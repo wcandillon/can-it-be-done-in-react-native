@@ -1,12 +1,18 @@
 // @flow
 import * as React from 'react';
-import { StyleSheet, View, SafeAreaView } from 'react-native';
+import {
+  StyleSheet, View, SafeAreaView, Text,
+} from 'react-native';
 import { MapView, Location } from 'expo';
+
+import Monitor from './Monitor';
+
+const { Marker, Polyline } = MapView;
 
 type Position = {
   coords: {
     accuracy: number,
-    altitude: 393.6201477050781,
+    altitude: number,
       altitudeAccuracy: number,
       heading: number,
       latitude: number,
@@ -22,20 +28,49 @@ type RunProps = {
   longitude: number,
 };
 
-export default class Run extends React.PureComponent<RunProps> {
-  componentDidMount() {
-    Location.watchPositionAsync({ enableHighAccuracy: true, timeInterval: 1000 }, this.onNewPosition);
+type RunState = {
+  positions: Position[],
+  duration: number,
+  distance: number,
+};
+
+export default class Run extends React.PureComponent<RunProps, RunState> {
+  state = {
+    positions: [],
+    duration: 0,
+    distance: 0,
+  };
+
+  interval;
+
+  watcher: { remove: () => void };
+
+  async componentDidMount() {
+    const options = { enableHighAccuracy: true, timeInterval: 1000, distanceInterval: 1 };
+    this.watcher = await Location.watchPositionAsync(options, this.onNewPosition);
+  }
+
+  componentWillUnmount() {
+    this.watcher.remove();
   }
 
   onNewPosition = (position: Position) => {
-    console.log({ position });
+    const { positions } = this.state;
+    this.setState({ positions: [...positions, position] });
   }
 
   render(): React.Node {
-    const { latitude, longitude } = this.props;
+    const {
+      latitude, longitude, distance: totalDistance, pace,
+    } = this.props;
+    const { positions, distance, duration } = this.state;
+    const currentPosition = positions[positions.length - 1];
     return (
       <View style={styles.container}>
-        <SafeAreaView style={styles.monitor} />
+        <Monitor {...{
+          distance, totalDistance, duration, pace,
+        }}
+        />
         <MapView
           style={styles.map}
           initialRegion={{
@@ -44,7 +79,14 @@ export default class Run extends React.PureComponent<RunProps> {
             latitudeDelta: 0.001,
             longitudeDelta: 0.01,
           }}
-        />
+        >
+          <Marker coordinate={currentPosition ? currentPosition.coords : { latitude, longitude }} />
+          <Polyline
+            strokeColor="#e9ac47"
+            strokeWidth={4}
+            coordinates={positions.map(position => position.coords)}
+          />
+        </MapView>
       </View>
     );
   }
@@ -54,11 +96,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  monitor: {
-    flex: 0.39,
-    backgroundColor: '#222222',
-  },
   map: {
-    flex: 0.61,
+    flex: 1,
   },
 });
