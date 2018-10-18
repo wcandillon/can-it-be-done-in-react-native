@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
 import {
-  StyleSheet, View, SafeAreaView, Text,
+  StyleSheet, View,
 } from 'react-native';
 import { MapView, Location } from 'expo';
+import * as turf from '@turf/turf';
 
 import Monitor from './Monitor';
 
@@ -34,7 +35,23 @@ type RunState = {
   distance: number,
 };
 
+const distanceBetween = (from: Position, to: Position) => {
+  const options = { units: 'meters' };
+  const origin = turf.point([from.coords.longitude, from.coords.latitude]);
+  const destination = turf.point([to.coords.longitude, to.coords.latitude]);
+  return turf.distance(origin, destination, options);
+};
+
+const paceBetween = (distance: number, from: Position, to: Position) => {
+  const time = (to.timestamp - from.timestamp) / (60 * 60 * 1000);
+  const pace = distance / 1000 / time;
+  console.log({ time, distance, pace });
+  return pace;
+};
+
 export default class Run extends React.PureComponent<RunProps, RunState> {
+  map = React.createRef();
+
   state = {
     positions: [],
     duration: 0,
@@ -55,25 +72,32 @@ export default class Run extends React.PureComponent<RunProps, RunState> {
   }
 
   onNewPosition = (position: Position) => {
+    this.map.current.animateToCoordinate(position.coords, 1000);
     const { positions } = this.state;
     const duration = positions[0] ? position.timestamp - positions[0].timestamp : 0;
-    console.log({ duration });
-    this.setState({ positions: [...positions, position], duration });
+    const distance = positions[0] ? distanceBetween(positions[positions.length - 1], position) : 0;
+    const pace = positions[0] ? paceBetween(distance, positions[positions.length - 1], position) : 0;
+    this.setState({
+      positions: [...positions, position], duration, distance: this.state.distance + distance, pace,
+    });
   }
 
   render(): React.Node {
     const {
-      latitude, longitude, distance: totalDistance, pace,
+      latitude, longitude, distance: totalDistance,
     } = this.props;
-    const { positions, distance, duration } = this.state;
+    const {
+      positions, distance, pace,
+    } = this.state;
     const currentPosition = positions[positions.length - 1];
     return (
       <View style={styles.container}>
         <Monitor {...{
-          distance, totalDistance, duration, pace,
+          distance, totalDistance, pace,
         }}
         />
         <MapView
+          ref={this.map}
           style={styles.map}
           initialRegion={{
             latitude,
@@ -81,6 +105,7 @@ export default class Run extends React.PureComponent<RunProps, RunState> {
             latitudeDelta: 0.001,
             longitudeDelta: 0.01,
           }}
+          provider="google"
         >
           <Marker coordinate={currentPosition ? currentPosition.coords : { latitude, longitude }} />
           <Polyline
