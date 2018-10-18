@@ -1,0 +1,112 @@
+{
+   "artwork_url":"https://i1.sndcdn.com/artworks-7jCWtNr6Ck0t-0-large.png",
+   "commentable":true,
+   "comment_count":2,
+   "created_at":"2018-05-08T16:04:53Z",
+   "description":null,
+   "downloadable":false,
+   "download_count":0,
+   "download_url":null,
+   "duration":131381,
+   "full_duration":131381,
+   "embeddable_by":"all",
+   "genre":"Dance",
+   "has_downloads_left":true,
+   "id":441163443,
+   "kind":"track",
+   "label_name":"Armada Electronic Elements",
+   "last_modified":"2018-10-05T10:30:58Z",
+   "license":"all-rights-reserved",
+   "likes_count":359,
+   "permalink":"jan-blomqvist-connect-one",
+   "permalink_url":"https://soundcloud.com/janblomqvist/jan-blomqvist-connect-one",
+   "playback_count":17830,
+   "public":true,
+   "publisher_metadata":{
+      "id":441163443,
+      "urn":"soundcloud:tracks:441163443",
+      "artist":"Jan Blomqvist",
+      "album_title":"Disconnected - Part One",
+      "contains_music":true,
+      "upc_or_ean":"8718522202551",
+      "isrc":"NLF711804864",
+      "explicit":false,
+      "p_line":"2018 Armada Music B.V.",
+      "p_line_for_display":"℗ 2018 Armada Music B.V.",
+      "c_line":"2018 Armada Music B.V.",
+      "c_line_for_display":"© 2018 Armada Music B.V.",
+      "release_title":"Jan Blomqvist - Connect One"
+   },
+   "purchase_title":null,
+   "purchase_url":null,
+   "release_date":"2018-05-25T00:00:00Z",
+   "reposts_count":39,
+   "secret_token":null,
+   "sharing":"public",
+   "state":"finished",
+   "streamable":true,
+   "tag_list":"\"Deep House\"",
+   "title":"Jan Blomqvist - Connect One",
+   "uri":"https://api.soundcloud.com/tracks/441163443",
+   "urn":"soundcloud:tracks:441163443",
+   "user_id":1268205,
+   "visuals":null,
+   "waveform_url":"https://wis.sndcdn.com/qlFhRI9UBIQ3_m.json",
+   "display_date":"2018-05-25T00:00:00Z",
+   "media":{
+      "transcodings":[
+         {
+            "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163443/legacy-mp3/stream/hls",
+            "preset":"mp3_0",
+            "duration":131381,
+            "snipped":false,
+            "format":{
+               "protocol":"hls",
+               "mime_type":"audio/mpeg"
+            },
+            "quality":"sq"
+         },
+         {
+            "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163443/legacy-mp3/stream/progressive",
+            "preset":"mp3_0",
+            "duration":131381,
+            "snipped":false,
+            "format":{
+               "protocol":"progressive",
+               "mime_type":"audio/mpeg"
+            },
+            "quality":"sq"
+         },
+         {
+            "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163443/legacy-opus/stream/hls",
+            "preset":"opus_0",
+            "duration":131381,
+            "snipped":false,
+            "format":{
+               "protocol":"hls",
+               "mime_type":"audio/ogg; codecs=\"opus\""
+            },
+            "quality":"sq"
+         }
+      ]
+   },
+   "monetization_model":"NOT_APPLICABLE",
+   "policy":"ALLOW",
+   "user":{
+      "avatar_url":"https://i1.sndcdn.com/avatars-000453156714-jr5xus-large.jpg",
+      "first_name":"",
+      "full_name":"",
+      "id":1268205,
+      "kind":"user",
+      "last_modified":"2018-10-05T14:30:27Z",
+      "last_name":"",
+      "permalink":"janblomqvist",
+      "permalink_url":"https://soundcloud.com/janblomqvist",
+      "uri":"https://api.soundcloud.com/users/1268205",
+      "urn":"soundcloud:users:1268205",
+      "username":"Jan Blomqvist",
+      "verified":false,
+      "city":"Berlin",
+      "country_code":"DE"
+   }
+}

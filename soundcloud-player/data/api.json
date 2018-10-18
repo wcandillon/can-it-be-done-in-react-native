@@ -1,0 +1,640 @@
+{
+   "artwork_url":"https://i1.sndcdn.com/artworks-58c13de6-c4e2-4b39-89ae-11206e742469-0-large.jpg",
+   "created_at":"2018-10-05T01:39:19Z",
+   "description":null,
+   "duration":2960226,
+   "embeddable_by":"all",
+   "genre":"Dance",
+   "id":616689924,
+   "kind":"playlist",
+   "label_name":null,
+   "last_modified":"2018-10-05T13:13:37Z",
+   "license":"all-rights-reserved",
+   "likes_count":452,
+   "managed_by_feeds":true,
+   "permalink":"disconnected-17",
+   "permalink_url":"https://soundcloud.com/janblomqvist/sets/disconnected-17",
+   "public":true,
+   "purchase_title":null,
+   "purchase_url":null,
+   "release_date":"2018-10-05T00:00:00Z",
+   "reposts_count":56,
+   "secret_token":null,
+   "sharing":"public",
+   "tag_list":"\"Melodic House & Techno\"",
+   "title":"Disconnected",
+   "uri":"https://api.soundcloud.com/playlists/616689924",
+   "user_id":1268205,
+   "set_type":"album",
+   "is_album":true,
+   "published_at":"2018-10-05T00:00:00Z",
+   "display_date":"2018-10-05T00:00:00Z",
+   "user":{
+      "avatar_url":"https://i1.sndcdn.com/avatars-000453156714-jr5xus-large.jpg",
+      "first_name":"",
+      "full_name":"",
+      "id":1268205,
+      "kind":"user",
+      "last_modified":"2018-10-05T14:30:27Z",
+      "last_name":"",
+      "permalink":"janblomqvist",
+      "permalink_url":"https://soundcloud.com/janblomqvist",
+      "uri":"https://api.soundcloud.com/users/1268205",
+      "urn":"soundcloud:users:1268205",
+      "username":"Jan Blomqvist",
+      "verified":false,
+      "city":"Berlin",
+      "country_code":"DE"
+   },
+   "tracks":[
+      {
+         "artwork_url":"https://i1.sndcdn.com/artworks-7jCWtNr6Ck0t-0-large.png",
+         "commentable":true,
+         "comment_count":2,
+         "created_at":"2018-05-08T16:04:53Z",
+         "description":null,
+         "downloadable":false,
+         "download_count":0,
+         "download_url":null,
+         "duration":131381,
+         "full_duration":131381,
+         "embeddable_by":"all",
+         "genre":"Dance",
+         "has_downloads_left":true,
+         "id":441163443,
+         "kind":"track",
+         "label_name":"Armada Electronic Elements",
+         "last_modified":"2018-10-05T10:30:58Z",
+         "license":"all-rights-reserved",
+         "likes_count":359,
+         "permalink":"jan-blomqvist-connect-one",
+         "permalink_url":"https://soundcloud.com/janblomqvist/jan-blomqvist-connect-one",
+         "playback_count":17830,
+         "public":true,
+         "publisher_metadata":{
+            "id":441163443,
+            "urn":"soundcloud:tracks:441163443",
+            "artist":"Jan Blomqvist",
+            "album_title":"Disconnected - Part One",
+            "contains_music":true,
+            "upc_or_ean":"8718522202551",
+            "isrc":"NLF711804864",
+            "explicit":false,
+            "p_line":"2018 Armada Music B.V.",
+            "p_line_for_display":"℗ 2018 Armada Music B.V.",
+            "c_line":"2018 Armada Music B.V.",
+            "c_line_for_display":"© 2018 Armada Music B.V.",
+            "release_title":"Jan Blomqvist - Connect One"
+         },
+         "purchase_title":null,
+         "purchase_url":null,
+         "release_date":"2018-05-25T00:00:00Z",
+         "reposts_count":39,
+         "secret_token":null,
+         "sharing":"public",
+         "state":"finished",
+         "streamable":true,
+         "tag_list":"\"Deep House\"",
+         "title":"Jan Blomqvist - Connect One",
+         "uri":"https://api.soundcloud.com/tracks/441163443",
+         "urn":"soundcloud:tracks:441163443",
+         "user_id":1268205,
+         "visuals":null,
+         "waveform_url":"https://wis.sndcdn.com/qlFhRI9UBIQ3_m.json",
+         "display_date":"2018-05-25T00:00:00Z",
+         "media":{
+            "transcodings":[
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163443/legacy-mp3/stream/hls",
+                  "preset":"mp3_0",
+                  "duration":131381,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163443/legacy-mp3/stream/progressive",
+                  "preset":"mp3_0",
+                  "duration":131381,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"progressive",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163443/legacy-opus/stream/hls",
+                  "preset":"opus_0",
+                  "duration":131381,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/ogg; codecs=\"opus\""
+                  },
+                  "quality":"sq"
+               }
+            ]
+         },
+         "monetization_model":"NOT_APPLICABLE",
+         "policy":"ALLOW",
+         "user":{
+            "avatar_url":"https://i1.sndcdn.com/avatars-000453156714-jr5xus-large.jpg",
+            "first_name":"",
+            "full_name":"",
+            "id":1268205,
+            "kind":"user",
+            "last_modified":"2018-10-05T14:30:27Z",
+            "last_name":"",
+            "permalink":"janblomqvist",
+            "permalink_url":"https://soundcloud.com/janblomqvist",
+            "uri":"https://api.soundcloud.com/users/1268205",
+            "urn":"soundcloud:users:1268205",
+            "username":"Jan Blomqvist",
+            "verified":false,
+            "city":"Berlin",
+            "country_code":"DE"
+         }
+      },
+      {
+         "artwork_url":"https://i1.sndcdn.com/artworks-8S7yvq2hAXez-0-large.png",
+         "commentable":true,
+         "comment_count":10,
+         "created_at":"2018-05-08T16:05:03Z",
+         "description":null,
+         "downloadable":false,
+         "download_count":0,
+         "download_url":null,
+         "duration":206099,
+         "full_duration":206099,
+         "embeddable_by":"all",
+         "genre":"Dance",
+         "has_downloads_left":true,
+         "id":441163500,
+         "kind":"track",
+         "label_name":"Armada Electronic Elements",
+         "last_modified":"2018-10-05T10:30:58Z",
+         "license":"all-rights-reserved",
+         "likes_count":1091,
+         "permalink":"jan-blomqvist-space-in-between",
+         "permalink_url":"https://soundcloud.com/janblomqvist/jan-blomqvist-space-in-between",
+         "playback_count":40044,
+         "public":true,
+         "publisher_metadata":{
+            "id":441163500,
+            "urn":"soundcloud:tracks:441163500",
+            "artist":"Jan Blomqvist",
+            "album_title":"Disconnected - Part One",
+            "contains_music":true,
+            "upc_or_ean":"8718522202551",
+            "isrc":"NLF711804865",
+            "explicit":false,
+            "p_line":"2018 Armada Music B.V.",
+            "p_line_for_display":"℗ 2018 Armada Music B.V.",
+            "c_line":"2018 Armada Music B.V.",
+            "c_line_for_display":"© 2018 Armada Music B.V.",
+            "release_title":"Jan Blomqvist - The Space In Between"
+         },
+         "purchase_title":null,
+         "purchase_url":null,
+         "release_date":"2018-05-25T00:00:00Z",
+         "reposts_count":203,
+         "secret_token":null,
+         "sharing":"public",
+         "state":"finished",
+         "streamable":true,
+         "tag_list":"\"Deep House\"",
+         "title":"Jan Blomqvist - The Space In Between",
+         "uri":"https://api.soundcloud.com/tracks/441163500",
+         "urn":"soundcloud:tracks:441163500",
+         "user_id":1268205,
+         "visuals":null,
+         "waveform_url":"https://wis.sndcdn.com/aIwk3ERz54YO_m.json",
+         "display_date":"2018-05-25T00:00:00Z",
+         "media":{
+            "transcodings":[
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163500/legacy-mp3/stream/hls",
+                  "preset":"mp3_0",
+                  "duration":206099,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163500/legacy-mp3/stream/progressive",
+                  "preset":"mp3_0",
+                  "duration":206099,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"progressive",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163500/legacy-opus/stream/hls",
+                  "preset":"opus_0",
+                  "duration":206099,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/ogg; codecs=\"opus\""
+                  },
+                  "quality":"sq"
+               }
+            ]
+         },
+         "monetization_model":"NOT_APPLICABLE",
+         "policy":"ALLOW",
+         "user":{
+            "avatar_url":"https://i1.sndcdn.com/avatars-000453156714-jr5xus-large.jpg",
+            "first_name":"",
+            "full_name":"",
+            "id":1268205,
+            "kind":"user",
+            "last_modified":"2018-10-05T14:30:27Z",
+            "last_name":"",
+            "permalink":"janblomqvist",
+            "permalink_url":"https://soundcloud.com/janblomqvist",
+            "uri":"https://api.soundcloud.com/users/1268205",
+            "urn":"soundcloud:users:1268205",
+            "username":"Jan Blomqvist",
+            "verified":false,
+            "city":"Berlin",
+            "country_code":"DE"
+         }
+      },
+      {
+         "artwork_url":"https://i1.sndcdn.com/artworks-i2j4iLO3sVLF-0-large.png",
+         "commentable":true,
+         "comment_count":19,
+         "created_at":"2018-05-08T16:05:13Z",
+         "description":null,
+         "downloadable":false,
+         "download_count":0,
+         "download_url":null,
+         "duration":266735,
+         "full_duration":266735,
+         "embeddable_by":"all",
+         "genre":"Dance",
+         "has_downloads_left":true,
+         "id":441163557,
+         "kind":"track",
+         "label_name":"Armada Electronic Elements",
+         "last_modified":"2018-10-05T10:30:58Z",
+         "license":"all-rights-reserved",
+         "likes_count":1723,
+         "permalink":"jan-blomqvist-broken-mind",
+         "permalink_url":"https://soundcloud.com/janblomqvist/jan-blomqvist-broken-mind",
+         "playback_count":83408,
+         "public":true,
+         "publisher_metadata":{
+            "id":441163557,
+            "urn":"soundcloud:tracks:441163557",
+            "artist":"Jan Blomqvist",
+            "album_title":"Disconnected - Part One",
+            "contains_music":true,
+            "upc_or_ean":"8718522202551",
+            "isrc":"NLF711804866",
+            "explicit":false,
+            "p_line":"2018 Armada Music B.V.",
+            "p_line_for_display":"℗ 2018 Armada Music B.V.",
+            "c_line":"2018 Armada Music B.V.",
+            "c_line_for_display":"© 2018 Armada Music B.V.",
+            "release_title":"Jan Blomqvist - Our Broken Mind Embassy"
+         },
+         "purchase_title":null,
+         "purchase_url":null,
+         "release_date":"2018-05-25T00:00:00Z",
+         "reposts_count":199,
+         "secret_token":null,
+         "sharing":"public",
+         "state":"finished",
+         "streamable":true,
+         "tag_list":"\"Deep House\"",
+         "title":"Jan Blomqvist - Our Broken Mind Embassy",
+         "uri":"https://api.soundcloud.com/tracks/441163557",
+         "urn":"soundcloud:tracks:441163557",
+         "user_id":1268205,
+         "visuals":null,
+         "waveform_url":"https://wis.sndcdn.com/BrEJErYNw0uC_m.json",
+         "display_date":"2018-05-25T00:00:00Z",
+         "media":{
+            "transcodings":[
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163557/legacy-mp3/stream/hls",
+                  "preset":"mp3_0",
+                  "duration":266735,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163557/legacy-mp3/stream/progressive",
+                  "preset":"mp3_0",
+                  "duration":266735,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"progressive",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163557/legacy-opus/stream/hls",
+                  "preset":"opus_0",
+                  "duration":266735,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/ogg; codecs=\"opus\""
+                  },
+                  "quality":"sq"
+               }
+            ]
+         },
+         "monetization_model":"NOT_APPLICABLE",
+         "policy":"ALLOW",
+         "user":{
+            "avatar_url":"https://i1.sndcdn.com/avatars-000453156714-jr5xus-large.jpg",
+            "first_name":"",
+            "full_name":"",
+            "id":1268205,
+            "kind":"user",
+            "last_modified":"2018-10-05T14:30:27Z",
+            "last_name":"",
+            "permalink":"janblomqvist",
+            "permalink_url":"https://soundcloud.com/janblomqvist",
+            "uri":"https://api.soundcloud.com/users/1268205",
+            "urn":"soundcloud:users:1268205",
+            "username":"Jan Blomqvist",
+            "verified":false,
+            "city":"Berlin",
+            "country_code":"DE"
+         }
+      },
+      {
+         "artwork_url":"https://i1.sndcdn.com/artworks-NKMWsw4WDeUv-0-large.png",
+         "commentable":true,
+         "comment_count":5,
+         "created_at":"2018-05-08T16:05:04Z",
+         "description":null,
+         "downloadable":false,
+         "download_count":0,
+         "download_url":null,
+         "duration":222975,
+         "full_duration":222975,
+         "embeddable_by":"all",
+         "genre":"Dance",
+         "has_downloads_left":true,
+         "id":441163506,
+         "kind":"track",
+         "label_name":"Armada Electronic Elements",
+         "last_modified":"2018-10-05T10:30:58Z",
+         "license":"all-rights-reserved",
+         "likes_count":574,
+         "permalink":"jan-blomqvist-feat-kid-simius",
+         "permalink_url":"https://soundcloud.com/janblomqvist/jan-blomqvist-feat-kid-simius",
+         "playback_count":27125,
+         "public":true,
+         "publisher_metadata":{
+            "id":441163506,
+            "urn":"soundcloud:tracks:441163506",
+            "artist":"Jan Blomqvist feat. Kid Simius",
+            "album_title":"Disconnected - Part One",
+            "contains_music":true,
+            "upc_or_ean":"8718522202551",
+            "isrc":"NLF711804867",
+            "explicit":false,
+            "p_line":"2018 Armada Music B.V.",
+            "p_line_for_display":"℗ 2018 Armada Music B.V.",
+            "c_line":"2018 Armada Music B.V.",
+            "c_line_for_display":"© 2018 Armada Music B.V.",
+            "release_title":"Jan Blomqvist feat. Kid Simius - The Six Degrees Theory"
+         },
+         "purchase_title":null,
+         "purchase_url":null,
+         "release_date":"2018-05-25T00:00:00Z",
+         "reposts_count":66,
+         "secret_token":null,
+         "sharing":"public",
+         "state":"finished",
+         "streamable":true,
+         "tag_list":"\"Deep House\"",
+         "title":"Jan Blomqvist feat. Kid Simius - The Six Degrees Theory",
+         "uri":"https://api.soundcloud.com/tracks/441163506",
+         "urn":"soundcloud:tracks:441163506",
+         "user_id":1268205,
+         "visuals":null,
+         "waveform_url":"https://wis.sndcdn.com/cO9jwdLkXdxI_m.json",
+         "display_date":"2018-05-25T00:00:00Z",
+         "media":{
+            "transcodings":[
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163506/legacy-mp3/stream/hls",
+                  "preset":"mp3_0",
+                  "duration":222975,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163506/legacy-mp3/stream/progressive",
+                  "preset":"mp3_0",
+                  "duration":222975,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"progressive",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163506/legacy-opus/stream/hls",
+                  "preset":"opus_0",
+                  "duration":222975,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/ogg; codecs=\"opus\""
+                  },
+                  "quality":"sq"
+               }
+            ]
+         },
+         "monetization_model":"NOT_APPLICABLE",
+         "policy":"ALLOW",
+         "user":{
+            "avatar_url":"https://i1.sndcdn.com/avatars-000453156714-jr5xus-large.jpg",
+            "first_name":"",
+            "full_name":"",
+            "id":1268205,
+            "kind":"user",
+            "last_modified":"2018-10-05T14:30:27Z",
+            "last_name":"",
+            "permalink":"janblomqvist",
+            "permalink_url":"https://soundcloud.com/janblomqvist",
+            "uri":"https://api.soundcloud.com/users/1268205",
+            "urn":"soundcloud:users:1268205",
+            "username":"Jan Blomqvist",
+            "verified":false,
+            "city":"Berlin",
+            "country_code":"DE"
+         }
+      },
+      {
+         "artwork_url":"https://i1.sndcdn.com/artworks-aJHlQd2vZFLG-0-large.png",
+         "commentable":true,
+         "comment_count":4,
+         "created_at":"2018-05-08T16:04:56Z",
+         "description":null,
+         "downloadable":false,
+         "download_count":0,
+         "download_url":null,
+         "duration":161660,
+         "full_duration":161660,
+         "embeddable_by":"all",
+         "genre":"Dance",
+         "has_downloads_left":true,
+         "id":441163452,
+         "kind":"track",
+         "label_name":"Armada Electronic Elements",
+         "last_modified":"2018-10-05T10:30:58Z",
+         "license":"all-rights-reserved",
+         "likes_count":193,
+         "permalink":"jan-blomqvist-disconnect-one",
+         "permalink_url":"https://soundcloud.com/janblomqvist/jan-blomqvist-disconnect-one",
+         "playback_count":11477,
+         "public":true,
+         "publisher_metadata":{
+            "id":441163452,
+            "urn":"soundcloud:tracks:441163452",
+            "artist":"Jan Blomqvist",
+            "album_title":"Disconnected - Part One",
+            "contains_music":true,
+            "upc_or_ean":"8718522202551",
+            "isrc":"NLF711804868",
+            "explicit":false,
+            "p_line":"2018 Armada Music B.V.",
+            "p_line_for_display":"℗ 2018 Armada Music B.V.",
+            "c_line":"2018 Armada Music B.V.",
+            "c_line_for_display":"© 2018 Armada Music B.V.",
+            "release_title":"Jan Blomqvist - Disconnect One"
+         },
+         "purchase_title":null,
+         "purchase_url":null,
+         "release_date":"2018-05-25T00:00:00Z",
+         "reposts_count":20,
+         "secret_token":null,
+         "sharing":"public",
+         "state":"finished",
+         "streamable":true,
+         "tag_list":"\"Deep House\"",
+         "title":"Jan Blomqvist - Disconnect One",
+         "uri":"https://api.soundcloud.com/tracks/441163452",
+         "urn":"soundcloud:tracks:441163452",
+         "user_id":1268205,
+         "visuals":null,
+         "waveform_url":"https://wis.sndcdn.com/HHhSVLQLzVy0_m.json",
+         "display_date":"2018-05-25T00:00:00Z",
+         "media":{
+            "transcodings":[
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163452/legacy-mp3/stream/hls",
+                  "preset":"mp3_0",
+                  "duration":161660,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163452/legacy-mp3/stream/progressive",
+                  "preset":"mp3_0",
+                  "duration":161660,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"progressive",
+                     "mime_type":"audio/mpeg"
+                  },
+                  "quality":"sq"
+               },
+               {
+                  "url":"https://api-v2.soundcloud.com/media/soundcloud:tracks:441163452/legacy-opus/stream/hls",
+                  "preset":"opus_0",
+                  "duration":161660,
+                  "snipped":false,
+                  "format":{
+                     "protocol":"hls",
+                     "mime_type":"audio/ogg; codecs=\"opus\""
+                  },
+                  "quality":"sq"
+               }
+            ]
+         },
+         "monetization_model":"NOT_APPLICABLE",
+         "policy":"ALLOW",
+         "user":{
+            "avatar_url":"https://i1.sndcdn.com/avatars-000453156714-jr5xus-large.jpg",
+            "first_name":"",
+            "full_name":"",
+            "id":1268205,
+            "kind":"user",
+            "last_modified":"2018-10-05T14:30:27Z",
+            "last_name":"",
+            "permalink":"janblomqvist",
+            "permalink_url":"https://soundcloud.com/janblomqvist",
+            "uri":"https://api.soundcloud.com/users/1268205",
+            "urn":"soundcloud:users:1268205",
+            "username":"Jan Blomqvist",
+            "verified":false,
+            "city":"Berlin",
+            "country_code":"DE"
+         }
+      },
+      {
+         "id":467728410,
+         "kind":"track"
+      },
+      {
+         "id":467728386,
+         "kind":"track"
+      },
+      {
+         "id":485923869,
+         "kind":"track"
+      },
+      {
+         "id":485923872,
+         "kind":"track"
+      },
+      {
+         "id":499434525,
+         "kind":"track"
+      },
+      {
+         "id":499431582,
+         "kind":"track"
+      },
+      {
+         "id":499431381,
+         "kind":"track"
+      }
+   ],
+   "track_count":12
+}
