@@ -108,7 +108,10 @@ export default class Run extends React.PureComponent<RunProps, RunState> {
           }}
           provider="google"
         >
-          <Marker coordinate={currentPosition ? currentPosition.coords : { latitude, longitude }}>
+          <Marker
+            coordinate={currentPosition ? currentPosition.coords : { latitude, longitude }}
+            anchor={{ x: 0.5, y: 0.5 }}
+          >
             <Pin />
           </Marker>
           <Polyline

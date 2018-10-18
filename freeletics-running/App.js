@@ -14,9 +14,7 @@ export default class App extends React.PureComponent<{}, { longitude: number, la
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status === 'granted') {
-      // const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-      const longitude = -95.880516;
-      const latitude = 36.063457;
+      const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync();
       this.setState({ longitude, latitude });
     } else {
       alert("We couldn't get your location");
