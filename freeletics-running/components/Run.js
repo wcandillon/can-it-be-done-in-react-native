@@ -56,7 +56,9 @@ export default class Run extends React.PureComponent<RunProps, RunState> {
 
   onNewPosition = (position: Position) => {
     const { positions } = this.state;
-    this.setState({ positions: [...positions, position] });
+    const duration = positions[0] ? position.timestamp - positions[0].timestamp : 0;
+    console.log({ duration });
+    this.setState({ positions: [...positions, position], duration });
   }
 
   render(): React.Node {
