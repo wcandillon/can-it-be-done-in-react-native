@@ -7,6 +7,7 @@ import { MapView, Location } from 'expo';
 import * as turf from '@turf/turf';
 
 import Monitor from './Monitor';
+import Pin from './Pin';
 
 const { Marker, Polyline } = MapView;
 
@@ -43,7 +44,7 @@ const distanceBetween = (from: Position, to: Position) => {
 };
 
 const paceBetween = (distance: number, from: Position, to: Position) => {
-  const time = (to.timestamp - from.timestamp) / (60 * 60 * 1000);
+  const time = (to.timestamp - from.timestamp) / 1000;
   const pace = distance / 1000 / time;
   console.log({ time, distance, pace });
   return pace;
@@ -107,7 +108,9 @@ export default class Run extends React.PureComponent<RunProps, RunState> {
           }}
           provider="google"
         >
-          <Marker coordinate={currentPosition ? currentPosition.coords : { latitude, longitude }} />
+          <Marker coordinate={currentPosition ? currentPosition.coords : { latitude, longitude }}>
+            <Pin />
+          </Marker>
           <Polyline
             strokeColor="#e9ac47"
             strokeWidth={4}
