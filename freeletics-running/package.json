@@ -14,7 +14,8 @@
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "react": "16.3.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "svg-path-properties": "^0.4.5"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",

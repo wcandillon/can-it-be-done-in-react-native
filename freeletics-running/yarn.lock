@@ -6048,6 +6048,10 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
+svg-path-properties@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/svg-path-properties/-/svg-path-properties-0.4.5.tgz#269af81cae0d73360d3eb934e8cb8b959bd5e92f"
+
 table@^5.0.2:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/table/-/table-5.1.0.tgz#69a54644f6f01ad1628f8178715b408dc6bf11f7"

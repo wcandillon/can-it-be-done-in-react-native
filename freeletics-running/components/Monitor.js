@@ -8,6 +8,7 @@ import {
 import { Svg } from 'expo';
 import { Feather as Icon } from '@expo/vector-icons';
 import SVGPath from 'art/modes/svg/path';
+import * as path from 'svg-path-properties';
 
 const { Path } = Svg;
 const radius = 100;
@@ -16,6 +17,9 @@ const d = SVGPath()
   .moveTo(strokeWidth, radius + strokeWidth)
   .arcTo(radius * 2, radius + strokeWidth, radius)
   .toSVG();
+const properties = path.svgPathProperties(d);
+const length = properties.getTotalLength();
+
 type ProgressProps = {
   distance: number,
   totalDistance: number,
@@ -42,13 +46,21 @@ export default class Progress extends React.PureComponent<ProgressProps, Progres
   }
 
   render(): React.Node {
-    const { distance, pace } = this.props;
+    const { distance, pace, totalDistance } = this.props;
     const { duration } = this.state;
+    const ratio = distance === 0 ? 0 : distance / totalDistance;
+    console.log({ ratio });
     return (
       <SafeAreaView style={styles.monitor}>
         <View style={styles.progressContainer}>
           <Svg style={styles.progressBar}>
-            <Path stroke="#e9ac47" fill="transparent" {...{ d, strokeWidth }} />
+            <Path
+              stroke="#e9ac47"
+              fill="transparent"
+              strokeDasharray={length}
+              strokeDashoffset={length - (ratio * length)}
+              {...{ d, strokeWidth }}
+            />
           </Svg>
           <View style={styles.progressLabelContainer}>
             <Text style={styles.progressLabel}>{_.round(distance)}</Text>
