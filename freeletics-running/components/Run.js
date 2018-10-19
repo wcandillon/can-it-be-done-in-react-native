@@ -71,6 +71,9 @@ export default class Run extends React.PureComponent<RunProps, RunState> {
   }
 
   onNewPosition = (position: Position) => {
+    if (position.coords.accuracy >= 50) {
+      return;
+    }
     this.map.current.animateToCoordinate(position.coords, 1000);
     const { positions } = this.state;
     const duration = positions[0] ? position.timestamp - positions[0].timestamp : 0;
@@ -110,7 +113,7 @@ export default class Run extends React.PureComponent<RunProps, RunState> {
             coordinate={currentPosition ? currentPosition.coords : { latitude, longitude }}
             anchor={{ x: 0.5, y: 0.5 }}
           >
-            <Pin />
+            <Pin accuracy={1 - (currentPosition ? currentPosition.coords.accuracy / 50 : 0)} />
           </Marker>
           <Polyline
             strokeColor="#e9ac47"

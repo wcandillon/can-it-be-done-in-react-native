@@ -2,11 +2,15 @@
 import * as React from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
 
+type PinProps = {
+  accuracy: number,
+};
+
 type PinState = {
   animation: Animated.Value,
 };
 
-export default class Pin extends React.PureComponent<{}, PinState> {
+export default class Pin extends React.PureComponent<PinProps, PinState> {
   state = {
     animation: new Animated.Value(0),
   };
@@ -31,13 +35,15 @@ export default class Pin extends React.PureComponent<{}, PinState> {
   }
 
   render(): React.Node {
+    const { accuracy } = this.props;
     const { animation } = this.state;
     const scale = animation.interpolate({
       inputRange: [0, 1],
       outputRange: [1, 1.25],
     });
+    const accuracyRadius = (60 * accuracy + 20) / 2;
     return (
-      <View style={styles.outerPin}>
+      <View style={[styles.outerPin, { width: accuracyRadius * 2, height: accuracyRadius * 2, borderRadius: accuracyRadius }]}>
         <View style={styles.pin}>
           <Animated.View style={[styles.innerPin, { transform: [{ scale }] }]} />
         </View>
@@ -49,9 +55,6 @@ export default class Pin extends React.PureComponent<{}, PinState> {
 const styles = StyleSheet.create({
   outerPin: {
     backgroundColor: 'rgba(233, 172, 71, 0.25)',
-    borderRadius: 40,
-    width: 80,
-    height: 80,
     justifyContent: 'center',
     alignItems: 'center',
   },
