@@ -46,12 +46,12 @@ export default class Progress extends React.PureComponent<ProgressProps, Progres
     const { duration } = this.state;
     return (
       <SafeAreaView style={styles.monitor}>
-        <View style={{ alignItems: 'center' }}>
-          <Svg style={{ height: radius * 2 + strokeWidth, width: radius * 2 + strokeWidth }}>
+        <View style={styles.progressContainer}>
+          <Svg style={styles.progressBar}>
             <Path stroke="#e9ac47" fill="transparent" {...{ d, strokeWidth }} />
           </Svg>
-          <View style={{ ...StyleSheet.absoluteFillObject, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 72, marginTop: 64 }}>{_.round(distance)}</Text>
+          <View style={styles.progressLabelContainer}>
+            <Text style={styles.progressLabel}>{_.round(distance)}</Text>
           </View>
         </View>
         <View style={styles.params}>
@@ -72,6 +72,23 @@ export default class Progress extends React.PureComponent<ProgressProps, Progres
 const styles = StyleSheet.create({
   monitor: {
     backgroundColor: '#222222',
+  },
+  progressContainer: {
+    alignItems: 'center',
+  },
+  progressBar: {
+    height: radius * 2 + strokeWidth,
+    width: radius * 2 + strokeWidth,
+  },
+  progressLabelContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  progressLabel: {
+    color: 'white',
+    fontSize: 72,
+    marginTop: 64,
   },
   params: {
     flexDirection: 'row',
