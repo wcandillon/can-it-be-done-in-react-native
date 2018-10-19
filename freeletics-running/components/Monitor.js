@@ -5,8 +5,17 @@ import * as React from 'react';
 import {
   StyleSheet, View, SafeAreaView, Text,
 } from 'react-native';
+import { Svg } from 'expo';
 import { Feather as Icon } from '@expo/vector-icons';
+import SVGPath from 'art/modes/svg/path';
 
+const { Path } = Svg;
+const radius = 100;
+const strokeWidth = 20;
+const d = SVGPath()
+  .moveTo(strokeWidth, radius + strokeWidth)
+  .arcTo(radius * 2, radius + strokeWidth, radius)
+  .toSVG();
 type ProgressProps = {
   distance: number,
   totalDistance: number,
@@ -37,8 +46,13 @@ export default class Progress extends React.PureComponent<ProgressProps, Progres
     const { duration } = this.state;
     return (
       <SafeAreaView style={styles.monitor}>
-        <View style={{ height: 200 }}>
-          <Text style={{ color: 'white', fontSize: 72 }}>{_.round(distance)}</Text>
+        <View style={{ alignItems: 'center' }}>
+          <Svg style={{ height: radius * 2 + strokeWidth, width: radius * 2 + strokeWidth }}>
+            <Path stroke="#e9ac47" fill="transparent" {...{ d, strokeWidth }} />
+          </Svg>
+          <View style={{ ...StyleSheet.absoluteFillObject, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: 'white', fontSize: 72, marginTop: 64 }}>{_.round(distance)}</Text>
+          </View>
         </View>
         <View style={styles.params}>
           <View style={styles.row}>

@@ -44,9 +44,7 @@ const distanceBetween = (from: Position, to: Position) => {
 };
 
 const paceBetween = (distance: number, from: Position, to: Position) => {
-  const time = (to.timestamp - from.timestamp) / 1000;
-  const pace = distance / 1000 / time;
-  console.log({ time, distance, pace });
+  const pace = (to.timestamp - from.timestamp) / distance;
   return pace;
 };
 
