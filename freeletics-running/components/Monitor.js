@@ -49,11 +49,15 @@ export default class Progress extends React.PureComponent<ProgressProps, Progres
     const { distance, pace, totalDistance } = this.props;
     const { duration } = this.state;
     const ratio = distance === 0 ? 0 : distance / totalDistance;
-    console.log({ ratio });
     return (
       <SafeAreaView style={styles.monitor}>
         <View style={styles.progressContainer}>
           <Svg style={styles.progressBar}>
+            <Path
+              stroke="white"
+              fill="transparent"
+              {...{ d, strokeWidth }}
+            />
             <Path
               stroke="#e9ac47"
               fill="transparent"
