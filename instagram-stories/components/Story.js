@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 
-export default class Story extends React.PureComponent<{ color: string }> {
+export default class Story extends React.PureComponent<{ source: number }> {
   render(): React.Node {
-    const { color: backgroundColor } = this.props;
+    const { source } = this.props;
     return (
-      <View style={[styles.container, { backgroundColor }]}>
-        <Text style={styles.text}>Hello</Text>
+      <View style={styles.container}>
+        <Image style={styles.image} {...{ source }} />
       </View>
     );
   }
@@ -16,11 +16,10 @@ export default class Story extends React.PureComponent<{ color: string }> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  text: {
-    fontSize: 72,
-    color: 'white',
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    width: null,
+    height: null,
   },
 });

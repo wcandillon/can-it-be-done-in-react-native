@@ -51,7 +51,7 @@ export default class App extends React.Component<{}, AppState> {
     const center = {
       flex: 1,
       transform: [
-        { perspective: -width / 2 },
+        { perspective: -width * 10 },
         { translateX },
         { rotateY },
       ],
@@ -59,7 +59,7 @@ export default class App extends React.Component<{}, AppState> {
     return (
       <SafeAreaView style={styles.container}>
         <Animated.View style={center}>
-          <Story color="red" />
+          <Story source={require('./assets/2.jpg')} />
         </Animated.View>
         <Animated.ScrollView
           ref={this.scroll}
