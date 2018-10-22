@@ -77,6 +77,7 @@ export default class App extends React.Component<{}, AppState> {
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
           bounces={false}
+          snapToInterval={width}
           contentContainerStyle={{ width: width * stories.length }}
           onScroll={Animated.event(
             [
