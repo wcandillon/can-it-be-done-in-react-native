@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {
-  StyleSheet, Text, View, Animated, Dimensions, InteractionManager, SafeAreaView,
+  StyleSheet, View, Animated, Dimensions, StatusBar, InteractionManager,
 } from 'react-native';
 
 import { Story } from './components';
@@ -31,9 +31,16 @@ export default class App extends React.Component<{}, AppState> {
     x: new Animated.Value(0),
   };
 
+  componentDidMount() {
+    setTimeout(() => this.scroll.current.getNode().scrollTo({ x: width / 2, animated: true }), 1000);
+  }
+
   getStyle(index: number) {
     const { x } = this.state;
     const offset = index * width;
+    const angle = Math.atan(perspective / (width / 2));
+    const length = width * 0.5 * Math.cos(angle);
+    console.log({ length });
     const translateX = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
       outputRange: [width / 2, 0, -width / 2],
@@ -41,7 +48,7 @@ export default class App extends React.Component<{}, AppState> {
     });
     const rotateY = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
-      outputRange: ['60deg', '0deg', '-60deg'],
+      outputRange: [`${angle}rad`, '0rad', `-${angle}rad`],
       extrapolate: 'clamp',
     });
     const translateXAfter = x.interpolate({
@@ -55,7 +62,6 @@ export default class App extends React.Component<{}, AppState> {
         { perspective },
         { translateX },
         { rotateY },
-        { translateX: translateXAfter },
       ],
     };
   }
@@ -64,6 +70,7 @@ export default class App extends React.Component<{}, AppState> {
     const { x } = this.state;
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
         {
           stories.map((story, i) => (
             <Animated.View style={this.getStyle(i)} key={story.id}>

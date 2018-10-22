@@ -4,7 +4,8 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import { MapView, Location } from 'expo';
-import * as turf from '@turf/turf';
+import { point } from '@turf/helpers';
+import distance from '@turf/distance';
 
 import Monitor from './Monitor';
 import Pin from './Pin';
@@ -38,9 +39,9 @@ type RunState = {
 
 const distanceBetween = (from: Position, to: Position) => {
   const options = { units: 'meters' };
-  const origin = turf.point([from.coords.longitude, from.coords.latitude]);
-  const destination = turf.point([to.coords.longitude, to.coords.latitude]);
-  return turf.distance(origin, destination, options);
+  const origin = point([from.coords.longitude, from.coords.latitude]);
+  const destination = point([to.coords.longitude, to.coords.latitude]);
+  return distance(origin, destination, options);
 };
 
 const paceBetween = (distance: number, from: Position, to: Position) => {
