@@ -1,10 +1,20 @@
 // @flow
 import * as React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
+import type { ImageSourcePropType } from 'react-native/Libraries/Image/ImageSourcePropType';
 
-export default class Story extends React.PureComponent<{ source: number }> {
+type Story = {
+  id: string,
+  source: ImageSourcePropType,
+};
+
+type StoryProps = {
+  story: Story,
+};
+
+export default class extends React.PureComponent<StoryProps> {
   render(): React.Node {
-    const { source } = this.props;
+    const { story: { source } } = this.props;
     return (
       <View style={styles.container}>
         <Image style={styles.image} {...{ source }} />

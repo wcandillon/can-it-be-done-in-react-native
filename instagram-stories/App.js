@@ -7,7 +7,19 @@ import {
 import { Story } from './components';
 
 const { width } = Dimensions.get('window');
-
+const perspective = width;
+const stories = [
+  {
+    id: '1',
+    source: require('./assets/1.jpg'),
+  }, {
+    id: '2',
+    source: require('./assets/2.jpg'),
+  }, {
+    id: '3',
+    source: require('./assets/3.jpg'),
+  },
+];
 type AppState = {
   x: Animated.Value,
 };
@@ -19,55 +31,53 @@ export default class App extends React.Component<{}, AppState> {
     x: new Animated.Value(0),
   };
 
-  componentDidMount() {
-    InteractionManager.runAfterInteractions(
-      () => this.scroll.current.getNode().scrollTo({ x: width / 4, animated: false }),
-    );
-  }
-
-  /*
-
-  <Animated.View style={left}>
-    <Story color="green" />
-  </Animated.View>
-
-  <Animated.View style={right}>
-    <Story color="blue" />
-  </Animated.View>
-  */
-  render() {
+  getStyle(index: number) {
     const { x } = this.state;
+    const offset = index * width;
     const translateX = x.interpolate({
-      inputRange: [0, width / 2],
-      outputRange: [width, -width],
+      inputRange: [offset - width, offset, offset + width],
+      outputRange: [width / 2, 0, -width / 2],
       extrapolate: 'clamp',
     });
     const rotateY = x.interpolate({
-      inputRange: [0, width / 2],
-      outputRange: ['-90deg', '90deg'],
+      inputRange: [offset - width, offset, offset + width],
+      outputRange: ['60deg', '0deg', '-60deg'],
       extrapolate: 'clamp',
     });
-
-    const center = {
-      flex: 1,
+    const translateXAfter = x.interpolate({
+      inputRange: [offset - width, offset, offset + width],
+      outputRange: [width / 2.38, 0, -width / 2.38],
+      extrapolate: 'clamp',
+    });
+    return {
+      ...StyleSheet.absoluteFillObject,
       transform: [
-        { perspective: -width * 10 },
+        { perspective },
         { translateX },
         { rotateY },
+        { translateX: translateXAfter },
       ],
     };
+  }
+
+  render() {
+    const { x } = this.state;
     return (
-      <SafeAreaView style={styles.container}>
-        <Animated.View style={center}>
-          <Story source={require('./assets/2.jpg')} />
-        </Animated.View>
+      <View style={styles.container}>
+        {
+          stories.map((story, i) => (
+            <Animated.View style={this.getStyle(i)} key={story.id}>
+              <Story {...{ story }} />
+            </Animated.View>
+          ))
+        }
         <Animated.ScrollView
           ref={this.scroll}
           style={StyleSheet.absoluteFillObject}
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
           bounces={false}
-          contentContainerStyle={{ width: width * 2 }}
+          contentContainerStyle={{ width: width * stories.length }}
           onScroll={Animated.event(
             [
               {
@@ -80,7 +90,7 @@ export default class App extends React.Component<{}, AppState> {
           )}
           horizontal
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }
