@@ -15,10 +15,9 @@ type StoryProps = {
 export default class extends React.PureComponent<StoryProps> {
   render(): React.Node {
     const { story: { source } } = this.props;
+    //         <Image style={styles.image} {...{ source }} />
     return (
-      <View style={styles.container}>
-        <Image style={styles.image} {...{ source }} />
-      </View>
+      <View style={styles.container} />
     );
   }
 }
@@ -26,6 +25,7 @@ export default class extends React.PureComponent<StoryProps> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'green',
   },
   image: {
     ...StyleSheet.absoluteFillObject,

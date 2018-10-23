@@ -7,7 +7,6 @@ import {
 import { Story } from './components';
 
 const { width } = Dimensions.get('window');
-const perspective = width;
 const stories = [
   {
     id: '1',
@@ -48,7 +47,7 @@ export default class App extends React.Component<{}, AppState> {
       outputRange: ['60deg', '0deg', '-60deg'],
       extrapolate: 'clamp',
     });
-    const v = (width / 2) * Math.sin(60 * Math.PI / 180);
+    const v = (width / 2) * Math.cos(30 * Math.PI / 180);
     const translateXAfter = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
       outputRange: [v, 0, -v],
