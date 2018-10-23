@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {
-  StyleSheet, View, Animated, Dimensions, StatusBar, InteractionManager,
+  StyleSheet, View, Animated, Dimensions, StatusBar, InteractionManager, PixelRatio,
 } from 'react-native';
 
 import { Story } from './components';
@@ -38,9 +38,6 @@ export default class App extends React.Component<{}, AppState> {
   getStyle(index: number) {
     const { x } = this.state;
     const offset = index * width;
-    const angle = Math.atan(perspective / (width / 2));
-    const length = width * 0.5 * Math.cos(angle);
-    console.log({ length });
     const translateX = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
       outputRange: [width / 2, 0, -width / 2],
@@ -48,20 +45,22 @@ export default class App extends React.Component<{}, AppState> {
     });
     const rotateY = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
-      outputRange: [`${angle}rad`, '0rad', `-${angle}rad`],
+      outputRange: ['60deg', '0deg', '-60deg'],
       extrapolate: 'clamp',
     });
+    const v = (width / 2) * Math.sin(60 * Math.PI / 180);
     const translateXAfter = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
-      outputRange: [width / 2.38, 0, -width / 2.38],
+      outputRange: [v, 0, -v],
       extrapolate: 'clamp',
     });
     return {
       ...StyleSheet.absoluteFillObject,
       transform: [
-        { perspective },
+        { perspective: width },
         { translateX },
         { rotateY },
+        { translateX: translateXAfter },
       ],
     };
   }
