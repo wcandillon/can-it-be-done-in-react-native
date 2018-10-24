@@ -17,6 +17,9 @@ const stories = [
   }, {
     id: '2',
     source: require('./assets/2.jpg'),
+  }, {
+    id: '3',
+    source: require('./assets/3.jpg'),
   },
 ];
 /*
