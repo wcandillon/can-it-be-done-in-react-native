@@ -55,7 +55,7 @@ export default class App extends React.Component<{}, AppState> {
     });
     const v = (width / 2) - ((width / 4) / Math.cos(angle / 2));
     const translateXAfter = x.interpolate({
-      inputRange: [offset - width, offset, offset + width],
+      inputRange: [offset - width / 2, offset, offset + width / 2],
       outputRange: [v, 0, -v],
       extrapolate: 'clamp',
     });
@@ -65,7 +65,7 @@ export default class App extends React.Component<{}, AppState> {
         { perspective },
         { translateX },
         { rotateY },
-        { translateX: index === 0 ? -v : v },
+        { translateX: translateXAfter },
       ],
     };
   }
