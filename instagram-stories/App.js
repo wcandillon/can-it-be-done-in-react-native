@@ -7,6 +7,9 @@ import {
 import { Story } from './components';
 
 const { width } = Dimensions.get('window');
+const perspective = width;
+const angle = Math.atan(perspective / (width / 2));
+
 const stories = [
   {
     id: '1',
@@ -14,11 +17,14 @@ const stories = [
   }, {
     id: '2',
     source: require('./assets/2.jpg'),
-  }, {
-    id: '3',
-    source: require('./assets/3.jpg'),
   },
 ];
+/*
+, {
+  id: '3',
+  source: require('./assets/3.jpg'),
+}, */
+
 type AppState = {
   x: Animated.Value,
 };
@@ -44,10 +50,10 @@ export default class App extends React.Component<{}, AppState> {
     });
     const rotateY = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
-      outputRange: ['60deg', '0deg', '-60deg'],
+      outputRange: [`${angle}rad`, '0rad', `-${angle}rad`],
       extrapolate: 'clamp',
     });
-    const v = (width / 2) * Math.cos(30 * Math.PI / 180);
+    const v = (width / 2) - ((width / 4) / Math.cos(angle / 2));
     const translateXAfter = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
       outputRange: [v, 0, -v],
@@ -56,10 +62,10 @@ export default class App extends React.Component<{}, AppState> {
     return {
       ...StyleSheet.absoluteFillObject,
       transform: [
-        { perspective: width },
+        { perspective },
         { translateX },
         { rotateY },
-        { translateX: translateXAfter },
+        { translateX: index === 0 ? -v : v },
       ],
     };
   }
