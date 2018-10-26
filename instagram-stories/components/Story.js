@@ -15,21 +15,12 @@ type StoryProps = {
 export default class extends React.PureComponent<StoryProps> {
   render(): React.Node {
     const { story: { source } } = this.props;
-    const backgroundColor = getRandomColor();
-    //         <Image style={styles.image} {...{ source }} />
     return (
-      <View style={[styles.container, { backgroundColor }]} />
+      <View style={styles.container}>
+        <Image style={styles.image} {...{ source }} />
+      </View>
     );
   }
-}
-
-function getRandomColor() {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
 }
 
 const styles = StyleSheet.create({
