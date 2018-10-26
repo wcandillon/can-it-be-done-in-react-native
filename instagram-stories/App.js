@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {
-  StyleSheet, View, Animated, Dimensions, StatusBar, InteractionManager, PixelRatio,
+  StyleSheet, View, Animated, Dimensions, StatusBar, Platform,
 } from 'react-native';
 
 import { Story } from './components';
@@ -9,6 +9,7 @@ import { Story } from './components';
 const { width } = Dimensions.get('window');
 const perspective = width;
 const angle = Math.atan(perspective / (width / 2));
+const ratio = Platform.OS === 'ios' ? 2 : 1;
 
 const stories = [
   {
@@ -22,11 +23,6 @@ const stories = [
     source: require('./assets/3.jpg'),
   },
 ];
-/*
-, {
-  id: '3',
-  source: require('./assets/3.jpg'),
-}, */
 
 type AppState = {
   x: Animated.Value,
@@ -48,7 +44,7 @@ export default class App extends React.Component<{}, AppState> {
     const offset = index * width;
     const translateX = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
-      outputRange: [width / 2, 0, -width / 2],
+      outputRange: [width / ratio, 0, -width / ratio],
       extrapolate: 'clamp',
     });
     const rotateY = x.interpolate({
@@ -58,7 +54,7 @@ export default class App extends React.Component<{}, AppState> {
     });
     const v = (width / 2) - ((width / 4) / Math.cos(angle / 2));
     const translateXAfter = x.interpolate({
-      inputRange: [offset - width / 2, offset, offset + width / 2],
+      inputRange: [offset - width / ratio, offset, offset + width / ratio],
       outputRange: [v, 0, -v],
       extrapolate: 'clamp',
     });
