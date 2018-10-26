@@ -48,7 +48,7 @@ export default class App extends React.Component<{}, AppState> {
     const offset = index * width;
     const translateX = x.interpolate({
       inputRange: [offset - width, offset, offset + width],
-      outputRange: [width, 0, -width],
+      outputRange: [width / 2, 0, -width / 2],
       extrapolate: 'clamp',
     });
     const rotateY = x.interpolate({
