@@ -9,7 +9,7 @@ import { Story } from './components';
 const { width } = Dimensions.get('window');
 const perspective = width;
 const angle = Math.atan(perspective / (width / 2));
-const ratio = Platform.OS === 'ios' ? 2 : 1;
+const ratio = Platform.OS === 'ios' ? 2 : 1.2;
 
 const stories = [
   {
