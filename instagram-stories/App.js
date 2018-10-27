@@ -64,10 +64,9 @@ export default class App extends React.Component<{}, AppState> {
       extrapolate: 'clamp',
     });
 
-    // const extra = ((width / 2) / Math.cos(angle / 2)) - width / 2;
     const translateX1 = x.interpolate({
       inputRange,
-      outputRange: [width / ratio, -width / ratio],
+      outputRange: [(width / ratio), -width / ratio],
       extrapolate: 'clamp',
     });
 
