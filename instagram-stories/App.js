@@ -15,15 +15,24 @@ const stories = [
   {
     id: '1',
     source: require('./assets/1.jpg'),
-  }, {
+  },
+  {
     id: '2',
     source: require('./assets/2.jpg'),
-  }, {
+  },
+
+  {
     id: '3',
     source: require('./assets/3.jpg'),
   },
 ];
 
+/*
+{
+ id: '2',
+ source: require('./assets/2.jpg'),
+},
+*/
 type AppState = {
   x: Animated.Value,
 };
@@ -42,29 +51,41 @@ export default class App extends React.Component<{}, AppState> {
   getStyle(index: number) {
     const { x } = this.state;
     const offset = index * width;
+
+    const inputRange = [offset - width, offset + width];
     const translateX = x.interpolate({
-      inputRange: [offset - width, offset, offset + width],
-      outputRange: [width / ratio, 0, -width / ratio],
+      inputRange,
+      outputRange: [width / ratio, -width / ratio],
       extrapolate: 'clamp',
     });
     const rotateY = x.interpolate({
-      inputRange: [offset - width, offset, offset + width],
-      outputRange: [`${angle}rad`, '0rad', `-${angle}rad`],
+      inputRange,
+      outputRange: [`${angle}rad`, `-${angle}rad`],
       extrapolate: 'clamp',
     });
-    const v = (width / 2) - ((width / 4) / Math.cos(angle / 2));
-    const translateXAfter = x.interpolate({
-      inputRange: [offset - width / ratio, offset, offset + width / ratio],
-      outputRange: [v, 0, -v],
+
+    // const extra = ((width / 2) / Math.cos(angle / 2)) - width / 2;
+    const translateX1 = x.interpolate({
+      inputRange,
+      outputRange: [width / ratio, -width / ratio],
       extrapolate: 'clamp',
     });
+
+    const extra = ((width / 2) / Math.cos(angle / 2)) - width / 2;
+    const translateX2 = x.interpolate({
+      inputRange,
+      outputRange: [-extra, extra],
+      extrapolate: 'clamp',
+    });
+
     return {
       ...StyleSheet.absoluteFillObject,
       transform: [
         { perspective },
         { translateX },
         { rotateY },
-        { translateX: translateXAfter },
+        { translateX: translateX1 },
+        { translateX: translateX2 },
       ],
     };
   }
@@ -86,7 +107,6 @@ export default class App extends React.Component<{}, AppState> {
           style={StyleSheet.absoluteFillObject}
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          bounces={false}
           snapToInterval={width}
           contentContainerStyle={{ width: width * stories.length }}
           onScroll={Animated.event(
@@ -109,5 +129,6 @@ export default class App extends React.Component<{}, AppState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'black',
   },
 });
