@@ -53,6 +53,7 @@ export default class App extends React.Component<{}, AppState> {
     const offset = index * width;
 
     const inputRange = [offset - width, offset + width];
+
     const translateX = x.interpolate({
       inputRange,
       outputRange: [width / ratio, -width / ratio],
@@ -89,6 +90,22 @@ export default class App extends React.Component<{}, AppState> {
     };
   }
 
+  getMaskStyle(index: number) {
+    const { x } = this.state;
+    const offset = index * width;
+    const inputRange = [offset - width, offset, offset + width];
+    const opacity = x.interpolate({
+      inputRange,
+      outputRange: [0.75, 0, 0.75],
+      extrapolate: 'clamp',
+    });
+    return {
+      backgroundColor: 'black',
+      ...StyleSheet.absoluteFillObject,
+      opacity,
+    };
+  }
+
   render() {
     const { x } = this.state;
     return (
@@ -98,6 +115,7 @@ export default class App extends React.Component<{}, AppState> {
           stories.map((story, i) => (
             <Animated.View style={this.getStyle(i)} key={story.id}>
               <Story {...{ story }} />
+              <Animated.View style={this.getMaskStyle(i)} />
             </Animated.View>
           ))
         }
