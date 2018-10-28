@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {
-  StyleSheet, View, Image, SafeAreaView,
+  StyleSheet, View, Image, SafeAreaView, TextInput,
 } from 'react-native';
 import type { ImageSourcePropType } from 'react-native/Libraries/Image/ImageSourcePropType';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -23,16 +23,17 @@ export default class extends React.PureComponent<StoryProps> {
   render(): React.Node {
     const { story: { source, user, avatar } } = this.props;
     return (
-      <View style={styles.container}>
-        <Image style={styles.image} {...{ source }} />
-        <SafeAreaView style={styles.story}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
+          <Image style={styles.image} {...{ source }} />
           <Avatar {...{ user, avatar }} />
-          <View style={styles.footer}>
-            <Icon name="camera" color="white" size={28} style={{ marginRight: 16 }} />
-            <Icon name="message-circle" color="white" size={28} />
-          </View>
-        </SafeAreaView>
-      </View>
+        </View>
+        <View style={styles.footer}>
+          <Icon name="camera" color="white" size={28} />
+          <TextInput style={styles.input} />
+          <Icon name="message-circle" color="white" size={28} />
+        </View>
+      </SafeAreaView>
     );
   }
 }
@@ -40,10 +41,6 @@ export default class extends React.PureComponent<StoryProps> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  story: {
-    flex: 1,
-    justifyContent: 'space-between',
   },
   image: {
     ...StyleSheet.absoluteFillObject,
@@ -54,6 +51,10 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 16,
+  },
+  input: {
+    borderWidth: 2, borderColor: 'white', height: 28, width: 250, borderRadius: 10,
   },
 });

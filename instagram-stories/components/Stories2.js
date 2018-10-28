@@ -69,7 +69,7 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
           { translateX },
           { rotateY },
           { translateX: translateX1 },
-          { translateX: translateX2 },
+          // { translateX: translateX2 },
         ],
       };
       story.current.setNativeProps({ style });
