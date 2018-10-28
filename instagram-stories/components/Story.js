@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {
-  StyleSheet, View, Image, SafeAreaView, TextInput,
+  StyleSheet, View, Image, SafeAreaView,
 } from 'react-native';
 import type { ImageSourcePropType } from 'react-native/Libraries/Image/ImageSourcePropType';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -24,15 +24,14 @@ export default class extends React.PureComponent<StoryProps> {
     const { story: { source, user, avatar } } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.story}>
-          <Image style={styles.image} {...{ source }} />
+        <Image style={styles.image} {...{ source }} />
+        <SafeAreaView style={styles.story}>
           <Avatar {...{ user, avatar }} />
-        </View>
-        <View style={styles.footer}>
-          <Icon name="camera" color="white" size={28} />
-          <TextInput style={styles.input} />
-          <Icon name="message-circle" color="white" size={28} />
-        </View>
+          <View style={styles.footer}>
+            <Icon name="camera" color="white" size={28} style={{ marginRight: 16 }} />
+            <Icon name="message-circle" color="white" size={28} />
+          </View>
+        </SafeAreaView>
       </View>
     );
   }
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
   },
   story: {
     flex: 1,
-    borderRadius: 5,
+    justifyContent: 'space-between',
   },
   image: {
     ...StyleSheet.absoluteFillObject,
@@ -53,10 +52,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   footer: {
-    height: 45,
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
+    padding: 16,
   },
   input: {
     borderColor: 'white',
