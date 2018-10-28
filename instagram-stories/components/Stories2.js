@@ -26,10 +26,13 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
     x: new Animated.Value(0),
   };
 
+  constructor(props) {
+    super(props);
+    this.stories = props.stories.map(() => React.createRef());
+  }
+
   componentDidMount() {
-    const { stories } = this.props;
     const { x } = this.state;
-    this.stories = stories.map(() => React.createRef());
     x.addListener(() => this.stories.forEach((story, index) => {
       const offset = index * width;
       const inputRange = [offset - width, offset + width];
@@ -51,12 +54,9 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
         extrapolate: 'clamp',
       }).__getValue();
 
-      const extra = ((width / ratio) / Math.cos(angle / ratio)) - width / ratio;
-      const translateX2 = x.interpolate({
-        inputRange,
-        outputRange: [-extra, extra],
-        extrapolate: 'clamp',
-      }).__getValue();
+      const alpha = parseFloat(rotateY.substr(0, rotateY.indexOf('rad')), 10);
+      const extra = Math.abs(translateX) / Math.cos(alpha);
+      const translateX2 = alpha > 0 ? -extra : extra;
 
       const style = {
         transform: [
@@ -94,7 +94,7 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
       <View style={styles.container}>
         {
             stories.map((story, i) => (
-              <Animated.View style={StyleSheet.absoluteFill} key={story.id}>
+              <Animated.View ref={this.stories[i]} style={StyleSheet.absoluteFill} key={story.id}>
                 <Story {...{ story }} />
                 <Animated.View style={this.getMaskStyle(i)} />
               </Animated.View>
