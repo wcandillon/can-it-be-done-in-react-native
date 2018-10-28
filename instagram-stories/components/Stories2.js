@@ -50,17 +50,19 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
 
       const translateX1 = x.interpolate({
         inputRange,
-        outputRange: [(width / 2), -width / 2],
+        outputRange: [width / 2, -width / 2],
         extrapolate: 'clamp',
       }).__getValue();
 
-      const alpha = parseFloat(rotateY.substr(0, rotateY.indexOf('rad')), 10);
-      // TODO: need to compute the value based on alpha here
-      const extra = ((width / ratio) / Math.cos(angle / ratio)) - width / ratio;
+
+      const extra = ((width / ratio) / Math.cos(angle / 2)) - width / ratio;
+      // const alpha = parseFloat(rotateY.substr(0, rotateY.indexOf('rad')), 10);
+
       const translateX2 = x.interpolate({
         inputRange,
         outputRange: [-extra, extra],
         extrapolate: 'clamp',
+        // easing: t => Math.sin(Math.PI * t),
       }).__getValue();
 
       const style = {

@@ -47,7 +47,7 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
       extrapolate: 'clamp',
     });
 
-    const extra = ((width / ratio) / Math.cos(angle / ratio)) - width / ratio;
+    const extra = ((width / ratio) / Math.cos(angle / 2)) - width / ratio;
     const translateX2 = x.interpolate({
       inputRange,
       outputRange: [-extra, extra],
@@ -61,7 +61,7 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
         { translateX },
         { rotateY },
         { translateX: translateX1 },
-        // { translateX: translateX2 },
+        { translateX: translateX2 },
       ],
     };
   }
