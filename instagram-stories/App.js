@@ -64,7 +64,7 @@ export default class App extends React.Component<{}, AppState> {
     return (
       <React.Fragment>
         <StatusBar barStyle="light-content" />
-        <Stories2 {...{ stories }} />
+        <Stories {...{ stories }} />
       </React.Fragment>
     );
   }

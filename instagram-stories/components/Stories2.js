@@ -50,7 +50,7 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
 
       const translateX1 = x.interpolate({
         inputRange,
-        outputRange: [(width / ratio), -width / ratio],
+        outputRange: [(width / 2), -width / 2],
         extrapolate: 'clamp',
       }).__getValue();
 

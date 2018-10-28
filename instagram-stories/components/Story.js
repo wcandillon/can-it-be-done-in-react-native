@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {
-  StyleSheet, View, Image, SafeAreaView, TextInput,
+  StyleSheet, View, Image, SafeAreaView, TextInput, Platform,
 } from 'react-native';
 import type { ImageSourcePropType } from 'react-native/Libraries/Image/ImageSourcePropType';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -55,6 +55,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   input: {
-    borderWidth: 2, borderColor: 'white', height: 28, width: 250, borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'white',
+    height: 28,
+    width: 250,
+    borderRadius: Platform.OS === 'android' ? 0 : 10,
   },
 });

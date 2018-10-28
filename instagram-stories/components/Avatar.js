@@ -1,8 +1,9 @@
 // @flow
 import * as React from 'react';
 import {
-  StyleSheet, View, Image, Text,
+  StyleSheet, View, Image, Text, Platform,
 } from 'react-native';
+import { Constants } from 'expo';
 import type { ImageSourcePropType } from 'react-native/Libraries/Image/ImageSourcePropType';
 
 type AvatarProps = {
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 16,
     alignItems: 'center',
+    marginTop: Platform.OS === 'android' ? Constants.statusBarHeight : 0,
   },
   avatar: {
     width: 36,
