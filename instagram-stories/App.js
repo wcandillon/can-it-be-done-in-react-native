@@ -3,8 +3,8 @@ import React from 'react';
 import {
   StyleSheet, View, Animated, Dimensions, StatusBar, Platform,
 } from 'react-native';
-
-import { Story } from './components';
+import { Asset, AppLoading } from 'expo';
+import { Stories } from './components';
 
 const { width } = Dimensions.get('window');
 const perspective = width;
@@ -13,139 +13,64 @@ const ratio = Platform.OS === 'ios' ? 2 : 1.2;
 
 const stories = [
   {
-    id: '1',
-    source: require('./assets/1.jpg'),
+    id: '2',
+    source: require('./assets/stories/2.jpg'),
+    user: 'derek.russel',
+    avatar: require('./assets/avatars/derek.russel.png'),
   },
   {
-    id: '2',
-    source: require('./assets/2.jpg'),
+    id: '4',
+    source: require('./assets/stories/4.jpg'),
+    user: 'jmitch',
+    avatar: require('./assets/avatars/jmitch.png'),
   },
-
+  {
+    id: '5',
+    source: require('./assets/stories/5.jpg'),
+    user: 'monicaa',
+    avatar: require('./assets/avatars/monicaa.png'),
+  },
   {
     id: '3',
-    source: require('./assets/3.jpg'),
+    source: require('./assets/stories/3.jpg'),
+    user: 'alexandergarcia',
+    avatar: require('./assets/avatars/alexandergarcia.png'),
+  },
+  {
+    id: '1',
+    source: require('./assets/stories/1.jpg'),
+    user: 'andrea.smidt',
+    avatar: require('./assets/avatars/andrea.schmidt.png'),
   },
 ];
 
-/*
-{
- id: '2',
- source: require('./assets/2.jpg'),
-},
-*/
 type AppState = {
-  x: Animated.Value,
+  ready: boolean,
 };
 
 export default class App extends React.Component<{}, AppState> {
-  scroll = React.createRef();
-
   state = {
-    x: new Animated.Value(0),
+    ready: false,
   };
 
-  componentDidMount() {
-    setTimeout(() => this.scroll.current.getNode().scrollTo({ x: width / 2, animated: true }), 1000);
-  }
-
-  getStyle(index: number) {
-    const { x } = this.state;
-    const offset = index * width;
-
-    const inputRange = [offset - width, offset + width];
-
-    const translateX = x.interpolate({
-      inputRange,
-      outputRange: [width / ratio, -width / ratio],
-      extrapolate: 'clamp',
-    });
-    const rotateY = x.interpolate({
-      inputRange,
-      outputRange: [`${angle}rad`, `-${angle}rad`],
-      extrapolate: 'clamp',
-    });
-
-    const translateX1 = x.interpolate({
-      inputRange,
-      outputRange: [(width / ratio), -width / ratio],
-      extrapolate: 'clamp',
-    });
-
-    const extra = ((width / ratio) / Math.cos(angle / ratio)) - width / ratio;
-    const translateX2 = x.interpolate({
-      inputRange,
-      outputRange: [-extra, extra],
-      extrapolate: 'clamp',
-    });
-
-    return {
-      ...StyleSheet.absoluteFillObject,
-      transform: [
-        { perspective },
-        { translateX },
-        { rotateY },
-        { translateX: translateX1 },
-        { translateX: translateX2 },
-      ],
-    };
-  }
-
-  getMaskStyle(index: number) {
-    const { x } = this.state;
-    const offset = index * width;
-    const inputRange = [offset - width, offset, offset + width];
-    const opacity = x.interpolate({
-      inputRange,
-      outputRange: [0.75, 0, 0.75],
-      extrapolate: 'clamp',
-    });
-    return {
-      backgroundColor: 'black',
-      ...StyleSheet.absoluteFillObject,
-      opacity,
-    };
+  async componentDidMount() {
+    await Promise.all(stories.map(story => Promise.all([
+      Asset.loadAsync(story.source),
+      Asset.loadAsync(story.avatar),
+    ])));
+    this.setState({ ready: true });
   }
 
   render() {
-    const { x } = this.state;
+    const { ready } = this.state;
+    if (!ready) {
+      return <AppLoading />;
+    }
     return (
-      <View style={styles.container}>
+      <React.Fragment>
         <StatusBar barStyle="light-content" />
-        {
-          stories.map((story, i) => (
-            <Animated.View style={this.getStyle(i)} key={story.id}>
-              <Story {...{ story }} />
-              <Animated.View style={this.getMaskStyle(i)} />
-            </Animated.View>
-          ))
-        }
-        <Animated.ScrollView
-          ref={this.scroll}
-          style={StyleSheet.absoluteFillObject}
-          showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={16}
-          snapToInterval={width}
-          contentContainerStyle={{ width: width * stories.length }}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: { x },
-                },
-              },
-            ],
-            { useNativeDriver: true },
-          )}
-          horizontal
-        />
-      </View>
+        <Stories {...{ stories }} />
+      </React.Fragment>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-  },
-});
