@@ -1,15 +1,10 @@
 // @flow
 import React from 'react';
-import {
-  StyleSheet, View, Animated, Dimensions, StatusBar, Platform,
-} from 'react-native';
+import { StatusBar } from 'react-native';
 import { Asset, AppLoading } from 'expo';
-import { Stories } from './components';
-
-const { width } = Dimensions.get('window');
-const perspective = width;
-const angle = Math.atan(perspective / (width / 2));
-const ratio = Platform.OS === 'ios' ? 2 : 1.2;
+// Two implementations of the story components.
+// One using linear interpolation which doesn't make it a perfect cube and one with setNativeProps which is unfinished
+import { Stories, Stories2 } from './components';
 
 const stories = [
   {
@@ -69,7 +64,7 @@ export default class App extends React.Component<{}, AppState> {
     return (
       <React.Fragment>
         <StatusBar barStyle="light-content" />
-        <Stories {...{ stories }} />
+        <Stories2 {...{ stories }} />
       </React.Fragment>
     );
   }

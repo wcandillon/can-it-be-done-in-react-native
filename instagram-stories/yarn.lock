@@ -436,6 +436,13 @@
     lodash "^4.17.4"
     react-native-vector-icons "4.5.0"
 
+"@expo/vector-icons@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@expo/vector-icons/-/vector-icons-8.0.0.tgz#29c91778aee02b92b045914bbed8eec299a84e5e"
+  dependencies:
+    lodash "^4.17.4"
+    react-native-vector-icons "6.0.0"
+
 "@expo/websql@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@expo/websql/-/websql-1.0.1.tgz#fff0cf9c1baa1f70f9e1d658b7c39a420d9b10a9"
@@ -4276,6 +4283,14 @@ react-native-vector-icons@4.5.0:
   dependencies:
     lodash "^4.0.0"
     prop-types "^15.5.10"
+    yargs "^8.0.2"
+
+react-native-vector-icons@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-6.0.0.tgz#3a7076dbe244ea94c6d5e92802a870e64a4283c5"
+  dependencies:
+    lodash "^4.0.0"
+    prop-types "^15.6.2"
     yargs "^8.0.2"
 
 "react-native@https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz":
