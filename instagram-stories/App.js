@@ -39,7 +39,7 @@ const stories = [
   {
     id: '1',
     source: require('./assets/stories/1.jpg'),
-    user: 'andrea.smidt',
+    user: 'andrea.schmidt',
     avatar: require('./assets/avatars/andrea.schmidt.png'),
   },
 ];

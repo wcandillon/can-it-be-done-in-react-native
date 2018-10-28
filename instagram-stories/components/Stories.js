@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {
-  StyleSheet, Animated, View, Dimensions, Platform,
+  StyleSheet, Animated, Dimensions, Platform, View, SafeAreaView,
 } from 'react-native';
 
 import Story, { type StoryModel } from './Story';
@@ -10,6 +10,7 @@ const { width } = Dimensions.get('window');
 const perspective = width;
 const angle = Math.atan(perspective / (width / 2));
 const ratio = Platform.OS === 'ios' ? 2 : 1.2;
+const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
 type StoriesProps = {
   stories: StoryModel[],
@@ -89,10 +90,10 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
       <View style={styles.container}>
         {
             stories.map((story, i) => (
-              <Animated.View style={this.getStyle(i)} key={story.id}>
+              <AnimatedSafeAreaView style={this.getStyle(i)} key={story.id}>
                 <Story {...{ story }} />
                 <Animated.View style={this.getMaskStyle(i)} />
-              </Animated.View>
+              </AnimatedSafeAreaView>
             ))
           }
         <Animated.ScrollView
@@ -112,6 +113,7 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
             ],
             { useNativeDriver: true },
           )}
+          decelerationRate={0.99}
           horizontal
         />
       </View>
