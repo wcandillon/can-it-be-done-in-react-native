@@ -55,8 +55,13 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
       }).__getValue();
 
       const alpha = parseFloat(rotateY.substr(0, rotateY.indexOf('rad')), 10);
-      const extra = Math.abs(translateX) / Math.cos(alpha);
-      const translateX2 = alpha > 0 ? -extra : extra;
+      // TODO: need to compute the value based on alpha here
+      const extra = ((width / ratio) / Math.cos(angle / ratio)) - width / ratio;
+      const translateX2 = x.interpolate({
+        inputRange,
+        outputRange: [-extra, extra],
+        extrapolate: 'clamp',
+      }).__getValue();
 
       const style = {
         transform: [
@@ -64,27 +69,11 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
           { translateX },
           { rotateY },
           { translateX: translateX1 },
-          // { translateX: translateX2 },
+          { translateX: translateX2 },
         ],
       };
       story.current.setNativeProps({ style });
     }));
-  }
-
-  getMaskStyle(index: number) {
-    const { x } = this.state;
-    const offset = index * width;
-    const inputRange = [offset - width, offset, offset + width];
-    const opacity = x.interpolate({
-      inputRange,
-      outputRange: [0.75, 0, 0.75],
-      extrapolate: 'clamp',
-    });
-    return {
-      backgroundColor: 'black',
-      ...StyleSheet.absoluteFillObject,
-      opacity,
-    };
   }
 
   render(): React.Node {
@@ -96,9 +85,8 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
             stories.map((story, i) => (
               <Animated.View ref={this.stories[i]} style={StyleSheet.absoluteFill} key={story.id}>
                 <Story {...{ story }} />
-                <Animated.View style={this.getMaskStyle(i)} />
               </Animated.View>
-            ))
+            )).reverse()
           }
         <Animated.ScrollView
           ref={this.scroll}
