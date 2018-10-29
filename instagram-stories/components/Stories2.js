@@ -55,16 +55,12 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
       }).__getValue();
 
 
-      const extra = ((width / ratio) / Math.cos(angle / 2)) - width / ratio;
       const parsed = parseFloat(rotateY.substr(0, rotateY.indexOf('rad')), 10);
       const alpha = Math.abs(parsed);
       const gamma = angle - alpha;
       const beta = Math.PI - alpha - gamma;
-      const y = (width * Math.sin(alpha)) / (2 * Math.sin(beta));
-      const A = y * (width / 4) * Math.sin(gamma);
-      const h = 2 * A / (width / 2);
-      const w = width / 2 - (h / Math.sin(alpha));
-      const translateX2 = isNaN(w) ? 0 : (parsed > 0 ? w : -w);
+      const w = width / 2 - ((width / 2) * Math.sin(gamma) / Math.sin(beta));
+      const translateX2 = parsed > 0 ? w : -w;
 
       const style = {
         transform: [
