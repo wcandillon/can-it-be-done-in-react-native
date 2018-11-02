@@ -51,10 +51,10 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
           >
             <LinearGradient colors={[topColor, bottomColor]}>
               <SafeAreaView>
-                <Section label="Obese" from={30} to={36} />
+                <Section label="Obese" from={30} to={36} noTopLabel />
                 <Section label="Overweight" from={25} to={29} />
                 <Section label="Healthy weight" from={19} to={24} />
-                <Section label="Underweight" from={17} to={18} />
+                <Section label="Underweight" from={17} to={18} noBottomLabel />
               </SafeAreaView>
             </LinearGradient>
           </Animated.ScrollView>
