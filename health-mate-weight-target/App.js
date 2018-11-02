@@ -1,21 +1,17 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// @flow
+import React from "react";
+import { StatusBar } from "react-native";
 
-export default class App extends React.Component {
+import { WeightTarget } from "./components";
+
+// eslint-disable-next-line react/prefer-stateless-function
+export default class App extends React.PureComponent {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <React.Fragment>
+        <StatusBar barStyle="light-content" />
+        <WeightTarget defaultValue={84} />
+      </React.Fragment>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
