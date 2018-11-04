@@ -36,22 +36,26 @@ export default class WeightTarget extends React.Component<WeightTargetProps, Wei
     };
 
     update = ({ value }) => {
+      const { defaultWeight } = this.props;
+      const defaultBMI = _.round(scaleWeight.invert(defaultWeight), 2);
+      console.log({ defaultBMI });
       const y = value + height / 2;
       const BMI = scaleBMI(y);
       const kgs = _.round(scaleWeight(BMI * 2), 0) / 2;
       const text = `${kgs}`;
-      this.input.current.setNativeProps({ text: `${text}` });
+      this.input.current.setNativeProps({ text });
     }
 
     componentDidMount() {
       const { y } = this.state;
       this.listener = y.addListener(this.update);
       InteractionManager.runAfterInteractions(this.scrollToDefaultValue);
+      // setTimeout(this.scrollToDefaultValue, 1000);
     }
 
     scrollToDefaultValue = () => {
       const { defaultWeight } = this.props;
-      const scrollTo = scaleBMI(scaleWeight(defaultWeight)) - height / 2;
+      const scrollTo = scaleBMI.invert(scaleWeight.invert(defaultWeight)) - height / 2;
       this.scroll.current.getNode().scrollTo({ y: scrollTo });
     }
 
