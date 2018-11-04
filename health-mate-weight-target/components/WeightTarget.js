@@ -6,18 +6,14 @@ import {
 } from "react-native";
 import { scaleLinear } from "d3-scale";
 
-import Section, { ROW_HEIGHT } from "./Section";
+import Scale, { ROW_HEIGHT } from "./Scale";
 
 const { height } = Dimensions.get("window");
 const backgroundColor = "#409aee";
-const from = 17;
-const to = 36;
-const range = to - from + 1;
-const scaleBMI = scaleLinear().domain([range * ROW_HEIGHT, 0]).range([from, to]);
-const scaleWeight = scaleLinear().domain([from, to]).range([55, 115]);
 
 type WeightTargetProps = {
-  defaultWeight: number,
+  weight: number,
+  height: number,
 };
 
 type WeightTargetState = {
@@ -36,28 +32,22 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
     };
 
     update = ({ value }) => {
-      const { defaultWeight } = this.props;
-      const defaultBMI = _.round(scaleWeight.invert(defaultWeight), 2);
-      const scaleProgress = scaleLinear().domain([from, defaultBMI, to]).range([-100, 0, 100]);
-      const y = value + height / 2;
-      const BMI = scaleBMI(y);
-      const progress = scaleProgress(BMI);
-      const kgs = _.round(scaleWeight(BMI * 2), 0) / 2;
-      const text = `${kgs}`;
-      this.input.current.setNativeProps({ text });
+      console.log({ value });
     }
 
     componentDidMount() {
+      const { weight, height: h } = this.props;
       const { y } = this.state;
+      const BMI = _.round(weight / (h * h));
+
+      // this.scaleBMI = scaleLinear().domain([range * ROW_HEIGHT, 0]).range([from, to]);
+      // this.scaleWeight = scaleLinear().domain([from, to]).range([55, 115]);
       this.listener = y.addListener(this.update);
-      InteractionManager.runAfterInteractions(this.scrollToDefaultValue);
+      // InteractionManager.runAfterInteractions(this.scrollToDefaultValue);
     }
 
     scrollToDefaultValue = () => {
-      const { defaultWeight } = this.props;
-      const scrollTo = scaleBMI.invert(scaleWeight.invert(defaultWeight)) - height / 2;
-      this.scroll.current.getNode().scrollTo({ y: scrollTo });
-      this.update({ value: scrollTo });
+      this.update({ value: 10 * ROW_HEIGHT });
     }
 
     componentWillUnmount() {
@@ -66,7 +56,18 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
     }
 
     render() {
+      const { weight, height: h } = this.props;
       const { y } = this.state;
+      const BMI = _.round(weight / (h * h));
+      const inputRange = [0, 21 * ROW_HEIGHT - height];
+      const translateY = y.interpolate({
+        inputRange,
+        outputRange: [-height / 2 + 100, height / 2 - 100],
+      });
+      const translateY2 = y.interpolate({
+        inputRange,
+        outputRange: [height / 2 - 100, -height / 2 + 100],
+      });
       return (
         <View style={styles.container}>
           <Animated.ScrollView
@@ -81,15 +82,20 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
               { useNativeDriver: true },
             )}
           >
-            <Section label="Obese" from={30} to={36} noTopLabel />
-            <Section label="Overweight" from={25} to={29} />
-            <Section label="Healthy weight" from={19} to={24} />
-            <Section label="Underweight" from={17} to={18} noBottomLabel />
+            <Scale from={BMI - 10} to={BMI + 10} />
           </Animated.ScrollView>
           <View style={styles.cursorContainer} pointerEvents="none">
             <View style={styles.cursor}>
               <TextInput ref={this.input} style={styles.cursorLabel} />
             </View>
+          </View>
+          <View style={styles.cursorContainer} pointerEvents="none">
+            <Animated.View style={[styles.cursor, { transform: [{ translateY }] }]}>
+              <TextInput ref={this.input} style={styles.cursorLabel} />
+            </Animated.View>
+          </View>
+          <View style={styles.cursorContainer} pointerEvents="none">
+            <Animated.View style={[styles.cursor, { transform: [{ translateY: translateY2 }] }]} />
           </View>
         </View>
       );
