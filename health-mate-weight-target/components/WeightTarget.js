@@ -7,6 +7,7 @@ import {
 import { scaleLinear } from "d3-scale";
 
 import Scale, { ROW_HEIGHT } from "./Scale";
+import Overlays from "./Overlays";
 
 const { height } = Dimensions.get("window");
 const backgroundColor = "#409aee";
@@ -91,7 +92,7 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
         outputRange: [height - 150, 50, height - 150],
       });
       return (
-        <View style={styles.root}>
+        <View style={styles.container}>
           <Animated.ScrollView
             ref={this.scroll}
             style={StyleSheet.absoluteFillObject}
@@ -106,36 +107,25 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
           >
             <Scale from={BMI - 10} to={BMI + 10} />
           </Animated.ScrollView>
-          <View style={styles.container} pointerEvents="none">
+          <Overlays>
             <Animated.View ref={this.line} style={[styles.line, { transform: [{ scaleY }] }]} />
-          </View>
-          <View style={styles.container} pointerEvents="none">
             <Animated.View style={[styles.oppositeCursor, { transform: [{ translateY: translateY2 }] }]} />
-          </View>
-          <View style={styles.container} pointerEvents="none">
             <Animated.View style={[styles.cursor, { transform: [{ scale }] }]}>
               <TextInput ref={this.relativeInput} style={styles.cursorLabel} />
             </Animated.View>
-          </View>
-          <View style={styles.container} pointerEvents="none">
             <Animated.View style={[styles.mainCursor, { transform: [{ translateY }] }]}>
               <TextInput ref={this.totalInput} style={styles.mainCursorLabel} />
             </Animated.View>
-          </View>
+          </Overlays>
         </View>
       );
     }
 }
 
 const styles = StyleSheet.create({
-  root: {
+  container: {
     flex: 1,
     backgroundColor,
-  },
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
-    justifyContent: "center",
   },
   line: {
     height: 1,
