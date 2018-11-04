@@ -8,6 +8,14 @@ import {
 import Separator from "./Separator";
 
 export const ROW_HEIGHT = 100;
+const separators = {
+  18: "Underweight",
+  19: "Healthy weight",
+  24: "Healthy weight",
+  25: "Overweight",
+  29: "Overweight",
+  30: "Obsese",
+};
 
 type ScaleProps = {
     from: number,
@@ -22,13 +30,25 @@ export default class Scale extends React.PureComponent<ScaleProps> {
       <View>
         {
             _.times(range, Number).map((v, index) => {
-              const isFirst = index === 0;
-              const isLast = index === range - 1;
+              const BMI = from + index;
+              const label = separators[BMI];
+              const opening = !!separators[BMI - 1];
               return (
-                <View style={styles.row} key={v}>
-                  <Text style={styles.value}>{`${from + index}`}</Text>
-
-                </View>
+                <React.Fragment key={v}>
+                  <View style={styles.row}>
+                    <Text style={styles.value}>{`${BMI}`}</Text>
+                    {
+                    label && (
+                    <Text style={styles.label}>{label}</Text>
+                    )
+                  }
+                  </View>
+                  {
+                    (opening && label) && (
+                    <Separator />
+                    )
+                  }
+                </React.Fragment>
               );
             }).reverse()
           }
@@ -49,5 +69,9 @@ const styles = StyleSheet.create({
     color: "white",
     opacity: 0.95,
     fontSize: 20,
+  },
+  label: {
+    color: "white",
+    opacity: 0.8,
   },
 });
