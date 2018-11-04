@@ -23,7 +23,9 @@ type WeightTargetState = {
 export default class WeightTarget extends React.PureComponent<WeightTargetProps, WeightTargetState> {
     scroll = React.createRef();
 
-    input = React.createRef();
+    totalInput = React.createRef();
+
+    relativeInput = React.createRef();
 
     line = React.createRef();
 
@@ -34,21 +36,32 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
     };
 
     update = ({ value }) => {
+      const { height: h, weight } = this.props;
+      const BMI = this.scaleBMI(value);
+      const kg = BMI * h * h;
+      this.totalInput.current.setNativeProps({
+        text: `${_.round(kg, 1)}`,
+      });
+      this.relativeInput.current.setNativeProps({
+        text: `${_.round(kg - weight, 1)}`,
+      });
     }
 
     componentDidMount() {
       const { weight, height: h } = this.props;
       const { y } = this.state;
       const BMI = _.round(weight / (h * h));
-
-      // this.scaleBMI = scaleLinear().domain([range * ROW_HEIGHT, 0]).range([from, to]);
-      // this.scaleWeight = scaleLinear().domain([from, to]).range([55, 115]);
+      const from = BMI - 10;
+      const to = BMI + 10;
+      this.scaleBMI = scaleLinear().domain([0, 21 * ROW_HEIGHT - height]).range([to, from]);
       this.listener = y.addListener(this.update);
       InteractionManager.runAfterInteractions(this.scrollToDefaultValue);
     }
 
     scrollToDefaultValue = () => {
-      this.update({ value: 10 * ROW_HEIGHT });
+      const y = 10 * ROW_HEIGHT;
+      this.update({ value: y });
+      this.scroll.current.getNode().scrollTo({ y, animated: true });
     }
 
     componentWillUnmount() {
@@ -101,12 +114,12 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
           </View>
           <View style={styles.container} pointerEvents="none">
             <Animated.View style={[styles.cursor, { transform: [{ scale }] }]}>
-              <TextInput ref={this.input} style={styles.cursorLabel} />
+              <TextInput ref={this.relativeInput} style={styles.cursorLabel} />
             </Animated.View>
           </View>
           <View style={styles.container} pointerEvents="none">
             <Animated.View style={[styles.mainCursor, { transform: [{ translateY }] }]}>
-              <TextInput ref={this.input} style={styles.cursorLabel} />
+              <TextInput ref={this.totalInput} style={styles.mainCursorLabel} />
             </Animated.View>
           </View>
         </View>
@@ -155,6 +168,10 @@ const styles = StyleSheet.create({
   },
   cursorLabel: {
     color: "white",
+    fontSize: 26,
+  },
+  mainCursorLabel: {
+    color: backgroundColor,
     fontSize: 26,
   },
 });
