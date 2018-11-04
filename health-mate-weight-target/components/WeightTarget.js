@@ -9,6 +9,7 @@ import { scaleLinear } from "d3-scale";
 
 import Scale, { ROW_HEIGHT } from "./Scale";
 import Overlays from "./Overlays";
+import StartModal from "./StartModal";
 
 const { height } = Dimensions.get("window");
 const backgroundColor = "#409aee";
@@ -143,26 +144,11 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
           </Overlays>
           {
             visibleModal && (
-            <Overlays>
-                  <View
-                    style={{
-                  flex: 1, justifyContent: "space-evenly", alignItems: "center", backgroundColor,
-                }}
-                    pointEvents="none"
-                  >
-                    <Text style={styles.title}>What is the target weight (kg) that you would like to reach?</Text>
-                    <Text style={styles.subtitle}>Drag the bubble  to set your target weight</Text>
-                  </View>
-                  <View style={styles.mainCursor}>
-                    <TextInput ref={this.modalInput} style={styles.mainCursorLabel} />
-                  </View>
-                  <Image
-                    style={{
-                  width: 100, height: 100, resizeMode: "contain", alignSelf: "flex-end", marginRight: 16,
-                }}
-                    source={require("../assets/pinch.png")}
-                  />
-                </Overlays>
+              <StartModal>
+                <View style={styles.mainCursor}>
+                  <TextInput ref={this.modalInput} style={styles.mainCursorLabel} />
+                </View>
+              </StartModal>
             )
           }
         </View>
@@ -211,17 +197,5 @@ const styles = StyleSheet.create({
   mainCursorLabel: {
     color: backgroundColor,
     fontSize: 26,
-  },
-  title: {
-    color: "white",
-    fontSize: 24,
-    width: 300,
-    textAlign: "center",
-  },
-  subtitle: {
-    width: 150,
-    color: "white",
-    fontSize: 14,
-    textAlign: "center",
   },
 });
