@@ -24,7 +24,7 @@ type WeightTargetState = {
     x: Animated.Value,
 };
 
-export default class WeightTarget extends React.Component<WeightTargetProps, WeightTargetState> {
+export default class WeightTarget extends React.PureComponent<WeightTargetProps, WeightTargetState> {
     scroll = React.createRef();
 
     input = React.createRef();
@@ -38,9 +38,10 @@ export default class WeightTarget extends React.Component<WeightTargetProps, Wei
     update = ({ value }) => {
       const { defaultWeight } = this.props;
       const defaultBMI = _.round(scaleWeight.invert(defaultWeight), 2);
-      console.log({ defaultBMI });
+      const scaleProgress = scaleLinear().domain([from, defaultBMI, to]).range([-100, 0, 100]);
       const y = value + height / 2;
       const BMI = scaleBMI(y);
+      const progress = scaleProgress(BMI);
       const kgs = _.round(scaleWeight(BMI * 2), 0) / 2;
       const text = `${kgs}`;
       this.input.current.setNativeProps({ text });
@@ -50,13 +51,13 @@ export default class WeightTarget extends React.Component<WeightTargetProps, Wei
       const { y } = this.state;
       this.listener = y.addListener(this.update);
       InteractionManager.runAfterInteractions(this.scrollToDefaultValue);
-      // setTimeout(this.scrollToDefaultValue, 1000);
     }
 
     scrollToDefaultValue = () => {
       const { defaultWeight } = this.props;
       const scrollTo = scaleBMI.invert(scaleWeight.invert(defaultWeight)) - height / 2;
       this.scroll.current.getNode().scrollTo({ y: scrollTo });
+      this.update({ value: scrollTo });
     }
 
     componentWillUnmount() {
@@ -87,7 +88,7 @@ export default class WeightTarget extends React.Component<WeightTargetProps, Wei
           </Animated.ScrollView>
           <View style={styles.cursorContainer} pointerEvents="none">
             <View style={styles.cursor}>
-              <TextInput ref={this.input} />
+              <TextInput ref={this.input} style={styles.cursorLabel} />
             </View>
           </View>
         </View>
@@ -109,6 +110,13 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 100,
     width: 100,
-    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "white",
+  },
+  cursorLabel: {
+    color: "white",
+    fontSize: 26,
   },
 });
