@@ -39,7 +39,7 @@ export default class Scale extends React.PureComponent<ScaleProps> {
                     <Text style={styles.value}>{`${BMI}`}</Text>
                     {
                     label && (
-                    <Text style={styles.label}>{label}</Text>
+                    <Text style={[styles.label, { alignSelf: opening ? "flex-end" : "flex-start" }]}>{label}</Text>
                     )
                   }
                   </View>
@@ -73,5 +73,6 @@ const styles = StyleSheet.create({
   label: {
     color: "white",
     opacity: 0.8,
+    fontSize: 16,
   },
 });
