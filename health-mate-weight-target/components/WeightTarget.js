@@ -1,8 +1,9 @@
 // @flow
+// Pinch icon: Pinch by Juraj Sedlák from the Noun Project
 import * as _ from "lodash";
 import * as React from "react";
 import {
-  View, Animated, StyleSheet, TextInput, InteractionManager, Dimensions, Text,
+  View, Animated, StyleSheet, TextInput, InteractionManager, Dimensions, Text, Image,
 } from "react-native";
 import { scaleLinear } from "d3-scale";
 
@@ -142,17 +143,26 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
           </Overlays>
           {
             visibleModal && (
-              <View style={styles.modal} pointerEvents="none">
-                <Text style={styles.title}>
-                  What is the target weight (kg) that you would like to reach?
-                </Text>
-                <View style={styles.mainCursor}>
-                  <TextInput ref={this.modalInput} style={styles.mainCursorLabel} />
-                </View>
-                <Text style={styles.subtitle}>
-                  Drag the bubble  to set your target weight
-                </Text>
-              </View>
+            <Overlays>
+                  <View
+                    style={{
+                  flex: 1, justifyContent: "space-evenly", alignItems: "center", backgroundColor,
+                }}
+                    pointEvents="none"
+                  >
+                    <Text style={styles.title}>What is the target weight (kg) that you would like to reach?</Text>
+                    <Text style={styles.subtitle}>Drag the bubble  to set your target weight</Text>
+                  </View>
+                  <View style={styles.mainCursor}>
+                    <TextInput ref={this.modalInput} style={styles.mainCursorLabel} />
+                  </View>
+                  <Image
+                    style={{
+                  width: 100, height: 100, resizeMode: "contain", alignSelf: "flex-end", marginRight: 16,
+                }}
+                    source={require("../assets/pinch.png")}
+                  />
+                </Overlays>
             )
           }
         </View>
@@ -201,12 +211,6 @@ const styles = StyleSheet.create({
   mainCursorLabel: {
     color: backgroundColor,
     fontSize: 26,
-  },
-  modal: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor,
-    alignItems: "center",
-    justifyContent: "space-evenly",
   },
   title: {
     color: "white",
