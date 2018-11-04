@@ -83,14 +83,14 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
       const kg = BMI * h * h;
       if (init) {
         this.modalInput.current.setNativeProps({
-          text: `${_.round(kg, 1)}`,
+          text: `${_.round(kg, 1).toFixed(1)}`,
         });
       }
       this.totalInput.current.setNativeProps({
-        text: `${_.round(kg, 1)}`,
+        text: `${(_.round(kg * 2) / 2).toFixed(1)}`,
       });
       this.relativeInput.current.setNativeProps({
-        text: `${_.round(kg - weight, 1)}`,
+        text: `${(_.round((kg - weight) * 2) / 2).toFixed(1)}`,
       });
     }
 
