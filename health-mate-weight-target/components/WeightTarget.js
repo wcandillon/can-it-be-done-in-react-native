@@ -2,7 +2,7 @@
 import * as _ from "lodash";
 import * as React from "react";
 import {
-  View, Animated, StyleSheet, TextInput, InteractionManager, Dimensions,
+  View, Animated, StyleSheet, TextInput, InteractionManager, Dimensions, Text,
 } from "react-native";
 import { scaleLinear } from "d3-scale";
 
@@ -20,6 +20,7 @@ type WeightTargetProps = {
 
 type WeightTargetState = {
     x: Animated.Value,
+    visibleModal: boolean,
 };
 
 export default class WeightTarget extends React.PureComponent<WeightTargetProps, WeightTargetState> {
@@ -29,13 +30,15 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
 
     relativeInput = React.createRef();
 
+    modalInput = React.createRef();
+
     line = React.createRef();
 
     to: number;
 
     from: number;
 
-    scaleBMI: number => number & { invert: number => number };
+    scaleBMI: number => number;
 
     listener: () => void;
 
@@ -45,9 +48,10 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
       const BMI = _.round(weight / (h * h));
       this.from = BMI - 10;
       this.to = BMI + 10;
-      this.scaleBMI = scaleLinear().domain([0, 21 * ROW_HEIGHT - height]).range([this.to, this.from]);
+      this.scaleBMI = scaleLinear().domain([this.to, this.from]).range([0, 21 * ROW_HEIGHT - height]);
       this.state = {
-        y: new Animated.Value(this.scaleBMI.invert(BMI)),
+        y: new Animated.Value(this.scaleBMI(BMI)),
+        visibleModal: true,
       };
     }
 
@@ -65,15 +69,23 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
     scrollToDefaultValue = () => {
       const { weight, height: h } = this.props;
       const BMI = weight / (h * h);
-      const y = this.scaleBMI.invert(BMI);
-      this.scroll.current.getNode().scrollTo({ y, animated: true });
-      this.update({ value: y });
+      const y = this.scaleBMI(BMI);
+      this.scroll.current.getNode().scrollTo({ y, animated: false });
+      this.update({ value: y }, true);
     }
 
-    update = ({ value }) => {
+    update = ({ value }, init: boolean) => {
+      if (!init) {
+        this.setState({ visibleModal: false });
+      }
       const { height: h, weight } = this.props;
-      const BMI = this.scaleBMI(value);
+      const BMI = this.scaleBMI.invert(value);
       const kg = BMI * h * h;
+      if (init) {
+        this.modalInput.current.setNativeProps({
+          text: `${_.round(kg, 1)}`,
+        });
+      }
       this.totalInput.current.setNativeProps({
         text: `${_.round(kg, 1)}`,
       });
@@ -84,9 +96,7 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
 
     render() {
       const { from, to } = this;
-      const { weight, height: h } = this.props;
-      const { y } = this.state;
-      const BMI = _.round(weight / (h * h));
+      const { y, visibleModal } = this.state;
       const inputRange = [0, 21 * ROW_HEIGHT - height];
       const translateY = y.interpolate({
         inputRange,
@@ -130,6 +140,21 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
               <TextInput ref={this.totalInput} style={styles.mainCursorLabel} />
             </Animated.View>
           </Overlays>
+          {
+            visibleModal && (
+              <View style={styles.modal} pointerEvents="none">
+                <Text style={styles.title}>
+                  What is the target weight (kg) that you would like to reach?
+                </Text>
+                <View style={styles.mainCursor}>
+                  <TextInput ref={this.modalInput} style={styles.mainCursorLabel} />
+                </View>
+                <Text style={styles.subtitle}>
+                  Drag the bubble  to set your target weight
+                </Text>
+              </View>
+            )
+          }
         </View>
       );
     }
@@ -176,5 +201,23 @@ const styles = StyleSheet.create({
   mainCursorLabel: {
     color: backgroundColor,
     fontSize: 26,
+  },
+  modal: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  title: {
+    color: "white",
+    fontSize: 24,
+    width: 300,
+    textAlign: "center",
+  },
+  subtitle: {
+    width: 150,
+    color: "white",
+    fontSize: 14,
+    textAlign: "center",
   },
 });
