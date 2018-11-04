@@ -10,7 +10,7 @@ export default class App extends React.PureComponent {
     return (
       <React.Fragment>
         <StatusBar barStyle="light-content" />
-        <WeightTarget defaultValue={84} />
+        <WeightTarget defaultWeight={84} />
       </React.Fragment>
     );
   }

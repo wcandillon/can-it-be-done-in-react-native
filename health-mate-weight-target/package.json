@@ -10,6 +10,7 @@
     "lint": "eslint App.js components"
   },
   "dependencies": {
+    "d3-scale": "^2.1.2",
     "expo": "^30.0.1",
     "lodash": "^4.17.11",
     "react": "16.3.1",

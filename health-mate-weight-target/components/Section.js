@@ -7,12 +7,14 @@ import {
 
 import Separator from "./Separator";
 
+export const ROW_HEIGHT = 100;
+
 type SectionProps = {
     label: string,
     from: number,
     to: number,
-    noTopLabel: boolean,
-    noBottomLabel: boolean,
+    noTopLabel?: boolean,
+    noBottomLabel?: boolean,
 };
 
 export default class Section extends React.PureComponent<SectionProps> {
@@ -56,7 +58,7 @@ export default class Section extends React.PureComponent<SectionProps> {
 
 const styles = StyleSheet.create({
   row: {
-    height: 100,
+    height: ROW_HEIGHT,
     padding: 16,
     flexDirection: "row",
     justifyContent: "space-between",

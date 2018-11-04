@@ -14,8 +14,8 @@ export default class Separator extends React.PureComponent<SeparatorProps> {
     return (
       <View style={styles.container}>
         {
-          _.times(dashes).map((v, i) => (
-            <View key={i} style={styles.dash} />
+          _.times(dashes).map((v, key) => (
+            <View style={styles.dash} {...{ key }} />
           ))
         }
       </View>

@@ -1,35 +1,69 @@
 // @flow
+import * as _ from "lodash";
 import * as React from "react";
 import {
-  View, Animated, StyleSheet, SafeAreaView,
+  View, Animated, StyleSheet, TextInput, InteractionManager, Dimensions,
 } from "react-native";
-import { LinearGradient } from "expo";
+import { scaleLinear } from "d3-scale";
 
-import Section from "./Section";
+import Section, { ROW_HEIGHT } from "./Section";
 
-const topColor = "#76f3cb";
-const bottomColor = "#409aee";
+const { height } = Dimensions.get("window");
+const backgroundColor = "#409aee";
+const from = 17;
+const to = 36;
+const range = to - from + 1;
+const scaleBMI = scaleLinear().domain([range * ROW_HEIGHT, 0]).range([from, to]);
+const scaleWeight = scaleLinear().domain([from, to]).range([55, 115]);
 
 type WeightTargetProps = {
-  defaultValue: number,
+  defaultWeight: number,
 };
+
 type WeightTargetState = {
     x: Animated.Value,
 };
 
-export default class WeightTarget extends React.PureComponent<WeightTargetProps, WeightTargetState> {
+export default class WeightTarget extends React.Component<WeightTargetProps, WeightTargetState> {
     scroll = React.createRef();
 
+    input = React.createRef();
+
+    listener: () => void;
+
     state = {
-      x: new Animated.Value(0),
+      y: new Animated.Value(0),
     };
 
+    update = ({ value }) => {
+      const y = value + height / 2;
+      const BMI = scaleBMI(y);
+      const kgs = _.round(scaleWeight(BMI * 2), 0) / 2;
+      const text = `${kgs}`;
+      this.input.current.setNativeProps({ text: `${text}` });
+    }
+
+    componentDidMount() {
+      const { y } = this.state;
+      this.listener = y.addListener(this.update);
+      InteractionManager.runAfterInteractions(this.scrollToDefaultValue);
+    }
+
+    scrollToDefaultValue = () => {
+      const { defaultWeight } = this.props;
+      const scrollTo = scaleBMI(scaleWeight(defaultWeight)) - height / 2;
+      this.scroll.current.getNode().scrollTo({ y: scrollTo });
+    }
+
+    componentWillUnmount() {
+      const { y } = this.state;
+      y.removeListener(this.listener);
+    }
+
     render() {
-      const { x } = this.state;
+      const { y } = this.state;
       return (
         <View style={styles.container}>
-          <View style={styles.topHalf} />
-          <View style={styles.bottomHalf} />
           <Animated.ScrollView
             ref={this.scroll}
             style={StyleSheet.absoluteFillObject}
@@ -37,27 +71,21 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
             scrollEventThrottle={16}
             bounces={false}
             showsVerticalScrollIndicator={false}
-            contentInsetAdjustmentBehavior="automatic"
             onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: { x },
-                  },
-                },
-              ],
+              [{ nativeEvent: { contentOffset: { y } } }],
               { useNativeDriver: true },
             )}
           >
-            <LinearGradient colors={[topColor, bottomColor]}>
-              <SafeAreaView>
-                <Section label="Obese" from={30} to={36} noTopLabel />
-                <Section label="Overweight" from={25} to={29} />
-                <Section label="Healthy weight" from={19} to={24} />
-                <Section label="Underweight" from={17} to={18} noBottomLabel />
-              </SafeAreaView>
-            </LinearGradient>
+            <Section label="Obese" from={30} to={36} noTopLabel />
+            <Section label="Overweight" from={25} to={29} />
+            <Section label="Healthy weight" from={19} to={24} />
+            <Section label="Underweight" from={17} to={18} noBottomLabel />
           </Animated.ScrollView>
+          <View style={styles.cursorContainer} pointerEvents="none">
+            <View style={styles.cursor}>
+              <TextInput ref={this.input} />
+            </View>
+          </View>
         </View>
       );
     }
@@ -66,13 +94,17 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor,
   },
-  topHalf: {
-    flex: 0.5,
-    backgroundColor: topColor,
+  cursorContainer: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  bottomHalf: {
-    flex: 0.5,
-    backgroundColor: bottomColor,
+  cursor: {
+    borderRadius: 50,
+    height: 100,
+    width: 100,
+    backgroundColor: "white",
   },
 });
