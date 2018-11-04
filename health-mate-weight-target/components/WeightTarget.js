@@ -11,6 +11,7 @@ import Overlays from "./Overlays";
 
 const { height } = Dimensions.get("window");
 const backgroundColor = "#409aee";
+const PADDING = 100;
 
 type WeightTargetProps = {
   weight: number,
@@ -30,11 +31,44 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
 
     line = React.createRef();
 
+    to: number;
+
+    from: number;
+
+    scaleBMI: number => number & { invert: number => number };
+
     listener: () => void;
 
-    state = {
-      y: new Animated.Value(0),
-    };
+    constructor(props: WeightTargetProps) {
+      super(props);
+      const { weight, height: h } = this.props;
+      const BMI = _.round(weight / (h * h));
+      this.from = BMI - 10;
+      this.to = BMI + 10;
+      this.scaleBMI = scaleLinear().domain([0, 21 * ROW_HEIGHT - height]).range([this.to, this.from]);
+      this.state = {
+        y: new Animated.Value(this.scaleBMI.invert(BMI)),
+      };
+    }
+
+    componentDidMount() {
+      const { y } = this.state;
+      this.listener = y.addListener(this.update);
+      InteractionManager.runAfterInteractions(this.scrollToDefaultValue);
+    }
+
+    componentWillUnmount() {
+      const { y } = this.state;
+      y.removeListener(this.listener);
+    }
+
+    scrollToDefaultValue = () => {
+      const { weight, height: h } = this.props;
+      const BMI = weight / (h * h);
+      const y = this.scaleBMI.invert(BMI);
+      this.scroll.current.getNode().scrollTo({ y, animated: true });
+      this.update({ value: y });
+    }
 
     update = ({ value }) => {
       const { height: h, weight } = this.props;
@@ -48,40 +82,19 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
       });
     }
 
-    componentDidMount() {
-      const { weight, height: h } = this.props;
-      const { y } = this.state;
-      const BMI = _.round(weight / (h * h));
-      const from = BMI - 10;
-      const to = BMI + 10;
-      this.scaleBMI = scaleLinear().domain([0, 21 * ROW_HEIGHT - height]).range([to, from]);
-      this.listener = y.addListener(this.update);
-      InteractionManager.runAfterInteractions(this.scrollToDefaultValue);
-    }
-
-    scrollToDefaultValue = () => {
-      const y = 10 * ROW_HEIGHT;
-      this.update({ value: y });
-      this.scroll.current.getNode().scrollTo({ y, animated: true });
-    }
-
-    componentWillUnmount() {
-      const { y } = this.state;
-      y.removeListener(this.listener);
-    }
-
     render() {
+      const { from, to } = this;
       const { weight, height: h } = this.props;
       const { y } = this.state;
       const BMI = _.round(weight / (h * h));
       const inputRange = [0, 21 * ROW_HEIGHT - height];
       const translateY = y.interpolate({
         inputRange,
-        outputRange: [-height / 2 + 100, height / 2 - 100],
+        outputRange: [-height / 2 + PADDING, height / 2 - PADDING],
       });
       const translateY2 = y.interpolate({
         inputRange,
-        outputRange: [height / 2 - 100, -height / 2 + 100],
+        outputRange: [height / 2 - PADDING, -height / 2 + PADDING],
       });
       const scale = y.interpolate({
         inputRange: [inputRange[0], inputRange[1] / 2, inputRange[1]],
@@ -89,7 +102,7 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
       });
       const scaleY = y.interpolate({
         inputRange: [inputRange[0], inputRange[1] / 2, inputRange[1]],
-        outputRange: [height - 150, 50, height - 150],
+        outputRange: [height - PADDING - 50, 50, height - PADDING - 50],
       });
       return (
         <View style={styles.container}>
@@ -105,7 +118,7 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
               { useNativeDriver: true },
             )}
           >
-            <Scale from={BMI - 10} to={BMI + 10} />
+            <Scale {...{ from, to }} />
           </Animated.ScrollView>
           <Overlays>
             <Animated.View ref={this.line} style={[styles.line, { transform: [{ scaleY }] }]} />
