@@ -62,7 +62,7 @@ export default class App extends React.Component<{}, AppState> {
     if (!ready) {
       return (
         <View style={styles.container}>
-          <ActivityIndicator size="large" color="white" />
+          <ActivityIndicator size="large" color="black" />
         </View>
       );
     }
@@ -80,6 +80,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#222222",
+    backgroundColor: "white",
   },
 });

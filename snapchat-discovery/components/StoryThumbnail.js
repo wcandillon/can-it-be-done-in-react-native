@@ -1,7 +1,7 @@
 // @flow
 import * as React from "react";
 import {
-  View, Image, StyleSheet, Dimensions,
+  View, Image, StyleSheet, Dimensions, TouchableWithoutFeedback,
 } from "react-native";
 
 import type { Story } from "./Story";
@@ -12,15 +12,18 @@ const width = Dimensions.get("window").width / 2 - margin * 2;
 
 type StoryThumbnailProps = {
   story: Story,
+  onPress: () => void,
 };
 
 export default class StoryThumbnail extends React.PureComponent<StoryThumbnailProps> {
   render() {
-    const { story } = this.props;
+    const { story, onPress } = this.props;
     return (
-      <View style={styles.container}>
-        <Image source={story.source} style={styles.image} />
-      </View>
+      <TouchableWithoutFeedback {...{ onPress }}>
+        <View style={styles.container}>
+          <Image source={story.source} style={styles.image} />
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
