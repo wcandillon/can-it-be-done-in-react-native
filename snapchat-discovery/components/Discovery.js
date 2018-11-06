@@ -1,14 +1,9 @@
 // @flow
 import * as React from "react";
-import { View } from "react-native";
-import type { ImageSourcePropType } from "react-native/Libraries/Image/ImageSourcePropType";
+import { StyleSheet, ScrollView, SafeAreaView } from "react-native";
 
-type Story = {
-  id: string,
-  source: ImageSourcePropType,
-  user: string,
-  avatar: ImageSourcePropType,
-};
+import type { Story } from "./Story";
+import StoryThumbnail from "./StoryThumbnail";
 
 type DiscoveryProps = {
   stories: Story[];
@@ -18,7 +13,24 @@ export default class Discovery extends React.PureComponent<DiscoveryProps> {
   render() {
     const { stories } = this.props;
     return (
-      <View />
+      <ScrollView style={styles.root} contentInsetAdjustmentBehavior="automatic">
+        <SafeAreaView style={styles.container}>
+          {
+            stories.map(story => <StoryThumbnail key={story.id} {...{ story }} />)
+          }
+        </SafeAreaView>
+      </ScrollView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
+  },
+});
