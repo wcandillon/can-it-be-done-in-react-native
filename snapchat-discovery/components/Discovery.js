@@ -8,10 +8,6 @@ import type { Story, Position } from "./Story";
 import StoryThumbnail from "./StoryThumbnail";
 import StoryModal from "./StoryModal";
 
-const measureInWindowAsync = ref => new Promise(resolve => ref.measureInWindow((x, y, width, height) => resolve({
-  x, y, width, height,
-})));
-
 type DiscoveryProps = {
   stories: Story[];
 };
@@ -36,7 +32,7 @@ export default class Discovery extends React.PureComponent<DiscoveryProps, Disco
   }
 
   goToStory = async (story: Story) => {
-    const position = await measureInWindowAsync(this.thumbnails[story.id].current);
+    const position = await this.thumbnails[story.id].current.measure();
     this.setState({ story, position });
   }
 
@@ -52,13 +48,14 @@ export default class Discovery extends React.PureComponent<DiscoveryProps, Disco
           <SafeAreaView style={styles.container}>
             {
             stories.map(
-              story => (
-                <View key={story.id} ref={this.thumbnails[story.id]}>
-                  <StoryThumbnail
-                    onPress={() => this.goToStory(story)}
-                    {...{ story }}
-                  />
-                </View>
+              s => (
+                <StoryThumbnail
+                  ref={this.thumbnails[s.id]}
+                  key={s.id}
+                  selected={!!story && story.id === s.id}
+                  onPress={() => this.goToStory(s)}
+                  story={s}
+                />
               ),
             )
           }

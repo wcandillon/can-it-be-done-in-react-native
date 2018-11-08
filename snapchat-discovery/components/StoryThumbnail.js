@@ -10,18 +10,32 @@ const margin = 16;
 const borderRadius = 5;
 const width = Dimensions.get("window").width / 2 - margin * 2;
 
+const measureInWindowAsync = ref => new Promise(resolve => ref.measureInWindow((x, y, width, height) => resolve({
+  x, y, width, height,
+})));
+
 type StoryThumbnailProps = {
   story: Story,
   onPress: () => void,
+  selected: boolean,
 };
 
 export default class StoryThumbnail extends React.PureComponent<StoryThumbnailProps> {
+  ref = React.createRef();
+
+  measure = async (): Position => measureInWindowAsync(this.ref.current);
+
   render() {
-    const { story, onPress } = this.props;
+    const { ref } = this;
+    const { story, onPress, selected } = this.props;
     return (
       <TouchableWithoutFeedback {...{ onPress }}>
         <View style={styles.container}>
-          <Image source={story.source} style={styles.image} />
+          {
+            !selected && (
+            <Image source={story.source} style={styles.image} {...{ ref }} />
+            )
+          }
         </View>
       </TouchableWithoutFeedback>
     );

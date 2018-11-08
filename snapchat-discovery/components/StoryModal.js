@@ -103,7 +103,7 @@ export default class StoryModal extends React.PureComponent<StoryModalProps> {
     } = this;
     const { story, position, onRequestClose } = this.props;
     const style = {
-      backgroundColor: "green",
+      borderRadius: 5,
       width,
       height,
       transform: [
@@ -165,5 +165,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     width: null,
     height: null,
+    borderRadius: 5,
   },
 });
