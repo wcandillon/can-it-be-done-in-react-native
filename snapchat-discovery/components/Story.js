@@ -7,3 +7,10 @@ export type Story = {
   user: string,
   avatar: ImageSourcePropType,
 };
+
+export type Position = {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+};
