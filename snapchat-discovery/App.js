@@ -38,6 +38,12 @@ const stories = [
     user: "andrea.schmidt",
     avatar: require("./assets/avatars/andrea.schmidt.png"),
   },
+  {
+    id: "6",
+    source: require("./assets/stories/6.jpg"),
+    user: "andrea.schmidt",
+    avatar: require("./assets/avatars/andrea.schmidt.png"),
+  },
 ];
 
 type AppState = {
