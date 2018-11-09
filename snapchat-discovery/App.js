@@ -82,7 +82,7 @@ export default class App extends React.Component<{}, AppState> {
     }
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="light-content" backgroundColor="black" />
         <Discovery {...{ stories }} />
       </View>
     );

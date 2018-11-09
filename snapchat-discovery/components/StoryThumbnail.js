@@ -1,18 +1,16 @@
 // @flow
 import * as React from "react";
 import {
-  View, Image, StyleSheet, Dimensions, TouchableWithoutFeedback,
+  View, Image, StyleSheet, Dimensions, TouchableWithoutFeedback, Platform,
 } from "react-native";
+import { Constants } from "expo";
 
 import type { Story } from "./Story";
 
 const margin = 16;
 const borderRadius = 5;
 const width = Dimensions.get("window").width / 2 - margin * 2;
-
-const measureInWindowAsync = ref => new Promise(resolve => ref.measureInWindow((x, y, width, height) => resolve({
-  x, y, width, height,
-})));
+const offset = (v: number) => (Platform.OS === "android" ? (v + Constants.statusBarHeight) : v);
 
 type StoryThumbnailProps = {
   story: Story,
@@ -23,7 +21,9 @@ type StoryThumbnailProps = {
 export default class StoryThumbnail extends React.PureComponent<StoryThumbnailProps> {
   ref = React.createRef();
 
-  measure = async (): Position => measureInWindowAsync(this.ref.current);
+  measure = async (): Position => new Promise(resolve => this.ref.current.measureInWindow((x, y, width, height) => resolve({
+    x, y: offset(y), width, height,
+  })));
 
   render() {
     const { ref } = this;
