@@ -1,6 +1,7 @@
 // @flow
 import * as React from "react";
 import { Image, StyleSheet, Dimensions } from "react-native";
+import { Video } from "expo";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 
@@ -152,7 +153,25 @@ export default class StoryModal extends React.PureComponent<StoryModalProps> {
           {...{ onGestureEvent }}
         >
           <Animated.View {...{ style }}>
-            <Image source={story.source} style={styles.image} />
+            {
+              !story.video && (
+                <Image source={story.source} style={styles.image} />
+              )
+            }
+            {
+              story.video && (
+                <Video
+                  source={story.video}
+                  rate={1.0}
+                  volume={1.0}
+                  isMuted={false}
+                  resizeMode="cover"
+                  shouldPlay
+                  isLooping
+                  style={styles.video}
+                />
+              )
+            }
           </Animated.View>
         </PanGestureHandler>
       </React.Fragment>
@@ -165,6 +184,10 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     width: null,
     height: null,
+    borderRadius: 5,
+  },
+  video: {
+    ...StyleSheet.absoluteFillObject,
     borderRadius: 5,
   },
 });

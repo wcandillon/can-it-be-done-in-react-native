@@ -21,6 +21,13 @@ const stories = [
     avatar: require("./assets/avatars/jmitch.png"),
   },
   {
+    id: "7",
+    source: require("./assets/stories/7.jpg"),
+    user: "andrea.schmidt",
+    avatar: require("./assets/avatars/andrea.schmidt.png"),
+    video: require("./assets/stories/7.mp4"),
+  },
+  {
     id: "5",
     source: require("./assets/stories/5.jpg"),
     user: "monicaa",
@@ -59,6 +66,7 @@ export default class App extends React.Component<{}, AppState> {
     await Promise.all(stories.map(story => Promise.all([
       Asset.loadAsync(story.source),
       Asset.loadAsync(story.avatar),
+      story.video ? Asset.loadAsync(story.video) : undefined,
     ])));
     this.setState({ ready: true });
   }
