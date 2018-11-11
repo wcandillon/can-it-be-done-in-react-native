@@ -8,7 +8,9 @@ import Animated from 'react-native-reanimated';
 
 import Story, { type StoryModel } from './Story';
 
-const { event, concat } = Animated;
+const {
+  event, concat, abs, sub, sin, divide, multiply, greaterThan, cond, debug,
+} = Animated;
 const { width } = Dimensions.get('window');
 const perspective = width;
 const angle = Math.atan(perspective / (width / 2));
@@ -44,18 +46,11 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
       extrapolate: 'clamp',
     });
 
-    const translateX1 = x.interpolate({
-      inputRange,
-      outputRange: [(width / 2), -width / 2],
-      extrapolate: 'clamp',
-    });
-
-    const extra = ((width / ratio) / Math.cos(angle / 2)) - width / ratio;
-    const translateX2 = x.interpolate({
-      inputRange,
-      outputRange: [-extra, extra],
-      extrapolate: 'clamp',
-    });
+    const alpha = abs(rotateY);
+    const gamma = sub(angle, alpha);
+    const beta = sub(Math.PI, alpha, gamma);
+    const w = sub(width / 2, multiply(width / 2, divide(sin(gamma), sin(beta))));
+    const translateX1 = cond(greaterThan(rotateY, 0), w, multiply(w, -1));
 
     return {
       ...StyleSheet.absoluteFillObject,
@@ -64,7 +59,6 @@ export default class Stories extends React.PureComponent<StoriesProps, StoriesSt
         { translateX },
         { rotateY: concat(rotateY, 'rad') },
         { translateX: translateX1 },
-        { translateX: translateX2 },
       ],
     };
   }
