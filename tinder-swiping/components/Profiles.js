@@ -48,19 +48,20 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
   render() {
     const { onGestureEvent, translateX, translateY } = this;
     const { profiles: [lastProfile, ...profiles] } = this.state;
-    const rotateX = concat(
+    const rotateZ = concat(
       interpolate(translateX, {
-        inputRange: [0, width],
-        outputRange: [-15, 15],
+        inputRange: [-width, width],
+        outputRange: [-30, 30],
       }),
       "deg",
     );
     const style = {
       ...StyleSheet.absoluteFillObject,
+      zIndex: 900,
       transform: [
         { translateX },
         { translateY },
-        { rotateX },
+        { rotateZ },
       ],
     };
     return (
@@ -110,6 +111,7 @@ const styles = StyleSheet.create({
   cards: {
     flex: 1,
     margin: 8,
+    zIndex: 100,
   },
   footer: {
     flexDirection: "row",
