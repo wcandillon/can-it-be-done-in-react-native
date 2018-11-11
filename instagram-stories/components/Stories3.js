@@ -9,7 +9,7 @@ import Animated from 'react-native-reanimated';
 import Story, { type StoryModel } from './Story';
 
 const {
-  event, concat, abs, sub, sin, divide, multiply, greaterThan, cond, debug,
+  event, concat, abs, sub, sin, divide, multiply, greaterThan, cond,
 } = Animated;
 const { width } = Dimensions.get('window');
 const perspective = width;
