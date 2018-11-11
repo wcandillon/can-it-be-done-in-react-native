@@ -1,6 +1,5 @@
 // @flow
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { Asset, AppLoading } from "expo";
 
 import { Profiles, type Profile } from "./components";
@@ -58,12 +57,3 @@ export default class App extends React.Component<{}, AppState> {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

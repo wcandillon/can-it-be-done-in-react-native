@@ -1,6 +1,8 @@
 // @flow
 import * as React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import {
+  SafeAreaView, StyleSheet, View, Dimensions,
+} from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
@@ -8,7 +10,10 @@ import Animated from "react-native-reanimated";
 import type { Profile } from "./Profile";
 import Card from "./Card";
 
-const { Value, event } = Animated;
+const { width } = Dimensions.get("window");
+const {
+  Value, event, interpolate, concat,
+} = Animated;
 
 type ProfilesProps = {
   profiles: Profile[],
@@ -43,11 +48,19 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
   render() {
     const { onGestureEvent, translateX, translateY } = this;
     const { profiles: [lastProfile, ...profiles] } = this.state;
+    const rotateX = concat(
+      interpolate(translateX, {
+        inputRange: [0, width],
+        outputRange: [-15, 15],
+      }),
+      "deg",
+    );
     const style = {
       ...StyleSheet.absoluteFillObject,
       transform: [
         { translateX },
         { translateY },
+        { rotateX },
       ],
     };
     return (
@@ -58,7 +71,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
         </View>
         <View style={styles.cards}>
           {
-              profiles.reverse().map(profile => (
+              profiles.map(profile => (
                 <Card key={profile.id} {...{ profile }} />
               ))
           }
