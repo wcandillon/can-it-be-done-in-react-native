@@ -4,7 +4,7 @@ import { StatusBar } from 'react-native';
 import { Asset, AppLoading } from 'expo';
 // Two implementations of the story components.
 // One using linear interpolation which doesn't make it a perfect cube and one with setNativeProps
-import { Stories, Stories2 } from './components';
+import { Stories, Stories2, Stories3 } from './components';
 
 const stories = [
   {
@@ -64,7 +64,7 @@ export default class App extends React.Component<{}, AppState> {
     return (
       <React.Fragment>
         <StatusBar barStyle="light-content" />
-        <Stories2 {...{ stories }} />
+        <Stories3 {...{ stories }} />
       </React.Fragment>
     );
   }
