@@ -10,9 +10,70 @@ import Animated from "react-native-reanimated";
 import type { Profile } from "./Profile";
 import Card from "./Card";
 
+function runSpring(clock, value, velocity, dest) {
+  const state = {
+    finished: new Value(0),
+    velocity: new Value(0),
+    position: new Value(0),
+    time: new Value(0),
+  };
+
+  const config = {
+    damping: 7,
+    mass: 1,
+    stiffness: 121.6,
+    overshootClamping: false,
+    restSpeedThreshold: 0.001,
+    restDisplacementThreshold: 0.001,
+    toValue: new Value(0),
+  };
+
+  return [
+    cond(clockRunning(clock), 0, [
+      set(state.finished, 0),
+      set(state.velocity, velocity),
+      set(state.position, value),
+      set(config.toValue, dest),
+      startClock(clock),
+    ]),
+    spring(clock, state, config),
+    cond(state.finished, stopClock(clock)),
+    state.position,
+  ];
+}
+
 const { width } = Dimensions.get("window");
 const {
-  Value, event, interpolate, concat,
+  neq,
+  add,
+  spring,
+  cond,
+  diff,
+  divide,
+  eq,
+  event,
+  exp,
+  lessThan,
+  greaterThan,
+  and,
+  defined,
+  call,
+  block,
+  multiply,
+  pow,
+  set,
+  abs,
+  clockRunning,
+  greaterOrEq,
+  lessOrEq,
+  sqrt,
+  startClock,
+  stopClock,
+  sub,
+  Clock,
+  Value,
+  concat,
+  interpolate,
 } = Animated;
 
 type ProfilesProps = {
@@ -26,22 +87,54 @@ type ProfilesState = {
 export default class Profiles extends React.PureComponent<ProfilesProps, ProfilesState> {
   constructor(props: ProfilesProps) {
     super(props);
-    this.translateX = new Value(0);
-    this.translateY = new Value(0);
-    this.velocityX = new Value(0);
+    const TOSS_SEC = 0.2;
+    const clockX = new Clock();
+    const clockY = new Clock();
+    const translationX = new Value(0);
+    const translationY = new Value(0);
+    const velocityX = new Value(0);
+    const state = new Value(State.UNDETERMINED);
+
     const { profiles } = props;
     this.state = { profiles };
     this.onGestureEvent = event(
       [
         {
           nativeEvent: {
-            translationX: this.translateX,
-            translationY: this.translateY,
-            velocityX: this.velocityX,
+            translationX,
+            translationY,
+            velocityX,
+            state,
           },
         },
       ],
       { useNativeDriver: true },
+    );
+    this.translateY = translationY;
+    const snapPoint = cond(
+      lessOrEq(velocityX, 0),
+      0,
+      cond(
+        lessThan(translationX, 0),
+        -width,
+        width,
+      ),
+    );
+    this.translateY = cond(
+      eq(state, State.END),
+      [
+        set(translationY, runSpring(clockY, translationY, 0, 0)),
+        translationY,
+      ],
+      translationY,
+    );
+    this.translateX = cond(
+      eq(state, State.END),
+      [
+        set(translationX, runSpring(clockX, translationX, velocityX, snapPoint)),
+        translationX,
+      ],
+      translationX,
     );
   }
 
