@@ -120,9 +120,9 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     translationY.setValue(0);
     velocityX.setValue(0);
     const snapPoint = cond(
-      lessThan(velocityX, -100),
+      and(lessThan(velocityX, -10), lessThan(translationX, 0)),
       -width,
-      cond(greaterThan(velocityX, 100), width, 0),
+      cond(and(greaterThan(velocityX, 10), greaterThan(translationX, 0)), width, 0),
     );
     this.translateY = cond(
       eq(gestureState, State.END),
