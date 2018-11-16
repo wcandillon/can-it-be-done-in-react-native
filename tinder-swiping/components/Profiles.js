@@ -10,7 +10,7 @@ import Animated from "react-native-reanimated";
 import type { Profile } from "./Profile";
 import Card from "./Card";
 
-function runSpring(clock, value, velocity, dest) {
+function runSpring(clock, value, dest) {
   const state = {
     finished: new Value(0),
     velocity: new Value(0),
@@ -31,7 +31,7 @@ function runSpring(clock, value, velocity, dest) {
   return [
     cond(clockRunning(clock), 0, [
       set(state.finished, 0),
-      set(state.velocity, velocity),
+      set(state.velocity, 0),
       set(state.position, value),
       set(config.toValue, dest),
       startClock(clock),
@@ -89,12 +89,9 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     super(props);
     const { profiles } = props;
     this.state = { profiles };
-    this.clockX = new Clock();
-    this.clockY = new Clock();
     this.translationX = new Value(0);
     this.translationY = new Value(0);
     this.velocityX = new Value(0);
-    this.velocityY = new Value(0);
     this.gestureState = new Value(State.UNDETERMINED);
     this.onGestureEvent = event(
       [
@@ -103,7 +100,6 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
             translationX: this.translationX,
             translationY: this.translationY,
             velocityX: this.velocityX,
-            velocityY: this.velocityY,
             state: this.gestureState,
           },
         },
@@ -114,12 +110,15 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
   }
 
   init = () => {
+    const clockX = new Clock();
+    const clockY = new Clock();
     const {
-      translationX, translationY, velocityX, velocityY, clockY, clockX, gestureState,
+      translationX, translationY, velocityX, gestureState,
     } = this;
     gestureState.setValue(State.UNDETERMINED);
     translationX.setValue(0);
     translationY.setValue(0);
+    velocityX.setValue(0);
     const snapPoint = cond(
       lessThan(velocityX, -100),
       -width,
@@ -128,7 +127,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     this.translateY = cond(
       eq(gestureState, State.END),
       [
-        set(translationY, runSpring(clockY, translationY, velocityY, 0)),
+        set(translationY, runSpring(clockY, translationY, 0)),
         translationY,
       ],
       translationY,
@@ -136,7 +135,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     this.translateX = cond(
       eq(gestureState, State.END),
       [
-        set(translationX, runSpring(clockX, translationX, velocityX, snapPoint)),
+        set(translationX, runSpring(clockX, translationX, snapPoint)),
         cond(and(eq(clockRunning(clockX), 0), neq(translationX, 0)), [
           call([translationX], this.swipped),
         ]),
@@ -146,12 +145,8 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     );
   };
 
-  swipped = ([translateX]) => {
-    if (translateX < 0) {
-      console.log("Nope");
-    } else {
-      console.log("Like");
-    }
+  swipped = ([translationX]) => {
+    console.log({ likes: translationX > 0 });
     const { profiles: [lastProfile, ...profiles] } = this.state;
     this.setState({ profiles }, this.init);
   }
