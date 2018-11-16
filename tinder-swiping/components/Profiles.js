@@ -19,9 +19,9 @@ function runSpring(clock, value, velocity, dest) {
   };
 
   const config = {
-    damping: 7,
+    damping: 10,
     mass: 1,
-    stiffness: 121.6,
+    stiffness: 100,
     overshootClamping: false,
     restSpeedThreshold: 0.001,
     restDisplacementThreshold: 0.001,
@@ -94,6 +94,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     const translationX = new Value(0);
     const translationY = new Value(0);
     const velocityX = new Value(0);
+    const velocityY = new Value(0);
     const gestureState = new Value(State.UNDETERMINED);
     this.onGestureEvent = event(
       [
@@ -102,6 +103,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
             translationX,
             translationY,
             velocityX,
+            velocityY,
             state: gestureState,
           },
         },
@@ -109,14 +111,14 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       { useNativeDriver: true },
     );
     const snapPoint = cond(
-      lessThan(translationX, 0),
-      cond(lessThan(velocityX, 10), -width, 0),
-      cond(greaterThan(velocityX, 10), width, 0),
+      lessThan(velocityX, -100),
+      -width,
+      cond(greaterThan(velocityX, 100), width, 0),
     );
     this.translateY = cond(
       eq(gestureState, State.END),
       [
-        set(translationY, runSpring(clockY, translationY, 0, 0)),
+        set(translationY, runSpring(clockY, translationY, velocityY, 0)),
         translationY,
       ],
       translationY,
@@ -125,7 +127,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       eq(gestureState, State.END),
       [
         set(translationX, runSpring(clockX, translationX, velocityX, snapPoint)),
-        cond(eq(clockRunning(clockX), 0), [
+        cond(and(eq(clockRunning(clockX), 0), neq(translationX, 0)), [
           call([translationX], this.swipped),
         ]),
         translationX,
@@ -136,12 +138,9 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
 
   swipped = ([translateX]) => {
     console.log({ translateX });
-    if (translateX === 0) {
-      return;
-    }
     if (translateX < 0) {
       console.log("Nope");
-    } else if (translateX > 0) {
+    } else {
       console.log("Like");
     }
     const { profiles: [lastProfile, ...profiles] } = this.state;
@@ -159,11 +158,11 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       "deg",
     );
     const likeOpacity = interpolate(translateX, {
-      inputRange: [0, width],
+      inputRange: [0, width / 2],
       outputRange: [0, 1],
     });
     const nopeOpacity = interpolate(translateX, {
-      inputRange: [-width, 0],
+      inputRange: [-width / 2, 0],
       outputRange: [1, 0],
     });
     const style = {
