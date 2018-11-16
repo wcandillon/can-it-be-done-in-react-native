@@ -110,15 +110,10 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       ],
       { useNativeDriver: true },
     );
-    this.translateY = translationY;
     const snapPoint = cond(
-      lessOrEq(velocityX, 0),
-      0,
-      cond(
-        lessThan(translationX, 0),
-        -width,
-        width,
-      ),
+      lessThan(translationX, 0),
+      cond(lessThan(velocityX, 10), -width, 0),
+      cond(greaterThan(velocityX, 10), width, 0),
     );
     this.translateY = cond(
       eq(state, State.END),
@@ -148,6 +143,14 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       }),
       "deg",
     );
+    const likeOpacity = interpolate(translateX, {
+      inputRange: [0, width],
+      outputRange: [0, 1],
+    });
+    const nopeOpacity = interpolate(translateX, {
+      inputRange: [-width, 0],
+      outputRange: [1, 0],
+    });
     const style = {
       ...StyleSheet.absoluteFillObject,
       zIndex: 900,
@@ -174,7 +177,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
             {...{ onGestureEvent }}
           >
             <Animated.View {...{ style }}>
-              <Card profile={lastProfile} />
+              <Card profile={lastProfile} {...{ likeOpacity, nopeOpacity }} />
             </Animated.View>
           </PanGestureHandler>
         </View>

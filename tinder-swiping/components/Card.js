@@ -3,27 +3,37 @@ import * as React from "react";
 import {
   Image, StyleSheet, View, Text,
 } from "react-native";
+import Animated from "react-native-reanimated";
 
 import type { Profile } from "./Profile";
 
+const { Value } = Animated;
+
 type CardProps = {
   profile: Profile,
+  likeOpacity?: Value | number,
+  nopeOpacity?: Value | number,
 };
 
 export default class Card extends React.PureComponent<CardProps> {
+  static defaultProps = {
+    likeOpacity: 0,
+    nopeOpacity: 0,
+  };
+
   render() {
-    const { profile } = this.props;
+    const { profile, likeOpacity, nopeOpacity } = this.props;
     return (
       <View style={StyleSheet.absoluteFill}>
         <Image style={styles.image} source={profile.profile} />
         <View style={styles.overlay}>
           <View style={styles.header}>
-            <View style={styles.like}>
+            <Animated.View style={[styles.like, { opacity: likeOpacity }]}>
               <Text style={styles.likeLabel}>LIKE</Text>
-            </View>
-            <View style={styles.nope}>
+            </Animated.View>
+            <Animated.View style={[styles.nope, { opacity: nopeOpacity }]}>
               <Text style={styles.nopeLabel}>NOPE</Text>
-            </View>
+            </Animated.View>
           </View>
           <View style={styles.footer}>
             <Text style={styles.name}>{profile.name}</Text>
