@@ -87,16 +87,14 @@ type ProfilesState = {
 export default class Profiles extends React.PureComponent<ProfilesProps, ProfilesState> {
   constructor(props: ProfilesProps) {
     super(props);
-    const TOSS_SEC = 0.2;
+    const { profiles } = props;
+    this.state = { profiles };
     const clockX = new Clock();
     const clockY = new Clock();
     const translationX = new Value(0);
     const translationY = new Value(0);
     const velocityX = new Value(0);
-    const state = new Value(State.UNDETERMINED);
-
-    const { profiles } = props;
-    this.state = { profiles };
+    const gestureState = new Value(State.UNDETERMINED);
     this.onGestureEvent = event(
       [
         {
@@ -104,7 +102,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
             translationX,
             translationY,
             velocityX,
-            state,
+            state: gestureState,
           },
         },
       ],
@@ -116,7 +114,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       cond(greaterThan(velocityX, 10), width, 0),
     );
     this.translateY = cond(
-      eq(state, State.END),
+      eq(gestureState, State.END),
       [
         set(translationY, runSpring(clockY, translationY, 0, 0)),
         translationY,
@@ -124,13 +122,30 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       translationY,
     );
     this.translateX = cond(
-      eq(state, State.END),
+      eq(gestureState, State.END),
       [
         set(translationX, runSpring(clockX, translationX, velocityX, snapPoint)),
+        cond(eq(clockRunning(clockX), 0), [
+          call([translationX], this.swipped),
+        ]),
         translationX,
       ],
       translationX,
     );
+  }
+
+  swipped = ([translateX]) => {
+    console.log({ translateX });
+    if (translateX === 0) {
+      return;
+    }
+    if (translateX < 0) {
+      console.log("Nope");
+    } else if (translateX > 0) {
+      console.log("Like");
+    }
+    const { profiles: [lastProfile, ...profiles] } = this.state;
+    this.setState({ profiles });
   }
 
   render() {
