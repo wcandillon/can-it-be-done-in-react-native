@@ -89,27 +89,37 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     super(props);
     const { profiles } = props;
     this.state = { profiles };
-    const clockX = new Clock();
-    const clockY = new Clock();
-    const translationX = new Value(0);
-    const translationY = new Value(0);
-    const velocityX = new Value(0);
-    const velocityY = new Value(0);
-    const gestureState = new Value(State.UNDETERMINED);
+    this.clockX = new Clock();
+    this.clockY = new Clock();
+    this.translationX = new Value(0);
+    this.translationY = new Value(0);
+    this.velocityX = new Value(0);
+    this.velocityY = new Value(0);
+    this.gestureState = new Value(State.UNDETERMINED);
     this.onGestureEvent = event(
       [
         {
           nativeEvent: {
-            translationX,
-            translationY,
-            velocityX,
-            velocityY,
-            state: gestureState,
+            translationX: this.translationX,
+            translationY: this.translationY,
+            velocityX: this.velocityX,
+            velocityY: this.velocityY,
+            state: this.gestureState,
           },
         },
       ],
       { useNativeDriver: true },
     );
+    this.init();
+  }
+
+  init = () => {
+    const {
+      translationX, translationY, velocityX, velocityY, clockY, clockX, gestureState,
+    } = this;
+    gestureState.setValue(State.UNDETERMINED);
+    translationX.setValue(0);
+    translationY.setValue(0);
     const snapPoint = cond(
       lessThan(velocityX, -100),
       -width,
@@ -134,17 +144,16 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       ],
       translationX,
     );
-  }
+  };
 
   swipped = ([translateX]) => {
-    console.log({ translateX });
     if (translateX < 0) {
       console.log("Nope");
     } else {
       console.log("Like");
     }
     const { profiles: [lastProfile, ...profiles] } = this.state;
-    this.setState({ profiles });
+    this.setState({ profiles }, this.init);
   }
 
   render() {
@@ -182,7 +191,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
         </View>
         <View style={styles.cards}>
           {
-              profiles.map(profile => (
+              profiles.reverse().map(profile => (
                 <Card key={profile.id} {...{ profile }} />
               ))
           }
