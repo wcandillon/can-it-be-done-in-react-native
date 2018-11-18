@@ -19,7 +19,7 @@ function runSpring(clock, value, dest) {
   };
 
   const config = {
-    damping: 10,
+    damping: 20,
     mass: 1,
     stiffness: 100,
     overshootClamping: false,
@@ -42,38 +42,28 @@ function runSpring(clock, value, dest) {
   ];
 }
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
+const toRadians = angle => angle * (Math.PI / 180);
+const rotatedWidth = width * Math.sin(toRadians(90 - 15)) + height * Math.sin(toRadians(15));
 const {
   neq,
-  add,
   spring,
   cond,
-  diff,
-  divide,
   eq,
   event,
-  exp,
   lessThan,
   greaterThan,
   and,
-  defined,
   call,
-  block,
-  multiply,
-  pow,
   set,
-  abs,
   clockRunning,
-  greaterOrEq,
-  lessOrEq,
-  sqrt,
   startClock,
   stopClock,
-  sub,
   Clock,
   Value,
   concat,
   interpolate,
+  Extrapolate,
 } = Animated;
 
 type ProfilesProps = {
@@ -121,8 +111,8 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     velocityX.setValue(0);
     const snapPoint = cond(
       and(lessThan(velocityX, -10), lessThan(translationX, 0)),
-      -width,
-      cond(and(greaterThan(velocityX, 10), greaterThan(translationX, 0)), width, 0),
+      -rotatedWidth,
+      cond(and(greaterThan(velocityX, 10), greaterThan(translationX, 0)), rotatedWidth, 0),
     );
     this.translateY = cond(
       eq(gestureState, State.END),
@@ -156,17 +146,18 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     const { profiles: [lastProfile, ...profiles] } = this.state;
     const rotateZ = concat(
       interpolate(translateX, {
-        inputRange: [-width, width],
-        outputRange: [-30, 30],
+        inputRange: [-width / 2, width / 2],
+        outputRange: [15, -15],
+        extrapolate: Extrapolate.CLAMP,
       }),
       "deg",
     );
     const likeOpacity = interpolate(translateX, {
-      inputRange: [0, width / 2],
+      inputRange: [0, width / 4],
       outputRange: [0, 1],
     });
     const nopeOpacity = interpolate(translateX, {
-      inputRange: [-width / 2, 0],
+      inputRange: [-width / 4, 0],
       outputRange: [1, 0],
     });
     const style = {
