@@ -84,6 +84,8 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     this.translationX = new Value(0);
     this.translationY = new Value(0);
     this.velocityX = new Value(0);
+    this.offsetY = new Value(0);
+    this.offsetX = new Value(0);
     this.gestureState = new Value(State.UNDETERMINED);
     this.onGestureEvent = event(
       [
@@ -105,37 +107,44 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     const clockX = new Clock();
     const clockY = new Clock();
     const {
-      translationX, translationY, velocityX, gestureState,
+      translationX, translationY, velocityX, gestureState, offsetY, offsetX,
     } = this;
     gestureState.setValue(State.UNDETERMINED);
     translationX.setValue(0);
     translationY.setValue(0);
     velocityX.setValue(0);
+    offsetY.setValue(0);
+    offsetX.setValue(0);
+
     const finalTranslateX = add(translationX, multiply(0.2, velocityX));
-    const translationThreshold = width / 2;
+    const translationThreshold = width / 4;
     const snapPoint = cond(
       lessThan(finalTranslateX, -translationThreshold),
       -rotatedWidth,
       cond(greaterThan(finalTranslateX, translationThreshold), rotatedWidth, 0),
     );
+    // TODO: handle case where the user drags the card again before the spring animation finished
     this.translateY = cond(
       eq(gestureState, State.END),
       [
         set(translationY, runSpring(clockY, translationY, 0)),
+        set(offsetY, translationY),
         translationY,
       ],
-      translationY,
+      cond(eq(gestureState, State.BEGAN), [stopClock(clockY), translationY], translationY),
     );
     this.translateX = cond(
       eq(gestureState, State.END),
       [
         set(translationX, runSpring(clockX, translationX, snapPoint)),
+        set(offsetX, translationX),
         cond(and(eq(clockRunning(clockX), 0), neq(translationX, 0)), [
           call([translationX], this.swipped),
         ]),
         translationX,
       ],
-      translationX,
+      cond(eq(gestureState, State.BEGAN), [stopClock(clockX), translationX], translationX),
+
     );
   };
 
