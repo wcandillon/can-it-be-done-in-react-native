@@ -119,5 +119,6 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     color: 'white',
     fontSize: 28,
+    fontVariant: ['tabular-nums'],
   },
 });
