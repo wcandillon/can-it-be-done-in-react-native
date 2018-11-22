@@ -111,7 +111,6 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     translationX.setValue(0);
     translationY.setValue(0);
     velocityX.setValue(0);
-
     const finalTranslateX = add(translationX, multiply(0.2, velocityX));
     const translationThreshold = width / 2;
     const snapPoint = cond(
@@ -119,7 +118,6 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
       -rotatedWidth,
       cond(greaterThan(finalTranslateX, translationThreshold), rotatedWidth, 0),
     );
-    // TODO: handle case where the user drags the card again before the spring animation finished
     this.translateY = cond(
       eq(gestureState, State.END),
       [
@@ -135,6 +133,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
         cond(and(eq(clockRunning(clockX), 0), neq(translationX, 0)), [
           call([translationX], this.swipped),
         ]),
+        translationX,
       ],
       translationX,
     );
