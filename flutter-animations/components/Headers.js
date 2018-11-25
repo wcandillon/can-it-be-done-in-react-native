@@ -30,7 +30,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
       },
     );
     return (
-      <React.Fragment>
+      <View style={styles.container}>
         {
           sections.map((section, key) => {
             const translateX = interpolate(y, {
@@ -40,11 +40,16 @@ export default class Headers extends React.PureComponent<HeadersProps> {
             });
             const translateY = interpolate(y, {
               inputRange: [-wHeight, 0],
-              outputRange: [-key * sectionHeight, 0],
+              outputRange: [-key * MIN_HEADER_SIZE, 0],
               extrapolate: Extrapolate.CLAMP,
             });
             return (
-              <Animated.View key={section.title} style={{ width, height, transform: [{ translateY, translateX }] }}>
+              <Animated.View
+                key={section.title}
+                style={{
+                  width, height, transform: [{ translateY, translateX }], zIndex: 1000,
+                }}
+              >
                 <Header
                   numberOfHeaders={sections.length}
                   {...{ key, section }}
@@ -53,10 +58,13 @@ export default class Headers extends React.PureComponent<HeadersProps> {
             );
           })
         }
-      </React.Fragment>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#343761',
+  },
 });

@@ -9,7 +9,7 @@ import MockCard from './MockCard';
 import { MIN_HEADER_SIZE } from './Headers';
 
 const { Value, interpolate, Extrapolate } = Animated;
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 type ContentProps = {
   y: Value,
@@ -20,15 +20,15 @@ export default class Content extends React.PureComponent<ContentProps> {
   render() {
     const { sections, y } = this.props;
     const translateY = interpolate(y, {
-      inputRange: [-height, MIN_HEADER_SIZE],
-      outputRange: [-height, MIN_HEADER_SIZE],
+      inputRange: [-height + MIN_HEADER_SIZE, 0],
+      outputRange: [-height + MIN_HEADER_SIZE, 0],
       extrapolate: Extrapolate.CLAMP,
     });
     return (
       <Animated.View style={[styles.container, { transform: [{ translateY }] }]}>
         {
         sections.map(({ image }, key) => (
-          <View {...{ key }}>
+          <View style={styles.section} {...{ key }}>
             <MockEntry {...{ image }} />
             <MockCard {...{ image }} />
             <MockEntry {...{ image }} />
@@ -46,5 +46,9 @@ export default class Content extends React.PureComponent<ContentProps> {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    backgroundColor: 'white',
+  },
+  section: {
+    width,
   },
 });

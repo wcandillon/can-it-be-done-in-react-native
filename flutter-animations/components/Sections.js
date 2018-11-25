@@ -6,6 +6,7 @@ import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 import Headers from './Headers';
 import Content from './Content';
+import HorizontalScroll from './HorizontalScroll';
 
 const { height, width } = Dimensions.get('window');
 const {
@@ -63,19 +64,17 @@ export default class Sections extends React.PureComponent<SectionsProps> {
       ],
       [set(prevTranslationY, 0), offsetY],
     );
-    const translateX = cond(lessOrEq(y, -height), interpolate(x, {
-      inputRange: [-width * sections.length, 0],
-      outputRange: [-width * sections.length, 0],
-      extrapolate: Extrapolate.CLAMP,
-    }), 0);
+    // <HorizontalScroll numberOfSections={sections.length} {...{ x }}>
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
         {...{ onGestureEvent }}
       >
-        <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
-          <Headers {...{ sections, y }} />
-          <Content {...{ sections, y }} />
+        <Animated.View style={{ flex: 1 }}>
+          <HorizontalScroll numberOfSections={sections.length} {...{ x, y }}>
+            <Headers {...{ sections, y }} />
+            <Content {...{ sections, y }} />
+          </HorizontalScroll>
         </Animated.View>
       </PanGestureHandler>
 

@@ -13,12 +13,12 @@ export default class MockEntry extends React.PureComponent<MockEntryProps> {
     const { image: source } = this.props;
     return (
       <View style={styles.container}>
-        <View>
+        <View style={styles.leftCell}>
           <Image style={styles.image} {...{ source }} />
         </View>
-        <View>
+        <View style={styles.rightCell}>
           <Text>React Native enables interactive animation</Text>
-          <Text>3K views - 5 days</Text>
+          <Text style={styles.subtitle}>3K views - 5 days</Text>
         </View>
       </View>
     );
@@ -29,7 +29,20 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
   },
+  leftCell: {
+    padding: 8,
+  },
+  rightCell: {
+    paddingVertical: 8,
+    paddingRight: 8,
+    justifyContent: 'center',
+  },
   image: {
-
+    width: 45,
+    height: 45,
+    borderRadius: 5,
+  },
+  subtitle: {
+    color: 'gray',
   },
 });
