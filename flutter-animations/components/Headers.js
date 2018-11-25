@@ -13,53 +13,37 @@ const { width, height: wHeight } = Dimensions.get('window');
 
 type HeadersProps = {
   sections: Section[],
+  scrollDriver: Value,
 };
 
 export default class Headers extends React.PureComponent<HeadersProps> {
-  constructor(props: HeadersProps) {
-    super(props);
-    this.translationY = new Value(0);
-    this.onGestureEvent = event(
-      [
-        {
-          nativeEvent: {
-            translationY: this.translationY,
-          },
-        },
-      ],
-      { useNativeDriver: true },
-    );
-  }
-
   render() {
-    const { onGestureEvent, translationY } = this;
-    const { sections } = this.props;
+    const { sections, scrollDriver: y } = this.props;
     const sectionHeight = wHeight / sections.length;
     const height = interpolate(
-      translationY,
+      y,
       {
-        inputRange: [-wHeight, 0],
-        outputRange: [64, sectionHeight],
+        inputRange: [0, wHeight],
+        outputRange: [sectionHeight, sectionHeight], // 64 + 45],
         extrapolate: Extrapolate.CLAMP,
       },
     );
     return (
-      <PanGestureHandler onHandlerStateChange={onGestureEvent} {...{ onGestureEvent }}>
-        <Animated.View>
-          {
+      <React.Fragment>
+        {
           sections.map((section, key) => {
-            const translateX = interpolate(translationY, {
-              inputRange: [-wHeight, 0],
-              outputRange: [key * width, 0],
+            const translateX = interpolate(y, {
+              inputRange: [0, wHeight],
+              outputRange: [0, key * width],
               extrapolate: Extrapolate.CLAMP,
             });
-            const translateY = interpolate(translationY, {
-              inputRange: [-wHeight, 0],
-              outputRange: [-key * sectionHeight, 0],
+            const translateY = interpolate(y, {
+              inputRange: [0, wHeight],
+              outputRange: [0, -key * sectionHeight],
               extrapolate: Extrapolate.CLAMP,
             });
             return (
-              <Animated.View key={section.title} style={{ width, height, transform: [{ translateX }, { translateY }] }}>
+              <Animated.View key={section.title} style={{ width, height, transform: [{ translateY, translateX }] }}>
                 <Header
                   numberOfHeaders={sections.length}
                   {...{ key, section }}
@@ -68,8 +52,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
             );
           })
         }
-        </Animated.View>
-      </PanGestureHandler>
+      </React.Fragment>
     );
   }
 }
