@@ -44,7 +44,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               extrapolate: Extrapolate.CLAMP,
             });
             const translateY = interpolate(y, {
-              inputRange: [-wHeight, 0],
+              inputRange: [-wHeight + MIN_HEADER_SIZE, 0],
               outputRange: [-key * MIN_HEADER_SIZE, 0],
               extrapolate: Extrapolate.CLAMP,
             });

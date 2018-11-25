@@ -27,16 +27,16 @@ export default class Content extends React.PureComponent<ContentProps> {
     return (
       <Animated.View style={[styles.container, { transform: [{ translateY }] }]}>
         {
-        sections.map(({ image }, key) => (
-          <View style={styles.section} {...{ key }}>
-            <MockEntry {...{ image }} />
-            <MockCard {...{ image }} />
-            <MockEntry {...{ image }} />
-            <MockEntry {...{ image }} />
-            <MockEntry {...{ image }} />
-            <MockEntry {...{ image }} />
-          </View>
-        ))
+          sections.map(({ image }, key) => (
+            <View style={styles.section} {...{ key }}>
+              <MockEntry {...{ image }} />
+              <MockCard {...{ image }} />
+              <MockEntry {...{ image }} />
+              <MockEntry {...{ image }} />
+              <MockEntry {...{ image }} />
+              <MockEntry {...{ image }} />
+            </View>
+          ))
         }
       </Animated.View>
     );
