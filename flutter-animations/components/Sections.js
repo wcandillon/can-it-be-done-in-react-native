@@ -2,11 +2,14 @@
 import * as React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 import Headers from './Headers';
 
-const { height } = Dimensions.get('window');
-const { event, Value } = Animated;
+const { height, width } = Dimensions.get('window');
+const {
+  event, Extrapolate, Value, add, cond, set, eq, sub, interpolate, greaterThan, lessOrEq,
+} = Animated;
 
 type SectionsProps = {
   sections: Section[],
@@ -15,12 +18,20 @@ type SectionsProps = {
 export default class Sections extends React.PureComponent<SectionsProps> {
   constructor(props: SectionsProps) {
     super(props);
-    this.y = new Value(0);
-    this.onScroll = event(
+    this.translationY = new Value(0);
+    this.translationX = new Value(0);
+    this.prevTranslationY = new Value(0);
+    this.prevTranslationX = new Value(0);
+    this.offsetX = new Value(0);
+    this.offsetY = new Value(0);
+    this.gestureState = new Value(State.UNDETERMINED);
+    this.onGestureEvent = event(
       [
         {
           nativeEvent: {
-            contentOffset: { y: this.y },
+            translationY: this.translationY,
+            translationX: this.translationX,
+            state: this.gestureState,
           },
         },
       ],
@@ -29,21 +40,43 @@ export default class Sections extends React.PureComponent<SectionsProps> {
   }
 
   render() {
-    const { onScroll, y } = this;
+    const {
+      onGestureEvent, translationX, translationY, offsetX, offsetY, prevTranslationX, prevTranslationY, gestureState,
+    } = this;
     const { sections } = this.props;
+    const x = cond(
+      eq(gestureState, State.ACTIVE),
+      [
+        set(offsetX, add(offsetX, sub(translationX, prevTranslationX))),
+        set(prevTranslationX, translationX),
+        offsetX,
+      ],
+      [set(prevTranslationX, 0), offsetX],
+    );
+    const y = cond(
+      eq(gestureState, State.ACTIVE),
+      [
+        set(offsetY, add(offsetY, sub(translationY, prevTranslationY))),
+        set(prevTranslationY, translationY),
+        offsetY,
+      ],
+      [set(prevTranslationY, 0), offsetY],
+    );
+    const translateX = cond(lessOrEq(y, -height), interpolate(x, {
+      inputRange: [-width * sections.length, 0],
+      outputRange: [-width * sections.length, 0],
+      extrapolate: Extrapolate.CLAMP,
+    }), 0);
     return (
-      <View style={styles.container}>
-        <Headers scrollDriver={y} {...{ sections }} />
-        <Animated.ScrollView
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
-          contentContainerStyle={styles.content}
-          style={StyleSheet.absoluteFillObject}
-          {...{ onScroll }}
-        >
-        </Animated.ScrollView>
-      </View>
+      <PanGestureHandler
+        onHandlerStateChange={onGestureEvent}
+        {...{ onGestureEvent }}
+      >
+        <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
+          <Headers {...{ sections, y }} />
+        </Animated.View>
+      </PanGestureHandler>
+
     );
   }
 }
@@ -51,8 +84,5 @@ export default class Sections extends React.PureComponent<SectionsProps> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  content: {
-    minHeight: height * 2,
   },
 });

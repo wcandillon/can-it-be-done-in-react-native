@@ -7,23 +7,23 @@ import Animated from 'react-native-reanimated';
 import Header from './Header';
 
 const {
-  Extrapolate, event, Value, interpolate, call, block,
+  Extrapolate, event, Value, interpolate,
 } = Animated;
 const { width, height: wHeight } = Dimensions.get('window');
 
 type HeadersProps = {
   sections: Section[],
-  scrollDriver: Value,
+  y: Value,
 };
 
 export default class Headers extends React.PureComponent<HeadersProps> {
   render() {
-    const { sections, scrollDriver: y } = this.props;
+    const { sections, y } = this.props;
     const sectionHeight = wHeight / sections.length;
     const height = interpolate(
       y,
       {
-        inputRange: [0, wHeight],
+        inputRange: [-wHeight, 0],
         outputRange: [sectionHeight, sectionHeight], // 64 + 45],
         extrapolate: Extrapolate.CLAMP,
       },
@@ -33,13 +33,13 @@ export default class Headers extends React.PureComponent<HeadersProps> {
         {
           sections.map((section, key) => {
             const translateX = interpolate(y, {
-              inputRange: [0, wHeight],
-              outputRange: [0, key * width],
+              inputRange: [-wHeight, 0],
+              outputRange: [key * width, 0],
               extrapolate: Extrapolate.CLAMP,
             });
             const translateY = interpolate(y, {
-              inputRange: [0, wHeight],
-              outputRange: [0, -key * sectionHeight],
+              inputRange: [-wHeight, 0],
+              outputRange: [-key * sectionHeight, 0],
               extrapolate: Extrapolate.CLAMP,
             });
             return (
