@@ -47,7 +47,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               <Animated.View
                 key={section.title}
                 style={{
-                  width, height, transform: [{ translateY, translateX }], zIndex: 1000,
+                  width, height, transform: [{ translateY, translateX }],
                 }}
               >
                 <Header
