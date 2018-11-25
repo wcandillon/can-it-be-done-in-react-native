@@ -24,17 +24,22 @@ export default class Headers extends React.PureComponent<HeadersProps> {
     const height = interpolate(
       y,
       {
-        inputRange: [-wHeight, 0],
+        inputRange: [-wHeight + MIN_HEADER_SIZE, 0],
         outputRange: [MIN_HEADER_SIZE, sectionHeight],
         extrapolate: Extrapolate.CLAMP,
       },
     );
+    const containerHeight = interpolate(y, {
+      inputRange: [-wHeight + MIN_HEADER_SIZE, 0],
+      outputRange: [MIN_HEADER_SIZE, wHeight],
+      extrapolate: Extrapolate.CLAMP,
+    });
     return (
-      <View style={styles.container}>
+      <Animated.View style={[styles.container, { height: containerHeight }]}>
         {
           sections.map((section, key) => {
             const translateX = interpolate(y, {
-              inputRange: [-wHeight, 0],
+              inputRange: [-wHeight + MIN_HEADER_SIZE, 0],
               outputRange: [key * width, 0],
               extrapolate: Extrapolate.CLAMP,
             });
@@ -47,7 +52,9 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               <Animated.View
                 key={section.title}
                 style={{
-                  width, height, transform: [{ translateY, translateX }],
+                  width,
+                  height,
+                  transform: [{ translateY, translateX }],
                 }}
               >
                 <Header
@@ -58,7 +65,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
             );
           })
         }
-      </View>
+      </Animated.View>
     );
   }
 }

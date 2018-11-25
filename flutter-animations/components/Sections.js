@@ -13,6 +13,16 @@ const {
   event, Extrapolate, Value, add, cond, set, eq, sub, interpolate, greaterThan, lessOrEq,
 } = Animated;
 
+const scroll = (gestureState, offset, translation, prevTranslation) => cond(
+  eq(gestureState, State.ACTIVE),
+  [
+    set(offset, add(offset, sub(translation, prevTranslation))),
+    set(prevTranslation, translation),
+    offset,
+  ],
+  [set(prevTranslation, 0), offset],
+);
+
 type SectionsProps = {
   sections: Section[],
 };
@@ -46,25 +56,10 @@ export default class Sections extends React.PureComponent<SectionsProps> {
       onGestureEvent, translationX, translationY, offsetX, offsetY, prevTranslationX, prevTranslationY, gestureState,
     } = this;
     const { sections } = this.props;
-    const x = cond(
-      eq(gestureState, State.ACTIVE),
-      [
-        set(offsetX, add(offsetX, sub(translationX, prevTranslationX))),
-        set(prevTranslationX, translationX),
-        offsetX,
-      ],
-      [set(prevTranslationX, 0), offsetX],
-    );
-    const y = cond(
-      eq(gestureState, State.ACTIVE),
-      [
-        set(offsetY, add(offsetY, sub(translationY, prevTranslationY))),
-        set(prevTranslationY, translationY),
-        offsetY,
-      ],
-      [set(prevTranslationY, 0), offsetY],
-    );
-    // <HorizontalScroll numberOfSections={sections.length} {...{ x }}>
+    const x = scroll(gestureState, offsetX, translationX, prevTranslationX);
+    const y = scroll(gestureState, offsetY, translationY, prevTranslationY);
+    //             <Content {...{ sections, y }} />
+
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
@@ -73,7 +68,6 @@ export default class Sections extends React.PureComponent<SectionsProps> {
         <Animated.View style={{ flex: 1 }}>
           <HorizontalScroll numberOfSections={sections.length} {...{ x, y }}>
             <Headers {...{ sections, y }} />
-            <Content {...{ sections, y }} />
           </HorizontalScroll>
         </Animated.View>
       </PanGestureHandler>
