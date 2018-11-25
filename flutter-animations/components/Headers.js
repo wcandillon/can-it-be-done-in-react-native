@@ -6,6 +6,7 @@ import Animated from 'react-native-reanimated';
 
 import Header from './Header';
 
+export const MIN_HEADER_SIZE = 45 + 64;
 const {
   Extrapolate, event, Value, interpolate,
 } = Animated;
@@ -24,7 +25,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
       y,
       {
         inputRange: [-wHeight, 0],
-        outputRange: [sectionHeight, sectionHeight], // 64 + 45],
+        outputRange: [MIN_HEADER_SIZE, sectionHeight],
         extrapolate: Extrapolate.CLAMP,
       },
     );

@@ -1,10 +1,11 @@
 // @flow
 import * as React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 import Headers from './Headers';
+import Content from './Content';
 
 const { height, width } = Dimensions.get('window');
 const {
@@ -74,15 +75,10 @@ export default class Sections extends React.PureComponent<SectionsProps> {
       >
         <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
           <Headers {...{ sections, y }} />
+          <Content {...{ sections, y }} />
         </Animated.View>
       </PanGestureHandler>
 
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
