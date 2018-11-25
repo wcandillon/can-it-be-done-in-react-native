@@ -18,14 +18,14 @@ type ContentProps = {
 
 export default class Content extends React.PureComponent<ContentProps> {
   render() {
-    const { sections, y } = this.props;
-    const translateY = interpolate(y, {
-      inputRange: [-height + MIN_HEADER_SIZE, 0],
-      outputRange: [-height + MIN_HEADER_SIZE, 0],
-      extrapolate: Extrapolate.CLAMP,
-    });
+    const { sections } = this.props;
+    const style = {
+      flexDirection: 'row',
+      backgroundColor: 'white',
+      minHeight: height,
+    };
     return (
-      <Animated.View style={[styles.container, { transform: [{ translateY }] }]}>
+      <Animated.View {...{ style }}>
         {
           sections.map(({ image }, key) => (
             <View style={styles.section} {...{ key }}>
@@ -44,11 +44,6 @@ export default class Content extends React.PureComponent<ContentProps> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    minHeight: height,
-  },
   section: {
     width,
   },

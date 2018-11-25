@@ -58,8 +58,6 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     const { sections } = this.props;
     const x = scroll(gestureState, offsetX, translationX, prevTranslationX);
     const y = scroll(gestureState, offsetY, translationY, prevTranslationY);
-    //             <Content {...{ sections, y }} />
-
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
@@ -68,6 +66,7 @@ export default class Sections extends React.PureComponent<SectionsProps> {
         <Animated.View style={{ flex: 1 }}>
           <HorizontalScroll numberOfSections={sections.length} {...{ x, y }}>
             <Headers {...{ sections, y }} />
+            <Content {...{ sections, y }} />
           </HorizontalScroll>
         </Animated.View>
       </PanGestureHandler>
