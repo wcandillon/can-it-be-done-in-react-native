@@ -12,13 +12,7 @@ type SectionsProps = {
 };
 
 export default class Sections extends React.PureComponent<SectionsProps> {
-  constructor(props: SectionsProps) {
-    super(props);
-    this.y = new Value(0);
-  }
-
   render() {
-    const { y } = this.props;
     const { sections } = this.props;
     return (
       <View style={styles.container}>

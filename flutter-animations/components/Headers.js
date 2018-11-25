@@ -7,7 +7,7 @@ import Animated from 'react-native-reanimated';
 import Header from './Header';
 
 const {
-  event, Value, interpolate, call, block,
+  Extrapolate, event, Value, interpolate, call, block,
 } = Animated;
 const { width, height: wHeight } = Dimensions.get('window');
 
@@ -34,28 +34,41 @@ export default class Headers extends React.PureComponent<HeadersProps> {
   render() {
     const { onGestureEvent, translationY } = this;
     const { sections } = this.props;
+    const sectionHeight = wHeight / sections.length;
     const height = interpolate(
       translationY,
       {
         inputRange: [-wHeight, 0],
-        outputRange: [64, wHeight / sections.length],
+        outputRange: [64, sectionHeight],
+        extrapolate: Extrapolate.CLAMP,
       },
     );
     return (
       <PanGestureHandler onHandlerStateChange={onGestureEvent} {...{ onGestureEvent }}>
-        <View>
+        <Animated.View>
           {
-          sections.map(section => (
-            <Animated.View key={section.title} style={{ width, height }}>
-              <Header
-                key={section.title}
-                numberOfHeaders={sections.length}
-                {...{ section }}
-              />
-            </Animated.View>
-          ))
+          sections.map((section, key) => {
+            const translateX = interpolate(translationY, {
+              inputRange: [-wHeight, 0],
+              outputRange: [key * width, 0],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const translateY = interpolate(translationY, {
+              inputRange: [-wHeight, 0],
+              outputRange: [-key * sectionHeight, 0],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            return (
+              <Animated.View key={section.title} style={{ width, height, transform: [{ translateX }, { translateY }] }}>
+                <Header
+                  numberOfHeaders={sections.length}
+                  {...{ key, section }}
+                />
+              </Animated.View>
+            );
+          })
         }
-        </View>
+        </Animated.View>
       </PanGestureHandler>
     );
   }
