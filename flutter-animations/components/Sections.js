@@ -10,17 +10,30 @@ import HorizontalScroll from './HorizontalScroll';
 
 const { height, width } = Dimensions.get('window');
 const {
-  event, Extrapolate, Value, add, cond, set, eq, sub, interpolate, greaterThan, lessOrEq,
+  event, Extrapolate, Value, add, cond, set, eq, sub, interpolate, greaterThan, lessOrEq, lessThan,
 } = Animated;
 
-const scroll = (gestureState, offset, translation, prevTranslation) => cond(
+
+const bound = (offset: Value, lowerBound: Value, higherBound: Value): Value => cond(
+  lessThan(offset, lowerBound),
+  lowerBound,
+  cond(greaterThan(offset, higherBound), 0, offset),
+);
+const scroll = (
+  gestureState: Value, offset: Value, translation: Value, prevTranslation: Value,
+  lowerBound: Value, higherBound: Value,
+): Value => cond(
   eq(gestureState, State.ACTIVE),
   [
     set(offset, add(offset, sub(translation, prevTranslation))),
     set(prevTranslation, translation),
     offset,
   ],
-  [set(prevTranslation, 0), offset],
+  [
+    set(prevTranslation, 0),
+    set(offset, bound(offset, lowerBound, higherBound)),
+    offset,
+  ],
 );
 
 type SectionsProps = {
@@ -56,8 +69,8 @@ export default class Sections extends React.PureComponent<SectionsProps> {
       onGestureEvent, translationX, translationY, offsetX, offsetY, prevTranslationX, prevTranslationY, gestureState,
     } = this;
     const { sections } = this.props;
-    const x = scroll(gestureState, offsetX, translationX, prevTranslationX);
-    const y = scroll(gestureState, offsetY, translationY, prevTranslationY);
+    const x = scroll(gestureState, offsetX, translationX, prevTranslationX, -width * (sections.length - 1), 0);
+    const y = scroll(gestureState, offsetY, translationY, prevTranslationY, -width * 2, 0);
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}

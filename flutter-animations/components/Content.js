@@ -6,9 +6,8 @@ import Animated from 'react-native-reanimated';
 import { type Section } from './Model';
 import MockEntry from './MockEntry';
 import MockCard from './MockCard';
-import { MIN_HEADER_SIZE } from './Headers';
 
-const { Value, interpolate, Extrapolate } = Animated;
+const { Value } = Animated;
 const { height, width } = Dimensions.get('window');
 
 type ContentProps = {
@@ -19,13 +18,8 @@ type ContentProps = {
 export default class Content extends React.PureComponent<ContentProps> {
   render() {
     const { sections } = this.props;
-    const style = {
-      flexDirection: 'row',
-      backgroundColor: 'white',
-      minHeight: height,
-    };
     return (
-      <Animated.View {...{ style }}>
+      <Animated.View style={styles.container}>
         {
           sections.map(({ image }, key) => (
             <View style={styles.section} {...{ key }}>
@@ -44,6 +38,11 @@ export default class Content extends React.PureComponent<ContentProps> {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    minHeight: height,
+  },
   section: {
     width,
   },
