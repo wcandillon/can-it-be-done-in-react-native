@@ -21,7 +21,7 @@ const bound = (offset: Value, lowerBound: Value, higherBound: Value): Value => c
 );
 const scroll = (
   gestureState: Value, offset: Value, translation: Value, prevTranslation: Value,
-  lowerBound: Value, higherBound: Value,
+  velocity: Value, lowerBound: Value, higherBound: Value,
 ): Value => cond(
   eq(gestureState, State.ACTIVE),
   [
@@ -49,6 +49,8 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     this.prevTranslationX = new Value(0);
     this.offsetX = new Value(0);
     this.offsetY = new Value(0);
+    this.velocityX = new Value(0);
+    this.velocityY = new Value(0);
     this.gestureState = new Value(State.UNDETERMINED);
     this.onGestureEvent = event(
       [
@@ -56,6 +58,8 @@ export default class Sections extends React.PureComponent<SectionsProps> {
           nativeEvent: {
             translationY: this.translationY,
             translationX: this.translationX,
+            velocityX: this.velocityX,
+            velocityY: this.velocityY,
             state: this.gestureState,
           },
         },
@@ -67,10 +71,11 @@ export default class Sections extends React.PureComponent<SectionsProps> {
   render() {
     const {
       onGestureEvent, translationX, translationY, offsetX, offsetY, prevTranslationX, prevTranslationY, gestureState,
+      velocityX, velocityY,
     } = this;
     const { sections } = this.props;
-    const x = scroll(gestureState, offsetX, translationX, prevTranslationX, -width * (sections.length - 1), 0);
-    const y = scroll(gestureState, offsetY, translationY, prevTranslationY, -width * 2, 0);
+    const x = scroll(gestureState, offsetX, translationX, prevTranslationX, velocityX, -width * (sections.length - 1), 0);
+    const y = scroll(gestureState, offsetY, translationY, prevTranslationY, velocityY, -width * 2, 0);
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
