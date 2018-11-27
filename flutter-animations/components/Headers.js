@@ -6,7 +6,8 @@ import Animated from 'react-native-reanimated';
 
 import Header from './Header';
 
-export const MIN_HEADER_SIZE = 45 + 64;
+export const SMALL_HEADER_SIZE = 45 + 64;
+export const MEDIUM_HEADER_SIZE = 300;
 const {
   Extrapolate, event, Value, interpolate,
 } = Animated;
@@ -24,14 +25,14 @@ export default class Headers extends React.PureComponent<HeadersProps> {
     const height = interpolate(
       y,
       {
-        inputRange: [-wHeight + MIN_HEADER_SIZE, 0],
-        outputRange: [MIN_HEADER_SIZE, sectionHeight],
+        inputRange: [-wHeight + SMALL_HEADER_SIZE, 0],
+        outputRange: [SMALL_HEADER_SIZE, sectionHeight],
         extrapolate: Extrapolate.CLAMP,
       },
     );
     const containerHeight = interpolate(y, {
-      inputRange: [-wHeight + MIN_HEADER_SIZE, 0],
-      outputRange: [MIN_HEADER_SIZE, wHeight],
+      inputRange: [-wHeight + SMALL_HEADER_SIZE, 0],
+      outputRange: [SMALL_HEADER_SIZE, wHeight],
       extrapolate: Extrapolate.CLAMP,
     });
     return (
@@ -39,13 +40,13 @@ export default class Headers extends React.PureComponent<HeadersProps> {
         {
           sections.map((section, key) => {
             const translateX = interpolate(y, {
-              inputRange: [-wHeight + MIN_HEADER_SIZE, 0],
+              inputRange: [-wHeight + SMALL_HEADER_SIZE, 0],
               outputRange: [key * width, 0],
               extrapolate: Extrapolate.CLAMP,
             });
             const translateY = interpolate(y, {
-              inputRange: [-wHeight + MIN_HEADER_SIZE, 0],
-              outputRange: [-key * MIN_HEADER_SIZE, 0],
+              inputRange: [-wHeight + SMALL_HEADER_SIZE, 0],
+              outputRange: [-key * SMALL_HEADER_SIZE, 0],
               extrapolate: Extrapolate.CLAMP,
             });
             return (

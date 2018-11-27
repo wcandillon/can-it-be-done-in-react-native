@@ -4,7 +4,7 @@ import { Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
-import Headers from './Headers';
+import Headers, { SMALL_HEADER_SIZE, MEDIUM_HEADER_SIZE } from './Headers';
 import Content from './Content';
 import HorizontalScroll from './HorizontalScroll';
 
@@ -24,7 +24,7 @@ function runSpring(clock: Clock, value: Value, velocity: Value, dest: Value): Va
   };
 
   const config = {
-    damping: 7,
+    damping: 20,
     mass: 1,
     stiffness: 121.6,
     overshootClamping: false,
@@ -55,8 +55,13 @@ const bound = (offset: Value, lowerBound: Value, higherBound: Value): Value => c
 
 const snapY = (clock: Clock, offset: Value, velocity: Value): Value => {
   const translation = add(offset, multiply(0.2, velocity));
-  return offset;
-  // return runSpring(clock, offset, velocity, translation);
+  const snapPoint = cond(
+    lessThan(sub(translation, SMALL_HEADER_SIZE), sub(translation, SMALL_HEADER_SIZE)),
+    -height + SMALL_HEADER_SIZE,
+    -height + MEDIUM_HEADER_SIZE,
+  );
+  // -height + SMALL_HEADER_SIZE
+  return runSpring(clock, offset, velocity, snapPoint);
 };
 
 const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
