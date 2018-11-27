@@ -54,11 +54,13 @@ const bound = (offset: Value, lowerBound: Value, higherBound: Value): Value => c
 );
 
 const snapY = (clock: Clock, offset: Value, velocity: Value): Value => {
-  const translation = add(offset, multiply(0.2, velocity));
+  const translation = abs(add(offset, multiply(0.2, velocity)));
+  const p1 = -height + SMALL_HEADER_SIZE;
+  const p2 = -height + MEDIUM_HEADER_SIZE;
   const snapPoint = cond(
-    lessThan(sub(translation, SMALL_HEADER_SIZE), sub(translation, SMALL_HEADER_SIZE)),
-    -height + SMALL_HEADER_SIZE,
-    -height + MEDIUM_HEADER_SIZE,
+    lessThan(sub(translation, SMALL_HEADER_SIZE), sub(MEDIUM_HEADER_SIZE, translation)),
+    p1,
+    p2,
   );
   // -height + SMALL_HEADER_SIZE
   return runSpring(clock, offset, velocity, snapPoint);
