@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get('window');
 const {
   Clock, event, Value, floor, add, cond, set, eq, sub, multiply, divide,
   interpolate, greaterThan, abs, lessThan, clockRunning, spring, startClock,
-  stopClock, or,
+  stopClock, or, block, call,
 } = Animated;
 
 function runSpring(value, velocity, dest) {
@@ -67,12 +67,12 @@ const snapX = (offset: Value, velocity: Value): Value => {
   const previous = multiply(width, index);
   const next = multiply(width, add(index, 1));
   const snapPoint = cond(
-    lessThan(sub(translation, previous), sub(next, translation)),
+    lessThan(sub(abs(translation), previous), sub(next, abs(translation))),
     multiply(previous, -1),
     multiply(next, -1),
   );
   return cond(
-    or(eq(offset, multiply(-1, previous)), eq(offset, multiply(-1, next))),
+    eq(offset, snapPoint),
     offset,
     runSpring(offset, velocity, snapPoint),
   );
