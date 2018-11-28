@@ -40,7 +40,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
         {
           sections.map((section, key) => {
             const translateX = interpolate(y, {
-              inputRange: [-wHeight + SMALL_HEADER_SIZE, 0],
+              inputRange: [-wHeight + MEDIUM_HEADER_SIZE, 0],
               outputRange: [key * width, 0],
               extrapolate: Extrapolate.CLAMP,
             });
