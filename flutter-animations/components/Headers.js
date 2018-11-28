@@ -25,8 +25,8 @@ export default class Headers extends React.PureComponent<HeadersProps> {
     const height = interpolate(
       y,
       {
-        inputRange: [-wHeight + SMALL_HEADER_SIZE, 0],
-        outputRange: [SMALL_HEADER_SIZE, sectionHeight],
+        inputRange: [-wHeight + SMALL_HEADER_SIZE, -wHeight + MEDIUM_HEADER_SIZE, 0],
+        outputRange: [SMALL_HEADER_SIZE, MEDIUM_HEADER_SIZE, sectionHeight],
         extrapolate: Extrapolate.CLAMP,
       },
     );
