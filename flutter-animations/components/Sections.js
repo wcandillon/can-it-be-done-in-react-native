@@ -53,17 +53,22 @@ const bound = (offset: Value, lowerBound: Value, higherBound: Value): Value => c
   cond(greaterThan(offset, higherBound), 0, offset),
 );
 
+const ifCloserToLeft = (v: Value, lowerBound: number, upperBound: number): Value => lessThan(
+  abs(sub(v, lowerBound)), abs(sub(v, upperBound)),
+);
+
 const snapY = (clock: Clock, offset: Value, velocity: Value): Value => {
-  const translation = abs(add(offset, multiply(0.2, velocity)));
-  const p1 = -height + SMALL_HEADER_SIZE;
-  const p2 = -height + MEDIUM_HEADER_SIZE;
+  const translation = add(height, add(offset, multiply(0.2, velocity)));
   const snapPoint = cond(
-    lessThan(sub(translation, SMALL_HEADER_SIZE), sub(MEDIUM_HEADER_SIZE, translation)),
-    p1,
-    p2,
+    ifCloserToLeft(translation, SMALL_HEADER_SIZE, MEDIUM_HEADER_SIZE),
+    -height + SMALL_HEADER_SIZE,
+    cond(ifCloserToLeft(translation, MEDIUM_HEADER_SIZE, height), -height + MEDIUM_HEADER_SIZE, 0),
   );
-  // -height + SMALL_HEADER_SIZE
-  return runSpring(clock, offset, velocity, snapPoint);
+  return cond(
+    eq(offset, snapPoint),
+    offset,
+    runSpring(clock, offset, velocity, snapPoint),
+  );
 };
 
 const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
@@ -72,7 +77,7 @@ const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
   const previous = multiply(width, index);
   const next = multiply(width, add(index, 1));
   const snapPoint = cond(
-    lessThan(sub(translation, previous), sub(next, translation)),
+    ifCloserToLeft(translation, previous, next),
     multiply(previous, -1),
     multiply(next, -1),
   );
