@@ -12,8 +12,13 @@ const { height, width } = Dimensions.get('window');
 const {
   Clock, event, Value, floor, add, cond, set, eq, sub, multiply, divide,
   interpolate, greaterThan, abs, lessThan, clockRunning, spring, startClock,
-  stopClock, or, block, call,
+  stopClock, or, block, call, neq, and,
 } = Animated;
+const ScrollState = {
+  UNDETERMINED: -1,
+  X: 1,
+  Y: 2,
+};
 
 function runSpring(clock: Clock, value: Value, velocity: Value, dest: Value): Value {
   const state = {
@@ -46,11 +51,16 @@ function runSpring(clock: Clock, value: Value, velocity: Value, dest: Value): Va
     state.position,
   ];
 }
-
-const bound = (offset: Value, lowerBound: Value, higherBound: Value): Value => cond(
+/*
+  if scrollViewState === X && isX || scrollViewState === Y && !isY
+*/
+const startScrollViewState = (scrollState: Value, isX: boolean) => cond(eq(scrollState, State.UNDETERMINED), set(scrollState, isX ? ScrollState.X : ScrollState.Y));
+const endScrollViewState = (scrollState: Value) => set(scrollState, ScrollState.UNDETERMINED);
+const isAllowedToScroll = (scrollState: Value, isX: boolean) => (isX ? eq(scrollState, ScrollState.X) : eq(scrollState, ScrollState.Y));
+const bound = (offset: Value, lowerBound: Value, upperBound: Value): Value => cond(
   lessThan(offset, lowerBound),
   lowerBound,
-  cond(greaterThan(offset, higherBound), 0, offset),
+  cond(greaterThan(offset, upperBound), 0, offset),
 );
 
 const ifCloserToLeft = (v: Value, lowerBound: number, upperBound: number): Value => lessThan(
@@ -90,7 +100,7 @@ const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
 
 const scroll = (
   gestureState: Value, offset: Value, translation: Value, prevTranslation: Value,
-  velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock, snap: (Value, Value) => Value,
+  velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock, snap: (Value, Value) => Value, scrollViewState: Value, isX: boolean,
 ): Value => cond(
   eq(gestureState, State.ACTIVE),
   [
@@ -99,7 +109,8 @@ const scroll = (
     offset,
   ],
   [
-    cond(eq(gestureState, State.BEGAN), [stopClock(clock)]),
+    cond(eq(gestureState, State.END), endScrollViewState(scrollViewState)),
+    cond(eq(gestureState, State.BEGAN), [startScrollViewState(scrollViewState, isX), stopClock(clock)]),
     set(prevTranslation, 0),
     set(offset, bound(offset, lowerBound, upperBound)),
     cond(eq(gestureState, State.END), set(offset, snap(clock, offset, velocity))),
@@ -125,6 +136,7 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     this.velocityX = new Value(0);
     this.velocityY = new Value(0);
     this.gestureState = new Value(State.UNDETERMINED);
+    this.scrollState = new Value(ScrollState.UNDETERMINED);
     this.onGestureEvent = event(
       [
         {
@@ -144,15 +156,15 @@ export default class Sections extends React.PureComponent<SectionsProps> {
   render() {
     const {
       onGestureEvent, translationX, translationY, offsetX, offsetY, prevTranslationX, prevTranslationY, gestureState,
-      velocityX, velocityY, clockX, clockY,
+      velocityX, velocityY, clockX, clockY, scrollState,
     } = this;
     const { sections } = this.props;
     const lowerBoundX = -width * (sections.length - 1);
     const upperBoundX = 0;
     const lowerBoundY = -width * 2;
     const upperBoundY = 0;
-    const x = scroll(gestureState, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX);
-    const y = scroll(gestureState, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY);
+    const x = scroll(gestureState, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX, scrollState, true);
+    const y = scroll(gestureState, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY, scrollState, false);
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
