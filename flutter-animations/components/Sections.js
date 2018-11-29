@@ -102,19 +102,14 @@ const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
 const scroll = (
   gestureState: Value, offset: Value, translation: Value, prevTranslation: Value,
   velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock, snap: (Value, Value) => Value,
-  scrollState: Value, isX: boolean,
 ): Value => cond(
   eq(gestureState, State.ACTIVE),
   [
-    cond(isAllowedToScroll(scrollState, isX), [
-      set(offset, add(offset, sub(translation, prevTranslation))),
-      set(prevTranslation, translation),
-    ]),
+    set(offset, add(offset, sub(translation, prevTranslation))),
+    set(prevTranslation, translation),
     offset,
   ],
   [
-    cond(and(eq(gestureState, State.BEGAN), neq(velocity, 0)), lock(scrollState, isX)),
-    cond(eq(gestureState, State.END), unlock(scrollState, isX)),
     cond(eq(gestureState, State.BEGAN), stopClock(clock)),
     set(prevTranslation, 0),
     set(offset, bound(offset, lowerBound, upperBound)),
@@ -168,8 +163,8 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     const upperBoundX = 0;
     const lowerBoundY = -width * 2;
     const upperBoundY = 0;
-    const x = scroll(gestureState, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX, scrollState, true);
-    const y = scroll(gestureState, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY, scrollState, false);
+    const x = scroll(gestureState, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX);
+    const y = scroll(gestureState, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY);
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
