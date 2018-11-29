@@ -54,9 +54,10 @@ function runSpring(clock: Clock, value: Value, velocity: Value, dest: Value): Va
 /*
   if scrollViewState === X && isX || scrollViewState === Y && !isY
 */
-const startScrollViewState = (scrollState: Value, isX: boolean) => cond(eq(scrollState, State.UNDETERMINED), set(scrollState, isX ? ScrollState.X : ScrollState.Y));
-const endScrollViewState = (scrollState: Value) => set(scrollState, ScrollState.UNDETERMINED);
-const isAllowedToScroll = (scrollState: Value, isX: boolean) => (isX ? eq(scrollState, ScrollState.X) : eq(scrollState, ScrollState.Y));
+const lock = (scrollState: Value, isX: boolean) => cond(eq(scrollState, State.UNDETERMINED), set(scrollState, isX ? ScrollState.X : ScrollState.Y));
+const unlock = (scrollState: Value) => set(scrollState, ScrollState.UNDETERMINED);
+const isAllowedToScroll = (scrollState: Value, isX: boolean) => eq(scrollState, isX ? ScrollState.X : ScrollState.Y);
+
 const bound = (offset: Value, lowerBound: Value, upperBound: Value): Value => cond(
   lessThan(offset, lowerBound),
   lowerBound,
@@ -100,17 +101,21 @@ const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
 
 const scroll = (
   gestureState: Value, offset: Value, translation: Value, prevTranslation: Value,
-  velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock, snap: (Value, Value) => Value, scrollViewState: Value, isX: boolean,
+  velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock, snap: (Value, Value) => Value,
+  scrollState: Value, isX: boolean,
 ): Value => cond(
   eq(gestureState, State.ACTIVE),
   [
-    set(offset, add(offset, sub(translation, prevTranslation))),
-    set(prevTranslation, translation),
+    cond(isAllowedToScroll(scrollState, isX), [
+      set(offset, add(offset, sub(translation, prevTranslation))),
+      set(prevTranslation, translation),
+    ]),
     offset,
   ],
   [
-    cond(eq(gestureState, State.END), endScrollViewState(scrollViewState)),
-    cond(eq(gestureState, State.BEGAN), [startScrollViewState(scrollViewState, isX), stopClock(clock)]),
+    cond(and(eq(gestureState, State.BEGAN), neq(velocity, 0)), lock(scrollState, isX)),
+    cond(eq(gestureState, State.END), unlock(scrollState, isX)),
+    cond(eq(gestureState, State.BEGAN), stopClock(clock)),
     set(prevTranslation, 0),
     set(offset, bound(offset, lowerBound, upperBound)),
     cond(eq(gestureState, State.END), set(offset, snap(clock, offset, velocity))),
