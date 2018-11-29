@@ -125,6 +125,8 @@ type SectionsProps = {
 export default class Sections extends React.PureComponent<SectionsProps> {
   constructor(props: SectionsProps) {
     super(props);
+    this.verticalHandler = React.createRef();
+    this.horizontalHandler = React.createRef();
     this.clockX = new Clock();
     this.clockY = new Clock();
     this.translationY = new Value(0);
@@ -135,17 +137,28 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     this.offsetY = new Value(0);
     this.velocityX = new Value(0);
     this.velocityY = new Value(0);
-    this.gestureState = new Value(State.UNDETERMINED);
+    this.gestureStateX = new Value(State.UNDETERMINED);
+    this.gestureStateY = new Value(State.UNDETERMINED);
     this.scrollState = new Value(ScrollState.UNDETERMINED);
-    this.onGestureEvent = event(
+    this.onGestureEventX = event(
+      [
+        {
+          nativeEvent: {
+            translationX: this.translationX,
+            velocityX: this.velocityX,
+            state: this.gestureStateX,
+          },
+        },
+      ],
+      { useNativeDriver: true },
+    );
+    this.onGestureEventY = event(
       [
         {
           nativeEvent: {
             translationY: this.translationY,
-            translationX: this.translationX,
-            velocityX: this.velocityX,
             velocityY: this.velocityY,
-            state: this.gestureState,
+            state: this.gestureStateY,
           },
         },
       ],
@@ -155,26 +168,39 @@ export default class Sections extends React.PureComponent<SectionsProps> {
 
   render() {
     const {
-      onGestureEvent, translationX, translationY, offsetX, offsetY, prevTranslationX, prevTranslationY, gestureState,
-      velocityX, velocityY, clockX, clockY, scrollState,
+      onGestureEventX, onGestureEventY, translationX, translationY, offsetX, offsetY, prevTranslationX, prevTranslationY, gestureStateX,
+      gestureStateY, velocityX, velocityY, clockX, clockY,
     } = this;
     const { sections } = this.props;
     const lowerBoundX = -width * (sections.length - 1);
     const upperBoundX = 0;
     const lowerBoundY = -width * 2;
     const upperBoundY = 0;
-    const x = scroll(gestureState, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX);
-    const y = scroll(gestureState, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY);
+    const x = scroll(gestureStateX, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX);
+    const y = scroll(gestureStateY, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY);
     return (
       <PanGestureHandler
-        onHandlerStateChange={onGestureEvent}
-        {...{ onGestureEvent }}
+        onHandlerStateChange={onGestureEventX}
+        onGestureEvent={onGestureEventX}
+        ref={this.horizontalHandler}
+        minDist={25}
+        failOffsetY={[-10, 10]}
+        // waitFor={this.verticalHandler}
       >
         <Animated.View style={{ flex: 1 }}>
-          <HorizontalScroll numberOfSections={sections.length} {...{ x, y }}>
-            <Headers {...{ sections, y }} />
-            <Content {...{ sections, y }} />
-          </HorizontalScroll>
+          <PanGestureHandler
+            ref={this.verticalHandler}
+            waitFor={this.horizontalHandler}
+            onHandlerStateChange={onGestureEventY}
+            onGestureEvent={onGestureEventY}
+          >
+            <Animated.View style={{ flex: 1 }}>
+              <HorizontalScroll numberOfSections={sections.length} {...{ x, y }}>
+                <Headers {...{ sections, y }} />
+                <Content {...{ sections, y }} />
+              </HorizontalScroll>
+            </Animated.View>
+          </PanGestureHandler>
         </Animated.View>
       </PanGestureHandler>
 
