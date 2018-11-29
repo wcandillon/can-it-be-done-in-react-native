@@ -125,7 +125,6 @@ type SectionsProps = {
 export default class Sections extends React.PureComponent<SectionsProps> {
   constructor(props: SectionsProps) {
     super(props);
-    this.verticalHandler = React.createRef();
     this.horizontalHandler = React.createRef();
     this.clockX = new Clock();
     this.clockY = new Clock();
@@ -183,13 +182,11 @@ export default class Sections extends React.PureComponent<SectionsProps> {
         onHandlerStateChange={onGestureEventX}
         onGestureEvent={onGestureEventX}
         ref={this.horizontalHandler}
-        minDist={25}
+        minDist={10}
         failOffsetY={[-10, 10]}
-        // waitFor={this.verticalHandler}
       >
         <Animated.View style={{ flex: 1 }}>
           <PanGestureHandler
-            ref={this.verticalHandler}
             waitFor={this.horizontalHandler}
             onHandlerStateChange={onGestureEventY}
             onGestureEvent={onGestureEventY}
