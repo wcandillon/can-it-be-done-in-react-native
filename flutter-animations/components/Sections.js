@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get('window');
 const {
   Clock, event, Value, floor, add, cond, set, eq, sub, multiply, divide,
   interpolate, greaterThan, abs, lessThan, clockRunning, spring, startClock,
-  stopClock, or, block, call, neq, and,
+  stopClock, or, block, call, neq, and, lessOrEq,
 } = Animated;
 const ScrollState = {
   UNDETERMINED: -1,
@@ -54,10 +54,7 @@ function runSpring(clock: Clock, value: Value, velocity: Value, dest: Value): Va
 /*
   if scrollViewState === X && isX || scrollViewState === Y && !isY
 */
-const lock = (scrollState: Value, isX: boolean) => cond(eq(scrollState, State.UNDETERMINED), set(scrollState, isX ? ScrollState.X : ScrollState.Y));
-const unlock = (scrollState: Value) => set(scrollState, ScrollState.UNDETERMINED);
-const isAllowedToScroll = (scrollState: Value, isX: boolean) => eq(scrollState, isX ? ScrollState.X : ScrollState.Y);
-
+// TODO: use diffClamp instead?
 const bound = (offset: Value, lowerBound: Value, upperBound: Value): Value => cond(
   lessThan(offset, lowerBound),
   lowerBound,
@@ -101,9 +98,10 @@ const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
 
 const scroll = (
   gestureState: Value, offset: Value, translation: Value, prevTranslation: Value,
-  velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock, snap: (Value, Value) => Value,
+  velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock,
+  snap: (Value, Value) => Value,
 ): Value => cond(
-  eq(gestureState, State.ACTIVE),
+  and(eq(gestureState, State.ACTIVE)),
   [
     set(offset, add(offset, sub(translation, prevTranslation))),
     set(prevTranslation, translation),
@@ -175,8 +173,8 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     const upperBoundX = 0;
     const lowerBoundY = -width * 2;
     const upperBoundY = 0;
-    const x = scroll(gestureStateX, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX);
     const y = scroll(gestureStateY, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY);
+    const x = scroll(gestureStateX, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX);
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEventX}
@@ -192,7 +190,7 @@ export default class Sections extends React.PureComponent<SectionsProps> {
             onGestureEvent={onGestureEventY}
           >
             <Animated.View style={{ flex: 1 }}>
-              <HorizontalScroll numberOfSections={sections.length} {...{ x, y }}>
+              <HorizontalScroll numberOfSections={sections.length} {...{ x }}>
                 <Headers {...{ sections, y }} />
                 <Content {...{ sections, y }} />
               </HorizontalScroll>
