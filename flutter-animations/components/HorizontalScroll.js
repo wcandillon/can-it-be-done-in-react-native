@@ -22,7 +22,6 @@ export default class HorizontalScroll extends React.PureComponent<HorizontalScro
       x, children, numberOfSections,
     } = this.props;
     const lowerBound = -width * (numberOfSections - 1);
-
     const translateX = interpolate(x, {
       inputRange: [lowerBound, 0],
       outputRange: [lowerBound, 0],

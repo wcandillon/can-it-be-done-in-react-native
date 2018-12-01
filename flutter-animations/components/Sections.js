@@ -14,11 +14,6 @@ const {
   interpolate, greaterThan, abs, lessThan, clockRunning, spring, startClock,
   stopClock, or, block, call, neq, and, lessOrEq,
 } = Animated;
-const ScrollState = {
-  UNDETERMINED: -1,
-  X: 1,
-  Y: 2,
-};
 
 function runSpring(clock: Clock, value: Value, velocity: Value, dest: Value): Value {
   const state = {
@@ -51,9 +46,7 @@ function runSpring(clock: Clock, value: Value, velocity: Value, dest: Value): Va
     state.position,
   ];
 }
-/*
-  if scrollViewState === X && isX || scrollViewState === Y && !isY
-*/
+
 // TODO: use diffClamp instead?
 const bound = (offset: Value, lowerBound: Value, upperBound: Value): Value => cond(
   lessThan(offset, lowerBound),
@@ -124,6 +117,7 @@ export default class Sections extends React.PureComponent<SectionsProps> {
   constructor(props: SectionsProps) {
     super(props);
     this.horizontalHandler = React.createRef();
+    this.verticalHandler = React.createRef();
     this.clockX = new Clock();
     this.clockY = new Clock();
     this.translationY = new Value(0);
@@ -136,7 +130,6 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     this.velocityY = new Value(0);
     this.gestureStateX = new Value(State.UNDETERMINED);
     this.gestureStateY = new Value(State.UNDETERMINED);
-    this.scrollState = new Value(ScrollState.UNDETERMINED);
     this.onGestureEventX = event(
       [
         {
@@ -175,19 +168,23 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     const upperBoundY = 0;
     const y = scroll(gestureStateY, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY);
     const x = scroll(gestureStateX, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX);
+    // const x2 = cond(lessOrEq(y, -height + MEDIUM_HEADER_SIZE), _x, offsetX);
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEventX}
         onGestureEvent={onGestureEventX}
         ref={this.horizontalHandler}
+        waitFor={this.verticalHandler}
         minDist={10}
         failOffsetY={[-10, 10]}
       >
         <Animated.View style={{ flex: 1 }}>
           <PanGestureHandler
-            waitFor={this.horizontalHandler}
+            ref={this.verticalHandler}
             onHandlerStateChange={onGestureEventY}
             onGestureEvent={onGestureEventY}
+            minDist={10}
+            failOffsetX={[-10, 10]}
           >
             <Animated.View style={{ flex: 1 }}>
               <HorizontalScroll numberOfSections={sections.length} {...{ x }}>
