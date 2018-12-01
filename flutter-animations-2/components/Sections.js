@@ -43,14 +43,14 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     return (
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
+        scrollEventThrottle={1}
         onScroll={onScrollY}
         bounces={false}
         vertical
       >
         <Animated.ScrollView
           showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={16}
+          scrollEventThrottle={1}
           onScroll={onScrollX}
           bounces={false}
           snapToInterval={width}
@@ -58,7 +58,7 @@ export default class Sections extends React.PureComponent<SectionsProps> {
           horizontal
         >
           <View>
-            <Headers {...{ sections }} />
+            <Headers {...{ sections, y, x }} />
             <Pages {...{ sections }} />
           </View>
         </Animated.ScrollView>
