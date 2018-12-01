@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import {
+  View, StyleSheet, Dimensions, Text,
+} from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
@@ -65,6 +67,12 @@ export default class Headers extends React.PureComponent<HeadersProps> {
                   numberOfHeaders={sections.length}
                   {...{ key, section }}
                 />
+                <View style={styles.labelContainer}>
+                  <Text style={styles.label}>{section.title.toUpperCase()}</Text>
+                </View>
+                <View style={styles.labelContainer}>
+                  <View style={styles.cursor} />
+                </View>
               </Animated.View>
             );
           })
@@ -77,5 +85,21 @@ export default class Headers extends React.PureComponent<HeadersProps> {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#343761',
+  },
+  labelContainer: {
+    ...StyleSheet.absoluteFillObject,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  label: {
+    color: 'white',
+    fontSize: 32,
+  },
+  cursor: {
+    width: 50,
+    height: 4,
+    backgroundColor: 'white',
+    top: 32,
   },
 });
