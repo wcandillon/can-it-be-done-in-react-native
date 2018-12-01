@@ -11,7 +11,7 @@ import Header from './Header';
 export const SMALL_HEADER_SIZE = 45 + 64;
 export const MEDIUM_HEADER_SIZE = 300;
 const {
-  Extrapolate, event, Value, interpolate, floor, divide, multiply, add, sub, mutiply,
+  Extrapolate, event, Value, interpolate, floor, divide, multiply, add, sub, mutiply, cond, eq,
 } = Animated;
 const { width, height: wHeight } = Dimensions.get('window');
 
@@ -54,6 +54,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               outputRange: [-key * SMALL_HEADER_SIZE, -key * MEDIUM_HEADER_SIZE, 0],
               extrapolate: Extrapolate.CLAMP,
             });
+            const opacity = cond(eq(currentIndex, key), 1, 0.5);
             return (
               <Animated.View
                 key={section.title}
@@ -67,12 +68,12 @@ export default class Headers extends React.PureComponent<HeadersProps> {
                   numberOfHeaders={sections.length}
                   {...{ key, section }}
                 />
-                <View style={styles.labelContainer}>
+                <Animated.View style={[styles.labelContainer, { opacity }]}>
                   <Text style={styles.label}>{section.title.toUpperCase()}</Text>
-                </View>
-                <View style={styles.labelContainer}>
+                </Animated.View>
+                <Animated.View style={[styles.labelContainer, , { opacity }]}>
                   <View style={styles.cursor} />
-                </View>
+                </Animated.View>
               </Animated.View>
             );
           })
