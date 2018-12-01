@@ -36,7 +36,7 @@ const sections: Section[] = [
   },
 ];
 
-export default class App extends React.Component<AppState> {
+export default class App extends React.Component<{}, AppState> {
   state = {
     ready: false,
   };
