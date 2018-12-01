@@ -99,7 +99,7 @@ const scroll = (
   velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock,
   snap: (Value, Value) => Value, currentIndex: Value,
 ): Value => cond(
-  and(eq(gestureState, State.ACTIVE)),
+  eq(gestureState, State.ACTIVE),
   [
     set(offset, add(offset, sub(translation, prevTranslation))),
     set(prevTranslation, translation),
@@ -173,8 +173,8 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     const lowerBoundY = -width * 2;
     const upperBoundY = 0;
     const y = scroll(gestureStateY, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY, currentIndex);
-    const x = scroll(gestureStateX, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX, currentIndex);
-    // const x2 = cond(lessOrEq(y, -height + MEDIUM_HEADER_SIZE), _x, offsetX);
+    const _x = scroll(gestureStateX, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX, currentIndex);
+    const x = cond(lessOrEq(y, -height + MEDIUM_HEADER_SIZE), _x, offsetX);
     return (
       <PanGestureHandler
         onHandlerStateChange={onGestureEventX}

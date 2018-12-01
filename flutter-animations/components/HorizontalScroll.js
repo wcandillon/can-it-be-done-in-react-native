@@ -19,16 +19,15 @@ type HorizontalScrollProps = {
 export default class HorizontalScroll extends React.PureComponent<HorizontalScrollProps> {
   render() {
     const {
-      x: translateX, children, numberOfSections,
+      x, children, numberOfSections,
     } = this.props;
-    /*
+
     const lowerBound = -width * (numberOfSections - 1);
     const translateX = interpolate(x, {
       inputRange: [lowerBound, 0],
       outputRange: [lowerBound, 0],
       extrapolate: Extrapolate.CLAMP,
     });
-    */
     return (
       <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
         {children}
