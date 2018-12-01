@@ -36,7 +36,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
       extrapolate: Extrapolate.CLAMP,
     });
     return (
-      <Animated.View style={[styles.container, { height: containerHeight }]}>
+      <Animated.View style={[styles.container, { width: width * sections.length, height: containerHeight }]}>
         {
           sections.map((section, key) => {
             const translateX = interpolate(y, {
@@ -45,8 +45,8 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               extrapolate: Extrapolate.CLAMP,
             });
             const translateY = interpolate(y, {
-              inputRange: [-wHeight + SMALL_HEADER_SIZE, 0],
-              outputRange: [-key * SMALL_HEADER_SIZE, 0],
+              inputRange: [-wHeight + SMALL_HEADER_SIZE, -wHeight + MEDIUM_HEADER_SIZE, 0],
+              outputRange: [-key * SMALL_HEADER_SIZE, -key * MEDIUM_HEADER_SIZE, 0],
               extrapolate: Extrapolate.CLAMP,
             });
             return (
