@@ -61,6 +61,16 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               outputRange: [0.5, 1, 0.5],
               extrapolate: Extrapolate.CLAMP,
             });
+            const translateLabelX = interpolate(y, {
+              inputRange: [-wHeight + SMALL_HEADER_SIZE, -wHeight + MEDIUM_HEADER_SIZE, 0],
+              outputRange: [0, 0, -width / 4],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const translateCursorX = interpolate(y, {
+              inputRange: [-wHeight + SMALL_HEADER_SIZE, -wHeight + MEDIUM_HEADER_SIZE, 0],
+              outputRange: [0, 0, (width / 2) - 50 - 8],
+              extrapolate: Extrapolate.CLAMP,
+            });
             return (
               <Animated.View
                 key={section.title}
@@ -74,10 +84,10 @@ export default class Headers extends React.PureComponent<HeadersProps> {
                   numberOfHeaders={sections.length}
                   {...{ key, section }}
                 />
-                <Animated.View style={[styles.labelContainer, { opacity }]}>
+                <Animated.View style={[styles.labelContainer, { opacity, transform: [{ translateX: translateLabelX }] }]}>
                   <Text style={styles.label}>{section.title.toUpperCase()}</Text>
                 </Animated.View>
-                <Animated.View style={[styles.labelContainer, { opacity }]}>
+                <Animated.View style={[styles.labelContainer, { opacity, transform: [{ translateX: translateCursorX }] }]}>
                   <View style={styles.cursor} />
                 </Animated.View>
               </Animated.View>
@@ -98,6 +108,7 @@ const styles = StyleSheet.create({
     padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 900,
   },
   label: {
     color: 'white',
