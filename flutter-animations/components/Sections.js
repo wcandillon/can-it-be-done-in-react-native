@@ -58,7 +58,7 @@ const ifCloserToLeft = (v: Value, lowerBound: number, upperBound: number): Value
   abs(sub(v, lowerBound)), abs(sub(v, upperBound)),
 );
 
-const snapY = (clock: Clock, offset: Value, velocity: Value): Value => {
+const snapY = (clock: Clock, offset: Value, velocity: Value, currentIndex: Value): Value => {
   const translation = add(height, add(offset, multiply(0.2, velocity)));
   const snapPoint = cond(
     ifCloserToLeft(translation, SMALL_HEADER_SIZE, MEDIUM_HEADER_SIZE),
@@ -72,7 +72,7 @@ const snapY = (clock: Clock, offset: Value, velocity: Value): Value => {
   );
 };
 
-const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
+const snapX = (clock: Clock, offset: Value, velocity: Value, currentIndex: Value): Value => {
   const translation = abs(add(offset, multiply(0.2, velocity)));
   const index = floor(divide(translation, width));
   const previous = multiply(width, index);
@@ -85,14 +85,19 @@ const snapX = (clock: Clock, offset: Value, velocity: Value): Value => {
   return cond(
     eq(offset, snapPoint),
     offset,
-    runSpring(clock, offset, velocity, snapPoint),
+    [
+      cond(eq(clockRunning(clock), 0), [
+        set(currentIndex, divide(abs(snapPoint), width)),
+      ]),
+      runSpring(clock, offset, velocity, snapPoint),
+    ],
   );
 };
 
 const scroll = (
   gestureState: Value, offset: Value, translation: Value, prevTranslation: Value,
   velocity: Value, lowerBound: Value, upperBound: Value, clock: Clock,
-  snap: (Value, Value) => Value,
+  snap: (Value, Value) => Value, currentIndex: Value,
 ): Value => cond(
   and(eq(gestureState, State.ACTIVE)),
   [
@@ -104,7 +109,7 @@ const scroll = (
     cond(eq(gestureState, State.BEGAN), stopClock(clock)),
     set(prevTranslation, 0),
     set(offset, bound(offset, lowerBound, upperBound)),
-    cond(eq(gestureState, State.END), set(offset, snap(clock, offset, velocity))),
+    cond(eq(gestureState, State.END), set(offset, snap(clock, offset, velocity, currentIndex))),
     offset,
   ],
 );
@@ -130,6 +135,7 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     this.velocityY = new Value(0);
     this.gestureStateX = new Value(State.UNDETERMINED);
     this.gestureStateY = new Value(State.UNDETERMINED);
+    this.currentIndex = new Value(0);
     this.onGestureEventX = event(
       [
         {
@@ -159,15 +165,15 @@ export default class Sections extends React.PureComponent<SectionsProps> {
   render() {
     const {
       onGestureEventX, onGestureEventY, translationX, translationY, offsetX, offsetY, prevTranslationX, prevTranslationY, gestureStateX,
-      gestureStateY, velocityX, velocityY, clockX, clockY,
+      gestureStateY, velocityX, velocityY, clockX, clockY, currentIndex,
     } = this;
     const { sections } = this.props;
     const lowerBoundX = -width * (sections.length - 1);
     const upperBoundX = 0;
     const lowerBoundY = -width * 2;
     const upperBoundY = 0;
-    const y = scroll(gestureStateY, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY);
-    const x = scroll(gestureStateX, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX);
+    const y = scroll(gestureStateY, offsetY, translationY, prevTranslationY, velocityY, lowerBoundY, upperBoundY, clockY, snapY, currentIndex);
+    const x = scroll(gestureStateX, offsetX, translationX, prevTranslationX, velocityX, lowerBoundX, upperBoundX, clockX, snapX, currentIndex);
     // const x2 = cond(lessOrEq(y, -height + MEDIUM_HEADER_SIZE), _x, offsetX);
     return (
       <PanGestureHandler
@@ -188,7 +194,10 @@ export default class Sections extends React.PureComponent<SectionsProps> {
           >
             <Animated.View style={{ flex: 1 }}>
               <HorizontalScroll numberOfSections={sections.length} {...{ x }}>
-                <Headers {...{ sections, y }} />
+                <Headers {...{
+                  sections, y, x, currentIndex,
+                }}
+                />
                 <Content {...{ sections, y }} />
               </HorizontalScroll>
             </Animated.View>

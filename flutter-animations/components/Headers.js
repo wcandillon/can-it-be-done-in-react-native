@@ -9,18 +9,21 @@ import Header from './Header';
 export const SMALL_HEADER_SIZE = 45 + 64;
 export const MEDIUM_HEADER_SIZE = 300;
 const {
-  Extrapolate, event, Value, interpolate,
+  Extrapolate, event, Value, interpolate, floor, divide, multiply, add, sub, mutiply,
 } = Animated;
 const { width, height: wHeight } = Dimensions.get('window');
 
 type HeadersProps = {
   sections: Section[],
   y: Value,
+  currentIndex: Value,
 };
 
 export default class Headers extends React.PureComponent<HeadersProps> {
   render() {
-    const { sections, y } = this.props;
+    const {
+      sections, y, currentIndex,
+    } = this.props;
     const sectionHeight = wHeight / sections.length;
     const height = interpolate(
       y,
@@ -41,7 +44,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
           sections.map((section, key) => {
             const translateX = interpolate(y, {
               inputRange: [-wHeight + MEDIUM_HEADER_SIZE, 0],
-              outputRange: [key * width, 0],
+              outputRange: [key * width, multiply(width, currentIndex)],
               extrapolate: Extrapolate.CLAMP,
             });
             const translateY = interpolate(y, {
