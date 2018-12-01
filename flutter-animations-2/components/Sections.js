@@ -1,13 +1,18 @@
 // @flow
 import * as React from 'react';
-import { View, Dimensions, ScrollView, StyleSheet } from 'react-native';
-import Animated from "react-native-reanimated";
+import { View, Dimensions } from 'react-native';
+import Animated from 'react-native-reanimated';
 
-const {Value, event, block, call} = Animated;
-const {width, height} = Dimensions.get("window");
+import Headers from './Headers';
+import Pages from './Pages';
+
+const {
+  Value, event, block, call,
+} = Animated;
+const { width, height } = Dimensions.get('window');
 
 type SectionsProps = {
-  sections: Section[]
+  sections: Section[],
 };
 
 const onScroll = (contentOffset: { x?: Value, y?: Value }) => event(
@@ -19,10 +24,9 @@ const onScroll = (contentOffset: { x?: Value, y?: Value }) => event(
     },
   ],
   { useNativeDriver: true },
-)
+);
 
 export default class Sections extends React.PureComponent<SectionsProps> {
-
   constructor(props: SectionsProps) {
     super(props);
     this.x = new Value(0);
@@ -32,36 +36,33 @@ export default class Sections extends React.PureComponent<SectionsProps> {
   }
 
   render() {
-    const {x, y, onScrollX, onScrollY} = this;
-    const {sections} = this.props;
+    const {
+      x, y, onScrollX, onScrollY,
+    } = this;
+    const { sections } = this.props;
     return (
-      <View style={styles.container}>
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={onScrollY}
+        bounces={false}
+        vertical
+      >
         <Animated.ScrollView
-          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          onScroll={onScrollY}
+          onScroll={onScrollX}
           bounces={false}
-          vertical
+          snapToInterval={width}
+          decelerationRate="fast"
+          horizontal
         >
-          <Animated.ScrollView
-            showsHorizontalScrollIndicator={false}
-            scrollEventThrottle={16}
-            onScroll={onScrollX}
-            bounces={false}
-            horizontal
-          >
-            <View style={{ width: sections.length * width, height: height * 2, backgroundColor: "red" }}>
-
-            </View>
-          </Animated.ScrollView>
+          <View>
+            <Headers {...{ sections }} />
+            <Pages {...{ sections }} />
+          </View>
         </Animated.ScrollView>
-      </View>
+      </Animated.ScrollView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
