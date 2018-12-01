@@ -18,13 +18,14 @@ const { width, height: wHeight } = Dimensions.get('window');
 type HeadersProps = {
   sections: Section[],
   y: Value,
+  x: Value,
   currentIndex: Value,
 };
 
 export default class Headers extends React.PureComponent<HeadersProps> {
   render() {
     const {
-      sections, y, currentIndex,
+      sections, y, x, currentIndex,
     } = this.props;
     const sectionHeight = wHeight / sections.length;
     const height = interpolate(
@@ -54,7 +55,12 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               outputRange: [-key * SMALL_HEADER_SIZE, -key * MEDIUM_HEADER_SIZE, 0],
               extrapolate: Extrapolate.CLAMP,
             });
-            const opacity = cond(eq(currentIndex, key), 1, 0.5);
+            const inputRange = key === 0 ? [-width, 0, width] : [-width * (key + 1), -width * key, -width * (key - 1)];
+            const opacity = interpolate(x, {
+              inputRange,
+              outputRange: [0.5, 1, 0.5],
+              extrapolate: Extrapolate.CLAMP,
+            });
             return (
               <Animated.View
                 key={section.title}
@@ -71,7 +77,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
                 <Animated.View style={[styles.labelContainer, { opacity }]}>
                   <Text style={styles.label}>{section.title.toUpperCase()}</Text>
                 </Animated.View>
-                <Animated.View style={[styles.labelContainer, , { opacity }]}>
+                <Animated.View style={[styles.labelContainer, { opacity }]}>
                   <View style={styles.cursor} />
                 </Animated.View>
               </Animated.View>
