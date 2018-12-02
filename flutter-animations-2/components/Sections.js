@@ -1,10 +1,11 @@
 // @flow
 import * as React from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, Dimensions, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import Headers from './Headers';
 import Pages from './Pages';
+import { SMALL_HEADER_HEIGHT } from './Model';
 
 const {
   Value, event, block, call,
@@ -41,28 +42,38 @@ export default class Sections extends React.PureComponent<SectionsProps> {
     } = this;
     const { sections } = this.props;
     return (
-      <Animated.ScrollView
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={1}
-        onScroll={onScrollY}
-        bounces={false}
-        vertical
-      >
+      <View style={styles.container}>
+        <View>
+          <Headers {...{ sections, y, x }} />
+          <Pages {...{ sections, y, x }} />
+        </View>
         <Animated.ScrollView
-          showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={1}
-          onScroll={onScrollX}
+          style={StyleSheet.absoluteFill}
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={16}
+          onScroll={onScrollY}
           bounces={false}
-          snapToInterval={width}
-          decelerationRate="fast"
-          horizontal
+          contentContainerStyle={{ height: height + height - SMALL_HEADER_HEIGHT }}
+          vertical
         >
-          <View>
-            <Headers {...{ sections, y, x }} />
-            <Pages {...{ sections }} />
-          </View>
+          <Animated.ScrollView
+            showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={16}
+            onScroll={onScrollX}
+            bounces={false}
+            contentContainerStyle={{ width: width * sections.length }}
+            snapToInterval={width}
+            decelerationRate="fast"
+            horizontal
+          />
         </Animated.ScrollView>
-      </Animated.ScrollView>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

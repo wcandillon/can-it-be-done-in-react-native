@@ -6,7 +6,9 @@ import Animated from 'react-native-reanimated';
 import { type Section, SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT } from './Model';
 import Header from './Header';
 
-const { Value, Extrapolate, interpolate } = Animated;
+const {
+  Value, Extrapolate, interpolate, add, multiply,
+} = Animated;
 
 type HeadersProps = {
   sections: Section[],
@@ -31,14 +33,15 @@ export default class Headers extends React.PureComponent<HeadersProps> {
       <View style={{ height, width: sections.length * width, backgroundColor }}>
         {
           sections.map((section, key) => {
-            const translateX = interpolate(y, {
+            const translateX1 = interpolate(y, {
               inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
               outputRange: [x, key * width],
               extrapolate: Extrapolate.CLAMP,
             });
+            const translateX = add(translateX1, multiply(x, -1));
             const translateY = interpolate(y, {
               inputRange,
-              outputRange: [key * FULL_HEADER_HEIGHT, height - MEDIUM_HEADER_HEIGHT / 2 - FULL_HEADER_HEIGHT / 2, height - SMALL_HEADER_HEIGHT / 2 - FULL_HEADER_HEIGHT / 2],
+              outputRange: [key * FULL_HEADER_HEIGHT, 0, 0],
               extrapolate: Extrapolate.CLAMP,
             });
             return (
