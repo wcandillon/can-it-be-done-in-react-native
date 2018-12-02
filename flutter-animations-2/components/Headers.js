@@ -90,10 +90,29 @@ export default class Headers extends React.PureComponent<HeadersProps> {
         }
         {
           sections.map((section, key) => {
-            const style = this.getStyle(headerHeight, key);
+            const translateY = interpolate(y, {
+              inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
+              outputRange: [multiply(headerHeight, key), 0],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const opacity = interpolate(x, {
+              inputRange: key === 0 ? [0, 0, width] : [width * (key - 1), width * key, width * (key + 1)],
+              outputRange: [0.5, 1, 0.5],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const style = {
+              height: headerHeight,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              opacity,
+              transform: [
+                { translateY },
+              ],
+            };
             return (
               <Animated.View {...{ key, style }}>
-                <Cursor index={key} {...{ section, x, y }} />
+                <Cursor />
               </Animated.View>
             );
           })

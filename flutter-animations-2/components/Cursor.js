@@ -2,9 +2,11 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-type CursorProps = {
+import { type Section, PADDING } from './Model';
 
+type CursorProps = {
 };
+
 
 export default class Cursor extends React.PureComponent<CursorProps> {
   render() {
@@ -18,11 +20,12 @@ export default class Cursor extends React.PureComponent<CursorProps> {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFill,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
-    alignItems: 'center',
   },
   cursor: {
+    top: 36,
+    left: PADDING,
     width: 50,
     height: 5,
     backgroundColor: 'white',

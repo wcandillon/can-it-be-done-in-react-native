@@ -3,7 +3,9 @@ import * as React from 'react';
 import { StyleSheet, Platform, Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-import { SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT, type Section } from './Model';
+import {
+  SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT, PADDING, type Section,
+} from './Model';
 
 const { Value, Extrapolate, interpolate } = Animated;
 
@@ -14,7 +16,6 @@ type LabelProps = {
   index: number,
 };
 
-const PADDING = 8;
 const { width, height } = Dimensions.get('window');
 // Character width is 19.3 on iOS and 19 on Android
 const charWidth = Platform.OS === 'ios' ? 19.3 : 19;
