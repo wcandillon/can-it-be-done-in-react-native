@@ -42,6 +42,21 @@ export default class Headers extends React.PureComponent<HeadersProps> {
     });
   }
 
+  getStyle = (headerHeight: Value, index: number) => {
+    const translateX = this.tX(index);
+    const translateY = this.tY(index);
+    return {
+      height: headerHeight,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      transform: [
+        { translateX },
+        { translateY },
+      ],
+    };
+  };
+
   render() {
     const { sections, x, y } = this.props;
     const FULL_HEADER_HEIGHT = height / sections.length;
@@ -54,22 +69,9 @@ export default class Headers extends React.PureComponent<HeadersProps> {
       <View style={{ height, width: sections.length * width, backgroundColor }}>
         {
           sections.map((section, key) => {
-            const translateX = this.tX(key);
-            const translateY = this.tY(key);
+            const style = this.getStyle(headerHeight, key);
             return (
-              <Animated.View
-                style={{
-                  height: headerHeight,
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  transform: [
-                    { translateX },
-                    { translateY },
-                  ],
-                }}
-                {...{ key }}
-              >
+              <Animated.View {...{ key, style }}>
                 <Header index={key} {...{ section }} />
               </Animated.View>
             );
@@ -77,22 +79,9 @@ export default class Headers extends React.PureComponent<HeadersProps> {
         }
         {
           sections.map((section, key) => {
-            const translateX = this.tX(key);
-            const translateY = this.tY(key);
+            const style = this.getStyle(headerHeight, key);
             return (
-              <Animated.View
-                style={{
-                  height: headerHeight,
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  transform: [
-                    { translateX },
-                    { translateY },
-                  ],
-                }}
-                {...{ key }}
-              >
+              <Animated.View {...{ key, style }}>
                 <Label index={key} {...{ section, x, y }} />
               </Animated.View>
             );
