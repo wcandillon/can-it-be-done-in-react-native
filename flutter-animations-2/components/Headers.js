@@ -102,7 +102,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
             });
             const translateX2 = interpolate(y, {
               inputRange: [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT],
-              outputRange: [0, (width / 2) * key, (CURSOR_WIDTH + PADDING) * key],
+              outputRange: [0, (width / 2) * key, (CURSOR_WIDTH + PADDING) * key - width / 4 + PADDING * 2],
               extrapolate: Extrapolate.CLAMP,
             });
             const translateX = add(translateX1, translateX2);
