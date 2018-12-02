@@ -8,6 +8,7 @@ import {
 } from './Model';
 import Header from './Header';
 import Label from './Label';
+import Cursor from './Cursor';
 
 const {
   Value, Extrapolate, interpolate, add, multiply,
@@ -83,6 +84,16 @@ export default class Headers extends React.PureComponent<HeadersProps> {
             return (
               <Animated.View {...{ key, style }}>
                 <Label index={key} {...{ section, x, y }} />
+              </Animated.View>
+            );
+          })
+        }
+        {
+          sections.map((section, key) => {
+            const style = this.getStyle(headerHeight, key);
+            return (
+              <Animated.View {...{ key, style }}>
+                <Cursor index={key} {...{ section, x, y }} />
               </Animated.View>
             );
           })
