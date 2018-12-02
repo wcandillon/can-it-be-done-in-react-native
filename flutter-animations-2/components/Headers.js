@@ -11,7 +11,7 @@ import Label from './Label';
 import Cursor from './Cursor';
 
 const {
-  Value, Extrapolate, interpolate, add, multiply, divide,
+  Value, Extrapolate, interpolate, add, multiply, divide, greaterThan, cond,
 } = Animated;
 
 type HeadersProps = {
@@ -95,11 +95,17 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               outputRange: [0.5, 1, 0.5],
               extrapolate: Extrapolate.CLAMP,
             });
-            const translateX = interpolate(y, {
+            const translateX1 = interpolate(y, {
               inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
               outputRange: [-width / 2 + CURSOR_WIDTH / 2 + PADDING, 0],
               extrapolate: Extrapolate.CLAMP,
             });
+            const translateX2 = interpolate(y, {
+              inputRange: [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT],
+              outputRange: [0, (width / 2) * key, (CURSOR_WIDTH + PADDING) * key],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const translateX = add(translateX1, translateX2);
             const translateY = interpolate(y, {
               inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
               outputRange: [multiply(headerHeight, key), 0],
