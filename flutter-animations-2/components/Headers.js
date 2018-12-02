@@ -3,8 +3,11 @@ import * as React from 'react';
 import { View, Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-import { type Section, SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT } from './Model';
+import {
+  type Section, SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT,
+} from './Model';
 import Header from './Header';
+import Label from './Label';
 
 const {
   Value, Extrapolate, interpolate, add, multiply,
@@ -20,12 +23,30 @@ const backgroundColor = '#343761';
 const { width, height } = Dimensions.get('window');
 
 export default class Headers extends React.PureComponent<HeadersProps> {
+  tX = (index: number) => {
+    const { x, y } = this.props;
+    return add(interpolate(y, {
+      inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
+      outputRange: [x, index * width],
+      extrapolate: Extrapolate.CLAMP,
+    }), multiply(x, -1));
+  }
+
+  tY = (index: number) => {
+    const { y, sections } = this.props;
+    const FULL_HEADER_HEIGHT = height / sections.length;
+    return interpolate(y, {
+      inputRange: [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT],
+      outputRange: [index * FULL_HEADER_HEIGHT, 0, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
+  }
+
   render() {
     const { sections, x, y } = this.props;
     const FULL_HEADER_HEIGHT = height / sections.length;
-    const inputRange = [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT];
     const headerHeight = interpolate(y, {
-      inputRange,
+      inputRange: [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT],
       outputRange: [FULL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT, SMALL_HEADER_HEIGHT],
       extrapolate: Extrapolate.CLAMP,
     });
@@ -33,17 +54,8 @@ export default class Headers extends React.PureComponent<HeadersProps> {
       <View style={{ height, width: sections.length * width, backgroundColor }}>
         {
           sections.map((section, key) => {
-            const translateX1 = interpolate(y, {
-              inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
-              outputRange: [x, key * width],
-              extrapolate: Extrapolate.CLAMP,
-            });
-            const translateX = add(translateX1, multiply(x, -1));
-            const translateY = interpolate(y, {
-              inputRange,
-              outputRange: [key * FULL_HEADER_HEIGHT, 0, 0],
-              extrapolate: Extrapolate.CLAMP,
-            });
+            const translateX = this.tX(key);
+            const translateY = this.tY(key);
             return (
               <Animated.View
                 style={{
@@ -58,7 +70,30 @@ export default class Headers extends React.PureComponent<HeadersProps> {
                 }}
                 {...{ key }}
               >
-                <Header index={key} {...{ section, x, y }} />
+                <Header index={key} {...{ section }} />
+              </Animated.View>
+            );
+          })
+        }
+        {
+          sections.map((section, key) => {
+            const translateX = this.tX(key);
+            const translateY = this.tY(key);
+            return (
+              <Animated.View
+                style={{
+                  height: headerHeight,
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  transform: [
+                    { translateX },
+                    { translateY },
+                  ],
+                }}
+                {...{ key }}
+              >
+                <Label index={key} {...{ section, x, y }} />
               </Animated.View>
             );
           })
