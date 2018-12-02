@@ -24,9 +24,9 @@ export default class Headers extends React.PureComponent<HeadersProps> {
     const { sections, x, y } = this.props;
     const FULL_HEADER_HEIGHT = height / sections.length;
     const inputRange = [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT];
-    const scaleY = interpolate(y, {
+    const headerHeight = interpolate(y, {
       inputRange,
-      outputRange: [1, MEDIUM_HEADER_HEIGHT / FULL_HEADER_HEIGHT, SMALL_HEADER_HEIGHT / FULL_HEADER_HEIGHT],
+      outputRange: [FULL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT, SMALL_HEADER_HEIGHT],
       extrapolate: Extrapolate.CLAMP,
     });
     return (
@@ -47,14 +47,13 @@ export default class Headers extends React.PureComponent<HeadersProps> {
             return (
               <Animated.View
                 style={{
-                  height: FULL_HEADER_HEIGHT,
+                  height: headerHeight,
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   transform: [
                     { translateX },
                     { translateY },
-                    { scaleY },
                   ],
                 }}
                 {...{ key }}
