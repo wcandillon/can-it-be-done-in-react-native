@@ -1,12 +1,13 @@
 // @flow
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 
-import { type Section, PADDING } from './Model';
+import { CURSOR_WIDTH } from './Model';
 
 type CursorProps = {
 };
 
+const { width } = Dimensions.get('window');
 
 export default class Cursor extends React.PureComponent<CursorProps> {
   render() {
@@ -20,13 +21,14 @@ export default class Cursor extends React.PureComponent<CursorProps> {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    width,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   cursor: {
-    top: 36,
-    left: PADDING,
-    width: 50,
+    top: 30,
+    width: CURSOR_WIDTH,
     height: 5,
     backgroundColor: 'white',
   },

@@ -4,14 +4,14 @@ import { View, Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import {
-  type Section, SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT,
+  type Section, SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT, PADDING, CURSOR_WIDTH,
 } from './Model';
 import Header from './Header';
 import Label from './Label';
 import Cursor from './Cursor';
 
 const {
-  Value, Extrapolate, interpolate, add, multiply,
+  Value, Extrapolate, interpolate, add, multiply, divide,
 } = Animated;
 
 type HeadersProps = {
@@ -90,14 +90,19 @@ export default class Headers extends React.PureComponent<HeadersProps> {
         }
         {
           sections.map((section, key) => {
-            const translateY = interpolate(y, {
-              inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
-              outputRange: [multiply(headerHeight, key), 0],
-              extrapolate: Extrapolate.CLAMP,
-            });
             const opacity = interpolate(x, {
               inputRange: key === 0 ? [0, 0, width] : [width * (key - 1), width * key, width * (key + 1)],
               outputRange: [0.5, 1, 0.5],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const translateX = interpolate(y, {
+              inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
+              outputRange: [-width / 2 + CURSOR_WIDTH / 2 + PADDING, 0],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const translateY = interpolate(y, {
+              inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
+              outputRange: [multiply(headerHeight, key), 0],
               extrapolate: Extrapolate.CLAMP,
             });
             const style = {
@@ -108,6 +113,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
               opacity,
               transform: [
                 { translateY },
+                { translateX },
               ],
             };
             return (
