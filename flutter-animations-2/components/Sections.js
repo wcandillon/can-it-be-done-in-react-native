@@ -5,7 +5,7 @@ import Animated from 'react-native-reanimated';
 
 import Headers from './Headers';
 import Pages from './Pages';
-import { SMALL_HEADER_HEIGHT } from './Model';
+import { SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT } from './Model';
 
 const {
   Value, event, block, call,

@@ -58,7 +58,7 @@ export default class Headers extends React.PureComponent<HeadersProps> {
                 }}
                 {...{ key }}
               >
-                <Header {...{ section }} />
+                <Header index={key} {...{ section, x, y }} />
               </Animated.View>
             );
           })
