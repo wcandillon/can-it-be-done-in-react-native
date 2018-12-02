@@ -17,6 +17,8 @@ type HeaderProps = {
   y: Value,
 };
 
+const CURSOR_WIDTH = 50;
+const PADDING = 8;
 const { width, height } = Dimensions.get('window');
 // Character width is 19.3 on iOS and 19 on Android
 const charWidth = Platform.OS === 'ios' ? 19.3 : 19;
@@ -39,7 +41,11 @@ export default class Header extends React.PureComponent<HeaderProps> {
       outputRange: [section.title.length * charWidth, width, width],
       extrapolate: Extrapolate.CLAMP,
     });
-    const translateCursorX = 0;
+    const translateCursorX = interpolate(y, {
+      inputRange: [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT],
+      outputRange: [-width / 2 + PADDING + CURSOR_WIDTH / 2, 0, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
     return (
       <View style={styles.container}>
         <Image source={section.image} style={styles.image} />
@@ -76,7 +82,7 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     ...StyleSheet.absoluteFillObject,
-    padding: 8,
+    padding: PADDING,
     justifyContent: 'center',
   },
   label: {
@@ -87,12 +93,12 @@ const styles = StyleSheet.create({
   },
   cursorContainer: {
     ...StyleSheet.absoluteFillObject,
-    padding: 8,
+    padding: PADDING,
     justifyContent: 'center',
     alignItems: 'center',
   },
   cursor: {
-    width: 50,
+    width: CURSOR_WIDTH,
     height: 4,
     backgroundColor: 'white',
     top: 32,
