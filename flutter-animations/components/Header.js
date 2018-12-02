@@ -1,13 +1,15 @@
 // @flow
 import * as React from 'react';
 import {
-  View, StyleSheet, Image,
+  View, StyleSheet, Image, Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo';
 
 type HeaderProps = {
   section: Section,
 };
+
+const { width } = Dimensions.get('window');
 
 export default class Header extends React.PureComponent<HeaderProps> {
   render() {
@@ -30,6 +32,7 @@ export default class Header extends React.PureComponent<HeaderProps> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width,
   },
   image: {
     ...StyleSheet.absoluteFillObject,

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "flutter-animations",
+    "name": "flutter-animations-2",
     "description": "This project is really great.",
-    "slug": "flutter-animations",
+    "slug": "flutter-animations-2",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],

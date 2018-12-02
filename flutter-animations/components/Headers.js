@@ -1,134 +1,135 @@
 // @flow
 import * as React from 'react';
-import {
-  View, StyleSheet, Dimensions, Text, Platform,
-} from 'react-native';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import { View, Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 
+import {
+  type Section, SMALL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT, PADDING, CURSOR_WIDTH,
+} from './Model';
 import Header from './Header';
-
-export const SMALL_HEADER_SIZE = 45 + 64;
-export const MEDIUM_HEADER_SIZE = 300;
-// Character width is 19.3 on iOS and 19 on Android
-const charWidth = Platform.OS === 'ios' ? 19.3 : 19;
-const fontSize = 32;
-const fontFamily = Platform.OS === 'ios' ? 'Menlo' : 'monospace';
+import Label from './Label';
+import Cursor from './Cursor';
 
 const {
-  Extrapolate, event, Value, interpolate, floor, divide, multiply, add, sub, mutiply, cond, eq,
+  Value, Extrapolate, interpolate, add, multiply, divide, greaterThan, cond,
 } = Animated;
-const { width, height: wHeight } = Dimensions.get('window');
 
 type HeadersProps = {
   sections: Section[],
-  y: Value,
   x: Value,
-  currentIndex: Value,
+  y: Value,
 };
 
+const backgroundColor = '#343761';
+const { width, height } = Dimensions.get('window');
+
 export default class Headers extends React.PureComponent<HeadersProps> {
+  tX = (index: number) => {
+    const { x, y } = this.props;
+    return add(interpolate(y, {
+      inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
+      outputRange: [x, index * width],
+      extrapolate: Extrapolate.CLAMP,
+    }), multiply(x, -1));
+  }
+
+  tY = (index: number) => {
+    const { y, sections } = this.props;
+    const FULL_HEADER_HEIGHT = height / sections.length;
+    return interpolate(y, {
+      inputRange: [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT],
+      outputRange: [index * FULL_HEADER_HEIGHT, 0, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
+  }
+
+  getStyle = (headerHeight: Value, index: number) => {
+    const translateX = this.tX(index);
+    const translateY = this.tY(index);
+    return {
+      height: headerHeight,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      transform: [
+        { translateX },
+        { translateY },
+      ],
+    };
+  };
+
   render() {
-    const {
-      sections, y, x, currentIndex,
-    } = this.props;
-    const sectionHeight = wHeight / sections.length;
-    const height = interpolate(
-      y,
-      {
-        inputRange: [-wHeight + SMALL_HEADER_SIZE, -wHeight + MEDIUM_HEADER_SIZE, 0],
-        outputRange: [SMALL_HEADER_SIZE, MEDIUM_HEADER_SIZE, sectionHeight],
-        extrapolate: Extrapolate.CLAMP,
-      },
-    );
-    const containerHeight = interpolate(y, {
-      inputRange: [-wHeight + SMALL_HEADER_SIZE, 0],
-      outputRange: [SMALL_HEADER_SIZE, wHeight],
+    const { sections, x, y } = this.props;
+    const FULL_HEADER_HEIGHT = height / sections.length;
+    const headerHeight = interpolate(y, {
+      inputRange: [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT],
+      outputRange: [FULL_HEADER_HEIGHT, MEDIUM_HEADER_HEIGHT, SMALL_HEADER_HEIGHT],
       extrapolate: Extrapolate.CLAMP,
     });
     return (
-      <Animated.View style={[styles.container, { width: width * sections.length, height: containerHeight }]}>
+      <View style={{ height, width: sections.length * width, backgroundColor }}>
         {
           sections.map((section, key) => {
-            const translateX = interpolate(y, {
-              inputRange: [-wHeight + MEDIUM_HEADER_SIZE, 0],
-              outputRange: [key * width, multiply(width, currentIndex)],
-              extrapolate: Extrapolate.CLAMP,
-            });
-            const translateY = interpolate(y, {
-              inputRange: [-wHeight + SMALL_HEADER_SIZE, -wHeight + MEDIUM_HEADER_SIZE, 0],
-              outputRange: [-key * SMALL_HEADER_SIZE, -key * MEDIUM_HEADER_SIZE, 0],
-              extrapolate: Extrapolate.CLAMP,
-            });
-            const inputRange = key === 0 ? [-width, 0, width] : [-width * (key + 1), -width * key, -width * (key - 1)];
-            const opacity = interpolate(x, {
-              inputRange,
-              outputRange: [0.5, 1, 0.5],
-              extrapolate: Extrapolate.CLAMP,
-            });
-            const labelWidth = interpolate(y, {
-              inputRange: [-wHeight + SMALL_HEADER_SIZE, -wHeight + MEDIUM_HEADER_SIZE, 0],
-              outputRange: [width, width, section.title.length * charWidth],
-              extrapolate: Extrapolate.CLAMP,
-            });
-            const translateCursorX = interpolate(y, {
-              inputRange: [-wHeight + SMALL_HEADER_SIZE, -wHeight + MEDIUM_HEADER_SIZE, 0],
-              outputRange: [0, 0, (width / 2) - 50 - 8],
-              extrapolate: Extrapolate.CLAMP,
-            });
+            const style = this.getStyle(headerHeight, key);
             return (
-              <Animated.View
-                key={section.title}
-                style={{
-                  width,
-                  height,
-                  transform: [{ translateY, translateX }],
-                }}
-              >
-                <Header
-                  numberOfHeaders={sections.length}
-                  {...{ key, section }}
-                />
-                <Animated.View style={[styles.labelContainer, { opacity }]}>
-                  <Animated.Text style={[styles.label, { width: labelWidth }]}>{section.title.toUpperCase()}</Animated.Text>
-                </Animated.View>
-                <Animated.View style={[styles.cursorContainer, { opacity, transform: [{ translateX: translateCursorX }] }]}>
-                  <View style={styles.cursor} />
-                </Animated.View>
+              <Animated.View {...{ key, style }}>
+                <Header index={key} {...{ section }} />
               </Animated.View>
             );
           })
         }
-      </Animated.View>
+        {
+          sections.map((section, key) => {
+            const style = this.getStyle(headerHeight, key);
+            return (
+              <Animated.View {...{ key, style }}>
+                <Label index={key} {...{ section, x, y }} />
+              </Animated.View>
+            );
+          })
+        }
+        {
+          sections.map((section, key) => {
+            const opacity = interpolate(x, {
+              inputRange: key === 0 ? [0, 0, width] : [width * (key - 1), width * key, width * (key + 1)],
+              outputRange: [0.5, 1, 0.5],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const translateX1 = interpolate(y, {
+              inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
+              outputRange: [-width / 2 + CURSOR_WIDTH / 2 + PADDING, 0],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const translateX2 = interpolate(y, {
+              inputRange: [0, height - MEDIUM_HEADER_HEIGHT, height - SMALL_HEADER_HEIGHT],
+              outputRange: [0, (width / 2) * key, (CURSOR_WIDTH + PADDING) * key - width / 4 + PADDING * 2],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const translateX = add(translateX1, translateX2);
+            const translateY = interpolate(y, {
+              inputRange: [0, height - MEDIUM_HEADER_HEIGHT],
+              outputRange: [multiply(headerHeight, key), 0],
+              extrapolate: Extrapolate.CLAMP,
+            });
+            const style = {
+              height: headerHeight,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              opacity,
+              transform: [
+                { translateY },
+                { translateX },
+              ],
+            };
+            return (
+              <Animated.View {...{ key, style }}>
+                <Cursor />
+              </Animated.View>
+            );
+          })
+        }
+      </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#343761',
-  },
-  labelContainer: {
-    ...StyleSheet.absoluteFillObject,
-    padding: 8,
-    justifyContent: 'center',
-  },
-  label: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize,
-    fontFamily,
-  },
-  cursorContainer: {
-    ...StyleSheet.absoluteFillObject,
-    padding: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cursor: {
-    width: 50,
-    height: 4,
-    backgroundColor: 'white',
-    top: 32,
-  },
-});
