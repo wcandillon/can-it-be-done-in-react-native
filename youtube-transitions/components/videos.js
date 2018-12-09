@@ -1,7 +1,19 @@
 // @flow
-import moment from 'moment';
+import moment, { type Moment } from 'moment';
+import type { ImageSourcePropType } from 'react-native/Libraries/Image/ImageSourcePropType';
 
-const videos = [
+export type Video = {
+  id: string,
+  thumbnail: ImageSourcePropType,
+  video: ImageSourcePropType,
+  title: string,
+  username: string,
+  avatar: ImageSourcePropType,
+  views: number,
+  published: Moment,
+};
+
+const videos: Video[] = [
   {
     id: '1',
     thumbnail: require('../assets/thumbnails/1.jpg'),
@@ -33,7 +45,7 @@ const videos = [
     published: moment().subtract(24, 'days'),
   },
   {
-    id: '3',
+    id: '4',
     thumbnail: require('../assets/thumbnails/4.jpg'),
     video: require('../assets/video.mp4'),
     title: 'Permissions in React Native for absolute beginners',
