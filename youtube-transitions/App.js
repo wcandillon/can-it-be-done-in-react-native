@@ -3,7 +3,7 @@
 import React from 'react';
 import { AppLoading, Asset } from 'expo';
 
-import { Home, videos } from './components';
+import { Home, PlayerProvider, videos } from './components';
 
 type AppState = {
   ready: boolean,
@@ -33,7 +33,9 @@ export default class App extends React.PureComponent<{}, AppState> {
       );
     }
     return (
-      <Home />
+      <PlayerProvider>
+        <Home />
+      </PlayerProvider>
     );
   }
 }

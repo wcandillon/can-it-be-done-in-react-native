@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
 import {
-  View, Image, StyleSheet, Text,
+  View, Image, StyleSheet, Text, TouchableWithoutFeedback,
 } from 'react-native';
 
+import { PlayerContext } from './PlayerProvider';
 import { type Video } from './videos';
 
 type VideoThumbnailProps = {
@@ -11,21 +12,33 @@ type VideoThumbnailProps = {
 };
 
 export default class VideoThumbnail extends React.PureComponent<VideoThumbnailProps> {
+  onPress = () => {
+
+  };
+
   render() {
     const { video } = this.props;
     return (
-      <View>
-        <Image source={video.thumbnail} style={styles.thumbnail} />
-        <View style={styles.description}>
-          <Image source={video.avatar} style={styles.avatar} />
-          <View>
-            <Text style={styles.title}>{video.title}</Text>
-            <Text style={styles.subtitle}>
-              {`${video.username} • ${video.views} views • ${video.published.fromNow()}`}
-            </Text>
-          </View>
-        </View>
-      </View>
+      <PlayerContext.Consumer>
+        {
+          ({ setVideo }) => (
+            <TouchableWithoutFeedback onPress={() => setVideo(video)}>
+              <View>
+                <Image source={video.thumbnail} style={styles.thumbnail} />
+                <View style={styles.description}>
+                  <Image source={video.avatar} style={styles.avatar} />
+                  <View>
+                    <Text style={styles.title}>{video.title}</Text>
+                    <Text style={styles.subtitle}>
+                      {`${video.username} • ${video.views} views • ${video.published.fromNow()}`}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          )
+      }
+      </PlayerContext.Consumer>
     );
   }
 }
