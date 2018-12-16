@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
   View, StyleSheet, Text, Image, ScrollView,
 } from 'react-native';
+import { Feather as Icon } from '@expo/vector-icons';
 
 import videos, { type Video } from './videos';
 
@@ -18,6 +19,14 @@ export default class VideoContent extends React.PureComponent<VideoContentProps>
         <View style={styles.content}>
           <Text style={styles.title}>{video.title}</Text>
           <Text style={styles.views}>{`${video.views} views`}</Text>
+          <View style={styles.icons}>
+            <Icon name="thumbs-up" style={styles.icon} />
+            <Icon name="thumbs-down" style={styles.icon} />
+            <Icon name="share" style={styles.icon} />
+            <Icon name="arrow-down-circle" style={styles.icon} />
+            <Icon name="list" style={styles.icon} />
+
+          </View>
         </View>
         <View style={styles.upNext}>
           <Text style={styles.upNextTitle}>Up next</Text>
@@ -49,6 +58,15 @@ const styles = StyleSheet.create({
   views: {
     color: 'gray',
     marginBottom: 16,
+  },
+  icons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  icon: {
+    margin: 16,
+    fontSize: 32,
+    color: 'gray',
   },
   upNext: {
     borderTopWidth: 1,
