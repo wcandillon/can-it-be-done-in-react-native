@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {
-  View, StyleSheet, Text, Image,
+  View, StyleSheet, Text, Image, ScrollView,
 } from 'react-native';
 
 import videos, { type Video } from './videos';
@@ -13,40 +13,52 @@ type VideoContentProps = {
 export default class VideoContent extends React.PureComponent<VideoContentProps> {
   render() {
     const { video } = this.props;
-    const upNextVideos = videos.filter(v => v.id !== video.id);
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>{video.title}</Text>
-        <Text style={styles.views}>{`${video.views} views`}</Text>
-        <View>
-          <Text>Up next</Text>
+      <ScrollView>
+        <View style={styles.content}>
+          <Text style={styles.title}>{video.title}</Text>
+          <Text style={styles.views}>{`${video.views} views`}</Text>
+        </View>
+        <View style={styles.upNext}>
+          <Text style={styles.upNextTitle}>Up next</Text>
           {
-            upNextVideos.map(v => (
+            videos.map(v => (
               <View key={v.id} style={styles.thumbnail}>
                 <Image source={v.thumbnail} style={styles.thumbnailImage} />
                 <View style={styles.thumbnailContent}>
-                  <Text numberOfLines={2}>{v.title}</Text>
-                  <Text>{v.username}</Text>
+                  <Text numberOfLines={2} style={styles.thumbnailTitle}>{v.title}</Text>
+                  <Text style={styles.thumbnailUsername}>{v.username}</Text>
                 </View>
               </View>
             ))
           }
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  content: {
     padding: 16,
   },
   title: {
-
+    fontSize: 16,
+    marginBottom: 8,
   },
   views: {
-
+    color: 'gray',
+    marginBottom: 16,
+  },
+  upNext: {
+    borderTopWidth: 1,
+    borderColor: 'lightgray',
+    paddingTop: 8,
+    padding: 16,
+  },
+  upNextTitle: {
+    fontWeight: 'bold',
+    color: 'gray',
   },
   thumbnail: {
     flexDirection: 'row',
@@ -62,5 +74,11 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     flex: 1,
     flexWrap: 'wrap',
+  },
+  thumbnailTitle: {
+    fontSize: 16,
+  },
+  thumbnailUsername: {
+    color: 'gray',
   },
 });

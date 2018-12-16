@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {
-  View, SafeAreaView, StyleSheet, Dimensions,
+  View, SafeAreaView, StyleSheet, Dimensions, StatusBar,
 } from 'react-native';
 import { Video } from 'expo';
 
@@ -19,17 +19,17 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
   render() {
     const { video } = this.props;
     return (
-      <SafeAreaView style={styles.root}>
-        <View style={styles.container}>
-          <Video
-            source={video.video}
-            style={{ width, height }}
-            resizeMode={Video.RESIZE_MODE_CONTAIN}
-            shouldPlay
-          />
-          <VideoContent {...{ video }} />
-        </View>
-      </SafeAreaView>
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
+        <SafeAreaView style={styles.root} />
+        <Video
+          source={video.video}
+          style={{ width, height }}
+          resizeMode={Video.RESIZE_MODE_CONTAIN}
+          shouldPlay
+        />
+        <VideoContent {...{ video }} />
+      </View>
     );
   }
 }
