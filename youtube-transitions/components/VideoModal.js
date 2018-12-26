@@ -10,8 +10,7 @@ import VideoContent from './VideoContent';
 
 const { Animated } = DangerZone;
 const { State, PanGestureHandler } = GestureHandler;
-const { width } = Dimensions.get('window');
-const height = width / 1.78;
+const { width, height } = Dimensions.get('window');
 const {
   Extrapolate,
   Value,
@@ -27,11 +26,10 @@ const {
   spring,
   stopClock,
   event,
-  greaterThan,
   interpolate,
 } = Animated;
 
-function runSpring(clock: Clock, value: Value, dest: number): Value {
+function runSpring(clock: Clock, value: Value, dest: Value): Value {
   const state = {
     finished: new Value(0),
     velocity: new Value(0),
@@ -94,12 +92,11 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
       { useNativeDriver: true },
     );
     const clockY = new Clock();
-    const finalTranslateX = add(translationY, multiply(0.2, velocityY));
-    const translationThreshold = width / 2;
+    const finalTranslateY = add(translationY, multiply(0.2, velocityY));
     const snapPoint = cond(
-      lessThan(finalTranslateX, translationThreshold),
+      lessThan(finalTranslateY, height / 2),
       0,
-      cond(greaterThan(finalTranslateX, translationThreshold), -height, 0),
+      height - 128 - Constants.statusBarHeight,
     );
     this.translateY = cond(
       eq(state, State.END),
@@ -142,7 +139,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
           <Animated.View style={{ flex: 1, backgroundColor: 'white', transform: [{ translateY: tY }] }}>
             <Video
               source={video.video}
-              style={{ width, height }}
+              style={{ width, height: width / 1.78 }}
               resizeMode={Video.RESIZE_MODE_CONTAIN}
               shouldPlay
             />
