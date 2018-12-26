@@ -4,21 +4,21 @@ import {
   View, StyleSheet, Text, Dimensions, TouchableWithoutFeedback,
 } from 'react-native';
 import { Icon } from 'expo';
-import { PlayerContext } from './PlayerProvider';
+import PlayerContext from './PlayerContext';
 
 const { width } = Dimensions.get('window');
 export const PLACEHOLDER_WIDTH = width / 3;
 
 type PlayerControlsProps = {
   title: string,
-  onPress: Function,
+  onPress: () => mixed,
 };
 
 export default class PlayerControls extends React.PureComponent<PlayerControlsProps> {
   render() {
     const { title, onPress } = this.props;
     return (
-      <TouchableWithoutFeedback {...{ onPress }}>
+      <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.container}>
           <View style={styles.placeholder} />
           <Text style={styles.title} numerOfLine={3}>{title}</Text>

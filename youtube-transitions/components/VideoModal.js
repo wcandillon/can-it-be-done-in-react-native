@@ -12,6 +12,10 @@ import PlayerControls, { PLACEHOLDER_WIDTH } from './PlayerControls';
 const { Animated, Easing } = DangerZone;
 const { State, PanGestureHandler } = GestureHandler;
 const { width, height } = Dimensions.get('window');
+const { statusBarHeight } = Constants;
+const minHeight = 64;
+const midBound = height - statusBarHeight - 128;
+const upperBound = midBound + minHeight;
 const {
   Extrapolate,
   Value,
@@ -30,10 +34,8 @@ const {
   event,
   interpolate,
   timing,
+  neq,
 } = Animated;
-const { statusBarHeight } = Constants;
-const boundY = height - statusBarHeight - 128;
-const minHeight = 64;
 const AnimatedVideo = Animated.createAnimatedComponent(Video);
 const shadow = {
   alignItems: 'center',
@@ -87,6 +89,8 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
 
   offsetY = new Value(0);
 
+  offsetY2 = new Value(0);
+
   gestureState = new Value(State.UNDETERMINED);
 
   onGestureEvent: $Call<event>;
@@ -96,7 +100,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
   constructor(props: VideoModalProps) {
     super(props);
     const {
-      translationY, velocityY, offsetY, gestureState: state,
+      translationY, velocityY, offsetY, gestureState: state, offsetY2,
     } = this;
     this.onGestureEvent = event(
       [
@@ -115,7 +119,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     const snapPoint = cond(
       lessThan(finalTranslateY, sub(offsetY, height / 4)),
       0,
-      boundY + minHeight,
+      upperBound,
     );
     this.translateY = cond(
       eq(state, State.END),
@@ -125,26 +129,35 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
         translationY,
       ],
       [
-        cond(eq(state, State.BEGAN), stopClock(clockY)),
+        cond(eq(state, State.BEGAN), [
+          stopClock(clockY),
+          set(offsetY, cond(neq(offsetY2, 0), 0, offsetY)),
+          set(offsetY2, 0),
+        ]),
         add(offsetY, translationY),
       ],
     );
   }
 
-  onPress = () => alert('Not implemented yet 🤷🏼‍♂️');
+  onPress = () => timing(this.offsetY2, {
+    toValue: -upperBound,
+    duration: 300,
+    easing: Easing.inOut(Easing.ease),
+  }).start();
 
   render() {
     const {
-      onGestureEvent, translateY, onPress,
+      onGestureEvent, translateY: y, onPress, offsetY2,
     } = this;
+    const translateY = add(y, offsetY2);
     const { video } = this.props;
     const tY = interpolate(translateY, {
-      inputRange: [0, boundY],
-      outputRange: [0, boundY],
+      inputRange: [0, midBound],
+      outputRange: [0, midBound],
       extrapolate: Extrapolate.CLAMP,
     });
     const opacity = interpolate(translateY, {
-      inputRange: [0, boundY - 100],
+      inputRange: [0, midBound - 100],
       outputRange: [1, 0],
       extrapolate: Extrapolate.CLAMP,
     });
@@ -154,27 +167,27 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
       extrapolateLeft: Extrapolate.CLAMP,
     });
     const videoContainerWidth = interpolate(translateY, {
-      inputRange: [0, boundY],
+      inputRange: [0, midBound],
       outputRange: [width, width - 16],
       extrapolate: Extrapolate.CLAMP,
     });
     const videoWidth = interpolate(translateY, {
-      inputRange: [0, boundY, boundY + minHeight],
+      inputRange: [0, midBound, upperBound],
       outputRange: [width, width - 16, PLACEHOLDER_WIDTH],
       extrapolate: Extrapolate.CLAMP,
     });
     const videoHeight = interpolate(translateY, {
-      inputRange: [0, boundY],
+      inputRange: [0, midBound],
       outputRange: [width / 1.78, minHeight],
       extrapolate: Extrapolate.CLAMP,
     });
     const containerHeight = interpolate(translateY, {
-      inputRange: [0, boundY],
+      inputRange: [0, midBound],
       outputRange: [height, 0],
       extrapolate: Extrapolate.CLAMP,
     });
     const playerControlOpaciy = interpolate(translateY, {
-      inputRange: [boundY, boundY + minHeight],
+      inputRange: [midBound, upperBound],
       outputRange: [0, 1],
       extrapolate: Extrapolate.CLAMP,
     });

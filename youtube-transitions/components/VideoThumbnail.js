@@ -4,7 +4,7 @@ import {
   View, Image, StyleSheet, Text, TouchableWithoutFeedback,
 } from 'react-native';
 
-import { PlayerContext } from './PlayerProvider';
+import PlayerContext from './PlayerContext';
 import { type Video } from './videos';
 
 type VideoThumbnailProps = {

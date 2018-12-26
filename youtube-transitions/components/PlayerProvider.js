@@ -5,14 +5,13 @@ import {
 } from 'react-native';
 import { DangerZone } from 'expo';
 
+import PlayerContext from './PlayerContext';
 import VideoModal from './VideoModal';
 import { type Video } from './videos';
 
 const { height } = Dimensions.get('window');
 const { Animated, Easing } = DangerZone;
 const { Value, timing } = Animated;
-// $FlowFixMe
-export const PlayerContext = React.createContext();
 
 type PlayerProviderProps = {
   children: React.Node,
