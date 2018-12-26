@@ -7,6 +7,7 @@ import {
 
 import { type Video as VideoModel } from './videos';
 import VideoContent from './VideoContent';
+import PlayerControls, { PLACEHOLDER_WIDTH } from './PlayerControls';
 
 const { Animated } = DangerZone;
 const { State, PanGestureHandler } = GestureHandler;
@@ -105,7 +106,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     const snapPoint = cond(
       lessThan(finalTranslateY, sub(offsetY, height / 4)),
       0,
-      boundY,
+      boundY + minHeight,
     );
     this.translateY = cond(
       eq(state, State.END),
@@ -143,7 +144,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     });
     const videoWidth = interpolate(translateY, {
       inputRange: [0, boundY - minHeight, boundY + minHeight],
-      outputRange: [width, width, width / 4],
+      outputRange: [width, width, PLACEHOLDER_WIDTH],
       extrapolate: Extrapolate.CLAMP,
     });
     const videoHeight = interpolate(translateY, {
@@ -177,6 +178,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
             }}
           >
             <Animated.View style={{ backgroundColor: 'white', width: videoContainerWidth }}>
+              <PlayerControls title={video.title} />
               <AnimatedVideo
                 source={video.video}
                 style={{ width: videoWidth, height: videoHeight }}
