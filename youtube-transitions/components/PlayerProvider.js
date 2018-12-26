@@ -10,9 +10,7 @@ import { type Video } from './videos';
 
 const { height } = Dimensions.get('window');
 const { Animated, Easing } = DangerZone;
-const {
-  Value, Clock, cond, clockRunning, startClock, stopClock, set, timing,
-} = Animated;
+const { Value, timing } = Animated;
 // $FlowFixMe
 export const PlayerContext = React.createContext();
 

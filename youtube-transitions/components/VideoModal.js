@@ -1,8 +1,6 @@
 // @flow
 import * as React from 'react';
-import {
-  View, StyleSheet, Dimensions, StatusBar,
-} from 'react-native';
+import { Dimensions } from 'react-native';
 import {
   Video, Constants, DangerZone, GestureHandler,
 } from 'expo';
@@ -21,18 +19,49 @@ const {
   cond,
   eq,
   set,
-  block,
+  add,
+  multiply,
+  lessThan,
   clockRunning,
   startClock,
   spring,
   stopClock,
   event,
-  and,
-  lessOrEq,
   greaterThan,
-  call,
   interpolate,
 } = Animated;
+
+function runSpring(clock: Clock, value: Value, dest: number): Value {
+  const state = {
+    finished: new Value(0),
+    velocity: new Value(0),
+    position: new Value(0),
+    time: new Value(0),
+  };
+
+  const config = {
+    damping: 20,
+    mass: 1,
+    stiffness: 100,
+    overshootClamping: false,
+    restSpeedThreshold: 1,
+    restDisplacementThreshold: 0.5,
+    toValue: new Value(0),
+  };
+
+  return [
+    cond(clockRunning(clock), 0, [
+      set(state.finished, 0),
+      set(state.velocity, 0),
+      set(state.position, value),
+      set(config.toValue, dest),
+      startClock(clock),
+    ]),
+    spring(clock, state, config),
+    cond(state.finished, stopClock(clock)),
+    state.position,
+  ];
+}
 
 type VideoModalProps = {
   video: VideoModel,
@@ -43,35 +72,55 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
 
   velocityY = new Value(0);
 
+  gestureState = new Value(State.UNDETERMINED);
+
   onGestureEvent: $Call<event>;
+
+  translateY: Value;
 
   constructor(props: VideoModalProps) {
     super(props);
-    const { translationY, velocityY } = this;
+    const { translationY, velocityY, gestureState: state } = this;
     this.onGestureEvent = event(
       [
         {
           nativeEvent: {
             translationY,
             velocityY,
-            state: this.state,
+            state,
           },
         },
       ],
       { useNativeDriver: true },
     );
+    const clockY = new Clock();
+    const finalTranslateX = add(translationY, multiply(0.2, velocityY));
+    const translationThreshold = width / 2;
+    const snapPoint = cond(
+      lessThan(finalTranslateX, translationThreshold),
+      0,
+      cond(greaterThan(finalTranslateX, translationThreshold), -height, 0),
+    );
+    this.translateY = cond(
+      eq(state, State.END),
+      [
+        set(translationY, runSpring(clockY, translationY, snapPoint)),
+        translationY,
+      ],
+      translationY,
+    );
   }
 
   render() {
-    const { onGestureEvent, translationY } = this;
+    const { onGestureEvent, translateY } = this;
     const { video } = this.props;
     const { statusBarHeight } = Constants;
-    const translateY = translationY.interpolate({
+    const tY = interpolate(translateY, {
       inputRange: [0, 1],
       outputRange: [0, 1],
       extrapolateLeft: Extrapolate.CLAMP,
     });
-    const statusBarOpacity = translationY.interpolate({
+    const statusBarOpacity = interpolate(translateY, {
       inputRange: [0, statusBarHeight],
       outputRange: [1, 0],
       extrapolateLeft: Extrapolate.CLAMP,
@@ -90,7 +139,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
           activeOffsetY={10}
           {...{ onGestureEvent }}
         >
-          <Animated.View style={{ flex: 1, backgroundColor: 'white', transform: [{ translateY }] }}>
+          <Animated.View style={{ flex: 1, backgroundColor: 'white', transform: [{ translateY: tY }] }}>
             <Video
               source={video.video}
               style={{ width, height }}
@@ -104,10 +153,3 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    height: Constants.statusBarHeight,
-    backgroundColor: 'black',
-  },
-});
