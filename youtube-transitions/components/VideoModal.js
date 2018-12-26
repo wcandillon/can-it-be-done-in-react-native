@@ -29,6 +29,9 @@ const {
   event,
   interpolate,
 } = Animated;
+const { statusBarHeight } = Constants;
+const boundY = height - statusBarHeight - 128;
+const AnimatedVideo = Animated.createAnimatedComponent(Video);
 
 function runSpring(clock: Clock, value: Value, dest: Value): Value {
   const state = {
@@ -101,7 +104,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     const snapPoint = cond(
       lessThan(finalTranslateY, sub(offsetY, height / 4)),
       0,
-      height - Constants.statusBarHeight - 128,
+      boundY,
     );
     this.translateY = cond(
       eq(state, State.END),
@@ -117,16 +120,30 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
   render() {
     const { onGestureEvent, translateY } = this;
     const { video } = this.props;
-    const { statusBarHeight } = Constants;
     const tY = interpolate(translateY, {
       inputRange: [0, 1],
       outputRange: [0, 1],
       extrapolateLeft: Extrapolate.CLAMP,
     });
+    const opacity = interpolate(translateY, {
+      inputRange: [0, boundY - 100],
+      outputRange: [1, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
     const statusBarOpacity = interpolate(translateY, {
       inputRange: [0, statusBarHeight],
       outputRange: [1, 0],
       extrapolateLeft: Extrapolate.CLAMP,
+    });
+    const videoWidth = interpolate(translateY, {
+      inputRange: [0, boundY],
+      outputRange: [width, width - 16],
+      extrapolate: Extrapolate.CLAMP,
+    });
+    const videoHeight = interpolate(translateY, {
+      inputRange: [0, boundY],
+      outputRange: [width / 1.78, 64],
+      extrapolate: Extrapolate.CLAMP,
     });
     return (
       <>
@@ -142,14 +159,23 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
           activeOffsetY={[-10, 10]}
           {...{ onGestureEvent }}
         >
-          <Animated.View style={{ flex: 1, backgroundColor: 'white', transform: [{ translateY: tY }] }}>
-            <Video
+          <Animated.View
+            style={{
+              transform: [{ translateY: tY }],
+              alignItems: 'center',
+            }}
+          >
+            <AnimatedVideo
               source={video.video}
-              style={{ width, height: width / 1.78 }}
-              resizeMode={Video.RESIZE_MODE_CONTAIN}
+              style={{ width: videoWidth, height: videoHeight }}
+              resizeMode={Video.RESIZE_MODE_COVER}
               shouldPlay
             />
-            <VideoContent {...{ video }} />
+            <Animated.View style={{ backgroundColor: 'white', width }}>
+              <Animated.View style={{ opacity }}>
+                <VideoContent {...{ video }} />
+              </Animated.View>
+            </Animated.View>
           </Animated.View>
         </PanGestureHandler>
       </>
