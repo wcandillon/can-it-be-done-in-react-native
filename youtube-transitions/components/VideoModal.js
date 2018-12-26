@@ -122,9 +122,9 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     const { onGestureEvent, translateY } = this;
     const { video } = this.props;
     const tY = interpolate(translateY, {
-      inputRange: [0, 1],
-      outputRange: [0, 1],
-      extrapolateLeft: Extrapolate.CLAMP,
+      inputRange: [0, boundY],
+      outputRange: [0, boundY],
+      extrapolate: Extrapolate.CLAMP,
     });
     const opacity = interpolate(translateY, {
       inputRange: [0, boundY - 100],
