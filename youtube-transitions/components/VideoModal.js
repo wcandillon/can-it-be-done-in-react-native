@@ -35,6 +35,14 @@ const { statusBarHeight } = Constants;
 const boundY = height - statusBarHeight - 128;
 const minHeight = 64;
 const AnimatedVideo = Animated.createAnimatedComponent(Video);
+const shadow = {
+  alignItems: 'center',
+  elevation: 1,
+  shadowColor: 'black',
+  shadowOffset: { width: 0, height: 0 },
+  shadowOpacity: 0.18,
+  shadowRadius: 2,
+};
 
 function runSpring(clock: Clock, value: Value, dest: Value): Value {
   const state = {
@@ -123,17 +131,12 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     );
   }
 
-  onPress = () => timing(
-    this.offsetY,
-    {
-      toValue: 0,
-      duration: 300,
-      easing: Easing.inOut(Easing.ease),
-    },
-  ).start();
+  onPress = () => alert('Not implemented yet 🤷🏼‍♂️');
 
   render() {
-    const { onGestureEvent, translateY, onPress } = this;
+    const {
+      onGestureEvent, translateY, onPress,
+    } = this;
     const { video } = this.props;
     const tY = interpolate(translateY, {
       inputRange: [0, boundY],
@@ -192,7 +195,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
           <Animated.View
             style={{
               transform: [{ translateY: tY }],
-              alignItems: 'center',
+              ...shadow,
             }}
           >
             <Animated.View style={{ backgroundColor: 'white', width: videoContainerWidth }}>

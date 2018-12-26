@@ -12,10 +12,6 @@ type VideoThumbnailProps = {
 };
 
 export default class VideoThumbnail extends React.PureComponent<VideoThumbnailProps> {
-  onPress = () => {
-
-  };
-
   render() {
     const { video } = this.props;
     return (

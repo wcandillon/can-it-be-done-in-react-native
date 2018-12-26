@@ -11,7 +11,7 @@ export const PLACEHOLDER_WIDTH = width / 3;
 
 type PlayerControlsProps = {
   title: string,
-  onPress: () => mixed,
+  onPress: Function,
 };
 
 export default class PlayerControls extends React.PureComponent<PlayerControlsProps> {
@@ -21,7 +21,7 @@ export default class PlayerControls extends React.PureComponent<PlayerControlsPr
       <TouchableWithoutFeedback {...{ onPress }}>
         <View style={styles.container}>
           <View style={styles.placeholder} />
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numerOfLine={3}>{title}</Text>
           <Icon.Feather style={styles.icon} name="play" />
           <PlayerContext.Consumer>
             {
