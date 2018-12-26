@@ -131,8 +131,10 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
       [
         cond(eq(state, State.BEGAN), [
           stopClock(clockY),
-          set(offsetY, cond(neq(offsetY2, 0), 0, offsetY)),
-          set(offsetY2, 0),
+          cond(neq(offsetY2, 0), [
+            set(offsetY, 0),
+            set(offsetY2, 0),
+          ]),
         ]),
         add(offsetY, translationY),
       ],
