@@ -1,27 +1,40 @@
 // @flow
 import * as React from 'react';
 import {
-  View, StyleSheet, Text, Dimensions,
+  View, StyleSheet, Text, Dimensions, TouchableWithoutFeedback,
 } from 'react-native';
 import { Icon } from 'expo';
+import { PlayerContext } from './PlayerProvider';
 
 const { width } = Dimensions.get('window');
 export const PLACEHOLDER_WIDTH = width / 3;
 
 type PlayerControlsProps = {
   title: string,
+  onPress: () => mixed,
 };
 
 export default class PlayerControls extends React.PureComponent<PlayerControlsProps> {
   render() {
-    const { title } = this.props;
+    const { title, onPress } = this.props;
     return (
-      <View style={styles.container}>
-        <View style={styles.placeholder} />
-        <Text style={styles.title}>{title}</Text>
-        <Icon.Feather style={styles.icon} name="play" />
-        <Icon.Feather style={styles.icon} name="x" />
-      </View>
+      <TouchableWithoutFeedback {...{ onPress }}>
+        <View style={styles.container}>
+          <View style={styles.placeholder} />
+          <Text style={styles.title}>{title}</Text>
+          <Icon.Feather style={styles.icon} name="play" />
+          <PlayerContext.Consumer>
+            {
+              ({ setVideo }) => (
+                <TouchableWithoutFeedback onPress={() => setVideo(null)}>
+                  <Icon.Feather style={styles.icon} name="x" />
+                </TouchableWithoutFeedback>
+              )
+            }
+
+          </PlayerContext.Consumer>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

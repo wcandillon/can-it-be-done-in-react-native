@@ -57,18 +57,16 @@ export default class PlayerProvider extends React.PureComponent<PlayerProviderPr
       <PlayerContext.Provider value={{ video, setVideo }}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.container}>
-          {children}
-          {
-            <Animated.View
-              style={{ ...StyleSheet.absoluteFillObject, transform: [{ translateY }] }}
-            >
-              {
-                video && (
-                  <VideoModal {...{ video }} />
-                )
-              }
-            </Animated.View>
-          }
+          <View style={StyleSheet.absoluteFill}>
+            {children}
+          </View>
+          <Animated.View
+            style={{ transform: [{ translateY }] }}
+          >
+            {
+              video && <VideoModal {...{ video }} />
+            }
+          </Animated.View>
         </View>
       </PlayerContext.Provider>
     );

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import {
   Video, Constants, DangerZone, GestureHandler,
 } from 'expo';
@@ -9,7 +9,7 @@ import { type Video as VideoModel } from './videos';
 import VideoContent from './VideoContent';
 import PlayerControls, { PLACEHOLDER_WIDTH } from './PlayerControls';
 
-const { Animated } = DangerZone;
+const { Animated, Easing } = DangerZone;
 const { State, PanGestureHandler } = GestureHandler;
 const { width, height } = Dimensions.get('window');
 const {
@@ -29,6 +29,7 @@ const {
   stopClock,
   event,
   interpolate,
+  timing,
 } = Animated;
 const { statusBarHeight } = Constants;
 const boundY = height - statusBarHeight - 128;
@@ -115,12 +116,24 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
         set(offsetY, translationY),
         translationY,
       ],
-      add(offsetY, translationY),
+      [
+        cond(eq(state, State.BEGAN), stopClock(clockY)),
+        add(offsetY, translationY),
+      ],
     );
   }
 
+  onPress = () => timing(
+    this.offsetY,
+    {
+      toValue: 0,
+      duration: 300,
+      easing: Easing.inOut(Easing.ease),
+    },
+  ).start();
+
   render() {
-    const { onGestureEvent, translateY } = this;
+    const { onGestureEvent, translateY, onPress } = this;
     const { video } = this.props;
     const tY = interpolate(translateY, {
       inputRange: [0, boundY],
@@ -157,6 +170,11 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
       outputRange: [height, 0],
       extrapolate: Extrapolate.CLAMP,
     });
+    const playerControlOpaciy = interpolate(translateY, {
+      inputRange: [boundY, boundY + minHeight],
+      outputRange: [0, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
     return (
       <>
         <Animated.View
@@ -178,7 +196,9 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
             }}
           >
             <Animated.View style={{ backgroundColor: 'white', width: videoContainerWidth }}>
-              <PlayerControls title={video.title} />
+              <Animated.View style={{ ...StyleSheet.absoluteFillObject, opacity: playerControlOpaciy }}>
+                <PlayerControls title={video.title} {...{ onPress }} />
+              </Animated.View>
               <AnimatedVideo
                 source={video.video}
                 style={{ width: videoWidth, height: videoHeight }}
