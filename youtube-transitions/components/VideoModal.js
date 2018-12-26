@@ -31,6 +31,7 @@ const {
 } = Animated;
 const { statusBarHeight } = Constants;
 const boundY = height - statusBarHeight - 128;
+const minHeight = 64;
 const AnimatedVideo = Animated.createAnimatedComponent(Video);
 
 function runSpring(clock: Clock, value: Value, dest: Value): Value {
@@ -142,7 +143,12 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     });
     const videoHeight = interpolate(translateY, {
       inputRange: [0, boundY],
-      outputRange: [width / 1.78, 64],
+      outputRange: [width / 1.78, minHeight],
+      extrapolate: Extrapolate.CLAMP,
+    });
+    const containerHeight = interpolate(translateY, {
+      inputRange: [0, boundY],
+      outputRange: [height, 0],
       extrapolate: Extrapolate.CLAMP,
     });
     return (
@@ -171,7 +177,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
               resizeMode={Video.RESIZE_MODE_COVER}
               shouldPlay
             />
-            <Animated.View style={{ backgroundColor: 'white', width }}>
+            <Animated.View style={{ backgroundColor: 'white', width, height: containerHeight }}>
               <Animated.View style={{ opacity }}>
                 <VideoContent {...{ video }} />
               </Animated.View>
