@@ -3,12 +3,13 @@ import * as React from 'react';
 import {
   View, StyleSheet, Dimensions, StatusBar,
 } from 'react-native';
-import Animated, { Easing } from 'react-native-reanimated';
+import { DangerZone } from 'expo';
 
 import VideoModal from './VideoModal';
 import { type Video } from './videos';
 
 const { height } = Dimensions.get('window');
+const { Animated, Easing } = DangerZone;
 const {
   Value, Clock, cond, clockRunning, startClock, stopClock, set, timing,
 } = Animated;

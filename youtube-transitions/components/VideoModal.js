@@ -3,13 +3,13 @@ import * as React from 'react';
 import {
   View, StyleSheet, Dimensions, StatusBar,
 } from 'react-native';
-import { Video, Constants } from 'expo';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
+import { Video, Constants, DangerZone } from 'expo';
 
 import { type Video as VideoModel } from './videos';
 import VideoContent from './VideoContent';
 
+const { Animated, PanGestureHandler } = DangerZone;
+const { State } = PanGestureHandler;
 const { width } = Dimensions.get('window');
 const height = width / 1.78;
 const {

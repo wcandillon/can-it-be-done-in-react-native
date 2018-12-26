@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Icon as ExpoIcon } from 'expo';
 
 type IconProps = {
   name: string,
@@ -13,7 +13,7 @@ export default class Icon extends React.PureComponent<IconProps> {
     const { name, label } = this.props;
     return (
       <View style={styles.container}>
-        <Feather style={styles.icon} {...{ name }} />
+        <ExpoIcon.Feather style={styles.icon} {...{ name }} />
         <Text style={styles.label}>{label}</Text>
       </View>
     );

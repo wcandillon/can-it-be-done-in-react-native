@@ -26,7 +26,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-react-native": "^3.3.0",
-    "flow-bin": "^0.87.0",
+    "flow-bin": "0.63.1",
     "flow-result-checker": "^1.1.0"
   }
 }

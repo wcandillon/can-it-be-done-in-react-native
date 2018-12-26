@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable global-require */
 import moment, { type Moment } from 'moment';
 import type { ImageSourcePropType } from 'react-native/Libraries/Image/ImageSourcePropType';
 
