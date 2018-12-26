@@ -16,9 +16,19 @@ export type Video = {
 
 const videos: Video[] = [
   {
+    id: '3',
+    thumbnail: require('../assets/thumbnails/3.jpg'),
+    video: require('../assets/3.mp4'),
+    title: 'Sending Firebase Data Messages to Expo: iOS',
+    username: 'Expo',
+    avatar: require('../assets/avatars/1.png'),
+    views: 189,
+    published: moment().subtract(5, 'days'),
+  },
+  {
     id: '1',
     thumbnail: require('../assets/thumbnails/1.jpg'),
-    video: require('../assets/video.mp4'),
+    video: require('../assets/1.mp4'),
     title: 'React Native Image Picker Tutorial',
     username: 'Expo',
     avatar: require('../assets/avatars/1.png'),
@@ -28,7 +38,7 @@ const videos: Video[] = [
   {
     id: '2',
     thumbnail: require('../assets/thumbnails/2.jpg'),
-    video: require('../assets/video.mp4'),
+    video: require('../assets/2.mp4'),
     title: 'PIXI.js in React Native for beginners',
     username: 'Expo',
     avatar: require('../assets/avatars/1.png'),
@@ -36,19 +46,9 @@ const videos: Video[] = [
     published: moment().subtract(17, 'days'),
   },
   {
-    id: '3',
-    thumbnail: require('../assets/thumbnails/3.jpg'),
-    video: require('../assets/video.mp4'),
-    title: 'Sending Firebase Data Messages to Expo: iOS',
-    username: 'Expo',
-    avatar: require('../assets/avatars/1.png'),
-    views: 189,
-    published: moment().subtract(24, 'days'),
-  },
-  {
     id: '4',
     thumbnail: require('../assets/thumbnails/4.jpg'),
-    video: require('../assets/video.mp4'),
+    video: require('../assets/1.mp4'),
     title: 'Permissions in React Native for absolute beginners',
     username: 'Expo',
     avatar: require('../assets/avatars/1.png'),

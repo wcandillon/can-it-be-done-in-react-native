@@ -141,7 +141,13 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
     );
   }
 
-  onPress = () => timing(this.offsetY2, {
+  componentDidUpdate(prevProps: VideoModalProps) {
+    if (prevProps !== this.props) {
+      this.slideUp();
+    }
+  }
+
+  slideUp = () => timing(this.offsetY2, {
     toValue: -upperBound,
     duration: 300,
     easing: Easing.inOut(Easing.ease),
@@ -149,7 +155,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
 
   render() {
     const {
-      onGestureEvent, translateY: y, onPress, offsetY2,
+      onGestureEvent, translateY: y, offsetY2,
     } = this;
     const translateY = add(y, offsetY2);
     const { video } = this.props;
@@ -215,7 +221,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
           >
             <Animated.View style={{ backgroundColor: 'white', width: videoContainerWidth }}>
               <Animated.View style={{ ...StyleSheet.absoluteFillObject, opacity: playerControlOpaciy }}>
-                <PlayerControls title={video.title} {...{ onPress }} />
+                <PlayerControls title={video.title} onPress={this.slideUp} />
               </Animated.View>
               <AnimatedVideo
                 source={video.video}
