@@ -19,6 +19,7 @@ const {
   eq,
   set,
   add,
+  sub,
   multiply,
   lessThan,
   clockRunning,
@@ -70,6 +71,8 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
 
   velocityY = new Value(0);
 
+  offsetY = new Value(0);
+
   gestureState = new Value(State.UNDETERMINED);
 
   onGestureEvent: $Call<event>;
@@ -78,7 +81,9 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
 
   constructor(props: VideoModalProps) {
     super(props);
-    const { translationY, velocityY, gestureState: state } = this;
+    const {
+      translationY, velocityY, offsetY, gestureState: state,
+    } = this;
     this.onGestureEvent = event(
       [
         {
@@ -92,19 +97,20 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
       { useNativeDriver: true },
     );
     const clockY = new Clock();
-    const finalTranslateY = add(translationY, multiply(0.2, velocityY));
+    const finalTranslateY = add(add(translationY, offsetY), multiply(0.2, velocityY));
     const snapPoint = cond(
-      lessThan(finalTranslateY, height / 2),
+      lessThan(finalTranslateY, sub(offsetY, height / 4)),
       0,
-      height - 128 - Constants.statusBarHeight,
+      height - Constants.statusBarHeight - 128,
     );
     this.translateY = cond(
       eq(state, State.END),
       [
-        set(translationY, runSpring(clockY, translationY, snapPoint)),
+        set(translationY, runSpring(clockY, add(translationY, offsetY), snapPoint)),
+        set(offsetY, translationY),
         translationY,
       ],
-      translationY,
+      add(offsetY, translationY),
     );
   }
 
@@ -133,7 +139,7 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
         />
         <PanGestureHandler
           onHandlerStateChange={onGestureEvent}
-          activeOffsetY={10}
+          activeOffsetY={[-10, 10]}
           {...{ onGestureEvent }}
         >
           <Animated.View style={{ flex: 1, backgroundColor: 'white', transform: [{ translateY: tY }] }}>
