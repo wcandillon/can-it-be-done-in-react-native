@@ -14,7 +14,7 @@ const { State, PanGestureHandler } = GestureHandler;
 const { width, height } = Dimensions.get('window');
 const { statusBarHeight } = Constants;
 const minHeight = 64;
-const midBound = height - statusBarHeight - 128;
+const midBound = height - 64 * 3;
 const upperBound = midBound + minHeight;
 const {
   Extrapolate,
@@ -185,8 +185,8 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
       extrapolate: Extrapolate.CLAMP,
     });
     const videoHeight = interpolate(translateY, {
-      inputRange: [0, midBound],
-      outputRange: [width / 1.78, minHeight],
+      inputRange: [0, midBound, upperBound],
+      outputRange: [width / 1.78, minHeight * 1.3, minHeight],
       extrapolate: Extrapolate.CLAMP,
     });
     const containerHeight = interpolate(translateY, {
