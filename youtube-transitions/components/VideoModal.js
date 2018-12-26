@@ -136,9 +136,14 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
       outputRange: [1, 0],
       extrapolateLeft: Extrapolate.CLAMP,
     });
-    const videoWidth = interpolate(translateY, {
+    const videoContainerWidth = interpolate(translateY, {
       inputRange: [0, boundY],
       outputRange: [width, width - 16],
+      extrapolate: Extrapolate.CLAMP,
+    });
+    const videoWidth = interpolate(translateY, {
+      inputRange: [0, boundY - minHeight, boundY + minHeight],
+      outputRange: [width, width, width / 4],
       extrapolate: Extrapolate.CLAMP,
     });
     const videoHeight = interpolate(translateY, {
@@ -171,12 +176,14 @@ export default class VideoModal extends React.PureComponent<VideoModalProps> {
               alignItems: 'center',
             }}
           >
-            <AnimatedVideo
-              source={video.video}
-              style={{ width: videoWidth, height: videoHeight }}
-              resizeMode={Video.RESIZE_MODE_COVER}
-              shouldPlay
-            />
+            <Animated.View style={{ backgroundColor: 'white', width: videoContainerWidth }}>
+              <AnimatedVideo
+                source={video.video}
+                style={{ width: videoWidth, height: videoHeight }}
+                resizeMode={Video.RESIZE_MODE_COVER}
+                shouldPlay
+              />
+            </Animated.View>
             <Animated.View style={{ backgroundColor: 'white', width, height: containerHeight }}>
               <Animated.View style={{ opacity }}>
                 <VideoContent {...{ video }} />
