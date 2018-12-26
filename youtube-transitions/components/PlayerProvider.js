@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import {
+  View, StyleSheet, Dimensions, StatusBar,
+} from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
 
 import VideoModal from './VideoModal';
@@ -54,6 +56,7 @@ export default class PlayerProvider extends React.PureComponent<PlayerProviderPr
     });
     return (
       <PlayerContext.Provider value={{ video, setVideo }}>
+        <StatusBar barStyle="dark-content" />
         <View style={styles.container}>
           {children}
           {

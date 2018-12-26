@@ -1,46 +1,111 @@
 // @flow
 import * as React from 'react';
 import {
-  View, SafeAreaView, StyleSheet, Dimensions, StatusBar,
+  View, StyleSheet, Dimensions, StatusBar,
 } from 'react-native';
-import { Video } from 'expo';
+import { Video, Constants } from 'expo';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 
 import { type Video as VideoModel } from './videos';
 import VideoContent from './VideoContent';
+
+const { width } = Dimensions.get('window');
+const height = width / 1.78;
+const {
+  Extrapolate,
+  Value,
+  Clock,
+  cond,
+  eq,
+  set,
+  block,
+  clockRunning,
+  startClock,
+  spring,
+  stopClock,
+  event,
+  and,
+  lessOrEq,
+  greaterThan,
+  call,
+  interpolate,
+} = Animated;
 
 type VideoModalProps = {
   video: VideoModel,
 };
 
-const { width } = Dimensions.get('window');
-const height = width / 1.78;
-
 export default class VideoModal extends React.PureComponent<VideoModalProps> {
+  translationY = new Value(0);
+
+  velocityY = new Value(0);
+
+  onGestureEvent: $Call<event>;
+
+  constructor(props: VideoModalProps) {
+    super(props);
+    const { translationY, velocityY } = this;
+    this.onGestureEvent = event(
+      [
+        {
+          nativeEvent: {
+            translationY,
+            velocityY,
+            state: this.state,
+          },
+        },
+      ],
+      { useNativeDriver: true },
+    );
+  }
+
   render() {
+    const { onGestureEvent, translationY } = this;
     const { video } = this.props;
+    const { statusBarHeight } = Constants;
+    const translateY = translationY.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+      extrapolateLeft: Extrapolate.CLAMP,
+    });
+    const statusBarOpacity = translationY.interpolate({
+      inputRange: [0, statusBarHeight],
+      outputRange: [1, 0],
+      extrapolateLeft: Extrapolate.CLAMP,
+    });
     return (
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <SafeAreaView style={styles.root} />
-        <Video
-          source={video.video}
-          style={{ width, height }}
-          resizeMode={Video.RESIZE_MODE_CONTAIN}
-          shouldPlay
+      <>
+        <Animated.View
+          style={{
+            height: statusBarHeight,
+            backgroundColor: 'black',
+            opacity: statusBarOpacity,
+          }}
         />
-        <VideoContent {...{ video }} />
-      </View>
+        <PanGestureHandler
+          onHandlerStateChange={onGestureEvent}
+          activeOffsetY={10}
+          {...{ onGestureEvent }}
+        >
+          <Animated.View style={{ flex: 1, backgroundColor: 'white', transform: [{ translateY }] }}>
+            <Video
+              source={video.video}
+              style={{ width, height }}
+              resizeMode={Video.RESIZE_MODE_CONTAIN}
+              shouldPlay
+            />
+            <VideoContent {...{ video }} />
+          </Animated.View>
+        </PanGestureHandler>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
+  safeArea: {
+    height: Constants.statusBarHeight,
     backgroundColor: 'black',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
   },
 });
