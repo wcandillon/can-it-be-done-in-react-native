@@ -24,15 +24,17 @@ export default class StatusLabel extends React.PureComponent<StatusProps> {
     const { status } = this.props;
     const backgroundColor = backgroundColors[status];
     return (
-      <View style={[styles.face, { backgroundColor }]}>
-        <View style={styles.eyes}>
-          <Eye {...{ status }} />
-          <View style={styles.rightEye}>
+      <View style={styles.faceContainer}>
+        <View style={[styles.face, { backgroundColor }]}>
+          <View style={styles.eyes}>
             <Eye {...{ status }} />
+            <View style={styles.rightEye}>
+              <Eye {...{ status }} />
+            </View>
           </View>
-        </View>
-        <View style={styles.mouth}>
-          <Mouth {...{ status }} />
+          <View style={styles.mouth}>
+            <Mouth {...{ status }} />
+          </View>
         </View>
       </View>
     );
@@ -40,6 +42,10 @@ export default class StatusLabel extends React.PureComponent<StatusProps> {
 }
 
 const styles = StyleSheet.create({
+  faceContainer: {
+    width: width / 5,
+    alignItems: "center",
+  },
   face: {
     width: radius * 2,
     height: radius * 2,
