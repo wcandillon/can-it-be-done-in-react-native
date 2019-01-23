@@ -1,10 +1,13 @@
 import * as React from "react";
 import { View } from "react-native";
-import { Svg } from "expo";
+import { Svg, DangerZone } from "expo";
 
 import { Status } from "./Model";
 
 const { Path } = Svg;
+const { Animated } = DangerZone;
+const { Value } = Animated;
+
 const paths = {
   terrible: "M3.375.006a1.5 1.5 0 0 0-.604 2.807l.993.552c-.477.27-.924.606-1.325 1.006a1.502 1.502 0 0 0 2.122 2.123c.83-.83 2.024-1.137 3.156-.928l2.31 1.287a1.5 1.5 0 0 0 1.79-2.371 6.675 6.675 0 0 0-2.963-1.717L4.23.191a1.483 1.483 0 0 0-.856-.185z",
   bad: "M6.64 0A3.643 3.643 0 0 0 3 3.639c0 .709.203 1.37.553 1.93.317.507.756.93 1.275 1.229a3.621 3.621 0 0 0 1.813.483 3.625 3.625 0 0 0 2.641-1.137A3.642 3.642 0 0 0 8.315.407 3.626 3.626 0 0 0 6.641 0z",
@@ -14,15 +17,15 @@ const paths = {
 };
 
 interface EyeProps {
-  status: Status
+  x: Value
 }
 
 export default class Eye extends React.PureComponent<EyeProps> {
   render() {
-    const { status } = this.props;
+    const { x } = this.props;
     return (
       <Svg width={13} height={8} viewBox="0 0 13 8">
-        <Path d={paths[status]} />
+        <Path d={paths.ok} />
       </Svg>
     );
   }

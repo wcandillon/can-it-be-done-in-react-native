@@ -1,41 +1,46 @@
 /* eslint-disable max-len */
 import * as React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
+import { DangerZone } from "expo";
 
-import { Status } from "./Model";
 import Eye from "./Eye";
 import Mouth from "./Mouth";
+import { interpolateColors } from "./AnimationHelpers";
 
+const { Animated } = DangerZone;
+const { Value } = Animated;
 const { width } = Dimensions.get("window");
 const radius = width / 10 - 8;
-const backgroundColors = {
-  terrible: "rgb(244, 199, 164)",
-  bad: "rgb(246, 210, 163)",
-  ok: "rgb(249, 223, 160)",
-  good: "rgb(249, 223, 160)",
-  great: "rgb(249, 223, 160)",
-};
+
 interface StatusProps {
-  status: Status
+  x: Value,
+  inputRange: number[]
 }
 
-export default class StatusLabel extends React.PureComponent<StatusProps> {
+export default class Status extends React.PureComponent<StatusProps> {
   render() {
-    const { status } = this.props;
-    const backgroundColor = backgroundColors[status];
+    const { x, inputRange } = this.props;
+    const outputRange = [
+      "rgb(244, 199, 164)",
+      "rgb(246, 210, 163)",
+      "rgb(249, 223, 160)",
+      "rgb(249, 223, 160)",
+      "rgb(249, 223, 160)",
+    ];
+    const backgroundColor = interpolateColors(x, inputRange, outputRange);
     return (
       <View style={styles.faceContainer}>
-        <View style={[styles.face, { backgroundColor }]}>
+        <Animated.View style={[styles.face, { backgroundColor }]}>
           <View style={styles.eyes}>
-            <Eye {...{ status }} />
+            <Eye {...{ x }} />
             <View style={styles.rightEye}>
-              <Eye {...{ status }} />
+              <Eye {...{ x }} />
             </View>
           </View>
           <View style={styles.mouth}>
-            <Mouth {...{ status }} />
+            <Mouth {...{ x }} />
           </View>
-        </View>
+        </Animated.View>
       </View>
     );
   }

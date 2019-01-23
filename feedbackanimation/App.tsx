@@ -31,17 +31,24 @@ export default class App extends React.Component<AppProps> {
 
   render() {
     const { onScroll } = this;
-    const { x: translateX } = this;
+    const { x } = this;
+    const inputRange = [
+      0,
+      width / 5,
+      width * 2 / 5,
+      width * 3 / 5,
+      width * 4 / 5,
+    ];
     return (
       <View style={styles.container}>
-        <Status status="terrible" />
-        <Status status="bad" />
-        <Status status="ok" />
-        <Status status="good" />
-        <Status status="great" />
+        <Status x={new Value(inputRange[0])} {...{ inputRange }} />
+        <Status x={new Value(inputRange[1])} {...{ inputRange }} />
+        <Status x={new Value(inputRange[2])} {...{ inputRange }} />
+        <Status x={new Value(inputRange[3])} {...{ inputRange }} />
+        <Status x={new Value(inputRange[4])} {...{ inputRange }} />
         <View style={styles.slider}>
-          <Animated.View style={{ transform: [{ translateX }] }}>
-            <Status status="terrible" />
+          <Animated.View style={{ transform: [{ translateX: x }] }}>
+            <Status {...{ x, inputRange }} />
           </Animated.View>
         </View>
         <Animated.ScrollView
