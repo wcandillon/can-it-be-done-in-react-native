@@ -8,6 +8,13 @@ import Mouth from "./Mouth";
 
 const { width } = Dimensions.get("window");
 const radius = width / 10 - 8;
+const backgroundColors = {
+  terrible: "rgb(244, 199, 164)",
+  bad: "rgb(246, 210, 163)",
+  ok: "rgb(249, 223, 160)",
+  good: "rgb(249, 223, 160)",
+  great: "rgb(249, 223, 160)",
+};
 interface StatusProps {
   status: Status
 }
@@ -15,8 +22,9 @@ interface StatusProps {
 export default class StatusLabel extends React.PureComponent<StatusProps> {
   render() {
     const { status } = this.props;
+    const backgroundColor = backgroundColors[status];
     return (
-      <View style={styles.face}>
+      <View style={[styles.face, { backgroundColor }]}>
         <View style={styles.eyes}>
           <Eye {...{ status }} />
           <View style={styles.rightEye}>
@@ -36,6 +44,7 @@ const styles = StyleSheet.create({
     width: radius * 2,
     height: radius * 2,
     borderRadius: radius,
+    justifyContent: "space-evenly",
   },
   eyes: {
     flexDirection: "row",
