@@ -39,7 +39,6 @@ const {
 const AnimatedVideo = Animated.createAnimatedComponent(Video);
 const shadow = {
   alignItems: 'center',
-  elevation: 1,
   shadowColor: 'black',
   shadowOffset: { width: 0, height: 0 },
   shadowOpacity: 0.18,
