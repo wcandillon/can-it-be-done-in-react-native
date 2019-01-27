@@ -9,26 +9,33 @@ import { interpolateColors } from "./AnimationHelpers";
 const { width } = Dimensions.get("window");
 const radius = (width / 5 - 8) / 2;
 const { Animated } = DangerZone;
-const { Value, event, divide } = Animated;
+const {
+  Value, Extrapolate, interpolate, sub, add,
+} = Animated;
 
 interface FaceProps {
   happiness: Value,
-  isStatic?: boolean
+  slider?: Value | null
 }
 
 export default class Face extends React.PureComponent<FaceProps> {
   static defaultProps = {
-    static: false,
+    slider: null,
   };
 
   render() {
-    const { happiness, isStatic } = this.props;
+    const { happiness, slider } = this.props;
     const inputRange = [0, 0.5];
     const outputRange = ["#f4b899", "#fadf97"];
-    const backgroundColor = isStatic ? "#c9ced2" : interpolateColors(happiness, inputRange, outputRange);
+    const backgroundColor = slider !== null ? "#c9ced2" : interpolateColors(happiness, inputRange, outputRange);
+    const scale = slider === null ? 1 : interpolate(slider, {
+      inputRange: [sub(happiness, 0.1), happiness, add(happiness, 0.1)],
+      outputRange: [0.75, 0, 0.75],
+      extrapolate: Extrapolate.CLAMP,
+    });
     return (
       <View style={styles.container}>
-        <Animated.View style={[styles.face, { backgroundColor }]}>
+        <Animated.View style={[styles.face, { backgroundColor, transform: [{ scale }] }]}>
           <View style={styles.eyes}>
             <Eye />
             <Eye />

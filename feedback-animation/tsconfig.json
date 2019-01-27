@@ -57,6 +57,8 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "./webspeechapi.d.ts"
+    "./webspeechapi.d.ts",
+    "./d3-interpolate-path.d.ts",
+    "App.tsx"
   ]
 }

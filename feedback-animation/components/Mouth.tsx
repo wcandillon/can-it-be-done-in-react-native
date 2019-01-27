@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Dimensions } from "react-native";
-import { Svg, DangerZone } from "expo";
+import { Svg } from "expo";
+import Animated from "react-native-reanimated";
 
 import { interpolatePath } from "d3-interpolate-path";
 
 const { Path } = Svg;
-const { Animated } = DangerZone;
+const { Value } = Animated;
 const { call } = Animated;
 
 const aspectRatio = 84 / 365;
@@ -16,15 +17,17 @@ const great = "M3 3.75C62.833 55.917 122.667 82 182.5 82S302.167 55.917 362 3.75
 const interpolator = interpolatePath(terrible, great);
 
 interface MouthProps {
-  happiness: Value
+  happiness: typeof Value
 }
 
 export default class Mouth extends React.PureComponent<MouthProps> {
-  path = React.createRef();
+  path = React.createRef<Path>();
 
-  interpolatePath = ([happiness]) => {
+  interpolatePath = ([happiness]: [number]) => {
     const d = interpolator(happiness);
-    this.path.current.setNativeProps({ d });
+    if (this.path.current) {
+      this.path.current.setNativeProps({ d });
+    }
   };
 
   render() {
