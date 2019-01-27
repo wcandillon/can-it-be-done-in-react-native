@@ -6,7 +6,7 @@ import { Face } from "./components";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, divide, call, multiply,
+  Value, event, divide,
 } = Animated;
 const { width } = Dimensions.get("window");
 const smileyWidth = width / 5;

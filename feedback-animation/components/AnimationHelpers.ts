@@ -1,5 +1,7 @@
 import Color from "color";
-import Animated, { Easing } from "react-native-reanimated";
+import { DangerZone } from "expo";
+
+const { Animated } = DangerZone;
 
 const {
   cond,
@@ -14,14 +16,6 @@ const {
   sub,
   color,
   Extrapolate,
-  timing,
-  set,
-  Value,
-  block,
-  clockRunning,
-  spring,
-  stopClock,
-  startClock,
 } = Animated;
 
 function match(condsAndResPairs, offset = 0) {

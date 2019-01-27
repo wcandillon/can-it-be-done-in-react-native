@@ -1,5 +1,4 @@
 import * as React from "react";
-import { View } from "react-native";
 import { Svg } from "expo";
 
 const { Path } = Svg;

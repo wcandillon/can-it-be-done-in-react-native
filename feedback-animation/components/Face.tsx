@@ -9,7 +9,7 @@ import { interpolateColors } from "./AnimationHelpers";
 const { width } = Dimensions.get("window");
 const radius = (width / 5 - 8) / 2;
 const { Animated } = DangerZone;
-const { Value, event, divide } = Animated;
+const { Value } = Animated;
 
 interface FaceProps {
   happiness: Value,
