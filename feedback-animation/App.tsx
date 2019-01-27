@@ -33,11 +33,11 @@ export default class App extends React.Component {
     return (
       <View style={styles.root}>
         <View style={styles.container}>
-          <Face happiness={new Value(0)} isStatic />
-          <Face happiness={new Value(0.25)} isStatic />
-          <Face happiness={new Value(0.5)} isStatic />
-          <Face happiness={new Value(0.75)} isStatic />
-          <Face happiness={new Value(1)} isStatic />
+          <Face happiness={new Value(0)} slider={happiness} />
+          <Face happiness={new Value(0.25)} slider={happiness} />
+          <Face happiness={new Value(0.5)} slider={happiness} />
+          <Face happiness={new Value(0.75)} slider={happiness} />
+          <Face happiness={new Value(1)} slider={happiness} />
         </View>
         <Animated.View
           style={[styles.slider, { transform: [{ translateX }] }]}
