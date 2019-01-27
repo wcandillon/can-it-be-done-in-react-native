@@ -6,7 +6,7 @@ import { Face } from "./components";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, divide,
+  Value, event, divide, multiply, sub,
 } = Animated;
 const { width } = Dimensions.get("window");
 const smileyWidth = width / 5;
@@ -28,8 +28,8 @@ export default class App extends React.Component {
 
   render() {
     const { onScroll, x } = this;
-    const happiness = divide(x, width - smileyWidth);
-    const translateX = x;
+    const happiness = sub(1, divide(x, width - smileyWidth));
+    const translateX = multiply(x, -1);
     return (
       <View style={styles.root}>
         <View style={styles.container}>
@@ -39,7 +39,9 @@ export default class App extends React.Component {
           <Face happiness={new Value(0.75)} isStatic />
           <Face happiness={new Value(1)} isStatic />
         </View>
-        <Animated.View style={[styles.slider, { transform: [{ translateX }] }]}>
+        <Animated.View
+          style={[styles.slider, { transform: [{ translateX }] }]}
+        >
           <Face {...{ happiness }} />
         </Animated.View>
         <Animated.ScrollView
@@ -49,6 +51,8 @@ export default class App extends React.Component {
           bounces={false}
           contentContainerStyle={{ width: width * 2 - smileyWidth }}
           horizontal
+          snapToInterval={smileyWidth}
+          decelerationRate="fast"
           {...{ onScroll }}
         />
       </View>
@@ -69,6 +73,6 @@ const styles = StyleSheet.create({
   slider: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
-    alignItems: "flex-start",
+    alignItems: "flex-end",
   },
 });
