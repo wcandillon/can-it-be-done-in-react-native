@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {
-  View, StyleSheet, Dimensions, StatusBar,
+  View, StyleSheet, Dimensions, StatusBar, Platform,
 } from 'react-native';
 import { DangerZone } from 'expo';
 
@@ -12,6 +12,7 @@ import { type Video } from './videos';
 const { height } = Dimensions.get('window');
 const { Animated, Easing } = DangerZone;
 const { Value, timing } = Animated;
+const isOS = Platform.OS === 'ios';
 
 type PlayerProviderProps = {
   children: React.Node,
@@ -59,13 +60,20 @@ export default class PlayerProvider extends React.PureComponent<PlayerProviderPr
           <View style={StyleSheet.absoluteFill}>
             {children}
           </View>
-          <Animated.View
-            style={{ transform: [{ translateY }] }}
-          >
-            {
-              video && <VideoModal {...{ video }} />
-            }
-          </Animated.View>
+          {
+            isOS && (
+              <Animated.View
+                style={{ transform: [{ translateY }] }}
+              >
+                {
+                  video && <VideoModal {...{ video }} />
+                }
+              </Animated.View>
+            )
+          }
+          {
+            !isOS && video && <VideoModal {...{ video }} />
+          }
         </View>
       </PlayerContext.Provider>
     );
