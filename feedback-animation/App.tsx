@@ -22,8 +22,7 @@ export default class App extends React.Component {
           contentOffset: { x: this.x },
         },
       },
-    ],
-    { useNativeDriver: true },
+    ]
   )
 
   render() {
@@ -47,7 +46,7 @@ export default class App extends React.Component {
         <Animated.ScrollView
           style={StyleSheet.absoluteFill}
           showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={16}
+          scrollEventThrottle={1}
           bounces={false}
           contentContainerStyle={{ width: width * 2 - smileyWidth }}
           horizontal
