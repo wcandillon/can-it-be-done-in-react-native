@@ -3,7 +3,7 @@ import React from "react";
 import { Dimensions } from "react-native";
 import { ImageManipulator, Asset, AppLoading } from "expo";
 
-import Stories, { Story } from "./components/Stories";
+import Story, { IStory } from "./components/Story";
 
 const { width, height } = Dimensions.get("window");
 const screens = [
@@ -13,9 +13,10 @@ const screens = [
   require("./assets/stories/story4.png"),
 ];
 
+
 interface IAppProps {}
 interface IAppState {
-  stories: Story[];
+  stories: IStory[];
 }
 
 export default class App extends React.Component<IAppProps, IAppState> {
@@ -28,6 +29,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
       const image = Asset.fromModule(screen);
       await image.downloadAsync();
       const { localUri } = image;
+      const resize = { width, height };
       const crop1 = {
         originX: 0,
         originY: 0,
@@ -40,8 +42,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
         width,
         height: height / 2,
       };
-      const { uri: top } = await ImageManipulator.manipulateAsync(localUri, [crop1]);
-      const { uri: bottom } = await ImageManipulator.manipulateAsync(localUri, [crop2]);
+      const { uri: top } = await ImageManipulator.manipulateAsync(localUri, [resize, crop1]);
+      const { uri: bottom } = await ImageManipulator.manipulateAsync(localUri, [resize, crop2]);
       return { top, bottom };
     });
     const stories = await Promise.all(edits);
@@ -56,7 +58,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
       );
     }
     return (
-      <Stories {...{ stories }} />
+      <Story front={stories[0]} back={stories[1]} />
     );
   }
 }

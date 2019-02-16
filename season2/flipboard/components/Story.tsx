@@ -8,21 +8,23 @@ const {
   Animated,
 } = DangerZone;
 const {
-  Value, Extrapolate, event, interpolate, concat,
+  Value, Extrapolate, event, interpolate, concat, multiply,
 } = Animated;
 const { height } = Dimensions.get("window");
-const perspective = 1000;
+const frontP = 1000;
+const backP = -frontP;
 
-export interface Story {
+export interface IStory {
   top: string;
   bottom: string;
 }
 
 interface StoriesProps {
-  stories: Story[];
+  front: IStory;
+  back: IStory;
 }
 
-export default class Stories extends React.PureComponent<StoriesProps> {
+export default class Story extends React.PureComponent<StoriesProps> {
   y = new Value(0);
 
   onScroll = event(
@@ -37,9 +39,10 @@ export default class Stories extends React.PureComponent<StoriesProps> {
 
   render() {
     const { y, onScroll } = this;
-    const { stories } = this.props;
-    const story = stories[0];
-    const { top } = story;
+    const {
+      front: { top: topFront, bottom: bottomFront },
+      back: { top: topBack, bottom: bottomBack },
+    } = this.props;
     const rotateX = concat(interpolate(y, {
       inputRange: [0, height],
       outputRange: [0, -180],
@@ -48,13 +51,25 @@ export default class Stories extends React.PureComponent<StoriesProps> {
     return (
       <View style={styles.container}>
         <View style={styles.story}>
-          <Animated.View
-            style={[styles.topHalf, {
-              transform: [{ perspective }, { translateY: height / 4 }, { rotateX }, { translateY: -height / 4 }],
-            }]}
-          >
-            <Image source={{ uri: top }} style={styles.image} />
-          </Animated.View>
+          <View style={styles.topHalf}>
+            <Animated.View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                transform: [{ perspective: backP }, { rotateY: "180deg" }, { translateY: height / 4 }, { rotateX }, { translateY: -height / 4 }],
+              }}
+            >
+              <Image source={{ uri: topFront }} style={styles.image} />
+            </Animated.View>
+            <Animated.View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                backfaceVisibility: "hidden",
+                transform: [{ perspective: frontP }, { translateY: height / 4 }, { rotateX }, { translateY: -height / 4 }],
+              }}
+            >
+              <Image source={{ uri: bottomBack }} style={styles.image} />
+            </Animated.View>
+          </View>
           <View style={styles.bottomHalf} />
         </View>
         <Animated.ScrollView
