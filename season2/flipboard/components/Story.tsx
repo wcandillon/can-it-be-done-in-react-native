@@ -4,11 +4,13 @@ import {
 } from "react-native";
 import { DangerZone } from "expo";
 
+import Interactable from "./Interactable";
+
 const {
   Animated,
 } = DangerZone;
 const {
-  Value, Extrapolate, event, interpolate, concat, multiply,
+  Value, Extrapolate, event, interpolate, concat, call,
 } = Animated;
 const { height } = Dimensions.get("window");
 const frontP = 1000;
@@ -25,6 +27,8 @@ interface StoriesProps {
 }
 
 export default class Story extends React.PureComponent<StoriesProps> {
+  scroll: React.RefObject<typeof Animated.ScrollView> = React.createRef();
+
   y = new Value(0);
 
   onScroll = event(
@@ -50,6 +54,11 @@ export default class Story extends React.PureComponent<StoriesProps> {
     }), "deg");
     return (
       <View style={styles.container}>
+        <Animated.Code>
+          {
+            () => call([y], ([y]) => console.log({ y }))
+          }
+        </Animated.Code>
         <View style={styles.story}>
           <View style={styles.topHalf}>
             <Animated.View
@@ -72,14 +81,13 @@ export default class Story extends React.PureComponent<StoriesProps> {
           </View>
           <View style={styles.bottomHalf} />
         </View>
-        <Animated.ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={1}
-          bounces={false}
-          contentContainerStyle={{ height: height * 2 }}
-          decelerationRate="fast"
-          {...{ onScroll }}
+        <Interactable
+          style={{
+            backgroundColor: "rgba(100, 200, 300, 0.5)", height: height * 2, position: "absolute", top: -height / 2, left: 0, right: 0,
+          }}
+          animatedValueY={y}
+          snapPoints={[{ y: 0 }, { y: height }]}
+          verticalOnly
         />
       </View>
     );
