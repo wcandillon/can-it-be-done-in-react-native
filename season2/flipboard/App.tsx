@@ -84,32 +84,34 @@ export default class App extends React.Component<IAppProps, IAppState> {
     const prev = stories[index - 1];
     const current = stories[index];
     const next = stories[index + 1];
-    if (!prev) {
-      return (
-        <View style={styles.container}>
-          <StatusBar hidden />
-          <BackgroundImage top={current.top} bottom={next.bottom} />
-          <View style={styles.container} />
-          <Story key={`${index}-bottom`} front={current.bottom} back={next.top} bottom {...{ onSnap }} />
-        </View>
-      );
-    }
-    if (!next) {
-      return (
-        <View style={styles.container}>
-          <StatusBar hidden />
-          <BackgroundImage top={prev.top} bottom={current.bottom} />
-          <Story key={`${index}-top`} front={current.top} back={prev.bottom} {...{ onSnap }} />
-          <View style={styles.container} />
-        </View>
-      );
-    }
     return (
       <View style={styles.container}>
         <StatusBar hidden />
-        <BackgroundImage top={prev.top} bottom={next.bottom} />
-        <Story key={`${index}-top`} front={current.top} back={prev.bottom} {...{ onSnap }} />
-        <Story key={`${index}-bottom`} front={current.bottom} back={next.top} bottom {...{ onSnap }} />
+        <BackgroundImage
+          top={!prev ? current.top : prev.top}
+          bottom={!next ? current.bottom : next.bottom}
+        />
+        {
+          !prev ? (<View style={styles.container} />) : (
+            <Story
+              key={`${index}-top`}
+              front={current.top}
+              back={prev.bottom}
+              {...{ onSnap }}
+            />
+          )
+        }
+        {
+          !next ? (<View style={styles.container} />) : (
+            <Story
+              key={`${index}-bottom`}
+              front={current.bottom}
+              back={next.top}
+              bottom
+              {...{ onSnap }}
+            />
+          )
+        }
       </View>
     );
   }
