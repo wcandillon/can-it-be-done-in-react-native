@@ -11,6 +11,7 @@ interface Size {
   width: number;
   height: number;
 }
+
 const getSize = (uri: string): Promise<Size> => new Promise(
   (resolve, reject) => Image.getSize(uri, (width, height) => resolve({ width, height }), reject),
 );
@@ -25,11 +26,13 @@ const screens = [
 interface IAppProps {}
 interface IAppState {
   stories: { top: string, bottom: string }[];
+  index: number;
 }
 
 export default class App extends React.Component<IAppProps, IAppState> {
   state: IAppState = {
     stories: [],
+    index: 1,
   };
 
   async componentDidMount() {
@@ -62,8 +65,17 @@ export default class App extends React.Component<IAppProps, IAppState> {
     this.setState({ stories });
   }
 
+  onSnap = (index: number) => {
+    const { index: currentIndex } = this.state;
+    this.setState({ index: currentIndex + index });
+  }
+
   render() {
-    const { stories } = this.state;
+    const { onSnap } = this;
+    const { stories, index } = this.state;
+    const prev = stories[index - 1];
+    const current = stories[index];
+    const next = stories[index + 1];
     if (stories.length === 0) {
       return (
         <AppLoading />
@@ -72,8 +84,16 @@ export default class App extends React.Component<IAppProps, IAppState> {
     return (
       <View style={styles.container}>
         <StatusBar hidden />
-        <Story front={stories[0].top} back={stories[1].bottom} />
-        <Story front={stories[0].bottom} back={stories[1].top} bottom />
+        <View style={StyleSheet.absoluteFill}>
+          <View style={styles.container}>
+            <Image source={{ uri: prev.top }} style={styles.image} />
+          </View>
+          <View style={styles.container}>
+            <Image source={{ uri: next.bottom }} style={styles.image} />
+          </View>
+        </View>
+        <Story front={current.top} back={prev.bottom} {...{ onSnap }} />
+        <Story front={current.bottom} back={next.top} bottom {...{ onSnap }} />
       </View>
     );
   }
@@ -82,5 +102,11 @@ export default class App extends React.Component<IAppProps, IAppState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    width: undefined,
+    height: undefined,
+    resizeMode: "cover",
   },
 });

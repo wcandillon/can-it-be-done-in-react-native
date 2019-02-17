@@ -20,6 +20,7 @@ interface StoriesProps {
   front: string;
   back: string;
   bottom?: boolean;
+  onSnap: (id: number) => void;
 }
 
 interface StoriesState {
@@ -39,11 +40,17 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
 
   onDrag = () => {
     const { isDragging } = this.state;
-    this.setState({ isDragging: !isDragging });
+    if (!isDragging) {
+      this.setState({ isDragging: true });
+    }
+  }
+
+  onSnap = ({ nativeEvent: { id } }: { nativeEvent: { id: string }}) => {
+    this.props.onSnap(id);
   }
 
   render() {
-    const { y, onDrag } = this;
+    const { y, onDrag, onSnap } = this;
     const { front, back, bottom } = this.props;
     const { isDragging } = this.state;
     const topInterpolation = interpolate(y, {
@@ -58,8 +65,8 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
     });
     const interpolation = bottom ? bottomInterpolation : topInterpolation;
     const rotateX = concat(interpolation, "deg");
-    const topSnapPoints = [{ y: 0 }, { y: height }];
-    const bottomSnapPoints = [{ y: -height }, { y: 0 }];
+    const topSnapPoints = [{ id: 0, y: 0 }, { id: -1, y: height }];
+    const bottomSnapPoints = [{ id: 1, y: -height }, { id: 0, y: 0 }];
     const snapPoints = bottom ? bottomSnapPoints : topSnapPoints;
     const coef = bottom ? -1 : 1;
     return (
@@ -85,11 +92,11 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
         </View>
         <Interactable
           style={{
-            backgroundColor: "rgba(100, 500, 0, 0.5)", height, position: "absolute", top: bottom ? 0 : -height / 2, left: 0, right: 0,
+            height, position: "absolute", top: bottom ? 0 : -height / 2, left: 0, right: 0,
           }}
           animatedValueY={y}
           verticalOnly
-          {...{ snapPoints, onDrag }}
+          {...{ snapPoints, onDrag, onSnap }}
         />
       </View>
     );
