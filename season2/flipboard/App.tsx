@@ -20,6 +20,8 @@ const screens = [
   require("./assets/stories/story2.png"),
   require("./assets/stories/story3.png"),
   require("./assets/stories/story4.png"),
+  require("./assets/stories/story1.png"),
+  require("./assets/stories/story2.png"),
 ];
 
 
@@ -73,14 +75,14 @@ export default class App extends React.Component<IAppProps, IAppState> {
   render() {
     const { onSnap } = this;
     const { stories, index } = this.state;
-    const prev = stories[index - 1];
-    const current = stories[index];
-    const next = stories[index + 1];
     if (stories.length === 0) {
       return (
         <AppLoading />
       );
     }
+    const prev = stories[index - 1];
+    const current = stories[index];
+    const next = stories[index + 1];
     return (
       <View style={styles.container}>
         <StatusBar hidden />
@@ -92,8 +94,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
             <Image source={{ uri: next.bottom }} style={styles.image} />
           </View>
         </View>
-        <Story front={current.top} back={prev.bottom} {...{ onSnap }} />
-        <Story front={current.bottom} back={next.top} bottom {...{ onSnap }} />
+        <Story key={`${index}-top`} front={current.top} back={prev.bottom} {...{ onSnap }} />
+        <Story key={`${index}-bottom`} front={current.bottom} back={next.top} bottom {...{ onSnap }} />
       </View>
     );
   }

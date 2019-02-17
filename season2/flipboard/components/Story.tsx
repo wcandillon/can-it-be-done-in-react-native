@@ -41,12 +41,13 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
   onDrag = () => {
     const { isDragging } = this.state;
     if (!isDragging) {
-      this.setState({ isDragging: true });
+      this.setState({ isDragging: !isDragging });
     }
   }
 
   onSnap = ({ nativeEvent: { id } }: { nativeEvent: { id: string }}) => {
-    this.props.onSnap(id);
+    const { onSnap } = this.props;
+    onSnap(id);
   }
 
   render() {
