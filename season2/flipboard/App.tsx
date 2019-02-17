@@ -1,9 +1,12 @@
 /* eslint-disable global-require */
 import React from "react";
-import { Image, StatusBar } from "react-native";
+import {
+  Image, StatusBar, View, StyleSheet,
+} from "react-native";
 import { ImageManipulator, Asset, AppLoading } from "expo";
 
-import Story, { IStory } from "./components/Story";
+import TopStory from "./components/TopStory";
+import BottomStory from "./components/BottomStory";
 
 interface Size {
   width: number;
@@ -26,7 +29,7 @@ interface IAppState {
 }
 
 export default class App extends React.Component<IAppProps, IAppState> {
-  state = {
+  state: IAppState = {
     stories: [],
   };
 
@@ -67,11 +70,19 @@ export default class App extends React.Component<IAppProps, IAppState> {
         <AppLoading />
       );
     }
+
     return (
-      <>
+      <View style={styles.container}>
         <StatusBar hidden />
-        <Story front={stories[0]} back={stories[1]} />
-      </>
+        <TopStory front={stories[0].top} back={stories[1].bottom} />
+        <BottomStory front={stories[0].bottom} back={stories[1].top} />
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
