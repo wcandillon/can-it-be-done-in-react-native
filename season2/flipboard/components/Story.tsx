@@ -83,7 +83,7 @@ export default class Story extends React.PureComponent<StoriesProps> {
         </View>
         <Interactable
           style={{
-            backgroundColor: "rgba(100, 200, 300, 0.5)", height: height * 2, position: "absolute", top: -height / 2, left: 0, right: 0,
+            backgroundColor: "rgba(100, 200, 300, 0.5)", height, position: "absolute", top: -height / 2, left: 0, right: 0,
           }}
           animatedValueY={y}
           snapPoints={[{ y: 0 }, { y: height }]}
