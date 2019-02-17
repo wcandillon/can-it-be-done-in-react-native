@@ -5,8 +5,7 @@ import {
 } from "react-native";
 import { ImageManipulator, Asset, AppLoading } from "expo";
 
-import TopStory from "./components/TopStory";
-import BottomStory from "./components/BottomStory";
+import Story from "./components/Story";
 
 interface Size {
   width: number;
@@ -73,8 +72,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
     return (
       <View style={styles.container}>
         <StatusBar hidden />
-        <TopStory front={stories[0].top} back={stories[1].bottom} />
-        <BottomStory front={stories[0].bottom} back={stories[1].top} />
+        <Story front={stories[0].top} back={stories[1].bottom} />
+        <Story front={stories[0].bottom} back={stories[1].top} bottom />
       </View>
     );
   }

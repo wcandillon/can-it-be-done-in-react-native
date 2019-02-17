@@ -19,6 +19,7 @@ const backPerspective = -frontPerspective;
 interface StoriesProps {
   front: string;
   back: string;
+  bottom?: boolean;
 }
 
 interface StoriesState {
@@ -26,6 +27,10 @@ interface StoriesState {
 }
 
 export default class Story extends React.PureComponent<StoriesProps, StoriesState> {
+  static defaultProps = {
+    bottom: false,
+  };
+
   state: StoriesState = {
     isDragging: false,
   };
@@ -39,22 +44,31 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
 
   render() {
     const { y, onDrag } = this;
-    const { front, back } = this.props;
+    const { front, back, bottom } = this.props;
     const { isDragging } = this.state;
-    const interpolation = interpolate(y, {
+    const topInterpolation = interpolate(y, {
       inputRange: [0, height],
       outputRange: [0, -180],
       extrapolate: Extrapolate.CLAMP,
     });
+    const bottomInterpolation = interpolate(y, {
+      inputRange: [-height, 0],
+      outputRange: [180, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
+    const interpolation = bottom ? bottomInterpolation : topInterpolation;
     const rotateX = concat(interpolation, "deg");
-    const snapPoints = [{ y: 0 }, { y: height }];
+    const topSnapPoints = [{ y: 0 }, { y: height }];
+    const bottomSnapPoints = [{ y: -height }, { y: 0 }];
+    const snapPoints = bottom ? bottomSnapPoints : topSnapPoints;
+    const coef = bottom ? -1 : 1;
     return (
       <View style={{ flex: 1, zIndex: isDragging ? 100 : 0 }}>
         <View style={styles.story}>
           <Animated.View
             style={{
               ...StyleSheet.absoluteFillObject,
-              transform: [backPerspective, { rotateY: "180deg" }, { translateY: height / 4 }, { rotateX }, { translateY: -height / 4 }, { rotateZ: "180deg" }],
+              transform: [backPerspective, { rotateY: "180deg" }, { translateY: coef * height / 4 }, { rotateX }, { translateY: coef * -height / 4 }, { rotateZ: "180deg" }],
             }}
           >
             <Image source={{ uri: back }} style={styles.image} />
@@ -63,7 +77,7 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
             style={{
               ...StyleSheet.absoluteFillObject,
               backfaceVisibility: "hidden",
-              transform: [frontPerspective, { translateY: height / 4 }, { rotateX }, { translateY: -height / 4 }],
+              transform: [frontPerspective, { translateY: coef * height / 4 }, { rotateX }, { translateY: coef * -height / 4 }],
             }}
           >
             <Image source={{ uri: front }} style={styles.image} />
@@ -71,7 +85,7 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
         </View>
         <Interactable
           style={{
-            backgroundColor: "rgba(100, 500, 0, 0.5)", height, position: "absolute", top: -height / 2, left: 0, right: 0,
+            backgroundColor: "rgba(100, 500, 0, 0.5)", height, position: "absolute", top: bottom ? 0 : -height / 2, left: 0, right: 0,
           }}
           animatedValueY={y}
           verticalOnly
