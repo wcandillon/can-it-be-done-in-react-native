@@ -39,11 +39,16 @@ const DEFAULT_SNAP_DAMPING = 0.7;
 const DEFAULT_GRAVITY_STRENGTH = 400;
 const DEFAULT_GRAVITY_FALLOF = 40;
 
-function sq(x) {
+interface Anchor {
+  x: number;
+  y: number;
+}
+
+function sq(x: Value | number) {
   return multiply(x, x);
 }
 
-function influenceAreaWithRadius(radius, anchor) {
+function influenceAreaWithRadius(radius: number, anchor: Anchor) {
   return {
     left: (anchor.x || 0) - radius,
     right: (anchor.x || 0) + radius,

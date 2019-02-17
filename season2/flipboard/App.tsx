@@ -25,7 +25,7 @@ const screens = [
 
 interface IAppProps {}
 interface IAppState {
-  stories: IStory[];
+  stories: { top: string, bottom: string }[];
 }
 
 export default class App extends React.Component<IAppProps, IAppState> {
@@ -70,7 +70,6 @@ export default class App extends React.Component<IAppProps, IAppState> {
         <AppLoading />
       );
     }
-
     return (
       <View style={styles.container}>
         <StatusBar hidden />

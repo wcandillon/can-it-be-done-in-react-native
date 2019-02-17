@@ -21,12 +21,26 @@ interface StoriesProps {
   back: string;
 }
 
-export default class Story extends React.PureComponent<StoriesProps> {
+interface StoriesState {
+  isDragging: boolean;
+}
+
+export default class Story extends React.PureComponent<StoriesProps, StoriesState> {
+  state: StoriesState = {
+    isDragging: false,
+  };
+
   y = new Value(0);
 
+  onDrag = () => {
+    const { isDragging } = this.state;
+    this.setState({ isDragging: !isDragging });
+  }
+
   render() {
-    const { y } = this;
+    const { y, onDrag } = this;
     const { front, back } = this.props;
+    const { isDragging } = this.state;
     const interpolation = interpolate(y, {
       inputRange: [0, height],
       outputRange: [0, -180],
@@ -35,7 +49,7 @@ export default class Story extends React.PureComponent<StoriesProps> {
     const rotateX = concat(interpolation, "deg");
     const snapPoints = [{ y: 0 }, { y: height }];
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, zIndex: isDragging ? 100 : 0 }}>
         <View style={styles.story}>
           <Animated.View
             style={{
@@ -61,7 +75,7 @@ export default class Story extends React.PureComponent<StoriesProps> {
           }}
           animatedValueY={y}
           verticalOnly
-          {...{ snapPoints }}
+          {...{ snapPoints, onDrag }}
         />
       </View>
     );
@@ -69,27 +83,13 @@ export default class Story extends React.PureComponent<StoriesProps> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   story: {
     flex: 1,
   },
-  scrollView: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  bottomHalf: {
-    flex: 1,
-    backgroundColor: "transparent",
-  },
-  topHalf: {
-    flex: 1,
-    // backfaceVisibility: "hidden",
-  },
   image: {
     ...StyleSheet.absoluteFillObject,
-    width: null,
-    height: null,
+    width: undefined,
+    height: undefined,
     resizeMode: "cover",
   },
 });
