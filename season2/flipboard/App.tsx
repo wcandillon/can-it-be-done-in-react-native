@@ -6,6 +6,7 @@ import {
 import { ImageManipulator, Asset, AppLoading } from "expo";
 
 import Story from "./components/Story";
+import BackgroundImage from "./components/BackgroundImage";
 
 interface Size {
   width: number;
@@ -83,17 +84,30 @@ export default class App extends React.Component<IAppProps, IAppState> {
     const prev = stories[index - 1];
     const current = stories[index];
     const next = stories[index + 1];
+    if (!prev) {
+      return (
+        <View style={styles.container}>
+          <StatusBar hidden />
+          <BackgroundImage top={current.top} bottom={next.bottom} />
+          <View style={styles.container} />
+          <Story key={`${index}-bottom`} front={current.bottom} back={next.top} bottom {...{ onSnap }} />
+        </View>
+      );
+    }
+    if (!next) {
+      return (
+        <View style={styles.container}>
+          <StatusBar hidden />
+          <BackgroundImage top={prev.top} bottom={current.bottom} />
+          <Story key={`${index}-top`} front={current.top} back={prev.bottom} {...{ onSnap }} />
+          <View style={styles.container} />
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
         <StatusBar hidden />
-        <View style={StyleSheet.absoluteFill}>
-          <View style={styles.container}>
-            <Image source={{ uri: prev.top }} style={styles.image} />
-          </View>
-          <View style={styles.container}>
-            <Image source={{ uri: next.bottom }} style={styles.image} />
-          </View>
-        </View>
+        <BackgroundImage top={prev.top} bottom={next.bottom} />
         <Story key={`${index}-top`} front={current.top} back={prev.bottom} {...{ onSnap }} />
         <Story key={`${index}-bottom`} front={current.bottom} back={next.top} bottom {...{ onSnap }} />
       </View>
@@ -104,11 +118,5 @@ export default class App extends React.Component<IAppProps, IAppState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  image: {
-    ...StyleSheet.absoluteFillObject,
-    width: undefined,
-    height: undefined,
-    resizeMode: "cover",
   },
 });
