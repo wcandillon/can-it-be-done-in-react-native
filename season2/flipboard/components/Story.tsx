@@ -55,10 +55,10 @@ export default class Story extends React.PureComponent<StoriesProps> {
             <Animated.View
               style={{
                 ...StyleSheet.absoluteFillObject,
-                transform: [{ perspective: backP }, { rotateY: "180deg" }, { translateY: height / 4 }, { rotateX }, { translateY: -height / 4 }],
+                transform: [{ perspective: backP }, { rotateY: "180deg" }, { translateY: height / 4 }, { rotateX }, { translateY: -height / 4 }, { rotateZ: "180deg" }],
               }}
             >
-              <Image source={{ uri: topFront }} style={styles.image} />
+              <Image source={{ uri: bottomBack }} style={styles.image} />
             </Animated.View>
             <Animated.View
               style={{
@@ -67,7 +67,7 @@ export default class Story extends React.PureComponent<StoriesProps> {
                 transform: [{ perspective: frontP }, { translateY: height / 4 }, { rotateX }, { translateY: -height / 4 }],
               }}
             >
-              <Image source={{ uri: bottomBack }} style={styles.image} />
+              <Image source={{ uri: topFront }} style={styles.image} />
             </Animated.View>
           </View>
           <View style={styles.bottomHalf} />
