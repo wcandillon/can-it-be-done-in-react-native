@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  View, StyleSheet, Dimensions, Image,
+  View, StyleSheet, Dimensions, Image, Platform,
 } from "react-native";
 import { DangerZone } from "expo";
 
@@ -10,11 +10,11 @@ const {
   Animated,
 } = DangerZone;
 const {
-  Value, Extrapolate, interpolate, concat,
+  Value, Extrapolate, interpolate, concat, cond, and, greaterOrEq, lessThan, multiply,
 } = Animated;
 const { height } = Dimensions.get("window");
-const frontPerspective = 1000;
-const backPerspective = -frontPerspective;
+const backPerspective = Platform.OS === "android" ? {} : { perspective: -1000 };
+const frontPerspective = Platform.OS === "android" ? {} : { perspective: 1000 };
 
 interface StoriesProps {
   front: string;
@@ -64,19 +64,39 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
       outputRange: [180, 0],
       extrapolate: Extrapolate.CLAMP,
     });
-    const interpolation = bottom ? bottomInterpolation : topInterpolation;
-    const rotateX = concat(interpolation, "deg");
+    const rotateXAsDeg = bottom ? bottomInterpolation : topInterpolation;
+    const rotateX = concat(rotateXAsDeg, "deg");
     const topSnapPoints = [{ id: 0, y: 0 }, { id: -1, y: height }];
     const bottomSnapPoints = [{ id: 1, y: -height }, { id: 0, y: 0 }];
     const snapPoints = bottom ? bottomSnapPoints : topSnapPoints;
     const coef = bottom ? -1 : 1;
+    // This version of RN doesn't have backfaceVisibility: "hidden" support on Android
+    // So we copy its implementation 1-to-1 using Reanimated
+    // https://github.com/facebook/react-native/commit/0cce0a62c1ab8d9687c9decd69cd204c99e1ec6c#diff-341b84e8097867e8de4179e496ec53d5R863
+    const opacity = Platform.OS === "android" ? cond(and(greaterOrEq(rotateXAsDeg, -90), lessThan(rotateXAsDeg, 90)), 1, 0) : 1;
+    const backOpacity = Platform.OS === "android" ? cond(opacity, 0, 1) : 1;
+    const zIndex = Platform.OS === "android" ? "elevation" : "zIndex";
     return (
-      <View style={{ flex: 1, zIndex: isDragging ? 100 : 0 }}>
+      <View style={{
+        flex: 1, [zIndex]: isDragging ? 1 : 0,
+      }}
+      >
         <View style={styles.story}>
           <Animated.View
             style={{
               ...StyleSheet.absoluteFillObject,
-              transform: [backPerspective, { rotateY: "180deg" }, { translateY: coef * height / 4 }, { rotateX }, { translateY: coef * -height / 4 }, { rotateZ: "180deg" }],
+              opacity: backOpacity,
+              transform: [
+                backPerspective,
+                { rotateY: "180deg" },
+                { translateY: coef * height / 4 },
+                {
+                  rotateX: Platform.OS === "android"
+                    ? concat(multiply(rotateXAsDeg, -1), "deg")
+                    : rotateX,
+                },
+                { translateY: coef * -height / 4 },
+                { rotateZ: "180deg" }],
             }}
           >
             <Image source={{ uri: back }} style={styles.image} />
@@ -85,6 +105,7 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
             style={{
               ...StyleSheet.absoluteFillObject,
               backfaceVisibility: "hidden",
+              opacity,
               transform: [frontPerspective, { translateY: coef * height / 4 }, { rotateX }, { translateY: coef * -height / 4 }],
             }}
           >

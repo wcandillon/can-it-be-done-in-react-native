@@ -6,6 +6,7 @@ import {
 import { ImageManipulator, Asset, AppLoading } from "expo";
 
 import Story from "./components/Story";
+import BackgroundImage from "./components/BackgroundImage";
 
 interface Size {
   width: number;
@@ -86,16 +87,31 @@ export default class App extends React.Component<IAppProps, IAppState> {
     return (
       <View style={styles.container}>
         <StatusBar hidden />
-        <View style={StyleSheet.absoluteFill}>
-          <View style={styles.container}>
-            <Image source={{ uri: prev.top }} style={styles.image} />
-          </View>
-          <View style={styles.container}>
-            <Image source={{ uri: next.bottom }} style={styles.image} />
-          </View>
-        </View>
-        <Story key={`${index}-top`} front={current.top} back={prev.bottom} {...{ onSnap }} />
-        <Story key={`${index}-bottom`} front={current.bottom} back={next.top} bottom {...{ onSnap }} />
+        <BackgroundImage
+          top={!prev ? current.top : prev.top}
+          bottom={!next ? current.bottom : next.bottom}
+        />
+        {
+          !prev ? (<View style={styles.container} />) : (
+            <Story
+              key={`${index}-top`}
+              front={current.top}
+              back={prev.bottom}
+              {...{ onSnap }}
+            />
+          )
+        }
+        {
+          !next ? (<View style={styles.container} />) : (
+            <Story
+              key={`${index}-bottom`}
+              front={current.bottom}
+              back={next.top}
+              bottom
+              {...{ onSnap }}
+            />
+          )
+        }
       </View>
     );
   }
@@ -104,11 +120,5 @@ export default class App extends React.Component<IAppProps, IAppState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  image: {
-    ...StyleSheet.absoluteFillObject,
-    width: undefined,
-    height: undefined,
-    resizeMode: "cover",
   },
 });
