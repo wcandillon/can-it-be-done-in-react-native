@@ -74,6 +74,7 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
     // So we copy its implementation 1-to-1 using Reanimated
     // https://github.com/facebook/react-native/commit/0cce0a62c1ab8d9687c9decd69cd204c99e1ec6c#diff-341b84e8097867e8de4179e496ec53d5R863
     const opacity = Platform.OS === "android" ? cond(and(greaterOrEq(rotateXAsDeg, -90), lessThan(rotateXAsDeg, 90)), 1, 0) : 1;
+    const backOpacity = Platform.OS === "android" ? cond(opacity, 0, 1) : 1;
     const zIndex = Platform.OS === "android" ? "elevation" : "zIndex";
     return (
       <View style={{
@@ -84,7 +85,7 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
           <Animated.View
             style={{
               ...StyleSheet.absoluteFillObject,
-              opacity: cond(opacity, 0, 1),
+              opacity: backOpacity,
               transform: [
                 backPerspective,
                 { rotateY: "180deg" },
