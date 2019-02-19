@@ -77,45 +77,38 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
     const backOpacity = Platform.OS === "android" ? cond(opacity, 0, 1) : 1;
     const zIndex = Platform.OS === "android" ? "elevation" : "zIndex";
     return (
-      <View style={{
-        flex: 1, [zIndex]: isDragging ? 1 : 0,
-      }}
-      >
-        <View style={styles.story}>
-          <Animated.View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              opacity: backOpacity,
-              transform: [
-                backPerspective,
-                { rotateY: "180deg" },
-                { translateY: coef * height / 4 },
-                {
-                  rotateX: Platform.OS === "android"
-                    ? concat(multiply(rotateXAsDeg, -1), "deg")
-                    : rotateX,
-                },
-                { translateY: coef * -height / 4 },
-                { rotateZ: "180deg" }],
-            }}
-          >
-            <Image source={{ uri: back }} style={styles.image} />
-          </Animated.View>
-          <Animated.View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              backfaceVisibility: "hidden",
-              opacity,
-              transform: [frontPerspective, { translateY: coef * height / 4 }, { rotateX }, { translateY: coef * -height / 4 }],
-            }}
-          >
-            <Image source={{ uri: front }} style={styles.image} />
-          </Animated.View>
-        </View>
-        <Interactable
+      <View style={{ flex: 1, [zIndex]: isDragging ? 1 : 0 }}>
+        <Animated.View
           style={{
-            height, position: "absolute", top: bottom ? 0 : -height / 2, left: 0, right: 0,
+            ...StyleSheet.absoluteFillObject,
+            opacity: backOpacity,
+            transform: [
+              backPerspective,
+              { rotateY: "180deg" },
+              { translateY: coef * height / 4 },
+              {
+                rotateX: Platform.OS === "android"
+                  ? concat(multiply(rotateXAsDeg, -1), "deg")
+                  : rotateX,
+              },
+              { translateY: coef * -height / 4 },
+              { rotateZ: "180deg" }],
           }}
+        >
+          <Image source={{ uri: back }} style={styles.image} />
+        </Animated.View>
+        <Animated.View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backfaceVisibility: "hidden",
+            opacity,
+            transform: [frontPerspective, { translateY: coef * height / 4 }, { rotateX }, { translateY: coef * -height / 4 }],
+          }}
+        >
+          <Image source={{ uri: front }} style={styles.image} />
+        </Animated.View>
+        <Interactable
+          style={StyleSheet.absoluteFill}
           animatedValueY={y}
           verticalOnly
           {...{ snapPoints, onDrag, onSnap }}
@@ -126,9 +119,7 @@ export default class Story extends React.PureComponent<StoriesProps, StoriesStat
 }
 
 const styles = StyleSheet.create({
-  story: {
-    flex: 1,
-  },
+
   image: {
     ...StyleSheet.absoluteFillObject,
     width: undefined,
