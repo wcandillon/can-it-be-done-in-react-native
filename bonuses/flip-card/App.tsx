@@ -47,7 +47,7 @@ export default class App extends React.Component<{}, AppState> {
           style={StyleSheet.absoluteFillObject}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ width: width * 2 }}
-          scrollEventThrottle={16}
+          scrollEventThrottle={1}
           onScroll={Animated.event(
             [
               {
