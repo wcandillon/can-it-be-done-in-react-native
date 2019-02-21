@@ -25,11 +25,11 @@ export default class Card extends React.PureComponent<CardProps> {
       outputRange: [0, 180],
     });
     const rotateY = concat(rotateYAsDeg, "deg");
-    const opacity = cond(
+    const opacity = Platform.OS === "android" ? cond(
       and(greaterOrEq(rotateYAsDeg, -90), lessThan(rotateYAsDeg, 90)),
       1,
       0,
-    );
+    ) : 1;
     const backOpacity = Platform.OS === "android" ? cond(opacity, 0, 1) : 1;
     /*
           */
@@ -40,6 +40,7 @@ export default class Card extends React.PureComponent<CardProps> {
           justifyContent: "center",
           alignItems: "center",
           opacity: backOpacity,
+          backfaceVisibility: "hidden",
           transform: [
             { perspective },
             { rotateY: "180deg" },
@@ -53,6 +54,7 @@ export default class Card extends React.PureComponent<CardProps> {
         <Animated.View style={{
           ...StyleSheet.absoluteFillObject,
           opacity,
+          backfaceVisibility: "hidden",
           transform: [
             { perspective },
             { rotateY },
