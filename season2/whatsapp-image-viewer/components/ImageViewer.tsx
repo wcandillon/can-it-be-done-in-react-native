@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import { DangerZone, GestureHandler } from "expo";
 import {
   dragDiff, friction, bouncyPinch, bouncy,
 } from "./AnimationHelpers";
 
+const { width, height } = Dimensions.get("window");
 const { Animated } = DangerZone;
 const { PanGestureHandler, State, PinchGestureHandler } = GestureHandler;
 
@@ -23,8 +24,8 @@ const {
   event,
 } = Animated;
 
-const WIDTH = 300;
-const HEIGHT = 300;
+const WIDTH = width;
+const HEIGHT = height;
 
 interface ImageViewerProps {
 
@@ -145,6 +146,7 @@ export default class ImageViewer extends Component<ImageViewerProps> {
   }
 
   render() {
+    const { source } = this.props;
     // The below two animated values makes it so that scale appears to be done
     // from the top left corner of the image view instead of its center. This
     // is required for the "scale focal point" math to work correctly
@@ -167,22 +169,21 @@ export default class ImageViewer extends Component<ImageViewerProps> {
               onHandlerStateChange={this._onPanEvent}
             >
               <Animated.Image
-                style={[
-                  styles.image,
-                  {
-                    transform: [
-                      { translateX: this._panTransX },
-                      { translateY: this._panTransY },
-                      { translateX: this._focalDisplacementX },
-                      { translateY: this._focalDisplacementY },
-                      { translateX: scaleTopLeftFixX },
-                      { translateY: scaleTopLeftFixY },
-                      { scale: this._scale },
-                    ],
-                  },
-                ]}
-                resizeMode="stretch"
-                source={this.props.source}
+                style={{
+                  width,
+                  height: width * (source.height / source.width),
+                  transform: [
+                    { translateX: this._panTransX },
+                    { translateY: this._panTransY },
+                    { translateX: this._focalDisplacementX },
+                    { translateY: this._focalDisplacementY },
+                    { translateX: scaleTopLeftFixX },
+                    { translateY: scaleTopLeftFixY },
+                    { scale: this._scale },
+                  ],
+                }}
+                resizeMode="contain"
+                source={source}
               />
             </PanGestureHandler>
           </Animated.View>
@@ -192,15 +193,12 @@ export default class ImageViewer extends Component<ImageViewerProps> {
   }
 }
 
+const black = "black";
 const styles = StyleSheet.create({
   wrapper: {
-    borderColor: "green",
-    borderWidth: 2,
+    flex: 1,
+    backgroundColor: black,
     overflow: "hidden",
-  },
-  image: {
-    width: 300,
-    height: 300,
-    backgroundColor: "black",
+    justifyContent: "center",
   },
 });
