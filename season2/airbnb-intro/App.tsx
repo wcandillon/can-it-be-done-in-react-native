@@ -1,20 +1,26 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import {AppLoading, Font} from "expo";
+import { AppLoading, Font } from "expo";
 
-import {downloadImagesAsync} from "./components/Images";
+import { downloadImagesAsync } from "./components/Images";
 import Home from "./components/Home";
 import Tabbar from "./components/Tabbar";
+import Intro from "./components/Intro";
 
 interface AppProps {}
 interface AppState {
   ready: boolean;
 }
 
-export default class App extends React.Component<AppProps, AppState> {
+const steps = [{
+  x: 0,
+  y: 0,
+  label: "Explore your favorite cities.",
+}];
 
+export default class App extends React.Component<AppProps, AppState> {
   state = {
-    ready: false
+    ready: false,
   };
 
   async componentDidMount() {
@@ -27,21 +33,22 @@ export default class App extends React.Component<AppProps, AppState> {
       "SFProDisplay-Bold": require("./assets/fonts/SF-Pro-Display-Bold.otf"),
       "SFProDisplay-Semibold": require("./assets/fonts/SF-Pro-Display-Semibold.otf"),
       "SFProDisplay-Regular": require("./assets/fonts/SF-Pro-Display-Regular.otf"),
-      "SFProDisplay-Light": require("./assets/fonts/SF-Pro-Display-Light.otf")
-  });
+      "SFProDisplay-Light": require("./assets/fonts/SF-Pro-Display-Light.otf"),
+    });
   }
 
   render() {
-    const {ready} = this.state;
+    const { ready } = this.state;
     if (!ready) {
       return (
         <AppLoading />
-      )
+      );
     }
     return (
       <View style={styles.container}>
         <Home />
         <Tabbar />
+        <Intro {...{ steps }} />
       </View>
     );
   }
@@ -51,5 +58,5 @@ export default class App extends React.Component<AppProps, AppState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
-})
+  },
+});
