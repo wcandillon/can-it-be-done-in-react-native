@@ -1,15 +1,22 @@
 import * as React from "react";
-import { View, ScrollView } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+
+import Explore from "./Explore";
 
 interface HomeProps {}
 
 export default class Home extends React.PureComponent<HomeProps> {
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={styles.scrollView}>
         <Explore />
-        <City />
       </ScrollView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: "white",
+  },
+});
