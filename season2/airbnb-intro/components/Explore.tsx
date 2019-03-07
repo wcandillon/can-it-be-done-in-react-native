@@ -5,11 +5,26 @@ import {
 
 import Category from "./Category";
 import CityCard from "./CityCard";
+import HomeCard, { Home } from "./HomeCard";
 import StyleGuide from "./StyleGuide";
 
 import {
   Homes, Experiences, Restaurants, CapeTown, London, LosAngeles, Miami, Nairobi, Paris, SanFrancisco, Tokyo,
 } from "./Images";
+
+const homes: Home[] = [
+  {
+    category1: "Entire apartment",
+    category2: "1 bedroom",
+    title: "Centric studio with roof top terrace",
+    price: {
+      amount: 85,
+      currency: "CHF",
+    },
+    // eslint-disable-next-line max-len
+    picture: "https://firebasestorage.googleapis.com/v0/b/react-native-ting.appspot.com/o/homes%2F19115781%2Fb16db24e-d530-4601-8ac1-9af91e8c06fc.jpg?alt=media&token=46c15767-8008-4e64-bfef-92865faab2c2",
+  },
+];
 
 interface ExploreProps {}
 
@@ -18,12 +33,22 @@ export default class Explore extends React.PureComponent<ExploreProps> {
   render() {
     return (
       <View>
-        <Text style={styles.title}>Explore</Text>
+        <Text style={styles.title1}>Explore</Text>
         <ScrollView horizontal style={styles.scrollView} contentContainerStyle={styles.container}>
           <Category label="Homes" image={Homes} />
           <Category label="Experiences" image={Experiences} />
           <Category label="Restaurants" image={Restaurants} />
         </ScrollView>
+        <View>
+          <Text style={styles.title2}>Zürich</Text>
+          <ScrollView
+            horizontal
+            style={styles.scrollView}
+            contentContainerStyle={styles.container}
+          >
+            <HomeCard home={homes[0]} />
+          </ScrollView>
+        </View>
         <ScrollView horizontal style={styles.scrollView} contentContainerStyle={styles.container}>
           <CityCard label="Cape Town" image={CapeTown} />
           <CityCard label="London" image={London} />
@@ -41,8 +66,12 @@ export default class Explore extends React.PureComponent<ExploreProps> {
 
 
 const styles = StyleSheet.create({
-  title: {
+  title1: {
     ...StyleGuide.typography.title1,
+    paddingLeft: StyleGuide.spacing.base,
+  },
+  title2: {
+    ...StyleGuide.typography.title2,
     paddingLeft: StyleGuide.spacing.base,
   },
   scrollView: {
