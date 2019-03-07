@@ -12,7 +12,7 @@ import {
   Homes, Experiences, Restaurants, CapeTown, London, LosAngeles, Miami, Nairobi, Paris, SanFrancisco, Tokyo,
 } from "./Images";
 
-const homes: Home[] = [
+const homes: [Home, Home] = [
   {
     category1: "Entire apartment",
     category2: "1 bedroom",
@@ -23,6 +23,17 @@ const homes: Home[] = [
     },
     // eslint-disable-next-line max-len
     picture: "https://firebasestorage.googleapis.com/v0/b/react-native-ting.appspot.com/o/homes%2F19115781%2Fb16db24e-d530-4601-8ac1-9af91e8c06fc.jpg?alt=media&token=46c15767-8008-4e64-bfef-92865faab2c2",
+  },
+  {
+    category1: "Entire apartment",
+    category2: "1 bedroom",
+    title: "Great studio in Zurich center",
+    price: {
+      amount: 52,
+      currency: "CHF",
+    },
+    // eslint-disable-next-line max-len
+    picture: "https://firebasestorage.googleapis.com/v0/b/react-native-ting.appspot.com/o/homes%2F10055779%2F4d82a918-3a61-4da2-965d-e33b76d891f6.jpg?alt=media&token=115f1f99-7dc5-4942-9a60-7d342aae2435",
   },
 ];
 
@@ -47,6 +58,7 @@ export default class Explore extends React.PureComponent<ExploreProps> {
             contentContainerStyle={styles.container}
           >
             <HomeCard home={homes[0]} />
+            <HomeCard home={homes[1]} />
           </ScrollView>
         </View>
         <ScrollView horizontal style={styles.scrollView} contentContainerStyle={styles.container}>
