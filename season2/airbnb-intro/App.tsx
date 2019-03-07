@@ -16,6 +16,15 @@ const steps = [{
   x: 0,
   y: 0,
   label: "Explore your favorite cities.",
+}, {
+  x: 50,
+  y: 100,
+  label: "Text",
+},
+{
+  x: 50,
+  y: 200,
+  label: "Hello",
 }];
 
 export default class App extends React.Component<AppProps, AppState> {

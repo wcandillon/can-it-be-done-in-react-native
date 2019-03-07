@@ -1,5 +1,7 @@
 import * as React from "react";
-import { Dimensions, StyleSheet, Animated } from "react-native";
+import {
+  Dimensions, StyleSheet, Animated, TouchableWithoutFeedback, View, Text,
+} from "react-native";
 import { Svg } from "expo";
 import SVGPath from "art/modes/svg/path";
 
@@ -38,36 +40,59 @@ interface IntroState {
 
 // eslint-disable-next-line react/prefer-stateless-function
 export default class Intro extends React.PureComponent<IntroProps, IntroState> {
+  x = new Animated.Value(0);
+
+  y = new Animated.Value(0);
+
   state = {
     index: 0,
   };
 
   nextStep = () => {
+    const { steps } = this.props;
     const { index } = this.state;
-    this.setState({ index: index + 1 });
+    if (index + 1 >= steps.length) {
+      this.setState({ index: -1 });
+    } else {
+      this.setState({ index: index + 1 });
+    }
   }
 
   render() {
+    const { x, y } = this;
     const { steps } = this.props;
     const { index } = this.state;
     const step = steps[index];
+    if (!step) {
+      return null;
+    }
     return (
-      <Animated.View
-        style={[styles.container, {
-          transform: [
-            { translateX: -200 },
-            { translateY: -200 },
-          ],
-        }]}
-      >
-        <Svg style={StyleSheet.absoluteFill}>
-          <Path
-            d={overlay.toSVG()}
-            fill="#00A699"
-            opacity={0.8}
-          />
-        </Svg>
-      </Animated.View>
+      <>
+        <Animated.View
+          style={[styles.container, {
+            transform: [
+              { translateX: -width / 2 + x + radius },
+              { translateY: -height / 2 + y + radius },
+            ],
+          }]}
+        >
+          <Svg style={StyleSheet.absoluteFill}>
+            <Path
+              d={overlay.toSVG()}
+              fill="#00A699"
+              opacity={0.85}
+            />
+          </Svg>
+        </Animated.View>
+
+        <View style={styles.content}>
+          <TouchableWithoutFeedback onPress={this.nextStep}>
+            <View>
+              <Text>Next</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </>
     );
   }
 }
@@ -79,5 +104,9 @@ const styles = StyleSheet.create({
     left: -width,
     width: width * 3,
     height: height * 3,
+  },
+  content: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
   },
 });
