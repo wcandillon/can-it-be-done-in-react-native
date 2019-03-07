@@ -1,22 +1,19 @@
 import * as React from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, SafeAreaView } from "react-native";
 
 import Explore from "./Explore";
 
 interface HomeProps {}
 
+// eslint-disable-next-line react/prefer-stateless-function
 export default class Home extends React.PureComponent<HomeProps> {
   render() {
     return (
-      <ScrollView style={styles.scrollView}>
-        <Explore />
+      <ScrollView>
+        <SafeAreaView>
+          <Explore />
+        </SafeAreaView>
       </ScrollView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: "white",
-  },
-});

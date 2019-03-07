@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, SafeAreaView } from "react-native";
+import { StyleSheet, View } from "react-native";
 import {AppLoading, Font} from "expo";
 
 import {downloadImagesAsync} from "./components/Images";
@@ -39,10 +39,10 @@ export default class App extends React.Component<AppProps, AppState> {
       )
     }
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Home />
         <Tabbar />
-      </SafeAreaView>
+      </View>
     );
   }
 }
@@ -51,6 +51,5 @@ export default class App extends React.Component<AppProps, AppState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8"
   }
 })
