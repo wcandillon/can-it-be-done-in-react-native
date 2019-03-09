@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  View, Text, StyleSheet, ScrollView, SafeAreaView,
+  View, Text, StyleSheet, ScrollView, SafeAreaView, InteractionManager,
 } from "react-native";
 
 import Category from "./Category";
@@ -51,8 +51,7 @@ export default class Explore extends React.PureComponent<ExploreProps> {
 
   componentDidMount() {
     const { onLoad } = this.props;
-    setTimeout(() => onLoad(), 3000);
-    // onLoad();
+    setTimeout(onLoad, 1000);
   }
 
   render() {
