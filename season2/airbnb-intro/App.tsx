@@ -37,14 +37,12 @@ export default class App extends React.Component<AppProps, AppState> {
     this.setState({ ready: true });
   }
 
-  async downloadFontsAsync() {
-    await Font.loadAsync({
-      "SFProDisplay-Bold": require("./assets/fonts/SF-Pro-Display-Bold.otf"),
-      "SFProDisplay-Semibold": require("./assets/fonts/SF-Pro-Display-Semibold.otf"),
-      "SFProDisplay-Regular": require("./assets/fonts/SF-Pro-Display-Regular.otf"),
-      "SFProDisplay-Light": require("./assets/fonts/SF-Pro-Display-Light.otf"),
-    });
-  }
+  downloadFontsAsync = () => Font.loadAsync({
+    "SFProDisplay-Bold": require("./assets/fonts/SF-Pro-Display-Bold.otf"),
+    "SFProDisplay-Semibold": require("./assets/fonts/SF-Pro-Display-Semibold.otf"),
+    "SFProDisplay-Regular": require("./assets/fonts/SF-Pro-Display-Regular.otf"),
+    "SFProDisplay-Light": require("./assets/fonts/SF-Pro-Display-Light.otf"),
+  });
 
   render() {
     const { ready } = this.state;

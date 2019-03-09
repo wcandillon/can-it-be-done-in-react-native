@@ -1,9 +1,10 @@
 import * as React from "react";
 import {
-  Dimensions, StyleSheet, Animated, TouchableWithoutFeedback, View, Text,
+  Dimensions, StyleSheet, Animated, TouchableWithoutFeedback, View, Text, SafeAreaView,
 } from "react-native";
 import { Svg } from "expo";
 import SVGPath from "art/modes/svg/path";
+import StyleGuide from "./StyleGuide";
 
 const { width, height } = Dimensions.get("window");
 const { Path } = Svg;
@@ -38,7 +39,6 @@ interface IntroState {
   index: number
 }
 
-// eslint-disable-next-line react/prefer-stateless-function
 export default class Intro extends React.PureComponent<IntroProps, IntroState> {
   x = new Animated.Value(0);
 
@@ -48,31 +48,49 @@ export default class Intro extends React.PureComponent<IntroProps, IntroState> {
     index: 0,
   };
 
+  componentDidMount() {
+    // this.nextStep();
+  }
+
   nextStep = () => {
+    const { x, y } = this;
     const { steps } = this.props;
     const { index } = this.state;
     if (index + 1 >= steps.length) {
       this.setState({ index: -1 });
     } else {
       this.setState({ index: index + 1 });
+      const step = steps[index + 1];
+      Animated.parallel([
+        Animated.timing(x, {
+          toValue: step.x,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(y, {
+          toValue: step.y,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
     }
   }
 
   render() {
     const { x, y } = this;
-    const { steps } = this.props;
     const { index } = this.state;
-    const step = steps[index];
-    if (!step) {
-      return null;
+    const translateX = Animated.add(x, new Animated.Value(-width / 2 + radius));
+    const translateY = Animated.add(y, new Animated.Value(-height / 2 + radius));
+    if (index !== -1) {
+      // return null;
     }
     return (
       <>
         <Animated.View
           style={[styles.container, {
             transform: [
-              { translateX: -width / 2 + x + radius },
-              { translateY: -height / 2 + y + radius },
+              { translateX },
+              { translateY },
             ],
           }]}
         >
@@ -84,13 +102,14 @@ export default class Intro extends React.PureComponent<IntroProps, IntroState> {
             />
           </Svg>
         </Animated.View>
-
         <View style={styles.content}>
-          <TouchableWithoutFeedback onPress={this.nextStep}>
-            <View>
-              <Text>Next</Text>
-            </View>
-          </TouchableWithoutFeedback>
+          <SafeAreaView>
+            <TouchableWithoutFeedback onPress={this.nextStep}>
+              <View style={styles.button}>
+                <Text style={styles.label}>Next</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </SafeAreaView>
         </View>
       </>
     );
@@ -107,6 +126,18 @@ const styles = StyleSheet.create({
   },
   content: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    padding: StyleGuide.spacing.large,
+  },
+  button: {
+    borderWidth: 2,
+    borderColor: "white",
+    borderRadius: 5,
+    padding: StyleGuide.spacing.tiny,
+  },
+  label: {
+    color: "white",
+    textAlign: "center",
+    ...StyleGuide.typography.regular,
   },
 });
