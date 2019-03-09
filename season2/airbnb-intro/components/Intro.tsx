@@ -45,11 +45,11 @@ export default class Intro extends React.PureComponent<IntroProps, IntroState> {
   y = new Animated.Value(0);
 
   state = {
-    index: 0,
+    index: -1,
   };
 
   componentDidMount() {
-    // this.nextStep();
+    this.nextStep();
   }
 
   nextStep = () => {
@@ -78,11 +78,13 @@ export default class Intro extends React.PureComponent<IntroProps, IntroState> {
 
   render() {
     const { x, y } = this;
+    const { steps } = this.props;
     const { index } = this.state;
+    const step = steps[index];
     const translateX = Animated.add(x, new Animated.Value(-width / 2 + radius));
     const translateY = Animated.add(y, new Animated.Value(-height / 2 + radius));
-    if (index !== -1) {
-      // return null;
+    if (index === -1) {
+      return null;
     }
     return (
       <>
@@ -104,6 +106,7 @@ export default class Intro extends React.PureComponent<IntroProps, IntroState> {
         </Animated.View>
         <View style={styles.content}>
           <SafeAreaView>
+            <Text style={styles.label}>{step.label}</Text>
             <TouchableWithoutFeedback onPress={this.nextStep}>
               <View style={styles.button}>
                 <Text style={styles.label}>Next</Text>
@@ -134,10 +137,11 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 5,
     padding: StyleGuide.spacing.tiny,
+    marginTop: StyleGuide.spacing.base,
   },
   label: {
     color: "white",
     textAlign: "center",
-    ...StyleGuide.typography.regular,
+    ...StyleGuide.typography.title3,
   },
 });
