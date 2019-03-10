@@ -9,11 +9,14 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "d3": "^5.9.1",
+    "d3-path": "^1.0.7",
     "expo": "^32.0.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
   },
   "devDependencies": {
+    "@types/d3-path": "^1.0.8",
     "@types/expo": "^32.0.6",
     "babel-preset-expo": "^5.0.0",
     "eslint": "^5.15.1",
