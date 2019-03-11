@@ -29,39 +29,39 @@ const tabs = [
   },
 ];
 const tabWidth = width / tabs.length;
+const backgroundColor = "white";
 
 const getPath = (index: number): string => shape.line()
   .x(d => d.x)
   .y(d => d.y)
-  .curve(shape.curveMonotoneX)([
+  .curve(shape.curveBasis)([
     { x: 0, y: 0 },
-    { x: width, y: 0 },
-    { x: width, y: height },
-    { x: 0, y: height },
+    { x: 0 + 10, y: 10 },
+    { x: 0 + 10 + 10, y: height },
+    { x: 0 + tabWidth - 20, y: height },
+    { x: 0 + tabWidth - 10, y: 10 },
+    { x: tabWidth, y: 0 },
   ]);
 interface TabbarProps {}
 
 // eslint-disable-next-line react/prefer-stateless-function
 export default class Tabbar extends React.PureComponent<TabbarProps> {
   render() {
-    const d = getPath(0);
+    const d = `${getPath(0)}L375,0L375,64L0,64`;
     console.log({ d });
     return (
-      <SafeAreaView style={styles.container}>
+      <>
         <Svg {...{ width, height }}>
-          <Path fill="blue" {...{ d }} />
+          <Path fill={backgroundColor} {...{ d }} />
         </Svg>
-      </SafeAreaView>
+        <SafeAreaView style={styles.container} />
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "white",
+    backgroundColor,
   },
 });

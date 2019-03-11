@@ -19,5 +19,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#eb3345",
+    justifyContent: "flex-end",
   },
 });
