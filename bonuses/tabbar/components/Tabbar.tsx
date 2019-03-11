@@ -1,12 +1,11 @@
 import * as React from "react";
 import {
-  SafeAreaView, StyleSheet, Dimensions,
+  SafeAreaView, StyleSheet, Dimensions, View,
 } from "react-native";
-// import { path } from "d3-path";
 import * as shape from "d3-shape";
-
-
 import { Svg } from "expo";
+
+import StaticTabbar from "./StaticTabbar";
 
 const { width } = Dimensions.get("window");
 const height = 64;
@@ -58,18 +57,33 @@ const getPath = (index: number): string => {
   ]);
   return `${left} ${tab} ${right}`;
 };
+
+const paths = tabs.map((tab, index) => getPath(index));
+
 interface TabbarProps {}
+interface TabbarState {
+  index: number;
+}
 
 // eslint-disable-next-line react/prefer-stateless-function
-export default class Tabbar extends React.PureComponent<TabbarProps> {
+export default class Tabbar extends React.PureComponent<TabbarProps, TabbarState> {
+  state = {
+    index: 0,
+  };
+
   render() {
-    const d = getPath(1);
+    const d = paths[0];
     console.log({ d });
     return (
       <>
-        <Svg {...{ width, height }}>
-          <Path fill={backgroundColor} {...{ d }} />
-        </Svg>
+        <View {...{ width, height }}>
+          <Svg {...{ width, height }}>
+            <Path fill={backgroundColor} {...{ d }} />
+          </Svg>
+          <View style={StyleSheet.absoluteFill}>
+            <StaticTabbar {...{ tabs }} />
+          </View>
+        </View>
         <SafeAreaView style={styles.container} />
       </>
     );
