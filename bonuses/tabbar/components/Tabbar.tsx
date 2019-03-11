@@ -41,10 +41,12 @@ const getPath = (index: number): string => {
   // .curve(shape.curveMonotoneX)
   const tab = shape.line().x(d => d.x).y(d => d.y).curve(shape.curveBasis)([
     { x: start, y: 0 },
+    { x: start + 5, y: 0 },
     { x: start + 10, y: 10 },
     { x: start + 15, y: height },
     { x: end - 15, y: height },
     { x: end - 10, y: 10 },
+    { x: end - 5, y: 0 },
     { x: end, y: 0 },
   ]);
   const right = shape.line().x(d => d.x).y(d => d.y)([
@@ -54,7 +56,6 @@ const getPath = (index: number): string => {
     { x: 0, y: height },
     { x: 0, y: 0 },
   ]);
-  console.log({ left, tab, right });
   return `${left} ${tab} ${right}`;
 };
 interface TabbarProps {}
