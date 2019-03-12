@@ -1,8 +1,9 @@
 import * as React from "react";
 import {
-  SafeAreaView, StyleSheet, Dimensions, View,
+  SafeAreaView, StyleSheet, Dimensions, View, Animated,
 } from "react-native";
 import * as shape from "d3-shape";
+import { interpolatePath } from "d3-interpolate-path";
 import { Svg } from "expo";
 
 import StaticTabbar from "./StaticTabbar";
@@ -67,23 +68,54 @@ interface TabbarState {
 
 // eslint-disable-next-line react/prefer-stateless-function
 export default class Tabbar extends React.PureComponent<TabbarProps, TabbarState> {
+  value = new Animated.Value(0);
+
+  path = React.createRef<typeof Path>();
+
+  interpolator = interpolatePath(paths[0], paths[1]);
+
+  subscription = "";
+
   state = {
     index: 0,
   };
 
-  onChange = (index: number) => {
+  componentDidMount() {
+    this.subscription = this.value.addListener(this.updatePath);
+  }
+
+  componentWillUnmount() {
+    this.value.removeListener(this.subscription);
+  }
+
+  updatePath = ({ value }: { value: number}) => {
+    const d = this.interpolator(value);
+    if (this.path.current) {
+      this.path.current.setNativeProps({ d });
+    }
+  }
+
+  onChange = (prev: number, index: number) => {
+    const { value } = this;
     this.setState({ index });
+    this.interpolator = interpolatePath(paths[prev], paths[index]);
+    value.setValue(0);
+    Animated.timing(value, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
   }
 
   render() {
-    const { onChange } = this;
+    const { onChange, value } = this;
     const { index } = this.state;
     const d = paths[index];
     return (
       <>
         <View {...{ width, height }}>
           <Svg {...{ width, height }}>
-            <Path fill={backgroundColor} {...{ d }} />
+            <Path ref={this.path} fill={backgroundColor} {...{ d }} />
           </Svg>
           <View style={StyleSheet.absoluteFill}>
             <StaticTabbar {...{ tabs, index, onChange }} />

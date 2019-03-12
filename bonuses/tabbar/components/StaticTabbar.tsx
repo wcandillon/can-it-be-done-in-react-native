@@ -9,7 +9,7 @@ interface Tab {
 interface StaticTabbarProps {
   tabs: Tab[];
   index: number;
-  onChange: (index: number) => void;
+  onChange: (prev: number, index: number) => void;
 }
 
 export default class StaticTabbar extends React.PureComponent<StaticTabbarProps> {
@@ -19,7 +19,7 @@ export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>
       <View style={styles.container}>
         {
           tabs.map((tab, key) => (
-            <TouchableWithoutFeedback onPress={() => onChange(key)} {...{ key }}>
+            <TouchableWithoutFeedback onPress={() => onChange(index, key)} {...{ key }}>
               <View style={styles.tab}>
                 {
 
