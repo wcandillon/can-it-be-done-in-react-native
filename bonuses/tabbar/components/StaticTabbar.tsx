@@ -34,10 +34,7 @@ export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>
           tabs.map((tab, key) => (
             <TouchableWithoutFeedback onPress={() => onPress(key)} {...{ key }}>
               <View style={styles.tab}>
-                {
-
-                  <Icon name={tab.name} color="black" size={25} />
-                }
+                <Icon name={tab.name} color="black" size={25} />
               </View>
             </TouchableWithoutFeedback>
           ))
