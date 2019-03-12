@@ -8,18 +8,24 @@ interface Tab {
 
 interface StaticTabbarProps {
   tabs: Tab[];
+  index: number;
+  onChange: (index: number) => void;
 }
 
 export default class StaticTabbar extends React.PureComponent<StaticTabbarProps> {
   render() {
-    const { tabs } = this.props;
+    const { tabs, onChange, index } = this.props;
     return (
       <View style={styles.container}>
         {
           tabs.map((tab, key) => (
-            <TouchableWithoutFeedback {...{ key }}>
+            <TouchableWithoutFeedback onPress={() => onChange(key)} {...{ key }}>
               <View style={styles.tab}>
-                <Icon name={tab.name} color="black" size={25} />
+                {
+
+                  key !== index && (
+                    <Icon name={tab.name} color="black" size={25} />)
+                }
               </View>
             </TouchableWithoutFeedback>
           ))

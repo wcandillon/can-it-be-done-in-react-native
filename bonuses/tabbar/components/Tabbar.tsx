@@ -71,9 +71,14 @@ export default class Tabbar extends React.PureComponent<TabbarProps, TabbarState
     index: 0,
   };
 
+  onChange = (index: number) => {
+    this.setState({ index });
+  }
+
   render() {
-    const d = paths[0];
-    console.log({ d });
+    const { onChange } = this;
+    const { index } = this.state;
+    const d = paths[index];
     return (
       <>
         <View {...{ width, height }}>
@@ -81,7 +86,7 @@ export default class Tabbar extends React.PureComponent<TabbarProps, TabbarState
             <Path fill={backgroundColor} {...{ d }} />
           </Svg>
           <View style={StyleSheet.absoluteFill}>
-            <StaticTabbar {...{ tabs }} />
+            <StaticTabbar {...{ tabs, index, onChange }} />
           </View>
         </View>
         <SafeAreaView style={styles.container} />
