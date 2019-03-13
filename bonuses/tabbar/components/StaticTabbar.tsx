@@ -16,14 +16,36 @@ interface StaticTabbarProps {
 }
 
 export default class StaticTabbar extends React.PureComponent<StaticTabbarProps> {
+  values: Animated.Value[] = [];
+
+  constructor(props: StaticTabbarProps) {
+    super(props);
+    const { tabs } = this.props;
+    this.values = tabs.map((tab, index) => new Animated.Value(index === 0 ? 1 : 0));
+  }
+
   onPress = (index: number) => {
     const { value, tabs } = this.props;
     const tabWidth = width / tabs.length;
-    Animated.timing(value, {
-      toValue: tabWidth * index,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    Animated.sequence([
+      Animated.parallel([
+        ...this.values.map(v => Animated.timing(v, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        })),
+        Animated.timing(value, {
+          toValue: tabWidth * index,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.timing(this.values[index], {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
   }
 
   render() {
@@ -40,9 +62,9 @@ export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>
               outputRange: [1, 0, 1],
               extrapolate: "clamp",
             });
-            const translateY = value.interpolate({
-              inputRange: [cursor - tabWidth, cursor, cursor + tabWidth],
-              outputRange: [64, 0, 64],
+            const translateY = this.values[key].interpolate({
+              inputRange: [0, 1],
+              outputRange: [64, 0],
               extrapolate: "clamp",
             });
             return (
