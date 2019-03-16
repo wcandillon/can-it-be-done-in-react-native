@@ -5,7 +5,7 @@ import { DangerZone } from "expo";
 
 const { Animated } = DangerZone;
 const {
-  Value, interpolate, add, multiply,
+  Value, interpolate, add, multiply, divide,
 } = Animated;
 
 interface HeaderProps {
@@ -16,7 +16,7 @@ interface HeaderProps {
 export default class Header extends React.PureComponent<HeaderProps> {
   render() {
     const { x, y } = this.props;
-    const translateY = add(multiply(y, -1), 64);
+    const translateY = divide(y, -2);
     return (
       <SafeAreaView style={styles.container}>
         <Animated.View style={[styles.content, { transform: [{ translateY }] }]}>
