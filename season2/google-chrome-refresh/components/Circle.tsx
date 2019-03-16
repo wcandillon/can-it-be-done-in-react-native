@@ -1,9 +1,11 @@
 import * as React from "react";
 import { View } from "react-native";
-import { DangerZone } from "expo";
+import { DangerZone, Svg } from "expo";
+import SVGPath from "art/modes/svg/path";
 
 const { Animated } = DangerZone;
 const { Value, interpolate, Extrapolate } = Animated;
+const { Path } = Svg;
 
 interface CircleProps {
   size: number;
@@ -22,15 +24,19 @@ export default class Circle extends React.PureComponent<CircleProps> {
       outputRange,
       extrapolate: Extrapolate.CLAMP,
     });
-    const style = {
-      height: size * 2,
-      width: size * 2,
-      borderRadius: size,
-      backgroundColor: "#656667",
-      transform: [{ translateX }],
-    };
+    const d = SVGPath()
+      .moveTo(size, 0)
+      .arcTo(size * 2, size, size)
+      .arcTo(size, size * 2, size)
+      .arcTo(0, size, size)
+      .arcTo(size, 0)
+      .toSVG();
     return (
-      <Animated.View {...{ style }} />
+      <Animated.View style={{ transform: [{ translateX }] }}>
+        <Svg width={size * 2} height={size * 2}>
+          <Path fill="#656667" {...{ d }} />
+        </Svg>
+      </Animated.View>
     );
   }
 }
