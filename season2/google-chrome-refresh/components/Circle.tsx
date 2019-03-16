@@ -19,15 +19,20 @@ interface CircleProps {
 export default class Circle extends React.PureComponent<CircleProps> {
   path = React.createRef();
 
-  morphPath = ([x]: [number]) => {
+  getPath = (x: number) => {
+    console.log({ x });
     const { size } = this.props;
-    const d = SVGPath()
+    return SVGPath()
       .moveTo(size, 0)
       .arcTo(size * 2, size, size)
       .arcTo(size, size * 2, size)
-      .arcTo(0, size, size)
+      .arcTo(0, size)
       .arcTo(size, 0)
       .toSVG();
+  }
+
+  morphPath = ([x]: [number]) => {
+    const d = this.getPath(x);
     this.path.current.setNativeProps({ d });
   };
 
@@ -40,13 +45,7 @@ export default class Circle extends React.PureComponent<CircleProps> {
       outputRange,
       extrapolate: Extrapolate.CLAMP,
     });
-    const d = SVGPath()
-      .moveTo(size, 0)
-      .arcTo(size * 2, size, size)
-      .arcTo(size, size * 2, size)
-      .arcTo(0, size, size)
-      .arcTo(size, 0)
-      .toSVG();
+    const d = this.getPath(0);
     return (
       <Animated.View style={{ transform: [{ translateX }] }}>
         <Animated.Code>
