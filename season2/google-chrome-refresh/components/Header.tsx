@@ -1,18 +1,29 @@
 import * as React from "react";
 import { View, SafeAreaView, StyleSheet } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
+import { DangerZone } from "expo";
 
-interface HeaderProps {}
+const { Animated } = DangerZone;
+const {
+  Value, interpolate, add, multiply,
+} = Animated;
+
+interface HeaderProps {
+  x: Value,
+  y: Value
+}
 
 export default class Header extends React.PureComponent<HeaderProps> {
   render() {
+    const { x, y } = this.props;
+    const translateY = add(multiply(y, -1), 64);
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
+        <Animated.View style={[styles.content, { transform: [{ translateY }] }]}>
           <Icon name="plus" size={32} />
           <Icon name="refresh-ccw" size={32} />
           <Icon name="x" size={32} />
-        </View>
+        </Animated.View>
       </SafeAreaView>
     );
   }
