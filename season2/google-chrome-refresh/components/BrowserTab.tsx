@@ -7,7 +7,7 @@ import Content from "./Content";
 import Header from "./Header";
 
 const { Animated } = DangerZone;
-const { Value, debug, block } = Animated;
+const { Value, multiply } = Animated;
 const { height } = Dimensions.get("window");
 
 interface BrowserTabProps {}
@@ -26,27 +26,20 @@ export default class BrowserTab extends React.PureComponent<BrowserTabProps> {
     }];
     return (
       <View>
-        <Animated.Code>
-          {
-            () => block([
-              debug("x", x),
-              debug("y", y),
-            ])
-          }
-        </Animated.Code>
         <View style={styles.background} />
-        <Interactable
-          style={styles.container}
-          animatedValueX={x}
-          animatedValueY={y}
-          verticalOnly
-          {...{
-            snapPoints, gravityPoints,
-          }}
-        >
-          <Header {...{ x, y }} />
-          <Content />
-        </Interactable>
+        <Animated.View style={{ transform: [{ translateX: multiply(x, -1) }] }}>
+          <Interactable
+            style={styles.container}
+            animatedValueX={x}
+            animatedValueY={y}
+            {...{
+              snapPoints, gravityPoints,
+            }}
+          >
+            <Header {...{ x, y }} />
+            <Content />
+          </Interactable>
+        </Animated.View>
       </View>
     );
   }

@@ -61,7 +61,11 @@ export default class Header extends React.PureComponent<HeaderProps> {
           opacity: cursor,
         }}
         >
-          <Circle {...{ size }} />
+          <Circle
+            inputRange={[-width / 8, width / 8]}
+            outputRange={[-translation - size, translation + size]}
+            {...{ size, x }}
+          />
         </Animated.View>
         <Animated.View style={[styles.content, { transform: [{ translateY }] }]}>
           <Animated.View style={{ opacity, transform: [{ translateX: translateXLeft }] }}>
