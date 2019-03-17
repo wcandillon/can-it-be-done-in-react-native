@@ -1,13 +1,14 @@
 import * as React from "react";
-import { View } from "react-native";
+import { Dimensions } from "react-native";
 import { DangerZone, Svg } from "expo";
-import SVGPath from "art/modes/svg/path";
+import * as shape from "d3-shape";
 
 const { Animated } = DangerZone;
 const {
   Value, interpolate, Extrapolate, call,
 } = Animated;
 const { Path } = Svg;
+const { width } = Dimensions.get("window");
 
 interface CircleProps {
   size: number;
@@ -20,15 +21,14 @@ export default class Circle extends React.PureComponent<CircleProps> {
   path = React.createRef();
 
   getPath = (x: number) => {
-    console.log({ x });
     const { size } = this.props;
-    return SVGPath()
-      .moveTo(size, 0)
-      .arcTo(size * 2, size, size)
-      .arcTo(size, size * 2, size)
-      .arcTo(0, size)
-      .arcTo(size, 0)
-      .toSVG();
+    return shape.line().x(d => d.x).y(d => d.y).curve(shape.curveBasis)([
+      { x: 0, y: size },
+      { x: size, y: 0 },
+      { x: size * 4, y: size },
+      { x: size, y: size * 2 },
+      { x: 0, y: size },
+    ]);
   }
 
   morphPath = ([x]: [number]) => {
@@ -40,23 +40,18 @@ export default class Circle extends React.PureComponent<CircleProps> {
     const {
       size, inputRange, outputRange, x,
     } = this.props;
-    const translateX = interpolate(x, {
-      inputRange,
-      outputRange,
-      extrapolate: Extrapolate.CLAMP,
-    });
     const d = this.getPath(0);
     return (
-      <Animated.View style={{ transform: [{ translateX }] }}>
+      <>
         <Animated.Code>
           {
             () => call([x], this.morphPath)
           }
         </Animated.Code>
-        <Svg width={size * 2} height={size * 2}>
+        <Svg width={width} height={size * 2}>
           <Path ref={this.path} fill="#656667" {...{ d }} />
         </Svg>
-      </Animated.View>
+      </>
     );
   }
 }
