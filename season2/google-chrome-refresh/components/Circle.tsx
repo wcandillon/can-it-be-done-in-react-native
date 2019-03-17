@@ -1,46 +1,50 @@
 import * as React from "react";
 import { Dimensions } from "react-native";
 import { DangerZone, Svg } from "expo";
-import * as shape from "d3-shape";
 
 const { Animated } = DangerZone;
 const {
   Value, interpolate, Extrapolate, call,
 } = Animated;
-const { Path } = Svg;
+const { Ellipse } = Svg;
 const { width } = Dimensions.get("window");
 
 interface CircleProps {
   size: number;
   x: Value;
-  inputRange: [number, number];
-  outputRange: [number, number];
+  max: number;
 }
 
 export default class Circle extends React.PureComponent<CircleProps> {
-  path = React.createRef();
+  ellipse = React.createRef();
 
   getPath = (x: number) => {
-    const { size } = this.props;
-    return shape.line().x(d => d.x).y(d => d.y).curve(shape.curveBasis)([
-      { x: 0, y: size },
-      { x: size, y: 0 },
-      { x: size * 4, y: size },
-      { x: size, y: size * 2 },
-      { x: 0, y: size },
-    ]);
+    const { size, max } = this.props;
+    console.log({ x });
+    // Normal
+    // cx={width / 2} cy={size} rx={size} ry={size}
+    // Right
+    // cx={width / 2 + size} cy={size} rx={size + size} ry={size}
+    // Left
+    // cx={width / 2 - size} cy={size} rx={size + size} ry={size}
+    const v = x > 0 ? Math.min(x, max) : Math.max(x, -max);
+    return {
+      cx: width / 2 + v,
+      cy: size,
+      rx: size + Math.abs(v),
+      ry: size,
+    };
   }
 
   morphPath = ([x]: [number]) => {
-    const d = this.getPath(x);
-    this.path.current.setNativeProps({ d });
+    const path = this.getPath(x);
+    this.ellipse.current.setNativeProps(path);
   };
 
   render() {
     const {
-      size, inputRange, outputRange, x,
+      size, x,
     } = this.props;
-    const d = this.getPath(0);
     return (
       <>
         <Animated.Code>
@@ -49,7 +53,7 @@ export default class Circle extends React.PureComponent<CircleProps> {
           }
         </Animated.Code>
         <Svg width={width} height={size * 2}>
-          <Path ref={this.path} fill="#656667" {...{ d }} />
+          <Ellipse ref={this.ellipse} cx={width / 2 - size} cy={size} rx={size + size} ry={size} fill="#656667" />
         </Svg>
       </>
     );

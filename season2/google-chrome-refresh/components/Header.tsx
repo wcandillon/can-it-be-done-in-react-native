@@ -62,8 +62,7 @@ export default class Header extends React.PureComponent<HeaderProps> {
         }}
         >
           <Circle
-            inputRange={[-width / 8, width / 8]}
-            outputRange={[-translation - size, translation + size]}
+            max={size}
             {...{ size, x }}
           />
         </Animated.View>
