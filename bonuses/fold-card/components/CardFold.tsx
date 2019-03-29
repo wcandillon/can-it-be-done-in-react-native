@@ -9,7 +9,7 @@ import Face, { CARD_WIDTH, CARD_HEIGHT } from "./Face";
 
 const { Animated } = DangerZone;
 const {
-  event, Value, Clock, block, cond, eq, set, debug,
+  event, Value, Clock, cond, eq,
 } = Animated;
 const { PinchGestureHandler, State } = GestureHandler;
 
