@@ -89,7 +89,6 @@ export default class NewTaskPart extends React.PureComponent<NewTaskPartProps, N
     return (
       <Animated.View
         style={{
-          backgroundColor: "green",
           width: CARD_WIDTH,
           height: CARD_HEIGHT / 2,
           transform: [
