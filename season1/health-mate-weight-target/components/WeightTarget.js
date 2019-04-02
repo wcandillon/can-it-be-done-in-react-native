@@ -136,17 +136,17 @@ export default class WeightTarget extends React.PureComponent<WeightTargetProps,
             <Animated.View ref={this.line} style={[styles.line, { transform: [{ scaleY }] }]} />
             <Animated.View style={[styles.oppositeCursor, { transform: [{ translateY: translateY2 }] }]} />
             <Animated.View style={[styles.cursor, { transform: [{ scale }] }]}>
-              <TextInput ref={this.relativeInput} style={styles.cursorLabel} />
+              <TextInput ref={this.relativeInput} underlineColorAndroid="transparent"  style={styles.cursorLabel} />
             </Animated.View>
             <Animated.View style={[styles.mainCursor, { transform: [{ translateY }] }]}>
-              <TextInput ref={this.totalInput} style={styles.mainCursorLabel} />
+              <TextInput ref={this.totalInput} underlineColorAndroid="transparent"  style={styles.mainCursorLabel} />
             </Animated.View>
           </Overlays>
           {
             visibleModal && (
               <StartModal>
                 <View style={styles.mainCursor}>
-                  <TextInput ref={this.modalInput} style={styles.mainCursorLabel} />
+                  <TextInput ref={this.modalInput} underlineColorAndroid="transparent"  style={styles.mainCursorLabel} />
                 </View>
               </StartModal>
             )
