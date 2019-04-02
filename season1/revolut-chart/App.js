@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {
-  StyleSheet, View, Dimensions, SafeAreaView, Animated, TextInput,
+  StyleSheet, View, Dimensions, SafeAreaView, Animated, TextInput, StatusBar,
 } from 'react-native';
 import { Svg } from 'expo';
 
@@ -80,6 +80,7 @@ export default class App extends React.Component {
     });
     return (
       <SafeAreaView style={styles.root}>
+        <StatusBar barStyle="dark-content" />
         <View style={styles.container}>
           <Svg {...{ width, height }}>
             <Defs>
@@ -127,6 +128,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    justifyContent: 'center',
   },
   container: {
     marginTop: 80,
