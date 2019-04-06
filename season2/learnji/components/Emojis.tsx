@@ -5,10 +5,12 @@ import {
 import { DangerZone } from "expo";
 
 const { Animated } = DangerZone;
-const { Value, event, interpolate } = Animated;
+const {
+  Value, event, interpolate, Extrapolate,
+} = Animated;
 const { width } = Dimensions.get("window");
 
-const padding = 8;
+const padding = 4;
 const fontSize = 92;
 export const EMOJI_WIDTH = fontSize + padding * 2;
 export const EMOJIS_OFFSET = (width - EMOJI_WIDTH) / 2;
@@ -49,11 +51,18 @@ export default ({
           const scale = interpolate(x, {
             inputRange: [EMOJI_WIDTH * (index - 1), EMOJI_WIDTH * index, EMOJI_WIDTH * (index + 1)],
             outputRange: [1, 1.3, 1],
+            extrapolate: Extrapolate.CLAMP,
+          });
+          const opacity = interpolate(x, {
+            inputRange: [EMOJI_WIDTH * (index - 1), EMOJI_WIDTH * index, EMOJI_WIDTH * (index + 1)],
+            outputRange: [0.5, 1, 0.5],
+            extrapolate: Extrapolate.CLAMP,
           });
           return (
             <Animated.View
               key={emoji}
               style={[styles.emoji, {
+                opacity,
                 transform: [
                   { translateX },
                   { scale },
