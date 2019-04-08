@@ -1,0 +1,8 @@
+{
+  "extends": "react-native-wcandillon",
+  "rules": {
+    "global-require": 0,
+    "react-native/no-color-literals": 0,
+    "react/no-array-index-key": 0
+  }
+}
