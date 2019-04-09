@@ -5,23 +5,25 @@ import { DangerZone } from "expo";
 import NewTaskPart, { TASK_HEIGHT } from "./NewTaskPart";
 
 const { Animated } = DangerZone;
-const { Value } = Animated;
+const { Value, sub, multiply } = Animated;
 
+type Value = typeof Value | string | number;
 interface NewTaskProps {
-  translateY: typeof Value;
-  scale: typeof Value;
-  backgroundColor: string | typeof Value;
+  index: Value;
+  scale: Value;
+  backgroundColor: Value;
 }
 
-export default function NewTask({ translateY, scale, backgroundColor } : NewTaskProps) {
+export default ({ index, scale, backgroundColor } : NewTaskProps) => {
   const task = "Create a new Task";
+  const translateY = sub(multiply(index, TASK_HEIGHT), TASK_HEIGHT / 2);
   return (
     <Animated.View style={[styles.container, { transform: [{ translateY }] }]}>
       <NewTaskPart isOnTop {...{ task, backgroundColor, scale }} />
       <NewTaskPart {...{ task, backgroundColor, scale }} />
     </Animated.View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,6 @@
 import interpolate from "color-interpolate";
 import * as React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { GestureHandler, DangerZone } from "expo";
 
 import Header, { HEADER_HEIGHT } from "./Header";
@@ -15,7 +15,7 @@ interface ListProps {
 const { PinchGestureHandler, State } = GestureHandler;
 const { Animated } = DangerZone;
 const {
-  event, Value, block, eq, cond, Clock, set, multiply, lessThan, divide, sub, floor, debug, add, round,
+  event, Value, block, eq, cond, Clock, set, multiply, lessThan, divide, sub, round, debug, diff, and, mutiply, neq,
 } = Animated;
 const colors = ["#C52B27", "#E1B044"];
 const palette = interpolate(colors);
@@ -25,15 +25,15 @@ export default class List extends React.PureComponent<ListProps> {
     const { tasks } = this.props;
     const step = 1 / tasks.length;
     const clock = new Clock();
-    const scaleRaw = new Value(0);
-    const focalYRaw = new Value(0);
+    const pinchScale = new Value(0);
+    const pinchFocalY = new Value(0);
     const focalY = new Value(0);
     const scale = new Value(0);
     const state = new Value(State.UNDETERMINED);
     const onGestureEvent = event([{
       nativeEvent: {
-        scale: scaleRaw,
-        focalY: focalYRaw,
+        scale: pinchScale,
+        focalY: pinchFocalY,
         state,
       },
     }]);
@@ -44,13 +44,20 @@ export default class List extends React.PureComponent<ListProps> {
     );
     const index = round(divide(focalY, TASK_HEIGHT));
     const scaleFactor = multiply(scale, TASK_HEIGHT / 4);
+    // See: https://github.com/kmagiera/react-native-gesture-handler/issues/553
+    const pinchBegan = Platform.OS === "ios"
+      ? eq(state, State.BEGAN)
+      : eq(diff(state), State.ACTIVE - State.BEGAN);
+    const getPinchScale = Platform.OS === "ios"
+      ? pinchScale
+      : cond(eq(state, State.BEGAN), 0, pinchScale);
     return (
       <View style={styles.container}>
         <Animated.Code>
           {
             () => block([
-              cond(eq(state, State.BEGAN), set(focalY, focalYRaw)),
-              set(scale, cond(eq(state, State.END), runSpring(clock, scaleRaw, 0), scaleRaw)),
+              cond(pinchBegan, set(focalY, pinchFocalY)),
+              set(scale, cond(eq(state, State.END), runSpring(clock, pinchScale, 0), getPinchScale)),
             ])
           }
         </Animated.Code>
@@ -61,8 +68,7 @@ export default class List extends React.PureComponent<ListProps> {
         >
           <Animated.View>
             <NewTask
-              translateY={sub(multiply(index, TASK_HEIGHT), TASK_HEIGHT / 2)}
-              {...{ backgroundColor, scale }}
+              {...{ backgroundColor, scale, index }}
             />
             {
               tasks.map((task, key) => {
