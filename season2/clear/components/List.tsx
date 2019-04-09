@@ -25,15 +25,15 @@ export default class List extends React.PureComponent<ListProps> {
     const { tasks } = this.props;
     const step = 1 / tasks.length;
     const clock = new Clock();
-    const scaleRaw = new Value(0);
-    const focalYRaw = new Value(0);
+    const pinchScale = new Value(0);
+    const pinchFocalY = new Value(0);
     const focalY = new Value(0);
     const scale = new Value(0);
     const state = new Value(State.UNDETERMINED);
     const onGestureEvent = event([{
       nativeEvent: {
-        scale: scaleRaw,
-        focalY: focalYRaw,
+        scale: pinchScale,
+        focalY: pinchFocalY,
         state,
       },
     }]);
@@ -49,15 +49,15 @@ export default class List extends React.PureComponent<ListProps> {
       ? eq(state, State.BEGAN)
       : eq(diff(state), State.ACTIVE - State.BEGAN);
     const getPinchScale = Platform.OS === "ios"
-      ? scaleRaw
-      : cond(eq(state, State.BEGAN), 0, scaleRaw);
+      ? pinchScale
+      : cond(eq(state, State.BEGAN), 0, pinchScale);
     return (
       <View style={styles.container}>
         <Animated.Code>
           {
             () => block([
-              cond(pinchBegan, set(focalY, focalYRaw)),
-              set(scale, cond(eq(state, State.END), runSpring(clock, scaleRaw, 0), getPinchScale)),
+              cond(pinchBegan, set(focalY, pinchFocalY)),
+              set(scale, cond(eq(state, State.END), runSpring(clock, pinchScale, 0), getPinchScale)),
             ])
           }
         </Animated.Code>
