@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     height: verticalPanHeight,
   },
   verticalPanContent: {
-    width: verticalPanHeight * 2 + EMOJIS_OFFSET * 2,
+    height: verticalPanHeight * 2 + EMOJIS_OFFSET * 2,
   },
   horizontalPan: {
     position: "absolute",
