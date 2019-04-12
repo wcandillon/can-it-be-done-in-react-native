@@ -5,25 +5,16 @@ import {
 import { DangerZone } from "expo";
 
 import Emojis, { EMOJI_WIDTH, EMOJIS_OFFSET } from "./components/Emojis";
+import { onScroll } from "./components/AnimationHelpers";
 
 const { Animated } = DangerZone;
-const { Value, event } = Animated;
+const { Value } = Animated;
 const emojis = require("./assets/emoji-db.json");
 
-const { width, height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 const horizontalPanHeight = EMOJI_WIDTH;
 const verticalPanHeight = height / 2 - horizontalPanHeight / 2;
 const numberOfEmojis = Object.keys(emojis).length;
-const onScroll = (contentOffset: { x?: typeof Value, y?: typeof Value }) => event(
-  [
-    {
-      nativeEvent: {
-        contentOffset,
-      },
-    },
-  ],
-  { useNativeDriver: true },
-);
 
 
 export default () => {
