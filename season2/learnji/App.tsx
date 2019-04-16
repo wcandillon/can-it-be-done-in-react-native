@@ -4,7 +4,9 @@ import {
 } from "react-native";
 import { DangerZone } from "expo";
 
-import Emojis, { EMOJI_WIDTH, EMOJIS_OFFSET } from "./components/Emojis";
+import Emojis from "./components/Emojis";
+import { EMOJI_WIDTH, EMOJIS_OFFSET } from "./components/Model";
+import EnglishWord from "./components/EnglishWord";
 import { onScroll } from "./components/AnimationHelpers";
 
 const { Animated } = DangerZone;
@@ -22,7 +24,11 @@ export default () => {
   const y = new Value(0);
   return (
     <View style={styles.container}>
-      <Emojis {...{ emojis, x, y }} />
+      <View style={styles.container} />
+      <Emojis {...{ emojis, x }} />
+      <View style={styles.container}>
+        <EnglishWord {...{ x, emojis }} />
+      </View>
       <Animated.ScrollView
         style={styles.verticalPan}
         contentContainerStyle={styles.verticalPanContent}
