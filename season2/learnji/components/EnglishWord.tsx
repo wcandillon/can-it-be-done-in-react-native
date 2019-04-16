@@ -7,7 +7,7 @@ import { Emojis, EMOJI_WIDTH } from "./Model";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, interpolate, block, call, divide, round, cond, neq, diff, Extrapolate,
+  Value, block, call, divide, round, cond, neq, diff,
 } = Animated;
 
 interface EnglishWordProps {
@@ -41,7 +41,12 @@ export default class EnglishWord extends React.PureComponent<EnglishWordProps> {
             ])
           }
         </Animated.Code>
-        <TextInput ref={this.text} underlineColorAndroid="transparent" style={styles.text} editable={false} />
+        <TextInput
+          ref={this.text}
+          underlineColorAndroid="transparent"
+          style={styles.text}
+          editable={false}
+        />
       </React.Fragment>
     );
   }
@@ -53,5 +58,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 48,
     color: "black",
+    fontWeight: "bold",
   },
 });

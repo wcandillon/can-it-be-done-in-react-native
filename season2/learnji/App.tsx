@@ -7,6 +7,7 @@ import { DangerZone } from "expo";
 import Emojis from "./components/Emojis";
 import { EMOJI_WIDTH, EMOJIS_OFFSET } from "./components/Model";
 import EnglishWord from "./components/EnglishWord";
+import Translations from "./components/Translations";
 import { onScroll } from "./components/AnimationHelpers";
 
 const { Animated } = DangerZone;
@@ -24,7 +25,9 @@ export default () => {
   const y = new Value(0);
   return (
     <View style={styles.container}>
-      <View style={styles.container} />
+      <View style={styles.container}>
+        <Translations {...{ emojis, y }} />
+      </View>
       <Emojis {...{ emojis, x }} />
       <View style={styles.container}>
         <EnglishWord {...{ x, emojis }} />
@@ -56,9 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   verticalPan: {
-    position: "absolute",
-    top: 0,
-    left: 0,
+    ...StyleSheet.absoluteFillObject,
     height: verticalPanHeight,
   },
   verticalPanContent: {
