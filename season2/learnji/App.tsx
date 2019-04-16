@@ -19,7 +19,6 @@ const horizontalPanHeight = EMOJI_WIDTH;
 const verticalPanHeight = height / 2 - horizontalPanHeight / 2;
 const numberOfEmojis = Object.keys(emojis).length;
 
-
 export default () => {
   const x = new Value(0);
   const y = new Value(0);
@@ -43,7 +42,7 @@ export default () => {
       <Animated.ScrollView
         style={styles.horizontalPan}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ width: EMOJI_WIDTH * numberOfEmojis }}
+        contentContainerStyle={styles.horizontalPanContent}
         onScroll={onScroll({ x })}
         scrollEventThrottle={1}
         snapToInterval={EMOJI_WIDTH}
@@ -59,16 +58,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   verticalPan: {
-    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
     height: verticalPanHeight,
   },
   verticalPanContent: {
-    height: verticalPanHeight * 2 + EMOJIS_OFFSET * 2,
+    height: (verticalPanHeight + EMOJIS_OFFSET) * 2,
   },
   horizontalPan: {
     position: "absolute",
     top: verticalPanHeight,
     left: 0,
     height: horizontalPanHeight,
+  },
+  horizontalPanContent: {
+    width: EMOJI_WIDTH * numberOfEmojis,
   },
 });
