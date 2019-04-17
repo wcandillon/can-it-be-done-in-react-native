@@ -7,7 +7,7 @@ const { Animated } = DangerZone;
 const {
   Value, debug, multiply, max,
 } = Animated;
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 interface TranslationsProps {
   y: typeof Value;
@@ -17,21 +17,22 @@ interface TranslationsProps {
 
 export default class Translations extends React.PureComponent<TranslationsProps> {
   render() {
-    const { y, max: maxVal } = this.props;
-    console.log(maxVal);
+    const { y, x, max: maxVal } = this.props;
     const translateY = max(multiply(y, -1), maxVal);
+    const translateX = multiply(x, -1);
     return (
-      <Animated.View style={{
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: "red",
-        transform: [{ translateY }],
-      }}
+      <Animated.View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          flexDirection: "row",
+          transform: [{ translateY }, { translateX }],
+        }}
+        horizontal
+        snapPoint={width}
       >
-        <Animated.Code>
-          {
-            () => debug("translateY", translateY)
-          }
-        </Animated.Code>
+        <View style={{ width, height: "100%", backgroundColor: "yellow" }} />
+        <View style={{ width, height: "100%", backgroundColor: "green" }} />
+        <View style={{ width, height: "100%", backgroundColor: "red" }} />
       </Animated.View>
     );
   }

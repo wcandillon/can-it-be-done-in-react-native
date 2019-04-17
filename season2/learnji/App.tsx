@@ -17,7 +17,7 @@ const {
 } = Animated;
 const emojis = require("./assets/emoji-db.json");
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 const horizontalPanHeight = EMOJI_WIDTH;
 const verticalPanHeight = height / 2 - horizontalPanHeight / 2;
 const numberOfEmojis = Object.keys(emojis).length;
@@ -61,6 +61,7 @@ export default class App extends React.PureComponent<{}> {
 
   render() {
     const { en } = this;
+    const slider = new Value(0);
     const x = new Value(0);
     const y = new Value(0);
     const index = round(divide(x, EMOJI_WIDTH));
@@ -76,6 +77,7 @@ export default class App extends React.PureComponent<{}> {
         <View style={styles.container}>
           <Translations
             max={(verticalPanHeight - 200) * -1}
+            x={slider}
             {...{ emojis, y }}
           />
         </View>
@@ -90,7 +92,18 @@ export default class App extends React.PureComponent<{}> {
           onScroll={onScroll({ y })}
           scrollEventThrottle={1}
           vertical
-        />
+        >
+          <Animated.ScrollView
+            style={StyleSheet.absoluteFillObject}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ width: width * 3 }}
+            onScroll={onScroll({ x: slider })}
+            scrollEventThrottle={1}
+            snapToInterval={width}
+            decelerationRate="fast"
+            horizontal
+          />
+        </Animated.ScrollView>
         <Animated.ScrollView
           style={styles.horizontalPan}
           showsHorizontalScrollIndicator={false}
