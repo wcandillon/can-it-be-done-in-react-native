@@ -4,17 +4,22 @@ import { DangerZone } from "expo";
 import { Emojis } from "./Model";
 
 const { Animated } = DangerZone;
-const { Value, debug } = Animated;
+const {
+  Value, debug, multiply, max,
+} = Animated;
 const { height } = Dimensions.get("window");
 
 interface TranslationsProps {
   y: typeof Value;
   emojis: Emojis;
+  max: number;
 }
 
 export default class Translations extends React.PureComponent<TranslationsProps> {
   render() {
-    const { y: translateY } = this.props;
+    const { y, max: maxVal } = this.props;
+    console.log(maxVal);
+    const translateY = max(multiply(y, -1), maxVal);
     return (
       <Animated.View style={{
         ...StyleSheet.absoluteFillObject,

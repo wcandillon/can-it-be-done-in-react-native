@@ -3,7 +3,7 @@ import React from "react";
 import {
   StyleSheet, View, Dimensions,
 } from "react-native";
-import { DangerZone } from "expo";
+import { DangerZone, Constants } from "expo";
 
 import Emojis from "./components/Emojis";
 import { EMOJI_WIDTH, EMOJIS_OFFSET } from "./components/Model";
@@ -48,14 +48,15 @@ export default class App extends React.PureComponent<{}> {
   setEmoji = ([index]) => requestAnimationFrame(() => {
     const emoji = Object.keys(emojis)[index];
     const translations = emojis[emoji];
-    this.en.setValue(_.capitalize(translations.en));
-    this.de.setValue(_.capitalize(translations.de));
-    this.it.setValue(_.capitalize(translations.it));
-    this.fr.setValue(_.capitalize(translations.fr));
-    this.es.setValue(_.capitalize(translations.es));
-    this.zhHant.setValue(_.capitalize(translations.zh_Hant));
-    this.ko.setValue(_.capitalize(translations.ko));
-    this.ja.setValue(_.capitalize(translations.ja));
+    const [en, de, it, fr, es, zhHant, ko, ja] = Object.keys(translations).map(lang => _.capitalize(translations[lang]));
+    this.en.setValue(en);
+    this.de.setValue(de);
+    this.it.setValue(it);
+    this.fr.setValue(fr);
+    this.es.setValue(es);
+    this.zhHant.setValue(zhHant);
+    this.ko.setValue(ko);
+    this.ja.setValue(ja);
   });
 
   render() {
@@ -73,7 +74,10 @@ export default class App extends React.PureComponent<{}> {
           }
         </Animated.Code>
         <View style={styles.container}>
-          <Translations {...{ emojis, y }} />
+          <Translations
+            max={(verticalPanHeight - 200) * -1}
+            {...{ emojis, y }}
+          />
         </View>
         <Emojis {...{ emojis, x }} />
         <View style={styles.container}>
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
     height: verticalPanHeight,
   },
   verticalPanContent: {
-    height: (verticalPanHeight + EMOJIS_OFFSET) * 2,
+    height: verticalPanHeight * 2,
   },
   horizontalPan: {
     position: "absolute",
