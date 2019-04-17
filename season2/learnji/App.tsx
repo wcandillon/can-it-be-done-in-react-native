@@ -13,7 +13,7 @@ import AnimatedText from "./components/AnimatedText";
 
 const { Animated } = DangerZone;
 const {
-  Value, block, call, divide, round, cond, neq, diff, set,
+  Value, block, call, divide, round, cond, neq, diff, set, onChange,
 } = Animated;
 const emojis = require("./assets/emoji-db.json");
 
@@ -25,106 +25,92 @@ const verticalPanHeight = height / 2 - horizontalPanHeight / 2;
 const numberOfEmojis = emojiList.length;
 const numberOfLanguages = Object.keys(emojis[emojiList[0]]).length;
 
-export default class App extends React.PureComponent<{}> {
-  en = new Value("");
-
-  de = new Value("");
-
-  it = new Value("");
-
-  fr = new Value("");
-
-  es = new Value("");
-
-  pt = new Value("");
-
-  zhHant = new Value("");
-
-  ko = new Value("");
-
-  ja = new Value("");
-
-  render() {
-    const {
-      en, de, it, fr, es, pt, zhHant, ko, ja,
-    } = this;
-    const slider = new Value(0);
-    const x = new Value(0);
-    const y = new Value(0);
-    const index = round(divide(x, EMOJI_WIDTH));
-    return (
+export default () => {
+  const en = new Value(emojis[emojiList[0]].en);
+  const de = new Value(emojis[emojiList[0]].de);
+  const it = new Value(emojis[emojiList[0]].it);
+  const fr = new Value(emojis[emojiList[0]].fr);
+  const es = new Value(emojis[emojiList[0]].es);
+  const pt = new Value(emojis[emojiList[0]].pt);
+  const zhHant = new Value(emojis[emojiList[0]].zh_Hant);
+  const ko = new Value(emojis[emojiList[0]].ko);
+  const ja = new Value(emojis[emojiList[0]].ja);
+  const slider = new Value(0);
+  const x = new Value(0);
+  const y = new Value(0);
+  const index = round(divide(x, EMOJI_WIDTH));
+  return (
+    <View style={styles.container}>
+      <Animated.Code>
+        {
+          () => block([
+            onChange(index, [
+              set(de, lookup(emojiList.map(emoji => emojis[emoji].de), index)),
+              set(en, lookup(emojiList.map(emoji => emojis[emoji].en), index)),
+              set(it, lookup(emojiList.map(emoji => emojis[emoji].it), index)),
+              set(fr, lookup(emojiList.map(emoji => emojis[emoji].fr), index)),
+              set(es, lookup(emojiList.map(emoji => emojis[emoji].es), index)),
+              set(pt, lookup(emojiList.map(emoji => emojis[emoji].pt), index)),
+              set(zhHant, lookup(emojiList.map(emoji => emojis[emoji].zh_Hant), index)),
+              set(ko, lookup(emojiList.map(emoji => emojis[emoji].ko), index)),
+              set(ja, lookup(emojiList.map(emoji => emojis[emoji].ja), index)),
+            ]),
+          ])
+        }
+      </Animated.Code>
       <View style={styles.container}>
-        <Animated.Code>
-          {
-            () => block([
-              cond(neq(diff(index), 0), [
-                set(de, lookup(emojiList.map(emoji => emojis[emoji].de), index)),
-                set(en, lookup(emojiList.map(emoji => emojis[emoji].en), index)),
-                set(it, lookup(emojiList.map(emoji => emojis[emoji].it), index)),
-                set(fr, lookup(emojiList.map(emoji => emojis[emoji].fr), index)),
-                set(es, lookup(emojiList.map(emoji => emojis[emoji].es), index)),
-                set(pt, lookup(emojiList.map(emoji => emojis[emoji].pt), index)),
-                set(zhHant, lookup(emojiList.map(emoji => emojis[emoji].zh_Hant), index)),
-                set(ko, lookup(emojiList.map(emoji => emojis[emoji].ko), index)),
-                set(ja, lookup(emojiList.map(emoji => emojis[emoji].ja), index)),
-              ]),
-            ])
-          }
-        </Animated.Code>
-        <View style={styles.container}>
-          <Translations
-            max={(verticalPanHeight - 150) * -1}
-            x={slider}
-            translations={{
-              de,
-              it,
-              fr,
-              es,
-              pt,
-              zhHant,
-              ko,
-              ja,
-            }}
-            {...{ emojis, y }}
-          />
-        </View>
-        <Emojis {...{ emojis, x }} />
-        <View style={styles.container}>
-          <AnimatedText style={styles.english} text={en} />
-        </View>
+        <Translations
+          max={(verticalPanHeight - 150) * -1}
+          x={slider}
+          translations={{
+            de,
+            it,
+            fr,
+            es,
+            pt,
+            zhHant,
+            ko,
+            ja,
+          }}
+          {...{ emojis, y }}
+        />
+      </View>
+      <Emojis {...{ emojis, x }} />
+      <View style={styles.container}>
+        <AnimatedText style={styles.english} text={en} />
+      </View>
+      <Animated.ScrollView
+        style={styles.verticalPan}
+        contentContainerStyle={styles.verticalPanContent}
+        showsVerticalScrollIndicator={false}
+        onScroll={onScroll({ y })}
+        scrollEventThrottle={1}
+        vertical
+      >
         <Animated.ScrollView
-          style={styles.verticalPan}
-          contentContainerStyle={styles.verticalPanContent}
-          showsVerticalScrollIndicator={false}
-          onScroll={onScroll({ y })}
-          scrollEventThrottle={1}
-          vertical
-        >
-          <Animated.ScrollView
-            style={StyleSheet.absoluteFillObject}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ width: width * (numberOfLanguages - 1) }}
-            onScroll={onScroll({ x: slider })}
-            scrollEventThrottle={1}
-            snapToInterval={width}
-            decelerationRate="fast"
-            horizontal
-          />
-        </Animated.ScrollView>
-        <Animated.ScrollView
-          style={styles.horizontalPan}
+          style={StyleSheet.absoluteFillObject}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.horizontalPanContent}
-          onScroll={onScroll({ x })}
+          contentContainerStyle={{ width: width * (numberOfLanguages - 1) }}
+          onScroll={onScroll({ x: slider })}
           scrollEventThrottle={1}
-          snapToInterval={EMOJI_WIDTH}
+          snapToInterval={width}
           decelerationRate="fast"
           horizontal
         />
-      </View>
-    );
-  }
-}
+      </Animated.ScrollView>
+      <Animated.ScrollView
+        style={styles.horizontalPan}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.horizontalPanContent}
+        onScroll={onScroll({ x })}
+        scrollEventThrottle={1}
+        snapToInterval={EMOJI_WIDTH}
+        decelerationRate="fast"
+        horizontal
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
