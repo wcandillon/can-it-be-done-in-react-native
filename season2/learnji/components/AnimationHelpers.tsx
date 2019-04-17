@@ -20,6 +20,7 @@ const {
   divide,
   sub,
   color,
+  eq,
   Extrapolate,
   Clock,
 } = Animated;
@@ -42,6 +43,8 @@ export const onScroll = (contentOffset: { x?: typeof Value, y?: typeof Value }) 
   ],
   { useNativeDriver: true },
 );
+
+export const lookup = (array: typeof Value[], index: typeof Value, notFound: Value): Value => array.reduce((acc, v, i) => cond(eq(i, index), v, acc), notFound);
 
 export function runSpring(clock: Clock, value: Val, dest: Val) {
   const state = {
