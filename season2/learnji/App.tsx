@@ -21,7 +21,7 @@ const { height, width } = Dimensions.get("window");
 const horizontalPanHeight = EMOJI_WIDTH;
 const verticalPanHeight = height / 2 - horizontalPanHeight / 2;
 const numberOfEmojis = Object.keys(emojis).length;
-
+const numberOfLanguages = Object.keys(emojis[Object.keys(emojis)[0]]).length;
 export default class App extends React.PureComponent<{}> {
   en = new Value("");
 
@@ -48,19 +48,22 @@ export default class App extends React.PureComponent<{}> {
   setEmoji = ([index]) => requestAnimationFrame(() => {
     const emoji = Object.keys(emojis)[index];
     const translations = emojis[emoji];
-    const [en, de, it, fr, es, zhHant, ko, ja] = Object.keys(translations).map(lang => _.capitalize(translations[lang]));
+    const [de, it, fr, es, en, pt, zhHant, ko, ja] = Object.keys(translations).map(lang => _.capitalize(translations[lang]));
     this.en.setValue(en);
     this.de.setValue(de);
     this.it.setValue(it);
     this.fr.setValue(fr);
     this.es.setValue(es);
+    this.pt.setValue(pt);
     this.zhHant.setValue(zhHant);
     this.ko.setValue(ko);
     this.ja.setValue(ja);
   });
 
   render() {
-    const { en } = this;
+    const {
+      en, de, it, fr, es, pt, zhHant, ko, ja,
+    } = this;
     const slider = new Value(0);
     const x = new Value(0);
     const y = new Value(0);
@@ -78,6 +81,16 @@ export default class App extends React.PureComponent<{}> {
           <Translations
             max={(verticalPanHeight - 200) * -1}
             x={slider}
+            translations={{
+              de,
+              it,
+              fr,
+              es,
+              pt,
+              zhHant,
+              ko,
+              ja,
+            }}
             {...{ emojis, y }}
           />
         </View>
@@ -96,7 +109,7 @@ export default class App extends React.PureComponent<{}> {
           <Animated.ScrollView
             style={StyleSheet.absoluteFillObject}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ width: width * 3 }}
+            contentContainerStyle={{ width: width * (numberOfLanguages - 1) }}
             onScroll={onScroll({ x: slider })}
             scrollEventThrottle={1}
             snapToInterval={width}
