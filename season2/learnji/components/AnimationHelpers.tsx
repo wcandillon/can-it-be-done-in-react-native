@@ -44,7 +44,7 @@ export const onScroll = (contentOffset: { x?: typeof Value, y?: typeof Value }) 
   { useNativeDriver: true },
 );
 
-export const lookup = (array: typeof Value[], index: typeof Value, notFound: Value): Value => array.reduce((acc, v, i) => cond(eq(i, index), v, acc), notFound);
+export const lookup = (array: typeof Value[], index: typeof Value, notFound: typeof Value = new Value("null")): Value => array.reduce((acc, v, i) => cond(eq(i, index), v, acc), notFound);
 
 export function runSpring(clock: Clock, value: Val, dest: Val) {
   const state = {

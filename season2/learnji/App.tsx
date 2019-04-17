@@ -8,20 +8,23 @@ import { DangerZone, Constants } from "expo";
 import Emojis from "./components/Emojis";
 import { EMOJI_WIDTH, EMOJIS_OFFSET } from "./components/Model";
 import Translations from "./components/Translations";
-import { onScroll } from "./components/AnimationHelpers";
+import { onScroll, lookup } from "./components/AnimationHelpers";
 import AnimatedText from "./components/AnimatedText";
 
 const { Animated } = DangerZone;
 const {
-  Value, block, call, divide, round, cond, neq, diff,
+  Value, block, call, divide, round, cond, neq, diff, set,
 } = Animated;
 const emojis = require("./assets/emoji-db.json");
+
+const emojiList = Object.keys(emojis);
 
 const { height, width } = Dimensions.get("window");
 const horizontalPanHeight = EMOJI_WIDTH;
 const verticalPanHeight = height / 2 - horizontalPanHeight / 2;
-const numberOfEmojis = Object.keys(emojis).length;
-const numberOfLanguages = Object.keys(emojis[Object.keys(emojis)[0]]).length;
+const numberOfEmojis = emojiList.length;
+const numberOfLanguages = Object.keys(emojis[emojiList[0]]).length;
+
 export default class App extends React.PureComponent<{}> {
   en = new Value("");
 
@@ -41,25 +44,6 @@ export default class App extends React.PureComponent<{}> {
 
   ja = new Value("");
 
-  componentDidMount() {
-    this.setEmoji([0]);
-  }
-
-  setEmoji = ([index]) => requestAnimationFrame(() => {
-    const emoji = Object.keys(emojis)[index];
-    const translations = emojis[emoji];
-    const [de, it, fr, es, en, pt, zhHant, ko, ja] = Object.keys(translations).map(lang => _.capitalize(translations[lang]));
-    this.en.setValue(en);
-    this.de.setValue(de);
-    this.it.setValue(it);
-    this.fr.setValue(fr);
-    this.es.setValue(es);
-    this.pt.setValue(pt);
-    this.zhHant.setValue(zhHant);
-    this.ko.setValue(ko);
-    this.ja.setValue(ja);
-  });
-
   render() {
     const {
       en, de, it, fr, es, pt, zhHant, ko, ja,
@@ -73,7 +57,17 @@ export default class App extends React.PureComponent<{}> {
         <Animated.Code>
           {
             () => block([
-              cond(neq(diff(index), 0), call([index], this.setEmoji)),
+              cond(neq(diff(index), 0), [
+                set(de, lookup(emojiList.map(emoji => emojis[emoji].de), index)),
+                set(en, lookup(emojiList.map(emoji => emojis[emoji].en), index)),
+                set(it, lookup(emojiList.map(emoji => emojis[emoji].it), index)),
+                set(fr, lookup(emojiList.map(emoji => emojis[emoji].fr), index)),
+                set(es, lookup(emojiList.map(emoji => emojis[emoji].es), index)),
+                set(pt, lookup(emojiList.map(emoji => emojis[emoji].pt), index)),
+                set(zhHant, lookup(emojiList.map(emoji => emojis[emoji].zh_Hant), index)),
+                set(ko, lookup(emojiList.map(emoji => emojis[emoji].ko), index)),
+                set(ja, lookup(emojiList.map(emoji => emojis[emoji].ja), index)),
+              ]),
             ])
           }
         </Animated.Code>
