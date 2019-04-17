@@ -4,6 +4,7 @@ import { TextInput, StyleSheet } from "react-native";
 import { DangerZone } from "expo";
 
 import { Emojis, EMOJI_WIDTH } from "./Model";
+import Text from "./AnimatedText";
 
 const { Animated } = DangerZone;
 const {
@@ -16,7 +17,7 @@ interface EnglishWordProps {
 }
 
 export default class EnglishWord extends React.PureComponent<EnglishWordProps> {
-  text = React.createRef();
+  text = new Value("");
 
   componentDidMount() {
     this.setEmoji([0]);
@@ -26,10 +27,11 @@ export default class EnglishWord extends React.PureComponent<EnglishWordProps> {
     const { emojis } = this.props;
     const emoji = Object.keys(emojis)[index];
     const text = _.capitalize(emojis[emoji].en);
-    this.text.current.setNativeProps({ text });
+    this.text.setValue(text);
   });
 
   render() {
+    const { text } = this;
     const { x } = this.props;
     const index = round(divide(x, EMOJI_WIDTH));
     return (
@@ -41,12 +43,7 @@ export default class EnglishWord extends React.PureComponent<EnglishWordProps> {
             ])
           }
         </Animated.Code>
-        <TextInput
-          ref={this.text}
-          underlineColorAndroid="transparent"
-          style={styles.text}
-          editable={false}
-        />
+        <AnimatedText style={styles.text} {...{ text }} />
       </React.Fragment>
     );
   }
