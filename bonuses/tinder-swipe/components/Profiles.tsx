@@ -1,9 +1,19 @@
 import * as React from "react";
-import { View, StyleSheet, SafeAreaView } from "react-native";
+import {
+  View, StyleSheet, SafeAreaView, Dimensions,
+} from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
+import { DangerZone } from "expo";
 
 import { Profile } from "./Model";
 import Card from "./Card";
+import GestureHandler from "./GestureHandler2";
+
+const { Animated } = DangerZone;
+const {
+  Value, interpolate, concat, Extrapolate, debug, block, sub, multiply,
+} = Animated;
+const { width, height } = Dimensions.get("window");
 
 interface ProfilesProps {
   profiles: Profile[];
@@ -22,6 +32,36 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     const { profiles } = this.props;
     const { index } = this.state;
     const profile = profiles[index];
+    const x = new Value(0);
+    const y = new Value(0);
+    const deltaX = width / 2;
+    const deltaY = height / 2;
+    const rotateZ = concat(
+      interpolate(x, {
+        inputRange: [-1 * deltaX, deltaX],
+        outputRange: [15, -15],
+        extrapolate: Extrapolate.CLAMP,
+      }),
+      "deg",
+    );
+    const likeOpacity = interpolate(x, {
+      inputRange: [0, deltaX / 4],
+      outputRange: [0, 1],
+    });
+    const nopeOpacity = interpolate(x, {
+      inputRange: [-1 * deltaX / 4, 0],
+      outputRange: [1, 0],
+    });
+    const translateX = x;
+    const translateY = y;
+    const style = {
+      ...StyleSheet.absoluteFillObject,
+      transform: [
+        { translateX },
+        { translateY },
+        { rotateZ },
+      ],
+    };
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
@@ -29,7 +69,10 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
           <Icon name="message-circle" size={32} color="gray" />
         </View>
         <View style={styles.cards}>
-          <Card {...{ profile }} />
+          <Animated.View {...{ style }}>
+            <Card {...{ profile, likeOpacity, nopeOpacity }} />
+          </Animated.View>
+          <GestureHandler {...{ x, y }} />
         </View>
         <View style={styles.footer}>
           <View style={styles.circle}>
@@ -57,7 +100,6 @@ const styles = StyleSheet.create({
   cards: {
     flex: 1,
     margin: 8,
-    zIndex: 100,
   },
   footer: {
     flexDirection: "row",
