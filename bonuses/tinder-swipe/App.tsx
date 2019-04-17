@@ -1,21 +1,64 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+/* eslint-disable global-require */
+import * as React from "react";
+import { Asset, AppLoading } from "expo";
 
-export default class App extends React.Component {
+import { Profile } from "./components/Model";
+import Profiles from "./components/Profiles";
+
+const profiles: Profile[] = [
+  {
+    id: "1",
+    name: "Caroline",
+    age: 24,
+    profile: require("./assets/profiles/1.jpg"),
+  },
+  {
+    id: "2",
+    name: "Jack",
+    age: 30,
+    profile: require("./assets/profiles/2.jpg"),
+  },
+  {
+    id: "3",
+    name: "Anet",
+    age: 21,
+    profile: require("./assets/profiles/3.jpg"),
+  },
+  {
+    id: "4",
+    name: "John",
+    age: 28,
+    profile: require("./assets/profiles/4.jpg"),
+  },
+];
+
+interface AppProps {
+
+}
+
+interface AppState {
+  ready: boolean;
+}
+
+export default class App extends React.Component<AppProps, AppState> {
+  state = {
+    ready: false,
+  };
+
+  async componentDidMount() {
+    await Promise.all(profiles.map(profile => Asset.loadAsync(profile.profile)));
+    this.setState({ ready: true });
+  }
+
   render() {
+    const { ready } = this.state;
+    if (!ready) {
+      return (
+        <AppLoading />
+      );
+    }
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <Profiles {...{ profiles }} />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
