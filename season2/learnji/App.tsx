@@ -23,7 +23,23 @@ const verticalPanHeight = height / 2 - horizontalPanHeight / 2;
 const numberOfEmojis = Object.keys(emojis).length;
 
 export default class App extends React.PureComponent<{}> {
-  english = new Value("");
+  en = new Value("");
+
+  de = new Value("");
+
+  it = new Value("");
+
+  fr = new Value("");
+
+  es = new Value("");
+
+  pt = new Value("");
+
+  zhHant = new Value("");
+
+  ko = new Value("");
+
+  ja = new Value("");
 
   componentDidMount() {
     this.setEmoji([0]);
@@ -31,12 +47,19 @@ export default class App extends React.PureComponent<{}> {
 
   setEmoji = ([index]) => requestAnimationFrame(() => {
     const emoji = Object.keys(emojis)[index];
-    const english = _.capitalize(emojis[emoji].en);
-    this.english.setValue(english);
+    const translations = emojis[emoji];
+    this.en.setValue(_.capitalize(translations.en));
+    this.de.setValue(_.capitalize(translations.de));
+    this.it.setValue(_.capitalize(translations.it));
+    this.fr.setValue(_.capitalize(translations.fr));
+    this.es.setValue(_.capitalize(translations.es));
+    this.zhHant.setValue(_.capitalize(translations.zh_Hant));
+    this.ko.setValue(_.capitalize(translations.ko));
+    this.ja.setValue(_.capitalize(translations.ja));
   });
 
   render() {
-    const { english } = this;
+    const { en } = this;
     const x = new Value(0);
     const y = new Value(0);
     const index = round(divide(x, EMOJI_WIDTH));
@@ -54,7 +77,7 @@ export default class App extends React.PureComponent<{}> {
         </View>
         <Emojis {...{ emojis, x }} />
         <View style={styles.container}>
-          <AnimatedText style={styles.english} text={english} />
+          <AnimatedText style={styles.english} text={en} />
         </View>
         <Animated.ScrollView
           style={styles.verticalPan}
