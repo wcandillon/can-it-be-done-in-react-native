@@ -79,7 +79,7 @@ export default class App extends React.PureComponent<{}> {
         </Animated.Code>
         <View style={styles.container}>
           <Translations
-            max={(verticalPanHeight - 200) * -1}
+            max={(verticalPanHeight - 150) * -1}
             x={slider}
             translations={{
               de,
