@@ -4,7 +4,7 @@ import { TextInput, StyleSheet } from "react-native";
 import { DangerZone } from "expo";
 
 import { Emojis, EMOJI_WIDTH } from "./Model";
-import Text from "./AnimatedText";
+import AnimatedText from "./AnimatedText";
 
 const { Animated } = DangerZone;
 const {
