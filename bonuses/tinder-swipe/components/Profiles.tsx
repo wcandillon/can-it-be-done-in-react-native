@@ -6,14 +6,20 @@ import { Feather as Icon } from "@expo/vector-icons";
 import { DangerZone } from "expo";
 
 import { Profile } from "./Model";
+import Interactable from "./Interactable";
+import { φ } from "./AnimationHelpers";
 import Card from "./Card";
-import GestureHandler from "./GestureHandler2";
 
 const { Animated } = DangerZone;
 const {
   Value, interpolate, concat, Extrapolate, debug, block, sub, multiply,
 } = Animated;
 const { width, height } = Dimensions.get("window");
+const deltaX = width / 2;
+const w = width - 32;
+const h = w * φ;
+const α = Math.PI / 12;
+const A = width * Math.cos(α) + height * Math.sin(α);
 
 interface ProfilesProps {
   profiles: Profile[];
@@ -28,21 +34,26 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     index: 0,
   };
 
+  onSnap = ({ nativeEvent: { x } }) => {
+    const { index } = this.state;
+    if (x !== 0) {
+      this.setState({ index: index + 1 });
+    }
+  }
+
   render() {
     const { profiles } = this.props;
     const { index } = this.state;
     const profile = profiles[index];
     const x = new Value(0);
     const y = new Value(0);
-    const deltaX = width / 2;
-    const deltaY = height / 2;
     const rotateZ = concat(
       interpolate(x, {
         inputRange: [-1 * deltaX, deltaX],
-        outputRange: [15, -15],
+        outputRange: [α, -1 * α],
         extrapolate: Extrapolate.CLAMP,
       }),
-      "deg",
+      "rad",
     );
     const likeOpacity = interpolate(x, {
       inputRange: [0, deltaX / 4],
@@ -72,7 +83,13 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
           <Animated.View {...{ style }}>
             <Card {...{ profile, likeOpacity, nopeOpacity }} />
           </Animated.View>
-          <GestureHandler {...{ x, y }} />
+          <Interactable
+            onSnap={this.onSnap}
+            animatedValueX={x}
+            animatedValueY={y}
+            snapPoints={[{ x: -1 * A }, { x: 0 }, { x: A }]}
+            style={StyleSheet.absoluteFill}
+          />
         </View>
         <View style={styles.footer}>
           <View style={styles.circle}>
@@ -91,17 +108,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fbfaff",
+    justifyContent: "space-evenly",
   },
   header: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 16,
   },
   cards: {
-    flex: 1,
-    margin: 8,
+    width: w,
+    height: h,
+    marginLeft: 16,
   },
   footer: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-evenly",
     padding: 16,

@@ -29,6 +29,7 @@ type Clock = typeof Clock;
 type Val = typeof Value | number;
 type Color = { r: number, g: number, b: number };
 
+export const φ = (1 + Math.sqrt(5)) / 2;
 export const toRad = (deg: Val): Val => multiply(deg, Math.PI / 180);
 export const toDeg = (rad: Val): Val => multiply(rad, 180 / Math.PI);
 export const translateZ = (perspective: Val, x: Val) => divide(perspective, sub(perspective, x));
