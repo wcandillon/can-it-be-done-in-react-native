@@ -1,3 +1,8 @@
+/*
+ * ⚠️️️️️️ Currently this doesn't work on Android because of this bug: ️
+ * https://github.com/kmagiera/react-native-reanimated/issues/165
+ * Will provide an alternative implementation soon.
+ */
 import * as _ from "lodash";
 import React from "react";
 import {
