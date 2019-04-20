@@ -34,6 +34,8 @@ export default () => (
       strokeWidth={padding * 2}
       stroke="url(#grad)"
       fill="none"
+      strokeDasharray={Math.PI * radius}
+      strokeDashoffset={radius}
       {...{ d }}
     />
   </Svg>
