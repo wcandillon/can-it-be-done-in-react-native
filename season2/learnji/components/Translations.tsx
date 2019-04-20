@@ -4,7 +4,7 @@ import {
 } from "react-native";
 import { DangerZone } from "expo";
 import { Emojis } from "./Model";
-import AnimatedText from "./AnimatedText";
+import Translation from "./Translation";
 
 const { Animated } = DangerZone;
 const {
@@ -39,22 +39,13 @@ interface TranslationsProps {
   y: typeof Value;
   emojis: Emojis;
   max: number;
-  translations: {
-    de: typeof Value;
-    it: typeof Value,
-    fr: typeof Value,
-    es: typeof Value,
-    pt: typeof Value,
-    zhHant: typeof Value,
-    ko: typeof Value,
-    ja: typeof Value,
-  }
+  index: typeof Value;
 }
 
 export default class Translations extends React.PureComponent<TranslationsProps> {
   render() {
     const {
-      y, x, max: maxVal, translations,
+      y, x, max: maxVal, index,
     } = this.props;
     const translateY = max(multiply(y, -1), maxVal);
     const translateX = multiply(x, -1);
@@ -72,7 +63,7 @@ export default class Translations extends React.PureComponent<TranslationsProps>
           Object.keys(colors).map(lang => (
             <SafeAreaView key={lang} style={{ width, height: "100%", backgroundColor: colors[lang] }}>
               <Text style={styles.flag}>{flags[lang]}</Text>
-              <AnimatedText text={translations[lang]} style={styles.translation} />
+              <Translation style={styles.translation} {...{lang, index}} />
             </SafeAreaView>
           ))
         }

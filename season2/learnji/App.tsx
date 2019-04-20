@@ -1,7 +1,7 @@
 /*
- * ⚠️️️️️️ Currently this doesn't work on Android because of this bug: ️
+ * ⚠️️️️️️ The implementation is different from the one at
+ * https://www.youtube.com/watch?v=Uw0XWM3Vz-o because of this bug: ️
  * https://github.com/kmagiera/react-native-reanimated/issues/165
- * Will provide an alternative implementation soon.
  */
 import * as _ from "lodash";
 import React from "react";
@@ -14,7 +14,7 @@ import Emojis from "./components/Emojis";
 import { EMOJI_WIDTH, EMOJIS_OFFSET } from "./components/Model";
 import Translations from "./components/Translations";
 import { onScroll, lookup } from "./components/AnimationHelpers";
-import AnimatedText from "./components/AnimatedText";
+import Translation from "./components/Translation";
 
 const { Animated } = DangerZone;
 const {
@@ -31,40 +31,22 @@ const numberOfEmojis = emojiList.length;
 const numberOfLanguages = Object.keys(emojis[emojiList[0]]).length;
 
 export default () => {
-  const translations = {
-    en: new Value(emojis[emojiList[0]].en),
-    de: new Value(emojis[emojiList[0]].de),
-    it: new Value(emojis[emojiList[0]].it),
-    fr: new Value(emojis[emojiList[0]].fr),
-    es: new Value(emojis[emojiList[0]].es),
-    pt: new Value(emojis[emojiList[0]].pt),
-    zhHant: new Value(emojis[emojiList[0]].zh_Hant),
-    ko: new Value(emojis[emojiList[0]].ko),
-    ja: new Value(emojis[emojiList[0]].ja),
-  };
   const slider = new Value(0);
   const x = new Value(0);
   const y = new Value(0);
   const index = round(divide(x, EMOJI_WIDTH));
   return (
     <View style={styles.container}>
-      <Animated.Code>
-        {
-          () => onChange(index,
-            Object.keys(translations)
-              .map(lang => set(translations[lang], lookup(emojiList.map(emoji => emojis[emoji].de), index))))
-        }
-      </Animated.Code>
       <View style={styles.container}>
         <Translations
           max={(verticalPanHeight - 150) * -1}
           x={slider}
-          {...{ emojis, y, translations }}
+          {...{ emojis, y, index }}
         />
       </View>
       <Emojis {...{ emojis, x }} />
       <View style={styles.container}>
-        <AnimatedText style={styles.english} text={translations.en} />
+        <Translation style={styles.english} lang="en" {...{ index }} />
       </View>
       <Animated.ScrollView
         style={styles.verticalPan}
