@@ -34,22 +34,20 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
     index: 0,
   };
 
-  x = new Value(0);
-
-  y = new Value(0);
 
   onSnap = ({ nativeEvent: { x } }) => {
     const { index } = this.state;
     if (x !== 0) {
       this.setState({ index: index + 1 });
-      console.log("Done!");
     }
   }
 
   render() {
-    const { x, y, onSnap } = this;
+    const { onSnap } = this;
     const { profiles } = this.props;
     const { index } = this.state;
+    const x = new Value(0);
+    const y = new Value(0);
     const profile = profiles[index];
     const rotateZ = concat(
       interpolate(x, {
@@ -88,6 +86,7 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
             <Card {...{ profile, likeOpacity, nopeOpacity }} />
           </Animated.View>
           <Interactable
+            key={index}
             animatedValueX={x}
             animatedValueY={y}
             snapPoints={[{ x: -1 * A }, { x: 0 }, { x: A }]}
