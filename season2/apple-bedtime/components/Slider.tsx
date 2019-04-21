@@ -1,7 +1,9 @@
 import * as React from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, View, StyleSheet } from "react-native";
 import { Svg, DangerZone } from "expo";
 import SVGPath from "art/modes/svg/path";
+
+import Cursor from "./Cursor";
 
 const { Animated } = DangerZone;
 const { Value } = Animated;
@@ -22,27 +24,34 @@ const d = SVGPath()
   .arcTo(radius + padding, radius * 2 + padding, radius)
   .arcTo(padding, radius + padding, radius)
   .toSVG();
-const start = "#f7cd46";
-const end = "#ef9837";
-// interface SliderProps {}
 
 export default () => {
-  const strokeDasharray = new Value(Math.PI * radius);
-  const strokeDashoffset = new Value(radius);
+  const strokeDasharray = new Value(0); // Math.PI * radius
+  const strokeDashoffset = new Value(0); // radius
   return (
-    <Svg width={size} height={size}>
-      <Defs>
-        <LinearGradient id="grad" x1="0" y1="0" x2="100%" y2="0">
-          <Stop offset="0" stopColor={start} stopOpacity="1" />
-          <Stop offset="1" stopColor={end} stopOpacity="1" />
-        </LinearGradient>
-      </Defs>
-      <AnimatedPath
-        strokeWidth={padding * 2}
-        stroke="url(#grad)"
-        fill="none"
-        {...{ d, strokeDasharray, strokeDashoffset }}
-      />
-    </Svg>
+    <View style={styles.container}>
+      <Svg style={StyleSheet.absoluteFill}>
+        <Defs>
+          <LinearGradient id="grad" x1="0" y1="0" x2="100%" y2="0">
+            <Stop offset="0" stopColor="#f7cd46" />
+            <Stop offset="1" stopColor="#ef9837" />
+          </LinearGradient>
+        </Defs>
+        <AnimatedPath
+          strokeWidth={padding * 2}
+          stroke="url(#grad)"
+          fill="none"
+          {...{ d, strokeDasharray, strokeDashoffset }}
+        />
+      </Svg>
+      <Cursor />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    height: size,
+    width: size,
+  },
+});
