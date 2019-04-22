@@ -1,16 +1,21 @@
 import * as React from "react";
 import { DangerZone, GestureHandler } from "expo";
 import { StyleSheet } from "react-native";
+import { number } from "prop-types";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, block, cond, eq, set, add,
+  Value, event, block, cond, eq, set, add, sqrt, pow, sub, min, max, debug, multiply, lessThan,
 } = Animated;
 const { PanGestureHandler, State } = GestureHandler;
+const addBounds = (n: typeof Value, lowerBound: number, upperBound: number): typeof Value => min(max(n, lowerBound), upperBound);
+const circle = (x: typeof Value, radius: number, top: typeof Value): typeof Value => multiply(sqrt(sub(pow(radius, 2), pow(x, 2))), cond(top, -1, 1));
 
-interface CursorProps {}
+interface CursorProps {
+  radius: number;
+}
 
-export default () => {
+export default ({ radius }: CursorProps) => {
   const x = new Value(0);
   const y = new Value(0);
   const xOffset = new Value(0);
@@ -32,21 +37,22 @@ export default () => {
     ],
     { useNativeDriver: true },
   );
+
   return (
     <>
       <Animated.Code>
         {
           () => block([
             cond(eq(state, State.ACTIVE), [
-              set(x, add(xOffset, translationX)),
-              set(y, add(yOffset, translationY)),
+              set(x, addBounds(add(xOffset, translationX), 0, radius * 2)),
+              set(y, addBounds(add(yOffset, translationY), 0, radius * 2)),
             ]),
             cond(eq(state, State.END), [
               set(xOffset, x),
               set(yOffset, y),
             ]),
             set(translateX, x),
-            set(translateY, y),
+            set(translateY, add(circle(sub(x, radius), radius, lessThan(y, radius)), radius)),
           ])
         }
       </Animated.Code>

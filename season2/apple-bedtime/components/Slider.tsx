@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
 import { Svg, DangerZone } from "expo";
-import SVGPath from "art/modes/svg/path";
 
 import Cursor from "./Cursor";
 
@@ -13,21 +12,13 @@ const size = width - 32;
 const padding = 25;
 const radius = size / 2 - padding;
 const {
-  Defs, LinearGradient, Stop, Path,
+  Defs, LinearGradient, Stop, Circle,
 } = Svg;
-const AnimatedPath = Animated.createAnimatedComponent(Path);
-
-const d = SVGPath()
-  .moveTo(padding, radius + padding)
-  .arcTo(radius + padding, padding, radius)
-  .arcTo(radius * 2 + padding, radius + padding, radius)
-  .arcTo(radius + padding, radius * 2 + padding, radius)
-  .arcTo(padding, radius + padding, radius)
-  .toSVG();
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default () => {
-  const strokeDasharray = new Value(0); // Math.PI * radius
-  const strokeDashoffset = new Value(0); // radius
+  const strokeDasharray = new Value(0); // Math.PI * radius);
+  const strokeDashoffset = new Value(0); // radius);
   return (
     <View style={styles.container}>
       <Svg style={StyleSheet.absoluteFill}>
@@ -37,14 +28,17 @@ export default () => {
             <Stop offset="1" stopColor="#ef9837" />
           </LinearGradient>
         </Defs>
-        <AnimatedPath
+        <AnimatedCircle
           strokeWidth={padding * 2}
           stroke="url(#grad)"
           fill="none"
-          {...{ d, strokeDasharray, strokeDashoffset }}
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          {...{ strokeDasharray, strokeDashoffset }}
         />
       </Svg>
-      <Cursor />
+      <Cursor {...{ radius }} />
     </View>
   );
 };
