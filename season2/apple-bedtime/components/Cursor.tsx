@@ -5,7 +5,7 @@ import { number } from "prop-types";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, block, cond, eq, set, add, sqrt, pow, sub, min, max, debug, multiply, lessThan,
+  Value, event, block, cond, eq, set, add, sqrt, pow, sub, min, max, debug, multiply, lessThan, atan, divide, sin, cos,
 } = Animated;
 const { PanGestureHandler, State } = GestureHandler;
 const addBounds = (n: typeof Value, lowerBound: number, upperBound: number): typeof Value => min(max(n, lowerBound), upperBound);
@@ -24,6 +24,7 @@ export default ({ radius }: CursorProps) => {
   const translateY = new Value(0);
   const translationX = new Value(0);
   const translationY = new Value(0);
+  const α = new Value(0);
   const state = new Value(State.UNDETERMINED);
   const onGestureEvent = event(
     [
@@ -51,8 +52,9 @@ export default ({ radius }: CursorProps) => {
               set(xOffset, x),
               set(yOffset, y),
             ]),
-            set(translateX, x),
-            set(translateY, add(circle(sub(x, radius), radius, lessThan(y, radius)), radius)),
+            set(α, atan(divide(sub(x, radius) / add(y, radius)))),
+            set(translateX, multiply(radius, sin(α))),
+            set(translateY, multiply(radius, cos(α))),
           ])
         }
       </Animated.Code>
