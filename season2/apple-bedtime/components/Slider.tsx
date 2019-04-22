@@ -47,5 +47,6 @@ const styles = StyleSheet.create({
   container: {
     height: size,
     width: size,
+    backgroundColor: "rgba(100, 200, 300, 0.5)",
   },
 });
