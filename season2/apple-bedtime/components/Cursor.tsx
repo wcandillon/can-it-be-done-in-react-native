@@ -52,6 +52,7 @@ export default ({ radius }: CursorProps) => {
               set(xOffset, x),
               set(yOffset, y),
             ]),
+            // TODO: fix y=0 case
             set(α, atan(divide(sub(x, radius) / add(y, radius)))),
             set(translateX, multiply(radius, sin(α))),
             set(translateY, multiply(radius, cos(α))),
