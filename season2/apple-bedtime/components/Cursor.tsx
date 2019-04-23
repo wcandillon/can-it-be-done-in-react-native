@@ -1,11 +1,11 @@
 import * as React from "react";
 import { DangerZone, GestureHandler } from "expo";
 import { StyleSheet } from "react-native";
-import { atan2, toDeg } from "./Math";
+import { atan2, atan } from "./Math";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, block, cond, eq, set, add, sub, debug, multiply, sin, cos,
+  Value, event, block, cond, eq, set, add, sub, debug, multiply, sin, cos, divide,
 } = Animated;
 const { PanGestureHandler, State } = GestureHandler;
 
@@ -45,11 +45,10 @@ export default ({ radius }: CursorProps) => {
       <Animated.Code>
         {
           () => block([
-            debug("α", toDeg(α)),
-            debug("y", y),
-            debug("x", x),
-            debug("translateX", translateX),
-            debug("translateY", translateY),
+            debug("atan", atan(divide(add(multiply(y, -1), radius), sub(x, radius)))),
+            debug("atan2", atan2(add(multiply(y, -1), radius), sub(x, radius))),
+            debug("y'", add(multiply(y, -1), radius)),
+            debug("x'", sub(x, radius)),
             cond(eq(state, State.ACTIVE), [
               set(x, add(xOffset, translationX)),
               set(y, add(yOffset, translationY)),
@@ -58,9 +57,9 @@ export default ({ radius }: CursorProps) => {
               set(xOffset, x),
               set(yOffset, y),
             ]),
-            set(α, atan2(sub(y, radius), sub(x, radius))),
+            set(α, atan2(add(multiply(y, -1), radius), sub(x, radius))),
             set(translateX, add(multiply(radius, cos(α)), radius)),
-            set(translateY, add(multiply(radius, sin(α)), radius)),
+            set(translateY, add(multiply(-1 * radius, sin(α)), radius)),
           ])
         }
       </Animated.Code>
