@@ -59,8 +59,8 @@ export default ({ radius }: CursorProps) => {
               set(yOffset, y),
             ]),
             set(α, atan2(sub(y, radius), sub(x, radius))),
-            set(translateX, multiply(radius, cos(α))),
-            set(translateY, multiply(radius, sin(α))),
+            set(translateX, add(multiply(radius, cos(α)), radius)),
+            set(translateY, add(multiply(radius, sin(α)), radius)),
           ])
         }
       </Animated.Code>
