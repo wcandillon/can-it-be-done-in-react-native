@@ -5,12 +5,9 @@ import { atan2, atan } from "./Math";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, block, cond, eq, set, add, sub, debug, multiply, sin, cos, divide,
+  Value, event, block, cond, eq, set, add, sub, multiply, sin, cos,
 } = Animated;
 const { PanGestureHandler, State } = GestureHandler;
-
-// const addBounds = (n: typeof Value, lowerBound: number, upperBound: number): typeof Value => min(max(n, lowerBound), upperBound);
-// const circle = (x: typeof Value, radius: number, top: typeof Value): typeof Value => multiply(sqrt(sub(pow(radius, 2), pow(x, 2))), cond(top, -1, 1));
 
 interface CursorProps {
   radius: number;
@@ -45,10 +42,6 @@ export default ({ radius }: CursorProps) => {
       <Animated.Code>
         {
           () => block([
-            debug("atan", atan(divide(add(multiply(y, -1), radius), sub(x, radius)))),
-            debug("atan2", atan2(add(multiply(y, -1), radius), sub(x, radius))),
-            debug("y'", add(multiply(y, -1), radius)),
-            debug("x'", sub(x, radius)),
             cond(eq(state, State.ACTIVE), [
               set(x, add(xOffset, translationX)),
               set(y, add(yOffset, translationY)),
@@ -64,33 +57,19 @@ export default ({ radius }: CursorProps) => {
         }
       </Animated.Code>
       <PanGestureHandler onHandlerStateChange={onGestureEvent} {...{ onGestureEvent }}>
-        <Animated.View style={StyleSheet.absoluteFillObject}>
-          <Animated.View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              backgroundColor: "white",
-              width: 50,
-              height: 50,
-              borderRadius: 25,
-              transform: [
-                { translateX },
-                { translateY },
-              ],
-            }}
-          />
-          <Animated.View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              backgroundColor: "red",
-              width: 50,
-              height: 50,
-              transform: [
-                { translateX: x },
-                { translateY: y },
-              ],
-            }}
-          />
-        </Animated.View>
+        <Animated.View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: "white",
+            width: 50,
+            height: 50,
+            borderRadius: 25,
+            transform: [
+              { translateX },
+              { translateY },
+            ],
+          }}
+        />
       </PanGestureHandler>
     </>
   );

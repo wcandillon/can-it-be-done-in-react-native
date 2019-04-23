@@ -17,7 +17,7 @@ const {
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default () => {
-  const strokeDasharray = new Value(0); // Math.PI * radius);
+  const strokeDasharray = new Value(0);// Math.PI * radius);
   const strokeDashoffset = new Value(0); // radius);
   return (
     <View style={styles.container}>
@@ -39,6 +39,7 @@ export default () => {
         />
       </Svg>
       <Cursor {...{ radius }} />
+      <Cursor {...{ radius }} />
     </View>
   );
 };
@@ -47,6 +48,5 @@ const styles = StyleSheet.create({
   container: {
     height: size,
     width: size,
-    backgroundColor: "rgba(100, 200, 300, 0.5)",
   },
 });
