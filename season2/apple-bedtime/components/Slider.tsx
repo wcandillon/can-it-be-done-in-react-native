@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
-import { Svg, DangerZone, Contacts } from "expo";
+import { Svg, DangerZone } from "expo";
 
 import Cursor from "./Cursor";
-import { toDeg } from "./Math";
 
 const { Animated } = DangerZone;
 const {
-  Value, debug, block, multiply, sub, concat, round, cond, greaterThan,
+  Value, debug, block, multiply, sub, concat, round, cond, greaterThan, call, lessThan, add,
 } = Animated;
 
 const { width } = Dimensions.get("window");
@@ -23,14 +22,15 @@ export default () => {
   const start = new Value(0);
   const end = new Value(0);
   const circumference = radius * 2 * Math.PI;
-  const delta = cond(greaterThan(end, start), sub(end, start), sub(start, end));
+  const delta = sub(end, start);
   const strokeDashoffset = multiply(delta, radius);
+  const rotateZ = concat(sub(Math.PI * 2, start, "rad"));
   return (
     <View style={styles.container}>
       <Animated.View style={{
         ...StyleSheet.absoluteFillObject,
         transform: [
-          { rotateZ: concat(sub(Math.PI * 2, cond(greaterThan(end, start), start, end)), "rad") },
+          { rotateZ },
         ],
       }}
       >
