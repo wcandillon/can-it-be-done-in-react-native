@@ -1,7 +1,7 @@
 import * as React from "react";
 import { DangerZone, GestureHandler } from "expo";
 import { StyleSheet } from "react-native";
-import { atan2 } from "./Math";
+import { atan2, toDeg } from "./Math";
 
 const { Animated } = DangerZone;
 const {
@@ -45,7 +45,7 @@ export default ({ radius }: CursorProps) => {
       <Animated.Code>
         {
           () => block([
-            debug("α", α),
+            debug("α", toDeg(α)),
             debug("y", y),
             debug("x", x),
             debug("translateX", translateX),
@@ -59,8 +59,8 @@ export default ({ radius }: CursorProps) => {
               set(yOffset, y),
             ]),
             set(α, atan2(sub(y, radius), sub(x, radius))),
-            set(translateX, add(multiply(radius, sin(α)), radius)),
-            set(translateY, add(multiply(radius, cos(α)), radius)),
+            set(translateX, multiply(radius, cos(α))),
+            set(translateY, multiply(radius, sin(α))),
           ])
         }
       </Animated.Code>
