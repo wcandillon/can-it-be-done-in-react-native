@@ -5,7 +5,9 @@ import { Svg, DangerZone } from "expo";
 import Cursor from "./Cursor";
 
 const { Animated } = DangerZone;
-const { Value } = Animated;
+const {
+  Value, debug, block, multiply, sub,
+} = Animated;
 
 const { width } = Dimensions.get("window");
 const size = width - 32;
@@ -19,8 +21,8 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 export default () => {
   const start = new Value(0);
   const end = new Value(0);
-  const strokeDasharray = new Value(0);// Math.PI * radius);
-  const strokeDashoffset = new Value(0); // radius);
+  const strokeDasharray = multiply(sub(end, start), radius);
+  const strokeDashoffset = multiply(sub(0, start), radius);
   return (
     <View style={styles.container}>
       <Svg style={StyleSheet.absoluteFill}>
