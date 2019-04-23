@@ -2,7 +2,7 @@ import { DangerZone } from "expo";
 
 const { Animated } = DangerZone;
 const {
-  Value, cond, eq, add, sqrt, neq, pow, sub, and, greaterThan, lessOrEq, multiply, lessThan, divide, abs,
+  Value, cond, eq, add, sqrt, or, neq, pow, sub, and, greaterThan, greaterOrEq, lessOrEq, multiply, lessThan, divide, abs,
 } = Animated;
 
 type Value = typeof Value;
@@ -18,18 +18,15 @@ export const atan = (x: Value): Value => sub(
 );
 
 // https://en.wikipedia.org/wiki/Atan2
+// https://www.gamedev.net/forums/topic/441464-manually-implementing-atan2-or-atan/
 export const atan2 = (y: Value, x: Value): Value => {
-  const expA = add(sqrt(add(pow(x, 2), pow(y, 2))), x);
-  const expB = sub(sqrt(add(pow(x, 2), pow(y, 2))), x);
-  const cond1 = greaterThan(x, 0);
-  const exp1 = multiply(2, atan(divide(y, expA)));
-  const cond2 = and(lessOrEq(x, 0), neq(y, 0));
-  const exp2 = multiply(2, atan(divide(expB, y)));
-  const cond3 = and(lessThan(x, 0), eq(y, 0));
-  const exp3 = new Value(Math.PI);
-  return cond(
-    cond1, exp1,
-    cond(cond2, exp2,
-      cond(cond3, exp3, new Value(0))),
-  );
+  const coeff1 = Math.PI / 4;
+  const coeff2 = 3 * coeff1;
+  const absY = abs(y);
+  const angle = cond(greaterOrEq(x, 0), [
+    sub(coeff1, multiply(coeff1, divide(sub(x, absY), add(x, absY)))),
+  ], [
+    sub(coeff2, multiply(coeff1, divide(add(x, absY), sub(absY, x)))),
+  ]);
+  return cond(lessThan(y, 0), multiply(angle, -1), angle);
 };
