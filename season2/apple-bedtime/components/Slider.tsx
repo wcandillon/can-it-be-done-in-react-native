@@ -17,6 +17,8 @@ const {
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default () => {
+  const start = new Value(0);
+  const end = new Value(0);
   const strokeDasharray = new Value(0);// Math.PI * radius);
   const strokeDashoffset = new Value(0); // radius);
   return (
@@ -38,8 +40,8 @@ export default () => {
           {...{ strokeDasharray, strokeDashoffset }}
         />
       </Svg>
-      <Cursor {...{ radius }} />
-      <Cursor {...{ radius }} />
+      <Cursor α={start} {...{ radius }} />
+      <Cursor α={end} {...{ radius }} />
     </View>
   );
 };

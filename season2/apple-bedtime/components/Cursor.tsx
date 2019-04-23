@@ -1,19 +1,21 @@
 import * as React from "react";
 import { DangerZone, GestureHandler } from "expo";
 import { StyleSheet } from "react-native";
-import { atan2, atan } from "./Math";
+import { atan2 } from "./Math";
 
 const { Animated } = DangerZone;
 const {
   Value, event, block, cond, eq, set, add, sub, multiply, sin, cos,
 } = Animated;
+type Value = typeof Value;
 const { PanGestureHandler, State } = GestureHandler;
 
 interface CursorProps {
   radius: number;
+  α: Value;
 }
 
-export default ({ radius }: CursorProps) => {
+export default ({ radius, α }: CursorProps) => {
   const x = new Value(0);
   const y = new Value(0);
   const xOffset = new Value(0);
@@ -22,7 +24,6 @@ export default ({ radius }: CursorProps) => {
   const translateY = new Value(0);
   const translationX = new Value(0);
   const translationY = new Value(0);
-  const α = new Value(0);
   const state = new Value(State.UNDETERMINED);
   const onGestureEvent = event(
     [
