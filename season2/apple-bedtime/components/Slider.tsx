@@ -3,10 +3,11 @@ import { Dimensions, View, StyleSheet } from "react-native";
 import { Svg, DangerZone } from "expo";
 
 import Cursor from "./Cursor";
+import { normalizeAngle } from "./Math";
 
 const { Animated } = DangerZone;
 const {
-  Value, debug, block, multiply, sub, concat, round, cond, greaterThan, call, lessThan, add,
+  Value, multiply, sub, concat, lessThan, cond, and, greaterOrEq, block, debug, modulo, sqrt, add, or,
 } = Animated;
 
 const { width } = Dimensions.get("window");
@@ -22,7 +23,7 @@ export default () => {
   const start = new Value(0);
   const end = new Value(0);
   const circumference = radius * 2 * Math.PI;
-  const delta = sub(end, start);
+  const delta = sub(cond(lessThan(start, end), end, add(end, Math.PI * 2)), start);
   const strokeDashoffset = multiply(delta, radius);
   const rotateZ = concat(sub(Math.PI * 2, start, "rad"));
   return (
@@ -53,8 +54,8 @@ export default () => {
           />
         </Svg>
       </Animated.View>
-      <Cursor α={start} {...{ radius }} />
-      <Cursor α={end} {...{ radius }} />
+      <Cursor angle={start} {...{ radius }} />
+      <Cursor angle={end} {...{ radius }} />
     </View>
   );
 };

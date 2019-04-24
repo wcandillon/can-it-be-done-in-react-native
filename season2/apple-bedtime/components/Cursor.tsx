@@ -5,17 +5,18 @@ import { atan2 } from "./Math";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, block, cond, eq, set, add, sub, multiply, sin, cos,
+  Value, event, block, cond, eq, set, add, sub, multiply, sin, cos, debug,
 } = Animated;
 type Value = typeof Value;
 const { PanGestureHandler, State } = GestureHandler;
 
 interface CursorProps {
   radius: number;
-  α: Value;
+  angle: Value;
 }
 
-export default ({ radius, α }: CursorProps) => {
+export default ({ radius, angle }: CursorProps) => {
+  const α = new Value(0);
   const x = new Value(0);
   const y = new Value(0);
   const xOffset = new Value(0);
@@ -35,9 +36,7 @@ export default ({ radius, α }: CursorProps) => {
         },
       },
     ],
-    { useNativeDriver: true },
   );
-
   return (
     <>
       <Animated.Code>
@@ -52,6 +51,7 @@ export default ({ radius, α }: CursorProps) => {
               set(yOffset, y),
             ]),
             set(α, atan2(add(multiply(y, -1), radius), sub(x, radius))),
+            set(angle, α),
             set(translateX, add(multiply(radius, cos(α)), radius)),
             set(translateY, add(multiply(-1 * radius, sin(α)), radius)),
           ])

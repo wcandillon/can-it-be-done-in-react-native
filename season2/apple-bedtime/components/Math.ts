@@ -2,7 +2,7 @@ import { DangerZone } from "expo";
 
 const { Animated } = DangerZone;
 const {
-  Value, cond, eq, add, sqrt, or, neq, pow, sub, and, greaterThan, greaterOrEq, lessOrEq, multiply, lessThan, divide, abs,
+  Value, cond, eq, add, sqrt, or, neq, pow, sub, and, greaterThan, modulo, greaterOrEq, lessOrEq, multiply, lessThan, divide, abs, cos, sin,
 } = Animated;
 
 type Value = typeof Value;
