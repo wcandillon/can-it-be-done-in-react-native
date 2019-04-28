@@ -25,6 +25,7 @@ const {
   Clock,
   block,
   debug,
+  min,
 } = Animated;
 
 type Clock = typeof Clock;
@@ -47,6 +48,14 @@ export const onScroll = (contentOffset: { x?: typeof Value, y?: typeof Value }) 
   ],
   { useNativeDriver: true },
 );
+
+export const getSnapPoint = (value: Value, velocity: Value, points: number[]): Value => {
+  const point = add(value, multiply(0.2, velocity));
+  const diffPoint = (p: Value) => abs(sub(point, p));
+  const deltas = points.map(p => diffPoint(p));
+  const delta = deltas.reduce((acc, d) => min(acc, d));
+  return points.reduce((acc, p) => cond(eq(diffPoint(p), delta), p, acc));
+};
 
 export const lookup = (array: typeof Value[], index: typeof Value, notFound: typeof Value = new Value("null")): typeof Value => array.reduce((acc, v, i) => cond(eq(i, index), v, acc), notFound);
 
