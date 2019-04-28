@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { DangerZone, Svg } from "expo";
 
 const { Animated } = DangerZone;
@@ -27,7 +27,7 @@ export default ({ progress }: CircularPogressProps) => {
   });
   const strokeDashoffset = multiply(α, radius);
   return (
-    <Svg width={size} height={size}>
+    <Svg width={size} height={size} style={styles.container}>
       <Defs>
         <LinearGradient id="grad" x1="0" y1="0" x2="100%" y2="0">
           <Stop offset="0" stopColor="#f7cd46" />
@@ -46,3 +46,9 @@ export default ({ progress }: CircularPogressProps) => {
     </Svg>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    transform: [{ rotateZ: "270deg" }],
+  },
+});
