@@ -23,10 +23,13 @@ const {
   eq,
   Extrapolate,
   Clock,
+  block,
+  debug,
 } = Animated;
 
 type Clock = typeof Clock;
-type Val = typeof Value | number;
+type Value = typeof Value;
+type Val = Value | number;
 type Color = { r: number, g: number, b: number };
 
 export const φ = (1 + Math.sqrt(5)) / 2;
@@ -47,6 +50,13 @@ export const onScroll = (contentOffset: { x?: typeof Value, y?: typeof Value }) 
 
 export const lookup = (array: typeof Value[], index: typeof Value, notFound: typeof Value = new Value("null")): typeof Value => array.reduce((acc, v, i) => cond(eq(i, index), v, acc), notFound);
 
+export function simpleInterpolation(v: Value, origin: Value, destination: Value): Value {
+  return interpolate(v, {
+    inputRange: [0, 1],
+    outputRange: [origin, destination],
+  });
+}
+
 export function runSpring(clock: Clock, value: Val, dest: Val) {
   const state = {
     finished: new Value(0),
@@ -56,27 +66,28 @@ export function runSpring(clock: Clock, value: Val, dest: Val) {
   };
 
   const config = {
-    damping: 20,
-    mass: 1,
-    stiffness: 100,
-    overshootClamping: false,
-    restSpeedThreshold: 1,
-    restDisplacementThreshold: 0.5,
     toValue: new Value(0),
+    damping: 7,
+    mass: 1,
+    stiffness: 121.6,
+    overshootClamping: false,
+    restSpeedThreshold: 0.001,
+    restDisplacementThreshold: 0.001,
   };
 
-  return [
+  return block([
     cond(clockRunning(clock), 0, [
       set(state.finished, 0),
-      set(state.velocity, 0),
+      set(state.time, 0),
       set(state.position, value),
+      set(state.velocity, 0),
       set(config.toValue, dest),
       startClock(clock),
     ]),
     spring(clock, state, config),
-    cond(state.finished, stopClock(clock)),
+    cond(state.finished, debug("stop clock", stopClock(clock))),
     state.position,
-  ];
+  ]);
 }
 
 
