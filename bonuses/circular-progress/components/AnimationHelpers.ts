@@ -102,38 +102,33 @@ export function runSpring(clock: Clock, value: Val, dest: Val) {
   ]);
 }
 
-interface Config {
+interface TimingConfig {
   duration: number;
   toValue: Value;
   easing: EasingStatic;
 }
 
-export function runTiming(clock: Clock, value: Value, config: Config): Value {
+export function runTiming(clock: Clock, value: Value, config: TimingConfig) {
   const state = {
     finished: new Value(0),
-    position: value,
+    position: new Value(0),
     time: new Value(0),
     frameTime: new Value(0),
   };
 
   return block([
     cond(clockRunning(clock), 0, [
-      // If the clock isn't running we reset all the animation params and start the clock
       set(state.finished, 0),
       set(state.time, 0),
       set(state.position, value),
       set(state.frameTime, 0),
       startClock(clock),
     ]),
-    // we run the step here that is going to update position
     timing(clock, state, config),
-    // if the animation is over we stop the clock
     cond(state.finished, debug("stop clock", stopClock(clock))),
-    // we made the block return the updated position
     state.position,
   ]);
 }
-
 
 function match(condsAndResPairs: Val[], offset = 0) {
   if (condsAndResPairs.length - offset === 1) {

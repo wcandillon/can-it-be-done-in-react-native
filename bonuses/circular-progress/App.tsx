@@ -10,23 +10,15 @@ const { Value, Clock, set } = Animated;
 
 export default () => {
   const clock = new Clock();
-  const progress = new Value(0);
   const config = {
     duration: 10 * 1000,
-    toValue: new Value(1),
+    toValue: 1,
     easing: Easing.linear,
   };
   return (
-    <>
-      <Animated.Code>
-        {
-          () => set(progress, runTiming(clock, 0, config))
-        }
-      </Animated.Code>
-      <View style={styles.container}>
-        <CircularProgress {...{ progress }} />
-      </View>
-    </>
+    <View style={styles.container}>
+      <CircularProgress progress={runTiming(clock, 0, config)} />
+    </View>
   );
 };
 
