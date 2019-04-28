@@ -87,11 +87,9 @@ export default class Profiles extends React.PureComponent<ProfilesProps, Profile
           </Animated.View>
           <Interactable
             key={index}
-            animatedValueX={x}
-            animatedValueY={y}
             snapPoints={[{ x: -1 * A }, { x: 0 }, { x: A }]}
             style={StyleSheet.absoluteFill}
-            {...{ onSnap }}
+            {...{ onSnap, x, y }}
           />
         </View>
         <View style={styles.footer}>
