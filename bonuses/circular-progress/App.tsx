@@ -1,21 +1,40 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { DangerZone } from "expo";
 
-export default class App extends React.Component {
-  render() {
-    return (
+import CircularProgress from "./components/CircularProgress";
+import { runTiming } from "./components/AnimationHelpers";
+
+const { Animated, Easing } = DangerZone;
+const { Value, Clock, set } = Animated;
+
+export default () => {
+  const clock = new Clock();
+  const progress = new Value(0);
+  const config = {
+    duration: 10 * 1000,
+    toValue: new Value(1),
+    easing: Easing.linear,
+  };
+  return (
+    <>
+      <Animated.Code>
+        {
+          () => set(progress, runTiming(clock, 0, config))
+        }
+      </Animated.Code>
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
+        <CircularProgress {...{ progress }} />
       </View>
-    );
-  }
-}
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "black",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
