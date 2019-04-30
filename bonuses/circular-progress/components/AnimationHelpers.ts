@@ -26,7 +26,8 @@ const {
   Clock,
   block,
   debug,
-  min,
+  min: min2,
+  max: max2,
   timing,
   and,
 } = Animated;
@@ -39,7 +40,10 @@ type Color = { r: number, g: number, b: number };
 export const φ = (1 + Math.sqrt(5)) / 2;
 export const toRad = (deg: Val): Val => multiply(deg, Math.PI / 180);
 export const toDeg = (rad: Val): Val => multiply(rad, 180 / Math.PI);
-export const translateZ = (perspective: Val, x: Val) => divide(perspective, sub(perspective, x));
+export const translateZ = (perspective: Val, z: Val): Value => divide(perspective, sub(perspective, z));
+
+export const min = (...args: Val[]): Value => args.reduce((acc, arg) => min2(acc, arg));
+export const max = (...args: Val[]): Value => args.reduce((acc, arg) => max2(acc, arg));
 
 export const onScroll = (contentOffset: { x?: typeof Value, y?: typeof Value }) => event(
   [
@@ -56,7 +60,7 @@ export const getSnapPoint = (value: Value, velocity: Value, points: number[]): V
   const point = add(value, multiply(0.2, velocity));
   const diffPoint = (p: Value) => abs(sub(point, p));
   const deltas = points.map(p => diffPoint(p));
-  const minDelta = deltas.reduce((acc, d) => min(acc, d));
+  const minDelta = min(...deltas);
   return points.reduce((acc, p) => cond(eq(diffPoint(p), minDelta), p, acc));
 };
 

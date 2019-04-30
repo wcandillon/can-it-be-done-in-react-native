@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { DangerZone } from "expo";
 
-import CircularProgress from "./components/CircularProgress";
+import CircularProgress2 from "./components/CircularProgress2";
 import { runTiming } from "./components/AnimationHelpers";
 
 const { Animated, Easing } = DangerZone;
@@ -17,7 +17,7 @@ export default () => {
   };
   return (
     <View style={styles.container}>
-      <CircularProgress progress={runTiming(clock, 0, config)} />
+      <CircularProgress2 progress={runTiming(clock, 0, config)} />
     </View>
   );
 };
