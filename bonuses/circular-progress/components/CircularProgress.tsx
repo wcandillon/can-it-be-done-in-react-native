@@ -12,6 +12,7 @@ const size = width - 32;
 const strokeWidth = 50;
 const radius = (size - strokeWidth) / 2;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const { PI } = Math;
 
 type Value = typeof Value;
 
@@ -20,10 +21,10 @@ interface CircularPogressProps {
 }
 
 export default ({ progress }: CircularPogressProps) => {
-  const circumference = radius * 2 * Math.PI;
+  const circumference = radius * 2 * PI;
   const α = interpolate(progress, {
     inputRange: [0, 1],
-    outputRange: [0, Math.PI * 2],
+    outputRange: [0, PI * 2],
   });
   const strokeDashoffset = multiply(α, radius);
   return (

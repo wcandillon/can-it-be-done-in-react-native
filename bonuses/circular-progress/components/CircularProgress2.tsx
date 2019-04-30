@@ -11,6 +11,8 @@ const {
 const {
   Defs, LinearGradient, Stop, Path,
 } = Svg;
+
+const { PI } = Math;
 const { width } = Dimensions.get("window");
 const size = width - 32;
 const strokeWidth = 50;
@@ -30,10 +32,9 @@ const transformOrigin = (xCenter: number, yCenter: number) => {
     polarToCanvas: (ϑ: number, r: number) => [x2toX1(radius * Math.cos(ϑ)), y2toY1(r * Math.sin(ϑ))],
   };
 };
-
-const A = Math.PI + Math.PI * 3;
-const start = Math.PI + (A - Math.PI) / 2;
-const end = Math.PI * 2 - (A - Math.PI) / 2;
+const A = PI + PI * 0.4;
+const start = PI + (A - PI) / 2;
+const end = PI * 2 - (A - PI) / 2;
 
 const o = transformOrigin(radius, radius);
 const d = SVGPath()
