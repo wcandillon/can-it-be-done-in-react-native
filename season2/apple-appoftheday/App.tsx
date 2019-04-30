@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  StyleSheet, SafeAreaView, View, ScrollView,
-} from "react-native";
+import { ScrollView, SafeAreaView } from "react-native";
 
 import App, { Apps } from "./components/App";
 
@@ -30,7 +28,8 @@ const apps: Apps = [
 ];
 
 export default () => (
-  <SafeAreaView style={styles.container}>
+  <>
+    <SafeAreaView />
     <ScrollView>
       {
         apps.map(app => (
@@ -38,12 +37,5 @@ export default () => (
         ))
       }
     </ScrollView>
-  </SafeAreaView>
+  </>
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});

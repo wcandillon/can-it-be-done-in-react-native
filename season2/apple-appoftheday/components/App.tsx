@@ -41,6 +41,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 8,
     marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   content: {
     ...StyleSheet.absoluteFillObject,
