@@ -13,12 +13,18 @@ const apps: Apps = [
     source: require("./assets/images/yoga.jpg"),
     content: "",
   },
-
   {
     id: "fitness",
     title: "Get Fit",
     subtitle: "Wear it while you work out",
     source: require("./assets/images/fitness.jpg"),
+    content: "",
+  },
+  {
+    id: "games",
+    title: "Classic Games",
+    subtitle: "They never get old",
+    source: require("./assets/images/chess.jpg"),
     content: "",
   },
 ];
