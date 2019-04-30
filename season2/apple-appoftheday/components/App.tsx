@@ -2,6 +2,13 @@ import * as React from "react";
 import {
   View, ImageSourcePropType, StyleSheet, Dimensions, Image, Text,
 } from "react-native";
+import { DangerZone, GestureHandler } from "expo";
+
+const { Animated } = DangerZone;
+const {
+  Value, event, cond, eq,
+} = Animated;
+const { TapGestureHandler, State } = GestureHandler;
 
 export interface App {
   id: string;
@@ -22,14 +29,25 @@ const { width, height } = Dimensions.get("window");
 export default class extends React.PureComponent<AppProps> {
   render() {
     const { app: { source, title, subtitle } } = this.props;
+    const state = new Value(State.UNDETERMINED);
+    const onHandlerStateChange = event([
+      {
+        nativeEvent: {
+          state,
+        },
+      },
+    ]);
+    const scale = cond(eq(state, State.BEGAN), 0.95, 1);
     return (
-      <View style={styles.container}>
-        <Image style={styles.image} {...{ source }} />
-        <View style={styles.content}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
-        </View>
-      </View>
+      <TapGestureHandler {...{ onHandlerStateChange }}>
+        <Animated.View style={[styles.container, { transform: [{ scale }] }]}>
+          <Image style={styles.image} {...{ source }} />
+          <View style={styles.content}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.subtitle}>{subtitle}</Text>
+          </View>
+        </Animated.View>
+      </TapGestureHandler>
     );
   }
 }
