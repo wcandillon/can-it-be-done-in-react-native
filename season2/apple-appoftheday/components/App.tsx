@@ -6,7 +6,7 @@ import { DangerZone, GestureHandler } from "expo";
 
 const { Animated } = DangerZone;
 const {
-  Value, event, cond, eq,
+  Clock, Value, event, cond, eq,
 } = Animated;
 const { TapGestureHandler, State } = GestureHandler;
 
@@ -29,6 +29,7 @@ const { width, height } = Dimensions.get("window");
 export default class extends React.PureComponent<AppProps> {
   render() {
     const { app: { source, title, subtitle } } = this.props;
+    const clock = new Clock();
     const state = new Value(State.UNDETERMINED);
     const onHandlerStateChange = event([
       {
@@ -37,7 +38,8 @@ export default class extends React.PureComponent<AppProps> {
         },
       },
     ]);
-    const scale = cond(eq(state, State.BEGAN), 0.95, 1);
+    const timingConfig = { toValue: 0.95, duration: 100 };
+    const scale = cond(eq(state, State.BEGAN), runTiming(clock, 1, timingConfig), 1);
     return (
       <TapGestureHandler {...{ onHandlerStateChange }}>
         <Animated.View style={[styles.container, { transform: [{ scale }] }]}>
