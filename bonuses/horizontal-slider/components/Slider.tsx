@@ -3,12 +3,15 @@ import { View, Dimensions, StyleSheet } from "react-native";
 import { DangerZone } from "expo";
 
 import Cursor from "./Cursor";
+import Labels from "./Labels";
 
 const { Animated } = DangerZone;
-const { Value, max, add } = Animated;
+const {
+  Value, max, add, round, divide,
+} = Animated;
 
 const { width: totalWidth } = Dimensions.get("window");
-const count = 10;
+const count = 5;
 const width = totalWidth / count;
 const height = width;
 
@@ -28,6 +31,7 @@ export default () => {
           borderRadius: height / 2,
         }}
       />
+      <Labels size={height} {...{ x, count }} />
       <Cursor size={height} {...{ x, count }} />
     </View>
   );
