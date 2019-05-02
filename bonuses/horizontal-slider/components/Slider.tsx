@@ -12,8 +12,6 @@ const count = 10;
 const width = totalWidth / count;
 const height = width;
 
-interface SliderProps {}
-
 export default () => {
   const x = new Value(0);
   return (

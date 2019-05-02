@@ -1,9 +1,7 @@
 import * as React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { DangerZone } from "expo";
-
-import Interactable from "./Interactable";
-import AnimatedText from "./AnimatedText";
+import { Interactable, ReText } from "react-native-redash";
 
 const { Animated } = DangerZone;
 const {
@@ -42,7 +40,7 @@ export default class Cursor extends React.PureComponent<CursorProps> {
             alignItems: "center",
           }}
         >
-          <AnimatedText text={concat(add(index, 1))} />
+          <ReText text={concat(add(index, 1))} />
         </Animated.View>
       </Interactable>
     );
