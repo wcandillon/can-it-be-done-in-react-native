@@ -40,7 +40,7 @@ export default class Cursor extends React.PureComponent<CursorProps> {
             alignItems: "center",
           }}
         >
-          <ReText text={concat(add(index, 1))} />
+          <ReText style={{ fontSize: 24 }} text={concat(add(index, 1))} />
         </Animated.View>
       </Interactable>
     );
