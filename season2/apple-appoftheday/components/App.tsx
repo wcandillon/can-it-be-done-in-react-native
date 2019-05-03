@@ -3,10 +3,11 @@ import {
   View, ImageSourcePropType, StyleSheet, Dimensions, Image, Text,
 } from "react-native";
 import { DangerZone, GestureHandler } from "expo";
+import { runTiming } from "react-native-redash";
 
-const { Animated } = DangerZone;
+const { Animated, Easing } = DangerZone;
 const {
-  Clock, Value, event, cond, eq,
+  Clock, Value, event, cond, eq, debug,
 } = Animated;
 const { TapGestureHandler, State } = GestureHandler;
 
@@ -38,8 +39,19 @@ export default class extends React.PureComponent<AppProps> {
         },
       },
     ]);
-    const timingConfig = { toValue: 0.95, duration: 100 };
-    const scale = cond(eq(state, State.BEGAN), runTiming(clock, 1, timingConfig), 1);
+    const duration = 100;
+    const easing = Easing.inOut(Easing.ease);
+    const beganConfig = { toValue: 0.95, duration, easing };
+    const endConfig = { toValue: 1, duration, easing };
+    const scale = cond(
+      eq(state, State.BEGAN),
+      runTiming(clock, 1, beganConfig),
+      cond(
+        eq(state, State.FAILED),
+        runTiming(clock, 0.95, endConfig),
+        1,
+      ),
+    );
     return (
       <TapGestureHandler {...{ onHandlerStateChange }}>
         <Animated.View style={[styles.container, { transform: [{ scale }] }]}>
