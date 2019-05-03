@@ -5,16 +5,17 @@ import {
 import { Feather as Icon } from "@expo/vector-icons";
 import { DangerZone } from "expo";
 
-import { Profile } from "./Model";
 import Interactable from "./Interactable";
-import { φ } from "./AnimationHelpers";
+// import { Interactable } from "react-native-redash";
+import { Profile } from "./Model";
 import Card from "./Card";
 
 const { Animated } = DangerZone;
 const {
-  Value, interpolate, concat, Extrapolate, debug, block, sub, multiply,
+  Value, interpolate, concat, Extrapolate,
 } = Animated;
 const { width, height } = Dimensions.get("window");
+const φ = (1 + Math.sqrt(5)) / 2;
 const deltaX = width / 2;
 const w = width - 32;
 const h = w * φ;
