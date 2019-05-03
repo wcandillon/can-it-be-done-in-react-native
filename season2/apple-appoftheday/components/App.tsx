@@ -1,21 +1,32 @@
 import * as React from "react";
 import {
-  View, ImageSourcePropType, StyleSheet, Dimensions, Image, Text,
+  View, StyleSheet, Dimensions, Image, Text, ImageRequireSource,
 } from "react-native";
 import { DangerZone, GestureHandler } from "expo";
 import { runTiming } from "react-native-redash";
 
+export interface Position {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 const { Animated, Easing } = DangerZone;
 const {
-  Clock, Value, event, cond, eq, debug,
+  Clock, Value, event, cond, eq, call,
 } = Animated;
 const { TapGestureHandler, State } = GestureHandler;
+const measure = async (ref: View | Text | ScrollView): Promise<Position> => new Promise(resolve => ref.measureInWindow((x, y, width, height) => resolve({
+  x, y, width, height,
+})));
+const { width, height } = Dimensions.get("window");
 
 export interface App {
   id: string;
   title: string;
   subtitle: string;
-  source: ImageSourcePropType;
+  source: ImageRequireSource;
   content: string;
 }
 
@@ -23,11 +34,18 @@ export type Apps = App[];
 
 interface AppProps {
   app: App;
+  startTransition: (app: App, position: Position) => void;
 }
 
-const { width, height } = Dimensions.get("window");
-
 export default class extends React.PureComponent<AppProps> {
+  container = React.createRef();
+
+  startTransition = async () => {
+    const { app, startTransition } = this.props;
+    const position = await measure(this.container.current.getNode());
+    startTransition(app, position);
+  };
+
   render() {
     const { app: { source, title, subtitle } } = this.props;
     const clock = new Clock();
@@ -45,7 +63,10 @@ export default class extends React.PureComponent<AppProps> {
     const endConfig = { toValue: 1, duration, easing };
     const scale = cond(
       eq(state, State.BEGAN),
-      runTiming(clock, 1, beganConfig),
+      [
+        call([], this.startTransition),
+        runTiming(clock, 1, beganConfig),
+      ],
       cond(
         eq(state, State.FAILED),
         runTiming(clock, 0.95, endConfig),
@@ -54,7 +75,7 @@ export default class extends React.PureComponent<AppProps> {
     );
     return (
       <TapGestureHandler {...{ onHandlerStateChange }}>
-        <Animated.View style={[styles.container, { transform: [{ scale }] }]}>
+        <Animated.View ref={this.container} style={[styles.container, { transform: [{ scale }] }]}>
           <Image style={styles.image} {...{ source }} />
           <View style={styles.content}>
             <Text style={styles.title}>{title}</Text>

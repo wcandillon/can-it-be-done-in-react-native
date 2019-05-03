@@ -2,7 +2,7 @@ import React from "react";
 import { ScrollView, SafeAreaView } from "react-native";
 
 import { AppLoading, Asset } from "expo";
-import App, { Apps } from "./components/App";
+import App, { Apps, Position } from "./components/App";
 
 const apps: Apps = [
   {
@@ -43,7 +43,10 @@ export default class extends React.PureComponent<AppProps, AppState> {
     this.setState({ ready: true });
   }
 
+  startTransition = (app: App, position: Position) => console.log({ app, position })
+
   render() {
+    const { startTransition } = this;
     const { ready } = this.state;
     if (!ready) {
       return (
@@ -56,7 +59,7 @@ export default class extends React.PureComponent<AppProps, AppState> {
         <ScrollView>
           {
             apps.map(app => (
-              <App key={app.id} {...{ app }} />
+              <App key={app.id} {...{ app, startTransition }} />
             ))
           }
         </ScrollView>
