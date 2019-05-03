@@ -1,6 +1,7 @@
 import React from "react";
 import { ScrollView, SafeAreaView } from "react-native";
 
+import { AppLoading, Asset } from "expo";
 import App, { Apps } from "./components/App";
 
 const apps: Apps = [
@@ -27,15 +28,39 @@ const apps: Apps = [
   },
 ];
 
-export default () => (
-  <>
-    <SafeAreaView />
-    <ScrollView>
-      {
-        apps.map(app => (
-          <App key={app.id} {...{ app }} />
-        ))
-      }
-    </ScrollView>
-  </>
-);
+interface AppProps {}
+interface AppState {
+  ready: boolean;
+}
+
+export default class extends React.PureComponent<AppProps, AppState> {
+  state = {
+    ready: false,
+  };
+
+  async componentDidMount() {
+    await Promise.all(apps.map(app => Asset.loadAsync(app.source)));
+    this.setState({ ready: true });
+  }
+
+  render() {
+    const { ready } = this.state;
+    if (!ready) {
+      return (
+        <AppLoading />
+      );
+    }
+    return (
+      <>
+        <SafeAreaView />
+        <ScrollView>
+          {
+            apps.map(app => (
+              <App key={app.id} {...{ app }} />
+            ))
+          }
+        </ScrollView>
+      </>
+    );
+  }
+}
