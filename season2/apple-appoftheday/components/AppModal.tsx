@@ -2,10 +2,13 @@ import * as React from "react";
 import {
   View, StyleSheet,
 } from "react-native";
-import Animated from "react-native-reanimated";
+import { DangerZone } from "expo";
 
 import AppThumbnail from "./AppThumbnail";
 import { App, Position } from "./Model";
+
+const { Animated } = DangerZone;
+const { Value } = Animated;
 
 export interface AppModalProps {
   app: App;
@@ -13,13 +16,32 @@ export interface AppModalProps {
 }
 
 export default class AppModal extends React.PureComponent<AppModalProps> {
-  render() {
+  constructor(props: AppModalProps) {
+    super(props);
     const {
-      app,
       position: {
         x, y, width, height,
       },
-    } = this.props;
+    } = props;
+    this.x = new Value(x);
+    this.y = new Value(y);
+    this.width = new Value(width);
+    this.height = new Value(height);
+  }
+
+  x: typeof Value;
+
+  y: typeof Value;
+
+  width: typeof Value;
+
+  height: typeof Value;
+
+  render() {
+    const {
+      x, y, width, height,
+    } = this;
+    const { app } = this.props;
     return (
       <View style={StyleSheet.absoluteFill}>
         <Animated.View
