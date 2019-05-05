@@ -39,10 +39,10 @@ export default ({ app, position } : AppModalProps) => {
         {
           () => block([
             set(driver, runTiming(clock, 0, timingConfig)),
-            set(x, binaryInterpolation(driver, x, 0)),
-            set(y, binaryInterpolation(driver, y, 0)),
-            set(contentX, binaryInterpolation(driver, x, 0)),
-            set(contentY, binaryInterpolation(driver, y, position.height)),
+            set(x, binaryInterpolation(driver, position.x, 0)),
+            set(y, binaryInterpolation(driver, position.y, 0)),
+            set(contentX, binaryInterpolation(driver, position.x, 0)),
+            set(contentY, binaryInterpolation(driver, position.y, position.height)),
             set(width, binaryInterpolation(driver, width, wWidth)),
           ])
         }
@@ -62,8 +62,10 @@ export default ({ app, position } : AppModalProps) => {
       </Animated.View>
       <Animated.View
         style={{
+          position: "absolute",
           width,
           height,
+          top: y,
           left: x,
         }}
       >
