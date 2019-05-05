@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, SafeAreaView } from "react-native";
+import { ScrollView, SafeAreaView, StatusBar } from "react-native";
 import { AppLoading, Asset } from "expo";
 
 import { Apps, Position } from "./components/Model";
@@ -59,6 +59,9 @@ export default class extends React.PureComponent<AppProps, AppState> {
     }
     return (
       <>
+        <StatusBar
+          barStyle="dark-content"
+        />
         <SafeAreaView />
         <ScrollView>
           {

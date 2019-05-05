@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  View, StyleSheet, Image, Text,
+  View, StyleSheet, Text,
 } from "react-native";
 import { Constants, DangerZone } from "expo";
 

@@ -8,6 +8,7 @@ import { binaryInterpolation, runTiming } from "react-native-redash";
 import AppThumbnail from "./AppThumbnail";
 import { App, Position } from "./Model";
 import Content from "./Content";
+import SwipeToClose from "./SwipeToClose";
 
 const { width: wWidth } = Dimensions.get("window");
 const { Animated, Easing } = DangerZone;
@@ -35,7 +36,7 @@ export default ({ app, position } : AppModalProps) => {
   const contentY = new Value(position.y);
   const borderRadius = driver;
   return (
-    <View style={StyleSheet.absoluteFill}>
+    <SwipeToClose>
       <Animated.Code>
         {
           () => block([
@@ -80,6 +81,6 @@ export default ({ app, position } : AppModalProps) => {
       >
         <AppThumbnail {...{ app, borderRadius }} />
       </Animated.View>
-    </View>
+    </SwipeToClose>
   );
 };
