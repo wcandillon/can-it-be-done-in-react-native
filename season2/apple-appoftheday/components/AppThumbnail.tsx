@@ -11,30 +11,16 @@ interface AppThumbnailProps {
 }
 
 export default ({ app: { source, title, subtitle } }: AppThumbnailProps) => (
-  <View style={styles.container}>
+  <>
     <Image style={styles.image} {...{ source }} />
     <View style={styles.content}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.subtitle}>{subtitle}</Text>
     </View>
-  </View>
+  </>
 );
 
 const styles = StyleSheet.create({
-  container: {
-    width: width - 32,
-    height: height / 2,
-    alignSelf: "center",
-    borderRadius: 8,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
   content: {
     ...StyleSheet.absoluteFillObject,
     padding: 16,
