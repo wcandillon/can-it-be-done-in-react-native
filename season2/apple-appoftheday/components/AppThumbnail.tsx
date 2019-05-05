@@ -1,10 +1,9 @@
 import * as React from "react";
 import {
-  View, StyleSheet, Image, Dimensions, Text,
+  View, StyleSheet, Image, Text,
 } from "react-native";
+import { Constants } from "expo";
 import { App } from "./Model";
-
-const { width, height } = Dimensions.get("window");
 
 interface AppThumbnailProps {
   app: App;
@@ -24,6 +23,7 @@ const styles = StyleSheet.create({
   content: {
     ...StyleSheet.absoluteFillObject,
     padding: 16,
+    paddingTop: Constants.statusBarHeight,
     justifyContent: "space-between",
   },
   title: {
