@@ -1,22 +1,14 @@
 import * as React from "react";
-import {
-  View, StyleSheet, Dimensions, Image, Text,
-} from "react-native";
-import { DangerZone, GestureHandler } from "expo";
-import { runTiming } from "react-native-redash";
+import { View, Text, TouchableWithoutFeedback } from "react-native";
+import { DangerZone } from "expo";
 
 import { App, Position } from "./Model";
 import AppThumbnail from "./AppThumbnail";
 
-const { Animated, Easing } = DangerZone;
-const {
-  Clock, Value, event, cond, eq, call,
-} = Animated;
-const { TapGestureHandler, State } = GestureHandler;
+const { Animated } = DangerZone;
 const measure = async (ref: View | Text | ScrollView): Promise<Position> => new Promise(resolve => ref.measureInWindow((x, y, width, height) => resolve({
   x, y, width, height,
 })));
-const { width, height } = Dimensions.get("window");
 
 export type Apps = App[];
 
@@ -36,37 +28,12 @@ export default class extends React.PureComponent<AppProps> {
 
   render() {
     const { app } = this.props;
-    const clock = new Clock();
-    const state = new Value(State.UNDETERMINED);
-    const onHandlerStateChange = event([
-      {
-        nativeEvent: {
-          state,
-        },
-      },
-    ]);
-    const duration = 100;
-    const easing = Easing.inOut(Easing.ease);
-    const beganConfig = { toValue: 0.95, duration, easing };
-    const endConfig = { toValue: 1, duration, easing };
-    const scale = cond(
-      eq(state, State.BEGAN),
-      [
-        call([], this.startTransition),
-        runTiming(clock, 1, beganConfig),
-      ],
-      cond(
-        eq(state, State.FAILED),
-        runTiming(clock, 0.95, endConfig),
-        1,
-      ),
-    );
     return (
-      <TapGestureHandler {...{ onHandlerStateChange }}>
-        <Animated.View ref={this.container} style={{ transform: [{ scale }] }}>
+      <TouchableWithoutFeedback onPress={this.startTransition}>
+        <Animated.View ref={this.container}>
           <AppThumbnail {...{ app }} />
         </Animated.View>
-      </TapGestureHandler>
+      </TouchableWithoutFeedback>
     );
   }
 }
