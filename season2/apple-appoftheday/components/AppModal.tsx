@@ -3,19 +3,20 @@ import {
   View, StyleSheet, Dimensions,
 } from "react-native";
 import { DangerZone } from "expo";
-import { runSpring, binaryInterpolation, runTiming } from "react-native-redash";
+import { binaryInterpolation, runTiming } from "react-native-redash";
 
 import AppThumbnail from "./AppThumbnail";
 import { App, Position } from "./Model";
+import Content from "./Content";
 
 const { width: wWidth } = Dimensions.get("window");
 const { Animated, Easing } = DangerZone;
 const {
-  Value, Clock, block, set,
+  Value, Clock, block, set, cond, greaterThan,
 } = Animated;
 const timingConfig = {
   toValue: 1,
-  duration: 5000,
+  duration: 300,
   easing: Easing.inOut(Easing.ease),
 };
 export interface AppModalProps {
@@ -41,9 +42,9 @@ export default ({ app, position } : AppModalProps) => {
             set(driver, runTiming(clock, 0, timingConfig)),
             set(x, binaryInterpolation(driver, position.x, 0)),
             set(y, binaryInterpolation(driver, position.y, 0)),
+            set(width, binaryInterpolation(driver, position.width, wWidth)),
             set(contentX, binaryInterpolation(driver, position.x, 0)),
             set(contentY, binaryInterpolation(driver, position.y, position.height)),
-            set(width, binaryInterpolation(driver, width, wWidth)),
           ])
         }
       </Animated.Code>
@@ -58,7 +59,15 @@ export default ({ app, position } : AppModalProps) => {
           backgroundColor: "white",
         }}
       >
-
+      </Animated.View>
+      <Animated.View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          marginTop: position.height,
+          opacity: cond(greaterThan(driver, 0.5), 1, 0),
+        }}
+      >
+        <Content />
       </Animated.View>
       <Animated.View
         style={{
