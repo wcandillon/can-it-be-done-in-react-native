@@ -2,22 +2,30 @@ import * as React from "react";
 import {
   View, StyleSheet, Image, Text,
 } from "react-native";
-import { Constants } from "expo";
+import { Constants, DangerZone } from "expo";
+
 import { App } from "./Model";
+
+const { Animated } = DangerZone;
+const { Value } = Animated;
 
 interface AppThumbnailProps {
   app: App;
+  borderRadius?: typeof Value;
 }
 
-export default ({ app: { source, title, subtitle } }: AppThumbnailProps) => (
-  <>
-    <Image style={styles.image} {...{ source }} />
-    <View style={styles.content}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.subtitle}>{subtitle}</Text>
-    </View>
-  </>
-);
+export default ({ app: { source, title, subtitle }, borderRadius: br }: AppThumbnailProps) => {
+  const borderRadius = br || 8;
+  return (
+    <>
+      <Animated.Image style={[styles.image, { borderRadius }]} {...{ source }} />
+      <View style={styles.content}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   content: {
@@ -37,7 +45,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   image: {
-    borderRadius: 8,
     ...StyleSheet.absoluteFillObject,
     width: undefined,
     height: undefined,
