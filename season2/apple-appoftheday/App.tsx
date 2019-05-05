@@ -1,8 +1,10 @@
 import React from "react";
 import { ScrollView, SafeAreaView } from "react-native";
-
 import { AppLoading, Asset } from "expo";
-import App, { Apps, Position } from "./components/App";
+
+import { Apps, Position } from "./components/Model";
+import App from "./components/App";
+import AppModal, { AppModalProps } from "./components/AppModal";
 
 const apps: Apps = [
   {
@@ -31,11 +33,13 @@ const apps: Apps = [
 interface AppProps {}
 interface AppState {
   ready: boolean;
+  modal: AppModalProps | null
 }
 
 export default class extends React.PureComponent<AppProps, AppState> {
   state = {
     ready: false,
+    modal: null,
   };
 
   async componentDidMount() {
@@ -43,11 +47,11 @@ export default class extends React.PureComponent<AppProps, AppState> {
     this.setState({ ready: true });
   }
 
-  startTransition = (app: App, position: Position) => console.log({ app, position })
+  startTransition = (app: App, position: Position) => this.setState({ modal: { app, position } })
 
   render() {
     const { startTransition } = this;
-    const { ready } = this.state;
+    const { ready, modal } = this.state;
     if (!ready) {
       return (
         <AppLoading />
@@ -63,6 +67,11 @@ export default class extends React.PureComponent<AppProps, AppState> {
             ))
           }
         </ScrollView>
+        {
+          modal !== null && (
+            <AppModal {...modal} />
+          )
+        }
       </>
     );
   }
