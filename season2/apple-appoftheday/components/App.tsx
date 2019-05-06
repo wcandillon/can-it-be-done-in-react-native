@@ -3,12 +3,12 @@ import {
   View, Text, TouchableWithoutFeedback, StyleSheet, Dimensions,
 } from "react-native";
 import { DangerZone } from "expo";
-
 import { App, Position } from "./Model";
 import AppThumbnail from "./AppThumbnail";
 
-const { width, height } = Dimensions.get("window");
 const { Animated } = DangerZone;
+const { Value } = Animated;
+const { width, height } = Dimensions.get("window");
 const measure = async (ref: View | Text | ScrollView): Promise<Position> => new Promise(resolve => ref.measureInWindow((x, y, width, height) => resolve({
   x, y, width, height,
 })));
@@ -23,17 +23,21 @@ interface AppProps {
 export default class extends React.PureComponent<AppProps> {
   container = React.createRef();
 
+  opacity = new Value(1);
+
   startTransition = async () => {
     const { app, startTransition } = this.props;
     const position = await measure(this.container.current.getNode());
+    this.opacity.setValue(0);
     startTransition(app, position);
   };
 
   render() {
+    const { opacity } = this;
     const { app } = this.props;
     return (
       <TouchableWithoutFeedback onPress={this.startTransition}>
-        <Animated.View ref={this.container} style={styles.container}>
+        <Animated.View ref={this.container} style={[styles.container, { opacity }]}>
           <AppThumbnail {...{ app }} />
         </Animated.View>
       </TouchableWithoutFeedback>

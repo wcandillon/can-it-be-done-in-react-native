@@ -63,8 +63,12 @@ export default ({ app, position } : AppModalProps) => {
       </Animated.View>
       <Animated.View
         style={{
-          ...StyleSheet.absoluteFillObject,
-          marginTop: position.height,
+          position: "absolute",
+          borderRadius,
+          width,
+          height,
+          top: contentY,
+          left: contentX,
           opacity: cond(greaterThan(driver, 0.5), 1, 0),
         }}
       >

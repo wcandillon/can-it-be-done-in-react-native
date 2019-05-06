@@ -5,10 +5,6 @@ import { DangerZone } from "expo";
 const { Animated } = DangerZone;
 const { Value } = Animated;
 
-interface ContentProps {
-  opacity: typeof Value;
-}
-
 export default () => (
   <Animated.View style={styles.container}>
     <Text style={styles.paragraph}>
