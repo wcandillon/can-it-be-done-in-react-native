@@ -11,7 +11,7 @@ import SwipeToClose from "./SwipeToClose";
 const { width: wWidth } = Dimensions.get("window");
 const { Animated, Easing } = DangerZone;
 const {
-  Value, Clock, block, set, cond, greaterThan,
+  Value, Clock, block, set, cond, greaterThan, eq, round,
 } = Animated;
 const timingConfig = {
   toValue: 1,
@@ -26,15 +26,16 @@ export interface AppModalProps {
 export default ({ app, position } : AppModalProps) => {
   const clock = new Clock();
   const driver = new Value(0);
+  const translationY = new Value(0);
   const x = new Value(position.x);
   const y = new Value(position.y);
   const width = new Value(position.width);
   const height = new Value(position.height);
   const contentX = new Value(position.x);
   const contentY = new Value(position.y);
-  const borderRadius = driver;
+  const borderRadius = cond(eq(driver, 0), 8, cond(greaterThan(round(translationY), 0), 8));
   return (
-    <SwipeToClose>
+    <SwipeToClose y={translationY}>
       <Animated.Code>
         {
           () => block([

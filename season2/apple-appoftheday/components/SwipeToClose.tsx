@@ -6,12 +6,13 @@ import { DangerZone, BlurView } from "expo";
 const { Animated } = DangerZone;
 const { Value, interpolate, Extrapolate } = Animated;
 
-interface SwipeToCloseProps {}
+interface SwipeToCloseProps {
+  y: typeof Value;
+}
 
 export default class SwipeToClose extends React.PureComponent<SwipeToCloseProps> {
   render() {
-    const { children } = this.props;
-    const y = new Value(0);
+    const { children, y } = this.props;
     const scale = interpolate(y, {
       inputRange: [0, 100],
       outputRange: [1, 0.85],
