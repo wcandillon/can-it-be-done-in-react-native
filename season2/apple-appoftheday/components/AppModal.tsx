@@ -11,7 +11,7 @@ import SwipeToClose from "./SwipeToClose";
 const { width: wWidth } = Dimensions.get("window");
 const { Animated, Easing } = DangerZone;
 const {
-  Value, Clock, block, set, cond, greaterThan, eq, round, and, greaterOrEq,
+  Value, Clock, block, set, cond, greaterThan, eq, round, greaterOrEq, debug, neq, and,
 } = Animated;
 const timingConfig = {
   toValue: 1,
@@ -25,6 +25,7 @@ export interface AppModalProps {
 
 export default ({ app, position } : AppModalProps) => {
   const clock = new Clock();
+  const opened = new Value(0);
   const driver = new Value(0);
   const translationY = new Value(0);
   const x = new Value(position.x);
@@ -39,12 +40,22 @@ export default ({ app, position } : AppModalProps) => {
       <Animated.Code>
         {
           () => block([
-            set(driver, runTiming(clock, 0, timingConfig)),
+            cond(eq(opened, 0), [
+              set(driver, runTiming(clock, 0, timingConfig)),
+              cond(eq(clockRunning(clock), 0), set(opened, 1)),
+            ]),
             set(x, binaryInterpolation(driver, position.x, 0)),
             set(y, binaryInterpolation(driver, position.y, 0)),
             set(width, binaryInterpolation(driver, position.width, wWidth)),
             set(contentX, binaryInterpolation(driver, position.x, 0)),
             set(contentY, binaryInterpolation(driver, position.y, position.height)),
+            cond(and(greaterOrEq(round(translationY), 100), neq(driver, 0)), [
+              set(driver, runTiming(clock, 1, {
+                toValue: 0,
+                duration: 300,
+                easing: Easing.inOut(Easing.ease),
+              })),
+            ]),
           ])
         }
       </Animated.Code>
