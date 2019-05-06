@@ -7,7 +7,9 @@ import { App, Position } from "./Model";
 import AppThumbnail from "./AppThumbnail";
 
 const { Animated } = DangerZone;
-const { Value } = Animated;
+const {
+  Value, cond, debug, eq,
+} = Animated;
 const { width, height } = Dimensions.get("window");
 const measure = async (ref: View | Text | ScrollView): Promise<Position> => new Promise(resolve => ref.measureInWindow((x, y, width, height) => resolve({
   x, y, width, height,
@@ -18,7 +20,7 @@ export type Apps = App[];
 interface AppProps {
   app: App;
   open: (app: App, position: Position) => void;
-  isInBackground: boolean;
+  activeAppId: typeof Value;
 }
 
 export default class extends React.PureComponent<AppProps> {
@@ -32,10 +34,19 @@ export default class extends React.PureComponent<AppProps> {
   };
 
   render() {
-    const { app, isInBackground } = this.props;
+    const { app, activeAppId } = this.props;
+    const opacity = cond(eq(activeAppId, app.id), 0, 1);
     return (
       <TouchableWithoutFeedback onPress={this.startTransition}>
-        <Animated.View ref={this.container} style={[styles.container, { opacity: isInBackground ? 0 : 1 }]}>
+        <Animated.View
+          ref={this.container}
+          style={[styles.container, { opacity }]}
+        >
+          <Animated.Code>
+            {
+              () => debug(`opacity(${app.id}):`, opacity)
+            }
+          </Animated.Code>
           <AppThumbnail {...{ app }} />
         </Animated.View>
       </TouchableWithoutFeedback>

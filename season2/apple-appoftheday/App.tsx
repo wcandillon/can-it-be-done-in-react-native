@@ -1,28 +1,30 @@
 import React from "react";
 import { ScrollView, SafeAreaView, StatusBar } from "react-native";
-import { AppLoading, Asset } from "expo";
+import { AppLoading, Asset, DangerZone } from "expo";
 
-import { Apps, Position } from "./components/Model";
+import { Apps, Position, App as AppModel } from "./components/Model";
 import App from "./components/App";
 import AppModal, { AppModalProps } from "./components/AppModal";
 
+const { Animated } = DangerZone;
+const { Value, cond, eq } = Animated;
 const apps: Apps = [
   {
-    id: "yoga",
+    id: 0,
     title: "Namaste",
     subtitle: "Best Yoga apps for the summer",
     source: require("./assets/images/yoga.jpg"),
     content: "",
   },
   {
-    id: "fitness",
+    id: 1,
     title: "Get Fit",
     subtitle: "Wear it while you work out",
     source: require("./assets/images/fitness.jpg"),
     content: "",
   },
   {
-    id: "games",
+    id: 2,
     title: "Classic Games",
     subtitle: "They never get old",
     source: require("./assets/images/chess.jpg"),
@@ -42,17 +44,25 @@ export default class extends React.PureComponent<AppProps, AppState> {
     modal: null,
   };
 
+  activeAppId = new Value(-1);
+
   async componentDidMount() {
     await Promise.all(apps.map(app => Asset.loadAsync(app.source)));
     this.setState({ ready: true });
   }
 
-  open = (app: App, position: Position) => this.setState({ modal: { app, position } });
+  open = (app: AppModel, position: Position) => {
+    this.activeAppId.setValue(app.id);
+    this.setState({ modal: { app, position } });
+  }
 
-  close = () => this.setState({ modal: null });
+  close = () => {
+    this.activeAppId.setValue(-1);
+    this.setState({ modal: null });
+  }
 
   render() {
-    const { open, close } = this;
+    const { open, close, activeAppId } = this;
     const { ready, modal } = this.state;
     if (!ready) {
       return (
@@ -70,8 +80,7 @@ export default class extends React.PureComponent<AppProps, AppState> {
             apps.map(app => (
               <App
                 key={app.id}
-                isInBackground={modal !== null && modal.app.id === app.id}
-                {...{ app, open }}
+                {...{ app, open, activeAppId }}
               />
             ))
           }

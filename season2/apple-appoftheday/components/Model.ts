@@ -1,7 +1,7 @@
 import { ImageRequireSource } from "react-native";
 
 export interface App {
-  id: string;
+  id: number;
   title: string;
   subtitle: string;
   source: ImageRequireSource;
