@@ -4,7 +4,9 @@ import { Interactable } from "react-native-redash";
 import { DangerZone, BlurView } from "expo";
 
 const { Animated } = DangerZone;
-const { Value, interpolate, Extrapolate } = Animated;
+const {
+  Value, interpolate, Extrapolate, cond, neq,
+} = Animated;
 
 interface SwipeToCloseProps {
   translationY: typeof Value;
@@ -14,16 +16,16 @@ interface SwipeToCloseProps {
 export default class SwipeToClose extends React.PureComponent<SwipeToCloseProps> {
   render() {
     const { children, translationY: y, driver } = this.props;
-    const scale = interpolate(y, {
+    const scale = cond(neq(driver, 0), interpolate(y, {
       inputRange: [0, 100],
       outputRange: [1, 0.85],
       extrapolate: Extrapolate.CLAMP,
-    });
-    const translateY = interpolate(y, {
+    }), 1);
+    const translateY = cond(neq(driver, 0), interpolate(y, {
       inputRange: [0, 100],
       outputRange: [0, 100],
       extrapolate: Extrapolate.CLAMP,
-    });
+    }), 0);
     const opacity = interpolate(driver, {
       inputRange: [0, 1],
       outputRange: [0, 1],

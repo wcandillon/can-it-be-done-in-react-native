@@ -11,7 +11,7 @@ import SwipeToClose from "./SwipeToClose";
 const { width: wWidth } = Dimensions.get("window");
 const { Animated, Easing } = DangerZone;
 const {
-  Value, Clock, block, set, cond, greaterThan, eq, round, greaterOrEq, debug, neq, and,
+  Value, Clock, block, set, cond, greaterThan, eq, round, greaterOrEq, neq, and,
 } = Animated;
 const timingConfig = {
   toValue: 1,
