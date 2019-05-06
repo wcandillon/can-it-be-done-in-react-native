@@ -49,8 +49,10 @@ export default class extends React.PureComponent<AppProps, AppState> {
 
   startTransition = (app: App, position: Position) => this.setState({ modal: { app, position } })
 
+  closeTransition = () => this.setState({ modal: null });
+
   render() {
-    const { startTransition } = this;
+    const { startTransition, closeTransition } = this;
     const { ready, modal } = this.state;
     if (!ready) {
       return (
@@ -72,7 +74,7 @@ export default class extends React.PureComponent<AppProps, AppState> {
         </ScrollView>
         {
           modal !== null && (
-            <AppModal {...modal} />
+            <AppModal {...modal} {...{ closeTransition }} />
           )
         }
       </>

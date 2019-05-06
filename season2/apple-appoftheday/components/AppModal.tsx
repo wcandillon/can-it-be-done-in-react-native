@@ -11,7 +11,7 @@ import SwipeToClose from "./SwipeToClose";
 const { width: wWidth } = Dimensions.get("window");
 const { Animated, Easing } = DangerZone;
 const {
-  Value, Clock, block, set, cond, greaterThan, eq, round, greaterOrEq, neq, and,
+  Value, Clock, block, set, cond, greaterThan, eq, round, greaterOrEq, neq, and, call,
 } = Animated;
 const timingConfig = {
   toValue: 1,
@@ -21,9 +21,10 @@ const timingConfig = {
 export interface AppModalProps {
   app: App;
   position: Position;
+  closeTransition: () => void;
 }
 
-export default ({ app, position } : AppModalProps) => {
+export default ({ app, position, closeTransition } : AppModalProps) => {
   const clock = new Clock();
   const opened = new Value(0);
   const driver = new Value(0);
@@ -55,6 +56,7 @@ export default ({ app, position } : AppModalProps) => {
                 duration: 300,
                 easing: Easing.inOut(Easing.ease),
               })),
+              cond(eq(clockRunning(clock), 0), call([], closeTransition)),
             ]),
           ])
         }
