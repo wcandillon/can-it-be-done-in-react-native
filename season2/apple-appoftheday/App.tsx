@@ -68,7 +68,11 @@ export default class extends React.PureComponent<AppProps, AppState> {
         <ScrollView>
           {
             apps.map(app => (
-              <App key={app.id} {...{ app, open }} />
+              <App
+                key={app.id}
+                isInBackground={modal !== null && modal.app.id === app.id}
+                {...{ app, open }}
+              />
             ))
           }
         </ScrollView>

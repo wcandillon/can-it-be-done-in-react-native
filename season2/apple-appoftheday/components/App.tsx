@@ -18,26 +18,24 @@ export type Apps = App[];
 interface AppProps {
   app: App;
   open: (app: App, position: Position) => void;
+  isInBackground: boolean;
 }
 
 export default class extends React.PureComponent<AppProps> {
   container = React.createRef();
 
-  opacity = new Value(1);
 
   startTransition = async () => {
     const { app, open } = this.props;
     const position = await measure(this.container.current.getNode());
-    this.opacity.setValue(0);
     open(app, position);
   };
 
   render() {
-    const { opacity } = this;
-    const { app } = this.props;
+    const { app, isInBackground } = this.props;
     return (
       <TouchableWithoutFeedback onPress={this.startTransition}>
-        <Animated.View ref={this.container} style={[styles.container, { opacity }]}>
+        <Animated.View ref={this.container} style={[styles.container, { opacity: isInBackground ? 0 : 1 }]}>
           <AppThumbnail {...{ app }} />
         </Animated.View>
       </TouchableWithoutFeedback>
