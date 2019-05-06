@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dimensions } from "react-native";
 import { DangerZone } from "expo";
-import { binaryInterpolation, runTiming } from "react-native-redash";
+import { binaryInterpolation, runTiming, clockRunning } from "react-native-redash";
 
 import AppThumbnail from "./AppThumbnail";
 import { App, Position } from "./Model";
@@ -11,7 +11,7 @@ import SwipeToClose from "./SwipeToClose";
 const { width: wWidth } = Dimensions.get("window");
 const { Animated, Easing } = DangerZone;
 const {
-  Value, Clock, block, set, cond, greaterThan, eq, round,
+  Value, Clock, block, set, cond, greaterThan, eq, round, and, greaterOrEq,
 } = Animated;
 const timingConfig = {
   toValue: 1,
@@ -35,7 +35,7 @@ export default ({ app, position } : AppModalProps) => {
   const contentY = new Value(position.y);
   const borderRadius = cond(eq(driver, 0), 8, cond(greaterThan(round(translationY), 0), 8));
   return (
-    <SwipeToClose y={translationY}>
+    <SwipeToClose {...{ driver, translationY }}>
       <Animated.Code>
         {
           () => block([
