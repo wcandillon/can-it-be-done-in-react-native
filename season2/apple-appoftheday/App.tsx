@@ -47,12 +47,12 @@ export default class extends React.PureComponent<AppProps, AppState> {
     this.setState({ ready: true });
   }
 
-  startTransition = (app: App, position: Position) => this.setState({ modal: { app, position } })
+  open = (app: App, position: Position) => this.setState({ modal: { app, position } });
 
-  closeTransition = () => this.setState({ modal: null });
+  close = () => this.setState({ modal: null });
 
   render() {
-    const { startTransition, closeTransition } = this;
+    const { open, close } = this;
     const { ready, modal } = this.state;
     if (!ready) {
       return (
@@ -68,13 +68,13 @@ export default class extends React.PureComponent<AppProps, AppState> {
         <ScrollView>
           {
             apps.map(app => (
-              <App key={app.id} {...{ app, startTransition }} />
+              <App key={app.id} {...{ app, open }} />
             ))
           }
         </ScrollView>
         {
           modal !== null && (
-            <AppModal {...modal} {...{ closeTransition }} />
+            <AppModal {...modal} {...{ close }} />
           )
         }
       </>

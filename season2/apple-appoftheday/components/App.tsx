@@ -17,7 +17,7 @@ export type Apps = App[];
 
 interface AppProps {
   app: App;
-  startTransition: (app: App, position: Position) => void;
+  open: (app: App, position: Position) => void;
 }
 
 export default class extends React.PureComponent<AppProps> {
@@ -26,10 +26,10 @@ export default class extends React.PureComponent<AppProps> {
   opacity = new Value(1);
 
   startTransition = async () => {
-    const { app, startTransition } = this.props;
+    const { app, open } = this.props;
     const position = await measure(this.container.current.getNode());
     this.opacity.setValue(0);
-    startTransition(app, position);
+    open(app, position);
   };
 
   render() {

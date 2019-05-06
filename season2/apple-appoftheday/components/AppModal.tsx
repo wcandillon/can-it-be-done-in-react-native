@@ -21,10 +21,10 @@ const timingConfig = {
 export interface AppModalProps {
   app: App;
   position: Position;
-  closeTransition: () => void;
+  close: () => void;
 }
 
-export default ({ app, position, closeTransition } : AppModalProps) => {
+export default ({ app, position, close } : AppModalProps) => {
   const clock = new Clock();
   const opened = new Value(0);
   const driver = new Value(0);
@@ -56,7 +56,7 @@ export default ({ app, position, closeTransition } : AppModalProps) => {
                 duration: 300,
                 easing: Easing.inOut(Easing.ease),
               })),
-              cond(eq(clockRunning(clock), 0), call([], closeTransition)),
+              cond(eq(clockRunning(clock), 0), call([], close)),
             ]),
           ])
         }
