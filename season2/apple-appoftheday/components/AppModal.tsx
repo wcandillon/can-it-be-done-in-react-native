@@ -1,7 +1,5 @@
 import * as React from "react";
-import {
-  View, StyleSheet, Dimensions,
-} from "react-native";
+import { Dimensions } from "react-native";
 import { DangerZone } from "expo";
 import { binaryInterpolation, runTiming } from "react-native-redash";
 

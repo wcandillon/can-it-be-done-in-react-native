@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
 import { Interactable } from "react-native-redash";
-import { DangerZone } from "expo";
+import { DangerZone, BlurView } from "expo";
 
 const { Animated } = DangerZone;
 const { Value, interpolate, Extrapolate } = Animated;
@@ -23,10 +23,9 @@ export default class SwipeToClose extends React.PureComponent<SwipeToCloseProps>
       extrapolate: Extrapolate.CLAMP,
     });
     return (
-      <View style={styles.container}>
-        <StatusBar
-          barStyle="light-content"
-        />
+      <View style={StyleSheet.absoluteFill}>
+        <BlurView tint="default" intensity={80} style={StyleSheet.absoluteFill} />
+        <StatusBar barStyle="light-content" />
         <Animated.View style={{ transform: [{ scale }, { translateY }] }}>
           {children}
         </Animated.View>
@@ -40,10 +39,3 @@ export default class SwipeToClose extends React.PureComponent<SwipeToCloseProps>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: 8,
-  },
-});
