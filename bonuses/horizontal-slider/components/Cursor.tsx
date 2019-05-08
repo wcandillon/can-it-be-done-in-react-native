@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { DangerZone } from "expo";
 import { Interactable, ReText } from "react-native-redash";
 
@@ -20,7 +20,7 @@ export default class Cursor extends React.PureComponent<CursorProps> {
     const snapPoints = new Array(count).fill(0).map((e, i) => ({ x: i * size }));
     const index = round(divide(animatedValueX, size));
     return (
-      <Interactable {...{ snapPoints, animatedValueX }} horizontalOnly>
+      <Interactable style={StyleSheet.absoluteFill} {...{ snapPoints, animatedValueX }} horizontalOnly>
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
@@ -40,7 +40,13 @@ export default class Cursor extends React.PureComponent<CursorProps> {
             alignItems: "center",
           }}
         >
-          <ReText style={{ fontSize: 24 }} text={concat(add(index, 1))} />
+          {
+            // For an implementation of ReText on android look at
+            // https://bit.ly/2DXZFbS
+            Platform.OS === "ios" && (
+              <ReText style={{ fontSize: 24 }} text={concat(add(index, 1))} />
+            )
+          }
         </Animated.View>
       </Interactable>
     );
