@@ -1,16 +1,17 @@
 import * as React from "react";
 import {
-  View, Text, TouchableWithoutFeedback, StyleSheet, Dimensions,
+  View, Text, TouchableWithoutFeedback, StyleSheet, Dimensions, Platform,
 } from "react-native";
-import { DangerZone } from "expo";
+import { DangerZone, Constants } from "expo";
 import { App, Position } from "./Model";
 import AppThumbnail from "./AppThumbnail";
 
 const { Animated } = DangerZone;
 const { Value, cond, eq } = Animated;
 const { width, height } = Dimensions.get("window");
+const offset = (v: number) => (Platform.OS === "android" ? (v + Constants.statusBarHeight) : v);
 const measure = async (ref: View | Text | ScrollView): Promise<Position> => new Promise(resolve => ref.measureInWindow((x, y, width, height) => resolve({
-  x, y, width, height,
+  x, y: offset(y), width, height,
 })));
 
 export type Apps = App[];

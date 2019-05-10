@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  View, StyleSheet, Text,
+  View, StyleSheet, Text, Platform, Image,
 } from "react-native";
 import { Constants, DangerZone } from "expo";
 
@@ -16,10 +16,22 @@ interface AppThumbnailProps {
 
 export default ({ app: { source, title, subtitle }, borderRadius }: AppThumbnailProps) => (
   <>
-    <Animated.Image
-      style={[styles.image, { borderRadius: borderRadius || 8 }]}
-      {...{ source }}
-    />
+    {
+      Platform.OS === "android" && (
+        <Image
+          style={styles.image}
+          {...{ source }}
+        />
+      )
+    }
+    {
+      Platform.OS === "ios" && (
+        <Animated.Image
+          style={[styles.image, { borderRadius: borderRadius || 8 }]}
+          {...{ source }}
+        />
+      )
+    }
     <View style={styles.content}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.subtitle}>{subtitle}</Text>
