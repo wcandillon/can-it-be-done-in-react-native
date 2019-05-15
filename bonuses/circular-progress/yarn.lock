@@ -4629,6 +4629,10 @@ react-native-reanimated@1.0.0-alpha.11:
   version "1.0.0-alpha.11"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.0.0-alpha.11.tgz#b78c839bae878d149561b56a3c750414957ea86d"
 
+react-native-redash@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-2.0.0.tgz#e91f7c87dba8687c1f18fd62e2caf1e618b6231c"
+
 react-native-safe-module@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-module/-/react-native-safe-module-1.2.0.tgz#a23824ca24edc2901913694a76646475113d570d"

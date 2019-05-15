@@ -1,17 +1,17 @@
 import * as React from "react";
-import { Dimensions, StyleSheet, addons } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { DangerZone, Svg } from "expo";
 import SVGPath from "art/modes/svg/path";
-import { φ } from "./AnimationHelpers";
 
 const { Animated } = DangerZone;
 const {
-  Value, interpolate, multiply, add, sub,
+  Value, interpolate, multiply,
 } = Animated;
 const {
   Defs, LinearGradient, Stop, Path,
 } = Svg;
 
+const φ = 1.61;
 const { PI } = Math;
 const { width } = Dimensions.get("window");
 const size = width - 32;

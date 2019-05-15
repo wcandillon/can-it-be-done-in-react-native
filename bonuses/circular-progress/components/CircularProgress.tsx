@@ -35,6 +35,14 @@ export default ({ progress }: CircularPogressProps) => {
           <Stop offset="1" stopColor="#ef9837" />
         </LinearGradient>
       </Defs>
+      <Circle
+        stroke="rgba(255, 255, 255, 0.2)"
+        fill="none"
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        {...{ strokeWidth }}
+      />
       <AnimatedCircle
         stroke="url(#grad)"
         fill="none"
