@@ -27,7 +27,8 @@ export default ({ track, artist, index }: TrackProps) => (
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: "row"
+    flexDirection: "row",
+    backgroundColor: "black"
   },
   cell: {
     padding: 16,

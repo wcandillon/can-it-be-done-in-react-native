@@ -8,7 +8,7 @@ const album: AlbumModel = {
   artist: "Jan Blomqvist",
   release: 2016,
   // eslint-disable-next-line global-require
-  cover: require("./assets/Jan-Blomqvist-Remote-Control.jpg"),
+  cover: require("./assets/Jan-Blomqvist.jpg"),
   tracks: [
     { name: "Stories Over" },
     { name: "More", artist: "Jan Blomqvist, Elena Pitoulis" },

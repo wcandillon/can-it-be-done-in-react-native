@@ -36,7 +36,6 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
   },
   header: {
     height: MAX_HEADER_HEIGHT
