@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import Animated from "react-native-reanimated";
 import { onScroll } from "react-native-redash";
 import {LinearGradient} from "expo";
@@ -18,7 +18,12 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
   const height = interpolate(y, {
     inputRange: [-MAX_HEADER_HEIGHT, 0],
     outputRange: [0, MAX_HEADER_HEIGHT],
-    extrapolateRight: Extrapolate.CLAMP
+    extrapolate: Extrapolate.CLAMP
+  });
+  const opacity = interpolate(y, {
+    inputRange: [-MAX_HEADER_HEIGHT / 2, 0, MAX_HEADER_HEIGHT / 2],
+    outputRange: [0, 1, 0],
+    extrapolateLeft: Extrapolate.CLAMP
   });
   return (
     <Animated.ScrollView
@@ -35,6 +40,9 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
             end={[0, 1]} 
             colors={['transparent', 'rgba(0, 0, 0, 0.2)', 'black']} 
           />
+        </Animated.View>
+        <Animated.View style={[styles.artistContainer, { opacity }]}>
+          <Text style={styles.artist}>{artist}</Text>
         </Animated.View>
       </View>
       {
@@ -59,5 +67,16 @@ const styles = StyleSheet.create({
   mask: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "black"
+  },
+  artistContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  artist: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 64,
+    fontWeight: "bold"
   }
 });
