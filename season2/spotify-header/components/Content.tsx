@@ -1,9 +1,9 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { onScroll } from "react-native-redash";
 
-import { Album } from "./Model";
+import { Album, MAX_HEADER_HEIGHT } from "./Model";
 import Track from "./Track";
 
 interface ContentProps {
@@ -19,7 +19,8 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
       style={styles.container}
       showsVerticalScrollIndicator={false}
       scrollEventThrottle={1}
-    >
+    > 
+      <View style={styles.header} />
       {
         tracks.map((track, index) => (
           <Track
@@ -37,4 +38,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
   },
+  header: {
+    height: MAX_HEADER_HEIGHT
+  }
 });
