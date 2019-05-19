@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
+import {LinearGradient} from "expo";
 import Animated from "react-native-reanimated";
 import { Album, MAX_HEADER_HEIGHT } from './Model';
 
@@ -25,6 +26,12 @@ export default ({ album: { cover }, y }: CoverProps) => {
     <Animated.View style={[styles.container, { transform: [{ scale }] }]}>
       <Image style={styles.image} source={cover}  />
       <Animated.View style={[styles.mask, { opacity }]} />
+      <LinearGradient
+        style={StyleSheet.absoluteFill} 
+        start={[0, 0.61]}
+        end={[0, 1]} 
+        colors={['rgba(0, 0, 0, 0.3)', 'black']} 
+      />
     </Animated.View>
   );
 }
