@@ -17,6 +17,11 @@ export default ({ album: { cover }, y }: CoverProps) => {
     outputRange: [2, 1],
     extrapolateRight: Extrapolate.CLAMP
   });
+  const height = interpolate(y, {
+    inputRange: [-MAX_HEADER_HEIGHT, 0],
+    outputRange: [0, MAX_HEADER_HEIGHT],
+    extrapolateRight: Extrapolate.CLAMP
+  });
   const opacity = interpolate(y, {
     inputRange: [-MAX_HEADER_HEIGHT / 2, 0, MAX_HEADER_HEIGHT],
     outputRange: [0, 0.2, 1],
@@ -26,12 +31,14 @@ export default ({ album: { cover }, y }: CoverProps) => {
     <Animated.View style={[styles.container, { transform: [{ scale }] }]}>
       <Image style={styles.image} source={cover}  />
       <Animated.View style={[styles.mask, { opacity }]} />
-      <LinearGradient
-        style={StyleSheet.absoluteFill} 
-        start={[0, 0.61]}
-        end={[0, 1]} 
-        colors={['rgba(0, 0, 0, 0.3)', 'black']} 
-      />
+      <Animated.View style={{ position: "absolute", left: 0, bottom: 0, right: 0, height }}>
+        <LinearGradient
+          style={StyleSheet.absoluteFill} 
+          start={[0, 0.4]}
+          end={[0, 1]} 
+          colors={['transparent', 'rgba(0, 0, 0, 0.2)', 'black']} 
+        />
+      </Animated.View>
     </Animated.View>
   );
 }
