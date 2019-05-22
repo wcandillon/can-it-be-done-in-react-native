@@ -72,11 +72,9 @@ export default class Progress extends React.Component<ProgressProps, ProgressSta
       this.progress += 0.1;
       if (this.progress >= 1) {
         this.progress = 0;
-        if (this.lastIndex === (paths.length - 1)) {
-          this.lastIndex = 0;
-        }
-        this.interpolator = interpolatePath(paths[this.lastIndex], paths[( this.lastIndex + 1 ) % paths.length]);
-        this.lastIndex += 1;
+        const nextIndex = (this.lastIndex + 1) % paths.length
+        this.interpolator = interpolatePath(paths[this.lastIndex], paths[nextIndex]);
+        this.lastIndex = nextIndex;
       }
       const d = this.interpolator(this.progress);
       this.setState({ d });
