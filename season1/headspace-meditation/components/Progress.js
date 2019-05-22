@@ -39,7 +39,6 @@ const paths = [
   generatePath(),
   generatePath(),
   generatePath(),
-  p1,
 ];
 
 type ProgressProps = {};
@@ -76,8 +75,7 @@ export default class Progress extends React.Component<ProgressProps, ProgressSta
         if (this.lastIndex === (paths.length - 1)) {
           this.lastIndex = 0;
         }
-        // FIXME: the first and the last paths shouldn't require to be identical
-        this.interpolator = interpolatePath(paths[this.lastIndex], paths[this.lastIndex + 1]);
+        this.interpolator = interpolatePath(paths[this.lastIndex], paths[( this.lastIndex + 1 ) % paths.length]);
         this.lastIndex += 1;
       }
       const d = this.interpolator(this.progress);
