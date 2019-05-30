@@ -1,8 +1,8 @@
 import * as React from "react";
-import { TouchableWithoutFeedback, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import Animated from "react-native-reanimated";
 
-import { MAX_HEADER_HEIGHT } from "./Model";
+import { MAX_HEADER_HEIGHT, MIN_HEADER_HEIGHT } from "./Model";
 
 interface ShufflePlayProps {
   y: Animated.Value<number>;
@@ -10,10 +10,13 @@ interface ShufflePlayProps {
 
 const BUTTON_HEIGHT = 48;
 const BUTTON_WIDTH = 200;
-const { add, multiply } = Animated;
+const { add, multiply, max } = Animated;
 
 export default ({ y }: ShufflePlayProps) => {
-  const translateY = add(multiply(y, -1), MAX_HEADER_HEIGHT - BUTTON_HEIGHT / 2);
+  const translateY = max(
+    add(multiply(y, -1), MAX_HEADER_HEIGHT - BUTTON_HEIGHT / 2),
+    MIN_HEADER_HEIGHT - BUTTON_HEIGHT / 2,
+  );
   return (
     <TouchableWithoutFeedback>
       <Animated.View style={[styles.button, { transform: [{ translateY }] }]}>

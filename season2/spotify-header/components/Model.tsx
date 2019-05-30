@@ -1,7 +1,7 @@
 import { Dimensions } from "react-native";
 import { Constants } from "expo";
 
-const {height} = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 const φ = (1 + Math.sqrt(5)) / 2;
 
 export const MIN_HEADER_HEIGHT = 64 + Constants.statusBarHeight;

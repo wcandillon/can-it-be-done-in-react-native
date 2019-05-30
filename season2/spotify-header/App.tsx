@@ -1,5 +1,6 @@
 import React from "react";
 import { Asset, AppLoading } from "expo";
+import { StatusBar } from "react-native";
 
 import Album, { Album as AlbumModel } from "./components/Album";
 
@@ -49,7 +50,10 @@ export default class App extends React.PureComponent<AppProps, AppState> {
       );
     }
     return (
+      <>
+        <StatusBar barStyle="light-content" />
         <Album {...{ album }} />
+      </>
     );
   }
 }

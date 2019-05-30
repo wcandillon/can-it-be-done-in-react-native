@@ -4624,7 +4624,7 @@ react-native-maps@*:
   version "0.24.2"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.24.2.tgz#19974f967cb0c2e24dab74ca879118e0932571b2"
 
-"react-native-maps@github:expo/react-native-maps#v0.22.1-exp.0":
+react-native-maps@expo/react-native-maps#v0.22.1-exp.0:
   version "0.22.1"
   resolved "https://codeload.github.com/expo/react-native-maps/tar.gz/e6f98ff7272e5d0a7fe974a41f28593af2d77bb2"
 
@@ -4632,9 +4632,11 @@ react-native-reanimated@1.0.0-alpha.11:
   version "1.0.0-alpha.11"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.0.0-alpha.11.tgz#b78c839bae878d149561b56a3c750414957ea86d"
 
-react-native-redash@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-2.0.0.tgz#e91f7c87dba8687c1f18fd62e2caf1e618b6231c"
+react-native-redash@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-3.3.1.tgz#a3df41ad9f6920092cc2e0499fce5a6382e4113d"
+  dependencies:
+    svg-path-properties "0.4.8"
 
 react-native-safe-module@^1.1.0:
   version "1.2.0"
@@ -5313,6 +5315,10 @@ supports-color@^5.3.0:
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.5.0.tgz#e2e69a44ac8772f78a1ec0b35b689df6530efc8f"
   dependencies:
     has-flag "^3.0.0"
+
+svg-path-properties@0.4.8:
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/svg-path-properties/-/svg-path-properties-0.4.8.tgz#376a833e4bfdc414045532f4d2ee3c79ea0b998d"
 
 table@^5.2.3:
   version "5.3.3"

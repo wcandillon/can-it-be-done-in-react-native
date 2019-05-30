@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 
 import { Album } from "./Model";
+import Header from "./Header";
 import Content from "./Content";
 import Cover from "./Cover";
 import ShufflePlay from "./ShufflePlay";
@@ -15,11 +16,13 @@ interface AlbumProps {
 
 export default ({ album }: AlbumProps) => {
   const y = new Value(0);
+  const { artist } = album;
   return (
     <View style={styles.container}>
-      <Cover {...{y, album}} />
+      <Header {...{ y, artist }} />
+      <ShufflePlay {...{ y }} />
+      <Cover {...{ y, album }} />
       <Content {...{ y, album }} />
-      <ShufflePlay {...{y}} />
     </View>
   );
 };
