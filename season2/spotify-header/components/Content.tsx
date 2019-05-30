@@ -34,9 +34,7 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
     >
       <View style={styles.header}>
         <Animated.View
-          style={{
-            position: "absolute", left: 0, bottom: 0, right: 0, height, alignItems: "center",
-          }}
+          style={[styles.gradient, { height }]}
         >
           <LinearGradient
             style={StyleSheet.absoluteFill}
@@ -69,6 +67,13 @@ const styles = StyleSheet.create({
   },
   header: {
     height: MAX_HEADER_HEIGHT,
+  },
+  gradient: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    right: 0,
+    alignItems: "center",
   },
   artistContainer: {
     ...StyleSheet.absoluteFillObject,
