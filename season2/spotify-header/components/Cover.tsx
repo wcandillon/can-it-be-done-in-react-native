@@ -7,7 +7,7 @@ const {interpolate, Extrapolate} = Animated;
 
 interface CoverProps {
   album: Album;
-  y: Animated.Value;
+  y: Animated.Value<number>;
 }
 
 export default ({ album: { cover }, y }: CoverProps) => {
@@ -23,7 +23,7 @@ export default ({ album: { cover }, y }: CoverProps) => {
   });
   return (
     <Animated.View style={[styles.container, { transform: [{ scale }] }]}>
-      <Image style={styles.image} source={cover}  />
+      <Image style={styles.image} source={cover} />
       <Animated.View
         style={{ ...StyleSheet.absoluteFillObject, backgroundColor: "black", opacity }}
       />

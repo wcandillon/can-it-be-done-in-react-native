@@ -49,7 +49,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
       );
     }
     return (
-      <Album {...{ album }} />
+        <Album {...{ album }} />
     );
   }
 }

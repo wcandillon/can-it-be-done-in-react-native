@@ -5,6 +5,7 @@ import Animated from "react-native-reanimated";
 import { Album } from "./Model";
 import Content from "./Content";
 import Cover from "./Cover";
+import ShufflePlay from "./ShufflePlay";
 
 const { Value } = Animated;
 
@@ -18,6 +19,7 @@ export default ({ album }: AlbumProps) => {
     <View style={styles.container}>
       <Cover {...{y, album}} />
       <Content {...{ y, album }} />
+      <ShufflePlay {...{y}} />
     </View>
   );
 };
