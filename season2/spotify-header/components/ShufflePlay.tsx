@@ -13,7 +13,7 @@ const BUTTON_WIDTH = 200;
 const { add, multiply } = Animated;
 
 export default ({ y }: ShufflePlayProps) => {
-  const translateY = add(MAX_HEADER_HEIGHT, multiply(y, -1));
+  const translateY = add(multiply(y, -1), MAX_HEADER_HEIGHT - BUTTON_HEIGHT / 2);
   return (
     <TouchableWithoutFeedback>
       <Animated.View style={[styles.button, { transform: [{ translateY }] }]}>

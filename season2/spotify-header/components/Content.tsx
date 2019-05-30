@@ -30,12 +30,14 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
       onScroll={onScroll({ y })}
       style={styles.container}
       showsVerticalScrollIndicator={false}
-      scrollEventThrottle={1}
+      scrollEventThrottle={16}
     >
       <View style={styles.header}>
-        <Animated.View style={{
- position: "absolute", left: 0, bottom: 0, right: 0, height, alignItems: "center" 
-}}>
+        <Animated.View
+          style={{
+            position: "absolute", left: 0, bottom: 0, right: 0, height, alignItems: "center",
+          }}
+        >
           <LinearGradient
             style={StyleSheet.absoluteFill}
             start={[0, 0.3]}
@@ -47,14 +49,16 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
           <Text style={styles.artist}>{artist}</Text>
         </Animated.View>
       </View>
-      {
-        tracks.map((track, key) => (
-          <Track
-            index={key + 1}
-            {...{ track, key, artist }}
-          />
-        ))
-      }
+      <View style={styles.tracks}>
+        {
+          tracks.map((track, key) => (
+            <Track
+              index={key + 1}
+              {...{ track, key, artist }}
+            />
+          ))
+        }
+      </View>
     </Animated.ScrollView>
   );
 };
@@ -66,10 +70,6 @@ const styles = StyleSheet.create({
   header: {
     height: MAX_HEADER_HEIGHT,
   },
-  mask: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "black",
-  },
   artistContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
@@ -80,5 +80,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 48,
     fontWeight: "bold",
+  },
+  tracks: {
+    paddingTop: 32,
+    backgroundColor: "black",
   },
 });
