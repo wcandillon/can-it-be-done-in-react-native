@@ -19,10 +19,10 @@ export default ({ album }: AlbumProps) => {
   const { artist } = album;
   return (
     <View style={styles.container}>
-      <Header {...{ y, artist }} />
-      <ShufflePlay {...{ y }} />
       <Cover {...{ y, album }} />
       <Content {...{ y, album }} />
+      <Header {...{ y, artist }} />
+      <ShufflePlay {...{ y }} />
     </View>
   );
 };

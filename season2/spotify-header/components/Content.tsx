@@ -30,7 +30,7 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
       onScroll={onScroll({ y })}
       style={styles.container}
       showsVerticalScrollIndicator={false}
-      scrollEventThrottle={1}
+      scrollEventThrottle={16}
     >
       <View style={styles.header}>
         <Animated.View
