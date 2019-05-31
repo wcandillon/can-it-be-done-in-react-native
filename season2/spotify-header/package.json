@@ -9,14 +9,14 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "expo": "^32.0.0",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-redash": "^3.3.1"
+    "expo": "^33.0.0",
+    "react": "16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-redash": "^3.3.2",
+    "react-native-web": "^0.11.4"
   },
   "devDependencies": {
-    "@types/expo": "^32.0.13",
-    "babel-preset-expo": "^5.0.0",
+    "babel-preset-expo": "^5.1.1",
     "eslint": "^5.16.0",
     "eslint-config-react-native-wcandillon": "^1.0.6"
   },

@@ -1,5 +1,5 @@
 import { Dimensions } from "react-native";
-import { Constants } from "expo";
+import Constants from "expo-constants";
 
 const { height } = Dimensions.get("window");
 const φ = (1 + Math.sqrt(5)) / 2;

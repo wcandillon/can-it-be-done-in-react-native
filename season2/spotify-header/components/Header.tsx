@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Text, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
-import { Constants } from "expo";
+import Constants from "expo-constants";
 import { MIN_HEADER_HEIGHT, HEADER_DELTA } from "./Model";
 
 interface HeaderProps {

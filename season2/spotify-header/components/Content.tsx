@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Animated from "react-native-reanimated";
 import { onScroll } from "react-native-redash";
-import { LinearGradient } from "expo";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { Album, MAX_HEADER_HEIGHT } from "./Model";
 import Track from "./Track";
