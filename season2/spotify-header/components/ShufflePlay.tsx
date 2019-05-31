@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   button: {
     position: "absolute",
     alignSelf: "center",
-    backgroundColor: "#58b55f",
+    backgroundColor: "#1ed760",
     height: BUTTON_HEIGHT,
     width: BUTTON_WIDTH,
     borderRadius: 32,
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "white",
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "center",
-    fontWeight: "500",
+    fontWeight: "600",
   },
 });
