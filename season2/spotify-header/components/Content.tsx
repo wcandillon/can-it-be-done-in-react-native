@@ -4,10 +4,13 @@ import Animated from "react-native-reanimated";
 import { onScroll } from "react-native-redash";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { Album, MAX_HEADER_HEIGHT } from "./Model";
+import { Album, MAX_HEADER_HEIGHT, HEADER_DELTA } from "./Model";
 import Track from "./Track";
+import ShufflePlay, { BUTTON_HEIGHT } from "./ShufflePlay";
 
-const { interpolate, Extrapolate } = Animated;
+const {
+  interpolate, Extrapolate, cond, greaterOrEq,
+} = Animated;
 
 interface ContentProps {
   album: Album;
@@ -25,6 +28,7 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
     outputRange: [0, 1, 0],
     extrapolateLeft: Extrapolate.CLAMP,
   });
+  const opacityBtn = cond(greaterOrEq(y, HEADER_DELTA + BUTTON_HEIGHT / 2), 0, 1);
   return (
     <Animated.ScrollView
       onScroll={onScroll({ y })}
@@ -48,6 +52,9 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
         </Animated.View>
       </View>
       <View style={styles.tracks}>
+        <Animated.View style={{ opacity: opacityBtn }}>
+          <ShufflePlay />
+        </Animated.View>
         {
           tracks.map((track, key) => (
             <Track

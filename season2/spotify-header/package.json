@@ -9,6 +9,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@types/expo__vector-icons": "^9.0.1",
     "expo": "^33.0.0",
     "react": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
@@ -16,6 +17,8 @@
     "react-native-web": "^0.11.4"
   },
   "devDependencies": {
+    "@types/react": "^16.8.19",
+    "@types/react-native": "^0.57.60",
     "babel-preset-expo": "^5.1.1",
     "eslint": "^5.16.0",
     "eslint-config-react-native-wcandillon": "^1.0.6"

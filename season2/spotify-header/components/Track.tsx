@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import {Feather as Icon} from "@expo/vector-icons";
+import * as React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Feather as Icon } from "@expo/vector-icons";
 
-import { Track } from './Model';
+import { Track } from "./Model";
 
 interface TrackProps {
   track: Track;
@@ -28,19 +28,19 @@ export default ({ track, artist, index }: TrackProps) => (
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   cell: {
     padding: 16,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   index: {
-    color: "#b2b3b4"
+    color: "#b2b3b4",
   },
   artist: {
-    color: "#b2b3b4"
+    color: "#b2b3b4",
   },
   name: {
-    color: "white"
-  }
-})
+    color: "white",
+  },
+});
