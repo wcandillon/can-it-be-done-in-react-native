@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Asset } from "expo-asset";
 import { StatusBar } from "react-native";
+import { AppLoading } from "expo";
 
-import LoadingScreen from "./components/LoadingScreen";
 import Album from "./components/Album";
 import { Album as AlbumModel } from "./components/Model";
 
@@ -28,32 +28,21 @@ const album: AlbumModel = {
   ],
 };
 
-interface AppProps {}
-
-interface AppState {
-  ready: boolean;
-}
-
-export default class App extends React.PureComponent<AppProps, AppState> {
-  state = {
-    ready: false,
-  };
-
-  async componentDidMount() {
-    await Asset.loadAsync(album.cover);
-    this.setState({ ready: true });
+export default () => {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    (async () => {
+      await Asset.loadAsync(album.cover);
+      setReady(true);
+    })();
+  });
+  if (!ready) {
+    return <AppLoading />;
   }
-
-  render() {
-    const { ready } = this.state;
-    if (!ready) {
-      return <LoadingScreen />;
-    }
-    return (
-      <>
-        <StatusBar barStyle="light-content" />
-        <Album {...{ album }} />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <StatusBar barStyle="light-content" />
+      <Album {...{ album }} />
+    </>
+  );
+};
