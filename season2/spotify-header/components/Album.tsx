@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 
 import {
-  Album, MIN_HEADER_HEIGHT, MAX_HEADER_HEIGHT, HEADER_DELTA,
+  Album, MIN_HEADER_HEIGHT, HEADER_DELTA,
 } from "./Model";
 import Header from "./Header";
 import Content from "./Content";

@@ -1,9 +1,10 @@
 import React from "react";
 import { Asset } from "expo-asset";
-import { AppLoading } from "expo";
 import { StatusBar } from "react-native";
 
-import Album, { Album as AlbumModel } from "./components/Album";
+import LoadingScreen from "./components/LoadingScreen";
+import Album from "./components/Album";
+import { Album as AlbumModel } from "./components/Model";
 
 const album: AlbumModel = {
   name: "Remote Control",
@@ -46,9 +47,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
   render() {
     const { ready } = this.state;
     if (!ready) {
-      return (
-        <AppLoading />
-      );
+      return <LoadingScreen />;
     }
     return (
       <>

@@ -17,6 +17,6 @@ export interface Album {
   name: string;
   artist: string;
   release: number;
-  cover: number | number[];
+  cover: number;
   tracks: Track[];
 }
