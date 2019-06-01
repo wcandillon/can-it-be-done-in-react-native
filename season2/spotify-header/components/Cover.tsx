@@ -11,7 +11,7 @@ interface CoverProps {
 }
 
 export default ({ album: { cover }, y }: CoverProps) => {
-  const scale = interpolate(y, {
+  const scale: any = interpolate(y, {
     inputRange: [-MAX_HEADER_HEIGHT, 0],
     outputRange: [3, 1],
     extrapolateRight: Extrapolate.CLAMP,
