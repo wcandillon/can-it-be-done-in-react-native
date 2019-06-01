@@ -1,0 +1,7 @@
+{
+  "extends": "react-native-wcandillon",
+  "rules": {
+    "react-native/no-color-literals": 0,
+    "import/no-extraneous-dependencies": 0
+  }
+}
