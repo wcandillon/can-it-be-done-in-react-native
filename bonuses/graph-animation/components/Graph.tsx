@@ -35,7 +35,7 @@ export default ({ data }: GraphProps) => {
     .line<DataPoint>()
     .x(p => scaleX(p.date))
     .y(p => scaleY(p.value))
-    .curve(shape.curveBasis)(data);
+    .curve(shape.curveBasis)(data) as string;
   return (
     <View style={styles.container}>
       <Svg style={StyleSheet.absoluteFill}>
@@ -50,12 +50,7 @@ export default ({ data }: GraphProps) => {
           d={`${d}L ${width} ${height} L 0 ${height}`}
           fill="url(#gradient)"
         />
-        <Path
-          d={`${d}`}
-          fill="transparent"
-          stroke="#3977e3"
-          {...{ strokeWidth }}
-        />
+        <Path fill="transparent" stroke="#3977e3" {...{ d, strokeWidth }} />
       </Svg>
     </View>
   );
