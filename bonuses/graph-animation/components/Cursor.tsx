@@ -2,7 +2,9 @@ import * as React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { decay, getY, clamp } from "react-native-redash";
+import { decay, clamp } from "react-native-redash";
+
+import { getY } from "./SVGHelpers";
 
 const { Value, event, sub } = Animated;
 const TOUCH_SIZE = 200;
