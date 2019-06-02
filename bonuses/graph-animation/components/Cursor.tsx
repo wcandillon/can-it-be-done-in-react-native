@@ -6,7 +6,7 @@ import { decay, clamp } from "react-native-redash";
 
 import { getParts, getYAtLength, getXAtLength } from "./SVGHelpers";
 
-const { Value, event, sub } = Animated;
+const { Value, event, sub, interpolate } = Animated;
 const TOUCH_SIZE = 200;
 const { width } = Dimensions.get("window");
 
@@ -31,10 +31,15 @@ export default ({ d, r, borderWidth, borderColor }: CursorProps) => {
       }
     }
   ]);
-  const l = clamp(decay(translationX, state, velocityX), 0, width);
+  // TODO: is Clamp necessary here?
+  const cx = clamp(decay(translationX, state, velocityX), 0, width);
   const parts = getParts(d);
-  const y = getYAtLength(parts, l);
-  const x = getXAtLength(parts, l);
+  const length = interpolate(cx, {
+    inputRange: [0, width],
+    outputRange: [0, parts.length]
+  });
+  const y = getYAtLength(parts, length);
+  const x = getXAtLength(parts, length);
   const translateX: any = sub(x, TOUCH_SIZE / 2);
   const translateY: any = sub(y, TOUCH_SIZE / 2);
   return (
