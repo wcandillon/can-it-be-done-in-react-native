@@ -4,7 +4,7 @@ import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { decay, clamp } from "react-native-redash";
 
-import { getY } from "./SVGHelpers";
+import { getParts, getYAtLength, getXAtLength } from "./SVGHelpers";
 
 const { Value, event, sub } = Animated;
 const TOUCH_SIZE = 200;
@@ -31,8 +31,10 @@ export default ({ d, r, borderWidth, borderColor }: CursorProps) => {
       }
     }
   ]);
-  const x = clamp(decay(translationX, state, velocityX), 0, width);
-  const y = getY(d, x);
+  const l = clamp(decay(translationX, state, velocityX), 0, width);
+  const parts = getParts(d);
+  const y = getYAtLength(parts, l);
+  const x = getXAtLength(parts, l);
   const translateX: any = sub(x, TOUCH_SIZE / 2);
   const translateY: any = sub(y, TOUCH_SIZE / 2);
   return (
