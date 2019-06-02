@@ -26,6 +26,30 @@ const CY2 = 4;
 const CX = 5;
 const CY = 6;
 
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface Part {
+  p0: Point;
+  p1: Point;
+  p2: Point;
+  p3: Point;
+}
+
+export interface Parts {
+  search: Part[];
+  p0x: Point[];
+  p0y: Point[];
+  p1x: Point[];
+  p1y: Point[];
+  p2x: Point[];
+  p2y: Point[];
+  p3x: Point[];
+  p3y: Point[];
+}
+
 export const bezier = (
   t: Animated.Node<number>,
   p0: Animated.Node<number>,
@@ -41,9 +65,9 @@ export const bezier = (
   return add(a1, a2, a3, a4);
 };
 
-export const getParts = (d: string) => {
+export const getParts = (d: string): Parts => {
   const curves = normalizeSVG(absSVG(parseSVG(d)));
-  const parts = curves
+  const parts: Parts = curves
     .filter((_, index) => index !== 0)
     .map((curve, index) => {
       const prevCurve = curves[index];
@@ -75,10 +99,10 @@ export const getParts = (d: string) => {
 };
 
 export const getY = (
-  d: string,
-  x: Animated.Value<number>
+  d: string | Parts,
+  x: Animated.Node<number>
 ): Animated.Node<number> => {
-  const parts = getParts(d);
+  const parts = typeof d === "string" ? getParts(d) : d;
   const notFound: Animated.Node<number> = new Value(-1);
   const index = parts.search.reduce(
     (acc, p, i) =>

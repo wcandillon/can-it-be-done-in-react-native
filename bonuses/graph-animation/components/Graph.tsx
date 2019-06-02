@@ -5,6 +5,7 @@ import { scaleTime, scaleLinear } from "d3-scale";
 import * as shape from "d3-shape";
 
 import Cursor from "./Cursor";
+import { getParts } from "./SVGHelpers";
 
 interface DataPoint {
   date: number;
