@@ -26,7 +26,7 @@
     "@types/react-native": "^0.57.60",
     "babel-preset-expo": "^5.1.1",
     "eslint": "^5.16.0",
-    "eslint-config-react-native-wcandillon": "1.1.1"
+    "eslint-config-react-native-wcandillon": "1.1.2"
   },
   "private": true
 }
