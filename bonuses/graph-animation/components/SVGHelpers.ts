@@ -4,60 +4,22 @@ import absSVG from "abs-svg-path";
 import normalizeSVG from "normalize-svg-path";
 import { find } from "react-native-redash";
 
-import { getCubicBezierLength } from "./Bezier";
+import cubicBezierLength from "./CubicBezierLength";
 
 const {
   Value,
-  sub,
-  pow,
-  multiply,
-  add,
   lessOrEq,
   greaterOrEq,
   and,
   cond,
-  interpolate
+  interpolate,
+  sub,
+  multiply,
+  pow,
+  add
 } = Animated;
 
-const MX = 1;
-const MY = 2;
-const CX1 = 1;
-const CY1 = 2;
-const CX2 = 3;
-const CY2 = 4;
-const CX = 5;
-const CY = 6;
-
-interface Point {
-  x: number;
-  y: number;
-}
-
-interface Part {
-  length: number;
-  p0: Point;
-  p1: Point;
-  p2: Point;
-  p3: Point;
-}
-
-export interface Parts {
-  length: number;
-  search: { start: number; end: number }[];
-  lengths: number[];
-  start: number[];
-  end: number[];
-  p0x: number[];
-  p0y: number[];
-  p1x: number[];
-  p1y: number[];
-  p2x: number[];
-  p2y: number[];
-  p3x: number[];
-  p3y: number[];
-}
-
-export const bezier = (
+export const cubicBezier = (
   t: Animated.Node<number>,
   p0: Animated.Node<number>,
   p1: Animated.Node<number>,
@@ -72,29 +34,72 @@ export const bezier = (
   return add(a, b, c, d);
 };
 
-export const getParts = (d: string): Parts => {
-  const curves = normalizeSVG(absSVG(parseSVG(d)));
-  const parts: Part[] = curves
-    .filter((_, index) => index !== 0)
-    .map((curve, index) => {
-      const prevCurve = curves[index];
-      const p0 =
-        prevCurve[0] === "M"
-          ? { x: prevCurve[MX], y: prevCurve[MY] }
-          : { x: prevCurve[CX], y: prevCurve[CY] };
-      const p1 = { x: curve[CX1], y: curve[CY1] };
-      const p2 = { x: curve[CX2], y: curve[CY2] };
-      const p3 = { x: curve[CX], y: curve[CY] };
-      const length = getCubicBezierLength(p0, p1, p2, p3);
-      return {
-        p0,
-        p1,
-        p2,
-        p3,
-        length
-      };
-    });
-  const search = parts.map((part, index) => {
+// const COMMAND = 0;
+const MX = 1;
+const MY = 2;
+const CX1 = 1;
+const CY1 = 2;
+const CX2 = 3;
+const CY2 = 4;
+const CX = 5;
+const CY = 6;
+
+type SVGMoveCommand = ["M", number, number];
+type SVGCurveCommand = ["C", number, number, number, number, number, number];
+type SVGNormalizedCommands = [SVGMoveCommand, ...SVGCurveCommand[]];
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface BezierCubicCurve {
+  length: number;
+  p0: Point;
+  p1: Point;
+  p2: Point;
+  p3: Point;
+}
+
+export interface ReanimatedPath {
+  totalLength: number;
+  segments: { start: number; end: number }[];
+  length: number[];
+  start: number[];
+  end: number[];
+  p0x: number[];
+  p0y: number[];
+  p1x: number[];
+  p1y: number[];
+  p2x: number[];
+  p2y: number[];
+  p3x: number[];
+  p3y: number[];
+}
+export const getPath = (d: string): ReanimatedPath => {
+  const [move, ...curves]: SVGNormalizedCommands = normalizeSVG(
+    absSVG(parseSVG(d))
+  );
+  console.log(normalizeSVG(absSVG(parseSVG(d))));
+  const parts: BezierCubicCurve[] = curves.map((curve, index) => {
+    const prevCurve = curves[index - 1];
+    const p0 =
+      index === 0
+        ? { x: move[MX], y: move[MY] }
+        : { x: prevCurve[CX], y: prevCurve[CY] };
+    const p1 = { x: curve[CX1], y: curve[CY1] };
+    const p2 = { x: curve[CX2], y: curve[CY2] };
+    const p3 = { x: curve[CX], y: curve[CY] };
+    const length = cubicBezierLength(p0, p1, p2, p3);
+    return {
+      p0,
+      p1,
+      p2,
+      p3,
+      length
+    };
+  });
+  const segments = parts.map((part, index) => {
     const start = parts.slice(0, index).reduce((acc, p) => acc + p.length, 0);
     const end = start + part.length;
     return {
@@ -103,11 +108,11 @@ export const getParts = (d: string): Parts => {
     };
   });
   return {
-    search,
-    length: parts.reduce((acc, part) => acc + part.length, 0),
-    lengths: parts.map(part => part.length),
-    start: search.map(p => p.start),
-    end: search.map(p => p.end),
+    segments,
+    totalLength: parts.reduce((acc, part) => acc + part.length, 0),
+    length: parts.map(part => part.length),
+    start: segments.map(segment => segment.start),
+    end: segments.map(segment => segment.end),
     p0x: parts.map(part => part.p0.x),
     p0y: parts.map(part => part.p0.y),
     p1x: parts.map(part => part.p1.x),
@@ -119,18 +124,24 @@ export const getParts = (d: string): Parts => {
   };
 };
 
-export const getYAtLength = (
-  parts: Parts,
+export const getPointAtLength = (
+  parts: ReanimatedPath,
   length: Animated.Node<number>
-): Animated.Node<number> => {
+): { x: Animated.Node<number>; y: Animated.Node<number> } => {
   const notFound: Animated.Node<number> = new Value(-1);
-  const index = parts.search.reduce(
+  const index = parts.segments.reduce(
     (acc, p, i) =>
       cond(and(greaterOrEq(length, p.start), lessOrEq(length, p.end)), i, acc),
     notFound
   );
   const start = find(parts.start, index);
   const end = find(parts.end, index);
+
+  const p0x = find(parts.p0x, index);
+  const p1x = find(parts.p1x, index);
+  const p2x = find(parts.p2x, index);
+  const p3x = find(parts.p3x, index);
+
   const p0y = find(parts.p0y, index);
   const p1y = find(parts.p1y, index);
   const p2y = find(parts.p2y, index);
@@ -139,28 +150,8 @@ export const getYAtLength = (
     inputRange: [start, end],
     outputRange: [0, 1]
   });
-  return bezier(t, p0y, p1y, p2y, p3y);
-};
-
-export const getXAtLength = (
-  parts: Parts,
-  length: Animated.Node<number>
-): Animated.Node<number> => {
-  const notFound: Animated.Node<number> = new Value(-1);
-  const index = parts.search.reduce(
-    (acc, p, i) =>
-      cond(and(greaterOrEq(length, p.start), lessOrEq(length, p.end)), i, acc),
-    notFound
-  );
-  const start = find(parts.start, index);
-  const end = find(parts.end, index);
-  const p0x = find(parts.p0x, index);
-  const p1x = find(parts.p1x, index);
-  const p2x = find(parts.p2x, index);
-  const p3x = find(parts.p3x, index);
-  const t = interpolate(length, {
-    inputRange: [start, end],
-    outputRange: [0, 1]
-  });
-  return bezier(t, p0x, p1x, p2x, p3x);
+  return {
+    x: cubicBezier(t, p0x, p1x, p2x, p3x),
+    y: cubicBezier(t, p0y, p1y, p2y, p3y)
+  };
 };

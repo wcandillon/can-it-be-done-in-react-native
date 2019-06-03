@@ -1,10 +1,11 @@
-export interface Point {
+interface Point {
   x: number;
   y: number;
 }
 
 type CtrlPoint = [number, number, number, number];
 
+// Cubic bezier curve length from http://bl.ocks.org/hnakamur/e7efd0602bfc15f66fc5
 // Legendre-Gauss abscissae (xi values, defined at i=n as the roots of the nth order Legendre polynomial Pn(x))
 const tValues = [
   [],
@@ -708,17 +709,14 @@ const cValues = [
 const binomialCoefficients = [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]];
 
 // Look up what the binomial coefficient is for pair {n,k}
-function binomials(n, k) {
-  return binomialCoefficients[n][k];
-}
+const binomials = (n: number, k: number) => binomialCoefficients[n][k];
 
 /**
  * Compute the curve derivative (hodograph) at t.
  */
-function getDerivative(derivative, t, vs) {
+const getDerivative = (derivative: number, t: number, vs: number[]): number => {
   // the derivative of any 't'-less function is zero.
   const n = vs.length - 1;
-  let _vs;
   let value;
   let k;
   if (n === 0) {
@@ -728,20 +726,19 @@ function getDerivative(derivative, t, vs) {
   // direct values? compute!
   if (derivative === 0) {
     value = 0;
-    for (k = 0; k <= n; k++) {
-      value +=
-        binomials(n, k) * Math.pow(1 - t, n - k) * Math.pow(t, k) * vs[k];
+    for (k = 0; k <= n; k += 1) {
+      value += binomials(n, k) * (1 - t ** n - k) * t ** k * vs[k];
     }
     return value;
   }
   // Still some derivative? go down one order, then try
   // for the lower order curve's.
-  _vs = new Array(n);
-  for (k = 0; k < n; k++) {
-    _vs[k] = n * (vs[k + 1] - vs[k]);
+  const vs1 = new Array(n);
+  for (k = 0; k < n; k += 1) {
+    vs1[k] = n * (vs[k + 1] - vs[k]);
   }
-  return getDerivative(derivative - 1, t, _vs);
-}
+  return getDerivative(derivative - 1, t, vs1);
+};
 
 function B(xs: CtrlPoint, ys: CtrlPoint, t: number) {
   const xbase = getDerivative(1, t, xs);
@@ -769,7 +766,7 @@ const getArcLength = (
   return z * sum;
 };
 
-export const getCubicBezierLength = (
+const cubicBezierLength = (
   p0: Point,
   p1: Point,
   p2: Point,
@@ -779,3 +776,5 @@ export const getCubicBezierLength = (
   const ys: CtrlPoint = [p0.y, p1.y, p2.y, p3.y];
   return getArcLength(xs, ys);
 };
+
+export default cubicBezierLength;

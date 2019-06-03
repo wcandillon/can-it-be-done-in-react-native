@@ -4,11 +4,12 @@ import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { decay, clamp } from "react-native-redash";
 
-import { getParts, getYAtLength, getXAtLength } from "./SVGHelpers";
+import { getPath, getPointAtLength } from "./SVGHelpers";
 
 const { Value, event, sub, interpolate } = Animated;
 const TOUCH_SIZE = 200;
 const { width } = Dimensions.get("window");
+const white = "white";
 
 interface CursorProps {
   d: string;
@@ -31,15 +32,13 @@ export default ({ d, r, borderWidth, borderColor }: CursorProps) => {
       }
     }
   ]);
-  // TODO: is Clamp necessary here?
   const cx = clamp(decay(translationX, state, velocityX), 0, width);
-  const parts = getParts(d);
+  const path = getPath(d);
   const length = interpolate(cx, {
     inputRange: [0, width],
-    outputRange: [0, parts.length]
+    outputRange: [0, path.totalLength]
   });
-  const y = getYAtLength(parts, length);
-  const x = getXAtLength(parts, length);
+  const { y, x } = getPointAtLength(path, length);
   const translateX: any = sub(x, TOUCH_SIZE / 2);
   const translateY: any = sub(y, TOUCH_SIZE / 2);
   return (
@@ -63,7 +62,8 @@ export default ({ d, r, borderWidth, borderColor }: CursorProps) => {
               height: radius * 2,
               borderRadius: radius,
               borderColor,
-              borderWidth
+              borderWidth,
+              backgroundColor: white
             }}
           />
         </Animated.View>
