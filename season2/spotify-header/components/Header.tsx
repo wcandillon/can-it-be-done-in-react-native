@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Text, StyleSheet } from "react-native";
-import Animated from "react-native-reanimated";
+import { Text, StyleSheet, View } from "react-native";
 import Constants from "expo-constants";
+import Animated from "react-native-reanimated";
 import { MIN_HEADER_HEIGHT, HEADER_DELTA } from "./Model";
 
 interface HeaderProps {
@@ -9,19 +9,22 @@ interface HeaderProps {
   y: Animated.Value<number>;
 }
 
-const {
-  Extrapolate, interpolate,
-} = Animated;
+const { interpolate, Extrapolate } = Animated;
 
 export default ({ artist, y }: HeaderProps) => {
-  const backgroundOpacity = interpolate(y, {
-    inputRange: [HEADER_DELTA - 32, HEADER_DELTA],
+  const opacity = interpolate(y, {
+    inputRange: [HEADER_DELTA - 16, HEADER_DELTA],
+    outputRange: [0, 1],
+    extrapolate: Extrapolate.CLAMP,
+  });
+  const textOpacity = interpolate(y, {
+    inputRange: [HEADER_DELTA - 8, HEADER_DELTA - 4],
     outputRange: [0, 1],
     extrapolate: Extrapolate.CLAMP,
   });
   return (
-    <Animated.View style={[styles.container, { opacity: backgroundOpacity }]}>
-      <Text style={styles.title}>{artist}</Text>
+    <Animated.View style={[styles.container, { opacity }]}>
+      <Animated.Text style={[styles.title, { opacity: textOpacity }]}>{artist}</Animated.Text>
     </Animated.View>
   );
 };
