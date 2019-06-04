@@ -1,23 +1,26 @@
 import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import {
+  StyleSheet, View, Text, ScrollView, Platform,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import Animated from "react-native-reanimated";
 import { onScroll } from "react-native-redash";
-import { LinearGradient } from "expo-linear-gradient";
 
 import { Album, MAX_HEADER_HEIGHT, HEADER_DELTA } from "./Model";
 import Track from "./Track";
-import ShufflePlay, { BUTTON_HEIGHT } from "./ShufflePlay";
-
-const {
-  interpolate, Extrapolate, cond, greaterOrEq,
-} = Animated;
+import ShufflePlay from "./ShufflePlay";
 
 interface ContentProps {
   album: Album;
   y: Animated.Value<number>;
+  btnOpacity: Animated.Value<number>;
 }
 
-export default ({ album: { artist, tracks }, y }: ContentProps) => {
+const {
+  interpolate, Extrapolate, cond, eq,
+} = Animated;
+
+export default ({ album: { artist, tracks }, y, btnOpacity }: ContentProps) => {
   const height = interpolate(y, {
     inputRange: [-MAX_HEADER_HEIGHT, 0],
     outputRange: [0, MAX_HEADER_HEIGHT],
@@ -26,9 +29,8 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
   const opacity = interpolate(y, {
     inputRange: [-MAX_HEADER_HEIGHT / 2, 0, MAX_HEADER_HEIGHT / 2],
     outputRange: [0, 1, 0],
-    extrapolateLeft: Extrapolate.CLAMP,
+    extrapolate: Extrapolate.CLAMP,
   });
-  const opacityBtn = cond(greaterOrEq(y, HEADER_DELTA + BUTTON_HEIGHT / 2), 0, 1);
   return (
     <Animated.ScrollView
       onScroll={onScroll({ y })}
@@ -47,14 +49,18 @@ export default ({ album: { artist, tracks }, y }: ContentProps) => {
             colors={["transparent", "rgba(0, 0, 0, 0.2)", "black"]}
           />
         </Animated.View>
-        <Animated.View style={[styles.artistContainer, { opacity }]}>
-          <Text style={styles.artist}>{artist}</Text>
-        </Animated.View>
+        <View style={styles.artistContainer}>
+          <Animated.Text style={[styles.artist, { opacity }]}>{artist}</Animated.Text>
+        </View>
       </View>
       <View style={styles.tracks}>
-        <Animated.View style={{ opacity: opacityBtn }}>
-          <ShufflePlay />
-        </Animated.View>
+        {
+          Platform.OS === "ios" && (
+            <Animated.View style={{ opacity: cond(eq(btnOpacity, 1), 0, 1) }}>
+              <ShufflePlay />
+            </Animated.View>
+          )
+        }
         {
           tracks.map((track, key) => (
             <Track
