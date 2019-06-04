@@ -14,13 +14,13 @@ interface AlbumProps {
 }
 
 const {
-  Value, greaterOrEq, cond, interpolate,
+  Value, greaterOrEq, cond, multiply, min,
 } = Animated;
 
 export default ({ album }: AlbumProps) => {
   const { artist } = album;
   const y = new Value(0);
-  const opacity = cond(greaterOrEq(y, HEADER_DELTA + BUTTON_HEIGHT / 2), 1, 0);
+  const opacity = Platform.OS === "ios" ? cond(greaterOrEq(y, HEADER_DELTA + BUTTON_HEIGHT / 2), 1, 0) : 1;
   const translateY = Platform.OS === "ios" ? 0 : multiply(min(y, HEADER_DELTA), -1);
   return (
     <View style={styles.container}>
@@ -30,7 +30,7 @@ export default ({ album }: AlbumProps) => {
       <Animated.View
         style={{
           position: "absolute",
-          top: MIN_HEADER_HEIGHT + (Platform.OS === "ios" ? 0 : -BUTTON_HEIGHT / 2),
+          top: Platform.OS === "ios" ? MIN_HEADER_HEIGHT : MAX_HEADER_HEIGHT - BUTTON_HEIGHT / 2,
           left: 0,
           right: 0,
           opacity,
