@@ -20,6 +20,8 @@ const {
 export default ({ album }: AlbumProps) => {
   const { artist } = album;
   const y = new Value(0);
+  // Because of the bug below, we need to use a different strategy on iOS
+  // https://github.com/facebook/react-native/issues/24826
   const opacity = Platform.OS === "ios" ? cond(greaterOrEq(y, HEADER_DELTA + BUTTON_HEIGHT / 2), 1, 0) : 1;
   const translateY = Platform.OS === "ios" ? 0 : multiply(min(y, HEADER_DELTA), -1);
   return (
