@@ -28,19 +28,6 @@ export default ({ album }: AlbumProps) => {
     <View style={styles.container}>
       <Cover {...{ y, album }} />
       <Content btnOpacity={opacity} {...{ y, album }} />
-      <Header {...{ y, artist }} />
-      <Animated.View
-        style={{
-          position: "absolute",
-          top: Platform.OS === "ios" ? MIN_HEADER_HEIGHT : MAX_HEADER_HEIGHT - BUTTON_HEIGHT / 2,
-          left: 0,
-          right: 0,
-          opacity,
-          transform: [{ translateY }],
-        }}
-      >
-        <ShufflePlay />
-      </Animated.View>
     </View>
   );
 };

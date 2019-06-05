@@ -6,9 +6,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import Animated from "react-native-reanimated";
 import { onScroll } from "react-native-redash";
 
-import { Album, MAX_HEADER_HEIGHT, HEADER_DELTA } from "./Model";
+import { Album, MAX_HEADER_HEIGHT, HEADER_DELTA, MIN_HEADER_HEIGHT } from "./Model";
 import Track from "./Track";
-import ShufflePlay from "./ShufflePlay";
+import ShufflePlay, { BUTTON_HEIGHT } from "./ShufflePlay";
+import Header from './Header';
 
 interface ContentProps {
   album: Album;
@@ -22,8 +23,8 @@ const {
 
 export default ({ album: { artist, tracks }, y, btnOpacity }: ContentProps) => {
   const height = interpolate(y, {
-    inputRange: [-MAX_HEADER_HEIGHT, 0],
-    outputRange: [0, MAX_HEADER_HEIGHT],
+    inputRange: [-MAX_HEADER_HEIGHT, -32],
+    outputRange: [0, MAX_HEADER_HEIGHT + 32],
     extrapolate: Extrapolate.CLAMP,
   });
   const opacity = interpolate(y, {
@@ -37,6 +38,8 @@ export default ({ album: { artist, tracks }, y, btnOpacity }: ContentProps) => {
       style={styles.container}
       showsVerticalScrollIndicator={false}
       scrollEventThrottle={1}
+      // contentContainerStyle={{ paddingTop: MAX_HEADER_HEIGHT }}
+      stickyHeaderIndices={[1]}
     >
       <View style={styles.header}>
         <Animated.View
@@ -53,14 +56,13 @@ export default ({ album: { artist, tracks }, y, btnOpacity }: ContentProps) => {
           <Animated.Text style={[styles.artist, { opacity }]}>{artist}</Animated.Text>
         </View>
       </View>
+      <View style={{ zIndex: 1, marginTop: -BUTTON_HEIGHT, backgroundColor: 'back' }}>
+        <Header {...{ y, artist }} />
+        <ShufflePlay />
+      </View>
       <View style={styles.tracks}>
-        {
-          Platform.OS === "ios" && (
-            <Animated.View style={{ opacity: cond(eq(btnOpacity, 1), 0, 1) }}>
-              <ShufflePlay />
-            </Animated.View>
-          )
-        }
+
+
         {
           tracks.map((track, key) => (
             <Track
@@ -77,9 +79,10 @@ export default ({ album: { artist, tracks }, y, btnOpacity }: ContentProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: MIN_HEADER_HEIGHT - BUTTON_HEIGHT/2,
   },
   header: {
-    height: MAX_HEADER_HEIGHT,
+    height: MAX_HEADER_HEIGHT - BUTTON_HEIGHT,
   },
   gradient: {
     position: "absolute",
