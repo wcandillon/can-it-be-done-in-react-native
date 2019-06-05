@@ -4,6 +4,7 @@ import {
 } from "react-native";
 import Animated from "react-native-reanimated";
 import { Album, MAX_HEADER_HEIGHT, HEADER_DELTA } from "./Model";
+import { BUTTON_HEIGHT } from "./ShufflePlay";
 
 interface CoverProps {
   album: Album;
@@ -36,7 +37,7 @@ export default ({ album: { cover }, y }: CoverProps) => {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    height: MAX_HEADER_HEIGHT,
+    height: MAX_HEADER_HEIGHT + BUTTON_HEIGHT * 2,
   },
   image: {
     ...StyleSheet.absoluteFillObject,
