@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import Animated from "react-native-reanimated";
 import { MIN_HEADER_HEIGHT, HEADER_DELTA } from "./Model";
+import { BUTTON_HEIGHT } from "./ShufflePlay";
 
 interface HeaderProps {
   artist: string;
@@ -32,7 +33,7 @@ export default ({ artist, y }: HeaderProps) => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 0,
+    top: BUTTON_HEIGHT / 2 - MIN_HEADER_HEIGHT,
     left: 0,
     right: 0,
     height: MIN_HEADER_HEIGHT,
