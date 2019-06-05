@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import Animated from "react-native-reanimated";
 import { MIN_HEADER_HEIGHT, HEADER_DELTA } from "./Model";
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
   },
   title: {
-    zIndex: 1,
     color: "white",
     fontSize: 16,
     textAlign: "center",
