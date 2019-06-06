@@ -15,6 +15,7 @@ interface CardProps {
 
 const { width } = Dimensions.get("window");
 const margin = width / 8;
+export const CARD_WIDTH = width - margin * 2;
 
 export default ({ card }: CardProps) => {
   return <Image source={card.design} style={styles.design} />;

@@ -1,27 +1,34 @@
 import React, { useState, useRef } from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-import Animated, { Transitioning, Transition } from "react-native-reanimated";
+import Animated, {
+  Transitioning,
+  Transition,
+  TransitioningView
+} from "react-native-reanimated";
 
-import Card, { Card as CardModel } from "./Card";
+import Card, { Card as CardModel, CARD_WIDTH } from "./Card";
 import CheckIcon from "./CheckIcon";
 import Thumbnail from "./Thumbnail";
 
-const { Value } = Animated;
-
 interface CardSelectionProps {
-  cards: CardModel[];
+  cards: [CardModel, CardModel, CardModel];
 }
+
+const { concat } = Animated;
 
 export default ({ cards }: CardSelectionProps) => {
   const [selectedCard, setSelectCard] = useState(-1);
-  const container = useRef<Transitioning.View>();
+  const container = useRef<TransitioningView>();
   const transition = <Transition.In type="fade" durationMs={100} />;
-  const cardZIndexes = cards.map((_, index) => new Value(index));
   const selectCard = (index: number) => {
-    container.current.animateNextTransition();
+    if (container && container.current) {
+      container.current.animateNextTransition();
+    }
     setSelectCard(index);
   };
+  const cardZIndexes = [1, 2, 3];
+  const cardRotates = [-15, 0, 15];
   return (
     <Transitioning.View
       ref={container}
@@ -31,13 +38,19 @@ export default ({ cards }: CardSelectionProps) => {
       <View style={styles.cards}>
         {cards.map((card, index) => {
           const zIndex = cardZIndexes[index];
+          const rotateZ = concat(cardRotates[index], "deg");
           return (
             <Animated.View
               key={card.id}
               style={{
                 zIndex,
                 elevation: zIndex,
-                ...StyleSheet.absoluteFillObject
+                ...StyleSheet.absoluteFillObject,
+                transform: [
+                  { translateX: -CARD_WIDTH },
+                  { rotateZ },
+                  { translateX: CARD_WIDTH }
+                ]
               }}
             >
               <Card key={card.id} {...{ card }} />

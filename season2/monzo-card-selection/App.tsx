@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { Asset } from "expo-asset";
 import { AppLoading } from "expo";
@@ -34,12 +35,12 @@ export default () => {
   useEffect(() => {
     (async () => {
       await Promise.all(
-        cards
-          .map(card => [
+        _.flatten(
+          cards.map(card => [
             Asset.loadAsync(card.design),
             Asset.loadAsync(card.thumbnail)
           ])
-          .flat()
+        )
       );
       setReady(true);
     })();
