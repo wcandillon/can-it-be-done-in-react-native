@@ -5,8 +5,17 @@ import { Asset } from "expo-asset";
 import { AppLoading } from "expo";
 
 import CardSelection from "./components/CardSelection";
+import { Card as CardModel } from "./components/Card";
 
-const cards = [
+const usePromiseAll = <T extends any>(promises: Promise<T>[], cb: () => void) =>
+  useEffect(() => {
+    (async () => {
+      await Promise.all(promises);
+      cb();
+    })();
+  });
+
+const cards: [CardModel, CardModel, CardModel] = [
   {
     id: "purple-sky",
     name: "Purple Sky",
@@ -32,19 +41,13 @@ const cards = [
 
 export default () => {
   const [ready, setReady] = useState(false);
-  useEffect(() => {
-    (async () => {
-      await Promise.all(
-        _.flatten(
-          cards.map(card => [
-            Asset.loadAsync(card.design),
-            Asset.loadAsync(card.thumbnail)
-          ])
-        )
-      );
-      setReady(true);
-    })();
-  });
+  const loadAssets = _.flatten(
+    cards.map(card => [
+      Asset.loadAsync(card.design),
+      Asset.loadAsync(card.thumbnail)
+    ])
+  );
+  usePromiseAll(loadAssets, () => setReady(true));
   if (!ready) {
     return <AppLoading />;
   }
