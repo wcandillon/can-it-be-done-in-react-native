@@ -6,18 +6,23 @@ import Animated, {
   Transition,
   TransitioningView
 } from "react-native-reanimated";
+import { runSpring } from "react-native-redash";
 
 import Card, { Card as CardModel, CARD_WIDTH } from "./Card";
 import CheckIcon from "./CheckIcon";
 import Thumbnail from "./Thumbnail";
+import { delay } from "./AnimationHelpers";
 
 interface CardSelectionProps {
   cards: [CardModel, CardModel, CardModel];
 }
 
-const { concat } = Animated;
+const { Clock, Value, concat, block, set, multiply } = Animated;
 
 export default ({ cards }: CardSelectionProps) => {
+  const cardZIndexes = cards.map((_, index) => new Value(index));
+  const cardRotates = cards.map(() => new Value(0));
+  const clock = new Clock();
   const [selectedCard, setSelectCard] = useState(-1);
   const container = useRef<TransitioningView>();
   const transition = <Transition.In type="fade" durationMs={100} />;
@@ -27,18 +32,24 @@ export default ({ cards }: CardSelectionProps) => {
     }
     setSelectCard(index);
   };
-  const cardZIndexes = [1, 2, 3];
-  const cardRotates = [-15, 0, 15];
   return (
     <Transitioning.View
       ref={container}
       style={styles.container}
       {...{ transition }}
     >
+      <Animated.Code>
+        {() =>
+          block([
+            set(cardRotates[0], runSpring(clock, 0, -15)),
+            set(cardRotates[2], multiply(cardRotates[0], -1))
+          ])
+        }
+      </Animated.Code>
       <View style={styles.cards}>
         {cards.map((card, index) => {
           const zIndex = cardZIndexes[index];
-          const rotateZ = concat(cardRotates[index], "deg");
+          const rotateZ = concat(cardRotates[index] as any, "deg" as any);
           return (
             <Animated.View
               key={card.id}
