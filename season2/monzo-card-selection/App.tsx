@@ -33,7 +33,14 @@ export default () => {
   const [ready, setReady] = useState(false);
   useEffect(() => {
     (async () => {
-      await Promise.all(cards.map(card => Asset.loadAsync(card.design)));
+      await Promise.all(
+        cards
+          .map(card => [
+            Asset.loadAsync(card.design),
+            Asset.loadAsync(card.thumbnail)
+          ])
+          .flat()
+      );
       setReady(true);
     })();
   });

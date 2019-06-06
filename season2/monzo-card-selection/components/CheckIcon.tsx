@@ -1,23 +1,18 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Animated from "react-native-reanimated";
 
 interface CheckIconProps {
   color: string;
-  isActive: Animated.Value<number>;
 }
 
 const CHECK_ICON_SIZE = 35;
 
-export default ({
-  isActive: opacity,
-  color: backgroundColor
-}: CheckIconProps) => {
+export default ({ color: backgroundColor }: CheckIconProps) => {
   return (
-    <Animated.View style={[styles.container, { backgroundColor, opacity }]}>
+    <View style={[styles.container, { backgroundColor }]}>
       <Icon name="check" color="white" size={24} />
-    </Animated.View>
+    </View>
   );
 };
 

@@ -1,24 +1,33 @@
-import * as React from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-import Animated from "react-native-reanimated";
+import Animated, { Transitioning, Transition } from "react-native-reanimated";
 
 import Card, { Card as CardModel } from "./Card";
 import CheckIcon from "./CheckIcon";
 import Thumbnail from "./Thumbnail";
 
-const { Value, eq } = Animated;
+const { Value } = Animated;
 
 interface CardSelectionProps {
   cards: CardModel[];
 }
 
 export default ({ cards }: CardSelectionProps) => {
+  const [selectedCard, setSelectCard] = useState(-1);
+  const container = useRef<Transitioning.View>();
+  const transition = <Transition.In type="fade" durationMs={100} />;
   const cardZIndexes = cards.map((_, index) => new Value(index));
-  const selectedCard: Animated.Value<number> = new Value(-1);
-  const selectCard = (index: number) => selectedCard.setValue(index);
+  const selectCard = (index: number) => {
+    container.current.animateNextTransition();
+    setSelectCard(index);
+  };
   return (
-    <View style={styles.container}>
+    <Transitioning.View
+      ref={container}
+      style={styles.container}
+      {...{ transition }}
+    >
       <View style={styles.cards}>
         {cards.map((card, index) => {
           const zIndex = cardZIndexes[index];
@@ -44,12 +53,12 @@ export default ({ cards }: CardSelectionProps) => {
               <View style={styles.label}>
                 <Text>{name}</Text>
               </View>
-              <CheckIcon isActive={eq(selectedCard, index)} {...{ color }} />
+              {selectedCard === index && <CheckIcon {...{ color }} />}
             </View>
           </RectButton>
         ))}
       </SafeAreaView>
-    </View>
+    </Transitioning.View>
   );
 };
 
