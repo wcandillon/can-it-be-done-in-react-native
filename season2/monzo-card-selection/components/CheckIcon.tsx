@@ -5,7 +5,7 @@ import Animated from "react-native-reanimated";
 
 interface CheckIconProps {
   color: string;
-  isActive: Animated.Value<0 | 1>;
+  isActive: Animated.Value<number>;
 }
 
 const CHECK_ICON_SIZE = 35;
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: CHECK_ICON_SIZE / 2,
     marginRight: 8,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    alignSelf: "center"
   }
 });
