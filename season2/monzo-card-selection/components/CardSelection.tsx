@@ -7,7 +7,7 @@ import Card, { Card as CardModel } from "./Card";
 import CheckIcon from "./CheckIcon";
 import Thumbnail from "./Thumbnail";
 
-const { Value } = Animated;
+const { Value, eq } = Animated;
 
 interface CardSelectionProps {
   cards: CardModel[];
@@ -37,7 +37,7 @@ export default ({ cards }: CardSelectionProps) => {
               <View style={styles.label}>
                 <Text>{name}</Text>
               </View>
-              <CheckIcon {...{ color }} />
+              <CheckIcon isActive={eq(selectedCard, index)} {...{ color }} />
             </View>
           </RectButton>
         ))}
