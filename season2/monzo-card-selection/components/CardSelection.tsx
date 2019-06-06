@@ -23,7 +23,14 @@ export default ({ cards }: CardSelectionProps) => {
         {cards.map((card, index) => {
           const zIndex = cardZIndexes[index];
           return (
-            <Animated.View key={card.id} style={{ zIndex, elevation: zIndex }}>
+            <Animated.View
+              key={card.id}
+              style={{
+                zIndex,
+                elevation: zIndex,
+                ...StyleSheet.absoluteFillObject
+              }}
+            >
               <Card key={card.id} {...{ card }} />
             </Animated.View>
           );
@@ -51,13 +58,16 @@ const styles = StyleSheet.create({
     flex: 1
   },
   cards: {
-    flex: 1
+    flex: 1,
+    backgroundColor: "#f4f6f3"
   },
   button: {
-    flexDirection: "row",
-    alignItems: "center"
+    flexDirection: "row"
   },
   label: {
-    flex: 1
+    flex: 1,
+    borderBottomWidth: 1,
+    borderColor: "#f4f6f3",
+    justifyContent: "center"
   }
 });
