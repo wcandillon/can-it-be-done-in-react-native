@@ -5,6 +5,8 @@ export interface Card {
   id: string;
   name: string;
   design: number;
+  thumbnail: number;
+  color: string;
 }
 
 interface CardProps {
