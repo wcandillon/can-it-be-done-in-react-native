@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Animated, {
@@ -11,20 +11,33 @@ import { runSpring } from "react-native-redash";
 import Card, { Card as CardModel, CARD_WIDTH } from "./Card";
 import CheckIcon from "./CheckIcon";
 import Thumbnail from "./Thumbnail";
-import { delay } from "./AnimationHelpers";
 
 interface CardSelectionProps {
   cards: [CardModel, CardModel, CardModel];
 }
 
+interface Values {
+  cardZIndexes: Animated.Value<number>[];
+  cardRotates: Animated.Value<number>[];
+  clock: Animated.Clock;
+}
+
 const { Clock, Value, concat, block, set, multiply } = Animated;
 
+const initValues = (cards: [CardModel, CardModel, CardModel]) => ({
+  cardZIndexes: cards.map((_, index) => new Value(index)),
+  cardRotates: cards.map(() => new Value(0)),
+  clock: new Clock()
+});
+
 export default ({ cards }: CardSelectionProps) => {
-  const cardZIndexes = cards.map((_, index) => new Value(index));
-  const cardRotates = cards.map(() => new Value(0));
-  const clock = new Clock();
   const [selectedCard, setSelectCard] = useState(-1);
   const container = useRef<TransitioningView>();
+  const values = useRef<Values>();
+  if (values.current === undefined) {
+    values.current = initValues(cards);
+  }
+  const { cardZIndexes, cardRotates, clock } = values.current as Values;
   const transition = <Transition.In type="fade" durationMs={100} />;
   const selectCard = (index: number) => {
     if (container && container.current) {

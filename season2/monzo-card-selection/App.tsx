@@ -15,6 +15,14 @@ const usePromiseAll = <T extends any>(promises: Promise<T>[], cb: () => void) =>
     })();
   });
 
+const useLoadAssets = (assets: number[]): boolean => {
+  const [ready, setReady] = useState(false);
+  usePromiseAll(assets.map(asset => Asset.loadAsync(asset)), () =>
+    setReady(true)
+  );
+  return ready;
+};
+
 const cards: [CardModel, CardModel, CardModel] = [
   {
     id: "purple-sky",
@@ -40,14 +48,8 @@ const cards: [CardModel, CardModel, CardModel] = [
 ];
 
 export default () => {
-  const [ready, setReady] = useState(false);
-  const loadAssets = _.flatten(
-    cards.map(card => [
-      Asset.loadAsync(card.design),
-      Asset.loadAsync(card.thumbnail)
-    ])
-  );
-  usePromiseAll(loadAssets, () => setReady(true));
+  const assets = _.flatten(cards.map(card => [card.design, card.thumbnail]));
+  const ready = useLoadAssets(assets);
   if (!ready) {
     return <AppLoading />;
   }
