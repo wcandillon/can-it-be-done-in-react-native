@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Animated, {
@@ -11,33 +11,22 @@ import { runSpring } from "react-native-redash";
 import Card, { Card as CardModel, CARD_WIDTH } from "./Card";
 import CheckIcon from "./CheckIcon";
 import Thumbnail from "./Thumbnail";
+import { useValues } from "./hookah";
 
 interface CardSelectionProps {
   cards: [CardModel, CardModel, CardModel];
 }
 
-interface Values {
-  cardZIndexes: Animated.Value<number>[];
-  cardRotates: Animated.Value<number>[];
-  clock: Animated.Clock;
-}
-
-const { Clock, Value, concat, block, set, multiply } = Animated;
-
-const initValues = (cards: [CardModel, CardModel, CardModel]) => ({
-  cardZIndexes: cards.map((_, index) => new Value(index)),
-  cardRotates: cards.map(() => new Value(0)),
-  clock: new Clock()
-});
+const { useCode, Clock, Value, concat, block, set, multiply } = Animated;
 
 export default ({ cards }: CardSelectionProps) => {
   const [selectedCard, setSelectCard] = useState(-1);
+  const { cardZIndexes, cardRotates, clock } = useValues({
+    cardZIndexes: cards.map((_, index) => new Value(index)),
+    cardRotates: cards.map(() => new Value(0)),
+    clock: new Clock()
+  });
   const container = useRef<TransitioningView>();
-  const values = useRef<Values>();
-  if (values.current === undefined) {
-    values.current = initValues(cards);
-  }
-  const { cardZIndexes, cardRotates, clock } = values.current as Values;
   const transition = <Transition.In type="fade" durationMs={100} />;
   const selectCard = (index: number) => {
     if (container && container.current) {
@@ -45,20 +34,19 @@ export default ({ cards }: CardSelectionProps) => {
     }
     setSelectCard(index);
   };
+  useCode(
+    block([
+      set(cardRotates[0], runSpring(clock, 0, -15)),
+      set(cardRotates[2], multiply(cardRotates[0], -1))
+    ]),
+    []
+  );
   return (
     <Transitioning.View
       ref={container}
       style={styles.container}
       {...{ transition }}
     >
-      <Animated.Code>
-        {() =>
-          block([
-            set(cardRotates[0], runSpring(clock, 0, -15)),
-            set(cardRotates[2], multiply(cardRotates[0], -1))
-          ])
-        }
-      </Animated.Code>
       <View style={styles.cards}>
         {cards.map((card, index) => {
           const zIndex = cardZIndexes[index];

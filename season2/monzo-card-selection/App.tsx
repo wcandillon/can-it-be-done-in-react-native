@@ -1,27 +1,11 @@
 /* eslint-disable global-require */
 import _ from "lodash";
-import React, { useState, useEffect } from "react";
-import { Asset } from "expo-asset";
+import React from "react";
 import { AppLoading } from "expo";
+import { useLoadAssets } from "./components/hookah";
 
 import CardSelection from "./components/CardSelection";
 import { Card as CardModel } from "./components/Card";
-
-const usePromiseAll = <T extends any>(promises: Promise<T>[], cb: () => void) =>
-  useEffect(() => {
-    (async () => {
-      await Promise.all(promises);
-      cb();
-    })();
-  });
-
-const useLoadAssets = (assets: number[]): boolean => {
-  const [ready, setReady] = useState(false);
-  usePromiseAll(assets.map(asset => Asset.loadAsync(asset)), () =>
-    setReady(true)
-  );
-  return ready;
-};
 
 const cards: [CardModel, CardModel, CardModel] = [
   {
