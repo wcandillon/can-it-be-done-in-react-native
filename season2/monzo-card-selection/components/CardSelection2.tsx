@@ -22,9 +22,13 @@ const {
   multiply,
   cond,
   eq,
+  and,
+  defined,
+  diff,
   clockRunning,
   onChange,
-  debug
+  debug,
+  neq
 } = Animated;
 
 const INITIAL_INDEX: number = -1;
@@ -34,22 +38,25 @@ export default ({ cards }: CardSelectionProps) => {
   const cardZIndexes = cards.map((_, index) => new Value(index));
   const cardRotates = cards.map(() => new Value(0));
   const spring = new Value(0);
-  const cardRotatesClock = new Clock();
+  const clock = new Clock();
   const translationX = new Value(CARD_WIDTH);
+  const firstSelectionIsDone = new Value(0);
   const selectCard = (index: number) => selectedCard.setValue(index);
   useCode(
     block([
       cond(eq(selectedCard, INITIAL_INDEX), [
-        set(spring, runSpring(cardRotatesClock, 0, 1)),
+        set(spring, runSpring(clock, 0, 1)),
         set(cardRotates[0], bInterpolate(spring, 0, -15)),
+        set(cardRotates[1], 0),
         set(cardRotates[2], bInterpolate(spring, 0, 15))
       ]),
-      cond(eq(selectedCard, 0), [
-        set(spring, runSpring(cardRotatesClock, 0, 1)),
+      cond(and(neq(selectedCard, -1), eq(firstSelectionIsDone, 0)), [
+        set(spring, runSpring(clock, 0, 1)),
         set(cardRotates[0], bInterpolate(spring, 0, -7.5)),
         set(cardRotates[1], bInterpolate(spring, 0, 7.5)),
         set(cardRotates[2], bInterpolate(spring, 15, 0)),
-        set(translationX, bInterpolate(spring, translationX, 0))
+        set(translationX, bInterpolate(spring, translationX, 0)),
+        cond(eq(clockRunning(clock), 0), set(firstSelectionIsDone, 1))
       ])
     ]),
     [cards]
