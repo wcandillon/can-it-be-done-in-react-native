@@ -2,7 +2,7 @@ import * as React from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Animated, { Easing } from "react-native-reanimated";
-import { bInterpolate, runTiming } from "react-native-redash";
+import { bInterpolate, runTiming, max } from "react-native-redash";
 
 import Card, { Card as CardModel, CARD_WIDTH, CARD_HEIGHT } from "./Card";
 import CheckIcon from "./CheckIcon";
@@ -50,6 +50,7 @@ export default ({ cards }: CardSelectionProps) => {
   const clock = new Clock();
   const translationX = new Value(CARD_WIDTH);
   const firstSelectionIsDone = new Value(0);
+  const shouldUpdateZIndexes = new Value(1);
   const selectCard = (index: number) => {
     indexHasChanged.setValue(0);
     selectedCard.setValue(index);
@@ -88,7 +89,69 @@ export default ({ cards }: CardSelectionProps) => {
             extrapolate: Extrapolate.CLAMP
           })
         ),
-        set(cardZIndexes[0], cond(greaterOrEq(spring, 0.5), 10, 0))
+        cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
+          set(
+            cardZIndexes[0],
+            add(cardZIndexes[0], add(max(...cardZIndexes), 10)),
+            cardZIndexes[0]
+          ),
+          set(shouldUpdateZIndexes, 0)
+        ]),
+        cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
+      ]),
+      cond(and(firstSelectionIsDone, eq(selectedCard, 1), indexHasChanged), [
+        set(spring, timing(clock)),
+        set(
+          cardRotates[1],
+          interpolate(spring, {
+            inputRange: [0, 0.5, 1],
+            outputRange: [cardRotates[0], 45, 0]
+          })
+        ),
+        set(
+          cardTranslatesY[1],
+          interpolate(spring, {
+            inputRange: [0, 0.5, 1],
+            outputRange: [0, -CARD_HEIGHT * 1.5, 0],
+            extrapolate: Extrapolate.CLAMP
+          })
+        ),
+        cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
+          set(
+            cardZIndexes[1],
+            add(cardZIndexes[1], add(max(...cardZIndexes), 10)),
+            cardZIndexes[1]
+          ),
+          set(shouldUpdateZIndexes, 0)
+        ]),
+        cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
+      ]),
+      cond(and(firstSelectionIsDone, eq(selectedCard, 2), indexHasChanged), [
+        set(spring, timing(clock)),
+        set(
+          cardRotates[2],
+          interpolate(spring, {
+            inputRange: [0, 0.5, 1],
+            outputRange: [cardRotates[0], 45, 0]
+          })
+        ),
+        set(
+          cardTranslatesY[2],
+          interpolate(spring, {
+            inputRange: [0, 0.5, 1],
+            outputRange: [0, -CARD_HEIGHT * 1.5, 0],
+            extrapolate: Extrapolate.CLAMP
+          })
+        ),
+        cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
+          set(
+            cardZIndexes[2],
+            add(cardZIndexes[2], add(max(...cardZIndexes), 10)),
+            cardZIndexes[2]
+          ),
+          set(shouldUpdateZIndexes, 0)
+        ]),
+        cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
       ])
     ]),
     [cards]
