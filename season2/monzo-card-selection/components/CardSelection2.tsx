@@ -72,87 +72,37 @@ export default ({ cards }: CardSelectionProps) => {
         set(translationX, bInterpolate(spring, translationX, 0)),
         cond(not(clockRunning(clock)), set(firstSelectionIsDone, 1))
       ]),
-      cond(and(firstSelectionIsDone, eq(selectedCard, 0), indexHasChanged), [
-        set(spring, timing(clock)),
-        set(
-          cardRotates[0],
-          interpolate(spring, {
-            inputRange: [0, 0.5, 1],
-            outputRange: [cardRotates[0], 45, 0]
-          })
-        ),
-        set(
-          cardTranslatesY[0],
-          interpolate(spring, {
-            inputRange: [0, 0.5, 1],
-            outputRange: [0, -CARD_HEIGHT * 1.5, 0],
-            extrapolate: Extrapolate.CLAMP
-          })
-        ),
-        cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
-          set(
-            cardZIndexes[0],
-            add(cardZIndexes[0], add(max(...cardZIndexes), 10)),
-            cardZIndexes[0]
-          ),
-          set(shouldUpdateZIndexes, 0)
-        ]),
-        cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
-      ]),
-      cond(and(firstSelectionIsDone, eq(selectedCard, 1), indexHasChanged), [
-        set(spring, timing(clock)),
-        set(
-          cardRotates[1],
-          interpolate(spring, {
-            inputRange: [0, 0.5, 1],
-            outputRange: [cardRotates[0], 45, 0]
-          })
-        ),
-        set(
-          cardTranslatesY[1],
-          interpolate(spring, {
-            inputRange: [0, 0.5, 1],
-            outputRange: [0, -CARD_HEIGHT * 1.5, 0],
-            extrapolate: Extrapolate.CLAMP
-          })
-        ),
-        cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
-          set(
-            cardZIndexes[1],
-            add(cardZIndexes[1], add(max(...cardZIndexes), 10)),
-            cardZIndexes[1]
-          ),
-          set(shouldUpdateZIndexes, 0)
-        ]),
-        cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
-      ]),
-      cond(and(firstSelectionIsDone, eq(selectedCard, 2), indexHasChanged), [
-        set(spring, timing(clock)),
-        set(
-          cardRotates[2],
-          interpolate(spring, {
-            inputRange: [0, 0.5, 1],
-            outputRange: [cardRotates[0], 45, 0]
-          })
-        ),
-        set(
-          cardTranslatesY[2],
-          interpolate(spring, {
-            inputRange: [0, 0.5, 1],
-            outputRange: [0, -CARD_HEIGHT * 1.5, 0],
-            extrapolate: Extrapolate.CLAMP
-          })
-        ),
-        cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
-          set(
-            cardZIndexes[2],
-            add(cardZIndexes[2], add(max(...cardZIndexes), 10)),
-            cardZIndexes[2]
-          ),
-          set(shouldUpdateZIndexes, 0)
-        ]),
-        cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
-      ])
+      ...[0, 1, 2].map(index =>
+        cond(
+          and(firstSelectionIsDone, eq(selectedCard, index), indexHasChanged),
+          [
+            set(spring, timing(clock)),
+            set(
+              cardRotates[index],
+              interpolate(spring, {
+                inputRange: [0, 0.5, 1],
+                outputRange: [cardRotates[index], 45, 0]
+              })
+            ),
+            set(
+              cardTranslatesY[index],
+              interpolate(spring, {
+                inputRange: [0, 0.5, 1],
+                outputRange: [0, -CARD_HEIGHT * 1.5, 0],
+                extrapolate: Extrapolate.CLAMP
+              })
+            ),
+            cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
+              set(
+                cardZIndexes[index],
+                add(cardZIndexes[index], add(max(...cardZIndexes), 10))
+              ),
+              set(shouldUpdateZIndexes, 0)
+            ]),
+            cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
+          ]
+        )
+      )
     ]),
     [cards]
   );
