@@ -22,7 +22,8 @@ const {
   multiply,
   cond,
   eq,
-  onChange
+  onChange,
+  debug
 } = Animated;
 
 const INITIAL_INDEX: number = -1;
@@ -41,12 +42,10 @@ export default ({ cards }: CardSelectionProps) => {
     block([
       cond(
         eq(selectedCard, INITIAL_INDEX),
-        set(cardRotates[0], runSpring(cardRotatesClock, 0, -15))
-      ),
-      set(cardRotates[2], multiply(cardRotates[0], -1)),
-      onChange(selectedCard, [
+        set(cardRotates[0], runSpring(cardRotatesClock, 0, -15)),
         set(translationX, runSpring(translationXClock, translationX, 0))
-      ])
+      ),
+      set(cardRotates[2], multiply(cardRotates[0], -1))
     ]),
     [cards]
   );
