@@ -39,7 +39,6 @@ export default ({ cards }: CardSelectionProps) => {
   const selectCard = (index: number) => selectedCard.setValue(index);
   useCode(
     block([
-      set(cardRotates[2], multiply(cardRotates[0], -1)),
       cond(eq(selectedCard, INITIAL_INDEX), [
         set(spring, runSpring(cardRotatesClock, 0, 1)),
         set(cardRotates[0], bInterpolate(spring, 0, -15)),
