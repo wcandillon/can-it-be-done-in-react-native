@@ -2,7 +2,7 @@
 import Animated, { Easing } from "react-native-reanimated";
 import { runTiming } from "react-native-redash";
 
-const { Clock, Value, cond, block, eq, clockRunning } = Animated;
+const { Clock, cond, block, eq, clockRunning } = Animated;
 
 export const delay = (
   node: Animated.Node<number>,

@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Asset } from "expo-asset";
 
-const usePromiseAll = <T extends any>(promises: Promise<T>[], cb: () => void) =>
+export const usePromiseAll = <T extends any>(
+  promises: Promise<T>[],
+  cb: () => void
+) =>
   useEffect(() => {
     (async () => {
       await Promise.all(promises);
@@ -16,5 +19,3 @@ export const useLoadAssets = (assets: number[]): boolean => {
   );
   return ready;
 };
-
-export const useValues = <T extends {}>(values: T): T => useState(values)[0];
