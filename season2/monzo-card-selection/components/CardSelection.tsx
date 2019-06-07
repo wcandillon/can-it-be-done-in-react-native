@@ -38,19 +38,17 @@ export default ({ cards }: CardSelectionProps) => {
     selectedCardVal,
     cardZIndexes,
     cardRotates,
-    fanOutClock,
-    springClock,
-    spring,
-    translationX
+    cardRotatesClock,
+    translationX,
+    translationXClock
   } = useMemo(
     () => ({
       selectedCardVal: new Value(INITIAL_INDEX),
       cardZIndexes: cards.map((_, index) => new Value(index)),
       cardRotates: cards.map(() => new Value(0)),
-      fanOutClock: new Clock(),
-      springClock: new Clock(),
-      spring: new Value(0),
-      translationX: new Value(CARD_WIDTH)
+      cardRotatesClock: new Clock(),
+      translationX: new Value(CARD_WIDTH),
+      translationXClock: new Clock()
     }),
     [cards]
   );
@@ -65,12 +63,38 @@ export default ({ cards }: CardSelectionProps) => {
     block([
       cond(
         eq(selectedCardVal, -1),
-        set(cardRotates[0], runSpring(fanOutClock, 0, -15)),
-        set(translationX, runSpring(fanOutClock, CARD_WIDTH, 0))
+        set(cardRotates[0], runSpring(cardRotatesClock, 0, -15)),
+        set(translationX, runSpring(translationXClock, CARD_WIDTH, 0))
       ),
       set(cardRotates[2], multiply(cardRotates[0], -1))
     ]),
     [cards]
+  );
+  const cardComps = useMemo(
+    () =>
+      cards.map((card, index) => {
+        const zIndex = cardZIndexes[index];
+        const rotateZ = concat(cardRotates[index] as any, "deg" as any);
+        return (
+          <Animated.View
+            key={card.id}
+            style={{
+              zIndex,
+              elevation: zIndex,
+              ...StyleSheet.absoluteFillObject,
+              transform: [
+                { translateX: multiply(translationX, -1) },
+                { rotateZ },
+                { translateX: translationX },
+                { translateY: 0 }
+              ]
+            }}
+          >
+            <Card key={card.id} {...{ card }} />
+          </Animated.View>
+        );
+      }),
+    [cardRotates, cardZIndexes, cards, translationX]
   );
   return (
     <Transitioning.View
@@ -78,34 +102,7 @@ export default ({ cards }: CardSelectionProps) => {
       style={styles.container}
       transition={<Transition.In type="fade" durationMs={100} />}
     >
-      <View style={styles.cards}>
-        {useMemo(
-          () =>
-            cards.map((card, index) => {
-              const zIndex = cardZIndexes[index];
-              const rotateZ = concat(cardRotates[index] as any, "deg" as any);
-              return (
-                <Animated.View
-                  key={card.id}
-                  style={{
-                    zIndex,
-                    elevation: zIndex,
-                    ...StyleSheet.absoluteFillObject,
-                    transform: [
-                      { translateX: multiply(translationX, -1) },
-                      { rotateZ },
-                      { translateX: translationX },
-                      { translateY: 0 }
-                    ]
-                  }}
-                >
-                  <Card key={card.id} {...{ card }} />
-                </Animated.View>
-              );
-            }),
-          [cardRotates, cardZIndexes, cards, translationX]
-        )}
-      </View>
+      <View style={styles.cards}>{cardComps}</View>
       <SafeAreaView>
         {cards.map(({ id, name, color, thumbnail }, index) => (
           <RectButton key={id} onPress={() => selectCard(index)}>

@@ -4,7 +4,7 @@ import React from "react";
 import { AppLoading } from "expo";
 import { useLoadAssets } from "./components/hookah";
 
-import CardSelection from "./components/CardSelection";
+import CardSelection from "./components/CardSelection2";
 import { Card as CardModel } from "./components/Card";
 
 const cards: [CardModel, CardModel, CardModel] = [
