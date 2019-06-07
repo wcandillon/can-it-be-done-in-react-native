@@ -6,7 +6,7 @@ import Animated, {
   Transition,
   TransitioningView
 } from "react-native-reanimated";
-import { runSpring } from "react-native-redash";
+import { runSpring, bInterpolate } from "react-native-redash";
 
 import Card, { Card as CardModel, CARD_WIDTH } from "./Card";
 import CheckIcon from "./CheckIcon";
@@ -16,18 +16,39 @@ interface CardSelectionProps {
   cards: [CardModel, CardModel, CardModel];
 }
 
-const { useCode, Clock, Value, concat, block, set, multiply } = Animated;
+const {
+  useCode,
+  Clock,
+  Value,
+  concat,
+  block,
+  set,
+  multiply,
+  onChange,
+  cond,
+  eq,
+  debug
+} = Animated;
+const INITIAL_INDEX: number = -1;
 
 export default ({ cards }: CardSelectionProps) => {
   const container = useRef<TransitioningView>();
-  const [selectedCard, setSelectCard] = useState(-1);
-  const { cardZIndexes, cardRotates, clock } = useMemo(
+  const [selectedCard, setSelectCard] = useState(INITIAL_INDEX);
+  const {
+    selectedCardVal,
+    cardZIndexes,
+    cardRotates,
+    fanOutClock,
+    springClock,
+    spring
+  } = useMemo(
     () => ({
+      selectedCardVal: new Value(INITIAL_INDEX),
       cardZIndexes: cards.map((_, index) => new Value(index)),
-      cardRotates: cards.map(() => {
-        return new Value(0);
-      }),
-      clock: new Clock()
+      cardRotates: cards.map(() => new Value(0)),
+      fanOutClock: new Clock(),
+      springClock: new Clock(),
+      spring: new Value(0)
     }),
     [cards]
   );
@@ -36,10 +57,11 @@ export default ({ cards }: CardSelectionProps) => {
       container.current.animateNextTransition();
     }
     setSelectCard(index);
+    selectedCardVal.setValue(index);
   };
   useCode(
     block([
-      set(cardRotates[0], runSpring(clock, 0, -15)),
+      set(cardRotates[0], runSpring(fanOutClock, 0, -15)),
       set(cardRotates[2], multiply(cardRotates[0], -1))
     ]),
     [cards]
@@ -66,7 +88,8 @@ export default ({ cards }: CardSelectionProps) => {
                     transform: [
                       { translateX: -CARD_WIDTH },
                       { rotateZ },
-                      { translateX: CARD_WIDTH }
+                      { translateX: CARD_WIDTH },
+                      { translateY: 0 }
                     ]
                   }}
                 >

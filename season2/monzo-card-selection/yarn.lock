@@ -1796,9 +1796,9 @@ eslint-config-prettier@^4.3.0:
   dependencies:
     get-stdin "^6.0.0"
 
-eslint-config-react-native-wcandillon@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-react-native-wcandillon/-/eslint-config-react-native-wcandillon-1.2.1.tgz#bbdffa61802cc9c96c84da05577b0b02d0489804"
+eslint-config-react-native-wcandillon@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/eslint-config-react-native-wcandillon/-/eslint-config-react-native-wcandillon-1.2.2.tgz#124a4465ad3c9679da1f260b21a78dec840e01da"
   dependencies:
     "@typescript-eslint/eslint-plugin" "1.3.0"
     "@typescript-eslint/parser" "1.3.0"
