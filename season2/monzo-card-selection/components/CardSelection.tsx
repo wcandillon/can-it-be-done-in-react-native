@@ -42,7 +42,7 @@ export default ({ cards }: CardSelectionProps) => {
       set(cardRotates[0], runSpring(clock, 0, -15)),
       set(cardRotates[2], multiply(cardRotates[0], -1))
     ]),
-    []
+    [cards]
   );
   return (
     <Transitioning.View
@@ -51,27 +51,31 @@ export default ({ cards }: CardSelectionProps) => {
       transition={<Transition.In type="fade" durationMs={100} />}
     >
       <View style={styles.cards}>
-        {cards.map((card, index) => {
-          const zIndex = cardZIndexes[index];
-          const rotateZ = concat(cardRotates[index] as any, "deg" as any);
-          return (
-            <Animated.View
-              key={card.id}
-              style={{
-                zIndex,
-                elevation: zIndex,
-                ...StyleSheet.absoluteFillObject,
-                transform: [
-                  { translateX: -CARD_WIDTH },
-                  { rotateZ },
-                  { translateX: CARD_WIDTH }
-                ]
-              }}
-            >
-              <Card key={card.id} {...{ card }} />
-            </Animated.View>
-          );
-        })}
+        {useMemo(
+          () =>
+            cards.map((card, index) => {
+              const zIndex = cardZIndexes[index];
+              const rotateZ = concat(cardRotates[index] as any, "deg" as any);
+              return (
+                <Animated.View
+                  key={card.id}
+                  style={{
+                    zIndex,
+                    elevation: zIndex,
+                    ...StyleSheet.absoluteFillObject,
+                    transform: [
+                      { translateX: -CARD_WIDTH },
+                      { rotateZ },
+                      { translateX: CARD_WIDTH }
+                    ]
+                  }}
+                >
+                  <Card key={card.id} {...{ card }} />
+                </Animated.View>
+              );
+            }),
+          [cardRotates, cardZIndexes, cards]
+        )}
       </View>
       <SafeAreaView>
         {cards.map(({ id, name, color, thumbnail }, index) => (
