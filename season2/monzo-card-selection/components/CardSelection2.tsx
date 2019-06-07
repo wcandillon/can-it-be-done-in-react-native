@@ -4,7 +4,7 @@ import { RectButton } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { runSpring, bInterpolate } from "react-native-redash";
 
-import Card, { Card as CardModel, CARD_WIDTH } from "./Card";
+import Card, { Card as CardModel, CARD_WIDTH, CARD_HEIGHT } from "./Card";
 import CheckIcon from "./CheckIcon";
 import Thumbnail from "./Thumbnail";
 
@@ -19,16 +19,20 @@ const {
   concat,
   block,
   set,
+  add,
   multiply,
   cond,
   eq,
   and,
+  greaterOrEq,
+  interpolate,
   defined,
   diff,
   clockRunning,
   onChange,
   debug,
-  neq
+  neq,
+  not
 } = Animated;
 
 const INITIAL_INDEX: number = -1;
@@ -37,6 +41,7 @@ export default ({ cards }: CardSelectionProps) => {
   const selectedCard = new Value(INITIAL_INDEX);
   const cardZIndexes = cards.map((_, index) => new Value(index));
   const cardRotates = cards.map(() => new Value(0));
+  const cardTranslatesY = cards.map(() => new Value(0));
   const spring = new Value(0);
   const clock = new Clock();
   const translationX = new Value(CARD_WIDTH);
@@ -50,13 +55,31 @@ export default ({ cards }: CardSelectionProps) => {
         set(cardRotates[1], 0),
         set(cardRotates[2], bInterpolate(spring, 0, 15))
       ]),
-      cond(and(neq(selectedCard, -1), eq(firstSelectionIsDone, 0)), [
+      cond(and(neq(selectedCard, INITIAL_INDEX), not(firstSelectionIsDone)), [
         set(spring, runSpring(clock, 0, 1)),
         set(cardRotates[0], bInterpolate(spring, 0, -7.5)),
         set(cardRotates[1], bInterpolate(spring, 0, 7.5)),
         set(cardRotates[2], bInterpolate(spring, 15, 0)),
         set(translationX, bInterpolate(spring, translationX, 0)),
-        cond(eq(clockRunning(clock), 0), set(firstSelectionIsDone, 1))
+        cond(not(clockRunning(clock)), set(firstSelectionIsDone, 1))
+      ]),
+      cond(and(firstSelectionIsDone, eq(selectedCard, 0)), [
+        set(spring, runSpring(clock, 0, 1)),
+        set(
+          cardRotates[0],
+          interpolate(spring, {
+            inputRange: [0, 0.5, 1],
+            outputRange: [cardRotates[0], 45, 0]
+          })
+        ),
+        set(
+          cardTranslatesY[0],
+          interpolate(spring, {
+            inputRange: [0, 0.5, 1],
+            outputRange: [0, -CARD_HEIGHT * 1.5, 0]
+          })
+        ),
+        set(cardZIndexes[0], cond(greaterOrEq(spring, 0.5), 10, 0))
       ])
     ]),
     [cards]
@@ -67,6 +90,7 @@ export default ({ cards }: CardSelectionProps) => {
         {cards.map((card, index) => {
           const zIndex = cardZIndexes[index];
           const rotateZ = concat(cardRotates[index] as any, "deg" as any);
+          const translateY = cardTranslatesY[index];
           return (
             <Animated.View
               key={card.id}
@@ -77,7 +101,8 @@ export default ({ cards }: CardSelectionProps) => {
                 transform: [
                   { translateX: multiply(translationX, -1) },
                   { rotateZ },
-                  { translateX: translationX }
+                  { translateX: translationX },
+                  { translateY }
                 ]
               }}
             >
