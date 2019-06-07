@@ -1,8 +1,8 @@
 import * as React from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-import Animated from "react-native-reanimated";
-import { runSpring, bInterpolate } from "react-native-redash";
+import Animated, { Easing } from "react-native-reanimated";
+import { bInterpolate, runTiming } from "react-native-redash";
 
 import Card, { Card as CardModel, CARD_WIDTH, CARD_HEIGHT } from "./Card";
 import CheckIcon from "./CheckIcon";
@@ -32,10 +32,13 @@ const {
   onChange,
   debug,
   neq,
-  not
+  not,
+  Extrapolate
 } = Animated;
 
 const INITIAL_INDEX: number = -1;
+const timing = (clock: Animated.Clock) =>
+  runTiming(clock, 0, { toValue: 1, duration: 400, easing: Easing.linear });
 
 export default ({ cards }: CardSelectionProps) => {
   const selectedCard = new Value(INITIAL_INDEX);
@@ -50,13 +53,13 @@ export default ({ cards }: CardSelectionProps) => {
   useCode(
     block([
       cond(eq(selectedCard, INITIAL_INDEX), [
-        set(spring, runSpring(clock, 0, 1)),
+        set(spring, timing(clock, 0, 1)),
         set(cardRotates[0], bInterpolate(spring, 0, -15)),
         set(cardRotates[1], 0),
         set(cardRotates[2], bInterpolate(spring, 0, 15))
       ]),
       cond(and(neq(selectedCard, INITIAL_INDEX), not(firstSelectionIsDone)), [
-        set(spring, runSpring(clock, 0, 1)),
+        set(spring, timing(clock, 0, 1)),
         set(cardRotates[0], bInterpolate(spring, 0, -7.5)),
         set(cardRotates[1], bInterpolate(spring, 0, 7.5)),
         set(cardRotates[2], bInterpolate(spring, 15, 0)),
@@ -64,7 +67,7 @@ export default ({ cards }: CardSelectionProps) => {
         cond(not(clockRunning(clock)), set(firstSelectionIsDone, 1))
       ]),
       cond(and(firstSelectionIsDone, eq(selectedCard, 0)), [
-        set(spring, runSpring(clock, 0, 1)),
+        set(spring, timing(clock, 0, 1)),
         set(
           cardRotates[0],
           interpolate(spring, {
@@ -76,7 +79,8 @@ export default ({ cards }: CardSelectionProps) => {
           cardTranslatesY[0],
           interpolate(spring, {
             inputRange: [0, 0.5, 1],
-            outputRange: [0, -CARD_HEIGHT * 1.5, 0]
+            outputRange: [0, -CARD_HEIGHT * 1.5, 0],
+            extrapolate: Extrapolate.CLAMP
           })
         ),
         set(cardZIndexes[0], cond(greaterOrEq(spring, 0.5), 10, 0))
