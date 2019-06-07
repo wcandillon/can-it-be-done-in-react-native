@@ -40,7 +40,8 @@ export default ({ cards }: CardSelectionProps) => {
     cardRotates,
     fanOutClock,
     springClock,
-    spring
+    spring,
+    translationX
   } = useMemo(
     () => ({
       selectedCardVal: new Value(INITIAL_INDEX),
@@ -48,7 +49,8 @@ export default ({ cards }: CardSelectionProps) => {
       cardRotates: cards.map(() => new Value(0)),
       fanOutClock: new Clock(),
       springClock: new Clock(),
-      spring: new Value(0)
+      spring: new Value(0),
+      translationX: new Value(CARD_WIDTH)
     }),
     [cards]
   );
@@ -61,7 +63,11 @@ export default ({ cards }: CardSelectionProps) => {
   };
   useCode(
     block([
-      set(cardRotates[0], runSpring(fanOutClock, 0, -15)),
+      cond(
+        eq(selectedCardVal, -1),
+        set(cardRotates[0], runSpring(fanOutClock, 0, -15)),
+        set(translationX, runSpring(fanOutClock, CARD_WIDTH, 0))
+      ),
       set(cardRotates[2], multiply(cardRotates[0], -1))
     ]),
     [cards]
@@ -86,9 +92,9 @@ export default ({ cards }: CardSelectionProps) => {
                     elevation: zIndex,
                     ...StyleSheet.absoluteFillObject,
                     transform: [
-                      { translateX: -CARD_WIDTH },
+                      { translateX: multiply(translationX, -1) },
                       { rotateZ },
-                      { translateX: CARD_WIDTH },
+                      { translateX: translationX },
                       { translateY: 0 }
                     ]
                   }}
@@ -97,7 +103,7 @@ export default ({ cards }: CardSelectionProps) => {
                 </Animated.View>
               );
             }),
-          [cardRotates, cardZIndexes, cards]
+          [cardRotates, cardZIndexes, cards, translationX]
         )}
       </View>
       <SafeAreaView>
