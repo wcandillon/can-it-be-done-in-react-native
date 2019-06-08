@@ -1,7 +1,12 @@
-import * as React from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-import Animated, { Easing } from "react-native-reanimated";
+import Animated, {
+  Easing,
+  Transitioning,
+  Transition,
+  TransitioningView
+} from "react-native-reanimated";
 import { bInterpolate, runTiming, max } from "react-native-redash";
 
 import Card, { Card as CardModel, CARD_WIDTH, CARD_HEIGHT } from "./Card";
@@ -39,17 +44,39 @@ const timing = (clock: Animated.Clock) =>
   runTiming(clock, 0, { toValue: 1, duration: 400, easing: Easing.linear });
 
 export default ({ cards }: CardSelectionProps) => {
-  const selectedCard = new Value(INITIAL_INDEX);
-  const nextIndex = new Value(INITIAL_INDEX);
-  const cardZIndexes = cards.map((_, index) => new Value(index));
-  const cardRotates = cards.map(() => new Value(0));
-  const cardTranslatesY = cards.map(() => new Value(0));
-  const spring = new Value(0);
-  const clock = new Clock();
-  const translationX = new Value(CARD_WIDTH);
-  const firstSelectionIsDone = new Value(0);
-  const shouldUpdateZIndexes = new Value(1);
-  const selectCard = (index: number) => nextIndex.setValue(index);
+  const container = useRef<TransitioningView>();
+  const {
+    selectedCard,
+    nextIndex,
+    cardZIndexes,
+    cardRotates,
+    cardTranslatesY,
+    spring,
+    clock,
+    translationX,
+    firstSelectionIsDone,
+    shouldUpdateZIndexes
+  } = useMemo(
+    () => ({
+      selectedCard: new Value(INITIAL_INDEX),
+      nextIndex: new Value(INITIAL_INDEX),
+      cardZIndexes: cards.map((_, index) => new Value(index)),
+      cardRotates: cards.map(() => new Value(0)),
+      cardTranslatesY: cards.map(() => new Value(0)),
+      spring: new Value(0),
+      clock: new Clock(0),
+      translationX: new Value(CARD_WIDTH),
+      firstSelectionIsDone: new Value(0),
+      shouldUpdateZIndexes: new Value(1)
+    }),
+    [cards]
+  );
+  const selectCard = (index: number) => {
+    if (container && container.current) {
+      container.current.animateNextTransition();
+    }
+    nextIndex.setValue(index);
+  };
   useCode(
     block([
       onChange(nextIndex, [
@@ -117,7 +144,11 @@ export default ({ cards }: CardSelectionProps) => {
     [cards]
   );
   return (
-    <View style={styles.container}>
+    <Transitioning.View
+      ref={container}
+      style={styles.container}
+      transition={<Transition.In type="fade" durationMs={100} />}
+    >
       <View style={styles.cards}>
         {cards.map((card, index) => {
           const zIndex = cardZIndexes[index];
@@ -163,7 +194,7 @@ export default ({ cards }: CardSelectionProps) => {
           </RectButton>
         ))}
       </SafeAreaView>
-    </View>
+    </Transitioning.View>
   );
 };
 
