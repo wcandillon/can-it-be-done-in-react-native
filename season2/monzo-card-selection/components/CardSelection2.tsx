@@ -26,11 +26,8 @@ const {
   and,
   greaterOrEq,
   interpolate,
-  defined,
-  diff,
   clockRunning,
   onChange,
-  debug,
   neq,
   not,
   Extrapolate
@@ -72,11 +69,20 @@ export default ({ cards }: CardSelectionProps) => {
         set(translationX, bInterpolate(spring, translationX, 0)),
         cond(not(clockRunning(clock)), set(firstSelectionIsDone, 1))
       ]),
-      ...[0, 1, 2].map(index =>
+      ...cards.map((_, index) =>
         cond(
           and(firstSelectionIsDone, eq(selectedCard, index), indexHasChanged),
           [
             set(spring, timing(clock)),
+            ...cards
+              .map((_c, i) => i)
+              .filter((_c, i) => i !== index)
+              .map((absoluteIndex, i) =>
+                set(
+                  cardRotates[absoluteIndex],
+                  bInterpolate(spring, 0, 7.5 * (i % 2 === 0 ? -1 : 1))
+                )
+              ),
             set(
               cardRotates[index],
               interpolate(spring, {
