@@ -27,10 +27,11 @@ const {
   greaterOrEq,
   interpolate,
   clockRunning,
-  onChange,
   neq,
   not,
-  Extrapolate
+  Extrapolate,
+  onChange,
+  debug
 } = Animated;
 
 const INITIAL_INDEX: number = -1;
@@ -39,7 +40,7 @@ const timing = (clock: Animated.Clock) =>
 
 export default ({ cards }: CardSelectionProps) => {
   const selectedCard = new Value(INITIAL_INDEX);
-  const indexHasChanged = new Value(INITIAL_INDEX);
+  const nextIndex = new Value(INITIAL_INDEX);
   const cardZIndexes = cards.map((_, index) => new Value(index));
   const cardRotates = cards.map(() => new Value(0));
   const cardTranslatesY = cards.map(() => new Value(0));
@@ -48,13 +49,15 @@ export default ({ cards }: CardSelectionProps) => {
   const translationX = new Value(CARD_WIDTH);
   const firstSelectionIsDone = new Value(0);
   const shouldUpdateZIndexes = new Value(1);
-  const selectCard = (index: number) => {
-    indexHasChanged.setValue(0);
-    selectedCard.setValue(index);
-  };
+  const selectCard = (index: number) => nextIndex.setValue(index);
   useCode(
     block([
-      onChange(selectedCard, set(indexHasChanged, 1)),
+      onChange(nextIndex, [
+        cond(
+          and(not(clockRunning(clock)), neq(nextIndex, selectedCard)),
+          set(selectedCard, nextIndex)
+        )
+      ]),
       cond(eq(selectedCard, INITIAL_INDEX), [
         set(spring, timing(clock)),
         set(cardRotates[0], bInterpolate(spring, 0, -15)),
@@ -70,44 +73,45 @@ export default ({ cards }: CardSelectionProps) => {
         cond(not(clockRunning(clock)), set(firstSelectionIsDone, 1))
       ]),
       ...cards.map((_, index) =>
-        cond(
-          and(firstSelectionIsDone, eq(selectedCard, index), indexHasChanged),
-          [
-            set(spring, timing(clock)),
-            ...cards
-              .map((_c, i) => i)
-              .filter((_c, i) => i !== index)
-              .map((absoluteIndex, i) =>
-                set(
-                  cardRotates[absoluteIndex],
-                  bInterpolate(spring, 0, 7.5 * (i % 2 === 0 ? -1 : 1))
-                )
-              ),
-            set(
-              cardRotates[index],
-              interpolate(spring, {
-                inputRange: [0, 0.5, 1],
-                outputRange: [cardRotates[index], 45, 0]
-              })
-            ),
-            set(
-              cardTranslatesY[index],
-              interpolate(spring, {
-                inputRange: [0, 0.5, 1],
-                outputRange: [0, -CARD_HEIGHT * 1.5, 0],
-                extrapolate: Extrapolate.CLAMP
-              })
-            ),
-            cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
+        cond(and(firstSelectionIsDone, eq(selectedCard, index)), [
+          set(spring, timing(clock)),
+          ...cards
+            .map((_c, i) => i)
+            .filter((_c, i) => i !== index)
+            .map((absoluteIndex, i) =>
               set(
-                cardZIndexes[index],
-                add(cardZIndexes[index], add(max(...cardZIndexes), 10))
-              ),
-              set(shouldUpdateZIndexes, 0)
-            ]),
-            cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
-          ]
-        )
+                cardRotates[absoluteIndex],
+                bInterpolate(
+                  spring,
+                  cardRotates[absoluteIndex],
+                  7.5 * (i % 2 === 0 ? -1 : 1)
+                )
+              )
+            ),
+          set(
+            cardRotates[index],
+            interpolate(spring, {
+              inputRange: [0, 0.5, 1],
+              outputRange: [cardRotates[index], 45, 0]
+            })
+          ),
+          set(
+            cardTranslatesY[index],
+            interpolate(spring, {
+              inputRange: [0, 0.5, 1],
+              outputRange: [0, -CARD_HEIGHT * 1.5, 0],
+              extrapolate: Extrapolate.CLAMP
+            })
+          ),
+          cond(and(greaterOrEq(spring, 0.5), shouldUpdateZIndexes), [
+            set(
+              cardZIndexes[index],
+              add(cardZIndexes[index], add(max(...cardZIndexes), 10))
+            ),
+            set(shouldUpdateZIndexes, 0)
+          ]),
+          cond(not(clockRunning(clock)), set(shouldUpdateZIndexes, 1))
+        ])
       )
     ]),
     [cards]
