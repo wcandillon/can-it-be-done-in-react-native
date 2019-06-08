@@ -35,7 +35,6 @@ const {
   neq,
   not,
   Extrapolate,
-  onChange,
   call
 } = Animated;
 
