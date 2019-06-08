@@ -79,17 +79,15 @@ export default ({ cards }: CardSelectionProps) => {
     setSelectCardState(index);
   };
   const selectCard = (index: number) => {
-    if (selectedCardState !== index) {
+    if (index !== selectedCardState) {
       nextIndex.setValue(index);
     }
   };
   useCode(
     block([
-      onChange(nextIndex, [
-        cond(and(not(clockRunning(clock)), neq(nextIndex, selectedCard)), [
-          set(selectedCard, nextIndex),
-          call([selectedCard], selectCardState)
-        ])
+      cond(and(not(clockRunning(clock)), neq(nextIndex, selectedCard)), [
+        set(selectedCard, nextIndex),
+        call([selectedCard], selectCardState)
       ]),
       cond(eq(selectedCard, INITIAL_INDEX), [
         set(spring, timing(clock)),
