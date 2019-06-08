@@ -36,7 +36,7 @@ const {
   not,
   Extrapolate,
   onChange,
-  debug
+  call
 } = Animated;
 
 const INITIAL_INDEX: number = -1;
@@ -45,6 +45,7 @@ const timing = (clock: Animated.Clock) =>
 
 export default ({ cards }: CardSelectionProps) => {
   const container = useRef<TransitioningView>();
+  const [selectedCardState, setSelectCardState] = useState(INITIAL_INDEX);
   const {
     selectedCard,
     nextIndex,
@@ -64,26 +65,31 @@ export default ({ cards }: CardSelectionProps) => {
       cardRotates: cards.map(() => new Value(0)),
       cardTranslatesY: cards.map(() => new Value(0)),
       spring: new Value(0),
-      clock: new Clock(0),
+      clock: new Clock(),
       translationX: new Value(CARD_WIDTH),
       firstSelectionIsDone: new Value(0),
       shouldUpdateZIndexes: new Value(1)
     }),
     [cards]
   );
-  const selectCard = (index: number) => {
+  const selectCardState = ([index]: readonly number[]) => {
     if (container && container.current) {
       container.current.animateNextTransition();
     }
-    nextIndex.setValue(index);
+    setSelectCardState(index);
+  };
+  const selectCard = (index: number) => {
+    if (selectedCardState !== index) {
+      nextIndex.setValue(index);
+    }
   };
   useCode(
     block([
       onChange(nextIndex, [
-        cond(
-          and(not(clockRunning(clock)), neq(nextIndex, selectedCard)),
-          set(selectedCard, nextIndex)
-        )
+        cond(and(not(clockRunning(clock)), neq(nextIndex, selectedCard)), [
+          set(selectedCard, nextIndex),
+          call([selectedCard], selectCardState)
+        ])
       ]),
       cond(eq(selectedCard, INITIAL_INDEX), [
         set(spring, timing(clock)),
@@ -182,14 +188,7 @@ export default ({ cards }: CardSelectionProps) => {
               <View style={styles.label}>
                 <Text>{name}</Text>
               </View>
-              <Animated.View
-                style={{
-                  opacity: cond(eq(selectedCard, index), 1, 0),
-                  alignSelf: "center"
-                }}
-              >
-                <CheckIcon {...{ color }} />
-              </Animated.View>
+              {selectedCardState === index && <CheckIcon {...{ color }} />}
             </View>
           </RectButton>
         ))}
