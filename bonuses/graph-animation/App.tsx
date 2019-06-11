@@ -13,10 +13,9 @@ const data = [
   { date: new Date(2018, 10, 5).getTime(), value: 300 }
 ];
 
-// <Graph {...{ data }} />
 export default () => (
   <View style={styles.container}>
-    <MorphingAnimation />
+    <Graph {...{ data }} />
   </View>
 );
 
