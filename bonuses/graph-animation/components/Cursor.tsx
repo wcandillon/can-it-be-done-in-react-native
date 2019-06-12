@@ -2,9 +2,7 @@ import * as React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { decay, clamp } from "react-native-redash";
-
-import { getPath, getPointAtLength } from "./SVGHelpers";
+import { decay, clamp, parsePath, getPointAtLength } from "react-native-redash";
 
 const { Value, event, sub, interpolate } = Animated;
 const TOUCH_SIZE = 200;
@@ -33,7 +31,7 @@ export default ({ d, r, borderWidth, borderColor }: CursorProps) => {
     }
   ]);
   const cx = clamp(decay(translationX, state, velocityX), 0, width);
-  const path = getPath(d);
+  const path = parsePath(d);
   const length = interpolate(cx, {
     inputRange: [0, width],
     outputRange: [0, path.totalLength]
