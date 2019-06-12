@@ -1,0 +1,35 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject",
+    "lint": "eslint App.tsx components/*",
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "@types/d3-shape": "^1.3.1",
+    "abs-svg-path": "^0.1.1",
+    "d3-scale": "^3.0.0",
+    "d3-shape": "^1.3.5",
+    "expo": "^33.0.0",
+    "normalize-svg-path": "^1.0.1",
+    "parse-svg-path": "^0.1.2",
+    "react": "16.8.3",
+    "react-dom": "^16.8.6",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-redash": "5.0.0",
+    "react-native-web": "^0.11.4"
+  },
+  "devDependencies": {
+    "@types/d3-scale": "^2.1.1",
+    "@types/react": "^16.8.19",
+    "@types/react-native": "^0.57.60",
+    "babel-preset-expo": "^5.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-react-native-wcandillon": "1.1.2"
+  },
+  "private": true
+}
