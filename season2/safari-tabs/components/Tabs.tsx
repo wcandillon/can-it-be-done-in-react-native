@@ -16,20 +16,6 @@ interface TabsProps {
 export default ({ tabs }: TabsProps) => {
   const y = new Value(0);
   const progress = new Value(0);
-  const clock = new Clock();
-  useCode(
-    block([
-      set(
-        progress,
-        runTiming(clock, 0, {
-          toValue: 1,
-          duration: 300,
-          easing: Easing.linear
-        })
-      )
-    ]),
-    [tabs]
-  );
   return (
     <View style={styles.container}>
       {tabs.map(tab => (

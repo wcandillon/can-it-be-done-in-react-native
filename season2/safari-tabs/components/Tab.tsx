@@ -7,7 +7,7 @@ import Tap from "./Tap";
 
 const perspective = 1000;
 const { height } = Dimensions.get("window");
-const { Clock, multiply, sin, abs, interpolate, set } = Animated;
+const { Clock, multiply, sin, abs, interpolate, set, cond, eq } = Animated;
 
 export interface ITab {
   id: number;
@@ -25,22 +25,21 @@ export default ({ tab, progress }: TabProps) => {
     inputRange: [0, 1],
     outputRange: [0, -Math.PI / 6.67]
   });
+  const margin = interpolate(progress, {
+    inputRange: [0, 1],
+    outputRange: [0, 16]
+  });
   const z = multiply(H, sin(abs(rotateX)));
-
   const clock = new Clock();
-  const onPress = set(
-    progress,
-    runTiming(clock, 1, {
-      toValue: 0,
-      duration: 300,
-      easing: Easing.linear
-    })
-  );
+  const timing = (src: Animated.Node<number>, toValue: Animated.Node<number>) =>
+    runTiming(clock, src, { toValue, duration: 300, easing: Easing.linear });
+  const onPress = set(progress, timing(progress, cond(eq(progress, 1), 0, 1)));
   return (
     <Tap {...{ onPress }}>
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
+          margin,
           transform: [{ perspective }, { rotateX }, translateZ(perspective, z)]
         }}
       >
@@ -55,7 +54,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: undefined,
     height: undefined,
-    margin: 16,
     borderRadius: 8,
     resizeMode: "contain"
   }

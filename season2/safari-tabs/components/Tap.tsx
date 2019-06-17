@@ -18,7 +18,7 @@ export default ({ onPress, children }: TapProps) => {
       }
     }
   ]);
-  useCode(block([cond(eq(state, State.END), onPress)]));
+  useCode(block([cond(eq(state, State.END), onPress)]), [onPress]);
   return (
     <TapGestureHandler
       onHandlerStateChange={onGestureEvent}
