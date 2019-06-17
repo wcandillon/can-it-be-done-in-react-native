@@ -1,24 +1,31 @@
 import * as React from "react";
+import { View, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
-import { onScroll } from "react-native-redash";
 
-import Tab from "./Tab";
+import Tab, { ITab } from "./Tab";
 
 const { Value } = Animated;
 
-export default () => {
+export type ITabs = ITab[];
+
+interface TabsProps {
+  tabs: ITabs;
+}
+
+export default ({ tabs }: TabsProps) => {
   const y = new Value(0);
   return (
-    <Animated.ScrollView
-      showsVerticalScrollIndicator={false}
-      onScroll={onScroll({ y })}
-      scrollEventThrottle={1}
-      vertical
-    >
-      <Tab color="cyan" />
-      <Tab color="green" />
-      <Tab color="red" />
-      <Tab color="blue" />
-    </Animated.ScrollView>
+    <View style={styles.container}>
+      {tabs.map(tab => (
+        <Tab key={tab.id} {...{ tab }} />
+      ))}
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "black"
+  }
+});

@@ -1,32 +1,43 @@
 import * as React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, Image, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
+import { translateZ } from "react-native-redash";
 
 const perspective = 1000;
 const { width, height } = Dimensions.get("window");
-const { multiply } = Animated;
+const { multiply, concat, sin, abs } = Animated;
 
-interface TabProps {
-  color: string;
+export interface ITab {
+  id: number;
+  screen: number;
 }
 
-export default ({ color: backgroundColor }: TabProps) => {
-  const translateX = height / 2;
-  const rotateX = "-27deg";
+interface TabProps {
+  tab: ITab;
+}
+
+export default ({ tab }: TabProps) => {
+  const H = -height / 2;
+  const a = -27;
+  const rotateX = concat(a, "deg");
+  const z = multiply(H, sin(abs(a)));
   return (
     <Animated.View
       style={{
-        width,
-        height,
-        backgroundColor,
+        ...StyleSheet.absoluteFillObject,
         flex: 1,
-        transform: [
-          { perspective },
-          { translateX },
-          { rotateX },
-          { translateX: multiply(translateX, -1) }
-        ]
+        transform: [{ perspective }, { rotateX }, translateZ(perspective, z)]
       }}
-    />
+    >
+      <Image source={tab.screen} style={styles.image} />
+    </Animated.View>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    width: undefined,
+    height: undefined
+  }
+});
