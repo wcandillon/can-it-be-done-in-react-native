@@ -7,7 +7,19 @@ import Tap from "./Tap";
 
 const perspective = 1000;
 const { height } = Dimensions.get("window");
-const { Clock, multiply, sin, abs, interpolate, set, cond, eq } = Animated;
+const {
+  Value,
+  useCode,
+  Clock,
+  multiply,
+  sin,
+  abs,
+  interpolate,
+  set,
+  cond,
+  eq,
+  not
+} = Animated;
 
 export interface ITab {
   id: number;
@@ -23,17 +35,23 @@ export default ({ tab, progress }: TabProps) => {
   const H = -height / 2;
   const rotateX = interpolate(progress, {
     inputRange: [0, 1],
-    outputRange: [0, -Math.PI / 6.67]
+    outputRange: [0, -Math.PI / 6]
   });
   const margin = interpolate(progress, {
     inputRange: [0, 1],
     outputRange: [0, 16]
   });
   const z = multiply(H, sin(abs(rotateX)));
+  const toggle = new Value(0);
   const clock = new Clock();
-  const timing = (src: Animated.Node<number>, toValue: Animated.Node<number>) =>
-    runTiming(clock, src, { toValue, duration: 300, easing: Easing.linear });
-  const onPress = set(progress, timing(progress, cond(eq(progress, 1), 0, 1)));
+  const timing = (toggle: Animated.Node<number>) =>
+    runTiming(clock, toggle, {
+      toValue: not(toggle),
+      duration: 300,
+      easing: Easing.linear
+    });
+  const onPress = set(toggle, not(toggle));
+  useCode(set(progress, timing(toggle)), []);
   return (
     <Tap {...{ onPress }}>
       <Animated.View
@@ -54,7 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: undefined,
     height: undefined,
-    borderRadius: 8,
     resizeMode: "contain"
   }
 });
