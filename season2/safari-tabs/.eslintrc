@@ -1,7 +1,3 @@
 {
-  "extends": "react-native-wcandillon",
-  "rules": {
-    "react-hooks/exhaustive-deps": 2,
-    "react-native/no-color-literals": 0
-  }
+  "extends": "react-native-wcandillon"
 }

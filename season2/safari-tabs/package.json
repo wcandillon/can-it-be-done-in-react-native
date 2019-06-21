@@ -10,10 +10,13 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "expo": "^33.0.0",
+    "expo": "^33.0.7",
+    "expo-asset": "^5.0.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-gesture-handler": "~1.2.1",
+    "react-native-reanimated": "1.0.1",
     "react-native-redash": "^5.0.2",
     "react-native-web": "^0.11.4"
   },

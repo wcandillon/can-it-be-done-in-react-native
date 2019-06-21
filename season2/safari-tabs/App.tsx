@@ -4,7 +4,8 @@ import LoadAssets from "./components/LoadAssets";
 import Tabs, { ITabs } from "./components/Tabs";
 
 const tabs: ITabs = [
-  { id: "apple", screen: require("./assets/screens/apple.jpeg") }
+  { id: "screen1", screen: require("./assets/screens/screen1.jpeg") },
+  { id: "screen2", screen: require("./assets/screens/screen2.jpeg") }
 ];
 
 export default () => (

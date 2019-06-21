@@ -18,8 +18,8 @@ export default ({ tabs }: TabsProps) => {
   const progress = new Value(0);
   return (
     <View style={styles.container}>
-      {tabs.map(tab => (
-        <Tab key={tab.id} {...{ tab, progress }} />
+      {tabs.map((tab, index) => (
+        <Tab key={tab.id} {...{ tab, progress, index }} />
       ))}
     </View>
   );

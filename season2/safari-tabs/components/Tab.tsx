@@ -29,9 +29,10 @@ export interface ITab {
 interface TabProps {
   tab: ITab;
   progress: Animated.Value<number>;
+  index: number;
 }
 
-export default ({ tab, progress }: TabProps) => {
+export default ({ tab, progress, index }: TabProps) => {
   const H = -height / 2;
   const rotateX = interpolate(progress, {
     inputRange: [0, 1],
@@ -42,6 +43,10 @@ export default ({ tab, progress }: TabProps) => {
     outputRange: [0, 16]
   });
   const z = multiply(H, sin(abs(rotateX)));
+  const translateY = interpolate(progress, {
+    inputRange: [0, 1],
+    outputRange: [0, index * 100]
+  });
   const toggle = new Value(0);
   const clock = new Clock();
   const timing = (toggle: Animated.Node<number>) =>
@@ -58,7 +63,12 @@ export default ({ tab, progress }: TabProps) => {
         style={{
           ...StyleSheet.absoluteFillObject,
           margin,
-          transform: [{ perspective }, { rotateX }, translateZ(perspective, z)]
+          transform: [
+            { perspective },
+            { translateY },
+            { rotateX },
+            translateZ(perspective, z)
+          ]
         }}
       >
         <Image source={tab.screen} style={styles.image} />
