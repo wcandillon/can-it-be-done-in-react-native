@@ -48,7 +48,7 @@ export default ({ tab, transition, selectedTab, index }: TabProps) => {
   const position = cond(greaterThan(index, selectedTab), height, 0);
   const translateY = interpolate(transition, {
     inputRange: [0, 1],
-    outputRange: [position, index * 100]
+    outputRange: [position, index * 150]
   });
   const toggle = new Value(0);
   const clock = new Clock();
@@ -85,6 +85,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: undefined,
     height: undefined,
-    resizeMode: "contain"
+    resizeMode: "cover"
   }
 });

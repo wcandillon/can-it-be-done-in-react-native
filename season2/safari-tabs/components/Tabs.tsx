@@ -1,11 +1,10 @@
 import * as React from "react";
-import { View, StyleSheet, StatusBar } from "react-native";
-import Animated, { Easing } from "react-native-reanimated";
-import { runTiming } from "react-native-redash";
+import { StyleSheet, StatusBar } from "react-native";
+import Animated from "react-native-reanimated";
 
 import Tab, { ITab, OVERVIEW } from "./Tab";
 
-const { Value, Clock, block, useCode, set } = Animated;
+const { Value } = Animated;
 
 export type ITabs = ITab[];
 
@@ -19,11 +18,11 @@ export default ({ tabs }: TabsProps) => {
   return (
     <>
       <StatusBar hidden />
-      <View style={styles.container}>
+      <Animated.View style={styles.container}>
         {tabs.map((tab, index) => (
           <Tab key={tab.id} {...{ tab, transition, selectedTab, index }} />
         ))}
-      </View>
+      </Animated.View>
     </>
   );
 };
