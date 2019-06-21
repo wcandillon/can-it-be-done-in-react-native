@@ -5,7 +5,7 @@ import { TapGestureHandler, State } from "react-native-gesture-handler";
 const { Value, useCode, event, block, cond, eq } = Animated;
 
 interface TapProps {
-  onPress: Animated.Node<any>;
+  onPress: Animated.Node<any> | Animated.Node<any>[];
   children: React.ReactElement<typeof Animated.View>;
 }
 

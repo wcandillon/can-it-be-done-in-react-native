@@ -5,6 +5,7 @@ import { translateZ, runTiming } from "react-native-redash";
 
 import Tap from "./Tap";
 
+export const OVERVIEW = -1;
 const perspective = 1000;
 const { height } = Dimensions.get("window");
 const {
@@ -17,7 +18,7 @@ const {
   interpolate,
   set,
   cond,
-  eq,
+  greaterThan,
   not
 } = Animated;
 
@@ -28,24 +29,26 @@ export interface ITab {
 
 interface TabProps {
   tab: ITab;
-  progress: Animated.Value<number>;
+  transition: Animated.Value<number>;
+  selectedTab: Animated.Value<number>;
   index: number;
 }
 
-export default ({ tab, progress, index }: TabProps) => {
+export default ({ tab, transition, selectedTab, index }: TabProps) => {
   const H = -height / 2;
-  const rotateX = interpolate(progress, {
+  const rotateX = interpolate(transition, {
     inputRange: [0, 1],
     outputRange: [0, -Math.PI / 6]
   });
-  const margin = interpolate(progress, {
+  const margin = interpolate(transition, {
     inputRange: [0, 1],
     outputRange: [0, 16]
   });
   const z = multiply(H, sin(abs(rotateX)));
-  const translateY = interpolate(progress, {
+  const position = cond(greaterThan(index, selectedTab), height, 0);
+  const translateY = interpolate(transition, {
     inputRange: [0, 1],
-    outputRange: [0, index * 100]
+    outputRange: [position, index * 100]
   });
   const toggle = new Value(0);
   const clock = new Clock();
@@ -55,8 +58,8 @@ export default ({ tab, progress, index }: TabProps) => {
       duration: 300,
       easing: Easing.linear
     });
-  const onPress = set(toggle, not(toggle));
-  useCode(set(progress, timing(toggle)), []);
+  const onPress = [set(selectedTab, index), set(toggle, not(toggle))];
+  useCode(set(transition, timing(toggle)), []);
   return (
     <Tap {...{ onPress }}>
       <Animated.View
