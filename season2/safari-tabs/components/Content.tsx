@@ -9,9 +9,10 @@ const { Value, event, useCode, abs, cond, eq, call, round } = Animated;
 
 interface ContentProps {
   source: number;
+  closeTab: () => void;
 }
 
-export default ({ source }: ContentProps) => {
+export default ({ source, closeTab }: ContentProps) => {
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -25,16 +26,13 @@ export default ({ source }: ContentProps) => {
     }
   ]);
   const EXTREMITY = width * 1.1;
-  const snapPoints = [-EXTREMITY, EXTREMITY];
+  const snapPoints = [-EXTREMITY, 0, EXTREMITY];
   const translateX = spring(
     translationX,
     state,
     snapPoint(translateX, velocityX, snapPoints)
   );
-  useCode(
-    cond(eq(round(abs(translateX)), EXTREMITY), call([], () => alert("OK"))),
-    [source]
-  );
+  useCode(cond(eq(abs(translateX), EXTREMITY), call([], closeTab)), [source]);
   return (
     <PanGestureHandler
       activeOffsetX={[-10, 10]}

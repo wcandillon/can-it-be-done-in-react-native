@@ -1,5 +1,5 @@
-import * as React from "react";
-import { StyleSheet, StatusBar, Dimensions, View } from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
+import { StyleSheet, StatusBar, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 import { PanGestureHandler, State } from "react-native-gesture-handler";
@@ -14,26 +14,39 @@ interface TabsProps {
   tabs: ITabs;
 }
 
-export default ({ tabs }: TabsProps) => {
-  const transition = new Value(0);
-  const selectedTab = new Value(OVERVIEW);
-  const translationY = new Value(0);
-  const velocityY = new Value(0);
-  const state = new Value(State.UNDETERMINED);
-  const onGestureEvent = event([
-    {
-      nativeEvent: {
-        translationY,
-        velocityY,
-        state
-      }
-    }
-  ]);
-  const y = clamp(decay(translationY, state, velocityY), -150 * tabs.length, 0);
-  const translateY = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, y]
-  });
+export default ({ tabs: tabsProps }: TabsProps) => {
+  const [tabs, setTabs] = useState(tabsProps);
+  const { transition, translationY, selectedTab, velocityY, state } = useMemo(
+    () => ({
+      transition: new Value(0),
+      translationY: new Value(0),
+      selectedTab: new Value(OVERVIEW),
+      velocityY: new Value(0),
+      state: new Value(State.UNDETERMINED)
+    }),
+    []
+  );
+  const { onGestureEvent, translateY } = useMemo(
+    () => ({
+      onGestureEvent: event([
+        {
+          nativeEvent: {
+            translationY,
+            velocityY,
+            state
+          }
+        }
+      ]),
+      translateY: interpolate(transition, {
+        inputRange: [0, 1],
+        outputRange: [
+          0,
+          clamp(decay(translationY, state, velocityY), -150 * tabs.length, 0)
+        ]
+      })
+    }),
+    [state, tabs.length, transition, translationY, velocityY]
+  );
   return (
     <>
       <StatusBar hidden />
@@ -44,7 +57,14 @@ export default ({ tabs }: TabsProps) => {
       >
         <Animated.View style={{ flex: 1, transform: [{ translateY }] }}>
           {tabs.map((tab, index) => (
-            <Tab key={tab.id} {...{ tab, transition, selectedTab, index }} />
+            <Tab
+              key={tab.id}
+              closeTab={() => {
+                tabs.splice(index, 1);
+                setTabs([...tabs]);
+              }}
+              {...{ tab, transition, selectedTab, index }}
+            />
           ))}
         </Animated.View>
       </PanGestureHandler>

@@ -33,9 +33,16 @@ interface TabProps {
   transition: Animated.Value<number>;
   selectedTab: Animated.Value<number>;
   index: number;
+  closeTab: () => void;
 }
 
-export default ({ tab, transition, selectedTab, index }: TabProps) => {
+export default ({
+  tab,
+  transition,
+  selectedTab,
+  index,
+  closeTab
+}: TabProps) => {
   const H = -height / 2;
   const rotateX = interpolate(transition, {
     inputRange: [0, 1],
@@ -75,7 +82,7 @@ export default ({ tab, transition, selectedTab, index }: TabProps) => {
           ]
         }}
       >
-        <Content source={tab.screen} />
+        <Content source={tab.screen} {...{ closeTab }} />
       </Animated.View>
     </Tap>
   );
