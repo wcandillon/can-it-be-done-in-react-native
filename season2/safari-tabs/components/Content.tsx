@@ -5,7 +5,7 @@ import Animated from "react-native-reanimated";
 import { snapPoint, spring } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
-const { Value, event } = Animated;
+const { Value, event, useCode, abs, cond, eq, call, round } = Animated;
 
 interface ContentProps {
   source: number;
@@ -24,11 +24,16 @@ export default ({ source }: ContentProps) => {
       }
     }
   ]);
-  const snapPoints = [-width, 0, width];
+  const EXTREMITY = width * 1.1;
+  const snapPoints = [-EXTREMITY, EXTREMITY];
   const translateX = spring(
     translationX,
     state,
     snapPoint(translateX, velocityX, snapPoints)
+  );
+  useCode(
+    cond(eq(round(abs(translateX)), EXTREMITY), call([], () => alert("OK"))),
+    [source]
   );
   return (
     <PanGestureHandler
