@@ -7,6 +7,7 @@ import { decay, clamp } from "react-native-redash";
 import Tab, { ITab, OVERVIEW } from "./Tab";
 
 const { Value, event, interpolate } = Animated;
+const OFFSET_Y = -150;
 
 export type ITabs = ITab[];
 
@@ -16,14 +17,25 @@ interface TabsProps {
 
 export default ({ tabs: tabsProps }: TabsProps) => {
   const [tabs, setTabs] = useState(tabsProps);
-  const { transition, translationY, selectedTab, velocityY, state } = useMemo(
+  const {
+    transition,
+    translationY,
+    selectedTab,
+    velocityY,
+    state,
+    offset
+  } = useMemo(
     () => ({
       transition: new Value(0),
       translationY: new Value(0),
       selectedTab: new Value(OVERVIEW),
       velocityY: new Value(0),
-      state: new Value(State.UNDETERMINED)
+      state: new Value(State.UNDETERMINED),
+      offset: new Value(OFFSET_Y * tabs.length)
     }),
+    // Here we don't want tabs as a dependency of this memo
+    // because we want to update the offset animated value without triggering a re-render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   const { onGestureEvent, translateY } = useMemo(
@@ -41,11 +53,11 @@ export default ({ tabs: tabsProps }: TabsProps) => {
         inputRange: [0, 1],
         outputRange: [
           0,
-          clamp(decay(translationY, state, velocityY), -150 * tabs.length, 0)
+          clamp(decay(translationY, state, velocityY), offset, 0)
         ]
       })
     }),
-    [state, tabs.length, transition, translationY, velocityY]
+    [offset, state, transition, translationY, velocityY]
   );
   return (
     <>
@@ -61,6 +73,7 @@ export default ({ tabs: tabsProps }: TabsProps) => {
               key={tab.id}
               closeTab={() => {
                 tabs.splice(index, 1);
+                offset.setValue(OFFSET_Y * tabs.length);
                 setTabs([...tabs]);
               }}
               {...{ tab, transition, selectedTab, index }}
