@@ -6,8 +6,7 @@ import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { decay, clamp } from "react-native-redash";
 import Tab, { ITab, OVERVIEW } from "./Tab";
 
-const { height } = Dimensions.get("window");
-const { Value, event, cond, eq, interpolate } = Animated;
+const { Value, event, interpolate } = Animated;
 
 export type ITabs = ITab[];
 

@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Dimensions, Image, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import Animated, { Easing } from "react-native-reanimated";
 import { translateZ, runTiming } from "react-native-redash";
 
 import Tap from "./Tap";
+import Content from "./Content";
 
 export const OVERVIEW = -1;
 const perspective = 1000;
@@ -74,17 +75,8 @@ export default ({ tab, transition, selectedTab, index }: TabProps) => {
           ]
         }}
       >
-        <Image source={tab.screen} style={styles.image} />
+        <Content source={tab.screen} />
       </Animated.View>
     </Tap>
   );
 };
-
-const styles = StyleSheet.create({
-  image: {
-    flex: 1,
-    width: undefined,
-    height: undefined,
-    resizeMode: "cover"
-  }
-});
