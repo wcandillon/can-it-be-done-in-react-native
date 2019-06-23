@@ -7,13 +7,13 @@ import Animated, {
   Easing
 } from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { decay, clamp } from "react-native-redash";
+import { decay, clamp, bInterpolate } from "react-native-redash";
 
 import { useTransition } from "./AnimationHelpers";
 import Tab, { ITab, OVERVIEW } from "./Tab";
 
 const { height } = Dimensions.get("window");
-const { Value, event, eq, neq } = Animated;
+const { Value, event, eq, neq, cond } = Animated;
 const transition = <Transition.Change interpolation="linear" />;
 const durationMs = 400;
 
@@ -38,11 +38,16 @@ export default ({ tabs: tabsProps }: TabsProps) => {
     const translationY = new Value(0);
     const velocityY = new Value(0);
     const state = new Value(State.UNDETERMINED);
+    const translateY1 = clamp(
+      decay(translationY, state, velocityY),
+      -tabsProps.length * 100,
+      0
+    );
     return {
-      translateY: clamp(
-        decay(translationY, state, velocityY),
-        -tabsProps.length * 150,
-        0
+      translateY: cond(
+        eq(transitionVal, 1),
+        translateY1,
+        bInterpolate(transitionVal, 0, translateY1)
       ),
       onGestureEvent: event([
         {
@@ -54,7 +59,7 @@ export default ({ tabs: tabsProps }: TabsProps) => {
         }
       ])
     };
-  }, [tabsProps.length]);
+  }, [tabsProps.length, transitionVal]);
   return (
     <Transitioning.View
       style={styles.container}
