@@ -2,17 +2,17 @@ import React, { useMemo } from "react";
 import { StyleSheet, Image, Dimensions } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
-import { snapPoint, spring } from "react-native-redash";
+import {
+  snapPoint,
+  spring,
+  gestureEvent,
+  approximates
+} from "react-native-redash";
 
 const { width } = Dimensions.get("window");
-const { Value, event, useCode, abs, cond, lessThan, sub, call } = Animated;
+const { Value, useCode, abs, cond, call } = Animated;
 const EXTREMITY = width * 1.1;
 const snapPoints = [-EXTREMITY, 0, EXTREMITY];
-export const approximates = (
-  a: Animated.Adaptable<number>,
-  b: Animated.Adaptable<number>,
-  precision: Animated.Adaptable<number> = 0.001
-) => lessThan(abs(sub(a, b)), precision);
 
 interface ContentProps {
   source: number;
@@ -30,15 +30,11 @@ export default ({ source, closeTab }: ContentProps) => {
   );
   const { onGestureEvent, translateX } = useMemo(
     () => ({
-      onGestureEvent: event([
-        {
-          nativeEvent: {
-            translationX,
-            velocityX,
-            state
-          }
-        }
-      ]),
+      onGestureEvent: gestureEvent({
+        translationX,
+        velocityX,
+        state
+      }),
       translateX: spring(
         translationX,
         state,

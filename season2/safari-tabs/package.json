@@ -17,7 +17,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-gesture-handler": "~1.2.1",
     "react-native-reanimated": "1.0.1",
-    "react-native-redash": "^5.0.2",
+    "react-native-redash": "https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Freact-native-redash-v6.3.1.tgz?alt=media&token=fc983b95-e0c5-4045-9575-8e1d2c8054eb",
     "react-native-web": "^0.11.4"
   },
   "devDependencies": {

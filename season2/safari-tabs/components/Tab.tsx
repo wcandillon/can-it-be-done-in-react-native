@@ -4,7 +4,6 @@ import Animated from "react-native-reanimated";
 import { translateZ, bInterpolate } from "react-native-redash";
 
 import Content from "./Content";
-import { ITabs } from "./Tabs";
 
 export const OVERVIEW = -1;
 const perspective = 1000;
@@ -12,7 +11,7 @@ const { height } = Dimensions.get("window");
 const { multiply, sin, abs } = Animated;
 
 export interface ITab {
-  id: number;
+  id: string;
   screen: number;
 }
 
@@ -20,8 +19,8 @@ interface TabProps {
   tab: ITab;
   selectedTab: number;
   index: number;
-  closeTab: (tabs: ITabs, index: number) => void;
-  selectTab: (selectedTab: number, index: number) => void;
+  closeTab: () => void;
+  selectTab: () => void;
   transition: Animated.Value<number>;
 }
 
