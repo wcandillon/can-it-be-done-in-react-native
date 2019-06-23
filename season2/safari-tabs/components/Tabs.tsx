@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useCallback } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import Animated, {
   Transitioning,
@@ -23,7 +23,7 @@ interface TabsProps {
 export default ({ tabs: tabsProps }: TabsProps) => {
   const ref = useRef<TransitioningView>();
   const [tabs, setTabs] = useState(tabsProps);
-  const [selectedTab, selectTab] = useState(OVERVIEW);
+  const [selectedTab, setSelectedTab] = useState(OVERVIEW);
   return (
     <Transitioning.View style={styles.container} ref={ref} {...{ transition }}>
       <StatusBar hidden />
@@ -31,14 +31,14 @@ export default ({ tabs: tabsProps }: TabsProps) => {
         {tabs.map((tab, index) => (
           <Tab
             key={tab.id}
-            selectTab={() => {
-              ref.current!.animateNextTransition();
-              selectTab(selectedTab === index ? OVERVIEW : index);
-            }}
             closeTab={() => {
               ref.current!.animateNextTransition();
               tabs.splice(index, 1);
               setTabs([...tabs]);
+            }}
+            selectTab={() => {
+              ref.current!.animateNextTransition();
+              setSelectedTab(selectedTab === index ? OVERVIEW : index);
             }}
             {...{ tab, selectedTab, index }}
           />

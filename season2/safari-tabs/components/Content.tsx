@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useMemo } from "react";
 import { StyleSheet, Image, Dimensions } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
@@ -6,6 +6,8 @@ import { snapPoint, spring } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
 const { Value, event, useCode, abs, cond, eq, call } = Animated;
+const EXTREMITY = width * 1.1;
+const snapPoints = [-EXTREMITY, 0, EXTREMITY];
 
 interface ContentProps {
   source: number;
@@ -13,26 +15,37 @@ interface ContentProps {
 }
 
 export default ({ source, closeTab }: ContentProps) => {
-  const translationX = new Value(0);
-  const velocityX = new Value(0);
-  const state = new Value(State.UNDETERMINED);
-  const onGestureEvent = event([
-    {
-      nativeEvent: {
-        translationX,
-        velocityX,
-        state
-      }
-    }
-  ]);
-  const EXTREMITY = width * 1.1;
-  const snapPoints = [-EXTREMITY, 0, EXTREMITY];
-  const translateX = spring(
-    translationX,
-    state,
-    snapPoint(translateX, velocityX, snapPoints)
+  const { translationX, velocityX, state } = useMemo(
+    () => ({
+      translationX: new Value(0),
+      velocityX: new Value(0),
+      state: new Value(State.UNDETERMINED)
+    }),
+    []
   );
-  useCode(cond(eq(abs(translateX), EXTREMITY), call([], closeTab)), [source]);
+  const { onGestureEvent, translateX } = useMemo(
+    () => ({
+      onGestureEvent: event([
+        {
+          nativeEvent: {
+            translationX,
+            velocityX,
+            state
+          }
+        }
+      ]),
+      translateX: spring(
+        translationX,
+        state,
+        snapPoint(translationX, velocityX, snapPoints)
+      )
+    }),
+    [state, translationX, velocityX]
+  );
+  useCode(cond(eq(abs(translateX), EXTREMITY), call([], closeTab)), [
+    translateX,
+    closeTab
+  ]);
   return (
     <PanGestureHandler
       activeOffsetX={[-10, 10]}

@@ -4,6 +4,7 @@ import Animated, { Easing } from "react-native-reanimated";
 import { translateZ, runTiming } from "react-native-redash";
 
 import Content from "./Content";
+import { ITabs } from "./Tabs";
 
 export const OVERVIEW = -1;
 const perspective = 1000;
@@ -31,8 +32,8 @@ interface TabProps {
   tab: ITab;
   selectedTab: number;
   index: number;
-  closeTab: () => void;
-  selectTab: () => void;
+  closeTab: (tabs: ITabs, index: number) => void;
+  selectTab: (selectedTab: number, index: number) => void;
 }
 
 export default ({
