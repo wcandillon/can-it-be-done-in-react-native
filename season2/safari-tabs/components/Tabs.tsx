@@ -25,7 +25,7 @@ interface TabsProps {
 
 export default ({ tabs: tabsProps }: TabsProps) => {
   const ref = useRef<TransitioningView>();
-  const [tabs, setTabs] = useState(tabsProps);
+  const [tabs, setTabs] = useState([...tabsProps]);
   const [selectedTab, setSelectedTab] = useState(OVERVIEW);
   const transitionVal = useTransition(
     selectedTab,
@@ -33,29 +33,57 @@ export default ({ tabs: tabsProps }: TabsProps) => {
     eq(selectedTab, OVERVIEW),
     durationMs
   );
+  const { onGestureEvent, translateY } = useMemo(() => {
+    const translationY = new Value(0);
+    const velocityY = new Value(0);
+    const state = new Value(State.UNDETERMINED);
+    console.log("OK");
+    return {
+      translateY: clamp(
+        decay(translationY, state, velocityY),
+        -tabsProps.length * 150,
+        0
+      ),
+      onGestureEvent: event([
+        {
+          nativeEvent: {
+            translationY,
+            velocityY,
+            state
+          }
+        }
+      ])
+    };
+  }, [tabsProps.length]);
   return (
     <Transitioning.View
       style={styles.container}
       {...{ transition, ref, durationMs }}
     >
-      <Animated.View style={styles.content}>
-        {tabs.map((tab, index) => (
-          <Tab
-            key={tab.id}
-            transition={transitionVal}
-            closeTab={() => {
-              ref.current!.animateNextTransition();
-              tabs.splice(index, 1);
-              setTabs([...tabs]);
-            }}
-            selectTab={() => {
-              ref.current!.animateNextTransition();
-              setSelectedTab(selectedTab === index ? OVERVIEW : index);
-            }}
-            {...{ tab, selectedTab, index }}
-          />
-        ))}
-      </Animated.View>
+      <PanGestureHandler
+        onHandlerStateChange={onGestureEvent}
+        {...{ onGestureEvent }}
+      >
+        <Animated.View
+          style={[styles.content, { transform: [{ translateY }] }]}
+        >
+          {tabs.map((tab, index) => (
+            <Tab
+              key={tab.id}
+              transition={transitionVal}
+              closeTab={() => {
+                ref.current!.animateNextTransition();
+                setTabs([...tabs.slice(0, index), ...tabs.slice(index + 1)]);
+              }}
+              selectTab={() => {
+                ref.current!.animateNextTransition();
+                setSelectedTab(selectedTab === index ? OVERVIEW : index);
+              }}
+              {...{ tab, selectedTab, index }}
+            />
+          ))}
+        </Animated.View>
+      </PanGestureHandler>
     </Transitioning.View>
   );
 };
