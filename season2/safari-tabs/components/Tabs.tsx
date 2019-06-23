@@ -32,7 +32,7 @@ interface TabsProps {
 }
 
 export default ({ tabs: tabsProps }: TabsProps) => {
-  const ref = useRef<TransitioningView>();
+  const ref = useRef<TransitioningView>(null);
   const [tabs, setTabs] = useState([...tabsProps]);
   const [selectedTab, setSelectedTab] = useState(OVERVIEW);
   const transitionVal = useTransition(
