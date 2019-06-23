@@ -9,12 +9,13 @@ import Animated, {
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { decay, clamp, runTiming } from "react-native-redash";
 
+import { useTransition } from "./AnimationHelpers";
 import Tab, { ITab, OVERVIEW } from "./Tab";
 
 const { Value, Clock, event, interpolate, useCode, set, eq, neq } = Animated;
 const OFFSET_Y = -150;
 const transition = <Transition.Change interpolation="linear" />;
-const duration = 400;
+const durationMs = 400;
 
 export type ITabs = ITab[];
 
@@ -26,31 +27,17 @@ export default ({ tabs: tabsProps }: TabsProps) => {
   const ref = useRef<TransitioningView>();
   const [tabs, setTabs] = useState(tabsProps);
   const [selectedTab, setSelectedTab] = useState(OVERVIEW);
-  const { transitionVal, clock } = useMemo(
-    () => ({
-      transitionVal: new Value(0),
-      clock: new Clock()
-    }),
-    []
-  );
-  useCode(
-    set(
-      transitionVal,
-      runTiming(clock, neq(selectedTab, OVERVIEW), {
-        toValue: eq(selectedTab, OVERVIEW),
-        duration,
-        easing: Easing.linear
-      })
-    ),
-    [selectedTab]
+  const transitionVal = useTransition(
+    selectedTab,
+    neq(selectedTab, OVERVIEW),
+    eq(selectedTab, OVERVIEW),
+    durationMs
   );
   return (
     <Transitioning.View
       style={styles.container}
-      durationMs={duration}
-      {...{ transition, ref }}
+      {...{ transition, ref, durationMs }}
     >
-      <StatusBar hidden />
       <Animated.View style={styles.content}>
         {tabs.map((tab, index) => (
           <Tab
