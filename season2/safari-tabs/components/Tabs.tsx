@@ -44,11 +44,7 @@ export default ({ tabs: tabsProps }: TabsProps) => {
       0
     );
     return {
-      translateY: cond(
-        eq(transitionVal, 1),
-        translateY1,
-        bInterpolate(transitionVal, 0, translateY1)
-      ),
+      translateY: bInterpolate(transitionVal, 0, translateY1),
       onGestureEvent: event([
         {
           nativeEvent: {
