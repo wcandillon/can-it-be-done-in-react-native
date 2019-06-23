@@ -29,7 +29,6 @@ export interface ITab {
 
 interface TabProps {
   tab: ITab;
-  transition: Animated.Value<number>;
   selectedTab: number;
   index: number;
   closeTab: () => void;
@@ -38,19 +37,13 @@ interface TabProps {
 
 export default ({
   tab,
-  transition,
   selectedTab,
   index,
   selectTab: onPress,
   closeTab
 }: TabProps) => {
   const H = -height / 2;
-  const rotateX = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, -Math.PI / 6]
-  });
   const margin = selectedTab === OVERVIEW ? 16 : 0;
-  const z = multiply(H, sin(abs(rotateX)));
   const position = index > selectedTab ? height : 0;
   const top = selectedTab === OVERVIEW ? index * 150 : position;
   return (
@@ -59,8 +52,7 @@ export default ({
         style={{
           ...StyleSheet.absoluteFillObject,
           margin,
-          top,
-          transform: [{ perspective }, { rotateX }, translateZ(perspective, z)]
+          top
         }}
       >
         <Content source={tab.screen} {...{ closeTab }} />

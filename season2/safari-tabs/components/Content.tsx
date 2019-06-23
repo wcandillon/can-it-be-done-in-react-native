@@ -5,7 +5,7 @@ import Animated from "react-native-reanimated";
 import { snapPoint, spring } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
-const { Value, event, useCode, abs, cond, eq, call, round } = Animated;
+const { Value, event, useCode, abs, cond, eq, call } = Animated;
 
 interface ContentProps {
   source: number;
