@@ -27,7 +27,7 @@ export default ({ tabs: tabsProps }: TabsProps) => {
   return (
     <Transitioning.View style={styles.container} ref={ref} {...{ transition }}>
       <StatusBar hidden />
-      <Animated.View style={{ flex: 1 }}>
+      <Animated.View style={styles.content}>
         {tabs.map((tab, index) => (
           <Tab
             key={tab.id}
@@ -52,5 +52,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black"
-  }
+  },
+  content: { flex: 1 }
 });

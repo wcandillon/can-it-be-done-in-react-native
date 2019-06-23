@@ -5,9 +5,14 @@ import Animated from "react-native-reanimated";
 import { snapPoint, spring } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
-const { Value, event, useCode, abs, cond, eq, call } = Animated;
+const { Value, event, useCode, abs, cond, lessThan, sub, call } = Animated;
 const EXTREMITY = width * 1.1;
 const snapPoints = [-EXTREMITY, 0, EXTREMITY];
+export const approximates = (
+  a: Animated.Adaptable<number>,
+  b: Animated.Adaptable<number>,
+  precision: Animated.Adaptable<number> = 0.001
+) => lessThan(abs(sub(a, b)), precision);
 
 interface ContentProps {
   source: number;
@@ -42,10 +47,10 @@ export default ({ source, closeTab }: ContentProps) => {
     }),
     [state, translationX, velocityX]
   );
-  useCode(cond(eq(abs(translateX), EXTREMITY), call([], closeTab)), [
-    translateX,
-    closeTab
-  ]);
+  useCode(
+    cond(approximates(abs(translateX), EXTREMITY, 10), call([], closeTab)),
+    [translateX, closeTab]
+  );
   return (
     <PanGestureHandler
       activeOffsetX={[-10, 10]}
