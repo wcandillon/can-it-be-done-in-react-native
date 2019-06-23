@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import Animated, { Easing } from "react-native-reanimated";
-import { translateZ, runTiming, bInterpolate } from "react-native-redash";
+import Animated from "react-native-reanimated";
+import { translateZ, bInterpolate } from "react-native-redash";
 
 import Content from "./Content";
 import { ITabs } from "./Tabs";
@@ -9,19 +9,7 @@ import { ITabs } from "./Tabs";
 export const OVERVIEW = -1;
 const perspective = 1000;
 const { height } = Dimensions.get("window");
-const {
-  Value,
-  useCode,
-  Clock,
-  multiply,
-  sin,
-  abs,
-  interpolate,
-  set,
-  cond,
-  greaterThan,
-  not
-} = Animated;
+const { multiply, sin, abs } = Animated;
 
 export interface ITab {
   id: number;

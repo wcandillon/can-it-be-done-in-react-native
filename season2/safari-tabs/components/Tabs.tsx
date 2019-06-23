@@ -7,14 +7,13 @@ import Animated, {
   Easing
 } from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { decay, clamp, runTiming } from "react-native-redash";
+import { decay, clamp } from "react-native-redash";
 
 import { useTransition } from "./AnimationHelpers";
 import Tab, { ITab, OVERVIEW } from "./Tab";
 
 const { height } = Dimensions.get("window");
-const { Value, Clock, event, interpolate, useCode, set, eq, neq } = Animated;
-const OFFSET_Y = -150;
+const { Value, event, eq, neq } = Animated;
 const transition = <Transition.Change interpolation="linear" />;
 const durationMs = 400;
 
@@ -32,7 +31,8 @@ export default ({ tabs: tabsProps }: TabsProps) => {
     selectedTab,
     neq(selectedTab, OVERVIEW),
     eq(selectedTab, OVERVIEW),
-    durationMs
+    durationMs,
+    Easing.linear
   );
   const { onGestureEvent, translateY } = useMemo(() => {
     const translationY = new Value(0);
