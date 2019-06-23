@@ -1,6 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { StyleSheet, StatusBar, View } from "react-native";
-import Animated from "react-native-reanimated";
+import React, { useState, useMemo, useRef } from "react";
+import { StyleSheet, StatusBar } from "react-native";
+import Animated, {
+  Transitioning,
+  Transition,
+  TransitioningView
+} from "react-native-reanimated";
 
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { decay, clamp } from "react-native-redash";
@@ -8,6 +12,7 @@ import Tab, { ITab, OVERVIEW } from "./Tab";
 
 const { Value, event, interpolate } = Animated;
 const OFFSET_Y = -150;
+const transition = <Transition.Change interpolation="linear" />;
 
 export type ITabs = ITab[];
 
@@ -16,19 +21,13 @@ interface TabsProps {
 }
 
 export default ({ tabs: tabsProps }: TabsProps) => {
+  const ref = useRef<TransitioningView>();
   const [tabs, setTabs] = useState(tabsProps);
-  const {
-    transition,
-    translationY,
-    selectedTab,
-    velocityY,
-    state,
-    offset
-  } = useMemo(
+  const [selectedTab, selectTab] = useState(OVERVIEW);
+  const { transition, translationY, velocityY, state, offset } = useMemo(
     () => ({
       transition: new Value(0),
       translationY: new Value(0),
-      selectedTab: new Value(OVERVIEW),
       velocityY: new Value(0),
       state: new Value(State.UNDETERMINED),
       offset: new Value(OFFSET_Y * tabs.length)
@@ -60,9 +59,8 @@ export default ({ tabs: tabsProps }: TabsProps) => {
     [offset, state, transition, translationY, velocityY]
   );
   return (
-    <>
+    <Transitioning.View style={styles.container} {...{ ref, transition }}>
       <StatusBar hidden />
-      <View style={styles.background} />
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
         {...{ onGestureEvent }}
@@ -71,9 +69,14 @@ export default ({ tabs: tabsProps }: TabsProps) => {
           {tabs.map((tab, index) => (
             <Tab
               key={tab.id}
+              selectTab={() => {
+                ref.current!.animateNextTransition();
+                selectTab(index);
+              }}
               closeTab={() => {
+                ref.current!.animateNextTransition();
                 tabs.splice(index, 1);
-                offset.setValue(OFFSET_Y * tabs.length);
+                // offset.setValue(OFFSET_Y * tabs.length);
                 setTabs([...tabs]);
               }}
               {...{ tab, transition, selectedTab, index }}
@@ -81,17 +84,13 @@ export default ({ tabs: tabsProps }: TabsProps) => {
           ))}
         </Animated.View>
       </PanGestureHandler>
-    </>
+    </Transitioning.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black"
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
     backgroundColor: "black"
   }
 });

@@ -1,9 +1,8 @@
 import * as React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import Animated, { Easing } from "react-native-reanimated";
 import { translateZ, runTiming } from "react-native-redash";
 
-import Tap from "./Tap";
 import Content from "./Content";
 
 export const OVERVIEW = -1;
@@ -31,9 +30,10 @@ export interface ITab {
 interface TabProps {
   tab: ITab;
   transition: Animated.Value<number>;
-  selectedTab: Animated.Value<number>;
+  selectedTab: number;
   index: number;
   closeTab: () => void;
+  selectTab: () => void;
 }
 
 export default ({
@@ -41,6 +41,7 @@ export default ({
   transition,
   selectedTab,
   index,
+  selectTab: onPress,
   closeTab
 }: TabProps) => {
   const H = -height / 2;
@@ -48,42 +49,22 @@ export default ({
     inputRange: [0, 1],
     outputRange: [0, -Math.PI / 6]
   });
-  const margin = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, 16]
-  });
+  const margin = selectedTab === OVERVIEW ? 16 : 0;
   const z = multiply(H, sin(abs(rotateX)));
-  const position = cond(greaterThan(index, selectedTab), height, 0);
-  const translateY = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [position, index * 150]
-  });
-  const toggle = new Value(0);
-  const clock = new Clock();
-  const timing = (toggle: Animated.Node<number>) =>
-    runTiming(clock, toggle, {
-      toValue: not(toggle),
-      duration: 300,
-      easing: Easing.linear
-    });
-  const onPress = [set(selectedTab, index), set(toggle, not(toggle))];
-  useCode(set(transition, timing(toggle)), []);
+  const position = index > selectedTab ? height : 0;
+  const top = selectedTab === OVERVIEW ? index * 150 : position;
   return (
-    <Tap {...{ onPress }}>
+    <TouchableWithoutFeedback {...{ onPress }}>
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
           margin,
-          transform: [
-            { perspective },
-            { translateY },
-            { rotateX },
-            translateZ(perspective, z)
-          ]
+          top,
+          transform: [{ perspective }, { rotateX }, translateZ(perspective, z)]
         }}
       >
         <Content source={tab.screen} {...{ closeTab }} />
       </Animated.View>
-    </Tap>
+    </TouchableWithoutFeedback>
   );
 };
