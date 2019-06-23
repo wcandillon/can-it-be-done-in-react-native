@@ -19,8 +19,11 @@ import Tab, { ITab, OVERVIEW } from "./Tab";
 
 const { height } = Dimensions.get("window");
 const { Value, eq, neq } = Animated;
-const transition = <Transition.Change interpolation="linear" />;
 const durationMs = 400;
+const easing = Easing.inOut(Easing.ease);
+const transition = (
+  <Transition.Change interpolation="easeInOut" {...{ durationMs }} />
+);
 
 export type ITabs = ITab[];
 
@@ -37,7 +40,7 @@ export default ({ tabs: tabsProps }: TabsProps) => {
     neq(selectedTab, OVERVIEW),
     eq(selectedTab, OVERVIEW),
     durationMs,
-    Easing.linear
+    easing
   );
   const { onGestureEvent, translateY } = useMemo(() => {
     const translationY = new Value(0);
@@ -59,10 +62,7 @@ export default ({ tabs: tabsProps }: TabsProps) => {
     };
   }, [tabsProps.length, transitionVal]);
   return (
-    <Transitioning.View
-      style={styles.container}
-      {...{ transition, ref, durationMs }}
-    >
+    <Transitioning.View style={styles.container} {...{ transition, ref }}>
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
         {...{ onGestureEvent }}

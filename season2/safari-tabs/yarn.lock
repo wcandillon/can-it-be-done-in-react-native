@@ -4461,9 +4461,9 @@ react-native-reanimated@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.0.1.tgz#5ecb6a2f6dad0351077ac9b771ca943b7ad6feda"
 
-"react-native-redash@https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Freact-native-redash-v6.3.1.tgz?alt=media&token=fc983b95-e0c5-4045-9575-8e1d2c8054eb":
-  version "6.3.1"
-  resolved "https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Freact-native-redash-v6.3.1.tgz?alt=media&token=fc983b95-e0c5-4045-9575-8e1d2c8054eb#d7c86fb0690b8327cd36ac73ac4553d8ef6cacc2"
+"react-native-redash@https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Freact-native-redash-v6.3.3.tgz?alt=media&token=99711335-bfd8-4888-b5d6-f35689f542fa":
+  version "6.3.3"
+  resolved "https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Freact-native-redash-v6.3.3.tgz?alt=media&token=99711335-bfd8-4888-b5d6-f35689f542fa#bd8961da50a75acc62d2b257a44fb92d0b628d39"
   dependencies:
     abs-svg-path "^0.1.1"
     normalize-svg-path "^1.0.1"

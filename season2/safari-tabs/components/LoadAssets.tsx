@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Asset } from "expo-asset";
 import { AppLoading } from "expo";
 
@@ -23,7 +23,7 @@ export const useLoadAssets = (assets: number[]): boolean => {
 
 interface LoadAssetsProps {
   assets: number[];
-  children: ReactNode;
+  children: JSX.Element;
 }
 
 export default ({ children, assets }: LoadAssetsProps) => {
