@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: undefined,
     height: undefined,
-    resizeMode: "cover"
+    resizeMode: "contain"
   }
 });

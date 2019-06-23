@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from "react";
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import Animated, {
   Transitioning,
   Transition,
@@ -12,6 +12,7 @@ import { decay, clamp, runTiming } from "react-native-redash";
 import { useTransition } from "./AnimationHelpers";
 import Tab, { ITab, OVERVIEW } from "./Tab";
 
+const { height } = Dimensions.get("window");
 const { Value, Clock, event, interpolate, useCode, set, eq, neq } = Animated;
 const OFFSET_Y = -150;
 const transition = <Transition.Change interpolation="linear" />;
@@ -37,7 +38,6 @@ export default ({ tabs: tabsProps }: TabsProps) => {
     const translationY = new Value(0);
     const velocityY = new Value(0);
     const state = new Value(State.UNDETERMINED);
-    console.log("OK");
     return {
       translateY: clamp(
         decay(translationY, state, velocityY),
@@ -65,7 +65,10 @@ export default ({ tabs: tabsProps }: TabsProps) => {
         {...{ onGestureEvent }}
       >
         <Animated.View
-          style={[styles.content, { transform: [{ translateY }] }]}
+          style={{
+            height: tabsProps.length * height,
+            transform: [{ translateY }]
+          }}
         >
           {tabs.map((tab, index) => (
             <Tab
@@ -92,6 +95,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black"
-  },
-  content: { flex: 1 }
+  }
 });

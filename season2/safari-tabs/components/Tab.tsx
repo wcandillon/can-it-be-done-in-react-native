@@ -63,6 +63,7 @@ export default ({
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
+          height,
           margin,
           top,
           transform: [{ perspective }, { rotateX }, translateZ(perspective, z)]
