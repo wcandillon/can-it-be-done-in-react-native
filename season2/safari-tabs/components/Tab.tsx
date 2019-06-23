@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useMemo } from "react";
 import { Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import Animated, { Easing } from "react-native-reanimated";
 import { translateZ, runTiming } from "react-native-redash";
@@ -34,9 +34,11 @@ interface TabProps {
   index: number;
   closeTab: (tabs: ITabs, index: number) => void;
   selectTab: (selectedTab: number, index: number) => void;
+  transition: Animated.Value<number>;
 }
 
 export default ({
+  transition,
   tab,
   selectedTab,
   index,
@@ -47,13 +49,23 @@ export default ({
   const margin = selectedTab === OVERVIEW ? 16 : 0;
   const position = index > selectedTab ? height : 0;
   const top = selectedTab === OVERVIEW ? index * 150 : position;
+  const rotateX = useMemo(
+    () =>
+      interpolate(transition, {
+        inputRange: [0, 1],
+        outputRange: [0, -Math.PI / 6]
+      }),
+    [transition]
+  );
+  const z = useMemo(() => multiply(H, sin(abs(rotateX))), [H, rotateX]);
   return (
     <TouchableWithoutFeedback {...{ onPress }}>
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
           margin,
-          top
+          top,
+          transform: [{ perspective }, { rotateX }, translateZ(perspective, z)]
         }}
       >
         <Content source={tab.screen} {...{ closeTab }} />
