@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import * as React from "react";
+import { View, StyleSheet } from "react-native";
 
 import CircularSelection from "./CircularSelection";
 
@@ -11,15 +11,15 @@ export default ({ channels }: ChannelsProps) => {
   return (
     <View style={styles.container}>
       <View />
-      <CircularSelection {...{channels}} />
+      <CircularSelection {...{ channels }} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    backgroundColor: "#1a1b1c"
+    backgroundColor: "#1abc9c" // "#1a1b1c"
   }
-})
+});
