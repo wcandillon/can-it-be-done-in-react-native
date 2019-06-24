@@ -1,11 +1,13 @@
 import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
+import { parsePath } from "react-native-redash";
 
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
 
 const { width } = Dimensions.get("window");
+const height = width / 1.4;
 const D = width * 1.2;
 const R = D / 2;
 const circle = (r: number, cx: number, cy: number) => `M ${cx - r}, ${cy}
@@ -14,7 +16,7 @@ a ${r},${r} 0 1,0 ${-r * 2},0`;
 const styles = StyleSheet.create({
   container: {
     width,
-    height: width / 1.4
+    height
   }
 });
 
@@ -25,8 +27,14 @@ interface CircularSelectionProps {
 export default ({ channels }: CircularSelectionProps) => {
   const l = Math.sin(Math.PI / channels.length);
   const r = (R * l) / (1 - l);
-  const R1 = R + 2 * r;
-  const d = circle(R1, R1 - (R1 - width / 2), R1);
+  const outerR = R + 2 * r;
+  const midR = R + r;
+  const C = 2 * Math.PI * midR;
+  const cx = width / 2;
+  const outerPath = circle(outerR, cx, outerR);
+  const d = circle(midR, cx, outerR);
+  const path = parsePath(d);
+  console.log({ R, r, path, C });
   return (
     <View style={styles.container}>
       <Svg style={StyleSheet.absoluteFill}>
@@ -36,7 +44,8 @@ export default ({ channels }: CircularSelectionProps) => {
             <Stop offset="1" stopColor="#1c1d1e" />
           </LinearGradient>
         </Defs>
-        <Path fill="#3498db" {...{ d }} />
+        <Path fill="#3498db" d={outerPath} />
+        <Path fill="#c0392b" d={d} />
       </Svg>
       <View style={StyleSheet.absoluteFill}>
         {channels.map((channel, index) => (
