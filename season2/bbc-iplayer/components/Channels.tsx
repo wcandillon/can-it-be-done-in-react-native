@@ -10,6 +10,7 @@ interface ChannelsProps {
 export default ({ channels }: ChannelsProps) => {
   return (
     <View style={styles.container}>
+      <View />
       <CircularSelection {...{channels}} />
     </View>
   );
@@ -17,6 +18,8 @@ export default ({ channels }: ChannelsProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    justifyContent: "space-between",
+    backgroundColor: "#1a1b1c"
   }
 })
