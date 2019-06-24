@@ -5197,6 +5197,10 @@ svg-arc-to-cubic-bezier@^3.0.0:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/svg-arc-to-cubic-bezier/-/svg-arc-to-cubic-bezier-3.1.3.tgz#7b5f76445310ef03238964c39ae7dbc761fda879"
 
+svg-path-properties@^0.4.11:
+  version "0.4.11"
+  resolved "https://registry.yarnpkg.com/svg-path-properties/-/svg-path-properties-0.4.11.tgz#1a04760a773b17ea71737e5c4fca12a74502a612"
+
 symbol-observable@^1.0.4:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"

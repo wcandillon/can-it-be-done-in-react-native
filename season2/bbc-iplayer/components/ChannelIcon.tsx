@@ -13,7 +13,7 @@ export default ({ name, radius }: ChannelIconProps) => {
         width: radius * 2,
         height: radius * 2,
         borderRadius: radius,
-        backgroundColor: "white"
+        backgroundColor: "rgba(255, 255, 255, 0.5)"
       }}
     />
   );

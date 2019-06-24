@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
-import { parsePath, getPointAtLength } from "react-native-redash";
+import * as path from "svg-path-properties";
 
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
@@ -29,15 +29,13 @@ export default ({ channels }: CircularSelectionProps) => {
   const r = (R * l) / (1 - l);
   const outerR = R + 2 * r;
   const midR = R + r;
-  const C = 2 * Math.PI * midR;
-  const cx = width / 2;
-  const outerPath = circle(outerR, cx, outerR);
-  const d = circle(midR, cx, outerR);
-  const path = parsePath(d);
-  const segment = path.totalLength / channels.length;
-  console.log({ path });
+  const outerPath = circle(outerR, outerR, outerR);
+  const d = circle(midR, outerR, outerR);
+  const properties = path.svgPathProperties(d);
+  // const p = parsePath(d);
+  const segment = properties.getTotalLength() / channels.length;
   return (
-    <View style={styles.container}>
+    <View style={{ width: outerR * 2, height: outerR * 2 }}>
       <Svg style={StyleSheet.absoluteFill}>
         <Defs>
           <LinearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="50%">
@@ -46,14 +44,17 @@ export default ({ channels }: CircularSelectionProps) => {
           </LinearGradient>
         </Defs>
         <Path fill="#3498db" d={outerPath} />
-        <Path fill="#c0392b" d={d} />
+        <Path fill="#9b59b6" d={d} />
       </Svg>
       <View style={StyleSheet.absoluteFill}>
         {channels.map((channel, index) => {
-          const { x, y } = { x: 0, y: 0 }; // getPointAtLength(path, index * segment);
+          const { x, y } = properties.getPointAtLength(index * segment);
           // console.log({ x, y });
           return (
-            <View key={index} style={{ position: "absolute", top: y, left: x }}>
+            <View
+              key={index}
+              style={{ position: "absolute", top: y - r, left: x - r }}
+            >
               <ChannelIcon name={`${index + 1}`} radius={r} />
             </View>
           );
