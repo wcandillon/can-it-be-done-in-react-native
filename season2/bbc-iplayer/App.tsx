@@ -1,7 +1,9 @@
-import React from 'react';
-import Channels from "./components/Channels";
+import React from "react";
 
-const channels: Channel[] = [
+import Channels from "./components/Channels";
+import { IChannel } from "./components/Model";
+
+const channels: IChannel[] = [
   {},
   {},
   {},
@@ -19,11 +21,9 @@ const channels: Channel[] = [
   {},
   {},
   {},
-  {},
-]
+  {}
+];
 
 export default function App() {
-  return (
-    <Channels {...{channels}} />
-  );
+  return <Channels {...{ channels }} />;
 }

@@ -1,1 +1,1 @@
-export interface Channel {}
+export interface IChannel {}

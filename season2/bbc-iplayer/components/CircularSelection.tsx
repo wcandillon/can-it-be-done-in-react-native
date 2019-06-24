@@ -3,6 +3,7 @@ import { Dimensions, View, StyleSheet } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
 
 import { Channel } from "./Model";
+import ChannelIcon from "./ChannelIcon";
 
 const { width } = Dimensions.get("window");
 const D = width * 1.2;
@@ -39,7 +40,7 @@ export default ({ channels }: CircularSelectionProps) => {
       </Svg>
       <View style={StyleSheet.absoluteFill}>
         {channels.map((channel, index) => (
-          <View key={index} />
+          <ChannelIcon key={index} name={`${index + 1}`} radius={r} />
         ))}
       </View>
     </View>

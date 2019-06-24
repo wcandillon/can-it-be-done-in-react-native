@@ -2,9 +2,10 @@ import * as React from "react";
 import { View, StyleSheet } from "react-native";
 
 import CircularSelection from "./CircularSelection";
+import { IChannel } from "./Model";
 
 interface ChannelsProps {
-  channels: Channel[];
+  channels: IChannel[];
 }
 
 export default ({ channels }: ChannelsProps) => {
