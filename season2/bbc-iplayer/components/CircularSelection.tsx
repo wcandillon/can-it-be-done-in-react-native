@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
-import { parsePath } from "react-native-redash";
+import { parsePath, getPointAtLength } from "react-native-redash";
 
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
@@ -34,7 +34,8 @@ export default ({ channels }: CircularSelectionProps) => {
   const outerPath = circle(outerR, cx, outerR);
   const d = circle(midR, cx, outerR);
   const path = parsePath(d);
-  console.log({ R, r, path, C });
+  const segment = path.totalLength / channels.length;
+  console.log({ path });
   return (
     <View style={styles.container}>
       <Svg style={StyleSheet.absoluteFill}>
@@ -48,9 +49,15 @@ export default ({ channels }: CircularSelectionProps) => {
         <Path fill="#c0392b" d={d} />
       </Svg>
       <View style={StyleSheet.absoluteFill}>
-        {channels.map((channel, index) => (
-          <ChannelIcon key={index} name={`${index + 1}`} radius={r} />
-        ))}
+        {channels.map((channel, index) => {
+          const { x, y } = { x: 0, y: 0 }; // getPointAtLength(path, index * segment);
+          // console.log({ x, y });
+          return (
+            <View key={index} style={{ position: "absolute", top: y, left: x }}>
+              <ChannelIcon name={`${index + 1}`} radius={r} />
+            </View>
+          );
+        })}
       </View>
     </View>
   );
