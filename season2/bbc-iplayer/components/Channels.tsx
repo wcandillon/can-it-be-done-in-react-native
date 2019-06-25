@@ -8,6 +8,14 @@ interface ChannelsProps {
   channels: IChannel[];
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-between",
+    backgroundColor: "#1abc9c" // "#1a1b1c"
+  }
+});
+
 export default ({ channels }: ChannelsProps) => {
   return (
     <View style={styles.container}>
@@ -16,11 +24,3 @@ export default ({ channels }: ChannelsProps) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "space-between",
-    backgroundColor: "#1abc9c" // "#1a1b1c"
-  }
-});
