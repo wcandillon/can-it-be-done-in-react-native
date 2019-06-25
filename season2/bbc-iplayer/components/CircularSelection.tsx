@@ -8,7 +8,7 @@ import { onGestureEvent, decay, transformOrigin } from "react-native-redash";
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
 
-const { Value, interpolate, block, debug } = Animated;
+const { Value, interpolate } = Animated;
 const { width } = Dimensions.get("window");
 const height = width / 1.4;
 const D = width * 1.2;
@@ -44,13 +44,10 @@ export default ({ channels }: CircularSelectionProps) => {
   });
   const angle = (2 * Math.PI) / channels.length;
   const translateX = decay(translationX, state, velocityX);
-  const rotateZ = block([
-    debug("translateX", translateX),
-    interpolate(translateX, {
-      inputRange: [0, outerR],
-      outputRange: [0, Math.PI]
-    })
-  ]);
+  const rotateZ = interpolate(translateX, {
+    inputRange: [0, outerR],
+    outputRange: [0, Math.PI / 2]
+  });
   return (
     <View style={styles.container}>
       <Svg style={StyleSheet.absoluteFill}>
