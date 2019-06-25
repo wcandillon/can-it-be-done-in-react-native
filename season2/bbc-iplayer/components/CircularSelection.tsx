@@ -43,7 +43,6 @@ export default ({ channels }: CircularSelectionProps) => {
           </LinearGradient>
         </Defs>
         <Path fill="#3498db" d={outerPath} />
-        <Path fill="#9b59b6" d={d} />
       </Svg>
       <View style={StyleSheet.absoluteFill}>
         {channels.map((channel, index) => {
