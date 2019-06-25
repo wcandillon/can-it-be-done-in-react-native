@@ -9,7 +9,7 @@ import { gestureEvent, decay } from "react-native-redash";
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
 
-const { Value, concat } = Animated;
+const { Value, concat, debug, block } = Animated;
 const { width } = Dimensions.get("window");
 const height = width / 1.4;
 const D = width * 1.2;
@@ -47,7 +47,11 @@ export default ({ channels }: CircularSelectionProps) => {
     velocityX,
     state
   });
-  const rotateZ = concat(decay(translationX, state, velocityX), "deg");
+  const translateX = decay(translationX, state, velocityX);
+  const rotateZ = block([
+    debug("translateX", translateX),
+    concat(translateX, "deg")
+  ]);
   return (
     <View style={{ width, height }}>
       <Svg style={StyleSheet.absoluteFill}>
@@ -66,7 +70,14 @@ export default ({ channels }: CircularSelectionProps) => {
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
-            transform: [{ translateY: cx }, { rotateZ }, { translateY: -cx }]
+            backgroundColor: "rgba(142, 68, 173, 0.5)",
+            transform: [
+              { translateX: 0 },
+              { translateY: 0 },
+              { rotateZ },
+              { translateX: 0 },
+              { translateY: 0 }
+            ]
           }}
         >
           {channels.map((channel, index) => {
