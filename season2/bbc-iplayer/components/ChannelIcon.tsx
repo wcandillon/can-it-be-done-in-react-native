@@ -1,10 +1,17 @@
 import * as React from "react";
-import { View } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 interface ChannelIconProps {
   name: string;
   r: number;
 }
+
+const styles = StyleSheet.create({
+  text: {
+    color: "#3498db",
+    fontSize: 32
+  }
+});
 
 export default ({ name, radius }: ChannelIconProps) => {
   return (
@@ -21,9 +28,13 @@ export default ({ name, radius }: ChannelIconProps) => {
           width: (radius - 8) * 2,
           height: (radius - 8) * 2,
           borderRadius: radius - 8,
-          backgroundColor: "rgba(255, 255, 255, 1)"
+          backgroundColor: "rgba(255, 255, 255, 1)",
+          justifyContent: "center",
+          alignItems: "center"
         }}
-      />
+      >
+        <Text style={styles.text}>{name}</Text>
+      </View>
     </View>
   );
 };
