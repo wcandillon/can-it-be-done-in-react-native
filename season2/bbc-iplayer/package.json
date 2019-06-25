@@ -16,9 +16,8 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-gesture-handler": "~1.2.1",
     "react-native-reanimated": "1.0.1",
-    "react-native-redash": "^6.3.1",
-    "react-native-web": "^0.11.4",
-    "svg-path-properties": "^0.4.11"
+    "react-native-redash": "6.3.2",
+    "react-native-web": "^0.11.4"
   },
   "devDependencies": {
     "@types/react": "^16.8.19",

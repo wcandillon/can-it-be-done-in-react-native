@@ -3,8 +3,7 @@ import { Dimensions, View, StyleSheet } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
 import Animated from "react-native-reanimated";
-import * as path from "svg-path-properties";
-import { gestureEvent, decay } from "react-native-redash";
+import { onGestureEvent, decay } from "react-native-redash";
 
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
@@ -36,22 +35,22 @@ export default ({ channels }: CircularSelectionProps) => {
   const cx = width / 2;
   const cy = outerR;
   const outerPath = circle(outerR, cx, cy);
-  const d = circle(midR, cx, cy);
-  const properties = path.svgPathProperties(d);
-  const segment = properties.getTotalLength() / channels.length;
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
-  const onGestureEvent = gestureEvent({
+  const gestureEvent = onGestureEvent({
     translationX,
     velocityX,
     state
   });
   const translateX = decay(translationX, state, velocityX);
+  const angle = (2 * Math.PI) / channels.length;
+  /*
   const rotateZ = block([
     debug("translateX", translateX),
     concat(translateX, "deg")
   ]);
+  */
   return (
     <View style={{ width, height }}>
       <Svg style={StyleSheet.absoluteFill}>
@@ -63,29 +62,24 @@ export default ({ channels }: CircularSelectionProps) => {
         </Defs>
         <Path fill="#3498db" d={outerPath} />
       </Svg>
-      <PanGestureHandler
-        onHandlerStateChange={onGestureEvent}
-        {...{ onGestureEvent }}
-      >
-        <Animated.View
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            backgroundColor: "rgba(142, 68, 173, 0.5)",
-            transform: [
-              { translateX: 0 },
-              { translateY: 0 },
-              { rotateZ },
-              { translateX: 0 },
-              { translateY: 0 }
-            ]
-          }}
-        >
+      <PanGestureHandler {...{ gestureEvent }}>
+        <Animated.View style={StyleSheet.absoluteFill}>
           {channels.map((channel, index) => {
-            const { x, y } = properties.getPointAtLength(index * segment);
             return (
               <View
                 key={index}
-                style={{ position: "absolute", top: y - r, left: x - r }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  transform: [
+                    { translateX: cx - r },
+                    { translateY: cy - r },
+                    { rotateZ: `${index * angle}rad` },
+                    { translateY: -(cy - r) }
+                  ]
+                  // transform: [{ rotateZ: `${index * angle}rad` }]
+                }}
               >
                 <ChannelIcon name={`${index + 1}`} radius={r} />
               </View>
