@@ -29,13 +29,12 @@ export default ({ channels }: CircularSelectionProps) => {
   const r = (R * l) / (1 - l);
   const outerR = R + 2 * r;
   const midR = R + r;
-  const outerPath = circle(outerR, outerR, outerR);
-  const d = circle(midR, outerR, outerR);
+  const outerPath = circle(outerR, width / 2, outerR);
+  const d = circle(midR, width / 2, outerR);
   const properties = path.svgPathProperties(d);
-  // const p = parsePath(d);
   const segment = properties.getTotalLength() / channels.length;
   return (
-    <View style={{ width: outerR * 2, height: outerR * 2 }}>
+    <View style={{ width, height }}>
       <Svg style={StyleSheet.absoluteFill}>
         <Defs>
           <LinearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="50%">
@@ -49,7 +48,6 @@ export default ({ channels }: CircularSelectionProps) => {
       <View style={StyleSheet.absoluteFill}>
         {channels.map((channel, index) => {
           const { x, y } = properties.getPointAtLength(index * segment);
-          // console.log({ x, y });
           return (
             <View
               key={index}
