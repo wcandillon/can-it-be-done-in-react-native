@@ -22,7 +22,7 @@ interface ThumbnailsProps {
 }
 
 export default ({ channels, index }: ThumbnailsProps) => {
-  // useCode(debug("index", index), []);
+  useCode(debug("index", index), []);
   return (
     <View style={styles.container}>
       <SafeAreaView />

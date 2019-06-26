@@ -8,7 +8,7 @@ import { onGestureEvent, decay, transformOrigin } from "react-native-redash";
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
 
-const { Value, interpolate, set, divide, modulo, useCode } = Animated;
+const { Value, interpolate, set, divide, modulo, sub, useCode } = Animated;
 const { width } = Dimensions.get("window");
 const height = width / 1.4;
 const D = width * 1.2;
@@ -49,7 +49,13 @@ export default ({ channels, index }: CircularSelectionProps) => {
     inputRange: [0, outerR],
     outputRange: [0, Math.PI / 2]
   });
-  useCode(set(index, modulo(divide(rotateZ, segment), channels.length)), []);
+  useCode(
+    set(
+      index,
+      sub(channels.length, modulo(divide(rotateZ, segment), channels.length))
+    ),
+    []
+  );
   return (
     <View style={styles.container}>
       <Svg style={StyleSheet.absoluteFill}>
