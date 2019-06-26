@@ -16,7 +16,14 @@ const {
   sub,
   onChange,
   useCode,
-  add
+  cond,
+  eq,
+  diff,
+  block,
+  debug,
+  abs,
+  add,
+  multiply
 } = Animated;
 const { width } = Dimensions.get("window");
 const height = width / 1.4;
@@ -46,19 +53,6 @@ export default ({ channels, index }: CircularSelectionProps) => {
     outputRange: [0, -2 * Math.PI]
   });
   const translateX = new Value(0);
-  useCode(
-    onChange(
-      translateX,
-      set(
-        index,
-        sub(
-          channels.length,
-          modulo(divide(translateX, width / 2), channels.length)
-        )
-      )
-    ),
-    []
-  );
   return (
     <View style={styles.container}>
       <View
@@ -98,7 +92,11 @@ export default ({ channels, index }: CircularSelectionProps) => {
           );
         })}
       </Animated.View>
-      <PanGesture {...{ translateX }} />
+      <PanGesture
+        ratio={width / 2}
+        length={channels.length}
+        {...{ translateX, index }}
+      />
     </View>
   );
 };

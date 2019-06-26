@@ -4,13 +4,31 @@ import Animated from "react-native-reanimated";
 import { onGestureEvent, decay } from "react-native-redash";
 import { State, PanGestureHandler } from "react-native-gesture-handler";
 
-const { Value, useCode, set } = Animated;
+const {
+  Value,
+  useCode,
+  set,
+  block,
+  onChange,
+  modulo,
+  multiply,
+  divide,
+  diff,
+  add,
+  sub,
+  cond,
+  eq
+} = Animated;
 
 interface PanGestureProps {
   translateX: Animated.Value<number>;
+  index: Animated.Value<number>;
+  ratio: number;
+  length: number;
 }
 
-export default ({ translateX }: PanGestureProps) => {
+export default ({ translateX, index, ratio, length }: PanGestureProps) => {
+  // const offsetX = new Value(0);
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -20,7 +38,25 @@ export default ({ translateX }: PanGestureProps) => {
     state
   });
   const translateXNode = decay(translationX, state, velocityX);
-  useCode(set(translateX, translateXNode), []);
+  useCode(
+    block([
+      set(translateX, translateXNode),
+      onChange(
+        translateX,
+        set(index, sub(length, modulo(divide(translateX, ratio), length)))
+      )
+    ]),
+    []
+  );
+  /*
+      onChange(
+        index,
+        cond(
+          eq(diff(translateX), 0),
+          set(offsetX, add(offsetX, multiply(diff(index), -ratio)))
+        )
+      )
+      */
   return (
     <PanGestureHandler {...gestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill} />

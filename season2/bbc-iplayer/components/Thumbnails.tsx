@@ -15,7 +15,12 @@ const {
   sub,
   modulo,
   divide,
-  add
+  add,
+  cond,
+  eq,
+  block,
+  multiply,
+  diff
 } = Animated;
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -34,16 +39,6 @@ interface ThumbnailsProps {
 
 export default ({ channels, index }: ThumbnailsProps) => {
   const translateX = new Value(0);
-  useCode(
-    onChange(
-      translateX,
-      set(
-        index,
-        sub(channels.length, modulo(divide(translateX, width), channels.length))
-      )
-    ),
-    []
-  );
   return (
     <View style={styles.container}>
       <SafeAreaView />
@@ -73,7 +68,11 @@ export default ({ channels, index }: ThumbnailsProps) => {
             </Animated.View>
           );
         })}
-        <PanGesture {...{ translateX }} />
+        <PanGesture
+          ratio={width}
+          length={channels.length}
+          {...{ translateX, index }}
+        />
       </View>
     </View>
   );
