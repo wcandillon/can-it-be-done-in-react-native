@@ -34,11 +34,11 @@ export default ({ channels, index }: ThumbnailsProps) => {
             key === 0
               ? {
                   inputRange: [0, 1, 1, last - 1, last],
-                  outputRange: [0, width, -width, -width, 0]
+                  outputRange: [0, -width, width, width, 0]
                 }
               : {
                   inputRange: [key - 1, key, key + 1],
-                  outputRange: [-width, 0, width]
+                  outputRange: [width, 0, -width]
                 }
           );
           return (
