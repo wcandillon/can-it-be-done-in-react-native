@@ -5,7 +5,7 @@ import Animated from "react-native-reanimated";
 import { Channel } from "./Model";
 import Thumbnail from "./Thumbnail";
 
-const { useCode, debug, interpolate } = Animated;
+const { useCode, debug, interpolate, Extrapolate } = Animated;
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
@@ -23,6 +23,7 @@ interface ThumbnailsProps {
 
 export default ({ channels, index }: ThumbnailsProps) => {
   useCode(debug("index", index), []);
+  const last = channels.length - 1;
   return (
     <View style={styles.container}>
       <SafeAreaView />
@@ -44,6 +45,21 @@ export default ({ channels, index }: ThumbnailsProps) => {
             </Animated.View>
           );
         })}
+        <Animated.View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            transform: [
+              {
+                translateX: interpolate(index, {
+                  inputRange: [last, last + 1],
+                  outputRange: [-width, 0]
+                })
+              }
+            ]
+          }}
+        >
+          <Thumbnail name="1" />
+        </Animated.View>
       </View>
     </View>
   );
