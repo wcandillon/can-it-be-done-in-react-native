@@ -22,8 +22,6 @@ interface ThumbnailsProps {
 }
 
 export default ({ channels, index }: ThumbnailsProps) => {
-  const last = channels.length;
-  useCode(debug("index", index), []);
   return (
     <View style={styles.container}>
       <SafeAreaView />
@@ -33,7 +31,7 @@ export default ({ channels, index }: ThumbnailsProps) => {
             index,
             key === 0
               ? {
-                  inputRange: [0, 1, 1, last - 1, last],
+                  inputRange: [0, 1, 1, channels.length - 1, channels.length],
                   outputRange: [0, -width, width, width, 0]
                 }
               : {

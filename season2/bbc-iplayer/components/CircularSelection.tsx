@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
-import { onGestureEvent, decay, transformOrigin } from "react-native-redash";
+import { transformOrigin } from "react-native-redash";
 
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
+import PanGesture from "./PanGesture";
 
 const {
   Value,
@@ -14,7 +14,6 @@ const {
   divide,
   modulo,
   sub,
-  multiply,
   onChange,
   useCode
 } = Animated;
@@ -40,20 +39,12 @@ export default ({ channels, index }: CircularSelectionProps) => {
   const R = innerR + 2 * r;
   const cx = width / 2 - r;
   const cy = R - r;
-  const translationX = new Value(0);
-  const velocityX = new Value(0);
-  const state = new Value(State.UNDETERMINED);
-  const gestureEvent = onGestureEvent({
-    translationX,
-    velocityX,
-    state
-  });
   const segment = (2 * Math.PI) / channels.length;
-  const translateX = decay(translationX, state, velocityX);
   const rotateZ = interpolate(index, {
     inputRange: [0, channels.length],
     outputRange: [0, -2 * Math.PI]
   });
+  const translateX = new Value(0);
   useCode(
     onChange(
       translateX,
@@ -106,9 +97,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
           );
         })}
       </Animated.View>
-      <PanGestureHandler {...gestureEvent}>
-        <Animated.View style={StyleSheet.absoluteFill} />
-      </PanGestureHandler>
+      <PanGesture {...{ translateX }} />
     </View>
   );
 };
