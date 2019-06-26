@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
+import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 import Animated from "react-native-reanimated";
 import { onGestureEvent, decay, transformOrigin } from "react-native-redash";
 
@@ -13,9 +13,6 @@ const { width } = Dimensions.get("window");
 const height = width / 1.4;
 const D = width * 1.2;
 const R = D / 2;
-const circle = (r: number, cx: number, cy: number) => `M ${cx - r}, ${cy}
-a ${r},${r} 0 1,0 ${r * 2},0
-a ${r},${r} 0 1,0 ${-r * 2},0`;
 const styles = StyleSheet.create({
   container: {
     width,
@@ -34,7 +31,6 @@ export default ({ channels, index }: CircularSelectionProps) => {
   const outerR = R + 2 * r;
   const cx = width / 2;
   const cy = outerR;
-  const outerPath = circle(outerR, cx, cy);
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -65,7 +61,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
             <Stop offset="1" stopColor="#1c1d1e" />
           </LinearGradient>
         </Defs>
-        <Path fill="#3498db" d={outerPath} />
+        <Circle fill="#3498db" r={outerR} {...{ cy, cx }} />
       </Svg>
       <Animated.View
         style={{
