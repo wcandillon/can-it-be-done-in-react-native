@@ -4,8 +4,19 @@ import Animated from "react-native-reanimated";
 
 import { Channel } from "./Model";
 import Thumbnail from "./Thumbnail";
+import PanGesture from "./PanGesture";
 
-const { interpolate, useCode, debug } = Animated;
+const {
+  interpolate,
+  Value,
+  useCode,
+  onChange,
+  set,
+  sub,
+  modulo,
+  divide,
+  add
+} = Animated;
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
@@ -22,12 +33,23 @@ interface ThumbnailsProps {
 }
 
 export default ({ channels, index }: ThumbnailsProps) => {
+  const translateX = new Value(0);
+  useCode(
+    onChange(
+      translateX,
+      set(
+        index,
+        sub(channels.length, modulo(divide(translateX, width), channels.length))
+      )
+    ),
+    []
+  );
   return (
     <View style={styles.container}>
       <SafeAreaView />
       <View style={styles.content}>
         {channels.map((channel, key) => {
-          const translateX = interpolate(
+          const x = interpolate(
             index,
             key === 0
               ? {
@@ -43,7 +65,7 @@ export default ({ channels, index }: ThumbnailsProps) => {
             <Animated.View
               style={{
                 ...StyleSheet.absoluteFillObject,
-                transform: [{ translateX }]
+                transform: [{ translateX: x }]
               }}
               {...{ key }}
             >
@@ -51,6 +73,7 @@ export default ({ channels, index }: ThumbnailsProps) => {
             </Animated.View>
           );
         })}
+        <PanGesture {...{ translateX }} />
       </View>
     </View>
   );

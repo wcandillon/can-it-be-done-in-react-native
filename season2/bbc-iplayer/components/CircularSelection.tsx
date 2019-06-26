@@ -15,7 +15,8 @@ const {
   modulo,
   sub,
   onChange,
-  useCode
+  useCode,
+  add
 } = Animated;
 const { width } = Dimensions.get("window");
 const height = width / 1.4;
@@ -52,7 +53,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
         index,
         sub(
           channels.length,
-          modulo(divide(translateX, channels.length), channels.length)
+          modulo(divide(translateX, width / 2), channels.length)
         )
       )
     ),
