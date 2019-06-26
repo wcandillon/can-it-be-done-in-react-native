@@ -28,8 +28,8 @@ export default ({ channels, index }: CircularSelectionProps) => {
   const l = Math.sin(Math.PI / channels.length);
   const r = (R * l) / (1 - l);
   const outerR = R + 2 * r;
-  const cx = width / 2;
-  const cy = outerR;
+  const cx = width / 2 - r;
+  const cy = outerR - r;
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -66,7 +66,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
-          transform: transformOrigin(0, cy - height / 2, { rotateZ })
+          transform: transformOrigin(0, outerR - height / 2, { rotateZ })
         }}
       >
         {channels.map((channel, key) => {
@@ -78,10 +78,10 @@ export default ({ channels, index }: CircularSelectionProps) => {
                 top: 0,
                 left: 0,
                 transform: [
-                  { translateX: cx - r },
-                  { translateY: cy - r },
+                  { translateX: cx },
+                  { translateY: cy },
                   { rotateZ: `${key * segment}rad` },
-                  { translateY: -(cy - r) }
+                  { translateY: -cy }
                 ]
               }}
             >
