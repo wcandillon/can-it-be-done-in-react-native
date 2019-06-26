@@ -1,13 +1,12 @@
 import * as React from "react";
 import { View, StyleSheet } from "react-native";
+import Animated from "react-native-reanimated";
 
 import CircularSelection from "./CircularSelection";
-import { IChannel } from "./Model";
+import Thumbnails from "./Thumbnails";
+import { Channel } from "./Model";
 
-interface ChannelsProps {
-  channels: IChannel[];
-}
-
+const { Value } = Animated;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -16,11 +15,16 @@ const styles = StyleSheet.create({
   }
 });
 
+interface ChannelsProps {
+  channels: Channel[];
+}
+
 export default ({ channels }: ChannelsProps) => {
+  const index = new Value(0);
   return (
     <View style={styles.container}>
-      <View />
-      <CircularSelection {...{ channels }} />
+      <Thumbnails {...{ index, channels }} />
+      <CircularSelection {...{ channels, index }} />
     </View>
   );
 };

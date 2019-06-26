@@ -8,7 +8,7 @@ import { onGestureEvent, decay, transformOrigin } from "react-native-redash";
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
 
-const { Value, interpolate } = Animated;
+const { Value, interpolate, set, divide, modulo, useCode } = Animated;
 const { width } = Dimensions.get("window");
 const height = width / 1.4;
 const D = width * 1.2;
@@ -25,9 +25,10 @@ const styles = StyleSheet.create({
 
 interface CircularSelectionProps {
   channels: Channel[];
+  index: Animated.Value<number>;
 }
 
-export default ({ channels }: CircularSelectionProps) => {
+export default ({ channels, index }: CircularSelectionProps) => {
   const l = Math.sin(Math.PI / channels.length);
   const r = (R * l) / (1 - l);
   const outerR = R + 2 * r;
@@ -42,12 +43,13 @@ export default ({ channels }: CircularSelectionProps) => {
     velocityX,
     state
   });
-  const angle = (2 * Math.PI) / channels.length;
+  const segment = (2 * Math.PI) / channels.length;
   const translateX = decay(translationX, state, velocityX);
   const rotateZ = interpolate(translateX, {
     inputRange: [0, outerR],
     outputRange: [0, Math.PI / 2]
   });
+  useCode(set(index, modulo(divide(rotateZ, segment), channels.length)), []);
   return (
     <View style={styles.container}>
       <Svg style={StyleSheet.absoluteFill}>
@@ -62,13 +64,13 @@ export default ({ channels }: CircularSelectionProps) => {
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
-          transform: transformOrigin(0, cy - height / 2, [{ rotateZ }])
+          transform: transformOrigin(0, cy - height / 2, { rotateZ })
         }}
       >
-        {channels.map((channel, index) => {
+        {channels.map((channel, key) => {
           return (
             <View
-              key={index}
+              {...{ key }}
               style={{
                 position: "absolute",
                 top: 0,
@@ -76,12 +78,12 @@ export default ({ channels }: CircularSelectionProps) => {
                 transform: [
                   { translateX: cx - r },
                   { translateY: cy - r },
-                  { rotateZ: `${index * angle}rad` },
+                  { rotateZ: `${key * segment}rad` },
                   { translateY: -(cy - r) }
                 ]
               }}
             >
-              <ChannelIcon name={`${index + 1}`} radius={r} />
+              <ChannelIcon name={`${key + 1}`} radius={r} />
             </View>
           );
         })}
