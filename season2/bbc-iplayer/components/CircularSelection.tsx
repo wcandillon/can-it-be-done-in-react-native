@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 import Animated from "react-native-reanimated";
 import { onGestureEvent, decay, transformOrigin } from "react-native-redash";
 
@@ -54,15 +53,16 @@ export default ({ channels, index }: CircularSelectionProps) => {
   );
   return (
     <View style={styles.container}>
-      <Svg style={StyleSheet.absoluteFill}>
-        <Defs>
-          <LinearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="50%">
-            <Stop offset="0" stopColor="#353637" />
-            <Stop offset="1" stopColor="#1c1d1e" />
-          </LinearGradient>
-        </Defs>
-        <Circle fill="#3498db" r={outerR} {...{ cy, cx }} />
-      </Svg>
+      <View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          borderRadius: outerR,
+          width: outerR * 2,
+          height: outerR * 2,
+          backgroundColor: "#3498db",
+          left: -(outerR - width / 2)
+        }}
+      />
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
