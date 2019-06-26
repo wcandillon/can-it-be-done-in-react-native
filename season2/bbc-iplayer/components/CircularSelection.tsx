@@ -11,7 +11,7 @@ const { Value, interpolate, set, divide, modulo, sub, useCode } = Animated;
 const { width } = Dimensions.get("window");
 const height = width / 1.4;
 const D = width * 1.2;
-const R = D / 2;
+const innerR = D / 2;
 const styles = StyleSheet.create({
   container: {
     width,
@@ -26,10 +26,10 @@ interface CircularSelectionProps {
 
 export default ({ channels, index }: CircularSelectionProps) => {
   const l = Math.sin(Math.PI / channels.length);
-  const r = (R * l) / (1 - l);
-  const outerR = R + 2 * r;
+  const r = (innerR * l) / (1 - l);
+  const R = innerR + 2 * r;
   const cx = width / 2 - r;
-  const cy = outerR - r;
+  const cy = R - r;
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -41,7 +41,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
   const segment = (2 * Math.PI) / channels.length;
   const translateX = decay(translationX, state, velocityX);
   const rotateZ = interpolate(translateX, {
-    inputRange: [0, outerR],
+    inputRange: [0, R],
     outputRange: [0, Math.PI / 2]
   });
   useCode(
@@ -56,17 +56,17 @@ export default ({ channels, index }: CircularSelectionProps) => {
       <View
         style={{
           ...StyleSheet.absoluteFillObject,
-          borderRadius: outerR,
-          width: outerR * 2,
-          height: outerR * 2,
+          borderRadius: R,
+          width: R * 2,
+          height: R * 2,
           backgroundColor: "#3498db",
-          left: -(outerR - width / 2)
+          left: -(R - width / 2)
         }}
       />
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
-          transform: transformOrigin(0, outerR - height / 2, { rotateZ })
+          transform: transformOrigin(0, R - height / 2, { rotateZ })
         }}
       >
         {channels.map((channel, key) => {
