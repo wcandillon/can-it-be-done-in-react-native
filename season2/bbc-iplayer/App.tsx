@@ -1,9 +1,9 @@
 import React from "react";
 
 import Channels from "./components/Channels";
-import { IChannel } from "./components/Model";
+import { Channel } from "./components/Model";
 
-const channels: IChannel[] = [
+const channels: Channel[] = [
   {},
   {},
   {},

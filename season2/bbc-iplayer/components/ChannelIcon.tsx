@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 
 interface ChannelIconProps {
   name: string;
-  r: number;
+  radius: number;
 }
 
 const styles = StyleSheet.create({
