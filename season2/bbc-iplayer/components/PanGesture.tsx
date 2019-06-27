@@ -28,7 +28,6 @@ interface PanGestureProps {
 }
 
 export default ({ index, ratio, length }: PanGestureProps) => {
-  const offsetX = new Value(0);
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -39,10 +38,7 @@ export default ({ index, ratio, length }: PanGestureProps) => {
   });
   const translateX = decay(translationX, state, velocityX);
   useCode(
-    set(
-      index,
-      sub(length, modulo(divide(add(translateX, offsetX), ratio), length))
-    ),
+    set(index, sub(length, modulo(divide(translateX, ratio), length))),
     []
   );
   return (
