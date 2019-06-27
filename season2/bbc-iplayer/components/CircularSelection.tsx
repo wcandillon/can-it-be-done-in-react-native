@@ -52,7 +52,6 @@ export default ({ channels, index }: CircularSelectionProps) => {
     inputRange: [0, channels.length],
     outputRange: [0, -2 * Math.PI]
   });
-  const translateX = new Value(0);
   return (
     <View style={styles.container}>
       <View
@@ -92,11 +91,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
           );
         })}
       </Animated.View>
-      <PanGesture
-        ratio={width / 2}
-        length={channels.length}
-        {...{ translateX, index }}
-      />
+      <PanGesture ratio={width / 2} length={channels.length} {...{ index }} />
     </View>
   );
 };

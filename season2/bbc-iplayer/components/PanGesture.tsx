@@ -16,19 +16,19 @@ const {
   diff,
   add,
   sub,
+  acc,
   cond,
   eq
 } = Animated;
 
 interface PanGestureProps {
-  translateX: Animated.Value<number>;
   index: Animated.Value<number>;
   ratio: number;
   length: number;
 }
 
-export default ({ translateX, index, ratio, length }: PanGestureProps) => {
-  // const offsetX = new Value(0);
+export default ({ index, ratio, length }: PanGestureProps) => {
+  const offsetX = new Value(0);
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -37,13 +37,15 @@ export default ({ translateX, index, ratio, length }: PanGestureProps) => {
     velocityX,
     state
   });
-  const translateXNode = decay(translationX, state, velocityX);
+  const translateX = decay(translationX, state, velocityX);
   useCode(
     block([
-      set(translateX, translateXNode),
       onChange(
         translateX,
-        set(index, sub(length, modulo(divide(translateX, ratio), length)))
+        set(
+          index,
+          sub(length, modulo(divide(add(translateX, offsetX), ratio), length))
+        )
       )
     ]),
     []
