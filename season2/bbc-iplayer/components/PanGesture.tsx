@@ -20,14 +20,14 @@ const {
   stopClock
 } = Animated;
 
-export const spring = (
+const spring = (
   translation: Animated.Value<number>,
-  velocity: Animated.Value<number>,
-  state: Animated.Value<State>,
-  ratio: number
+  state: Animated.Value<GestureState>,
+  snapPt: (value: Animated.Node<number>) => Animated.Adaptable<number>,
+  defaultOffset: number = 0
 ) => {
   const springedValue = new Value(0);
-  const offset = new Value(0);
+  const offset = new Value(defaultOffset);
   const clock = new Clock();
   const rerunSpring = new Value(0);
   // http://chenglou.github.io/react-motion/demos/demo5-spring-parameters-chooser/
@@ -49,19 +49,7 @@ export const spring = (
           runSpring(
             clock,
             add(translation, offset),
-            snapPoint(add(translation, offset), velocity, [
-              sub(
-                add(translation, offset),
-                modulo(add(translation, offset), ratio)
-              ),
-              add(
-                sub(
-                  add(translation, offset),
-                  modulo(add(translation, offset), ratio)
-                ),
-                ratio
-              )
-            ]),
+            snapPt(add(translation, offset)),
             springConfig
           )
         )
@@ -79,6 +67,18 @@ export const spring = (
   ]);
 };
 
+export const snap = (
+  translation: Animated.Value<number>,
+  velocity: Animated.Value<number>,
+  state: Animated.Value<State>,
+  ratio: number
+) =>
+  spring(translation, state, value => {
+    const lowerBound = sub(value, modulo(value, ratio));
+    const upperBound = add(lowerBound, ratio);
+    return snapPoint(value, velocity, [lowerBound, upperBound]);
+  });
+
 interface PanGestureProps {
   index: Animated.Value<number>;
   ratio: number;
@@ -94,7 +94,7 @@ export default ({ index, ratio, length }: PanGestureProps) => {
     velocityX,
     state
   });
-  const translateX = spring(translationX, velocityX, state, ratio);
+  const translateX = snap(translationX, velocityX, state, ratio);
   const increment = divide(diff(translateX), ratio);
   useCode(set(index, modulo(sub(index, increment), length)), []);
   return (
