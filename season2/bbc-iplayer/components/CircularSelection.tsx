@@ -7,24 +7,7 @@ import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
 import PanGesture from "./PanGesture";
 
-const {
-  Value,
-  interpolate,
-  set,
-  divide,
-  modulo,
-  sub,
-  onChange,
-  useCode,
-  cond,
-  eq,
-  diff,
-  block,
-  debug,
-  abs,
-  add,
-  multiply
-} = Animated;
+const { interpolate } = Animated;
 const { width } = Dimensions.get("window");
 const height = width / 1.4;
 const D = width * 1.2;

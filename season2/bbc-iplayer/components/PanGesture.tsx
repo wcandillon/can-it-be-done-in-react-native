@@ -4,22 +4,7 @@ import Animated from "react-native-reanimated";
 import { onGestureEvent, decay } from "react-native-redash";
 import { State, PanGestureHandler } from "react-native-gesture-handler";
 
-const {
-  Value,
-  useCode,
-  set,
-  block,
-  onChange,
-  modulo,
-  multiply,
-  divide,
-  diff,
-  add,
-  sub,
-  acc,
-  cond,
-  eq
-} = Animated;
+const { Value, useCode, set, modulo, divide, diff, sub } = Animated;
 
 interface PanGestureProps {
   index: Animated.Value<number>;
@@ -37,10 +22,8 @@ export default ({ index, ratio, length }: PanGestureProps) => {
     state
   });
   const translateX = decay(translationX, state, velocityX);
-  useCode(
-    set(index, sub(length, modulo(divide(translateX, ratio), length))),
-    []
-  );
+  const increment = divide(diff(translateX), ratio);
+  useCode(set(index, modulo(sub(index, increment), length)), []);
   return (
     <PanGestureHandler {...gestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill} />
