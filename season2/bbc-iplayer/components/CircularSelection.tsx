@@ -46,7 +46,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
           height: R * 2,
           left: -(R - width / 2)
         }}
-        colors={["#353637", "#161819"]}
+        colors={["#353637", "#161819", "#161819"]}
       />
       <Animated.View
         style={{
