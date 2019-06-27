@@ -2163,7 +2163,7 @@ expo-app-loader-provider@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/expo-app-loader-provider/-/expo-app-loader-provider-5.0.1.tgz#56f531e189de8407bdf257d5753ccec43dd253f7"
 
-expo-asset@~5.0.1:
+expo-asset@^5.0.1, expo-asset@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-5.0.1.tgz#02445aeb695b8449cb7239e11fc3a8d34e6c86ce"
   dependencies:

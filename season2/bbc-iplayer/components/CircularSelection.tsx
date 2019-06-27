@@ -54,7 +54,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
           transform: transformOrigin(0, R - height / 2, { rotateZ })
         }}
       >
-        {channels.map((channel, key) => {
+        {channels.map((_, key) => {
           return (
             <View
               {...{ key }}

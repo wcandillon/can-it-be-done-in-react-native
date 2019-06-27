@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
-import { View } from "react-native";
 
-const usePromiseAll = <T extends any>(promises: Promise<T>[], cb: () => void) =>
+const usePromiseAll = <T extends {}>(promises: Promise<T>[], cb: () => void) =>
   useEffect(() => {
     (async () => {
       await Promise.all(promises);

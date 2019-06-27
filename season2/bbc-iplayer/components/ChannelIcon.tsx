@@ -8,8 +8,9 @@ interface ChannelIconProps {
 
 const styles = StyleSheet.create({
   text: {
-    color: "#3498db",
-    fontSize: 32
+    color: "white",
+    fontSize: 32,
+    fontWeight: "bold"
   }
 });
 
@@ -28,7 +29,7 @@ export default ({ name, radius }: ChannelIconProps) => {
           width: (radius - 8) * 2,
           height: (radius - 8) * 2,
           borderRadius: radius - 8,
-          backgroundColor: "rgba(255, 255, 255, 1)",
+          backgroundColor: "#919293",
           justifyContent: "center",
           alignItems: "center"
         }}
