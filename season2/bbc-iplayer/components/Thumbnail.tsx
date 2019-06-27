@@ -16,13 +16,16 @@ const styles = StyleSheet.create({
     padding: 16
   },
   type: {
-    color: "white"
+    color: "white",
+    fontWeight: "bold"
   },
   title: {
-    color: "white"
+    color: "white",
+    fontSize: 24
   },
   subtitle: {
-    color: "white"
+    color: "white",
+    fontSize: 18
   }
 });
 
