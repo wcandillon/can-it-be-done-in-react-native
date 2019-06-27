@@ -2,6 +2,7 @@ import * as React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import { transformOrigin } from "react-native-redash";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { Channel } from "./Model";
 import ChannelIcon from "./ChannelIcon";
@@ -37,15 +38,15 @@ export default ({ channels, index }: CircularSelectionProps) => {
   });
   return (
     <View style={styles.container}>
-      <View
+      <LinearGradient
         style={{
           ...StyleSheet.absoluteFillObject,
           borderRadius: R,
           width: R * 2,
           height: R * 2,
-          backgroundColor: "#3498db",
           left: -(R - width / 2)
         }}
+        colors={["#353637", "#161819"]}
       />
       <Animated.View
         style={{

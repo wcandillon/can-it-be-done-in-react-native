@@ -1,6 +1,8 @@
+/* eslint-disable global-require */
 import React from "react";
 
 import Channels from "./components/Channels";
+import LoadAssets from "./components/LoadAssets";
 import { Channel } from "./components/Model";
 
 const channels: Channel[] = [
@@ -132,6 +134,8 @@ const channels: Channel[] = [
   }
 ];
 
-export default function App() {
-  return <Channels {...{ channels }} />;
-}
+export default () => (
+  <LoadAssets assets={channels.map(channel => channel.cover)}>
+    <Channels {...{ channels }} />
+  </LoadAssets>
+);
