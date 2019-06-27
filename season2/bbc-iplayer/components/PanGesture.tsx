@@ -39,26 +39,12 @@ export default ({ index, ratio, length }: PanGestureProps) => {
   });
   const translateX = decay(translationX, state, velocityX);
   useCode(
-    block([
-      onChange(
-        translateX,
-        set(
-          index,
-          sub(length, modulo(divide(add(translateX, offsetX), ratio), length))
-        )
-      )
-    ]),
+    set(
+      index,
+      sub(length, modulo(divide(add(translateX, offsetX), ratio), length))
+    ),
     []
   );
-  /*
-      onChange(
-        index,
-        cond(
-          eq(diff(translateX), 0),
-          set(offsetX, add(offsetX, multiply(diff(index), -ratio)))
-        )
-      )
-      */
   return (
     <PanGestureHandler {...gestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill} />
