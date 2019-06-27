@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    backgroundColor: "#1abc9c" // "#1a1b1c"
+    backgroundColor: "#1a1b1c"
   }
 });
 

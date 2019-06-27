@@ -5,6 +5,7 @@ import Animated from "react-native-reanimated";
 import { Channel } from "./Model";
 import Thumbnail from "./Thumbnail";
 import PanGesture from "./PanGesture";
+import Header from "./Header";
 
 const { interpolate } = Animated;
 const { width } = Dimensions.get("window");
@@ -26,6 +27,7 @@ export default ({ channels, index }: ThumbnailsProps) => {
   return (
     <View style={styles.container}>
       <SafeAreaView />
+      <Header />
       <View style={styles.content}>
         {channels.map((channel, key) => {
           const translateX = interpolate(
@@ -48,7 +50,7 @@ export default ({ channels, index }: ThumbnailsProps) => {
               }}
               {...{ key }}
             >
-              <Thumbnail name={`${key + 1}`} />
+              <Thumbnail {...{ channel }} />
             </Animated.View>
           );
         })}
