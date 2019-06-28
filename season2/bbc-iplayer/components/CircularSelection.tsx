@@ -75,7 +75,11 @@ export default ({ channels, index }: CircularSelectionProps) => {
           );
         })}
       </Animated.View>
-      <PanGesture ratio={width / 2} length={channels.length} {...{ index }} />
+      <PanGesture
+        ratio={width / (channels.length / 2)}
+        length={channels.length}
+        {...{ index }}
+      />
     </View>
   );
 };

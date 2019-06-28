@@ -25,9 +25,17 @@ const {
   ceil,
   not,
   clockRunning,
-  lessThan,
   stopClock
 } = Animated;
+const springConfig = {
+  toValue: new Value(0),
+  damping: 15,
+  mass: 1,
+  stiffness: 150,
+  overshootClamping: false,
+  restSpeedThreshold: 0.001,
+  restDisplacementThreshold: 0.001
+};
 
 interface PanGestureProps {
   index: Animated.Value<number>;
@@ -66,7 +74,8 @@ export default ({ index, ratio, length }: PanGestureProps) => {
             snapPoint(index, divide(velocityX, -ratio), [
               ceil(index),
               floor(index)
-            ])
+            ]),
+            springConfig
           )
         ),
         cond(not(clockRunning(clock)), set(shouldSnap, 0))
