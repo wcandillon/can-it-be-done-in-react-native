@@ -63,7 +63,10 @@ export default ({ index, ratio, length }: PanGestureProps) => {
           runSpring(
             clock,
             index,
-            cond(lessThan(velocityX, 0), ceil(index), floor(index))
+            snapPoint(index, divide(velocityX, -ratio), [
+              ceil(index),
+              floor(index)
+            ])
           )
         ),
         cond(not(clockRunning(clock)), set(shouldSnap, 0))
