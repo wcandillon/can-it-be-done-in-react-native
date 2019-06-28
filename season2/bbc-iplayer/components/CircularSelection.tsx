@@ -23,9 +23,10 @@ const styles = StyleSheet.create({
 interface CircularSelectionProps {
   channels: Channel[];
   index: Animated.Value<number>;
+  isActive: Animated.Value<number>;
 }
 
-export default ({ channels, index }: CircularSelectionProps) => {
+export default ({ channels, index, isActive }: CircularSelectionProps) => {
   const l = Math.sin(Math.PI / channels.length);
   const r = (innerR * l) / (1 - l);
   const R = innerR + 2 * r;
@@ -70,7 +71,12 @@ export default ({ channels, index }: CircularSelectionProps) => {
                 ]
               }}
             >
-              <ChannelIcon name={`${key + 1}`} radius={r} />
+              <ChannelIcon
+                name={`${key + 1}`}
+                radius={r}
+                currentIndex={key}
+                {...{ isActive, index }}
+              />
             </View>
           );
         })}
@@ -78,7 +84,7 @@ export default ({ channels, index }: CircularSelectionProps) => {
       <PanGesture
         ratio={width / (channels.length / 2)}
         length={channels.length}
-        {...{ index }}
+        {...{ index, isActive }}
       />
     </View>
   );

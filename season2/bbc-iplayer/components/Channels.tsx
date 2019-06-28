@@ -21,10 +21,11 @@ interface ChannelsProps {
 
 export default ({ channels }: ChannelsProps) => {
   const index = new Value(0);
+  const isActive = new Value(0);
   return (
     <View style={styles.container}>
-      <Thumbnails {...{ index, channels }} />
-      <CircularSelection {...{ channels, index }} />
+      <Thumbnails {...{ index, channels, isActive }} />
+      <CircularSelection {...{ channels, index, isActive }} />
     </View>
   );
 };

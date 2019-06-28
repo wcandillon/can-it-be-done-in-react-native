@@ -39,11 +39,12 @@ const springConfig = {
 
 interface PanGestureProps {
   index: Animated.Value<number>;
+  isActive: Animated.Value<number>;
   ratio: number;
   length: number;
 }
 
-export default ({ index, ratio, length }: PanGestureProps) => {
+export default ({ index, ratio, length, isActive }: PanGestureProps) => {
   const clock = new Clock();
   const shouldSnap = new Value(0);
   const translationX = new Value(0);
@@ -61,7 +62,7 @@ export default ({ index, ratio, length }: PanGestureProps) => {
   useCode(
     block([
       setIndex(sub(index, increment)),
-      cond(eq(state, State.BEGAN), stopClock(clock)),
+      cond(eq(state, State.BEGAN), [stopClock(clock), set(isActive, 1)]),
       cond(eq(state, State.END), [
         set(state, State.UNDETERMINED),
         set(shouldSnap, 1)
@@ -78,7 +79,7 @@ export default ({ index, ratio, length }: PanGestureProps) => {
             springConfig
           )
         ),
-        cond(not(clockRunning(clock)), set(shouldSnap, 0))
+        cond(not(clockRunning(clock)), [set(shouldSnap, 0), set(isActive, 0)])
       ])
     ]),
     []

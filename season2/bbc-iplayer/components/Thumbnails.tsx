@@ -21,9 +21,10 @@ const styles = StyleSheet.create({
 interface ThumbnailsProps {
   channels: Channel[];
   index: Animated.Value<number>;
+  isActive: Animated.Value<number>;
 }
 
-export default ({ channels, index }: ThumbnailsProps) => {
+export default ({ channels, index, isActive }: ThumbnailsProps) => {
   return (
     <View style={styles.container}>
       <SafeAreaView />
@@ -54,7 +55,11 @@ export default ({ channels, index }: ThumbnailsProps) => {
             </Animated.View>
           );
         })}
-        <PanGesture ratio={width} length={channels.length} {...{ index }} />
+        <PanGesture
+          ratio={width}
+          length={channels.length}
+          {...{ index, isActive }}
+        />
       </View>
     </View>
   );
