@@ -1,10 +1,33 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
-import { onGestureEvent, decay } from "react-native-redash";
+import {
+  onGestureEvent,
+  preserveOffset,
+  runSpring,
+  snapPoint
+} from "react-native-redash";
 import { State, PanGestureHandler } from "react-native-gesture-handler";
 
-const { Value, useCode, set, modulo, divide, diff, sub } = Animated;
+const {
+  Clock,
+  Value,
+  useCode,
+  set,
+  modulo,
+  divide,
+  diff,
+  sub,
+  block,
+  eq,
+  cond,
+  floor,
+  ceil,
+  not,
+  clockRunning,
+  lessThan,
+  stopClock
+} = Animated;
 
 interface PanGestureProps {
   index: Animated.Value<number>;
@@ -13,6 +36,8 @@ interface PanGestureProps {
 }
 
 export default ({ index, ratio, length }: PanGestureProps) => {
+  const clock = new Clock();
+  const shouldSnap = new Value(0);
   const translationX = new Value(0);
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -21,9 +46,31 @@ export default ({ index, ratio, length }: PanGestureProps) => {
     velocityX,
     state
   });
-  const translateX = decay(translationX, state, velocityX);
+  const translateX = preserveOffset(translationX, state);
   const increment = divide(diff(translateX), ratio);
-  useCode(set(index, modulo(sub(index, increment), length)), []);
+  const setIndex = (value: Animated.Node<number>) =>
+    set(index, modulo(value, length));
+  useCode(
+    block([
+      setIndex(sub(index, increment)),
+      cond(eq(state, State.BEGAN), stopClock(clock)),
+      cond(eq(state, State.END), [
+        set(state, State.UNDETERMINED),
+        set(shouldSnap, 1)
+      ]),
+      cond(eq(shouldSnap, 1), [
+        setIndex(
+          runSpring(
+            clock,
+            index,
+            cond(lessThan(velocityX, 0), ceil(index), floor(index))
+          )
+        ),
+        cond(not(clockRunning(clock)), set(shouldSnap, 0))
+      ])
+    ]),
+    []
+  );
   return (
     <PanGestureHandler {...gestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill} />
