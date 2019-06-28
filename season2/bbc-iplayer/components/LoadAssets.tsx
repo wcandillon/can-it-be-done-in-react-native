@@ -20,7 +20,7 @@ const useLoadAssets = (assets: number[]): boolean => {
 
 interface LoadAssetsProps {
   assets: number[];
-  children: React.ReactChildren;
+  children: React.ReactElement;
 }
 
 export default ({ assets, children }: LoadAssetsProps) => {

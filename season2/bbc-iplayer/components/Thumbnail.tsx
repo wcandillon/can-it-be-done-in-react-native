@@ -1,6 +1,8 @@
 import * as React from "react";
 import { View, Image, StyleSheet, Text, Dimensions } from "react-native";
 
+import { Channel } from "./Model";
+
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +32,7 @@ const styles = StyleSheet.create({
 });
 
 interface ThumbnailProps {
-  channel: string;
+  channel: Channel;
 }
 
 export default ({
