@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Dimensions, StyleSheet } from "react-native";
-import { DangerZone, Svg } from "expo";
-
-const { Animated } = DangerZone;
-const { Value, interpolate, multiply } = Animated;
-const {
+import Svg, {
   Defs, LinearGradient, Stop, Circle,
-} = Svg;
+} from "react-native-svg";
+import Animated from "react-native-reanimated";
+
+const { Value, interpolate, multiply } = Animated;
 const { width } = Dimensions.get("window");
 const size = width - 32;
 const strokeWidth = 50;

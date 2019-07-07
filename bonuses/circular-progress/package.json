@@ -9,10 +9,12 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "expo": "^32.0.0",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-redash": "^2.0.0"
+    "expo": "^33.0.0",
+    "react": "16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-reanimated": "1.0.1",
+    "react-native-redash": "^2.0.0",
+    "react-native-svg": "~9.4.0"
   },
   "devDependencies": {
     "@types/expo": "^32.0.11",

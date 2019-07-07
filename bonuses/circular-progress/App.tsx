@@ -1,11 +1,10 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { DangerZone } from "expo";
+import Animated, { Easing } from "react-native-reanimated";
 import { runTiming } from "react-native-redash";
 
 import CircularProgress from "./components/CircularProgress2";
 
-const { Animated, Easing } = DangerZone;
 const { Clock } = Animated;
 
 export default () => {
