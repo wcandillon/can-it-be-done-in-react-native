@@ -1,32 +1,31 @@
 import * as React from "react";
 import { Dimensions, StyleSheet } from "react-native";
-import { DangerZone, Svg } from "expo";
-
-const { Animated } = DangerZone;
-const { Value, interpolate, multiply } = Animated;
-const {
+import Svg, {
   Defs, LinearGradient, Stop, Circle,
-} = Svg;
+} from "react-native-svg";
+import Animated from "react-native-reanimated";
+
+const { interpolate, multiply } = Animated;
 const { width } = Dimensions.get("window");
 const size = width - 32;
 const strokeWidth = 50;
-const radius = (size - strokeWidth) / 2;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const { PI } = Math;
-
-type Value = typeof Value;
+const r = (size - strokeWidth) / 2;
+const cx = size / 2;
+const cy = size / 2;
 
 interface CircularPogressProps {
-  progress: Value;
+  progress: Animated.Value<number>;
 }
 
 export default ({ progress }: CircularPogressProps) => {
-  const circumference = radius * 2 * PI;
+  const circumference = r * 2 * PI;
   const α = interpolate(progress, {
     inputRange: [0, 1],
     outputRange: [0, PI * 2],
   });
-  const strokeDashoffset = multiply(α, radius);
+  const strokeDashoffset = multiply(α, r);
   return (
     <Svg width={size} height={size} style={styles.container}>
       <Defs>
@@ -38,19 +37,17 @@ export default ({ progress }: CircularPogressProps) => {
       <Circle
         stroke="rgba(255, 255, 255, 0.2)"
         fill="none"
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
-        {...{ strokeWidth }}
+        {...{
+          strokeWidth, cx, cy, r,
+        }}
       />
       <AnimatedCircle
         stroke="url(#grad)"
         fill="none"
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
         strokeDasharray={`${circumference}, ${circumference}`}
-        {...{ strokeDashoffset, strokeWidth }}
+        {...{
+          strokeDashoffset, strokeWidth, cx, cy, r,
+        }}
       />
     </Svg>
   );
