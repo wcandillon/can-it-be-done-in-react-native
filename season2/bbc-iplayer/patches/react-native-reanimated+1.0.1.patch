@@ -1,0 +1,25 @@
+diff --git a/node_modules/react-native-reanimated/react-native-reanimated.d.ts b/node_modules/react-native-reanimated/react-native-reanimated.d.ts
+index b1a0886..21cc8b8 100644
+--- a/node_modules/react-native-reanimated/react-native-reanimated.d.ts
++++ b/node_modules/react-native-reanimated/react-native-reanimated.d.ts
+@@ -113,8 +113,10 @@ declare module 'react-native-reanimated' {
+       toValue: Adaptable<number>;
+     }
+ 
++    type AnimatedTransform = { [P in keyof TransformStyle["transform"]]: Animated.Adaptable<TransformStyle["transform"][P]> };
++
+     type AnimateStyle<S extends object> = {
+-      [K in keyof S]: S[K] extends ReadonlyArray<any>
++      [K in keyof S]: K extends 'transform' ? AnimatedTransform : (S[K] extends ReadonlyArray<any>
+         ? ReadonlyArray<AnimateStyle<S[K][0]>>
+         : S[K] extends object
+           ? AnimateStyle<S[K]>
+@@ -123,7 +125,7 @@ declare module 'react-native-reanimated' {
+               | AnimatedNode<
+                   // allow `number` where `string` normally is to support colors
+                   S[K] extends string ? S[K] | number : S[K]
+-                >
++                >)
+     };
+ 
+     type AnimateProps<
