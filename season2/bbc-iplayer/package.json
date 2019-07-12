@@ -1,0 +1,36 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject",
+    "lint": "eslint App.tsx components/*",
+    "tsc": "tsc",
+    "postinstall": "patch-package"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^10.0.2",
+    "expo": "^33.0.0",
+    "expo-asset": "^5.0.1",
+    "expo-linear-gradient": "~5.0.1",
+    "react": "16.8.3",
+    "react-dom": "^16.8.6",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-gesture-handler": "~1.2.1",
+    "react-native-reanimated": "1.0.1",
+    "react-native-redash": "6.3.3",
+    "react-native-web": "^0.11.4"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.19",
+    "@types/react-native": "^0.57.60",
+    "babel-preset-expo": "^5.1.1",
+    "eslint": "^6.0.0",
+    "eslint-config-react-native-wcandillon": "2.0.0",
+    "patch-package": "^6.1.2",
+    "typescript": "^3.4.5"
+  },
+  "private": true
+}
