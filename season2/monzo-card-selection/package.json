@@ -13,7 +13,7 @@
     "@expo/vector-icons": "^9.0.0",
     "expo": "^33.0.0",
     "expo-asset": "^5.0.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
