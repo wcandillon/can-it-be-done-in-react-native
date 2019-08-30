@@ -1,7 +1,11 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  RectButton,
+  State
+} from "react-native-gesture-handler";
 import { clamp, onGestureEvent, withSpring } from "react-native-redash";
 
 const { height } = Dimensions.get("window");
@@ -27,6 +31,14 @@ const styles = StyleSheet.create({
   playerSheet: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "cyan"
+  },
+  navigation: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 50,
+    backgroundColor: "blue"
   }
 });
 
@@ -52,10 +64,20 @@ export default () => {
     SNAP_BOTTOM
   );
   return (
-    <PanGestureHandler {...gestureHandler}>
-      <Animated.View
-        style={[styles.playerSheet, { transform: [{ translateY }] }]}
-      />
-    </PanGestureHandler>
+    <>
+      <PanGestureHandler {...gestureHandler}>
+        <Animated.View
+          style={[styles.playerSheet, { transform: [{ translateY }] }]}
+        />
+      </PanGestureHandler>
+      <View style={styles.navigation}>
+        <RectButton>
+          <Text>Up</Text>
+        </RectButton>
+        <RectButton>
+          <Text>Down</Text>
+        </RectButton>
+      </View>
+    </>
   );
 };
