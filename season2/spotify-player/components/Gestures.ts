@@ -120,7 +120,12 @@ export const withSpring = (props: WithSpringParams) => {
         startClock(clock)
       ]),
       reSpring(clock, springState, config),
-      cond(springState.finished, [...snap, ...finishSpring])
+      cond(springState.finished, [
+        ...snap,
+        ...finishSpring,
+        set(state, State.UNDETERMINED),
+        set(value, 0)
+      ])
     ]),
     springState.position
   ]);

@@ -6,7 +6,7 @@ import {
   RectButton,
   State
 } from "react-native-gesture-handler";
-import { approximates, clamp, onGestureEvent } from "react-native-redash";
+import { onGestureEvent } from "react-native-redash";
 
 import { timing, withSpring } from "./AnimatedHelpers";
 
@@ -25,21 +25,13 @@ const {
   Clock,
   Value,
   cond,
-  eq,
   useCode,
   set,
   block,
   not,
   clockRunning,
-  add,
-  debug
+  add
 } = Animated;
-const withClamp = (
-  value: Animated.Node<number>,
-  state: Animated.Value<State>,
-  min: Animated.Adaptable<number>,
-  max: Animated.Adaptable<number>
-) => cond(eq(state, State.ACTIVE), clamp(value, min, max), value);
 
 const styles = StyleSheet.create({
   playerSheet: {
@@ -68,19 +60,26 @@ export default () => {
     translationY,
     velocityY
   });
-  const y = withSpring({
+  const translateY = withSpring({
     value: translationY,
     velocity: velocityY,
+    offset,
     state,
     snapPoints: [SNAP_TOP, SNAP_BOTTOM],
     config
   });
   const clock = new Clock();
-  const translateY = add(y, offset);
   useCode(
     block([
       cond(goUp, [
-        set(offset, timing({ clock, from: SNAP_BOTTOM, to: SNAP_TOP })),
+        set(
+          offset,
+          timing({
+            clock,
+            from: offset,
+            to: SNAP_TOP
+          })
+        ),
         cond(not(clockRunning(clock)), [set(goUp, 0)])
       ]),
       cond(goDown, [
@@ -88,7 +87,7 @@ export default () => {
           offset,
           timing({
             clock,
-            from: SNAP_TOP,
+            from: offset,
             to: SNAP_BOTTOM
           })
         ),
