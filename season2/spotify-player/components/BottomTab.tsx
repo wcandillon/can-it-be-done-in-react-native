@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import {
   PanGestureHandler,
@@ -7,12 +7,16 @@ import {
   State
 } from "react-native-gesture-handler";
 import { onGestureEvent } from "react-native-redash";
+import { getBottomSpace } from "react-native-iphone-x-helper";
 
 import { timing, withSpring } from "./AnimatedHelpers";
+import TabIcon from "./TabIcon";
 
 const { height } = Dimensions.get("window");
+const TABBAR_HEIGHT = getBottomSpace() + 50;
+const MINIMIZED_PLAYER_HEIGHT = 42;
 const SNAP_TOP = 0;
-const SNAP_BOTTOM = height - 128;
+const SNAP_BOTTOM = height - TABBAR_HEIGHT - MINIMIZED_PLAYER_HEIGHT;
 const config = {
   damping: 15,
   mass: 1,
@@ -21,30 +25,23 @@ const config = {
   restSpeedThreshold: 0.1,
   restDisplacementThreshold: 0.1
 };
-const {
-  Clock,
-  Value,
-  cond,
-  useCode,
-  set,
-  block,
-  not,
-  clockRunning,
-  add
-} = Animated;
+const { Clock, Value, cond, useCode, set, block, not, clockRunning } = Animated;
 
 const styles = StyleSheet.create({
   playerSheet: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "cyan"
   },
-  navigation: {
+  container: {
+    backgroundColor: "#272829",
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: 64,
-    backgroundColor: "blue"
+    height: TABBAR_HEIGHT,
+    flexDirection: "row",
+    borderTopColor: "black",
+    borderWidth: 1
   }
 });
 
@@ -52,7 +49,7 @@ export default () => {
   const translationY = new Value(0);
   const velocityY = new Value(0);
   const state = new Value(State.UNDETERMINED);
-  const offset = new Value(0);
+  const offset = new Value(SNAP_BOTTOM);
   const goUp = new Value(0);
   const goDown = new Value(0);
   const gestureHandler = onGestureEvent({
@@ -103,14 +100,15 @@ export default () => {
           style={[styles.playerSheet, { transform: [{ translateY }] }]}
         />
       </PanGestureHandler>
-      <View style={styles.navigation}>
-        <RectButton onPress={() => goUp.setValue(1)}>
-          <Text style={{ margin: 4, fontSize: 16 }}>Up</Text>
-        </RectButton>
-        <RectButton onPress={() => goDown.setValue(1)}>
-          <Text style={{ margin: 4, fontSize: 16 }}>Down</Text>
-        </RectButton>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <TabIcon name="home" label="Home" />
+        <TabIcon name="search" label="Search" />
+        <TabIcon
+          name="chevron-up"
+          label="Player"
+          onPress={() => goUp.setValue(1)}
+        />
+      </SafeAreaView>
     </>
   );
 };
