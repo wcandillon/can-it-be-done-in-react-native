@@ -8,6 +8,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 import { timing, withSpring } from "./AnimatedHelpers";
 import TabIcon from "./TabIcon";
 import Player from "./Player";
+import MiniPlayer from "./MiniPlayer";
 
 const { height } = Dimensions.get("window");
 const TABBAR_HEIGHT = getBottomSpace() + 50;
@@ -22,7 +23,18 @@ const config = {
   restSpeedThreshold: 0.1,
   restDisplacementThreshold: 0.1
 };
-const { Clock, Value, cond, useCode, set, block, not, clockRunning } = Animated;
+const {
+  Clock,
+  Value,
+  cond,
+  useCode,
+  set,
+  block,
+  not,
+  clockRunning,
+  interpolate,
+  Extrapolate
+} = Animated;
 
 const styles = StyleSheet.create({
   playerSheet: {
@@ -62,6 +74,24 @@ export default () => {
     snapPoints: [SNAP_TOP, SNAP_BOTTOM],
     config
   });
+  const translateBottomTab = interpolate(translateY, {
+    inputRange: [SNAP_TOP, SNAP_BOTTOM],
+    outputRange: [TABBAR_HEIGHT, 0],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const opacity = interpolate(translateY, {
+    inputRange: [SNAP_BOTTOM - MINIMIZED_PLAYER_HEIGHT, SNAP_BOTTOM],
+    outputRange: [0, 1],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const opacity2 = interpolate(translateY, {
+    inputRange: [
+      SNAP_BOTTOM - MINIMIZED_PLAYER_HEIGHT * 2,
+      SNAP_BOTTOM - MINIMIZED_PLAYER_HEIGHT
+    ],
+    outputRange: [0, 1],
+    extrapolate: Extrapolate.CLAMP
+  });
   const clock = new Clock();
   useCode(
     block([
@@ -97,17 +127,41 @@ export default () => {
           style={[styles.playerSheet, { transform: [{ translateY }] }]}
         >
           <Player onPress={() => goDown.setValue(1)} />
+          <Animated.View
+            pointerEvents="none"
+            style={{
+              opacity: opacity2,
+              backgroundColor: "#272829",
+              ...StyleSheet.absoluteFillObject
+            }}
+          />
+          <Animated.View
+            style={{
+              opacity,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: MINIMIZED_PLAYER_HEIGHT
+            }}
+          >
+            <MiniPlayer />
+          </Animated.View>
         </Animated.View>
       </PanGestureHandler>
-      <SafeAreaView style={styles.container}>
-        <TabIcon name="home" label="Home" />
-        <TabIcon name="search" label="Search" />
-        <TabIcon
-          name="chevron-up"
-          label="Player"
-          onPress={() => goUp.setValue(1)}
-        />
-      </SafeAreaView>
+      <Animated.View
+        style={{ transform: [{ translateY: translateBottomTab }] }}
+      >
+        <SafeAreaView style={styles.container}>
+          <TabIcon name="home" label="Home" />
+          <TabIcon name="search" label="Search" />
+          <TabIcon
+            name="chevron-up"
+            label="Player"
+            onPress={() => goUp.setValue(1)}
+          />
+        </SafeAreaView>
+      </Animated.View>
     </>
   );
 };
