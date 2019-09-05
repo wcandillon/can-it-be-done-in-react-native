@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { RectButton } from "react-native-gesture-handler";
-import { Feather as Icon } from "@expo/vector-icons";
+import { AntDesign, Feather as Icon } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -34,6 +34,31 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     width: width - 32,
     height: width - 32
+  },
+  metadata: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  song: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "white"
+  },
+  artist: {
+    color: "white"
+  },
+  slider: {
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    width: width - 32,
+    borderRadius: 2,
+    height: 4,
+    marginVertical: 16
+  },
+  controls: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center"
   }
 });
 
@@ -59,6 +84,21 @@ export default ({ onPress }: PlayerProps) => {
           </RectButton>
         </View>
         <Image source={require("../assets/thebay.jpg")} style={styles.cover} />
+        <View style={styles.metadata}>
+          <View>
+            <Text style={styles.song}>The Bay</Text>
+            <Text style={styles.artist}>Metronomy</Text>
+          </View>
+          <AntDesign name="heart" size={24} color="#55b661" />
+        </View>
+        <View style={styles.slider} />
+        <View style={styles.controls}>
+          <Icon name="shuffle" color="rgba(255, 255, 255, 0.5)" size={24} />
+          <AntDesign name="stepbackward" color="white" size={32} />
+          <AntDesign name="play" color="white" size={48} />
+          <AntDesign name="stepforward" color="white" size={32} />
+          <Icon name="repeat" color="rgba(255, 255, 255, 0.5)" size={24} />
+        </View>
       </View>
     </SafeAreaView>
   );
