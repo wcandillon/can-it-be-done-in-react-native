@@ -1,16 +1,13 @@
 import React from "react";
-import { Dimensions, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, SafeAreaView, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
-import {
-  PanGestureHandler,
-  RectButton,
-  State
-} from "react-native-gesture-handler";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { onGestureEvent } from "react-native-redash";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 
 import { timing, withSpring } from "./AnimatedHelpers";
 import TabIcon from "./TabIcon";
+import Player from "./Player";
 
 const { height } = Dimensions.get("window");
 const TABBAR_HEIGHT = getBottomSpace() + 50;
@@ -50,8 +47,8 @@ export default () => {
   const velocityY = new Value(0);
   const state = new Value(State.UNDETERMINED);
   const offset = new Value(SNAP_BOTTOM);
-  const goUp = new Value(0);
-  const goDown = new Value(0);
+  const goUp: Animated.Value<0 | 1> = new Value(0);
+  const goDown: Animated.Value<0 | 1> = new Value(0);
   const gestureHandler = onGestureEvent({
     state,
     translationY,
@@ -98,7 +95,9 @@ export default () => {
       <PanGestureHandler {...gestureHandler}>
         <Animated.View
           style={[styles.playerSheet, { transform: [{ translateY }] }]}
-        />
+        >
+          <Player onPress={() => goDown.setValue(1)} />
+        </Animated.View>
       </PanGestureHandler>
       <SafeAreaView style={styles.container}>
         <TabIcon name="home" label="Home" />

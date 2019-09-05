@@ -16,8 +16,6 @@ import { clamp, snapPoint } from "react-native-redash";
 const {
   Clock,
   Value,
-  debug,
-  onChange,
   event,
   add,
   block,
