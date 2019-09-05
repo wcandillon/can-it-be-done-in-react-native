@@ -12,6 +12,8 @@
   "dependencies": {
     "@expo/vector-icons": "^10.0.5",
     "expo": "^34.0.1",
+    "expo-asset": "~6.0.0",
+    "expo-font": "~6.0.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
