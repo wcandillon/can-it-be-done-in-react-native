@@ -144,7 +144,7 @@ export default () => {
               height: MINIMIZED_PLAYER_HEIGHT
             }}
           >
-            <MiniPlayer />
+            <MiniPlayer onPress={() => goUp.setValue(1)} />
           </Animated.View>
         </Animated.View>
       </PanGestureHandler>
