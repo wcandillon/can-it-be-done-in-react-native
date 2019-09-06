@@ -2,6 +2,7 @@ const StyleGuide = {
   spacing: 8,
   palette: {
     primary: "#3884ff",
+    secondary: "#ee6f85",
     backgroundPrimary: "#d5e5ff",
     background: "#f2f2f2",
     border: "#f2f2f2"

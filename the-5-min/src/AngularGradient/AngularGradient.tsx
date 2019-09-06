@@ -10,12 +10,13 @@ import Svg, {
   Stop
 } from "react-native-svg";
 import Animated from "react-native-reanimated";
+import { StyleGuide } from "../components";
 
 const { width } = Dimensions.get("window");
 const { PI, cos, sin } = Math;
 const { multiply, sub, Value } = Animated;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const colors = ["blue", "red"];
+const colors = [StyleGuide.palette.primary, StyleGuide.palette.secondary];
 const palette = interpolate(colors);
 const size = width * 0.8;
 const strokeWidth = 20;
@@ -46,10 +47,9 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const progress = new Value(0.5);
-  const transition = new Value(0.5);
+  const progress = new Value(0.3);
   const circumference = r * 2 * PI;
-  const α = multiply(sub(1, multiply(progress, transition)), PI * 2);
+  const α = multiply(sub(1, progress), PI * 2);
   const strokeDashoffset = sub(circumference, multiply(α, -r));
   return (
     <View style={styles.container}>
@@ -76,14 +76,18 @@ export default () => {
         >
           {arcs.map((d, key) => (
             <Path
+              fill="transparent"
               stroke={`url(#gradient-${key})`}
               {...{ strokeWidth, d, key }}
             />
           ))}
         </G>
         <AnimatedCircle
+          fill="transparent"
+          stroke="white"
           strokeDasharray={`${circumference}, ${circumference}`}
-          {...{ strokeWidth, strokeDashoffset, r, cx, cy }}
+          strokeWidth={strokeWidth + 1}
+          {...{ strokeDashoffset, r, cx, cy }}
         />
       </Svg>
     </View>
