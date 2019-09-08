@@ -21,9 +21,7 @@ const AppNavigator = createAppContainer(
       },
       Things: {
         screen: Things,
-        navigationOptions: {
-          title: "Things"
-        }
+        navigationOptions: { title: "Things" }
       }
     },
     {
