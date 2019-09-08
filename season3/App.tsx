@@ -12,16 +12,16 @@ const assets: number[] = [...episodes.map(episode => episode.icon)];
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Things: {
+        screen: Things,
+        navigationOptions: { title: "Things" }
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
           title: "Can it be done in React Native?",
           headerBackTitle: null
         }
-      },
-      Things: {
-        screen: Things,
-        navigationOptions: { title: "Things" }
       }
     },
     {
