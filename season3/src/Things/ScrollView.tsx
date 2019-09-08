@@ -1,12 +1,16 @@
 import React, { ReactNode, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { onGestureEvent, withDecay } from "react-native-redash";
 import { useMemoOne } from "use-memo-one";
 
 const { Value, diffClamp } = Animated;
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
 interface ScrollViewProps {
   children: ReactNode;
 }
@@ -41,7 +45,7 @@ export default ({ children }: ScrollViewProps) => {
   const translateY = diffClamp(decay, lowerBound, 0);
   return (
     <View
-      style={{ flex: 1 }}
+      style={styles.container}
       onLayout={({
         nativeEvent: {
           layout: { height }

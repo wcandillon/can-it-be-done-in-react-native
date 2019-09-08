@@ -7,7 +7,8 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint --ext .js,.ts,.tsx .",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.5",
@@ -34,6 +35,7 @@
     "babel-preset-expo": "^6.0.0",
     "eslint": "^6.3.0",
     "eslint-config-react-native-wcandillon": "^2.1.0",
+    "patch-package": "^6.1.4",
     "typescript": "^3.4.5"
   },
   "private": true
