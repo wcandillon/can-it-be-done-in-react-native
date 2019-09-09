@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { useMemoOne } from "use-memo-one";
-import { snapPoint } from "react-native-redash";
+import { clamp, snapPoint } from "react-native-redash";
 import { panGestureHandlerWithY } from "../components/AnimationHelpers";
 
 const {
@@ -54,8 +54,10 @@ function damping(dt, velocity, mass = 1, damping = 12) {
   return set(velocity, add(velocity, multiply(dt, acc)));
 }
 
-const decay = (dt, position, velocity) => {
-  return block([]);
+const decay = (dt, velocity, deceleration = 0.997) => {
+  const kv = pow(deceleration, multiply(dt, 1000));
+  const v = multiply(velocity, kv);
+  return block([debug("velocity", v), set(velocity, v)]);
 };
 
 const gravity = (dt, position, velocity, anchor, gravityCenter) => {
@@ -92,6 +94,7 @@ interface WithScrollParams {
 function withScroll({
   value,
   state,
+  velocity: gestureVelocity,
   upperBound,
   lowerBound
 }: WithScrollParams) {
@@ -115,7 +118,7 @@ function withScroll({
         set(offset, add(start, value)),
         cond(
           isInBound(offset),
-          set(position, offset),
+          [set(position, offset)],
           gravity(
             dt,
             position,
@@ -126,17 +129,23 @@ function withScroll({
         )
       ],
       [
-        set(dragging, 0),
-        set(velocity, 0),
-        cond(isInBound(position), decay(dt, position, velocity), [
-          spring(
-            dt,
-            position,
-            velocity,
-            cond(greaterThan(offset, upperBound), upperBound, lowerBound)
-          ),
-          damping(dt, velocity)
-        ])
+        cond(eq(dragging, 1), [
+          set(velocity, gestureVelocity),
+          set(dragging, 0)
+        ]),
+        cond(
+          isInBound(position),
+          [decay(dt, velocity)],
+          [
+            spring(
+              dt,
+              position,
+              velocity,
+              cond(greaterThan(offset, upperBound), upperBound, lowerBound)
+            ),
+            damping(dt, velocity)
+          ]
+        )
       ]
     ),
     set(position, add(position, multiply(velocity, dt)))
