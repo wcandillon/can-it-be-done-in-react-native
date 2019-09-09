@@ -43,6 +43,30 @@ const styles = StyleSheet.create({
   }
 });
 
+function spring(dt, position, velocity, anchor, mass = 1, tension = 300) {
+  const dist = sub(position, anchor);
+  const acc = divide(multiply(-1, tension, dist), mass);
+  return set(velocity, add(velocity, multiply(dt, acc)));
+}
+
+function damping(dt, velocity, mass = 1, damping = 12) {
+  const acc = divide(multiply(-1, damping, velocity), mass);
+  return set(velocity, add(velocity, multiply(dt, acc)));
+}
+
+const decay = (dt, position, velocity) => {
+  return block([]);
+};
+
+const gravity = (dt, position, velocity, anchor, gravityCenter) => {
+  return block([
+    spring(dt, position, velocity, anchor),
+    damping(dt, velocity),
+    spring(dt, position, velocity, gravityCenter),
+    damping(dt, velocity)
+  ]);
+};
+
 interface WithScrollParams {
   value: Animated.Adaptable<number>;
   velocity: Animated.Adaptable<number>;
@@ -50,49 +74,6 @@ interface WithScrollParams {
   lowerBound: number;
   upperBound: number;
 }
-
-const EPS = 1e-3;
-const EMPTY_FRAMES_THRESHOLDS = 5;
-
-function stopWhenNeeded(dt, position, velocity, clock) {
-  const ds = diff(position);
-  const noMovementFrames = new Value(0);
-
-  return cond(
-    lessThan(abs(ds), EPS),
-    [
-      set(noMovementFrames, add(noMovementFrames, 1)),
-      cond(
-        greaterThan(noMovementFrames, EMPTY_FRAMES_THRESHOLDS),
-        stopClock(clock)
-      )
-    ],
-    set(noMovementFrames, 0)
-  );
-}
-
-const spring = (
-  dt: Animated.Adaptable<number>,
-  position: Animated.Adaptable<number>,
-  velocity: Animated.Value<number>,
-  anchor: Animated.Adaptable<number>,
-  mass: number = 1,
-  tension: number = 300
-) => {
-  const dist = sub(position, anchor);
-  const acc = divide(multiply(-1, tension, dist), mass);
-  return set(velocity, add(velocity, multiply(dt, acc)));
-};
-
-const damping = (
-  dt: Animated.Adaptable<number>,
-  velocity: Animated.Value<number>,
-  mass: number = 1,
-  damp: number = 12
-) => {
-  const acc = divide(multiply(-1, damp, velocity), mass);
-  return set(velocity, add(velocity, multiply(dt, acc)));
-};
 
 /*
 
@@ -104,6 +85,7 @@ const damping = (
 2. When the gesture becomes inactive, draggin = 0
 3. If the finger position (offset + value) is within lowerBound and upperBound position = offset + value
 4. If offset + value > upperBound or offset + value < lowerBound, we add gravity to the translation
+
 5. When the gesture becomes inactive and is in bound: decay. Decay must not go outside the bounds
 6. When the gesture  becomes inactive and is outside the bounds: spring to the corresponding bound
 */
@@ -131,9 +113,31 @@ function withScroll({
       [
         cond(dragging, 0, [set(dragging, 1), set(start, position)]),
         set(offset, add(start, value)),
-        cond(isInBound(offset), set(position, offset))
+        cond(
+          isInBound(offset),
+          set(position, offset),
+          gravity(
+            dt,
+            position,
+            velocity,
+            offset,
+            cond(greaterThan(offset, upperBound), upperBound, lowerBound)
+          )
+        )
       ],
-      [set(dragging, 0)]
+      [
+        set(dragging, 0),
+        set(velocity, 0),
+        cond(isInBound(position), decay(dt, position, velocity), [
+          spring(
+            dt,
+            position,
+            velocity,
+            cond(greaterThan(offset, upperBound), upperBound, lowerBound)
+          ),
+          damping(dt, velocity)
+        ])
+      ]
     ),
     set(position, add(position, multiply(velocity, dt)))
   ]);
