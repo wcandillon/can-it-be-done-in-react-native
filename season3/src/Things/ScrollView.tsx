@@ -51,6 +51,26 @@ interface WithScrollParams {
   upperBound: number;
 }
 
+const EPS = 1e-3;
+const EMPTY_FRAMES_THRESHOLDS = 5;
+
+function stopWhenNeeded(dt, position, velocity, clock) {
+  const ds = diff(position);
+  const noMovementFrames = new Value(0);
+
+  return cond(
+    lessThan(abs(ds), EPS),
+    [
+      set(noMovementFrames, add(noMovementFrames, 1)),
+      cond(
+        greaterThan(noMovementFrames, EMPTY_FRAMES_THRESHOLDS),
+        stopClock(clock)
+      )
+    ],
+    set(noMovementFrames, 0)
+  );
+}
+
 const spring = (
   dt: Animated.Adaptable<number>,
   position: Animated.Adaptable<number>,
@@ -74,40 +94,49 @@ const damping = (
   return set(velocity, add(velocity, multiply(dt, acc)));
 };
 
-function withScroll({ value, state }: WithScrollParams) {
+/*
+
+  const lowerBound = -1 * (contentHeight - containerHeight);
+  const upperBound = 0;
+
+0. Start clock
+1. When the gesture becomes active, we keep the dragging = 1, offset = position
+2. When the gesture becomes inactive, draggin = 0
+3. If the finger position (offset + value) is within lowerBound and upperBound position = offset + value
+4. If offset + value > upperBound or offset + value < lowerBound, we add gravity to the translation
+5. When the gesture becomes inactive and is in bound: decay. Decay must not go outside the bounds
+6. When the gesture  becomes inactive and is outside the bounds: spring to the corresponding bound
+*/
+function withScroll({
+  value,
+  state,
+  upperBound,
+  lowerBound
+}: WithScrollParams) {
   const dragging = new Value(0);
   const start = new Value(0);
   const position = new Value(0);
-  const anchor = new Value(0);
+  const offset = new Value(0);
   const velocity = new Value(0);
 
   const clock = new Clock();
   const dt = divide(diff(clock), 1000);
+  const isInBound = (v: Animated.Node<number>) =>
+    and(lessOrEq(v, upperBound), greaterOrEq(v, lowerBound));
 
-  return cond(
-    eq(state, State.ACTIVE),
-    [
-      cond(dragging, 0, [set(dragging, 1), set(start, position)]),
-      set(anchor, add(start, value)),
-
-      // spring attached to pan gesture "anchor"
-      spring(dt, position, velocity, anchor),
-      damping(dt, velocity),
-
-      // spring attached to the center position (0)
-      spring(dt, position, velocity, 0),
-      damping(dt, velocity),
-
-      set(position, add(position, multiply(velocity, dt)))
-    ],
-    [
-      set(dragging, 0),
-      startClock(clock),
-      spring(dt, position, velocity, 0),
-      damping(dt, velocity),
-      set(position, add(position, multiply(velocity, dt)))
-    ]
-  );
+  return block([
+    startClock(clock),
+    cond(
+      eq(state, State.ACTIVE),
+      [
+        cond(dragging, 0, [set(dragging, 1), set(start, position)]),
+        set(offset, add(start, value)),
+        cond(isInBound(offset), set(position, offset))
+      ],
+      [set(dragging, 0)]
+    ),
+    set(position, add(position, multiply(velocity, dt)))
+  ]);
 }
 
 interface ScrollViewProps {
