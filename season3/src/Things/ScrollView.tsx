@@ -3,22 +3,14 @@ import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { useMemoOne } from "use-memo-one";
-import { clamp, snapPoint } from "react-native-redash";
 import { panGestureHandlerWithY } from "../components/AnimationHelpers";
 
 const {
   Value,
   Clock,
   eq,
-  stopClock,
   startClock,
-  not,
-  decay: reDecay,
-  spring: reSpring,
-  clockRunning,
   set,
-  neq,
-  diffClamp,
   multiply,
   add,
   and,
@@ -31,9 +23,6 @@ const {
   pow,
   block,
   debug,
-  exp,
-  abs,
-  lessThan,
   greaterThan
 } = Animated;
 
@@ -43,24 +32,46 @@ const styles = StyleSheet.create({
   }
 });
 
-function spring(dt, position, velocity, anchor, mass = 1, tension = 300) {
+function spring(
+  dt: Animated.Node<number>,
+  position: Animated.Adaptable<number>,
+  velocity: Animated.Value<number>,
+  anchor: Animated.Adaptable<number>,
+  mass: number = 1,
+  tension: number = 300
+) {
   const dist = sub(position, anchor);
   const acc = divide(multiply(-1, tension, dist), mass);
   return set(velocity, add(velocity, multiply(dt, acc)));
 }
 
-function damping(dt, velocity, mass = 1, damping = 12) {
-  const acc = divide(multiply(-1, damping, velocity), mass);
+const damping = (
+  dt: Animated.Node<number>,
+  velocity: Animated.Value<number>,
+  mass: number = 1,
+  coefficient: number = 12
+) => {
+  const acc = divide(multiply(-1, coefficient, velocity), mass);
   return set(velocity, add(velocity, multiply(dt, acc)));
-}
+};
 
-const decay = (dt, velocity, deceleration = 0.997) => {
+const decay = (
+  dt: Animated.Node<number>,
+  velocity: Animated.Value<number>,
+  deceleration: number = 0.997
+) => {
   const kv = pow(deceleration, multiply(dt, 1000));
   const v = multiply(velocity, kv);
   return block([debug("velocity", v), set(velocity, v)]);
 };
 
-const gravity = (dt, position, velocity, anchor, gravityCenter) => {
+const gravity = (
+  dt: Animated.Node<number>,
+  position: Animated.Adaptable<number>,
+  velocity: Animated.Value<number>,
+  anchor: Animated.Adaptable<number>,
+  gravityCenter: Animated.Adaptable<number>
+) => {
   return block([
     spring(dt, position, velocity, anchor),
     damping(dt, velocity),
@@ -87,9 +98,8 @@ interface WithScrollParams {
 2. When the gesture becomes inactive, draggin = 0
 3. If the finger position (offset + value) is within lowerBound and upperBound position = offset + value
 4. If offset + value > upperBound or offset + value < lowerBound, we add gravity to the translation
-
-5. When the gesture becomes inactive and is in bound: decay. Decay must not go outside the bounds
-6. When the gesture  becomes inactive and is outside the bounds: spring to the corresponding bound
+5. When the gesture  becomes inactive and is outside the bounds: spring to the corresponding bound
+6. Springing should rest at position and not trigger any decay
 */
 function withScroll({
   value,
@@ -109,6 +119,7 @@ function withScroll({
   const isInBound = (v: Animated.Node<number>) =>
     and(lessOrEq(v, upperBound), greaterOrEq(v, lowerBound));
 
+  const newPosition = add(position, multiply(velocity, dt));
   return block([
     startClock(clock),
     cond(
@@ -135,7 +146,15 @@ function withScroll({
         ]),
         cond(
           isInBound(position),
-          [decay(dt, velocity)],
+          [
+            decay(dt, velocity)
+            /*
+            cond(not(isInBound(newPosition)), [
+              set(velocity, 0),
+              set(position, diffClamp(newPosition, lowerBound, upperBound))
+            ])
+            */
+          ],
           [
             spring(
               dt,
@@ -148,7 +167,7 @@ function withScroll({
         )
       ]
     ),
-    set(position, add(position, multiply(velocity, dt)))
+    set(position, newPosition)
   ]);
 }
 
