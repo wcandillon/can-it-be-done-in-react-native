@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { useMemoOne } from "use-memo-one";
+import { snapPoint } from "react-native-redash";
 import { panGestureHandlerWithY } from "../components/AnimationHelpers";
 
 const {
@@ -89,10 +90,6 @@ interface WithScrollParams {
 }
 
 /*
-
-  const lowerBound = -1 * (contentHeight - containerHeight);
-  const upperBound = 0;
-
 0. Start clock
 1. When the gesture becomes active, we keep the dragging = 1, offset = position
 2. When the gesture becomes inactive, draggin = 0
@@ -146,21 +143,13 @@ function withScroll({
         ]),
         cond(
           isInBound(position),
-          [
-            decay(dt, velocity)
-            /*
-            cond(not(isInBound(newPosition)), [
-              set(velocity, 0),
-              set(position, diffClamp(newPosition, lowerBound, upperBound))
-            ])
-            */
-          ],
+          [decay(dt, velocity)],
           [
             spring(
               dt,
               position,
               velocity,
-              cond(greaterThan(offset, upperBound), upperBound, lowerBound)
+              snapPoint(position, velocity, [lowerBound, upperBound])
             ),
             damping(dt, velocity)
           ]
