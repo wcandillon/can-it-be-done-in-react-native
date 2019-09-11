@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions, SafeAreaView, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { onGestureEvent, timing, withSpring } from "react-native-redash";
+import { clamp, onGestureEvent, timing, withSpring } from "react-native-redash";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 
 import TabIcon from "./TabIcon";
@@ -65,14 +65,18 @@ export default () => {
     translationY,
     velocityY
   });
-  const translateY = withSpring({
-    value: translationY,
-    velocity: velocityY,
-    offset,
-    state,
-    snapPoints: [SNAP_TOP, SNAP_BOTTOM],
-    config
-  });
+  const translateY = clamp(
+    withSpring({
+      value: translationY,
+      velocity: velocityY,
+      offset,
+      state,
+      snapPoints: [SNAP_TOP, SNAP_BOTTOM],
+      config
+    }),
+    SNAP_TOP,
+    SNAP_BOTTOM
+  );
   const translateBottomTab = interpolate(translateY, {
     inputRange: [SNAP_TOP, SNAP_BOTTOM],
     outputRange: [TABBAR_HEIGHT, 0],
