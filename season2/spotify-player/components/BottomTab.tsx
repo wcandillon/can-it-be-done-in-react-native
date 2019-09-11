@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions, SafeAreaView, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { onGestureEvent, timing, withSpring } from "react-native-redash";
+import { clamp, onGestureEvent, timing, withSpring } from "react-native-redash";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 
 import TabIcon from "./TabIcon";
@@ -32,6 +32,7 @@ const {
   not,
   clockRunning,
   interpolate,
+  diffClamp,
   Extrapolate
 } = Animated;
 
@@ -66,7 +67,7 @@ export default () => {
     velocityY
   });
   const translateY = withSpring({
-    value: translationY,
+    value: clamp(translationY, SNAP_TOP, SNAP_BOTTOM),
     velocity: velocityY,
     offset,
     state,
