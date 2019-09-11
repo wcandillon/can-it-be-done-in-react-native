@@ -32,6 +32,7 @@ const {
   not,
   clockRunning,
   interpolate,
+  diffClamp,
   Extrapolate
 } = Animated;
 
@@ -65,18 +66,14 @@ export default () => {
     translationY,
     velocityY
   });
-  const translateY = clamp(
-    withSpring({
-      value: translationY,
-      velocity: velocityY,
-      offset,
-      state,
-      snapPoints: [SNAP_TOP, SNAP_BOTTOM],
-      config
-    }),
-    SNAP_TOP,
-    SNAP_BOTTOM
-  );
+  const translateY = withSpring({
+    value: clamp(translationY, SNAP_TOP, SNAP_BOTTOM),
+    velocity: velocityY,
+    offset,
+    state,
+    snapPoints: [SNAP_TOP, SNAP_BOTTOM],
+    config
+  });
   const translateBottomTab = interpolate(translateY, {
     inputRange: [SNAP_TOP, SNAP_BOTTOM],
     outputRange: [TABBAR_HEIGHT, 0],
