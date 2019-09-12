@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { useMemoOne } from "use-memo-one";
@@ -20,19 +20,32 @@ const {
   decay,
   block,
   not,
-  spring
+  spring,
+  diff,
+  lessThan,
+  abs,
+  debug,
+  greaterThan,
+  multiply,
+  divide,
+  sqrt,
+  sub
 } = Animated;
 
+const { height } = Dimensions.get("window");
+// C could have any value (just depending on how sensitive you want the overscroll to be)
+// Here I make it relative to the height of the screen 🤷🏼‍♂️
+const C = height / 100;
 const styles = StyleSheet.create({
   container: {
     flex: 1
   }
 });
 const baseSpringConfig = {
-  damping: 15,
+  damping: 40,
   mass: 1,
   stiffness: 150,
-  overshootClamping: false,
+  overshootClamping: true,
   restSpeedThreshold: 0.1,
   restDisplacementThreshold: 0.1
 };
@@ -77,10 +90,6 @@ function withScroll({
   const isInBound = (v: Animated.Node<number>) =>
     and(lessOrEq(v, upperBound), greaterOrEq(v, lowerBound));
 
-  const inertiaSpring = spring(clock, state, {
-    toValue: offset,
-    ...baseSpringConfig
-  });
   const restingSpring = spring(clock, state, {
     toValue: snapPoint(state.position, state.velocity, [
       lowerBound,
@@ -88,9 +97,9 @@ function withScroll({
     ]),
     ...baseSpringConfig
   });
+
   return block([
     startClock(clock),
-    set(state.finished, 0),
     cond(
       eq(gestureState, State.ACTIVE),
       [
@@ -98,8 +107,17 @@ function withScroll({
         set(offset, add(start, value)),
         cond(
           isInBound(offset),
-          [set(state.position, offset)], // [set(velocity, divide(sub(offset, position), dt))],
-          [inertiaSpring, restingSpring]
+          [set(state.position, offset), set(state.velocity, offset)],
+          [
+            set(
+              state.position,
+              cond(
+                greaterOrEq(offset, 0),
+                multiply(offset, divide(C, sqrt(abs(offset)))),
+                offset
+              )
+            )
+          ]
         )
       ],
       [
