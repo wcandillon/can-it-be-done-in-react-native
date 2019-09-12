@@ -22,6 +22,7 @@ const {
   diff,
   sub,
   pow,
+  decay,
   block,
   not,
   greaterThan
@@ -56,16 +57,6 @@ const damping = (
   return set(velocity, add(velocity, multiply(dt, acc)));
 };
 
-const decay = (
-  dt: Animated.Node<number>,
-  velocity: Animated.Value<number>,
-  deceleration: number = 0.997
-) => {
-  const kv = pow(deceleration, multiply(dt, 1000));
-  const v = multiply(velocity, kv);
-  return set(velocity, v);
-};
-
 interface WithScrollParams {
   value: Animated.Adaptable<number>;
   velocity: Animated.Adaptable<number>;
@@ -86,7 +77,7 @@ interface WithScrollParams {
 */
 function withScroll({
   value,
-  state,
+  state: gestureState,
   velocity: gestureVelocity,
   upperBound,
   lowerBound
@@ -95,30 +86,35 @@ function withScroll({
   const start = new Value(0);
   const position = new Value(0);
   const offset = new Value(0);
-  const velocity = new Value(0);
   const isSpringing = new Value(0);
 
   const clock = new Clock();
+  const state = {
+    finished: new Value(0),
+    velocity: new Value(0),
+    position: new Value(0),
+    time: new Value(0)
+  };
   const dt = divide(diff(clock), 1000);
   const isInBound = (v: Animated.Node<number>) =>
     and(lessOrEq(v, upperBound), greaterOrEq(v, lowerBound));
   const inertiaSpring = block([
-    spring(dt, position, velocity, offset),
-    damping(dt, velocity)
+    spring(dt, position, state.velocity, offset),
+    damping(dt, state.velocity)
   ]);
   const restingSpring = block([
     spring(
       dt,
       position,
-      velocity,
-      snapPoint(position, velocity, [lowerBound, upperBound])
+      state.velocity,
+      snapPoint(position, state.velocity, [lowerBound, upperBound])
     ),
-    damping(dt, velocity)
+    damping(dt, state.velocity)
   ]);
   return block([
     startClock(clock),
     cond(
-      eq(state, State.ACTIVE),
+      eq(gestureState, State.ACTIVE),
       [
         cond(dragging, 0, [set(dragging, 1), set(start, position)]),
         set(offset, add(start, value)),
@@ -130,18 +126,18 @@ function withScroll({
       ],
       [
         cond(eq(dragging, 1), [
-          set(velocity, gestureVelocity),
+          set(state.velocity, gestureVelocity),
           set(dragging, 0),
           set(isSpringing, 0)
         ]),
         cond(
           and(isInBound(position), not(isSpringing)),
-          [decay(dt, velocity)],
+          [decay(clock, state, { deceleration: 0.997 })],
           [set(isSpringing, 1), restingSpring]
         )
       ]
     ),
-    set(position, add(position, multiply(velocity, dt)))
+    set(position, add(position, multiply(state.velocity, dt)))
   ]);
 }
 
