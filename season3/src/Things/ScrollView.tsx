@@ -66,14 +66,9 @@ const decay = (
   return set(velocity, v);
 };
 
-const gravity = (
-  dt: Animated.Node<number>,
-  position: Animated.Adaptable<number>,
-  velocity: Animated.Value<number>,
-  anchor: Animated.Adaptable<number>,
-  gravityCenter: Animated.Adaptable<number>
-) => {
-  return block([spring(dt, position, velocity, anchor), damping(dt, velocity)]);
+const gravity = (dt, position, velocity, anchor) => {
+  const acc = divide(1, pow(sub(anchor, position), 2));
+  return set(velocity, add(velocity, multiply(dt, acc)));
 };
 
 interface WithScrollParams {
