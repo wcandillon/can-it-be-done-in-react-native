@@ -111,16 +111,14 @@ function withScroll({
           [
             set(
               state.position,
-              cond(
-                greaterOrEq(offset, 0),
-                multiply(offset, divide(C, sqrt(offset))),
-                sub(
-                  offset,
-                  multiply(
-                    -1,
-                    sub(abs(offset), abs(lowerBound)),
-                    divide(C, sqrt(abs(offset)))
-                  )
+              sub(
+                offset,
+                multiply(
+                  sub(
+                    offset,
+                    cond(greaterOrEq(offset, 0), upperBound, lowerBound)
+                  ),
+                  divide(C, sqrt(abs(offset)))
                 )
               )
             )
