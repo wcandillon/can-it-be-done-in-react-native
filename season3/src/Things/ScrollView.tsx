@@ -73,12 +73,7 @@ const gravity = (
   anchor: Animated.Adaptable<number>,
   gravityCenter: Animated.Adaptable<number>
 ) => {
-  return block([
-    spring(dt, position, velocity, anchor),
-    damping(dt, velocity),
-    spring(dt, position, velocity, gravityCenter),
-    damping(dt, velocity)
-  ]);
+  return block([spring(dt, position, velocity, anchor), damping(dt, velocity)]);
 };
 
 interface WithScrollParams {
@@ -117,8 +112,19 @@ function withScroll({
   const dt = divide(diff(clock), 1000);
   const isInBound = (v: Animated.Node<number>) =>
     and(lessOrEq(v, upperBound), greaterOrEq(v, lowerBound));
-
-  const newPosition = add(position, multiply(velocity, dt));
+  const offsetSpring = block([
+    spring(dt, position, velocity, offset),
+    damping(dt, velocity)
+  ]);
+  const overScrollSpring = block([
+    spring(
+      dt,
+      position,
+      velocity,
+      snapPoint(position, velocity, [lowerBound, upperBound])
+    ),
+    damping(dt, velocity)
+  ]);
   return block([
     startClock(clock),
     cond(
@@ -129,13 +135,7 @@ function withScroll({
         cond(
           isInBound(offset),
           [set(position, offset)],
-          gravity(
-            dt,
-            position,
-            velocity,
-            offset,
-            cond(greaterThan(offset, upperBound), upperBound, lowerBound)
-          )
+          [offsetSpring, overScrollSpring]
         )
       ],
       [
@@ -147,20 +147,11 @@ function withScroll({
         cond(
           and(isInBound(position), not(isSpringing)),
           [decay(dt, velocity)],
-          [
-            set(isSpringing, 1),
-            spring(
-              dt,
-              position,
-              velocity,
-              snapPoint(position, velocity, [lowerBound, upperBound])
-            ),
-            damping(dt, velocity)
-          ]
+          [set(isSpringing, 1), overScrollSpring]
         )
       ]
     ),
-    set(position, newPosition)
+    set(position, add(position, multiply(velocity, dt)))
   ]);
 }
 
