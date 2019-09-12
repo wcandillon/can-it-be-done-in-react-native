@@ -12,20 +12,15 @@ const {
   eq,
   startClock,
   set,
-  multiply,
   add,
   and,
   greaterOrEq,
   lessOrEq,
   cond,
-  divide,
-  diff,
-  sub,
-  pow,
   decay,
   block,
   not,
-  greaterThan
+  spring
 } = Animated;
 
 const styles = StyleSheet.create({
@@ -33,28 +28,13 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
-
-function spring(
-  dt: Animated.Node<number>,
-  position: Animated.Adaptable<number>,
-  velocity: Animated.Value<number>,
-  anchor: Animated.Adaptable<number>,
-  mass: number = 1,
-  tension: number = 300
-) {
-  const dist = sub(position, anchor);
-  const acc = divide(multiply(-1, tension, dist), mass);
-  return set(velocity, add(velocity, multiply(dt, acc)));
-}
-
-const damping = (
-  dt: Animated.Node<number>,
-  velocity: Animated.Value<number>,
-  mass: number = 1,
-  coefficient: number = 12
-) => {
-  const acc = divide(multiply(-1, coefficient, velocity), mass);
-  return set(velocity, add(velocity, multiply(dt, acc)));
+const baseSpringConfig = {
+  damping: 15,
+  mass: 1,
+  stiffness: 150,
+  overshootClamping: false,
+  restSpeedThreshold: 0.1,
+  restDisplacementThreshold: 0.1
 };
 
 interface WithScrollParams {
@@ -84,7 +64,6 @@ function withScroll({
 }: WithScrollParams) {
   const dragging = new Value(0);
   const start = new Value(0);
-  const position = new Value(0);
   const offset = new Value(0);
   const isSpringing = new Value(0);
 
@@ -95,32 +74,31 @@ function withScroll({
     position: new Value(0),
     time: new Value(0)
   };
-  const dt = divide(diff(clock), 1000);
   const isInBound = (v: Animated.Node<number>) =>
     and(lessOrEq(v, upperBound), greaterOrEq(v, lowerBound));
-  const inertiaSpring = block([
-    spring(dt, position, state.velocity, offset),
-    damping(dt, state.velocity)
-  ]);
-  const restingSpring = block([
-    spring(
-      dt,
-      position,
-      state.velocity,
-      snapPoint(position, state.velocity, [lowerBound, upperBound])
-    ),
-    damping(dt, state.velocity)
-  ]);
+
+  const inertiaSpring = spring(clock, state, {
+    toValue: offset,
+    ...baseSpringConfig
+  });
+  const restingSpring = spring(clock, state, {
+    toValue: snapPoint(state.position, state.velocity, [
+      lowerBound,
+      upperBound
+    ]),
+    ...baseSpringConfig
+  });
   return block([
     startClock(clock),
+    set(state.finished, 0),
     cond(
       eq(gestureState, State.ACTIVE),
       [
-        cond(dragging, 0, [set(dragging, 1), set(start, position)]),
+        cond(dragging, 0, [set(dragging, 1), set(start, state.position)]),
         set(offset, add(start, value)),
         cond(
           isInBound(offset),
-          [set(position, offset)], // [set(velocity, divide(sub(offset, position), dt))],
+          [set(state.position, offset)], // [set(velocity, divide(sub(offset, position), dt))],
           [inertiaSpring, restingSpring]
         )
       ],
@@ -131,13 +109,13 @@ function withScroll({
           set(isSpringing, 0)
         ]),
         cond(
-          and(isInBound(position), not(isSpringing)),
+          and(isInBound(state.position), not(isSpringing)),
           [decay(clock, state, { deceleration: 0.997 })],
           [set(isSpringing, 1), restingSpring]
         )
       ]
     ),
-    set(position, add(position, multiply(state.velocity, dt)))
+    state.position
   ]);
 }
 
