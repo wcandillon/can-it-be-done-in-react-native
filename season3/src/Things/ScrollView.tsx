@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { useMemoOne } from "use-memo-one";
@@ -24,7 +24,10 @@ const {
   pow,
   block,
   not,
-  greaterThan
+  sqrt,
+  greaterThan,
+  debug,
+  exp
 } = Animated;
 
 const styles = StyleSheet.create({
@@ -64,21 +67,6 @@ const decay = (
   const kv = pow(deceleration, multiply(dt, 1000));
   const v = multiply(velocity, kv);
   return set(velocity, v);
-};
-
-const gravity = (
-  dt: Animated.Node<number>,
-  position: Animated.Adaptable<number>,
-  velocity: Animated.Value<number>,
-  anchor: Animated.Adaptable<number>,
-  gravityCenter: Animated.Adaptable<number>
-) => {
-  return block([
-    spring(dt, position, velocity, anchor),
-    damping(dt, velocity),
-    spring(dt, position, velocity, gravityCenter),
-    damping(dt, velocity)
-  ]);
 };
 
 interface WithScrollParams {
@@ -129,13 +117,7 @@ function withScroll({
         cond(
           isInBound(offset),
           [set(position, offset)],
-          gravity(
-            dt,
-            position,
-            velocity,
-            offset,
-            cond(greaterThan(offset, upperBound), upperBound, lowerBound)
-          )
+          [set(position, multiply(offset, divide(5, sqrt(offset))))]
         )
       ],
       [
