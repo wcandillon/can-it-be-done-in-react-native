@@ -113,8 +113,15 @@ function withScroll({
               state.position,
               cond(
                 greaterOrEq(offset, 0),
-                multiply(offset, divide(C, sqrt(abs(offset)))),
-                offset
+                multiply(offset, divide(C, sqrt(offset))),
+                sub(
+                  offset,
+                  multiply(
+                    -1,
+                    sub(abs(offset), abs(lowerBound)),
+                    divide(C, sqrt(abs(offset)))
+                  )
+                )
               )
             )
           ]
