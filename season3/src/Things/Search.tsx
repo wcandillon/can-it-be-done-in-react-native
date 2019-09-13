@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
@@ -7,18 +7,16 @@ import { StyleGuide } from "../components";
 import { frictionFactor } from "../components/AnimationHelpers";
 
 const {
-  Value,
   Extrapolate,
   interpolate,
-  cond,
-  lessOrEq,
   divide,
-  sqrt,
   sub,
-  useCode,
-  debug,
   multiply,
-  add
+  max,
+  call,
+  useCode,
+  cond,
+  greaterOrEq
 } = Animated;
 const grey = {
   r: 186,
@@ -32,13 +30,14 @@ const primary = {
 };
 const size = 48;
 const marginTop = 32;
-const THRESHOLD = 100;
+const CONTAINER_HEIGHT = 100;
+const THRESHOLD = CONTAINER_HEIGHT + marginTop;
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
     left: 0,
     right: 0,
-    top: -THRESHOLD,
+    top: -CONTAINER_HEIGHT,
     justifyContent: "center",
     alignItems: "center"
   },
@@ -56,20 +55,34 @@ interface SearchProps {
 }
 
 export default ({ y }: SearchProps) => {
+  const [search, setSearch] = useState(false);
   const chevronTranslateY = multiply(y, frictionFactor(divide(1, y)));
-  const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD + marginTop);
+  const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD);
   const backgroundColor = interpolateColor(y, {
-    inputRange: [THRESHOLD, THRESHOLD + marginTop],
+    inputRange: [CONTAINER_HEIGHT, THRESHOLD],
     outputRange: [grey, primary]
   });
   const opacity = interpolate(y, {
-    inputRange: [THRESHOLD, THRESHOLD + marginTop],
+    inputRange: [CONTAINER_HEIGHT, THRESHOLD],
     outputRange: [1, 0],
     extrapolate: Extrapolate.CLAMP
   });
   const oppositeOpacity = sub(1, opacity);
+  useCode(cond(greaterOrEq(y, THRESHOLD), call([], () => setSearch(true))), []);
   return (
     <View style={styles.container}>
+      {search && (
+        <View
+          style={{
+            position: "absolute",
+            top: CONTAINER_HEIGHT,
+            left: 0,
+            width: 100,
+            height: 100,
+            backgroundColor: "red"
+          }}
+        />
+      )}
       <Animated.View
         style={[
           styles.search,
