@@ -190,7 +190,6 @@ export default memo(({ children, y, onPull }: ScrollViewProps) => {
           }) => setContentHeight(height)}
         >
           {children}
-          {children}
         </Animated.View>
       </PanGestureHandler>
     </View>
