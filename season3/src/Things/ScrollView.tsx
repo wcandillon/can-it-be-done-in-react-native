@@ -8,9 +8,9 @@ import {
   frictionFactor,
   verticalPanGestureHandler
 } from "../components/AnimationHelpers";
+import { THRESHOLD } from "./Search";
 
 const {
-  pow,
   Value,
   Clock,
   eq,
@@ -29,7 +29,9 @@ const {
   multiply,
   divide,
   sub,
-  useCode
+  useCode,
+  call,
+  neq
 } = Animated;
 
 const styles = StyleSheet.create({
@@ -137,9 +139,10 @@ function withScroll({
 interface ScrollViewProps {
   children: ReactNode;
   y: Animated.Value<number>;
+  onPull: () => void;
 }
 
-export default memo(({ children, y }: ScrollViewProps) => {
+export default memo(({ children, y, onPull }: ScrollViewProps) => {
   const [containerHeight, setContainerHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
   const { gestureHandler, translationY, velocityY, state } = useMemoOne(
@@ -155,7 +158,17 @@ export default memo(({ children, y }: ScrollViewProps) => {
     lowerBound,
     upperBound
   });
-  useCode(set(y, translateY), []);
+  useCode(
+    block([
+      set(y, translateY),
+      cond(
+        and(greaterOrEq(y, THRESHOLD), neq(state, State.ACTIVE)),
+        call([], onPull)
+      )
+    ]),
+    []
+  );
+
   return (
     <View
       style={styles.container}

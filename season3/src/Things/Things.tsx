@@ -7,6 +7,7 @@ import Animated, {
 import { StyleSheet } from "react-native";
 
 import { useMemoOne } from "use-memo-one";
+import { State } from "react-native-gesture-handler";
 import Content from "./Content";
 import ScrollView from "./ScrollView";
 import Search, { THRESHOLD } from "./Search";
@@ -28,18 +29,23 @@ const transition = (
 export default () => {
   const ref = useRef<TransitioningView>(null);
   const [search, setSearch] = useState(false);
-  const y = useMemoOne(() => new Value(0), []);
+  const { y, state } = useMemoOne(
+    () => ({
+      y: new Value(0),
+      state: new Value(State.UNDETERMINED)
+    }),
+    []
+  );
   const showSearchBox = () => {
     if (!search && ref.current) {
       ref.current.animateNextTransition();
       setSearch(true);
     }
   };
-  useCode(cond(greaterOrEq(y, THRESHOLD), call([], showSearchBox)), []);
   return (
     <Transitioning.View style={styles.container} {...{ transition, ref }}>
       <Search {...{ y }} />
-      <ScrollView {...{ y }}>
+      <ScrollView onPull={showSearchBox} {...{ y, state }}>
         <Content />
       </ScrollView>
       <SearchBox visible={search} onRequestClose={() => setSearch(false)} />
