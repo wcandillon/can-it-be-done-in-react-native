@@ -6,7 +6,19 @@ import { clamp, interpolateColor } from "react-native-redash";
 import { StyleGuide } from "../components";
 import { frictionFactor } from "../components/AnimationHelpers";
 
-const { Extrapolate, interpolate, divide, sub, multiply } = Animated;
+const {
+  Extrapolate,
+  interpolate,
+  divide,
+  sub,
+  multiply,
+  cond,
+  eq,
+  add,
+  useCode,
+  block,
+  debug
+} = Animated;
 const grey = {
   r: 186,
   g: 187,
@@ -45,7 +57,7 @@ interface SearchProps {
 }
 
 export default memo(({ y }: SearchProps) => {
-  const chevronTranslateY = multiply(y, frictionFactor(divide(1, y)));
+  const chevronTranslateY = multiply(y, frictionFactor(divide(1, add(1, y))));
   const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD);
   const backgroundColor = interpolateColor(y, {
     inputRange: [CONTAINER_HEIGHT, THRESHOLD],
@@ -57,6 +69,12 @@ export default memo(({ y }: SearchProps) => {
     extrapolate: Extrapolate.CLAMP
   });
   const oppositeOpacity = sub(1, opacity);
+  /*
+  useCode(
+    block([debug("y", y), debug("chevronTranslateY", chevronTranslateY)]),
+    []
+  );
+*/
   return (
     <View style={styles.container}>
       <Animated.View
