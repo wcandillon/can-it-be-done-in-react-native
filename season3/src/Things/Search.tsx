@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
-import { clamp } from "react-native-redash";
+import { clamp, interpolateColor } from "react-native-redash";
 
 const {
   Value,
@@ -17,14 +17,25 @@ const {
   multiply,
   add
 } = Animated;
+const grey = {
+  r: 186,
+  g: 187,
+  b: 199
+};
+const primary = {
+  r: 56,
+  g: 132,
+  b: 255
+};
 const size = 48;
-const HEIGHT = 100;
+const marginTop = 64;
+const THRESHOLD = 100;
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
     left: 0,
     right: 0,
-    top: -HEIGHT,
+    top: -THRESHOLD,
     justifyContent: "center",
     alignItems: "center"
   },
@@ -43,13 +54,17 @@ interface SearchProps {
 
 export default ({ y }: SearchProps) => {
   const chevronTranslateY = divide(multiply(y, 8), sqrt(y));
-  const searchTranslateY = clamp(chevronTranslateY, 0, HEIGHT + 16);
+  const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD + marginTop);
+  const backgroundColor = interpolateColor(y, {
+    inputRange: [THRESHOLD, THRESHOLD + marginTop],
+    outputRange: [grey, primary]
+  });
   return (
     <View style={styles.container}>
       <Animated.View
         style={[
           styles.search,
-          { transform: [{ translateY: searchTranslateY }] }
+          { backgroundColor, transform: [{ translateY: searchTranslateY }] }
         ]}
       >
         <Icon name="search" size={32} color="red" />
