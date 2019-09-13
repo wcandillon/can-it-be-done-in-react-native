@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, {
+  Easing,
+  Transition,
+  Transitioning,
+  TransitioningView
+} from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { clamp, interpolateColor } from "react-native-redash";
 import { StyleGuide } from "../components";
@@ -32,6 +37,13 @@ const size = 48;
 const marginTop = 32;
 const CONTAINER_HEIGHT = 100;
 const THRESHOLD = CONTAINER_HEIGHT + marginTop;
+const transition = (
+  <Transition.Together>
+    <Transition.In type="scale" durationMs={400} />
+    <Transition.Out type="scale" durationMs={400} />
+  </Transition.Together>
+);
+
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
@@ -55,7 +67,14 @@ interface SearchProps {
 }
 
 export default ({ y }: SearchProps) => {
+  const ref = useRef<TransitioningView>(null);
   const [search, setSearch] = useState(false);
+  const showSearchBox = () => {
+    if (!search && ref.current) {
+      ref.current.animateNextTransition();
+      setSearch(true);
+    }
+  };
   const chevronTranslateY = multiply(y, frictionFactor(divide(1, y)));
   const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD);
   const backgroundColor = interpolateColor(y, {
@@ -68,9 +87,9 @@ export default ({ y }: SearchProps) => {
     extrapolate: Extrapolate.CLAMP
   });
   const oppositeOpacity = sub(1, opacity);
-  useCode(cond(greaterOrEq(y, THRESHOLD), call([], () => setSearch(true))), []);
+  useCode(cond(greaterOrEq(y, THRESHOLD), call([], showSearchBox)), []);
   return (
-    <View style={styles.container}>
+    <Transitioning.View style={styles.container} {...{ transition, ref }}>
       {search && (
         <View
           style={{
@@ -117,6 +136,6 @@ export default ({ y }: SearchProps) => {
           />
         </Animated.View>
       </Animated.View>
-    </View>
+    </Transitioning.View>
   );
 };
