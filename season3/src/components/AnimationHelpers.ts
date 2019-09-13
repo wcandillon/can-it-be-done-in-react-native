@@ -5,7 +5,7 @@ import { onGestureEvent } from "react-native-redash";
 const { Value } = Animated;
 
 // eslint-disable-next-line import/prefer-default-export
-export const panGestureHandlerWithY = () => {
+export const verticalPanGestureHandler = () => {
   const translationY = new Value(0);
   const velocityY = new Value(0);
   const state = new Value(State.UNDETERMINED);

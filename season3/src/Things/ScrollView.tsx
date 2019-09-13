@@ -4,7 +4,7 @@ import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { useMemoOne } from "use-memo-one";
 import { snapPoint } from "react-native-redash";
-import { panGestureHandlerWithY } from "../components/AnimationHelpers";
+import { verticalPanGestureHandler } from "../components/AnimationHelpers";
 
 const {
   Value,
@@ -25,13 +25,13 @@ const {
   multiply,
   divide,
   sqrt,
-  sub
+  sub,
+  useCode
 } = Animated;
 
-const { height } = Dimensions.get("window");
 // C could have any value (just depending on how sensitive you want the overscroll to be)
 // Here its relative to the height of the screen 🤷🏼‍♂️
-const C = height / 100;
+const C = Dimensions.get("window").height / 100;
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -67,7 +67,6 @@ function withScroll({
   const start = new Value(0);
   const offset = new Value(0);
   const isSpringing = new Value(0);
-
   const clock = new Clock();
   const state = {
     finished: new Value(0),
@@ -75,6 +74,7 @@ function withScroll({
     position: new Value(0),
     time: new Value(0)
   };
+
   const isInBound = (v: Animated.Node<number>) =>
     and(lessOrEq(v, upperBound), greaterOrEq(v, lowerBound));
 
@@ -137,13 +137,14 @@ function withScroll({
 
 interface ScrollViewProps {
   children: ReactNode;
+  y: Animated.Value<number>;
 }
 
-export default ({ children }: ScrollViewProps) => {
+export default ({ children, y }: ScrollViewProps) => {
   const [containerHeight, setContainerHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
   const { gestureHandler, translationY, velocityY, state } = useMemoOne(
-    () => panGestureHandlerWithY(),
+    () => verticalPanGestureHandler(),
     []
   );
   const lowerBound = -1 * (contentHeight - containerHeight);
@@ -155,6 +156,7 @@ export default ({ children }: ScrollViewProps) => {
     lowerBound,
     upperBound
   });
+  useCode(set(y, translateY), []);
   return (
     <View
       style={styles.container}
