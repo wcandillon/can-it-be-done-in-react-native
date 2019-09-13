@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, memo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
@@ -139,7 +139,7 @@ interface ScrollViewProps {
   y: Animated.Value<number>;
 }
 
-export default ({ children, y }: ScrollViewProps) => {
+export default memo(({ children, y }: ScrollViewProps) => {
   const [containerHeight, setContainerHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
   const { gestureHandler, translationY, velocityY, state } = useMemoOne(
@@ -182,4 +182,4 @@ export default ({ children, y }: ScrollViewProps) => {
       </PanGestureHandler>
     </View>
   );
-};
+});

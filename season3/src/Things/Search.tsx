@@ -1,28 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { memo } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, {
-  Easing,
-  Transition,
-  Transitioning,
-  TransitioningView
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { clamp, interpolateColor } from "react-native-redash";
 import { StyleGuide } from "../components";
 import { frictionFactor } from "../components/AnimationHelpers";
 
-const {
-  Extrapolate,
-  interpolate,
-  divide,
-  sub,
-  multiply,
-  max,
-  call,
-  useCode,
-  cond,
-  greaterOrEq
-} = Animated;
+const { Extrapolate, interpolate, divide, sub, multiply } = Animated;
 const grey = {
   r: 186,
   g: 187,
@@ -36,13 +20,7 @@ const primary = {
 const size = 48;
 const marginTop = 32;
 const CONTAINER_HEIGHT = 100;
-const THRESHOLD = CONTAINER_HEIGHT + marginTop;
-const transition = (
-  <Transition.Together>
-    <Transition.In type="scale" durationMs={400} />
-    <Transition.Out type="scale" durationMs={400} />
-  </Transition.Together>
-);
+export const THRESHOLD = CONTAINER_HEIGHT + marginTop;
 
 const styles = StyleSheet.create({
   container: {
@@ -66,15 +44,7 @@ interface SearchProps {
   y: Animated.Value<number>;
 }
 
-export default ({ y }: SearchProps) => {
-  const ref = useRef<TransitioningView>(null);
-  const [search, setSearch] = useState(false);
-  const showSearchBox = () => {
-    if (!search && ref.current) {
-      ref.current.animateNextTransition();
-      setSearch(true);
-    }
-  };
+export default memo(({ y }: SearchProps) => {
   const chevronTranslateY = multiply(y, frictionFactor(divide(1, y)));
   const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD);
   const backgroundColor = interpolateColor(y, {
@@ -87,21 +57,8 @@ export default ({ y }: SearchProps) => {
     extrapolate: Extrapolate.CLAMP
   });
   const oppositeOpacity = sub(1, opacity);
-  useCode(cond(greaterOrEq(y, THRESHOLD), call([], showSearchBox)), []);
   return (
-    <Transitioning.View style={styles.container} {...{ transition, ref }}>
-      {search && (
-        <View
-          style={{
-            position: "absolute",
-            top: CONTAINER_HEIGHT,
-            left: 0,
-            width: 100,
-            height: 100,
-            backgroundColor: "red"
-          }}
-        />
-      )}
+    <View style={styles.container}>
       <Animated.View
         style={[
           styles.search,
@@ -136,6 +93,6 @@ export default ({ y }: SearchProps) => {
           />
         </Animated.View>
       </Animated.View>
-    </Transitioning.View>
+    </View>
   );
-};
+});
