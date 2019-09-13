@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { clamp, interpolateColor } from "react-native-redash";
+import { StyleGuide } from "../components";
 
 const {
   Value,
@@ -12,6 +13,7 @@ const {
   lessOrEq,
   divide,
   sqrt,
+  sub,
   useCode,
   debug,
   multiply,
@@ -28,7 +30,7 @@ const primary = {
   b: 255
 };
 const size = 48;
-const marginTop = 64;
+const marginTop = 32;
 const THRESHOLD = 100;
 const styles = StyleSheet.create({
   container: {
@@ -59,6 +61,12 @@ export default ({ y }: SearchProps) => {
     inputRange: [THRESHOLD, THRESHOLD + marginTop],
     outputRange: [grey, primary]
   });
+  const opacity = interpolate(y, {
+    inputRange: [THRESHOLD, THRESHOLD + marginTop],
+    outputRange: [1, 0],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const oppositeOpacity = sub(1, opacity);
   return (
     <View style={styles.container}>
       <Animated.View
@@ -67,10 +75,33 @@ export default ({ y }: SearchProps) => {
           { backgroundColor, transform: [{ translateY: searchTranslateY }] }
         ]}
       >
-        <Icon name="search" size={32} color="red" />
+        <Animated.View style={{ opacity }}>
+          <Icon name="search" size={32} color="#babbc7" />
+        </Animated.View>
+        <Animated.View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            opacity: oppositeOpacity,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Icon name="search" size={32} color="white" />
+        </Animated.View>
       </Animated.View>
       <Animated.View style={{ transform: [{ translateY: chevronTranslateY }] }}>
-        <Icon name="chevron-down" size={32} color="red" />
+        <Animated.View style={{ opacity }}>
+          <Icon name="chevron-down" size={32} color="#babbc7" />
+        </Animated.View>
+        <Animated.View
+          style={{ ...StyleSheet.absoluteFillObject, opacity: oppositeOpacity }}
+        >
+          <Icon
+            name="chevron-down"
+            size={32}
+            color={StyleGuide.palette.primary}
+          />
+        </Animated.View>
       </Animated.View>
     </View>
   );
