@@ -2,9 +2,13 @@ import Animated from "react-native-reanimated";
 import { State } from "react-native-gesture-handler";
 import { onGestureEvent } from "react-native-redash";
 
-const { Value } = Animated;
+const { Value, multiply, pow, sub } = Animated;
 
-// eslint-disable-next-line import/prefer-default-export
+// Thanks Flutter 🙋🏼‍♂️
+// https://bit.ly/2mgDDLF
+export const frictionFactor = (ratio: Animated.Node<number>) =>
+  multiply(0.52, pow(sub(1, ratio), 2));
+
 export const verticalPanGestureHandler = () => {
   const translationY = new Value(0);
   const velocityY = new Value(0);

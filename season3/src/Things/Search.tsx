@@ -4,6 +4,7 @@ import Animated from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { clamp, interpolateColor } from "react-native-redash";
 import { StyleGuide } from "../components";
+import { frictionFactor } from "../components/AnimationHelpers";
 
 const {
   Value,
@@ -55,7 +56,7 @@ interface SearchProps {
 }
 
 export default ({ y }: SearchProps) => {
-  const chevronTranslateY = divide(multiply(y, 8), sqrt(y));
+  const chevronTranslateY = multiply(y, frictionFactor(divide(1, y)));
   const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD + marginTop);
   const backgroundColor = interpolateColor(y, {
     inputRange: [THRESHOLD, THRESHOLD + marginTop],

@@ -1,12 +1,16 @@
 import React, { ReactNode, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { useMemoOne } from "use-memo-one";
 import { snapPoint } from "react-native-redash";
-import { verticalPanGestureHandler } from "../components/AnimationHelpers";
+import {
+  frictionFactor,
+  verticalPanGestureHandler
+} from "../components/AnimationHelpers";
 
 const {
+  pow,
   Value,
   Clock,
   eq,
@@ -24,14 +28,10 @@ const {
   abs,
   multiply,
   divide,
-  sqrt,
   sub,
   useCode
 } = Animated;
 
-// C could have any value (just depending on how sensitive you want the overscroll to be)
-// Here its relative to the height of the screen 🤷🏼‍♂️
-const C = Dimensions.get("window").height / 100;
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -91,6 +91,11 @@ function withScroll({
     restDisplacementThreshold: 0.1
   });
 
+  const delta = sub(
+    offset,
+    cond(greaterOrEq(offset, 0), upperBound, lowerBound)
+  );
+
   return block([
     startClock(clock),
     cond(
@@ -106,13 +111,7 @@ function withScroll({
               state.position,
               sub(
                 offset,
-                multiply(
-                  sub(
-                    offset,
-                    cond(greaterOrEq(offset, 0), upperBound, lowerBound)
-                  ),
-                  divide(C, sqrt(abs(offset)))
-                )
+                multiply(delta, frictionFactor(divide(1, abs(delta))))
               )
             )
           ]
