@@ -21,11 +21,7 @@ const {
   block,
   not,
   spring,
-  diff,
-  lessThan,
   abs,
-  debug,
-  greaterThan,
   multiply,
   divide,
   sqrt,
@@ -34,21 +30,13 @@ const {
 
 const { height } = Dimensions.get("window");
 // C could have any value (just depending on how sensitive you want the overscroll to be)
-// Here I make it relative to the height of the screen 🤷🏼‍♂️
+// Here its relative to the height of the screen 🤷🏼‍♂️
 const C = height / 100;
 const styles = StyleSheet.create({
   container: {
     flex: 1
   }
 });
-const baseSpringConfig = {
-  damping: 40,
-  mass: 1,
-  stiffness: 150,
-  overshootClamping: true,
-  restSpeedThreshold: 0.1,
-  restDisplacementThreshold: 0.1
-};
 
 interface WithScrollParams {
   value: Animated.Adaptable<number>;
@@ -95,7 +83,12 @@ function withScroll({
       lowerBound,
       upperBound
     ]),
-    ...baseSpringConfig
+    damping: 40,
+    mass: 1,
+    stiffness: 150,
+    overshootClamping: true,
+    restSpeedThreshold: 0.1,
+    restDisplacementThreshold: 0.1
   });
 
   return block([
