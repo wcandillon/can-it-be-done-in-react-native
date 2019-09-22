@@ -10,10 +10,10 @@ import { useMemoOne } from "use-memo-one";
 import { State } from "react-native-gesture-handler";
 import Content from "./Content";
 import ScrollView from "./ScrollView";
-import Search, { THRESHOLD } from "./Search";
+import Search from "./Search";
 import SearchBox from "./SearchBox";
 
-const { Value, useCode, cond, greaterOrEq, call } = Animated;
+const { Value } = Animated;
 const styles = StyleSheet.create({
   container: {
     flex: 1

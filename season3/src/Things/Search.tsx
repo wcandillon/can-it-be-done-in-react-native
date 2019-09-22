@@ -6,19 +6,7 @@ import { clamp, interpolateColor } from "react-native-redash";
 import { StyleGuide } from "../components";
 import { frictionFactor } from "../components/AnimationHelpers";
 
-const {
-  Extrapolate,
-  interpolate,
-  divide,
-  sub,
-  multiply,
-  cond,
-  eq,
-  add,
-  useCode,
-  block,
-  debug
-} = Animated;
+const { Extrapolate, interpolate, divide, sub, multiply, add } = Animated;
 const grey = {
   r: 186,
   g: 187,
@@ -62,7 +50,7 @@ export default memo(({ y }: SearchProps) => {
   const backgroundColor = interpolateColor(y, {
     inputRange: [CONTAINER_HEIGHT, THRESHOLD],
     outputRange: [grey, primary]
-  });
+  }) as Animated.Node<number>;
   const opacity = interpolate(y, {
     inputRange: [CONTAINER_HEIGHT, THRESHOLD],
     outputRange: [1, 0],
