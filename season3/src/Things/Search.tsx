@@ -57,18 +57,15 @@ export default memo(({ y }: SearchProps) => {
     extrapolate: Extrapolate.CLAMP
   });
   const oppositeOpacity = sub(1, opacity);
-  /*
-  useCode(
-    block([debug("y", y), debug("chevronTranslateY", chevronTranslateY)]),
-    []
-  );
-*/
   return (
     <View style={styles.container}>
       <Animated.View
         style={[
           styles.search,
-          { backgroundColor, transform: [{ translateY: searchTranslateY }] }
+          {
+            backgroundColor,
+            transform: [{ translateY: searchTranslateY }]
+          }
         ]}
       >
         <Animated.View style={{ opacity }}>

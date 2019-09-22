@@ -7,13 +7,15 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint --ext .js,.ts,.tsx .",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.5",
     "expo": "^35.0.0",
     "expo-asset": "~7.0.0",
     "expo-font": "~7.0.0",
+    "patch-package": "^6.2.0",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
