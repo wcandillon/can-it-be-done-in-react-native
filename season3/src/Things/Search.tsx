@@ -41,17 +41,17 @@ const styles = StyleSheet.create({
 });
 
 interface SearchProps {
-  y: Animated.Value<number>;
+  translateY: Animated.Value<number>;
 }
 
-export default memo(({ y }: SearchProps) => {
-  const chevronTranslateY = multiply(y, frictionFactor(divide(1, add(1, y))));
+export default memo(({ translateY }: SearchProps) => {
+  const chevronTranslateY = translateY;
   const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD);
-  const backgroundColor = interpolateColor(y, {
+  const backgroundColor = interpolateColor(translateY, {
     inputRange: [CONTAINER_HEIGHT, THRESHOLD],
     outputRange: [grey, primary]
   }) as Animated.Node<number>;
-  const opacity = interpolate(y, {
+  const opacity = interpolate(translateY, {
     inputRange: [CONTAINER_HEIGHT, THRESHOLD],
     outputRange: [1, 0],
     extrapolate: Extrapolate.CLAMP
@@ -68,19 +68,7 @@ export default memo(({ y }: SearchProps) => {
           }
         ]}
       >
-        <Animated.View style={{ opacity }}>
-          <Icon name="search" size={32} color="#babbc7" />
-        </Animated.View>
-        <Animated.View
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            opacity: oppositeOpacity,
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <Icon name="search" size={32} color="white" />
-        </Animated.View>
+        <Icon name="search" size={32} color="white" />
       </Animated.View>
       <Animated.View style={{ transform: [{ translateY: chevronTranslateY }] }}>
         <Animated.View style={{ opacity }}>

@@ -29,13 +29,7 @@ const transition = (
 export default () => {
   const ref = useRef<TransitioningView>(null);
   const [search, setSearch] = useState(false);
-  const { y, state } = useMemoOne(
-    () => ({
-      y: new Value(0),
-      state: new Value(State.UNDETERMINED)
-    }),
-    []
-  );
+  const translateY = useMemoOne(() => new Value(0), []);
   const showSearchBox = () => {
     if (!search && ref.current) {
       ref.current.animateNextTransition();
@@ -44,8 +38,8 @@ export default () => {
   };
   return (
     <Transitioning.View style={styles.container} {...{ transition, ref }}>
-      <Search {...{ y }} />
-      <ScrollView onPull={showSearchBox} {...{ y, state }}>
+      <Search {...{ translateY }} />
+      <ScrollView onPull={showSearchBox} {...{ translateY }}>
         <Content />
       </ScrollView>
       <SearchBox visible={search} onRequestClose={() => setSearch(false)} />
