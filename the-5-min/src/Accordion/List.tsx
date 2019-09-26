@@ -10,7 +10,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 16,
     borderTopLeftRadius: 8,
-    borderTopRightRadius: 8
+    borderTopRightRadius: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   title: {
     fontSize: 16,
@@ -46,16 +49,19 @@ export default ({ list }: ListProps) => {
           ]}
         >
           <Text style={styles.title}>Total Points</Text>
-          <Chevron />
+          <Chevron {...{ open }} />
         </View>
       </TouchableWithoutFeedback>
-      {open && (
-        <View style={styles.items}>
-          {list.items.map((item, key) => (
-            <Item {...{ item, key }} />
-          ))}
-        </View>
-      )}
+      <View
+        style={[
+          styles.items,
+          { height: open ? "auto" : 0, overflow: "hidden" }
+        ]}
+      >
+        {list.items.map((item, key) => (
+          <Item {...{ item, key }} />
+        ))}
+      </View>
     </>
   );
 };
