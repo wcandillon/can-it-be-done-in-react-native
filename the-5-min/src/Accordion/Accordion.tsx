@@ -17,9 +17,13 @@ const list: ListModel = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f7f7f7"
+    backgroundColor: "#f4f4f6",
+    padding: 16
   },
-  title: {}
+  title: {
+    fontSize: 32,
+    fontWeight: "bold"
+  }
 });
 
 export default () => {

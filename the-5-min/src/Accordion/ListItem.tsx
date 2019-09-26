@@ -1,5 +1,28 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderColor: "#f4f4f6"
+  },
+  name: {
+    fontSize: 16
+  },
+  pointsContainer: {
+    borderRadius: 8,
+    backgroundColor: "#44c282",
+    padding: 8
+  },
+  points: {
+    color: "white",
+    fontWeight: "bold"
+  }
+});
 
 export interface ListItem {
   name: string;
@@ -12,10 +35,10 @@ interface ListItemProps {
 
 export default ({ item }: ListItemProps) => {
   return (
-    <View>
-      <Text>{item.name}</Text>
-      <View>
-        <Text>{item.points}</Text>
+    <View style={styles.container}>
+      <Text style={styles.name}>{item.name}</Text>
+      <View style={styles.pointsContainer}>
+        <Text style={styles.points}>{item.points}</Text>
       </View>
     </View>
   );
