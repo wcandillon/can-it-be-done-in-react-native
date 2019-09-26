@@ -6,6 +6,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { LoadAssets, StyleGuide } from "./src/components";
 import Examples, { examples } from "./src/Examples";
 import AngularGradient from "./src/AngularGradient";
+import Accordion from "./src/Accordion";
 
 const assets: number[] = [...examples.map(example => example.source)];
 const fonts = {
@@ -17,6 +18,13 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Accordion: {
+        screen: Accordion,
+        navigationOptions: {
+          title: "Accordion"
+        }
+
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {
