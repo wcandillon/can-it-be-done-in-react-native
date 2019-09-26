@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     height: size,
     width: size,
     borderRadius: size / 2,
-    backgroundColor: "#525251",
     justifyContent: "center",
     alignItems: "center"
   }
@@ -19,9 +18,12 @@ interface ChevronProps {
 }
 
 export default ({ open }: ChevronProps) => {
-  const rotateZ = open ? "0deg" : "180deg";
+  const rotateZ = open ? "180deg" : "0deg";
+  const backgroundColor = open ? "#e45645" : "#525251";
   return (
-    <View style={[styles.container, { transform: [{ rotateZ }] }]}>
+    <View
+      style={[styles.container, { transform: [{ rotateZ }], backgroundColor }]}
+    >
       <Icon name="chevron-down" color="white" size={24} />
     </View>
   );
