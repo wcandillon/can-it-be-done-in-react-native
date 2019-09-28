@@ -51,10 +51,7 @@ export const waveVertRadius = (progress: Animated.Node<number>) => {
       maxVertRadius,
       add(
         initialVertRadius,
-        divide(
-          multiply(maxVertRadius - initialVertRadius, progress),
-          divide(progress, p1)
-        )
+        multiply(maxVertRadius - initialVertRadius, divide(progress, p1))
       )
     )
   );
