@@ -66,8 +66,7 @@ const waveHorR = (progress: Animated.Node<number>, A: number, B: number) => {
   const beta = r / (2 * m);
   const k = 50;
   const omega0 = k / m;
-  // eslint-disable-next-line no-restricted-properties
-  const omega = Math.pow(-Math.pow(beta, 2) + Math.pow(omega0, 2), 0.5);
+  const omega = (-(beta ** 2) + omega0 ** 2) ** 0.5;
   return cond(
     lessOrEq(progress, 0),
     initialHorRadius,
@@ -76,7 +75,7 @@ const waveHorR = (progress: Animated.Node<number>, A: number, B: number) => {
       0,
       cond(
         lessOrEq(progress, p1),
-        add(initialHorRadius, divide(progress, p1 * B)),
+        add(initialHorRadius, multiply(divide(progress, p1), B)),
         multiply(A, exp(multiply(-beta, t)), cos(multiply(omega, t)))
       )
     )
