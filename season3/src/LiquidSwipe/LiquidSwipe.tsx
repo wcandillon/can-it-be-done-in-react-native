@@ -42,6 +42,7 @@ export default () => {
   });
   const horRadius = waveHorRadius(progress);
   const vertRadius = waveVertRadius(progress);
+  useCode(debug("pogress", progress), []);
   return (
     <View style={{ flex: 1 }}>
       <PanGestureHandler {...gestureHandler}>
