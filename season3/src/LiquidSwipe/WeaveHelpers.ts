@@ -83,6 +83,6 @@ const waveHorR = (progress: Animated.Node<number>, A: number, B: number) => {
 
 export const waveHorRadius = (progress: Animated.Node<number>) =>
   waveHorR(progress, maxHorRadius, maxHorRadius - initialHorRadius);
-export const waveHorRadiuswaveHorRadiusBack = (
-  progress: Animated.Node<number>
-) => waveHorR(progress, 2 * initialHorRadius, initialHorRadius);
+
+export const waveHorRadiusBack = (progress: Animated.Node<number>) =>
+  waveHorR(progress, 2 * initialHorRadius, initialHorRadius);
