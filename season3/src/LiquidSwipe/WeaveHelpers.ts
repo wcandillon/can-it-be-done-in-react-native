@@ -25,18 +25,17 @@ export const initialSideWidth = 15;
 export const initialWaveCenter = height * 0.7167487685;
 
 export const sideWidth = (progress: Animated.Node<number>) => {
+  const p1 = 0.2;
+  const p2 = 0.8;
   return cond(
-    lessOrEq(progress, 0.2),
+    lessOrEq(progress, p1),
     initialSideWidth,
     cond(
-      greaterOrEq(progress, 0.8),
+      greaterOrEq(progress, p2),
       width,
       add(
         initialSideWidth,
-        divide(
-          multiply(width - initialSideWidth, sub(progress, 0.2)),
-          0.8 - 0.2
-        )
+        multiply(width - initialSideWidth, divide(sub(progress, p1), p2 - p1))
       )
     )
   );
