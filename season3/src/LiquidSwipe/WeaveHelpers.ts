@@ -42,15 +42,19 @@ export const sideWidth = (progress: Animated.Node<number>) => {
 };
 
 export const waveVertRadius = (progress: Animated.Node<number>) => {
+  const p1 = 0.4;
   return cond(
     lessOrEq(progress, 0),
     initialVertRadius,
     cond(
-      greaterOrEq(progress, 0.4),
+      greaterOrEq(progress, p1),
       maxVertRadius,
       add(
         initialVertRadius,
-        divide(multiply(sub(maxVertRadius, initialVertRadius), progress), 0.4)
+        divide(
+          multiply(maxVertRadius - initialVertRadius, progress),
+          divide(progress, p1)
+        )
       )
     )
   );
