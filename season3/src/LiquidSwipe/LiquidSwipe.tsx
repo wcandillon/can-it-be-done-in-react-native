@@ -5,25 +5,15 @@ import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { onGestureEvent, withOffset } from "react-native-redash";
 import Weave from "./Weave";
-import { sideWidth, waveHorRadius, waveVertRadius } from "./WeaveHelpers";
+import {
+  initialWaveCenter,
+  sideWidth,
+  waveHorRadius,
+  waveVertRadius
+} from "./WeaveHelpers";
 
-const { height, width } = Dimensions.get("window");
-const {
-  Value,
-  cond,
-  lessOrEq,
-  greaterOrEq,
-  add,
-  divide,
-  sub,
-  multiply,
-  interpolate,
-  block,
-  exp,
-  cos,
-  useCode,
-  debug
-} = Animated;
+const { width } = Dimensions.get("window");
+const { Value, interpolate, useCode, debug } = Animated;
 
 export default () => {
   const translationX = new Value(0);
@@ -34,15 +24,16 @@ export default () => {
     translationY,
     state
   });
+  const offsetY = new Value(initialWaveCenter);
   const translateX = withOffset(translationX, state);
-  const translateY = withOffset(translationY, state);
+  const translateY = withOffset(translationY, state, offsetY);
   const progress = interpolate(translateX, {
     inputRange: [-width, 0],
-    outputRange: [1, 0]
+    outputRange: [0.4, 0]
   });
   const horRadius = waveHorRadius(progress);
   const vertRadius = waveVertRadius(progress);
-  useCode(debug("pogress", progress), []);
+  useCode(debug("progress", progress), []);
   return (
     <View style={{ flex: 1 }}>
       <PanGestureHandler {...gestureHandler}>
