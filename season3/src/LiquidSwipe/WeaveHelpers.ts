@@ -22,7 +22,7 @@ export const maxHorRadius = width * 0.8;
 
 export const initialSideWidth = 15;
 
-export const initialWaveCenter = height * 0.7167487685;
+export const initialWaveCenter = height * 0.5;
 
 export const sideWidth = (progress: Animated.Node<number>) => {
   const p1 = 0.2;

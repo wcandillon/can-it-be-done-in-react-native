@@ -19,9 +19,7 @@ const snapPoints = [-width, 0];
 const {
   Clock,
   Value,
-  interpolate,
   eq,
-  greaterOrEq,
   cond,
   useCode,
   debug,
@@ -32,16 +30,19 @@ const {
   SpringUtils,
   block,
   spring,
-  startClock,
   set,
-  sub,
-  onChange
+  onChange,
+  stopClock,
+  startClock,
+  not,
+  clockRunning
 } = Animated;
 const springRatio = (
   value: Animated.Node<number>,
   velocity: Animated.Node<number>,
   gesture: Animated.Value<State>,
-  snapTo: Animated.Node<number>
+  isBack: Animated.Value<0 | 1>,
+  point: Animated.Node<number>
 ) => {
   const clock = new Clock();
   const state = {
@@ -52,37 +53,41 @@ const springRatio = (
   };
   const config = SpringUtils.makeDefaultConfig();
   return block([
-    startClock(clock),
     cond(
       eq(gesture, State.ACTIVE),
       [
-        set(state.time, 0),
-        set(state.finished, 0),
+        stopClock(clock),
         set(state.position, value),
-        set(state.velocity, velocity),
-        set(config.toValue, snapTo)
+        set(state.velocity, velocity)
       ],
-      spring(clock, state, config)
+      [
+        cond(not(clockRunning(clock)), [
+          set(state.time, 0),
+          set(state.finished, 0),
+          debug("point", point),
+          set(isBack, point),
+          set(config.toValue, isBack),
+          startClock(clock)
+        ]),
+        spring(clock, state, config)
+      ]
     ),
     state.position
   ]);
 };
 
 export default () => {
-  // const absoluteY = new Value(0);
   const translationX = new Value(0);
   const translationY = new Value(0);
   const velocityX = new Value(0);
   const velocityY = new Value(0);
   const state = new Value(State.UNDETERMINED);
   const offsetY = new Value(initialWaveCenter);
-  const isBack = new Value(0);
   const gestureHandler = onGestureEvent({
     translationX,
     translationY,
     velocityX,
     velocityY,
-    // absoluteY,
     state
   });
   const translateX = withSpring({
@@ -98,15 +103,17 @@ export default () => {
     snapPoints: [initialWaveCenter],
     offset: offsetY
   });
-  const point = snapPoint(translationX, velocityX, snapPoints);
+  const isBack = new Value(0);
   const gestureProgress = min(
     1,
     max(0, divide(multiply(-1, translateX), cond(isBack, width, maxChange)))
   );
+  const point = snapPoint(translateX, velocityX, snapPoints);
   const progress = springRatio(
     gestureProgress,
     divide(velocityX, width),
     state,
+    isBack,
     cond(eq(point, snapPoints[0]), 1, 0)
   );
   const horRadius = cond(
@@ -116,6 +123,7 @@ export default () => {
   );
   const vertRadius = waveVertRadius(progress);
   const sWidth = sideWidth(progress);
+  useCode(onChange(isBack, debug("isBack", isBack)), []);
   return (
     <View style={{ flex: 1 }}>
       <PanGestureHandler {...gestureHandler}>
@@ -131,7 +139,7 @@ export default () => {
         pointerEvents="none"
         style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: "rgba(100, 200, 300, 0.4)",
+          backgroundColor: "rgba(100, 200, 300, 0.5)",
           transform: [{ translateX }, { translateY }]
         }}
       />
