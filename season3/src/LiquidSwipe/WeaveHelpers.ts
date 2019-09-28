@@ -11,7 +11,8 @@ const {
   sub,
   multiply,
   exp,
-  cos
+  cos,
+  block
 } = Animated;
 
 export const initialVertRadius = 82;
@@ -57,10 +58,9 @@ export const waveVertRadius = (progress: Animated.Node<number>) => {
   );
 };
 
-export const waveHorRadius = (progress: Animated.Node<number>) => {
+const waveHorR = (progress: Animated.Node<number>, A: number, B: number) => {
   const p1 = 0.4;
-  const t = divide(sub(progress, p1), sub(1, p1));
-  const A = maxHorRadius;
+  const t = divide(sub(progress, p1), 1 - p1);
   const r = 40;
   const m = 9.8;
   const beta = r / (2 * m);
@@ -76,12 +76,15 @@ export const waveHorRadius = (progress: Animated.Node<number>) => {
       0,
       cond(
         lessOrEq(progress, p1),
-        add(
-          initialHorRadius,
-          multiply(divide(progress, p1), sub(maxHorRadius, initialHorRadius))
-        ),
-        multiply(A, exp(multiply(-1, beta, t)), cos(multiply(omega, t)))
+        add(initialHorRadius, divide(progress, p1 * B)),
+        multiply(A, exp(multiply(-beta, t)), cos(multiply(omega, t)))
       )
     )
   );
 };
+
+export const waveHorRadius = (progress: Animated.Node<number>) =>
+  waveHorR(progress, maxHorRadius, maxHorRadius - initialHorRadius);
+export const waveHorRadiuswaveHorRadiusBack = (
+  progress: Animated.Node<number>
+) => waveHorR(progress, 2 * initialHorRadius, initialHorRadius);
