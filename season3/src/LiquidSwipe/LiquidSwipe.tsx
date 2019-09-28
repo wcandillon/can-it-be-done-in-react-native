@@ -1,19 +1,20 @@
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions } from "react-native";
 import Animated from "react-native-reanimated";
 
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { onGestureEvent, withOffset, withSpring } from "react-native-redash";
+import { onGestureEvent, withSpring } from "react-native-redash";
 import Weave from "./Weave";
 import {
   initialWaveCenter,
   sideWidth,
   waveHorRadius,
+  waveHorRadiuswaveHorRadiusBack,
   waveVertRadius
 } from "./WeaveHelpers";
 
 const { width } = Dimensions.get("window");
-const { Value, interpolate, useCode, debug } = Animated;
+const { Value, interpolate, greaterOrEq, cond, useCode, debug } = Animated;
 
 export default () => {
   const translationX = new Value(0);
@@ -24,6 +25,8 @@ export default () => {
   const gestureHandler = onGestureEvent({
     translationX,
     translationY,
+    velocityX,
+    velocityY,
     state
   });
   const translateX = withSpring({
@@ -46,6 +49,7 @@ export default () => {
   const horRadius = waveHorRadius(progress);
   const vertRadius = waveVertRadius(progress);
   const sWidth = sideWidth(progress);
+  useCode(debug("velocityX", velocityX), []);
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View>
