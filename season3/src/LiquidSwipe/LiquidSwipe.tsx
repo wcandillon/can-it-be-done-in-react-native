@@ -14,7 +14,19 @@ import {
 } from "./WeaveHelpers";
 
 const { width } = Dimensions.get("window");
-const { Value, interpolate, greaterOrEq, cond, useCode, debug } = Animated;
+const maxChange = width * (1.0 / 0.45);
+const {
+  Value,
+  interpolate,
+  greaterOrEq,
+  cond,
+  useCode,
+  debug,
+  min,
+  multiply,
+  divide,
+  max
+} = Animated;
 
 export default () => {
   const translationX = new Value(0);
@@ -22,6 +34,7 @@ export default () => {
   const velocityX = new Value(0);
   const velocityY = new Value(0);
   const state = new Value(State.UNDETERMINED);
+  const offsetY = new Value(initialWaveCenter);
   const gestureHandler = onGestureEvent({
     translationX,
     translationY,
@@ -40,16 +53,13 @@ export default () => {
     velocity: velocityY,
     state,
     snapPoints: [initialWaveCenter],
-    offset: new Value(initialWaveCenter)
+    offset: offsetY
   });
-  const progress = interpolate(translateX, {
-    inputRange: [-width, 0],
-    outputRange: [1, 0]
-  });
+  const progress = min(1, max(0, divide(multiply(-1, translateX), maxChange)));
   const horRadius = waveHorRadius(progress);
   const vertRadius = waveVertRadius(progress);
   const sWidth = sideWidth(progress);
-  useCode(debug("velocityX", velocityX), []);
+  useCode(debug("progress", progress), []);
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View>
