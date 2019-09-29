@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Dimensions, MaskedViewIOS, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import Svg, { ClipPath, Defs, Image, Path, Rect } from "react-native-svg";
@@ -15,9 +15,16 @@ interface WeaveProps {
   horRadius: Animated.Node<number>;
   vertRadius: Animated.Node<number>;
   sideWidth: Animated.Node<number>;
+  children: ReactNode;
 }
 
-export default ({ centerY, horRadius, vertRadius, sideWidth }: WeaveProps) => {
+export default ({
+  centerY,
+  horRadius,
+  vertRadius,
+  sideWidth,
+  children
+}: WeaveProps) => {
   const curveStartY = add(centerY, vertRadius);
   const maskWidth = sub(width, sideWidth);
   const commands: Animated.Node<string>[] = [];
@@ -170,36 +177,13 @@ export default ({ centerY, horRadius, vertRadius, sideWidth }: WeaveProps) => {
   close(commands);
   const d = commands.reduce((acc, c) => concat(acc, c));
   const maskElement = (
-    <Svg {...{ width, height }} style={{ backgroundColor: "transparent" }}>
+    <Svg {...{ width, height }}>
       <AnimatedPath {...{ d }} fill="black" />
     </Svg>
   );
   return (
-    <MaskedViewIOS
-      style={{ flex: 1, flexDirection: "row", height: "100%" }}
-      maskElement={
-                <View
-          style={{
-            // Transparent background because mask is based off alpha channel.
-            backgroundColor: "transparent",
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center"
-          }}
->
-  <Svg
-              {...{ width, height }}
-            style={{ backgroundColor: "transparent" }}
-          >
-            <AnimatedPath {...{ d }} fill="black" />
-            </Svg>
-        </View>
-      }
-    >
-      <View style={{ flex: 1, height: "100%", backgroundColor: "#324376" }} />
-      <View style={{ flex: 1, height: "100%", backgroundColor: "#F5DD90" }} />
-      <View style={{ flex: 1, height: "100%", backgroundColor: "#F76C5E" }} />
-      <View style={{ flex: 1, height: "100%", backgroundColor: "#e1e1e1" }} />
+    <MaskedViewIOS style={{ flex: 1 }} maskElement={maskElement}>
+      {children}
     </MaskedViewIOS>
   );
 };

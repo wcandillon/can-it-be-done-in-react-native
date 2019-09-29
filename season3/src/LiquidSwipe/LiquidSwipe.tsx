@@ -12,6 +12,7 @@ import {
   waveHorRadiusBack,
   waveVertRadius
 } from "./WeaveHelpers";
+import Content from "./Content";
 
 const { width } = Dimensions.get("window");
 const maxChange = width * (1 / 0.45);
@@ -37,6 +38,7 @@ const {
   not,
   clockRunning
 } = Animated;
+
 const springRatio = (
   value: Animated.Node<number>,
   velocity: Animated.Node<number>,
@@ -64,7 +66,6 @@ const springRatio = (
         cond(not(clockRunning(clock)), [
           set(state.time, 0),
           set(state.finished, 0),
-          debug("point", point),
           set(isBack, point),
           set(config.toValue, isBack),
           startClock(clock)
@@ -75,6 +76,12 @@ const springRatio = (
     state.position
   ]);
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
 
 export default () => {
   const translationX = new Value(0);
@@ -125,21 +132,38 @@ export default () => {
   const sWidth = sideWidth(progress);
   useCode(onChange(isBack, debug("isBack", isBack)), []);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
+      <View style={StyleSheet.absoluteFill}>
+        <Content
+          backgroundColor="white"
+          source={require("./assets/firstPageImage.png")}
+          title1="Online"
+          title2="Gambling"
+          color="black"
+        />
+      </View>
       <PanGestureHandler {...gestureHandler}>
-        <Animated.View style={{ flex: 1 }}>
+        <Animated.View style={styles.container}>
           <Weave
             centerY={translateY}
             sideWidth={sWidth}
             {...{ horRadius, vertRadius }}
-          />
+          >
+            <Content
+              backgroundColor="#4d1168"
+              source={require("./assets/secondPageImage.png")}
+              title1="For"
+              title2="Gamers"
+              color="#fd5587"
+            />
+          </Weave>
         </Animated.View>
       </PanGestureHandler>
       <Animated.View
         pointerEvents="none"
         style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: "rgba(100, 200, 300, 0.5)",
+          backgroundColor: "rgba(100, 200, 300, 0)",
           transform: [{ translateX }, { translateY }]
         }}
       />
