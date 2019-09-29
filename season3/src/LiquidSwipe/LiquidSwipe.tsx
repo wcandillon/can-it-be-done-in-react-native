@@ -1,6 +1,6 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { Easing } from "react-native-reanimated";
 
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { onGestureEvent, snapPoint, withSpring } from "react-native-redash";
@@ -31,6 +31,7 @@ const {
   SpringUtils,
   block,
   spring,
+  timing,
   set,
   onChange,
   stopClock,
@@ -49,11 +50,16 @@ const springRatio = (
   const clock = new Clock();
   const state = {
     time: new Value(0),
+    frameTime: new Value(0),
     velocity: new Value(0),
     position: new Value(0),
     finished: new Value(0)
   };
-  const config = SpringUtils.makeDefaultConfig();
+  const config = {
+    toValue: new Value(0),
+    duration: 500,
+    easing: Easing.inOut(Easing.ease)
+  };
   return block([
     cond(
       eq(gesture, State.ACTIVE),
@@ -65,12 +71,13 @@ const springRatio = (
       [
         cond(not(clockRunning(clock)), [
           set(state.time, 0),
+          set(state.frameTime, 0),
           set(state.finished, 0),
           set(isBack, point),
           set(config.toValue, isBack),
           startClock(clock)
         ]),
-        spring(clock, state, config)
+        timing(clock, state, config)
       ]
     ),
     state.position
