@@ -127,7 +127,7 @@ export default () => {
   return (
     <View style={{ flex: 1 }}>
       <PanGestureHandler {...gestureHandler}>
-        <Animated.View>
+        <Animated.View style={{ flex: 1 }}>
           <Weave
             centerY={translateY}
             sideWidth={sWidth}
