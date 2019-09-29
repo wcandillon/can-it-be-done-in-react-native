@@ -22,22 +22,19 @@ const {
   Value,
   eq,
   cond,
-  useCode,
-  debug,
   min,
   multiply,
   divide,
   max,
-  SpringUtils,
   block,
-  spring,
   timing,
   set,
-  onChange,
   stopClock,
   startClock,
   not,
-  clockRunning
+  clockRunning,
+  useCode,
+  debug
 } = Animated;
 
 const springRatio = (
@@ -73,11 +70,11 @@ const springRatio = (
           set(state.time, 0),
           set(state.frameTime, 0),
           set(state.finished, 0),
-          set(isBack, point),
-          set(config.toValue, isBack),
+          set(config.toValue, point),
           startClock(clock)
         ]),
-        timing(clock, state, config)
+        timing(clock, state, config),
+        cond(eq(state.finished, 1), set(isBack, point))
       ]
     ),
     state.position
@@ -137,7 +134,6 @@ export default () => {
   );
   const vertRadius = waveVertRadius(progress);
   const sWidth = sideWidth(progress);
-  useCode(onChange(isBack, debug("isBack", isBack)), []);
   return (
     <View style={styles.container}>
       <View style={StyleSheet.absoluteFill}>
