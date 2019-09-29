@@ -33,13 +33,31 @@ const {
   startClock,
   not,
   clockRunning,
+  spring,
   useCode,
-  debug
+  debug,
+  SpringUtils
 } = Animated;
+
+const followFinger = (value: Animated.Node<number>) => {
+  const clock = new Clock();
+  const config = SpringUtils.makeDefaultConfig();
+  const state = {
+    time: new Value(0),
+    velocity: new Value(0),
+    position: new Value(0),
+    finished: new Value(0)
+  };
+  return block([
+    startClock(clock),
+    set(config.toValue, value),
+    spring(clock, state, config),
+    state.position
+  ]);
+};
 
 const springRatio = (
   value: Animated.Node<number>,
-  velocity: Animated.Node<number>,
   gesture: Animated.Value<State>,
   isBack: Animated.Value<0 | 1>,
   point: Animated.Node<number>
@@ -48,7 +66,6 @@ const springRatio = (
   const state = {
     time: new Value(0),
     frameTime: new Value(0),
-    velocity: new Value(0),
     position: new Value(0),
     finished: new Value(0)
   };
@@ -60,11 +77,7 @@ const springRatio = (
   return block([
     cond(
       eq(gesture, State.ACTIVE),
-      [
-        stopClock(clock),
-        set(state.position, value),
-        set(state.velocity, velocity)
-      ],
+      [stopClock(clock), set(state.position, value)],
       [
         cond(not(clockRunning(clock)), [
           set(state.time, 0),
@@ -88,17 +101,20 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  //const x = new Value(initialWaveCenter);
+  const y = new Value(initialWaveCenter);
   const translationX = new Value(0);
   const translationY = new Value(0);
   const velocityX = new Value(0);
   const velocityY = new Value(0);
   const state = new Value(State.UNDETERMINED);
-  const offsetY = new Value(initialWaveCenter);
   const gestureHandler = onGestureEvent({
     translationX,
     translationY,
     velocityX,
     velocityY,
+    //x,
+    y,
     state
   });
   const translateX = withSpring({
@@ -107,22 +123,16 @@ export default () => {
     state,
     snapPoints
   });
-  const translateY = withSpring({
-    value: translationY,
-    velocity: velocityY,
-    state,
-    snapPoints: [initialWaveCenter],
-    offset: offsetY
-  });
+  const translateY = followFinger(y);
   const isBack = new Value(0);
   const gestureProgress = min(
     1,
     max(0, divide(multiply(-1, translateX), cond(isBack, width, maxChange)))
   );
   const point = snapPoint(translateX, velocityX, snapPoints);
+  const centerY = translateY;
   const progress = springRatio(
     gestureProgress,
-    divide(velocityX, width),
     state,
     isBack,
     cond(eq(point, snapPoints[0]), 1, 0)
@@ -147,11 +157,7 @@ export default () => {
       </View>
       <PanGestureHandler {...gestureHandler}>
         <Animated.View style={styles.container}>
-          <Weave
-            centerY={translateY}
-            sideWidth={sWidth}
-            {...{ horRadius, vertRadius }}
-          >
+          <Weave sideWidth={sWidth} {...{ centerY, horRadius, vertRadius }}>
             <Content
               backgroundColor="#4d1168"
               source={require("./assets/secondPageImage.png")}
@@ -166,7 +172,7 @@ export default () => {
         pointerEvents="none"
         style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: "rgba(100, 200, 300, 0)",
+          backgroundColor: "rgba(100, 200, 300, 0.5)",
           transform: [{ translateX }, { translateY }]
         }}
       />
