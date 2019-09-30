@@ -34,7 +34,7 @@ export default ({
   return (
     <View
       style={{
-        flex: 1,
+        ...StyleSheet.absoluteFillObject,
         padding: 32,
         backgroundColor,
         alignItems: "center",

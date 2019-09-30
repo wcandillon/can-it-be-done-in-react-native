@@ -6,9 +6,12 @@ import { createStackNavigator } from "react-navigation-stack";
 import { LoadAssets, StyleGuide } from "./src/components";
 import Episodes, { episodes } from "./src/Episodes";
 import Things from "./src/Things";
-import LiquidSwipe from "./src/LiquidSwipe";
+import LiquidSwipe, { assets as liquidSwipeAssets } from "./src/LiquidSwipe";
 
-const assets: number[] = [...episodes.map(episode => episode.icon)];
+const assets: number[] = [
+  ...episodes.map(episode => episode.icon),
+  ...liquidSwipeAssets
+];
 
 const AppNavigator = createAppContainer(
   createStackNavigator(
