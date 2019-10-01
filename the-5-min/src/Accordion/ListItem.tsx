@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -33,11 +34,21 @@ export interface ListItem {
 
 interface ListItemProps {
   item: ListItem;
+  isLast: boolean;
 }
 
-export default ({ item }: ListItemProps) => {
+export default ({ item, isLast }: ListItemProps) => {
+  const bottomRadius = isLast ? 8 : 0;
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          borderBottomLeftRadius: bottomRadius,
+          borderBottomRightRadius: bottomRadius
+        }
+      ]}
+    >
       <Text style={styles.name}>{item.name}</Text>
       <View style={styles.pointsContainer}>
         <Text style={styles.points}>{item.points}</Text>

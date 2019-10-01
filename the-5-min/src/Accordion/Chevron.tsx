@@ -1,6 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
+import Animated from "react-native-reanimated";
+import { bInterpolate, bInterpolateColor } from "react-native-redash";
 
 const size = 30;
 const styles = StyleSheet.create({
@@ -15,16 +17,21 @@ const styles = StyleSheet.create({
 
 interface ChevronProps {
   open: boolean;
+  transition: Animated.Value<number>;
 }
 
-export default ({ open }: ChevronProps) => {
-  const rotateZ = open ? "180deg" : "0deg";
-  const backgroundColor = open ? "#e45645" : "#525251";
+export default ({ open, transition }: ChevronProps) => {
+  const rotateZ = bInterpolate(transition, Math.PI, 0);
+  const backgroundColor = bInterpolateColor(
+    transition,
+    { r: 82, g: 82, b: 81 },
+    { r: 228, g: 86, b: 69 }
+  );
   return (
-    <View
+    <Animated.View
       style={[styles.container, { transform: [{ rotateZ }], backgroundColor }]}
     >
       <Icon name="chevron-down" color="white" size={24} />
-    </View>
+    </Animated.View>
   );
 };

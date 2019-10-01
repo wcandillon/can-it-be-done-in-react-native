@@ -1,10 +1,13 @@
 import React, { RefObject, useState } from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
-import { TransitioningView } from "react-native-reanimated";
+import Animated, { Easing, TransitioningView } from "react-native-reanimated";
+import { useTransition } from "react-native-redash";
 import Chevron from "./Chevron";
 import Item, { ListItem } from "./ListItem";
 
+const { not, interpolate } = Animated;
+const bit = (b: boolean) => (b ? 1 : 0);
 const styles = StyleSheet.create({
   container: {
     marginTop: 16,
@@ -21,9 +24,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   items: {
-    backgroundColor: "white",
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
     overflow: "hidden"
   }
 });
@@ -40,9 +40,18 @@ interface ListProps {
 
 export default ({ list, transition }: ListProps) => {
   const [open, setOpen] = useState(false);
-  const borderBottomLeftRadius = open ? 0 : 8;
-  const borderBottomRightRadius = open ? 0 : 8;
+  const trn = useTransition(
+    open,
+    not(bit(open)),
+    bit(open),
+    400,
+    Easing.inOut(Easing.ease)
+  );
   const height = open ? "auto" : 0;
+  const bottomRadius = interpolate(trn, {
+    inputRange: [0, 16 / 400],
+    outputRange: [8, 0]
+  });
   return (
     <>
       <TouchableWithoutFeedback
@@ -53,19 +62,22 @@ export default ({ list, transition }: ListProps) => {
           setOpen(prev => !prev);
         }}
       >
-        <View
+        <Animated.View
           style={[
             styles.container,
-            { borderBottomLeftRadius, borderBottomRightRadius }
+            {
+              borderBottomLeftRadius: bottomRadius,
+              borderBottomRightRadius: bottomRadius
+            }
           ]}
         >
           <Text style={styles.title}>Total Points</Text>
-          <Chevron {...{ open }} />
-        </View>
+          <Chevron transition={trn} {...{ open }} />
+        </Animated.View>
       </TouchableWithoutFeedback>
       <View style={[styles.items, { height }]}>
         {list.items.map((item, key) => (
-          <Item {...{ item, key }} />
+          <Item {...{ item, key }} isLast={key === list.items.length - 1} />
         ))}
       </View>
     </>
