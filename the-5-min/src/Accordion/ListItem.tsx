@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderColor: "#f4f4f6",
-    minHeight: 54
+    height: 54
   },
   name: {
     fontSize: 16

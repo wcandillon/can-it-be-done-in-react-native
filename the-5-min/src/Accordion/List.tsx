@@ -2,11 +2,11 @@ import React, { RefObject, useState } from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 import Animated, { Easing, TransitioningView } from "react-native-reanimated";
-import { useTransition } from "react-native-redash";
+import { bInterpolate, useTransition } from "react-native-redash";
 import Chevron from "./Chevron";
 import Item, { ListItem } from "./ListItem";
 
-const { not, interpolate } = Animated;
+const { not, interpolate, useCode, debug, sub } = Animated;
 const bit = (b: boolean) => (b ? 1 : 0);
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +47,7 @@ export default ({ list, transition }: ListProps) => {
     400,
     Easing.inOut(Easing.ease)
   );
-  const height = open ? "auto" : 0;
+  const height = bInterpolate(trn, 0, 54 * list.items.length);
   const bottomRadius = interpolate(trn, {
     inputRange: [0, 16 / 400],
     outputRange: [8, 0]
@@ -75,11 +75,11 @@ export default ({ list, transition }: ListProps) => {
           <Chevron transition={trn} {...{ open }} />
         </Animated.View>
       </TouchableWithoutFeedback>
-      <View style={[styles.items, { height }]}>
+      <Animated.View style={[styles.items, { height }]}>
         {list.items.map((item, key) => (
           <Item {...{ item, key }} isLast={key === list.items.length - 1} />
         ))}
-      </View>
+      </Animated.View>
     </>
   );
 };
