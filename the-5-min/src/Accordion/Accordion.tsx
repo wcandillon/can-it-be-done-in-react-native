@@ -1,6 +1,11 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useRef } from "react";
+import { StyleSheet, Text } from "react-native";
 
+import {
+  Transition,
+  Transitioning,
+  TransitioningView
+} from "react-native-reanimated";
 import List, { List as ListModel } from "./List";
 
 const list: ListModel = {
@@ -14,6 +19,9 @@ const list: ListModel = {
   ]
 };
 
+const transition = (
+  <Transition.Change durationMs={400} interpolation="easeInOut" />
+);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -27,15 +35,16 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const ref = useRef<TransitioningView>(null);
   return (
-    <View style={styles.container}>
+    <Transitioning.View style={styles.container} {...{ ref, transition }}>
       <Text style={styles.title}>Markets</Text>
-      <List {...{ list }} />
-      <List {...{ list }} />
-      <List {...{ list }} />
-      <List {...{ list }} />
-      <List {...{ list }} />
-      <List {...{ list }} />
-    </View>
+      <List transition={ref} {...{ list }} />
+      <List transition={ref} {...{ list }} />
+      <List transition={ref} {...{ list }} />
+      <List transition={ref} {...{ list }} />
+      <List transition={ref} {...{ list }} />
+      <List transition={ref} {...{ list }} />
+    </Transitioning.View>
   );
 };
