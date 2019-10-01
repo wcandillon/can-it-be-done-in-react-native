@@ -1,12 +1,12 @@
-import React, { RefObject, useState } from "react";
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 
-import Animated, { Easing, TransitioningView } from "react-native-reanimated";
+import Animated, { Easing } from "react-native-reanimated";
 import { bInterpolate, useTransition } from "react-native-redash";
 import Chevron from "./Chevron";
 import Item, { ListItem } from "./ListItem";
 
-const { not, interpolate, useCode, debug, sub } = Animated;
+const { not, interpolate } = Animated;
 const bit = (b: boolean) => (b ? 1 : 0);
 const styles = StyleSheet.create({
   container: {
@@ -35,10 +35,9 @@ export interface List {
 
 interface ListProps {
   list: List;
-  transition: RefObject<TransitioningView>;
 }
 
-export default ({ list, transition }: ListProps) => {
+export default ({ list }: ListProps) => {
   const [open, setOpen] = useState(false);
   const trn = useTransition(
     open,
@@ -54,14 +53,7 @@ export default ({ list, transition }: ListProps) => {
   });
   return (
     <>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          if (transition.current) {
-            transition.current.animateNextTransition();
-          }
-          setOpen(prev => !prev);
-        }}
-      >
+      <TouchableWithoutFeedback onPress={() => setOpen(prev => !prev)}>
         <Animated.View
           style={[
             styles.container,
