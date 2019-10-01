@@ -1,7 +1,10 @@
 import * as React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
-import { NavigationScreenConfigProps } from "react-navigation";
+import {
+  NavigationScreenConfigProps,
+  NavigationScreenProp
+} from "react-navigation";
 import { StyleGuide, Thumbnail } from "../components";
 
 export const examples = [
@@ -9,6 +12,11 @@ export const examples = [
     screen: "AngularGradient",
     title: "Angular Gradient",
     source: require("../../assets/examples/angular-gradient.png")
+  },
+  {
+    screen: "Accordion",
+    title: "Accordion",
+    source: require("../../assets/examples/accordion.png")
   }
 ];
 
@@ -21,7 +29,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ({ navigation }: NavigationScreenConfigProps) => {
+export default ({
+  navigation
+}: NavigationScreenConfigProps<NavigationScreenProp<{}>>) => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {examples.map(thumbnail => (
