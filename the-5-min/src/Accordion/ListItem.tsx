@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
+export const LIST_ITEM_HEIGHT = 54;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderColor: "#f4f4f6",
-    minHeight: 54
+    height: LIST_ITEM_HEIGHT
   },
   name: {
     fontSize: 16
