@@ -16,11 +16,10 @@ const styles = StyleSheet.create({
 });
 
 interface ChevronProps {
-  open: boolean;
   transition: Animated.Value<number>;
 }
 
-export default ({ open, transition }: ChevronProps) => {
+export default ({ transition }: ChevronProps) => {
   const rotateZ = bInterpolate(transition, Math.PI, 0);
   const backgroundColor = bInterpolateColor(
     transition,
