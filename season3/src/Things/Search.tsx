@@ -4,9 +4,8 @@ import Animated from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { clamp, interpolateColor } from "react-native-redash";
 import { StyleGuide } from "../components";
-import { frictionFactor } from "../components/AnimationHelpers";
 
-const { Extrapolate, interpolate, divide, sub, multiply, add } = Animated;
+const { Extrapolate, interpolate, sub } = Animated;
 const grey = {
   r: 186,
   g: 187,

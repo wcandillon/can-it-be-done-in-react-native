@@ -7,7 +7,6 @@ import Animated, {
 import { StyleSheet } from "react-native";
 
 import { useMemoOne } from "use-memo-one";
-import { State } from "react-native-gesture-handler";
 import Content from "./Content";
 import ScrollView from "./ScrollView";
 import Search from "./Search";

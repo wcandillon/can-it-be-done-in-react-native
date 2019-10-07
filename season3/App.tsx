@@ -6,8 +6,12 @@ import { createStackNavigator } from "react-navigation-stack";
 import { LoadAssets, StyleGuide } from "./src/components";
 import Episodes, { episodes } from "./src/Episodes";
 import Things from "./src/Things";
+import LiquidSwipe, { assets as liquidSwipeAssets } from "./src/LiquidSwipe";
 
-const assets: number[] = [...episodes.map(episode => episode.icon)];
+const assets: number[] = [
+  ...episodes.map(episode => episode.icon),
+  ...liquidSwipeAssets
+];
 
 const AppNavigator = createAppContainer(
   createStackNavigator(
@@ -19,10 +23,17 @@ const AppNavigator = createAppContainer(
           headerBackTitle: null
         }
       },
+      LiquidSwipe: {
+        screen: LiquidSwipe,
+        navigationOptions: {
+          title: "Liquid Swipe",
+          gesturesEnabled: false
+        }
+      },
       Things: {
         screen: Things,
         navigationOptions: { title: "Things" }
-      },
+      }
     },
     {
       defaultNavigationOptions: {

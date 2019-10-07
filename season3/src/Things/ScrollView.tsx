@@ -67,7 +67,10 @@ const withScroll = ({
     lessOrEq(state.position, upperBound),
     greaterOrEq(state.position, lowerBound)
   );
-  const config = SpringUtils.makeDefaultConfig();
+  const config = {
+    ...SpringUtils.makeDefaultConfig(),
+    toValue: new Value(0)
+  };
   const overscroll = sub(
     state.position,
     cond(greaterOrEq(state.position, 0), upperBound, lowerBound)
