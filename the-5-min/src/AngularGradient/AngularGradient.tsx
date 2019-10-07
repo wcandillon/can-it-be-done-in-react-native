@@ -76,12 +76,14 @@ export default () => {
         >
           {arcs.map((d, key) => (
             <Path
+              fill="transparent"
               stroke={`url(#gradient-${key})`}
               {...{ strokeWidth, d, key }}
             />
           ))}
         </G>
         <AnimatedCircle
+          fill="transparent"
           strokeDasharray={`${circumference}, ${circumference}`}
           {...{ strokeWidth, strokeDashoffset, r, cx, cy }}
         />

@@ -18,13 +18,6 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      Accordion: {
-        screen: Accordion,
-        navigationOptions: {
-          title: "Accordion"
-        }
-
-      },
       Examples: {
         screen: Examples,
         navigationOptions: {
@@ -36,6 +29,12 @@ const AppNavigator = createAppContainer(
         screen: AngularGradient,
         navigationOptions: {
           title: "Angular Gradient"
+        }
+      },
+      Accordion: {
+        screen: Accordion,
+        navigationOptions: {
+          title: "Accordion"
         }
       }
     },
