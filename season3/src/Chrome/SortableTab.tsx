@@ -17,9 +17,10 @@ const {
   max,
   sub,
   multiply,
-  block,
   set,
-  and
+  and,
+  block,
+  debug
 } = Animated;
 
 export const withSnap = ({
