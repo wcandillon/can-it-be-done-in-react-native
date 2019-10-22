@@ -15,14 +15,19 @@ const styles = StyleSheet.create({
 
 export const episodes = [
   {
-    id: "Things",
-    name: "Things",
-    icon: require("../../assets/icons/things.png")
+    id: "Chrome",
+    name: "Google Chrome",
+    icon: require("../../assets/icons/chrome.png")
   },
   {
     id: "LiquidSwipe",
     name: "Liquid Swipe",
     icon: require("../../assets/icons/liquid-swipe.png")
+  },
+  {
+    id: "Things",
+    name: "Things",
+    icon: require("../../assets/icons/things.png")
   }
 ];
 
