@@ -6,11 +6,13 @@ import { createStackNavigator } from "react-navigation-stack";
 import { LoadAssets, StyleGuide } from "./src/components";
 import Episodes, { episodes } from "./src/Episodes";
 import Things from "./src/Things";
+import Chrome, { assets as chromeAssets } from "./src/Chrome";
 import LiquidSwipe, { assets as liquidSwipeAssets } from "./src/LiquidSwipe";
 
 const assets: number[] = [
   ...episodes.map(episode => episode.icon),
-  ...liquidSwipeAssets
+  ...liquidSwipeAssets,
+  ...chromeAssets
 ];
 
 const AppNavigator = createAppContainer(
@@ -33,6 +35,10 @@ const AppNavigator = createAppContainer(
       Things: {
         screen: Things,
         navigationOptions: { title: "Things" }
+      },
+      Chrome: {
+        screen: Chrome,
+        navigationOptions: { title: "Google Chrome" }
       }
     },
     {
