@@ -1,8 +1,7 @@
 import React from "react";
-import { View } from "react-native";
 import Animated, { Easing } from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { panGestureHandler } from "react-native-redash";
+import { moving, panGestureHandler } from "react-native-redash";
 import Tab, { TAB_SIZE, TabProps } from "./Tab";
 
 const {
@@ -87,7 +86,6 @@ export default ({ tab, offsets, index }: SortableCardProps) => {
     translationX,
     translationY
   } = panGestureHandler();
-  const zIndex = cond(eq(state, State.ACTIVE), 10, 1);
   const currentOffset = offsets[index];
   const translateX = withSnap({
     value: translationX,
@@ -99,6 +97,11 @@ export default ({ tab, offsets, index }: SortableCardProps) => {
     offset: currentOffset.y,
     state
   });
+  const zIndex = cond(
+    eq(state, State.ACTIVE),
+    200,
+    cond(moving(translateY), 100, 1)
+  );
   const offsetX = multiply(
     max(floor(divide(translateX, TAB_SIZE)), 0),
     TAB_SIZE
