@@ -1,5 +1,5 @@
 import React from "react";
-import Animated, { Easing } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { moving, panGestureHandler } from "react-native-redash";
 import Tab, { TAB_SIZE, TabProps } from "./Tab";
@@ -13,64 +13,61 @@ const {
   set,
   useCode,
   multiply,
-  floor,
   divide,
-  max,
   and,
   Clock,
-  timing,
-  clockRunning,
-  stopClock,
-  startClock,
-  not,
-  neq
+  round,
+  spring,
+  startClock
 } = Animated;
-const withSnap = ({
-  value,
+
+export const withOffset = ({
   offset,
+  value,
   state: gestureState
 }: {
+  offset: Animated.Adaptable<number>;
   value: Animated.Value<number>;
-  offset: Animated.Value<number>;
   state: Animated.Value<State>;
 }) => {
+  const safeOffset = new Value(0);
+  return cond(
+    eq(gestureState, State.ACTIVE),
+    add(safeOffset, value),
+    set(safeOffset, offset)
+  );
+};
+
+export const withTransition = (
+  value: Animated.Node<number>,
+  velocity: Animated.Value<number>,
+  gestureState: Animated.Value<State>
+) => {
   const clock = new Clock();
   const state = {
-    position: new Value(0),
     finished: new Value(0),
-    time: new Value(0),
-    frameTime: new Value(0)
+    velocity: new Value(0),
+    position: new Value(0),
+    time: new Value(0)
   };
   const config = {
     toValue: new Value(0),
-    duration: 250,
-    easing: Easing.linear
+    damping: 15,
+    mass: 1,
+    stiffness: 150,
+    overshootClamping: false,
+    restSpeedThreshold: 1,
+    restDisplacementThreshold: 1
   };
-  const position = new Value(0);
-  const safeOffset = new Value(0);
   return block([
-    cond(eq(gestureState, State.ACTIVE), set(position, value)),
-    cond(and(neq(gestureState, State.ACTIVE), not(clockRunning(clock))), [
-      set(config.toValue, offset),
-      set(state.position, add(safeOffset, position)),
-      set(state.finished, 0),
-      set(state.time, 0),
-      set(state.frameTime, 0),
-      startClock(clock),
-      set(position, 0)
-    ]),
+    startClock(clock),
+    set(config.toValue, value),
     cond(
-      clockRunning(clock),
-      [
-        timing(clock, state, config),
-        cond(eq(state.finished, 1), [
-          set(safeOffset, state.position),
-          stopClock(clock)
-        ]),
-        state.position
-      ],
-      [add(safeOffset, value)]
-    )
+      eq(gestureState, State.ACTIVE),
+      [set(state.velocity, velocity), set(state.position, value)],
+      spring(clock, state, config)
+    ),
+    state.position
   ]);
 };
 
@@ -84,32 +81,26 @@ export default ({ tab, offsets, index }: SortableCardProps) => {
     gestureHandler,
     state,
     translationX,
-    translationY
+    velocityX,
+    translationY,
+    velocityY
   } = panGestureHandler();
   const currentOffset = offsets[index];
-  const translateX = withSnap({
+  const x = withOffset({
     value: translationX,
     offset: currentOffset.x,
     state
   });
-  const translateY = withSnap({
+  const y = withOffset({
     value: translationY,
     offset: currentOffset.y,
     state
   });
-  const zIndex = cond(
-    eq(state, State.ACTIVE),
-    200,
-    cond(moving(translateY), 100, 1)
-  );
-  const offsetX = multiply(
-    max(floor(divide(translateX, TAB_SIZE)), 0),
-    TAB_SIZE
-  );
-  const offsetY = multiply(
-    max(floor(divide(translateY, TAB_SIZE)), 0),
-    TAB_SIZE
-  );
+  const zIndex = cond(eq(state, State.ACTIVE), 200, cond(moving(y), 100, 1));
+  const offsetX = multiply(round(divide(x, TAB_SIZE)), TAB_SIZE);
+  const offsetY = multiply(round(divide(y, TAB_SIZE)), TAB_SIZE);
+  const translateX = withTransition(x, velocityX, state);
+  const translateY = withTransition(y, velocityY, state);
   useCode(
     block(
       offsets.map(offset =>
