@@ -1,8 +1,32 @@
 import React from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import Animated from "react-native-reanimated";
+import { onScroll } from "react-native-redash";
 
-interface UberEatsProps {}
+import HeaderImage from "./HeaderImage";
+import Content from "./Content";
+import Header from "./Header";
+
+const { Value } = Animated;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
 
 export default () => {
-  return <View />;
+  const y = new Value(0);
+  return (
+    <View style={styles.container}>
+      <HeaderImage {...{ y }} />
+      <Animated.ScrollView
+        style={StyleSheet.absoluteFill}
+        onScroll={onScroll({ y })}
+        scrollEventThrottle={1}
+      >
+        <Content />
+      </Animated.ScrollView>
+      <Header {...{ y }} />
+    </View>
+  );
 };

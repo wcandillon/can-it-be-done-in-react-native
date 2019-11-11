@@ -8,12 +8,17 @@ import Episodes, { episodes } from "./src/Episodes";
 import Things from "./src/Things";
 import Chrome, { assets as chromeAssets } from "./src/Chrome";
 import LiquidSwipe, { assets as liquidSwipeAssets } from "./src/LiquidSwipe";
-import UberEats from "./src/UberEats";
+import UberEats, {
+  assets as uberEatsAssets,
+  fonts as uberEatsFonts
+} from "./src/UberEats";
 
+const fonts = { ...uberEatsFonts };
 const assets: number[] = [
   ...episodes.map(episode => episode.icon),
   ...liquidSwipeAssets,
-  ...chromeAssets
+  ...chromeAssets,
+  ...uberEatsAssets
 ];
 
 const AppNavigator = createAppContainer(
@@ -62,7 +67,7 @@ const AppNavigator = createAppContainer(
 );
 
 export default () => (
-  <LoadAssets {...{ assets }}>
+  <LoadAssets {...{ assets, fonts }}>
     <StatusBar barStyle="light-content" />
     <AppNavigator />
   </LoadAssets>
