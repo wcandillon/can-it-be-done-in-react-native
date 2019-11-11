@@ -8,6 +8,7 @@ import Episodes, { episodes } from "./src/Episodes";
 import Things from "./src/Things";
 import Chrome, { assets as chromeAssets } from "./src/Chrome";
 import LiquidSwipe, { assets as liquidSwipeAssets } from "./src/LiquidSwipe";
+import UberEats from "./src/UberEats";
 
 const assets: number[] = [
   ...episodes.map(episode => episode.icon),
@@ -18,6 +19,13 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      UberEats: {
+        screen: UberEats,
+        navigationOptions: {
+          title: "Uber Eats",
+          header: () => null
+        }
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
