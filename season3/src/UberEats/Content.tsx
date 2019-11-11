@@ -2,6 +2,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { AntDesign as Icon } from "@expo/vector-icons";
+import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 
 const menu = [
   {
@@ -35,6 +36,9 @@ const menu = [
   }
 ];
 const styles = StyleSheet.create({
+  placeholder: {
+    height: HEADER_IMAGE_HEIGHT
+  },
   text: {
     fontFamily: "UberMoveRegular"
   },
@@ -64,6 +68,7 @@ const styles = StyleSheet.create({
 export default () => {
   return (
     <>
+      <View style={styles.placeholder} />
       <Text style={styles.text}>$$ • Asiatisch • Koreanisch • Japanisch</Text>
       <View style={styles.info}>
         <Text style={styles.text}>Opens at 11:30 AM</Text>
