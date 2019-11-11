@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { AntDesign as Icon } from "@expo/vector-icons";
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
+import { MIN_HEADER_HEIGHT } from "./Header";
 
 const menu = [
   {
@@ -36,17 +37,24 @@ const menu = [
   }
 ];
 const styles = StyleSheet.create({
+  section: {
+    padding: 16
+  },
   placeholder: {
-    height: HEADER_IMAGE_HEIGHT
+    height: HEADER_IMAGE_HEIGHT,
+    marginBottom: MIN_HEADER_HEIGHT
   },
   text: {
-    fontFamily: "UberMoveRegular"
+    fontFamily: "UberMoveRegular",
+    fontSize: 14
   },
   title1: {
-    fontFamily: "UberMoveMedium"
+    fontFamily: "UberMoveMedium",
+    fontSize: 24
   },
   title2: {
-    fontFamily: "UberMoveMedium"
+    fontFamily: "UberMoveMedium",
+    fontSize: 16
   },
   divider: {
     height: 2,
@@ -54,36 +62,66 @@ const styles = StyleSheet.create({
   },
   info: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 8
+  },
+  ratings: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  icon: {
+    marginRight: 8
   },
   link: {
     color: "#247A00"
   },
-  item: {},
-  title: {},
-  description: {},
-  price: {}
+  item: {
+    borderBottomColor: "#e2e3e4",
+    borderBottomWidth: 1,
+    marginHorizontal: 16,
+    marginTop: 16
+  },
+  title: {
+    fontFamily: "UberMoveMedium",
+    fontSize: 16,
+    marginBottom: 8
+  },
+  description: {
+    marginBottom: 8
+  },
+  price: {
+    fontFamily: "UberMoveMedium",
+    marginBottom: 16
+  }
 });
 
 export default () => {
   return (
     <>
       <View style={styles.placeholder} />
-      <Text style={styles.text}>$$ • Asiatisch • Koreanisch • Japanisch</Text>
-      <View style={styles.info}>
-        <Text style={styles.text}>Opens at 11:30 AM</Text>
-        <Icon name="star" color="#f4c945" />
-        <Text style={styles.text}>(186)</Text>
+      <View style={styles.section}>
+        <Text style={styles.text}>$$ • Asiatisch • Koreanisch • Japanisch</Text>
+        <View style={styles.info}>
+          <Text style={styles.text}>Opens at 11:30 AM</Text>
+          <View style={styles.ratings}>
+            <Icon name="star" color="#f4c945" size={24} style={styles.icon} />
+            <Text style={styles.text}>(186)</Text>
+          </View>
+        </View>
       </View>
       <View style={styles.divider} />
-      <Text style={styles.title2}>Restaurant info</Text>
-      <View style={styles.info}>
-        <Text style={styles.text}>Europaallee 48, Zürich, Zürich 8004</Text>
-        <Text style={styles.link}>More info</Text>
+      <View style={styles.section}>
+        <Text style={styles.title2}>Restaurant info</Text>
+        <View style={styles.info}>
+          <Text style={styles.text}>Europaallee 48, Zürich, Zürich 8004</Text>
+          <Text style={styles.link}>More info</Text>
+        </View>
       </View>
       <View style={styles.divider} />
-      {menu.map(({ title, description, price }) => (
-        <View style={styles.item} key={title}>
+      {[...menu, ...menu].map(({ title, description, price }, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <View style={styles.item} key={index}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description} numberOfLines={2}>
             {description}
