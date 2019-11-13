@@ -39,15 +39,18 @@ interface HeaderProps {
 export default ({ y }: HeaderProps) => {
   const insets = useSafeArea();
   const { top: paddingTop } = insets;
-  const inputRange = [0, HEADER_IMAGE_HEIGHT];
   const translateX = interpolate(y, {
-    inputRange,
+    inputRange: [0, HEADER_IMAGE_HEIGHT],
     outputRange: [-ICON_SIZE - PADDING, 0],
     extrapolate: Extrapolate.CLAMP
   });
   const translateY = interpolate(y, {
-    inputRange,
-    outputRange: [HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT, 0],
+    inputRange: [-100, 0, HEADER_IMAGE_HEIGHT],
+    outputRange: [
+      HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT + 100,
+      HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT,
+      0
+    ],
     extrapolateRight: Extrapolate.CLAMP
   });
   return (
