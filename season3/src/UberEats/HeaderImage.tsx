@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 
-const { Extrapolate, interpolate, useCode, debug } = Animated;
+const { Extrapolate, interpolate } = Animated;
 const { height: wHeight, width: wWidth } = Dimensions.get("window");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 export const backgroundImage = require("./assets/background.jpeg");
