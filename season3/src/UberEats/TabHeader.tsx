@@ -1,8 +1,17 @@
 import React from "react";
-import { View } from "react-native";
+import { Text } from "react-native";
+import Animated from "react-native-reanimated";
 
-interface TabHeaderProps {}
+interface TabHeaderProps {
+  transition: Animated.Value<number>;
+  y: Animated.Value<number>;
+}
 
-export default () => {
-  return <View />;
+export default ({ transition, y }: TabHeaderProps) => {
+  const opacity = transition;
+  return (
+    <Animated.View style={{ height: 45, opacity }}>
+      <Text>Hello</Text>
+    </Animated.View>
+  );
 };
