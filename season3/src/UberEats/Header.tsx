@@ -7,7 +7,7 @@ import { useSafeArea } from "react-native-safe-area-context";
 
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import TabHeader from "./TabHeader";
-import withTransition from "./AnimationHelpers";
+import { withSpringTransition, withTimingTransition } from "./AnimationHelpers";
 
 const ICON_SIZE = 24;
 const PADDING = 16;
@@ -50,7 +50,7 @@ interface HeaderProps {
 export default ({ y }: HeaderProps) => {
   const [toggle] = useValues<0 | 1>([0], []);
   const insets = useSafeArea();
-  const transition = withTransition(toggle, 0);
+  const transition = withTimingTransition(toggle, { duration: 2000 });
   const { top: paddingTop } = insets;
   const translateX = interpolate(y, {
     inputRange: [0, HEADER_IMAGE_HEIGHT],
