@@ -5,6 +5,7 @@ import Animated, { Easing } from "react-native-reanimated";
 import { bInterpolate, bin, useTransition } from "react-native-redash";
 import Chevron from "./Chevron";
 import Item, { LIST_ITEM_HEIGHT, ListItem } from "./ListItem";
+import { useSpringTransition, useTimingTransition } from "./AnimationHelpers";
 
 const { not, interpolate } = Animated;
 const styles = StyleSheet.create({
@@ -38,13 +39,7 @@ interface ListProps {
 
 export default ({ list }: ListProps) => {
   const [open, setOpen] = useState(false);
-  const transition = useTransition(
-    open,
-    not(bin(open)),
-    bin(open),
-    400,
-    Easing.inOut(Easing.ease)
-  );
+  const transition = useSpringTransition(bin(open));
   const height = bInterpolate(
     transition,
     0,
