@@ -1,6 +1,7 @@
 import Animated, { Easing } from "react-native-reanimated";
 import { State } from "react-native-gesture-handler";
 import { useMemoOne } from "use-memo-one";
+import { bin } from "react-native-redash";
 
 const {
   Value,
@@ -13,13 +14,14 @@ const {
   startClock,
   timing,
   neq,
-  useCode
+  useCode,
+  debug
 } = Animated;
 
 export type TimingConfig = Partial<Omit<Animated.TimingConfig, "toValue">>;
 
 export const withTimingTransition = (
-  value: Animated.Adaptable<number>,
+  value: Animated.Value<number>,
   timingConfig: TimingConfig = {},
   gestureState: Animated.Value<State> = new Value(State.UNDETERMINED)
 ) => {
@@ -39,6 +41,10 @@ export const withTimingTransition = (
   return block([
     startClock(clock),
     cond(neq(config.toValue, value), [
+      debug("config.toValue", config.toValue),
+      debug("value", value),
+      debug("state.positon", state.position),
+      debug("=================", new Value(0)),
       set(state.frameTime, 0),
       set(state.time, 0),
       set(state.finished, 0),
@@ -56,7 +62,7 @@ export const withTimingTransition = (
 export type SpringConfig = Partial<Omit<Animated.SpringConfig, "toValue">>;
 
 export const withSpringTransition = (
-  value: Animated.Adaptable<number>,
+  value: Animated.Value<number>,
   springConfig: SpringConfig = {},
   velocity: Animated.Adaptable<number> = 0,
   gestureState: Animated.Value<State> = new Value(State.UNDETERMINED)
@@ -91,31 +97,21 @@ export const withSpringTransition = (
 };
 
 export const useTimingTransition = (
-  state: number,
+  state: boolean,
   config: TimingConfig = {}
 ) => {
-  const { transitionVal } = useMemoOne(
-    () => ({
-      transitionVal: new Value() as Animated.Value<number>
-    }),
-    []
-  );
-  useCode(set(transitionVal, state), [state]);
-  useCode(set(transitionVal, withTimingTransition(state, config)), []);
-  return transitionVal;
+  const value = useMemoOne(() => new Value(0), []);
+  useCode(set(value, bin(state)), [state]);
+  const transition = useMemoOne(() => withTimingTransition(value, config), []);
+  return transition;
 };
 
 export const useSpringTransition = (
-  state: number,
+  state: boolean,
   config: SpringConfig = {}
 ) => {
-  const { transitionVal } = useMemoOne(
-    () => ({
-      transitionVal: new Value() as Animated.Value<number>
-    }),
-    []
-  );
-  useCode(set(transitionVal, state), [state]);
-  useCode(set(transitionVal, withSpringTransition(state, config)), []);
-  return transitionVal;
+  const value = useMemoOne(() => new Value(0), []);
+  useCode(set(value, bin(state)), [state]);
+  const transition = useMemoOne(() => withSpringTransition(value, config), []);
+  return transition;
 };
