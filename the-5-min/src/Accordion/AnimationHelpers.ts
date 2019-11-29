@@ -91,20 +91,12 @@ export const withSpringTransition = (
   ]);
 };
 
-interface TimingTransition {
-  config: TimingConfig;
-  transition: typeof withTimingTransition;
-}
-
-interface SpringTransition {
-  config: SpringConfig;
-  transition: typeof withSpringTransition;
-}
-
-export const useTransition = <T extends TimingTransition | SpringTransition>(
+export const useTransition = <
+  T extends typeof withSpringTransition | typeof withTimingTransition
+>(
   state: boolean,
-  config: T["config"],
-  withTransition: T["transition"]
+  config: Parameters<T>[1],
+  withTransition: T
 ) => {
   const value = useMemoOne(() => new Value(0), []);
   useCode(set(value, bin(state)), [state]);
