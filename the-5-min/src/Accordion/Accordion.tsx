@@ -31,6 +31,11 @@ export default () => {
     <View style={styles.container}>
       <Text style={styles.title}>Markets</Text>
       <List {...{ list }} />
+      <List {...{ list }} />
+      <List {...{ list }} />
+      <List {...{ list }} />
+      <List {...{ list }} />
+      <List {...{ list }} />
     </View>
   );
 };

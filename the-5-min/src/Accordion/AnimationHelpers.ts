@@ -1,7 +1,7 @@
 import Animated, { Easing } from "react-native-reanimated";
 import { State } from "react-native-gesture-handler";
 import { useMemoOne } from "use-memo-one";
-import { bin, clamp } from "react-native-redash";
+import { bin } from "react-native-redash";
 
 const {
   Value,
@@ -91,13 +91,32 @@ export const withSpringTransition = (
   ]);
 };
 
+interface TimingTransition {
+  config: TimingConfig;
+  transition: typeof withTimingTransition;
+}
+
+interface SpringTransition {
+  config: SpringConfig;
+  transition: typeof withSpringTransition;
+}
+
+export const useTransition = <T extends TimingTransition | SpringTransition>(
+  state: boolean,
+  config: T["config"],
+  withTransition: T["transition"]
+) => {
+  const value = useMemoOne(() => new Value(0), []);
+  useCode(set(value, bin(state)), [state]);
+  const transition = useMemoOne(() => withTransition(value, config), []);
+  return transition;
+};
+
 export const useTimingTransition = (
   state: boolean,
   config: TimingConfig = {}
 ) => {
-  const value = useMemoOne(() => new Value(0), []);
-  useCode(set(value, bin(state)), [state]);
-  const transition = useMemoOne(() => withTimingTransition(value, config), []);
+  const transition = useTransition(state, config, withTimingTransition);
   return transition;
 };
 
@@ -105,8 +124,6 @@ export const useSpringTransition = (
   state: boolean,
   config: SpringConfig = {}
 ) => {
-  const value = useMemoOne(() => new Value(0), []);
-  useCode(set(value, bin(state)), [state]);
-  const transition = useMemoOne(() => withSpringTransition(value, config), []);
+  const transition = useTransition(state, config, withSpringTransition);
   return transition;
 };
