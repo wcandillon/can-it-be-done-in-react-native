@@ -39,7 +39,7 @@ interface ListProps {
 
 export default ({ list }: ListProps) => {
   const [open, setOpen] = useState(false);
-  const transition = useTimingTransition(open);
+  const transition = useSpringTransition(open);
   const height = bInterpolate(
     transition,
     0,

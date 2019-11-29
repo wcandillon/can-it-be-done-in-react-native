@@ -1,7 +1,7 @@
 import Animated, { Easing } from "react-native-reanimated";
 import { State } from "react-native-gesture-handler";
 import { useMemoOne } from "use-memo-one";
-import { bin } from "react-native-redash";
+import { bin, clamp } from "react-native-redash";
 
 const {
   Value,
@@ -14,8 +14,7 @@ const {
   startClock,
   timing,
   neq,
-  useCode,
-  debug
+  useCode
 } = Animated;
 
 export type TimingConfig = Partial<Omit<Animated.TimingConfig, "toValue">>;
@@ -41,10 +40,6 @@ export const withTimingTransition = (
   return block([
     startClock(clock),
     cond(neq(config.toValue, value), [
-      debug("config.toValue", config.toValue),
-      debug("value", value),
-      debug("state.positon", state.position),
-      debug("=================", new Value(0)),
       set(state.frameTime, 0),
       set(state.time, 0),
       set(state.finished, 0),
