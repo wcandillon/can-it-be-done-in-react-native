@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 });
 
 interface ChevronProps {
-  transition: Animated.Value<number>;
+  transition: Animated.Node<number>;
 }
 
 export default ({ transition }: ChevronProps) => {

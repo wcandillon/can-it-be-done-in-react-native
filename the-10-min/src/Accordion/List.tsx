@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 
-import Animated, { Easing } from "react-native-reanimated";
-import { bInterpolate, bin, useTransition } from "react-native-redash";
+import Animated from "react-native-reanimated";
+import { bInterpolate, useTimingTransition } from "react-native-redash";
 import Chevron from "./Chevron";
 import Item, { LIST_ITEM_HEIGHT, ListItem } from "./ListItem";
-import { useSpringTransition, useTimingTransition } from "./AnimationHelpers";
 
-const { not, interpolate } = Animated;
+const { interpolate } = Animated;
 const styles = StyleSheet.create({
   container: {
     marginTop: 16,
