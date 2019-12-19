@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 
 import Animated from "react-native-reanimated";
-import { bInterpolate, useTimingTransition } from "react-native-redash";
+import { bInterpolate, useTransition } from "react-native-redash";
 import Chevron from "./Chevron";
 import Item, { LIST_ITEM_HEIGHT, ListItem } from "./ListItem";
 
@@ -38,7 +38,7 @@ interface ListProps {
 
 export default ({ list }: ListProps) => {
   const [open, setOpen] = useState(false);
-  const transition = useTimingTransition(open);
+  const transition = useTransition(open);
   const height = bInterpolate(
     transition,
     0,

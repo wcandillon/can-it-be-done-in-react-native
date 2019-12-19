@@ -5538,10 +5538,10 @@ react-native-reanimated@~1.4.0:
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.4.0.tgz#7f1acbf9be08492d834f512700570978052be2f9"
   integrity sha512-tO7nSNNP+iRLVbkcSS5GXyDBb7tSI02+XuRL3/S39EAr35rnvUy2JfeLUQG+fWSObJjnMVhasUDEUwlENk8IXw==
 
-react-native-redash@9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-9.0.0.tgz#3fe5426c982a036cc4e7b2df9a94bd210ddd5750"
-  integrity sha512-2OV8ECpI6ruCwGA3nkhv1j3dGLUhoUVVDwgzAwOfhFrF3LglUaDhT8IG3DQFw7Q5sUuyPQY7HjLu9P0VkQ94LA==
+react-native-redash@9.1.1:
+  version "9.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-9.1.1.tgz#d6a092c189b5be2a8da541b46406362793e7a846"
+  integrity sha512-FmGViqa9sGsyFTOtUBWjfFyI+vU/6wXL0I+shltykpnBM2mHHmMNPcGtuOcDhVqcZOZdutKY+/JiJrSuKexXJQ==
   dependencies:
     abs-svg-path "^0.1.1"
     normalize-svg-path "^1.0.1"
