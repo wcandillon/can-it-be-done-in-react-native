@@ -2,6 +2,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { AntDesign as Icon } from "@expo/vector-icons";
+import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import { MIN_HEADER_HEIGHT } from "./Header";
 
@@ -96,11 +97,23 @@ const styles = StyleSheet.create({
   }
 });
 
-export default () => {
+interface ContentProps {
+  y: Animated.Node<number>;
+}
+
+export default ({ y }: ContentProps) => {
+  const opacity = interpolate(y, {
+    inputRange: [
+      HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT - 100,
+      HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT
+    ],
+    outputRange: [1, 0],
+    extrapolate: Extrapolate.CLAMP
+  });
   return (
     <>
       <View style={styles.placeholder} />
-      <View style={styles.section}>
+      <Animated.View style={[styles.section, { opacity }]}>
         <Text style={styles.text}>$$ • Asiatisch • Koreanisch • Japanisch</Text>
         <View style={styles.info}>
           <Text style={styles.text}>Opens at 11:30 AM</Text>
@@ -109,7 +122,7 @@ export default () => {
             <Text style={styles.text}>(186)</Text>
           </View>
         </View>
-      </View>
+      </Animated.View>
       <View style={styles.divider} />
       <View style={styles.section}>
         <Text style={styles.title2}>Restaurant info</Text>

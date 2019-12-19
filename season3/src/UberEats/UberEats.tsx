@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { debug, useCode } from "react-native-reanimated";
 import { onScroll } from "react-native-redash";
 
 import HeaderImage from "./HeaderImage";
@@ -24,7 +24,7 @@ export default () => {
         onScroll={onScroll({ y })}
         scrollEventThrottle={1}
       >
-        <Content />
+        <Content {...{ y }} />
       </Animated.ScrollView>
       <Header {...{ y }} />
     </View>

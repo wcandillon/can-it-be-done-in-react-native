@@ -49,7 +49,7 @@ interface HeaderProps {
 export default ({ y }: HeaderProps) => {
   const [toggle] = useValues<0 | 1>([0], []);
   const insets = useSafeArea();
-  const transition = withTimingTransition(toggle, { duration: 2000 });
+  const transition = withTimingTransition(toggle, { duration: 100 });
   const { top: paddingTop } = insets;
   const translateX = interpolate(y, {
     inputRange: [0, HEADER_IMAGE_HEIGHT],
@@ -87,7 +87,9 @@ export default ({ y }: HeaderProps) => {
         }}
       />
       <View style={styles.header}>
-        <Icon name="arrow-left" size={ICON_SIZE} color="white" />
+        <Animated.View style={{ opacity: transition }}>
+          <Icon name="arrow-left" size={ICON_SIZE} color="black" />
+        </Animated.View>
         <Animated.Text
           style={[
             styles.title,
