@@ -2,6 +2,7 @@ import React from "react";
 import { StatusBar } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { LoadAssets, StyleGuide } from "./src/components";
 import Episodes, { episodes } from "./src/Episodes";
@@ -69,6 +70,8 @@ const AppNavigator = createAppContainer(
 export default () => (
   <LoadAssets {...{ assets, fonts }}>
     <StatusBar barStyle="light-content" />
-    <AppNavigator />
+    <SafeAreaProvider>
+      <AppNavigator />
+    </SafeAreaProvider>
   </LoadAssets>
 );
