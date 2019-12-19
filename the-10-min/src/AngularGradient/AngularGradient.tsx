@@ -10,12 +10,13 @@ import Svg, {
   Stop
 } from "react-native-svg";
 import Animated from "react-native-reanimated";
+import { StyleGuide } from "../components";
 
 const { width } = Dimensions.get("window");
 const { PI, cos, sin } = Math;
 const { multiply, sub, Value } = Animated;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const colors = ["#3498db", "#c0392b"];
+const colors = [StyleGuide.palette.primary, "#c0392b"];
 const palette = interpolate(colors);
 const size = width * 0.8;
 const strokeWidth = 20;
