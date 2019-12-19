@@ -10,12 +10,13 @@ import Svg, {
   Stop
 } from "react-native-svg";
 import Animated from "react-native-reanimated";
+import { StyleGuide } from "../components";
 
 const { width } = Dimensions.get("window");
 const { PI, cos, sin } = Math;
 const { multiply, sub, Value } = Animated;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const colors = ["blue", "red"];
+const colors = [StyleGuide.palette.primary, "#c0392b"];
 const palette = interpolate(colors);
 const size = width * 0.8;
 const strokeWidth = 20;
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   svg: {
-    transform: [{ rotateZ: "270deg" }]
+    transform: [{ rotateZ: "-90deg" }]
   }
 });
 
