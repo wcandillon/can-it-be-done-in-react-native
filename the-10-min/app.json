@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "the-5-min",
-    "slug": "the-5-min",
+    "name": "the-10-min",
+    "slug": "the-10-min",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
