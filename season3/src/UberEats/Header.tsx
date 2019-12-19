@@ -1,13 +1,12 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { useValues } from "react-native-redash";
+import { useValues, withTimingTransition } from "react-native-redash";
 import { Feather as Icon } from "@expo/vector-icons";
 import { useSafeArea } from "react-native-safe-area-context";
 
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import TabHeader from "./TabHeader";
-import { withSpringTransition, withTimingTransition } from "./AnimationHelpers";
 
 const ICON_SIZE = 24;
 const PADDING = 16;
@@ -68,10 +67,15 @@ export default ({ y }: HeaderProps) => {
   });
   const opacity = transition;
   useCode(
-    block([
-      cond(greaterThan(y, HEADER_IMAGE_HEIGHT), set(toggle, 1), set(toggle, 0))
-    ]),
-    []
+    () =>
+      block([
+        cond(
+          greaterThan(y, HEADER_IMAGE_HEIGHT),
+          set(toggle, 1),
+          set(toggle, 0)
+        )
+      ]),
+    [toggle, y]
   );
   return (
     <Animated.View style={[styles.container, { paddingTop }]}>

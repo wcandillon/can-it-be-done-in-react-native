@@ -2873,10 +2873,10 @@ eslint-config-prettier@^6.7.0:
   dependencies:
     get-stdin "^6.0.0"
 
-eslint-config-react-native-wcandillon@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-react-native-wcandillon/-/eslint-config-react-native-wcandillon-2.3.1.tgz#beddb1bbe6a075dacf2a7546543ce110231b4acf"
-  integrity sha512-R1dLnXLMX19wItGIIs098FuZreKK3FfPElfbWSEx8uMPiovoUzs8942Z5QarpeaSCEH5zPT4k6JRZWz1nXkVlg==
+eslint-config-react-native-wcandillon@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/eslint-config-react-native-wcandillon/-/eslint-config-react-native-wcandillon-2.3.2.tgz#5ff0bd224dc6ef695d19ee4ba929b51542618c48"
+  integrity sha512-2CuvWtYnUEjAJbs/rPdE4jykixe3Vh8dSKpA8eRYDOG0ROuvJeMwjnX+0DfVpk91vRmhovxi5e/nRQpp5v4CRw==
   dependencies:
     "@typescript-eslint/eslint-plugin" "2.10.0"
     "@typescript-eslint/parser" "2.10.0"
@@ -5469,10 +5469,10 @@ react-native-reanimated@~1.4.0:
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.4.0.tgz#7f1acbf9be08492d834f512700570978052be2f9"
   integrity sha512-tO7nSNNP+iRLVbkcSS5GXyDBb7tSI02+XuRL3/S39EAr35rnvUy2JfeLUQG+fWSObJjnMVhasUDEUwlENk8IXw==
 
-react-native-redash@9.1.1:
-  version "9.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-9.1.1.tgz#d6a092c189b5be2a8da541b46406362793e7a846"
-  integrity sha512-FmGViqa9sGsyFTOtUBWjfFyI+vU/6wXL0I+shltykpnBM2mHHmMNPcGtuOcDhVqcZOZdutKY+/JiJrSuKexXJQ==
+react-native-redash@9.1.2:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-9.1.2.tgz#3165c823ca3d240fd7b92a473071cf037428c159"
+  integrity sha512-LguBCF+zbaAQJqj5PTj5t1G9k4VdbHKsKy3I/r6NBcerCyk9uBTJpt8C2HiQ6MzY37WSMe9b+mFiljGvStZ6VA==
   dependencies:
     abs-svg-path "^0.1.1"
     normalize-svg-path "^1.0.1"
