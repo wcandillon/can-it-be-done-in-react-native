@@ -25,13 +25,7 @@ interface TabProps {
   onPress?: () => void;
 }
 
-export default ({
-  name,
-  color,
-  onMeasurement,
-  backgroundColor,
-  onPress
-}: TabProps) => {
+export default ({ name, color, onMeasurement, onPress }: TabProps) => {
   return (
     <TouchableWithoutFeedback {...{ onPress }}>
       <View
@@ -44,7 +38,7 @@ export default ({
               }) => onMeasurement(width)
             : undefined
         }
-        style={[styles.container, { backgroundColor }]}
+        style={styles.container}
       >
         <Text style={[styles.text, { color }]}>{name}</Text>
       </View>

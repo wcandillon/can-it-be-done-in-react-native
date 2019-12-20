@@ -67,7 +67,6 @@ const Tabs = ({ active, onMeasurement, onPress }: TabsProps) => (
         onMeasurement={
           onMeasurement ? onMeasurement.bind(null, index) : undefined
         }
-        backgroundColor={active ? "black" : "white"}
         color={active ? "white" : "black"}
         onPress={onPress ? onPress.bind(null, index) : undefined}
         {...tab}
@@ -102,6 +101,17 @@ export default ({ transition }: TabHeaderProps) => {
           setMeasurements([...measurements]);
         }}
       />
+      <View>
+        <Animated.View
+          style={{
+            borderRadius: 24,
+            backgroundColor: "black",
+            width,
+            flex: 1,
+            transform: [{ translateX }]
+          }}
+        />
+      </View>
       <MaskedView
         style={StyleSheet.absoluteFill}
         maskElement={(
