@@ -74,9 +74,11 @@ export default ({ transition, y }: TabHeaderProps) => {
       <Tabs />
       <MaskedView
         style={StyleSheet.absoluteFill}
-        maskElement={
-          <View style={{ backgroundColor: "black", width: 200, height: 45 }} />
-        }
+        maskElement={(
+          <Animated.View
+            style={{ backgroundColor: "black", width: 200, flex: 1 }}
+          />
+        )}
       >
         <Tabs active />
       </MaskedView>
