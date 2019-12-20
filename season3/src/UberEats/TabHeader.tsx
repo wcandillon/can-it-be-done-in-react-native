@@ -3,46 +3,8 @@ import { StyleSheet, View } from "react-native";
 import Animated, { Value, interpolate } from "react-native-reanimated";
 import MaskedView from "@react-native-community/masked-view";
 
-import {
-  bInterpolate,
-  useTransition,
-  withTransition
-} from "react-native-redash";
-import Tab from "./Tab";
-
-const tabs = [
-  {
-    name: "Recommandations",
-    anchor: 100,
-    width: 123 + 16
-  },
-  {
-    name: "Starters",
-    anchor: 200,
-    width: 53 + 16
-  },
-  {
-    name: "Gimbap Sushi",
-    anchor: 300,
-    width: 91 + 16
-  },
-  {
-    name: "Bimbap Rice",
-    anchor: 400
-  },
-  {
-    name: "Noodles",
-    anchor: 500
-  },
-  {
-    name: "Fried Chicken",
-    anchor: 600
-  },
-  {
-    name: "Korean Favourites",
-    anchor: 600
-  }
-];
+import { withTransition } from "react-native-redash";
+import Tabs, { tabs } from "./Tabs";
 
 const styles = StyleSheet.create({
   container: {
@@ -50,34 +12,8 @@ const styles = StyleSheet.create({
     height: 45,
     marginBottom: 8,
     flexDirection: "row"
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    flexDirection: "row"
   }
 });
-
-interface TabsProps {
-  active?: boolean;
-  onMeasurement: (index: number, measurement: number) => void;
-  onPress?: (index: number) => void;
-}
-
-const Tabs = ({ active, onMeasurement, onPress }: TabsProps) => (
-  <View style={styles.overlay}>
-    {tabs.map((tab, index) => (
-      <Tab
-        key={index}
-        onMeasurement={
-          onMeasurement ? onMeasurement.bind(null, index) : undefined
-        }
-        color={active ? "white" : "black"}
-        onPress={onPress ? onPress.bind(null, index) : undefined}
-        {...tab}
-      />
-    ))}
-  </View>
-);
 
 interface TabHeaderProps {
   transition: Animated.Node<number>;
@@ -85,7 +21,7 @@ interface TabHeaderProps {
 }
 
 export default ({ transition }: TabHeaderProps) => {
-  const index = new Value(0);
+  const index = new Value<number>(0);
   const [measurements, setMeasurements] = useState<number[]>(
     new Array(tabs.length).fill(0)
   );
@@ -96,14 +32,24 @@ export default ({ transition }: TabHeaderProps) => {
     outputRange: measurements
   });
   const translateX = interpolate(indexTransition, {
-    inputRange: tabs.map((_, i) => i),
+    inputRange: tabs.map((_tab, i) => i),
     outputRange: measurements.map((_, i) => {
       return (
-        measurements.filter((__, j) => j < i).reduce((acc, m) => acc + m, 0) +
+        measurements
+          .filter((_measurement, j) => j < i)
+          .reduce((acc, m) => acc + m, 0) +
         8 * i
       );
     })
   });
+  const style = {
+    borderRadius: 24,
+    backgroundColor: "black",
+    width,
+    flex: 1,
+    transform: [{ translateX }]
+  };
+  const maskElement = <Animated.View {...{ style }} />;
   return (
     <Animated.View style={[styles.container, { opacity }]}>
       <Tabs
@@ -113,29 +59,9 @@ export default ({ transition }: TabHeaderProps) => {
         }}
       />
       <View>
-        <Animated.View
-          style={{
-            borderRadius: 24,
-            backgroundColor: "black",
-            width,
-            flex: 1,
-            transform: [{ translateX }]
-          }}
-        />
+        <Animated.View {...{ style }} />
       </View>
-      <MaskedView
-        style={StyleSheet.absoluteFill}
-        maskElement={(
-          <Animated.View
-            style={{
-              backgroundColor: "black",
-              width,
-              flex: 1,
-              transform: [{ translateX }]
-            }}
-          />
-        )}
-      >
+      <MaskedView style={StyleSheet.absoluteFill} maskElement={maskElement}>
         <Tabs active onPress={i => index.setValue(i)} />
       </MaskedView>
     </Animated.View>

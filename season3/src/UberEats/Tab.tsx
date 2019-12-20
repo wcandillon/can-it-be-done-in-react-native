@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
 
 interface TabProps {
   color: string;
-  backgroundColor: string;
   name: string;
   onMeasurement?: (measurement: number) => void;
   onPress?: () => void;
