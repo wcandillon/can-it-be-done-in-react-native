@@ -76,6 +76,7 @@ const Tabs = ({ active, onMeasurement, onPress }: TabsProps) => (
 );
 
 interface TabHeaderProps {
+  transition: Animated.Node<number>;
   y: Animated.Node<number>;
 }
 
