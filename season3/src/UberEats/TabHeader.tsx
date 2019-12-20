@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import MaskedView from "@react-native-community/masked-view";
 
+import { bInterpolate, useTransition } from "react-native-redash";
 import Tab from "./Tab";
 
 const tabs = [
@@ -52,13 +53,23 @@ const styles = StyleSheet.create({
   }
 });
 
-const Tabs = ({ active }: { active?: boolean }) => (
+interface TabsProps {
+  active?: boolean;
+  onMeasurement: (index: number, measurement: number) => void;
+  onPress?: (index: number) => void;
+}
+
+const Tabs = ({ active, onMeasurement, onPress }: TabsProps) => (
   <View style={styles.overlay}>
-    {tabs.map((tab, key) => (
+    {tabs.map((tab, index) => (
       <Tab
+        key={index}
+        onMeasurement={
+          onMeasurement ? onMeasurement.bind(null, index) : undefined
+        }
         backgroundColor={active ? "black" : "white"}
         color={active ? "white" : "black"}
-        {...{ key }}
+        onPress={onPress ? onPress.bind(null, index) : undefined}
         {...tab}
       />
     ))}
@@ -66,24 +77,45 @@ const Tabs = ({ active }: { active?: boolean }) => (
 );
 
 interface TabHeaderProps {
-  transition: Animated.Node<number>;
   y: Animated.Node<number>;
 }
 
 export default ({ transition }: TabHeaderProps) => {
+  const [index, setIndex] = useState(0);
+  const [measurements, setMeasurements] = useState<number[]>(
+    new Array(tabs.length).fill(0)
+  );
   const opacity = transition;
+  const t1 = useTransition(index === 1);
+  const width = bInterpolate(t1, measurements[0], measurements[1]);
+  const translateX = bInterpolate(t1, 0, measurements[0] + 8);
+  /*
+  const translateX =
+    measurements.filter((_, i) => i < index).reduce((acc, m) => acc + m, 0) +
+    8 * index;
+    */
   return (
     <Animated.View style={[styles.container, { opacity }]}>
-      <Tabs />
+      <Tabs
+        onMeasurement={(i, m) => {
+          measurements[i] = m;
+          setMeasurements([...measurements]);
+        }}
+      />
       <MaskedView
         style={StyleSheet.absoluteFill}
         maskElement={(
           <Animated.View
-            style={{ backgroundColor: "black", width: 123 + 16, flex: 1 }}
+            style={{
+              backgroundColor: "black",
+              width,
+              flex: 1,
+              transform: [{ translateX }]
+            }}
           />
         )}
       >
-        <Tabs active />
+        <Tabs active onPress={i => setIndex(i)} />
       </MaskedView>
     </Animated.View>
   );
