@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { RefObject, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   Value,
@@ -30,9 +30,10 @@ interface TabHeaderProps {
   transition: Animated.Node<number>;
   y: Animated.Node<number>;
   tabs: TabModel[];
+  scrollView: RefObject<Animated.ScrollView>;
 }
 
-export default ({ transition, y, tabs }: TabHeaderProps) => {
+export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
   const index = new Value<number>(0);
   const [measurements, setMeasurements] = useState<number[]>(
     new Array(tabs.length).fill(0)
@@ -92,7 +93,15 @@ export default ({ transition, y, tabs }: TabHeaderProps) => {
         <Animated.View {...{ style }} />
       </View>
       <MaskedView style={StyleSheet.absoluteFill} maskElement={maskElement}>
-        <Tabs active onPress={i => index.setValue(i)} {...{ tabs }} />
+        <Tabs
+          active
+          onPress={i => {
+            if (scrollView.current) {
+              scrollView.current.getNode().scrollTo({ y: tabs[i].anchor });
+            }
+          }}
+          {...{ tabs }}
+        />
       </MaskedView>
     </Animated.View>
   );

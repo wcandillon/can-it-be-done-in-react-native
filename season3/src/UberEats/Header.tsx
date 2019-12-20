@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { useValues, withTimingTransition } from "react-native-redash";
@@ -38,9 +38,10 @@ const styles = StyleSheet.create({
 interface HeaderProps {
   y: Animated.Value<number>;
   tabs: TabModel[];
+  scrollView: RefObject<Animated.ScrollView>;
 }
 
-export default ({ y, tabs }: HeaderProps) => {
+export default ({ y, tabs, scrollView }: HeaderProps) => {
   const [toggle] = useValues<0 | 1>([0], []);
   const insets = useSafeArea();
   const transition = withTimingTransition(toggle, { duration: 100 });
@@ -87,7 +88,7 @@ export default ({ y, tabs }: HeaderProps) => {
         </Animated.Text>
         <Icon name="heart" size={ICON_SIZE} color="white" />
       </View>
-      <TabHeader {...{ y, transition, tabs }} />
+      <TabHeader {...{ y, transition, tabs, scrollView }} />
     </Animated.View>
   );
 };

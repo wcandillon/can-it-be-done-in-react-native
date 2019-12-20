@@ -145,7 +145,7 @@ export default ({ y, onMeasurement }: ContentProps) => {
         </View>
       </View>
       <View style={styles.divider} />
-      {menu.map(({ name, items }, index) => (
+      {menu.map(({ name, items: menuItems }, index) => (
         <View
           style={styles.section}
           key={index}
@@ -156,7 +156,7 @@ export default ({ y, onMeasurement }: ContentProps) => {
           }) => onMeasurement(index, { name, anchor: anchor - 128 })}
         >
           <Text style={styles.title1}>{name}</Text>
-          {items.map(({ title, description, price }, j) => (
+          {menuItems.map(({ title, description, price }, j) => (
             <View style={styles.item} key={j}>
               <Text style={styles.title}>{title}</Text>
               <Text style={styles.description} numberOfLines={2}>

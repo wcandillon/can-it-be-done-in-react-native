@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { onScroll, useValues } from "react-native-redash";
@@ -14,12 +14,14 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const scrollView = useRef<Animated.ScrollView>(null);
   const [tabs, setTabs] = useState(defaultTabs);
   const [y] = useValues([0], []);
   return (
     <View style={styles.container}>
       <HeaderImage {...{ y }} />
       <Animated.ScrollView
+        ref={scrollView}
         style={StyleSheet.absoluteFill}
         onScroll={onScroll({ y })}
         scrollEventThrottle={1}
@@ -32,7 +34,7 @@ export default () => {
           {...{ y }}
         />
       </Animated.ScrollView>
-      <Header {...{ y, tabs }} />
+      <Header {...{ y, tabs, scrollView }} />
     </View>
   );
 };
