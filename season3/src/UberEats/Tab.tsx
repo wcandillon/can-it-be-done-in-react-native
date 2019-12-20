@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Animated from "react-native-reanimated";
 
 const styles = StyleSheet.create({
   container: {
@@ -20,14 +19,12 @@ interface TabProps {
   color: string;
   backgroundColor: string;
   name: string;
-  anchor: number;
-  y: Animated.Node<number>;
 }
 
-export default ({ name, anchor, y, color, backgroundColor }: TabProps) => {
+export default ({ name, color, backgroundColor }: TabProps) => {
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <Text style={[styles.text, {color}]}>{name}</Text>
+      <Text style={[styles.text, { color }]}>{name}</Text>
     </View>
   );
 };

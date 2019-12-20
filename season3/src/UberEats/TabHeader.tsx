@@ -3,20 +3,23 @@ import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import MaskedView from "@react-native-community/masked-view";
 
-import Tab, { TabModel } from "./Tab";
+import Tab from "./Tab";
 
-const tabs: TabModel[] = [
+const tabs = [
   {
     name: "Recommandations",
-    anchor: 100
+    anchor: 100,
+    width: 123 + 16
   },
   {
     name: "Starters",
-    anchor: 200
+    anchor: 200,
+    width: 53 + 16
   },
   {
     name: "Gimbap Sushi",
-    anchor: 300
+    anchor: 300,
+    width: 91 + 16
   },
   {
     name: "Bimbap Rice",
@@ -67,7 +70,7 @@ interface TabHeaderProps {
   y: Animated.Node<number>;
 }
 
-export default ({ transition, y }: TabHeaderProps) => {
+export default ({ transition }: TabHeaderProps) => {
   const opacity = transition;
   return (
     <Animated.View style={[styles.container, { opacity }]}>
@@ -76,7 +79,7 @@ export default ({ transition, y }: TabHeaderProps) => {
         style={StyleSheet.absoluteFill}
         maskElement={(
           <Animated.View
-            style={{ backgroundColor: "black", width: 200, flex: 1 }}
+            style={{ backgroundColor: "black", width: 123 + 16, flex: 1 }}
           />
         )}
       >
