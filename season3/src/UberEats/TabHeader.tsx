@@ -97,7 +97,7 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
           active
           onPress={i => {
             if (scrollView.current) {
-              scrollView.current.getNode().scrollTo({ y: tabs[i].anchor });
+              scrollView.current.getNode().scrollTo({ y: tabs[i].anchor + 1 });
             }
           }}
           {...{ tabs }}

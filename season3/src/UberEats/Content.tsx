@@ -41,7 +41,7 @@ const items = [
 const menu = [
   { name: "Starters", items },
   { name: "Order Again", items },
-  { name: "Starters", items },
+  { name: "Picked for you", items },
   { name: "Gimbap Sushi", items }
 ];
 export const defaultTabs = menu.map(({ name }) => ({ name, anchor: 0 }));
@@ -153,7 +153,7 @@ export default ({ y, onMeasurement }: ContentProps) => {
             nativeEvent: {
               layout: { y: anchor }
             }
-          }) => onMeasurement(index, { name, anchor: anchor - 128 })}
+          }) => onMeasurement(index, { name, anchor: anchor - 142 })}
         >
           <Text style={styles.title1}>{name}</Text>
           {menuItems.map(({ title, description, price }, j) => (
@@ -167,6 +167,7 @@ export default ({ y, onMeasurement }: ContentProps) => {
           ))}
         </View>
       ))}
+      <View style={{ height: 100 }} />
     </>
   );
 };
