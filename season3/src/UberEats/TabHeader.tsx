@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { Value, interpolate } from "react-native-reanimated";
 import MaskedView from "@react-native-community/masked-view";
 
-import { bInterpolate, useTransition } from "react-native-redash";
+import {
+  bInterpolate,
+  useTransition,
+  withTransition
+} from "react-native-redash";
 import Tab from "./Tab";
 
 const tabs = [
@@ -81,19 +85,25 @@ interface TabHeaderProps {
 }
 
 export default ({ transition }: TabHeaderProps) => {
-  const [index, setIndex] = useState(0);
+  const index = new Value(0);
   const [measurements, setMeasurements] = useState<number[]>(
     new Array(tabs.length).fill(0)
   );
   const opacity = transition;
-  const t1 = useTransition(index === 1);
-  const width = bInterpolate(t1, measurements[0], measurements[1]);
-  const translateX = bInterpolate(t1, 0, measurements[0] + 8);
-  /*
-  const translateX =
-    measurements.filter((_, i) => i < index).reduce((acc, m) => acc + m, 0) +
-    8 * index;
-    */
+  const indexTransition = withTransition(index);
+  const width = interpolate(indexTransition, {
+    inputRange: tabs.map((_, i) => i),
+    outputRange: measurements
+  });
+  const translateX = interpolate(indexTransition, {
+    inputRange: tabs.map((_, i) => i),
+    outputRange: measurements.map((_, i) => {
+      return (
+        measurements.filter((__, j) => j < i).reduce((acc, m) => acc + m, 0) +
+        8 * i
+      );
+    })
+  });
   return (
     <Animated.View style={[styles.container, { opacity }]}>
       <Tabs
@@ -126,7 +136,7 @@ export default ({ transition }: TabHeaderProps) => {
           />
         )}
       >
-        <Tabs active onPress={i => setIndex(i)} />
+        <Tabs active onPress={i => index.setValue(i)} />
       </MaskedView>
     </Animated.View>
   );
