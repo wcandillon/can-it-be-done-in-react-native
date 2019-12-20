@@ -11,15 +11,7 @@ import TabHeader from "./TabHeader";
 const ICON_SIZE = 24;
 const PADDING = 16;
 export const MIN_HEADER_HEIGHT = 45;
-const {
-  interpolate,
-  Extrapolate,
-  useCode,
-  cond,
-  greaterThan,
-  set,
-  block
-} = Animated;
+const { interpolate, Extrapolate, useCode, greaterThan, set, block } = Animated;
 
 const styles = StyleSheet.create({
   container: {
@@ -66,17 +58,10 @@ export default ({ y }: HeaderProps) => {
     extrapolateRight: Extrapolate.CLAMP
   });
   const opacity = transition;
-  useCode(
-    () =>
-      block([
-        cond(
-          greaterThan(y, HEADER_IMAGE_HEIGHT),
-          set(toggle, 1),
-          set(toggle, 0)
-        )
-      ]),
-    [toggle, y]
-  );
+  useCode(() => block([set(toggle, greaterThan(y, HEADER_IMAGE_HEIGHT))]), [
+    toggle,
+    y
+  ]);
   return (
     <Animated.View style={[styles.container, { paddingTop }]}>
       <Animated.View
