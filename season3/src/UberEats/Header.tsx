@@ -7,6 +7,7 @@ import { useSafeArea } from "react-native-safe-area-context";
 
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import TabHeader from "./TabHeader";
+import { TabModel } from "./Content";
 
 const ICON_SIZE = 24;
 const PADDING = 16;
@@ -36,9 +37,10 @@ const styles = StyleSheet.create({
 
 interface HeaderProps {
   y: Animated.Value<number>;
+  tabs: TabModel[];
 }
 
-export default ({ y }: HeaderProps) => {
+export default ({ y, tabs }: HeaderProps) => {
   const [toggle] = useValues<0 | 1>([0], []);
   const insets = useSafeArea();
   const transition = withTimingTransition(toggle, { duration: 100 });
@@ -85,7 +87,7 @@ export default ({ y }: HeaderProps) => {
         </Animated.Text>
         <Icon name="heart" size={ICON_SIZE} color="white" />
       </View>
-      <TabHeader {...{ y, transition }} />
+      <TabHeader {...{ y, transition, tabs }} />
     </Animated.View>
   );
 };

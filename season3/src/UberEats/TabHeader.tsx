@@ -14,7 +14,8 @@ import Animated, {
 import MaskedView from "@react-native-community/masked-view";
 
 import { withTransition } from "react-native-redash";
-import Tabs, { tabs } from "./Tabs";
+import Tabs from "./Tabs";
+import { TabModel } from "./Content";
 
 const styles = StyleSheet.create({
   container: {
@@ -28,9 +29,10 @@ const styles = StyleSheet.create({
 interface TabHeaderProps {
   transition: Animated.Node<number>;
   y: Animated.Node<number>;
+  tabs: TabModel[];
 }
 
-export default ({ transition, y }: TabHeaderProps) => {
+export default ({ transition, y, tabs }: TabHeaderProps) => {
   const index = new Value<number>(0);
   const [measurements, setMeasurements] = useState<number[]>(
     new Array(tabs.length).fill(0)
@@ -75,7 +77,7 @@ export default ({ transition, y }: TabHeaderProps) => {
           )
         )
       ),
-    [index, y]
+    [index, tabs, y]
   );
   return (
     <Animated.View style={[styles.container, { opacity }]}>
@@ -84,12 +86,13 @@ export default ({ transition, y }: TabHeaderProps) => {
           measurements[i] = m;
           setMeasurements([...measurements]);
         }}
+        {...{ tabs }}
       />
       <View>
         <Animated.View {...{ style }} />
       </View>
       <MaskedView style={StyleSheet.absoluteFill} maskElement={maskElement}>
-        <Tabs active onPress={i => index.setValue(i)} />
+        <Tabs active onPress={i => index.setValue(i)} {...{ tabs }} />
       </MaskedView>
     </Animated.View>
   );

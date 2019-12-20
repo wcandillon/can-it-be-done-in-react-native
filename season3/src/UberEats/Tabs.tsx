@@ -2,40 +2,7 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 
 import Tab from "./Tab";
-
-export const tabs = [
-  {
-    name: "Recommandations",
-    anchor: 100,
-    width: 123 + 16
-  },
-  {
-    name: "Starters",
-    anchor: 200,
-    width: 53 + 16
-  },
-  {
-    name: "Gimbap Sushi",
-    anchor: 300,
-    width: 91 + 16
-  },
-  {
-    name: "Bimbap Rice",
-    anchor: 400
-  },
-  {
-    name: "Noodles",
-    anchor: 500
-  },
-  {
-    name: "Fried Chicken",
-    anchor: 600
-  },
-  {
-    name: "Korean Favourites",
-    anchor: 600
-  }
-];
+import { TabModel } from "./Content";
 
 const styles = StyleSheet.create({
   overlay: {
@@ -45,12 +12,13 @@ const styles = StyleSheet.create({
 });
 
 interface TabsProps {
+  tabs: TabModel[];
   active?: boolean;
   onMeasurement?: (index: number, measurement: number) => void;
   onPress?: (index: number) => void;
 }
 
-export default ({ active, onMeasurement, onPress }: TabsProps) => (
+export default ({ tabs, active, onMeasurement, onPress }: TabsProps) => (
   <View style={styles.overlay}>
     {tabs.map((tab, index) => (
       <Tab

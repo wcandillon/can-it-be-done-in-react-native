@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { debug, useCode } from "react-native-reanimated";
-import { onScroll } from "react-native-redash";
+import Animated from "react-native-reanimated";
+import { onScroll, useValues } from "react-native-redash";
 
 import HeaderImage from "./HeaderImage";
-import Content from "./Content";
+import Content, { defaultTabs } from "./Content";
 import Header from "./Header";
 
-const { Value } = Animated;
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -15,7 +14,8 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const y = new Value(0);
+  const [tabs, setTabs] = useState(defaultTabs);
+  const [y] = useValues([0], []);
   return (
     <View style={styles.container}>
       <HeaderImage {...{ y }} />
@@ -24,9 +24,15 @@ export default () => {
         onScroll={onScroll({ y })}
         scrollEventThrottle={1}
       >
-        <Content {...{ y }} />
+        <Content
+          onMeasurement={(index, tab) => {
+            tabs[index] = tab;
+            setTabs([...tabs]);
+          }}
+          {...{ y }}
+        />
       </Animated.ScrollView>
-      <Header {...{ y }} />
+      <Header {...{ y, tabs }} />
     </View>
   );
 };

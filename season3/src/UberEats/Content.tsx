@@ -6,7 +6,7 @@ import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import { MIN_HEADER_HEIGHT } from "./Header";
 
-const menu = [
+const items = [
   {
     title: "Long Hongdae Nights",
     description:
@@ -37,6 +37,14 @@ const menu = [
     price: "26.50 CHF"
   }
 ];
+
+const menu = [
+  { name: "Starters", items },
+  { name: "Order Again", items },
+  { name: "Starters", items },
+  { name: "Gimbap Sushi", items }
+];
+export const defaultTabs = menu.map(({ name }) => ({ name, anchor: 0 }));
 const styles = StyleSheet.create({
   section: {
     padding: 16
@@ -80,7 +88,6 @@ const styles = StyleSheet.create({
   item: {
     borderBottomColor: "#e2e3e4",
     borderBottomWidth: 1,
-    marginHorizontal: 16,
     marginTop: 16
   },
   title: {
@@ -97,11 +104,17 @@ const styles = StyleSheet.create({
   }
 });
 
-interface ContentProps {
-  y: Animated.Node<number>;
+export interface TabModel {
+  name: string;
+  anchor: number;
 }
 
-export default ({ y }: ContentProps) => {
+interface ContentProps {
+  y: Animated.Node<number>;
+  onMeasurement: (index: number, tab: TabModel) => void;
+}
+
+export default ({ y, onMeasurement }: ContentProps) => {
   const opacity = interpolate(y, {
     inputRange: [
       HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT - 100,
@@ -132,14 +145,26 @@ export default ({ y }: ContentProps) => {
         </View>
       </View>
       <View style={styles.divider} />
-      {[...menu, ...menu].map(({ title, description, price }, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <View style={styles.item} key={index}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description} numberOfLines={2}>
-            {description}
-          </Text>
-          <Text style={styles.price}>{price}</Text>
+      {menu.map(({ name, items }, index) => (
+        <View
+          style={styles.section}
+          key={index}
+          onLayout={({
+            nativeEvent: {
+              layout: { y: anchor }
+            }
+          }) => onMeasurement(index, { name, anchor: anchor - 128 })}
+        >
+          <Text style={styles.title1}>{name}</Text>
+          {items.map(({ title, description, price }, j) => (
+            <View style={styles.item} key={j}>
+              <Text style={styles.title}>{title}</Text>
+              <Text style={styles.description} numberOfLines={2}>
+                {description}
+              </Text>
+              <Text style={styles.price}>{price}</Text>
+            </View>
+          ))}
         </View>
       ))}
     </>
