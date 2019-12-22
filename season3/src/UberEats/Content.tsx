@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { AntDesign as Icon } from "@expo/vector-icons";
 import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import { MIN_HEADER_HEIGHT } from "./Header";
 
+const { height } = Dimensions.get("window");
 const items = [
   {
     title: "Long Hongdae Nights",
@@ -167,7 +168,7 @@ export default ({ y, onMeasurement }: ContentProps) => {
           ))}
         </View>
       ))}
-      <View style={{ height: 100 }} />
+      <View style={{ height }} />
     </>
   );
 };

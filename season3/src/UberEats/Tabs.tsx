@@ -1,6 +1,7 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
+import Animated from "react-native-reanimated";
 import Tab from "./Tab";
 import { TabModel } from "./Content";
 
@@ -16,10 +17,17 @@ interface TabsProps {
   active?: boolean;
   onMeasurement?: (index: number, measurement: number) => void;
   onPress?: (index: number) => void;
+  translateX: Animated.Node<number>;
 }
 
-export default ({ tabs, active, onMeasurement, onPress }: TabsProps) => (
-  <View style={styles.overlay}>
+export default ({
+  tabs,
+  active,
+  onMeasurement,
+  onPress,
+  translateX
+}: TabsProps) => (
+  <Animated.View style={[styles.overlay, { transform: [{ translateX }] }]}>
     {tabs.map((tab, index) => (
       <Tab
         key={index}
@@ -31,5 +39,5 @@ export default ({ tabs, active, onMeasurement, onPress }: TabsProps) => (
         {...tab}
       />
     ))}
-  </View>
+  </Animated.View>
 );

@@ -48,9 +48,10 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
     inputRange: tabs.map((_tab, i) => i),
     outputRange: measurements.map((_, i) => {
       return (
-        measurements
-          .filter((_measurement, j) => j < i)
-          .reduce((acc, m) => acc + m, 0) +
+        -1 *
+          measurements
+            .filter((_measurement, j) => j < i)
+            .reduce((acc, m) => acc + m, 0) -
         8 * i
       );
     })
@@ -59,8 +60,7 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
     borderRadius: 24,
     backgroundColor: "black",
     width,
-    flex: 1,
-    transform: [{ translateX }]
+    flex: 1
   };
   const maskElement = <Animated.View {...{ style }} />;
   useCode(
@@ -87,7 +87,7 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
           measurements[i] = m;
           setMeasurements([...measurements]);
         }}
-        {...{ tabs }}
+        {...{ tabs, translateX }}
       />
       <View>
         <Animated.View {...{ style }} />
@@ -100,7 +100,7 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
               scrollView.current.getNode().scrollTo({ y: tabs[i].anchor + 1 });
             }
           }}
-          {...{ tabs }}
+          {...{ tabs, translateX }}
         />
       </MaskedView>
     </Animated.View>
