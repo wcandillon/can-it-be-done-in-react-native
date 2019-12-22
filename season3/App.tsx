@@ -25,13 +25,6 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      UberEats: {
-        screen: UberEats,
-        navigationOptions: {
-          title: "Uber Eats",
-          header: () => null
-        }
-      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
@@ -53,6 +46,13 @@ const AppNavigator = createAppContainer(
       Chrome: {
         screen: Chrome,
         navigationOptions: { title: "Google Chrome" }
+      },
+      UberEats: {
+        screen: UberEats,
+        navigationOptions: {
+          title: "Uber Eats",
+          header: () => null
+        }
       }
     },
     {
