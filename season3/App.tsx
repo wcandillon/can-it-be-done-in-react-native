@@ -13,6 +13,7 @@ import UberEats, {
   assets as uberEatsAssets,
   fonts as uberEatsFonts
 } from "./src/UberEats";
+import iPod from "./src/iPod";
 
 const fonts = { ...uberEatsFonts };
 const assets: number[] = [
@@ -25,6 +26,13 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      iPod: {
+        screen: iPod,
+        navigationOptions: {
+          title: "iPod Classic",
+          header: () => null
+        }
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {

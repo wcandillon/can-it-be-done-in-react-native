@@ -36,7 +36,7 @@ export const episodes = [
     icon: require("../../assets/icons/uber-eats.png")
   },
   {
-    id: "IPod",
+    id: "iPod",
     name: "iPod Classic",
     icon: require("../../assets/icons/ipod.png")
   }
