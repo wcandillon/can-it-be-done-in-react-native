@@ -11,7 +11,8 @@ const borderRadius = size * 0.16;
 const styles = StyleSheet.create({
   container: {
     width: size,
-    borderRadius
+    borderRadius,
+    marginBottom: StyleGuide.spacing * 2
   },
   icon: {
     width: size,
