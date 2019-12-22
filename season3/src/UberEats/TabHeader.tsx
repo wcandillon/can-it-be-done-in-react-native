@@ -82,26 +82,42 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
   );
   return (
     <Animated.View style={[styles.container, { opacity }]}>
-      <Tabs
-        onMeasurement={(i, m) => {
-          measurements[i] = m;
-          setMeasurements([...measurements]);
+      <Animated.View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          transform: [{ translateX }]
         }}
-        {...{ tabs, translateX }}
-      />
+      >
+        <Tabs
+          onMeasurement={(i, m) => {
+            measurements[i] = m;
+            setMeasurements([...measurements]);
+          }}
+          {...{ tabs, translateX }}
+        />
+      </Animated.View>
       <View>
         <Animated.View {...{ style }} />
       </View>
       <MaskedView style={StyleSheet.absoluteFill} maskElement={maskElement}>
-        <Tabs
-          active
-          onPress={i => {
-            if (scrollView.current) {
-              scrollView.current.getNode().scrollTo({ y: tabs[i].anchor + 1 });
-            }
+        <Animated.View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            transform: [{ translateX }]
           }}
-          {...{ tabs, translateX }}
-        />
+        >
+          <Tabs
+            active
+            onPress={i => {
+              if (scrollView.current) {
+                scrollView.current
+                  .getNode()
+                  .scrollTo({ y: tabs[i].anchor + 1 });
+              }
+            }}
+            {...{ tabs, translateX }}
+          />
+        </Animated.View>
       </MaskedView>
     </Animated.View>
   );
