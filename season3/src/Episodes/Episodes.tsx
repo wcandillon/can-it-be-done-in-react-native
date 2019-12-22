@@ -28,6 +28,11 @@ export const episodes = [
     id: "Things",
     name: "Things",
     icon: require("../../assets/icons/things.png")
+  },
+  {
+    id: "UberEats",
+    name: "UberEats",
+    icon: require("../../assets/icons/uber-eats.png")
   }
 ];
 
