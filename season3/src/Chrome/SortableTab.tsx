@@ -1,7 +1,11 @@
 import React from "react";
 import Animated from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { moving, panGestureHandler } from "react-native-redash";
+import {
+  moving,
+  panGestureHandler,
+  withSpringTransition
+} from "react-native-redash";
 import Tab, { TAB_SIZE, TabProps } from "./Tab";
 
 const {
@@ -15,10 +19,7 @@ const {
   multiply,
   divide,
   and,
-  Clock,
-  round,
-  spring,
-  startClock
+  round
 } = Animated;
 
 export const withOffset = ({
@@ -36,39 +37,6 @@ export const withOffset = ({
     add(safeOffset, value),
     set(safeOffset, offset)
   );
-};
-
-export const withTransition = (
-  value: Animated.Node<number>,
-  velocity: Animated.Value<number>,
-  gestureState: Animated.Value<State>
-) => {
-  const clock = new Clock();
-  const state = {
-    finished: new Value(0),
-    velocity: new Value(0),
-    position: new Value(0),
-    time: new Value(0)
-  };
-  const config = {
-    toValue: new Value(0),
-    damping: 15,
-    mass: 1,
-    stiffness: 150,
-    overshootClamping: false,
-    restSpeedThreshold: 1,
-    restDisplacementThreshold: 1
-  };
-  return block([
-    startClock(clock),
-    set(config.toValue, value),
-    cond(
-      eq(gestureState, State.ACTIVE),
-      [set(state.velocity, velocity), set(state.position, value)],
-      spring(clock, state, config)
-    ),
-    state.position
-  ]);
 };
 
 interface SortableCardProps extends TabProps {
@@ -99,27 +67,28 @@ export default ({ tab, offsets, index }: SortableCardProps) => {
   const zIndex = cond(eq(state, State.ACTIVE), 200, cond(moving(y), 100, 1));
   const offsetX = multiply(round(divide(x, TAB_SIZE)), TAB_SIZE);
   const offsetY = multiply(round(divide(y, TAB_SIZE)), TAB_SIZE);
-  const translateX = withTransition(x, velocityX, state);
-  const translateY = withTransition(y, velocityY, state);
+  const translateX = withSpringTransition(x, {}, velocityX, state);
+  const translateY = withSpringTransition(y, {}, velocityY, state);
   useCode(
-    block(
-      offsets.map(offset =>
-        cond(
-          and(
-            eq(offsetX, offset.x),
-            eq(offsetY, offset.y),
-            eq(state, State.ACTIVE)
-          ),
-          [
-            set(offset.x, currentOffset.x),
-            set(offset.y, currentOffset.y),
-            set(currentOffset.x, offsetX),
-            set(currentOffset.y, offsetY)
-          ]
+    () =>
+      block(
+        offsets.map(offset =>
+          cond(
+            and(
+              eq(offsetX, offset.x),
+              eq(offsetY, offset.y),
+              eq(state, State.ACTIVE)
+            ),
+            [
+              set(offset.x, currentOffset.x),
+              set(offset.y, currentOffset.y),
+              set(currentOffset.x, offsetX),
+              set(currentOffset.y, offsetY)
+            ]
+          )
         )
-      )
-    ),
-    []
+      ),
+    [currentOffset.x, currentOffset.y, offsetX, offsetY, offsets, state]
   );
   return (
     <PanGestureHandler {...gestureHandler}>

@@ -1,6 +1,7 @@
 {
    "extends": "react-native-wcandillon",
    "rules": {
-      "react/jsx-props-no-spreading": "off"
+      "react/no-array-index-key": "off",
+      "react/jsx-no-bind": "off"
    }
 }
