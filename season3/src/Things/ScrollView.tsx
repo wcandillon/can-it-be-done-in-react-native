@@ -141,23 +141,32 @@ export default memo(({ children, translateY, onPull }: ScrollViewProps) => {
     []
   );
   useCode(
-    block([
-      set(
-        translateY,
-        withScroll({
-          translationY,
-          velocityY,
-          state,
-          containerHeight,
-          contentHeight
-        })
-      ),
-      cond(
-        and(greaterOrEq(translateY, THRESHOLD), neq(state, State.ACTIVE)),
-        call([], onPull)
-      )
-    ]),
-    [containerHeight, contentHeight, onPull]
+    () =>
+      block([
+        set(
+          translateY,
+          withScroll({
+            translationY,
+            velocityY,
+            state,
+            containerHeight,
+            contentHeight
+          })
+        ),
+        cond(
+          and(greaterOrEq(translateY, THRESHOLD), neq(state, State.ACTIVE)),
+          call([], onPull)
+        )
+      ]),
+    [
+      containerHeight,
+      contentHeight,
+      onPull,
+      state,
+      translateY,
+      translationY,
+      velocityY
+    ]
   );
   return (
     <View
