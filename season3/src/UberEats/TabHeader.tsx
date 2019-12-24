@@ -1,5 +1,5 @@
 import React, { RefObject, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import Animated, {
   Value,
   and,
@@ -97,28 +97,42 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
         />
       </Animated.View>
       <View>
-        <Animated.View {...{ style }} />
-      </View>
-      <MaskedView style={StyleSheet.absoluteFill} maskElement={maskElement}>
         <Animated.View
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            transform: [{ translateX }]
-          }}
-        >
-          <Tabs
-            active
-            onPress={i => {
-              if (scrollView.current) {
-                scrollView.current
-                  .getNode()
-                  .scrollTo({ y: tabs[i].anchor + 1 });
-              }
+          style={[
+            style,
+            Platform.OS === "android"
+              ? {
+                  backgroundColor: "transparent",
+                  borderColor: "black",
+                  borderWidth: 1
+                }
+              : {}
+          ]}
+        />
+      </View>
+      {Platform.OS === "ios" && (
+        // see https://github.com/react-native-community/react-native-masked-view/issues/22
+        <MaskedView style={StyleSheet.absoluteFill} maskElement={maskElement}>
+          <Animated.View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              transform: [{ translateX }]
             }}
-            {...{ tabs, translateX }}
-          />
-        </Animated.View>
-      </MaskedView>
+          >
+            <Tabs
+              active
+              onPress={i => {
+                if (scrollView.current) {
+                  scrollView.current
+                    .getNode()
+                    .scrollTo({ y: tabs[i].anchor + 1 });
+                }
+              }}
+              {...{ tabs, translateX }}
+            />
+          </Animated.View>
+        </MaskedView>
+      )}
     </Animated.View>
   );
 };
