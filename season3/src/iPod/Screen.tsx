@@ -1,5 +1,6 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
+import Animated from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 const size = width - 32;
@@ -12,8 +13,11 @@ const styles = StyleSheet.create({
   }
 });
 
-interface ScreenProps {}
+interface ScreenProps {
+  alpha: Animated.Node<number>;
+}
 
-export default () => {
+export default ({ alpha }: ScreenProps) => {
+  console.log({ alpha });
   return <View style={styles.container} />;
 };

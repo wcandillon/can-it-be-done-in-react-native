@@ -1,12 +1,24 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import Animated, { Value } from "react-native-reanimated";
-import { onGestureEvent } from "react-native-redash";
+import Animated, {
+  Value,
+  add,
+  block,
+  cos,
+  debug,
+  multiply,
+  pow,
+  sin,
+  sqrt,
+  sub,
+  useCode
+} from "react-native-reanimated";
+import { atan2, onGestureEvent, toDeg, withOffset } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
 const size = 0.75 * (width - 32);
-const center = size * 0.39;
+const hole = size * 0.39;
 const styles = StyleSheet.create({
   container: {
     width: size,
@@ -17,11 +29,45 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   center: {
-    width: center,
-    height: center,
-    borderRadius: center / 2,
+    width: hole,
+    height: hole,
+    borderRadius: hole / 2,
     backgroundColor: "black"
   }
+});
+
+export interface Point {
+  x: Animated.Adaptable<number>;
+  y: Animated.Adaptable<number>;
+}
+
+export interface PolarPoint {
+  alpha: Animated.Adaptable<number>;
+  radius: Animated.Adaptable<number>;
+}
+
+export const canvas2Cartesian = ({ x, y }: Point, center: Point): Point => {
+  return {
+    x: sub(x, center.x),
+    y: multiply(sub(y, center.y), -1)
+  };
+};
+
+export const cartesian2Canvas = ({ x, y }: Point, center: Point): Point => ({
+  x: add(x, center.x),
+  y: add(multiply(y, -1), center.y)
+});
+
+export const cartesian2Polar = ({ x, y }: Point): PolarPoint => {
+  return {
+    alpha: atan2(y, x),
+    radius: sqrt(add(pow(x, 2), pow(y, 2)))
+  };
+};
+
+export const polar2Cartesian = ({ alpha, radius }: PolarPoint): Point => ({
+  x: multiply(radius, cos(alpha)),
+  y: multiply(radius, sin(alpha))
 });
 
 interface ClickWheelProps {
@@ -33,8 +79,45 @@ export default ({ alpha }: ClickWheelProps) => {
   const translationX = new Value(0);
   const translationY = new Value(0);
   const gestureHandler = onGestureEvent({ state, translationX, translationY });
+  const translateX = withOffset(translationX, state);
+  const translateY = withOffset(translationY, state);
+  const { x, y } = canvas2Cartesian(
+    { x: translateX, y: translateY },
+    { x: size / 2, y: size / 2 }
+  );
+  const polarPoint = cartesian2Polar({ x, y });
+  const center = {
+    x: size / 2,
+    y: size / 2
+  };
+  useCode(() => block([debug("alpha", toDeg(polarPoint.alpha))]), [
+    polarPoint.alpha
+  ]);
   return (
     <View style={styles.container}>
+      <View style={StyleSheet.absoluteFillObject}>
+        <Animated.View
+          style={{
+            transform: [
+              {
+                translateX: cartesian2Canvas(
+                  polar2Cartesian(polarPoint),
+                  center
+                ).x
+              },
+              {
+                translateY: cartesian2Canvas(
+                  polar2Cartesian(polarPoint),
+                  center
+                ).y
+              }
+            ],
+            width: 50,
+            height: 50,
+            backgroundColor: "red"
+          }}
+        />
+      </View>
       <PanGestureHandler {...gestureHandler}>
         <Animated.View style={StyleSheet.absoluteFill} />
       </PanGestureHandler>
