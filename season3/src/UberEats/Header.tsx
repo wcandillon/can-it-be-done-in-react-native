@@ -5,6 +5,8 @@ import { useValues, withTimingTransition } from "react-native-redash";
 import { Feather as Icon } from "@expo/vector-icons";
 import { useSafeArea } from "react-native-safe-area-context";
 
+import { useNavigation } from "react-navigation-hooks";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import TabHeader from "./TabHeader";
 import { TabModel } from "./Content";
@@ -42,6 +44,7 @@ interface HeaderProps {
 }
 
 export default ({ y, tabs, scrollView }: HeaderProps) => {
+  const { goBack } = useNavigation();
   const [toggle] = useValues<0 | 1>([0], []);
   const insets = useSafeArea();
   const transition = withTimingTransition(toggle, { duration: 100 });
@@ -75,9 +78,16 @@ export default ({ y, tabs, scrollView }: HeaderProps) => {
         }}
       />
       <View style={styles.header}>
-        <Animated.View style={{ opacity: transition }}>
-          <Icon name="arrow-left" size={ICON_SIZE} color="black" />
-        </Animated.View>
+        <TouchableWithoutFeedback onPress={() => goBack()}>
+          <View>
+            <Icon name="arrow-left" size={ICON_SIZE} color="white" />
+            <Animated.View
+              style={{ ...StyleSheet.absoluteFillObject, opacity: transition }}
+            >
+              <Icon name="arrow-left" size={ICON_SIZE} color="black" />
+            </Animated.View>
+          </View>
+        </TouchableWithoutFeedback>
         <Animated.Text
           style={[
             styles.title,
