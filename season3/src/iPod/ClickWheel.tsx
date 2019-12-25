@@ -3,12 +3,20 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
   Value,
+  abs,
   add,
   block,
+  cond,
   cos,
   debug,
+  diff,
+  eq,
+  greaterThan,
+  interpolate,
+  modulo,
   multiply,
   pow,
+  set,
   sin,
   sqrt,
   sub,
@@ -19,6 +27,10 @@ import { atan2, onGestureEvent, toDeg, withOffset } from "react-native-redash";
 const { width } = Dimensions.get("window");
 const size = 0.75 * (width - 32);
 const hole = size * 0.39;
+const center = {
+  x: size / 2,
+  y: size / 2
+};
 const styles = StyleSheet.create({
   container: {
     width: size,
@@ -81,18 +93,20 @@ export default ({ alpha }: ClickWheelProps) => {
   const gestureHandler = onGestureEvent({ state, translationX, translationY });
   const translateX = withOffset(translationX, state);
   const translateY = withOffset(translationY, state);
-  const { x, y } = canvas2Cartesian(
-    { x: translateX, y: translateY },
-    { x: size / 2, y: size / 2 }
+  const x = translateX;
+  const y = translateY;
+  const point = canvas2Cartesian({ x, y }, center);
+  const polarPoint = cartesian2Polar(point);
+  const a = diff(modulo(polarPoint.alpha, 2 * Math.PI));
+  useCode(
+    () =>
+      block([
+        set(alpha, modulo(polarPoint.alpha, 2 * Math.PI)),
+        debug("a", toDeg(a)),
+        debug("alpha", toDeg(alpha))
+      ]),
+    [a, alpha, polarPoint.alpha]
   );
-  const polarPoint = cartesian2Polar({ x, y });
-  const center = {
-    x: size / 2,
-    y: size / 2
-  };
-  useCode(() => block([debug("alpha", toDeg(polarPoint.alpha))]), [
-    polarPoint.alpha
-  ]);
   return (
     <View style={styles.container}>
       <View style={StyleSheet.absoluteFillObject}>
@@ -101,13 +115,13 @@ export default ({ alpha }: ClickWheelProps) => {
             transform: [
               {
                 translateX: cartesian2Canvas(
-                  polar2Cartesian(polarPoint),
+                  polar2Cartesian({ alpha, radius: size / 2 }),
                   center
                 ).x
               },
               {
                 translateY: cartesian2Canvas(
-                  polar2Cartesian(polarPoint),
+                  polar2Cartesian({ alpha, radius: size / 2 }),
                   center
                 ).y
               }
