@@ -18,6 +18,5 @@ interface ScreenProps {
 }
 
 export default ({ alpha }: ScreenProps) => {
-  console.log({ alpha });
   return <View style={styles.container} />;
 };
