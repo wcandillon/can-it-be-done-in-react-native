@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
   Value,
+  abs,
   add,
   block,
   cond,
@@ -10,6 +11,7 @@ import Animated, {
   defined,
   divide,
   eq,
+  greaterThan,
   lessThan,
   modulo,
   multiply,
@@ -71,23 +73,34 @@ export default ({ alpha }: ClickWheelProps) => {
     []
   );
   const gestureHandler = onGestureEvent({ state, x, y });
-  const pX = cond(eq(state, State.ACTIVE), sub(x, deltaX), x);
-  const pY = cond(eq(state, State.ACTIVE), sub(y, deltaY), y);
-  const start = canvas2Polar({ x: pX, y: pY }, center).alpha;
-  const end = canvas2Polar({ x, y }, center).alpha;
-  const delta = sub(end, start);
+  const x0 = cond(eq(state, State.ACTIVE), sub(x, deltaX), x);
+  const y0 = cond(eq(state, State.ACTIVE), sub(y, deltaY), y);
+  const a0 = canvas2Polar({ x: x0, y: y0 }, center).alpha;
+  const a = canvas2Polar({ x, y }, center).alpha;
+  const da = sub(a0, a);
   useCode(
     () =>
       block([
         set(deltaX, diff(x)),
         set(deltaY, diff(y)),
-        debug("x", x),
-        debug("y", y),
-        debug("pX", pX),
-        debug("pY", pY),
-        set(alpha, add(alpha, delta))
+        set(
+          alpha,
+          add(
+            alpha,
+            cond(
+              greaterThan(abs(da), Math.PI),
+              cond(
+                greaterThan(a0, 0),
+                sub(2 * Math.PI, da),
+                sub(-2 * Math.PI, da)
+              ),
+              da
+            )
+          )
+        ),
+        debug("alpha", toDeg(alpha))
       ]),
-    [alpha, delta, deltaX, deltaY, pX, pY, x, y]
+    [a0, alpha, da, deltaX, deltaY, x, y]
   );
   return (
     <View style={styles.container}>
