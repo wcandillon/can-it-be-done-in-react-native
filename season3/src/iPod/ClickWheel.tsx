@@ -7,11 +7,12 @@ import Animated, {
   block,
   cond,
   debug,
-  diff,
+  defined,
   divide,
   eq,
   lessThan,
   modulo,
+  multiply,
   neq,
   set,
   sub,
@@ -22,8 +23,19 @@ import {
   canvas2Polar,
   onGestureEvent,
   polar2Canvas,
-  toDeg
+  toDeg,
+  useValues
 } from "react-native-redash";
+
+const diff = (v: Animated.Node<number>) => {
+  const stash = new Value(0);
+  const prev: Animated.Value<number> = new Value();
+  return block([
+    set(stash, cond(defined(prev), sub(v, prev), 0)),
+    set(prev, v),
+    stash
+  ]);
+};
 
 const { width } = Dimensions.get("window");
 const size = 0.75 * (width - 32);
@@ -54,27 +66,28 @@ interface ClickWheelProps {
 }
 
 export default ({ alpha }: ClickWheelProps) => {
-  const state = new Value(State.UNDETERMINED);
-  const x = new Value(0);
-  const y = new Value(0);
+  const [state, x, y, deltaX, deltaY] = useValues(
+    [State.UNDETERMINED, 0, 0, 0, 0],
+    []
+  );
   const gestureHandler = onGestureEvent({ state, x, y });
-  const deltaX = diff(x);
-  const deltaY = diff(y);
-  const pX = sub(x, diff(x));
-  const pY = sub(y, diff(y));
+  const pX = cond(eq(state, State.ACTIVE), sub(x, deltaX), x);
+  const pY = cond(eq(state, State.ACTIVE), sub(y, deltaY), y);
   const start = canvas2Polar({ x: pX, y: pY }, center).alpha;
   const end = canvas2Polar({ x, y }, center).alpha;
   const delta = sub(end, start);
   useCode(
     () =>
       block([
+        set(deltaX, diff(x)),
+        set(deltaY, diff(y)),
         debug("x", x),
         debug("y", y),
-        debug("diff(x)", deltaX),
-        debug("diff(y)", deltaY),
+        debug("pX", pX),
+        debug("pY", pY),
         set(alpha, add(alpha, delta))
       ]),
-    [alpha, delta, deltaX, deltaY, x, y]
+    [alpha, delta, deltaX, deltaY, pX, pY, x, y]
   );
   return (
     <View style={styles.container}>
