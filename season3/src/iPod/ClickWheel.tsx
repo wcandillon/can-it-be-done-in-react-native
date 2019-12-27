@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  State,
+  TapGestureHandler
+} from "react-native-gesture-handler";
 import Animated, {
   Value,
   abs,
@@ -68,11 +72,15 @@ interface ClickWheelProps {
 }
 
 export default ({ alpha }: ClickWheelProps) => {
+  const tap = useRef(null);
+  const wheel = useRef(null);
   const [state, x, y, deltaX, deltaY] = useValues(
     [State.UNDETERMINED, 0, 0, 0, 0],
     []
   );
+  const tapState = new Value(0);
   const gestureHandler = onGestureEvent({ state, x, y });
+  const tapGestureHandler = onGestureEvent({ state: tapState });
   const x0 = cond(eq(state, State.ACTIVE), sub(x, deltaX), x);
   const y0 = cond(eq(state, State.ACTIVE), sub(y, deltaY), y);
   const a0 = canvas2Polar({ x: x0, y: y0 }, center).alpha;
@@ -98,9 +106,10 @@ export default ({ alpha }: ClickWheelProps) => {
             )
           )
         ),
-        debug("alpha", toDeg(alpha))
+        debug("alpha", toDeg(alpha)),
+        debug("tapState", tapState)
       ]),
-    [a0, alpha, da, deltaX, deltaY, x, y]
+    [a0, alpha, da, deltaX, deltaY, tapState, x, y]
   );
   return (
     <View style={styles.container}>
@@ -121,9 +130,13 @@ export default ({ alpha }: ClickWheelProps) => {
           }}
         />
       </View>
-      <PanGestureHandler {...gestureHandler}>
-        <Animated.View style={StyleSheet.absoluteFill} />
-      </PanGestureHandler>
+      <TapGestureHandler ref={tap} {...tapGestureHandler}>
+        <Animated.View style={StyleSheet.absoluteFill}>
+          <PanGestureHandler ref={wheel} {...gestureHandler}>
+            <Animated.View style={StyleSheet.absoluteFill} />
+          </PanGestureHandler>
+        </Animated.View>
+      </TapGestureHandler>
       <View style={styles.center} />
     </View>
   );
