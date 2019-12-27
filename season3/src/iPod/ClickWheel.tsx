@@ -5,9 +5,14 @@ import Animated, {
   Value,
   add,
   block,
+  cond,
   debug,
   diff,
+  divide,
+  eq,
+  lessThan,
   modulo,
+  neq,
   set,
   sub,
   useCode
@@ -53,14 +58,23 @@ export default ({ alpha }: ClickWheelProps) => {
   const x = new Value(0);
   const y = new Value(0);
   const gestureHandler = onGestureEvent({ state, x, y });
+  const deltaX = diff(x);
+  const deltaY = diff(y);
   const pX = sub(x, diff(x));
   const pY = sub(y, diff(y));
-  const a = modulo(canvas2Polar({ x, y }, center).alpha, 2 * Math.PI);
-  const pA = modulo(canvas2Polar({ x: pX, y: pY }, center).alpha, 2 * Math.PI);
-  const delta = sub(a, pA);
+  const start = canvas2Polar({ x: pX, y: pY }, center).alpha;
+  const end = canvas2Polar({ x, y }, center).alpha;
+  const delta = sub(end, start);
   useCode(
-    () => block([debug("delta", toDeg(delta)), set(alpha, add(alpha, delta))]),
-    [alpha, delta]
+    () =>
+      block([
+        debug("x", x),
+        debug("y", y),
+        debug("diff(x)", deltaX),
+        debug("diff(y)", deltaY),
+        set(alpha, add(alpha, delta))
+      ]),
+    [alpha, delta, deltaX, deltaY, x, y]
   );
   return (
     <View style={styles.container}>
