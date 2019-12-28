@@ -1,14 +1,13 @@
 import React from "react";
 import { StyleSheet, View, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Animated, { Value, color, cond } from "react-native-reanimated";
+import Animated, { cond } from "react-native-reanimated";
 import { between } from "react-native-redash";
 
-const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 const ITEM_HEIGHT = 45;
-const blue = color(41, 128, 185);
-const white = color(255, 255, 255);
-const black = color(0, 0, 0);
+const blue = processColor("#2980b9");
+const white = processColor("white");
+const black = processColor("black");
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -33,25 +32,23 @@ interface ItemProps {
   active: Animated.Node<0 | 1>;
 }
 
-const Item = ({ icon, label, active }: ItemProps) => (
-  <Animated.View
-    style={[styles.item, { backgroundColor: cond(active, blue, white) }]}
-  >
-    <View>
-      <Icon name={icon} color="black" style={styles.icon} size={24} />
-      <Animated.View
-        style={{ ...StyleSheet.absoluteFillObject, opacity: active }}
-      >
-        <Icon name={icon} color="white" style={styles.icon} size={24} />
-      </Animated.View>
-    </View>
-    <Animated.Text
-      style={[styles.label, { color: cond(active, white, black) }]}
-    >
-      {label}
-    </Animated.Text>
-  </Animated.View>
-);
+const Item = ({ icon, label, active }: ItemProps) => {
+  const backgroundColor = cond(active, blue, white);
+  const color = cond(active, white, black);
+  return (
+    <Animated.View style={[styles.item, { backgroundColor }]}>
+      <View>
+        <Icon name={icon} color="black" style={styles.icon} size={24} />
+        <Animated.View
+          style={{ ...StyleSheet.absoluteFillObject, opacity: active }}
+        >
+          <Icon name={icon} color="white" style={styles.icon} size={24} />
+        </Animated.View>
+      </View>
+      <Animated.Text style={[styles.label, { color }]}>{label}</Animated.Text>
+    </Animated.View>
+  );
+};
 
 interface ListProps {
   items: ItemProps[];
