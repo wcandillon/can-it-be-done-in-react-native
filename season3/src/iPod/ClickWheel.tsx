@@ -80,23 +80,6 @@ export default ({ alpha }: ClickWheelProps) => {
   useCode(() => block([set(alpha, max(add(alpha, da), 0))]), [alpha, da]);
   return (
     <View style={styles.container}>
-      <View style={StyleSheet.absoluteFillObject}>
-        <Animated.View
-          style={{
-            transform: [
-              {
-                translateX: polar2Canvas({ alpha, radius: size / 2 }).x
-              },
-              {
-                translateY: polar2Canvas({ alpha, radius: size / 2 }).y
-              }
-            ],
-            width: 50,
-            height: 50,
-            backgroundColor: "red"
-          }}
-        />
-      </View>
       <TapGestureHandler {...tapGestureHandler}>
         <Animated.View style={StyleSheet.absoluteFill}>
           <PanGestureHandler {...gestureHandler}>
