@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 import List from "./List";
+import StatusBar from "./StatusBar";
 
 const { width } = Dimensions.get("window");
 const size = width - 32;
@@ -22,6 +23,7 @@ interface ScreenProps {
 export default ({ alpha }: ScreenProps) => {
   return (
     <View style={styles.container}>
+      <StatusBar />
       <List
         items={[
           { icon: "play", label: "Now Playing" },
