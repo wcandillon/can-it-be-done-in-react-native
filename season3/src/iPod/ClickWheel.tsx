@@ -14,6 +14,7 @@ import Animated, {
   debug,
   eq,
   greaterThan,
+  max,
   set,
   sub,
   useCode
@@ -76,15 +77,7 @@ export default ({ alpha }: ClickWheelProps) => {
   const a0 = canvas2Polar({ x: x0, y: y0 }, center).alpha;
   const a = canvas2Polar({ x, y }, center).alpha;
   const da = delta(a0, a);
-  useCode(
-    () =>
-      block([
-        set(alpha, add(alpha, da)),
-        debug("alpha", toDeg(alpha)),
-        debug("tapState", tapState)
-      ]),
-    [alpha, da, tapState]
-  );
+  useCode(() => block([set(alpha, max(add(alpha, da), 0))]), [alpha, da]);
   return (
     <View style={styles.container}>
       <View style={StyleSheet.absoluteFillObject}>

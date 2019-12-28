@@ -1,6 +1,6 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { interpolate } from "react-native-reanimated";
 
 import List from "./List";
 import StatusBar from "./StatusBar";
@@ -21,6 +21,10 @@ interface ScreenProps {
 }
 
 export default ({ alpha }: ScreenProps) => {
+  const y = interpolate(alpha, {
+    inputRange: [0, 2 * Math.PI],
+    outputRange: [0, size]
+  });
   return (
     <View style={styles.container}>
       <StatusBar />
@@ -34,6 +38,7 @@ export default ({ alpha }: ScreenProps) => {
           { icon: "shuffle", label: "Shuffle" },
           { icon: "settings", label: "Settings" }
         ]}
+        {...{ y }}
       />
     </View>
   );
