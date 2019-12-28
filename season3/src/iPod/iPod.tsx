@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import Screen from "./Screen";
 import ClickWheel from "./ClickWheel";
+import data from "./data";
 
 const styles = StyleSheet.create({
   container: {
