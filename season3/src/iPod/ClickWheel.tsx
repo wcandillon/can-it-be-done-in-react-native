@@ -72,8 +72,6 @@ interface ClickWheelProps {
 }
 
 export default ({ alpha }: ClickWheelProps) => {
-  const tap = useRef(null);
-  const wheel = useRef(null);
   const [state, x, y, deltaX, deltaY] = useValues(
     [State.UNDETERMINED, 0, 0, 0, 0],
     []
@@ -130,9 +128,9 @@ export default ({ alpha }: ClickWheelProps) => {
           }}
         />
       </View>
-      <TapGestureHandler ref={tap} {...tapGestureHandler}>
+      <TapGestureHandler {...tapGestureHandler}>
         <Animated.View style={StyleSheet.absoluteFill}>
-          <PanGestureHandler ref={wheel} {...gestureHandler}>
+          <PanGestureHandler {...gestureHandler}>
             <Animated.View style={StyleSheet.absoluteFill} />
           </PanGestureHandler>
         </Animated.View>
