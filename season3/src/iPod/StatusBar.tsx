@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   flex: {
-    flex: 1
+    flex: 1,
+    justifyContent: "center"
   },
   battery: {
     flex: 1,
