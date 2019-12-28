@@ -1,16 +1,16 @@
-const albums = require("./albums");
-const heartsWereGold = require("./albums/hearts-were-gold");
-const brother = require("./albums/brother");
-const whereWeWere = require("./albums/where-we-were");
-const ribbons = require("./albums/ribbons");
-const doSomethingBeautiful = require("./albums/do-something-beautiful");
-const goGetGone = require("./albums/go-get-gone");
-const inColour = require("./albums/in-colour");
-const mountains = require("./albums/mountains");
-const pyk = require("./albums/pyk");
-const melodrama = require("./albums/melodrama");
-const ibnRlLeil = require("./albums/ibn-el-leil");
-const shakira = require("./albums/shakira");
+import albums from "./albums.json";
+import heartsWereGold from "./albums/hearts-were-gold.json";
+import brother from "./albums/brother.json";
+import whereWeWere from "./albums/where-we-were.json";
+import ribbons from "./albums/ribbons.json";
+import doSomethingBeautiful from "./albums/do-something-beautiful.json";
+import goGetGone from "./albums/go-get-gone.json";
+import inColour from "./albums/in-colour.json";
+import mountains from "./albums/mountains.json";
+import pyk from "./albums/pyk.json";
+import melodrama from "./albums/melodrama.json";
+import ibnRlLeil from "./albums/ibn-el-leil.json";
+import shakira from "./albums/shakira.json";
 
 interface Picture {
   uri: string;
