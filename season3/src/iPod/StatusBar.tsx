@@ -19,13 +19,14 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
+    alignSelf: "stretch"
   },
   battery: {
     flex: 1,
+    alignSelf: "stretch",
     justifyContent: "center",
-    alignItems: "flex-end",
-    marginRight: 8
+    alignItems: "flex-end"
   },
   time: {
     fontFamily: "Chicago",
