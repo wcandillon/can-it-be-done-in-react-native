@@ -1,36 +1,26 @@
 import * as React from "react";
-import { StatusBar, StyleSheet, View } from "react-native";
-import { Value } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-import Screen from "./Screen";
-import ClickWheel from "./ClickWheel";
+import createIPodNavigator, { InjectedIPodProps } from "./IPodNavigator";
+import List from "./List";
 import data from "./data";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-    padding: 16,
-    alignItems: "center",
-    justifyContent: "space-evenly"
-  },
-  clickWheel: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+const Menu = ({ y }: InjectedIPodProps) => (
+  <List
+    items={[
+      { icon: "play", label: "Now Playing" },
+      { icon: "list", label: "Playlists" },
+      { icon: "layers", label: "Albums" },
+      { icon: "users", label: "Users" },
+      { icon: "music", label: "Songs" },
+      { icon: "shuffle", label: "Shuffle" },
+      { icon: "settings", label: "Settings" }
+    ]}
+    {...{ y }}
+  />
+);
+
+export default createIPodNavigator({
+  Menu: {
+    screen: Menu
   }
 });
-
-export default () => {
-  const alpha = new Value(0);
-  return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar hidden />
-      <Screen {...{ alpha }} />
-      <View style={styles.clickWheel}>
-        <ClickWheel {...{ alpha }} />
-      </View>
-    </SafeAreaView>
-  );
-};
