@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Animated, { color, cond } from "react-native-reanimated";
+import Animated, { Value, color, cond } from "react-native-reanimated";
 import { between } from "react-native-redash";
 
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 const ITEM_HEIGHT = 45;
 const blue = color(41, 128, 185);
 const white = color(255, 255, 255);
@@ -36,7 +37,14 @@ const Item = ({ icon, label, active }: ItemProps) => (
   <Animated.View
     style={[styles.item, { backgroundColor: cond(active, blue, white) }]}
   >
-    <Icon name={icon} style={styles.icon} size={24} />
+    <View>
+      <Icon name={icon} color="black" style={styles.icon} size={24} />
+      <Animated.View
+        style={{ ...StyleSheet.absoluteFillObject, opacity: active }}
+      >
+        <Icon name={icon} color="white" style={styles.icon} size={24} />
+      </Animated.View>
+    </View>
     <Animated.Text
       style={[styles.label, { color: cond(active, white, black) }]}
     >
