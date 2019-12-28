@@ -13,9 +13,9 @@ import UberEats, {
   assets as uberEatsAssets,
   fonts as uberEatsFonts
 } from "./src/UberEats";
-import iPod from "./src/iPod";
+import iPod, { fonts as ipodFonts } from "./src/iPod";
 
-const fonts = { ...uberEatsFonts };
+const fonts = { ...uberEatsFonts, ...ipodFonts };
 const assets: number[] = [
   ...episodes.map(episode => episode.icon),
   ...liquidSwipeAssets,
