@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Animated, { cond } from "react-native-reanimated";
+import Animated, { cond, diffClamp } from "react-native-reanimated";
 import { between } from "react-native-redash";
 
 const ITEM_HEIGHT = 45;
@@ -56,11 +56,12 @@ interface ListProps {
 }
 
 export default ({ items, y }: ListProps) => {
+  const y1 = diffClamp(y, 0, items.length * ITEM_HEIGHT);
   return (
     <View style={styles.container}>
       {items.map((item, key) => (
         <Item
-          active={between(y, key * ITEM_HEIGHT, (key + 1) * ITEM_HEIGHT)}
+          active={between(y1, key * ITEM_HEIGHT, (key + 1) * ITEM_HEIGHT)}
           {...{ key }}
           {...item}
         />
