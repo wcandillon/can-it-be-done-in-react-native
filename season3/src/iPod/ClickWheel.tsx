@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import {
   PanGestureHandler,
@@ -12,43 +12,36 @@ import Animated, {
   block,
   cond,
   debug,
-  defined,
-  divide,
   eq,
   greaterThan,
-  lessThan,
-  modulo,
-  multiply,
-  neq,
   set,
   sub,
   useCode
 } from "react-native-reanimated";
-
 import {
   canvas2Polar,
   onGestureEvent,
   polar2Canvas,
   toDeg,
+  useDiff,
   useValues
 } from "react-native-redash";
 
-const diff = (v: Animated.Node<number>) => {
-  const stash = new Value(0);
-  const prev: Animated.Value<number> = new Value();
-  return block([
-    set(stash, cond(defined(prev), sub(v, prev), 0)),
-    set(prev, v),
-    stash
-  ]);
-};
-
+const { PI } = Math;
 const { width } = Dimensions.get("window");
 const size = 0.75 * (width - 32);
 const hole = size * 0.39;
 const center = {
   x: size / 2,
   y: size / 2
+};
+const delta = (a0: Animated.Node<number>, a: Animated.Node<number>) => {
+  const da = sub(a0, a);
+  return cond(
+    greaterThan(abs(da), PI),
+    cond(greaterThan(a0, 0), sub(2 * PI, da), sub(-2 * PI, da)),
+    da
+  );
 };
 const styles = StyleSheet.create({
   container: {
@@ -72,10 +65,9 @@ interface ClickWheelProps {
 }
 
 export default ({ alpha }: ClickWheelProps) => {
-  const [state, x, y, deltaX, deltaY] = useValues(
-    [State.UNDETERMINED, 0, 0, 0, 0],
-    []
-  );
+  const [state, x, y] = useValues([State.UNDETERMINED, 0, 0, 0, 0], []);
+  const deltaX = useDiff(x, []);
+  const deltaY = useDiff(y, []);
   const tapState = new Value(0);
   const gestureHandler = onGestureEvent({ state, x, y });
   const tapGestureHandler = onGestureEvent({ state: tapState });
@@ -83,31 +75,15 @@ export default ({ alpha }: ClickWheelProps) => {
   const y0 = cond(eq(state, State.ACTIVE), sub(y, deltaY), y);
   const a0 = canvas2Polar({ x: x0, y: y0 }, center).alpha;
   const a = canvas2Polar({ x, y }, center).alpha;
-  const da = sub(a0, a);
+  const da = delta(a0, a);
   useCode(
     () =>
       block([
-        set(deltaX, diff(x)),
-        set(deltaY, diff(y)),
-        set(
-          alpha,
-          add(
-            alpha,
-            cond(
-              greaterThan(abs(da), Math.PI),
-              cond(
-                greaterThan(a0, 0),
-                sub(2 * Math.PI, da),
-                sub(-2 * Math.PI, da)
-              ),
-              da
-            )
-          )
-        ),
+        set(alpha, add(alpha, da)),
         debug("alpha", toDeg(alpha)),
         debug("tapState", tapState)
       ]),
-    [a0, alpha, da, deltaX, deltaY, tapState, x, y]
+    [alpha, da, tapState]
   );
   return (
     <View style={styles.container}>
