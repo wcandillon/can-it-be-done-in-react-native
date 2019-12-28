@@ -15,6 +15,7 @@
     "@react-native-community/masked-view": "0.1.5",
     "expo": "^36.0.0",
     "expo-asset": "~8.0.0",
+    "expo-battery": "~2.0.0",
     "expo-font": "~8.0.0",
     "patch-package": "^6.2.0",
     "react": "16.9.0",
