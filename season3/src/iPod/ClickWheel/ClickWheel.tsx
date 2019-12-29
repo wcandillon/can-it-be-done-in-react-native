@@ -21,6 +21,7 @@ import {
 } from "react-native-redash";
 
 import Buttons, { Command, size } from "./Buttons";
+import Stickers from "./Stickers";
 
 const { PI } = Math;
 const hole = size * 0.39;
@@ -77,6 +78,7 @@ export default ({ alpha, command }: ClickWheelProps) => {
           <Animated.View style={StyleSheet.absoluteFill} />
         </PanGestureHandler>
       </Buttons>
+      <Stickers />
     </View>
   );
 };
