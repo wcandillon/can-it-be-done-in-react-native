@@ -28,12 +28,9 @@ import {
   useValues
 } from "react-native-redash";
 
-import Buttons from "./Buttons";
-import { Command } from "./IPodNavigator";
+import Buttons, { Command, size } from "./Buttons";
 
 const { PI } = Math;
-const { width } = Dimensions.get("window");
-const size = 0.75 * (width - 32);
 const hole = size * 0.39;
 const center = {
   x: size / 2,
@@ -82,12 +79,12 @@ export default ({ alpha, command }: ClickWheelProps) => {
   useCode(() => block([set(alpha, max(add(alpha, da), 0))]), [alpha, da]);
   return (
     <View style={styles.container}>
+      <View style={styles.center} />
       <Buttons {...{ command }}>
         <PanGestureHandler {...gestureHandler}>
           <Animated.View style={StyleSheet.absoluteFill} />
         </PanGestureHandler>
       </Buttons>
-      <View style={styles.center} />
     </View>
   );
 };

@@ -24,6 +24,7 @@ import {
 
 import ClickWheel from "./ClickWheel";
 import StatusBar from "./StatusBar";
+import { Command } from "./Buttons";
 
 const { width } = Dimensions.get("window");
 const size = width - 32;
@@ -48,15 +49,6 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
-
-export enum Command {
-  UNDETERMINED,
-  CENTER,
-  LEFT,
-  RIGHT,
-  TOP,
-  BOTTOM
-}
 
 export interface InjectedIPodProps {
   y: Animated.Node<number>;
