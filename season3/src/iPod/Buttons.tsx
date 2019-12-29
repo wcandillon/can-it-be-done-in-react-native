@@ -87,8 +87,7 @@ export default ({ command, children }: ButtonsProps) => {
   useCode(
     () =>
       block([
-        cond(
-          eq(state, State.END),
+        cond(eq(state, State.END), [
           cond(
             isInRegion(x, y, TOP),
             set(command, Command.TOP),
@@ -109,8 +108,9 @@ export default ({ command, children }: ButtonsProps) => {
                 )
               )
             )
-          )
-        ),
+          ),
+          set(state, State.UNDETERMINED)
+        ]),
         debug("command", command)
       ]),
     [command, state, x, y]
