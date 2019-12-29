@@ -1,20 +1,16 @@
 import React from "react";
-import { StyleSheet, View, processColor } from "react-native";
-import { Feather as Icon } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
 import Animated, {
   Value,
   add,
   and,
   block,
-  ceil,
   cond,
-  debug,
   diff,
   diffClamp,
   divide,
   floor,
   greaterOrEq,
-  greaterThan,
   lessOrEq,
   lessThan,
   multiply,
@@ -27,64 +23,19 @@ import { between } from "react-native-redash";
 import { useNavigation } from "react-navigation-hooks";
 import { NavigationStackProp } from "react-navigation-stack";
 
-import { Command, useOnPress } from "./ClickWheel";
-import { CONTENT_HEIGHT } from "./IPodNavigator";
+import { Command, useOnPress } from "../ClickWheel";
+import { CONTENT_HEIGHT } from "../IPodNavigator";
+import Item, { Item as ItemModel } from "./Item";
 
 const ITEM_HEIGHT = 45;
-const blue = processColor("#2980b9");
-const white = processColor("white");
-const black = processColor("black");
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  item: {
-    flexDirection: "row",
-    alignItems: "center",
-    height: 45
-  },
-  icon: {
-    paddingHorizontal: 16
-  },
-  label: {
-    fontSize: 16,
-    fontFamily: "Chicago"
   }
 });
 
-interface Item {
-  screen: string;
-  icon: string;
-  label: string;
-}
-
-interface ItemProps extends Item {
-  active: Animated.Node<0 | 1>;
-  command: Animated.Node<Command>;
-  onPress: () => void;
-}
-
-const Item = ({ icon, label, command, active, onPress }: ItemProps) => {
-  const backgroundColor = cond(active, blue, white);
-  const color = cond(active, white, black);
-  useOnPress(command, Command.CENTER, onPress, active);
-  return (
-    <Animated.View style={[styles.item, { backgroundColor }]}>
-      <View>
-        <Icon name={icon} color="black" style={styles.icon} size={24} />
-        <Animated.View
-          style={{ ...StyleSheet.absoluteFillObject, opacity: active }}
-        >
-          <Icon name={icon} color="white" style={styles.icon} size={24} />
-        </Animated.View>
-      </View>
-      <Animated.Text style={[styles.label, { color }]}>{label}</Animated.Text>
-    </Animated.View>
-  );
-};
-
 interface ListProps {
-  items: Item[];
+  items: ItemModel[];
   y: Animated.Node<number>;
   command: Animated.Node<Command>;
 }
@@ -92,9 +43,9 @@ interface ListProps {
 const inViewport = (
   index: Animated.Node<number>,
   translateY: Animated.Node<number>,
-  floor: Animated.Node<0 | 1>
+  goingUp: Animated.Node<0 | 1>
 ) => {
-  const y = multiply(add(index, not(floor)), ITEM_HEIGHT);
+  const y = multiply(add(index, not(goingUp)), ITEM_HEIGHT);
   const translate = multiply(translateY, -1);
   return and(
     greaterOrEq(y, translate),
