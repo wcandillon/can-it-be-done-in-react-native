@@ -1,9 +1,10 @@
 import React from "react";
-import { Image, StyleSheet, View, processColor } from "react-native";
+import { StyleSheet, View, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated, { cond } from "react-native-reanimated";
 
 import { Command, useOnPress } from "../ClickWheel";
+import Image from "./Image";
 
 const blue = processColor("#2980b9");
 const white = processColor("white");
@@ -64,9 +65,7 @@ export default ({
           </Animated.View>
         </View>
       )}
-      {thumbnail && (
-        <Image source={{ uri: thumbnail }} style={styles.thumbnail} />
-      )}
+      {thumbnail && <Image source={thumbnail} style={styles.thumbnail} />}
       <Animated.Text style={[styles.label, { color }]}>{label}</Animated.Text>
     </Animated.View>
   );

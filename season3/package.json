@@ -13,9 +13,11 @@
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
     "@react-native-community/masked-view": "0.1.5",
+    "crypto-js": "^3.1.9-1",
     "expo": "^36.0.0",
     "expo-asset": "~8.0.0",
     "expo-battery": "~2.0.0",
+    "expo-file-system": "~8.0.0",
     "expo-font": "~8.0.0",
     "patch-package": "^6.2.0",
     "react": "16.9.0",
@@ -34,6 +36,7 @@
     "use-memo-one": "^1.1.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^3.1.43",
     "@types/react": "^16.8.23",
     "@types/react-native": "^0.57.65",
     "babel-preset-expo": "^7.0.0",
