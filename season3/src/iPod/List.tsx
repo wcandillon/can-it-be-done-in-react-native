@@ -26,9 +26,12 @@ const styles = StyleSheet.create({
   }
 });
 
-interface ItemProps {
+interface Item {
   icon: string;
   label: string;
+}
+
+interface ItemProps extends Item {
   active: Animated.Node<0 | 1>;
 }
 
@@ -51,7 +54,7 @@ const Item = ({ icon, label, active }: ItemProps) => {
 };
 
 interface ListProps {
-  items: ItemProps[];
+  items: Item[];
   y: Animated.Node<number>;
 }
 
