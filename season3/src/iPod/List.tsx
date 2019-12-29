@@ -16,9 +16,11 @@ import Animated, {
   greaterOrEq,
   greaterThan,
   lessOrEq,
+  lessThan,
   multiply,
   not,
   set,
+  sub,
   useCode
 } from "react-native-reanimated";
 import { between } from "react-native-redash";
@@ -29,6 +31,7 @@ import { Command, useOnPress } from "./ClickWheel";
 import { SCREEN_SIZE } from "./IPodNavigator";
 import { STATUS_BAR_HEIGHT } from "./StatusBar";
 
+const CONTAINER_HEIGHT = SCREEN_SIZE - STATUS_BAR_HEIGHT;
 const ITEM_HEIGHT = 45;
 const blue = processColor("#2980b9");
 const white = processColor("white");
@@ -89,31 +92,36 @@ interface ListProps {
 }
 
 const inViewport = (
-  y: Animated.Node<number>,
+  index: Animated.Node<number>,
   translateY: Animated.Node<number>
 ) => {
+  const y = multiply(add(index, 1), ITEM_HEIGHT);
   return and(
     greaterOrEq(y, translateY),
-    lessOrEq(y, add(translateY, SCREEN_SIZE - STATUS_BAR_HEIGHT))
+    lessOrEq(y, add(translateY, CONTAINER_HEIGHT))
   );
 };
 
 export default ({ items, y, command }: ListProps) => {
   const navigation = useNavigation<NavigationStackProp>();
-  const y1 = diffClamp(y, 0, items.length * ITEM_HEIGHT);
+  const y1 = diffClamp(y, 0, items.length * ITEM_HEIGHT - 1);
   const translateY = new Value(0);
-  const goingUp = greaterThan(diff(y1), 0);
-  useOnPress(command, Command.TOP, () => navigation.navigate("Menu"));
+  const goingUp = lessThan(diff(y1), 0);
   const index = floor(divide(y1, ITEM_HEIGHT));
+  useOnPress(command, Command.TOP, () => navigation.navigate("Menu"));
   useCode(
     () =>
       block([
         debug("index", index),
         cond(
-          not(inViewport(multiply(index, ITEM_HEIGHT), translateY)),
+          not(inViewport(index, translateY)),
           set(
             translateY,
-            add(translateY, cond(goingUp, -ITEM_HEIGHT, ITEM_HEIGHT))
+            cond(
+              goingUp,
+              [multiply(sub(index, 1), ITEM_HEIGHT)],
+              [add(multiply(index, -ITEM_HEIGHT), CONTAINER_HEIGHT)]
+            )
           )
         )
       ]),
