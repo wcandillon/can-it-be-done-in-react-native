@@ -10,9 +10,10 @@ const useInterval = (callback: () => void, delay: number) => {
   }, [callback, delay]);
 };
 const format = (n: number) => `${n}`.padStart(2, "0");
+export const STATUS_BAR_HEIGHT = 32;
 const styles = StyleSheet.create({
   container: {
-    height: 32,
+    height: STATUS_BAR_HEIGHT,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"

@@ -12,6 +12,7 @@ import Animated, {
   diff,
   diffClamp,
   divide,
+  floor,
   greaterOrEq,
   greaterThan,
   lessOrEq,
@@ -26,6 +27,7 @@ import { NavigationStackProp } from "react-navigation-stack";
 
 import { Command, useOnPress } from "./ClickWheel";
 import { SCREEN_SIZE } from "./IPodNavigator";
+import { STATUS_BAR_HEIGHT } from "./StatusBar";
 
 const ITEM_HEIGHT = 45;
 const blue = processColor("#2980b9");
@@ -90,10 +92,9 @@ const inViewport = (
   y: Animated.Node<number>,
   translateY: Animated.Node<number>
 ) => {
-  const y1 = multiply(ceil(divide(y, ITEM_HEIGHT)), ITEM_HEIGHT);
   return and(
-    greaterOrEq(y1, translateY),
-    lessOrEq(y1, add(translateY, SCREEN_SIZE))
+    greaterOrEq(y, translateY),
+    lessOrEq(y, add(translateY, SCREEN_SIZE - STATUS_BAR_HEIGHT))
   );
 };
 
@@ -103,18 +104,20 @@ export default ({ items, y, command }: ListProps) => {
   const translateY = new Value(0);
   const goingUp = greaterThan(diff(y1), 0);
   useOnPress(command, Command.TOP, () => navigation.navigate("Menu"));
+  const index = floor(divide(y1, ITEM_HEIGHT));
   useCode(
     () =>
       block([
+        debug("index", index),
         cond(
-          not(inViewport(y1, translateY)),
+          not(inViewport(multiply(index, ITEM_HEIGHT), translateY)),
           set(
             translateY,
             add(translateY, cond(goingUp, -ITEM_HEIGHT, ITEM_HEIGHT))
           )
         )
       ]),
-    [goingUp, translateY, y1]
+    [goingUp, index, translateY]
   );
   return (
     <View style={styles.container}>
