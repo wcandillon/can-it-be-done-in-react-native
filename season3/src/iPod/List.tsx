@@ -1,11 +1,31 @@
 import React from "react";
 import { StyleSheet, View, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Animated, { cond, diffClamp } from "react-native-reanimated";
+import Animated, {
+  Value,
+  add,
+  and,
+  block,
+  ceil,
+  cond,
+  debug,
+  diff,
+  diffClamp,
+  divide,
+  greaterOrEq,
+  greaterThan,
+  lessOrEq,
+  multiply,
+  not,
+  set,
+  useCode
+} from "react-native-reanimated";
 import { between } from "react-native-redash";
 import { useNavigation } from "react-navigation-hooks";
 import { NavigationStackProp } from "react-navigation-stack";
+
 import { Command, useOnPress } from "./ClickWheel";
+import { SCREEN_SIZE } from "./IPodNavigator";
 
 const ITEM_HEIGHT = 45;
 const blue = processColor("#2980b9");
@@ -66,20 +86,48 @@ interface ListProps {
   command: Animated.Node<Command>;
 }
 
+const inViewport = (
+  y: Animated.Node<number>,
+  translateY: Animated.Node<number>
+) => {
+  const y1 = multiply(ceil(divide(y, ITEM_HEIGHT)), ITEM_HEIGHT);
+  return and(
+    greaterOrEq(y1, translateY),
+    lessOrEq(y1, add(translateY, SCREEN_SIZE))
+  );
+};
+
 export default ({ items, y, command }: ListProps) => {
   const navigation = useNavigation<NavigationStackProp>();
   const y1 = diffClamp(y, 0, items.length * ITEM_HEIGHT);
+  const translateY = new Value(0);
+  const goingUp = greaterThan(diff(y1), 0);
   useOnPress(command, Command.TOP, () => navigation.navigate("Menu"));
+  useCode(
+    () =>
+      block([
+        cond(
+          not(inViewport(y1, translateY)),
+          set(
+            translateY,
+            add(translateY, cond(goingUp, -ITEM_HEIGHT, ITEM_HEIGHT))
+          )
+        )
+      ]),
+    [goingUp, translateY, y1]
+  );
   return (
     <View style={styles.container}>
-      {items.map((item, key) => (
-        <Item
-          onPress={() => navigation.navigate(item.screen)}
-          active={between(y1, key * ITEM_HEIGHT, (key + 1) * ITEM_HEIGHT)}
-          {...{ command, key }}
-          {...item}
-        />
-      ))}
+      <Animated.View style={{ transform: [{ translateY }] }}>
+        {items.map((item, key) => (
+          <Item
+            onPress={() => navigation.navigate(item.screen)}
+            active={between(y1, key * ITEM_HEIGHT, (key + 1) * ITEM_HEIGHT)}
+            {...{ command, key }}
+            {...item}
+          />
+        ))}
+      </Animated.View>
     </View>
   );
 };

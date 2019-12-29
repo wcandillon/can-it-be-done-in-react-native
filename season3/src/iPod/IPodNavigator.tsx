@@ -26,7 +26,7 @@ import ClickWheel, { Command } from "./ClickWheel";
 import StatusBar from "./StatusBar";
 
 const { width } = Dimensions.get("window");
-const size = width - 32;
+export const SCREEN_SIZE = width - 32;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly"
   },
   screen: {
-    width: size,
-    height: size,
+    width: SCREEN_SIZE,
+    height: SCREEN_SIZE,
     backgroundColor: "white",
     borderRadius: 16,
     overflow: "hidden"
@@ -68,7 +68,7 @@ const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
   const command = new Value(Command.UNDETERMINED);
   const y = interpolate(alpha, {
     inputRange: [0, 2 * Math.PI],
-    outputRange: [0, size]
+    outputRange: [0, SCREEN_SIZE]
   });
   return (
     <SafeAreaView style={styles.container}>
