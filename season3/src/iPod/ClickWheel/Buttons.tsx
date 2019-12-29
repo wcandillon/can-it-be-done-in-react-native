@@ -1,12 +1,10 @@
 import React, { ReactNode } from "react";
 import { Dimensions, StyleSheet } from "react-native";
-import { useFocusState } from "react-navigation-hooks";
 import Animated, {
   and,
   block,
   call,
   cond,
-  debug,
   eq,
   greaterOrEq,
   lessOrEq,
@@ -14,7 +12,7 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
-import { bin, onGestureEvent, useValues } from "react-native-redash";
+import { onGestureEvent, useValues } from "react-native-redash";
 
 export enum Command {
   UNDETERMINED,
@@ -66,14 +64,12 @@ export const useOnPress = (
   onPress: () => void,
   active: Animated.Adaptable<number> = 1
 ) => {
-  useCode(
-    () =>
-      cond(and(active, eq(command, target)), [
-        // set(command, Command.UNDETERMINED),
-        call([], onPress)
-      ]),
-    [active, command, onPress, target]
-  );
+  useCode(() => cond(and(active, eq(command, target)), call([], onPress)), [
+    active,
+    command,
+    onPress,
+    target
+  ]);
 };
 
 interface ButtonsProps {
@@ -110,8 +106,7 @@ export default ({ command, children }: ButtonsProps) => {
             )
           ),
           set(state, State.UNDETERMINED)
-        ]),
-        debug("command", command)
+        ])
       ]),
     [command, state, x, y]
   );

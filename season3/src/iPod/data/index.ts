@@ -40,12 +40,14 @@ interface Playlist {
   entries: PlaylistEntry[];
 }
 
+/*
 interface Music {
   albums: Album[];
   tracks: (id: string) => Track[];
   playlists: Playlist[];
   transformAlbumToPlaylist: (album: Album) => Playlist;
 }
+*/
 
 const tracks: { [album: string]: Track[] } = {
   "hearts-were-gold": heartsWereGold,
@@ -63,8 +65,8 @@ const tracks: { [album: string]: Track[] } = {
 };
 
 const entry = (albumId: string, trackName: string): PlaylistEntry => ({
-  album: albums.find(album => album.id === albumId),
-  track: tracks[albumId].find(track => track.name === trackName)
+  album: albums.find(album => album.id === albumId) as Album,
+  track: tracks[albumId].find(track => track.name === trackName) as Track
 });
 
 const playlists: Playlist[] = [

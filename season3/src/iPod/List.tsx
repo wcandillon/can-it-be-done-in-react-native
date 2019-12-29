@@ -1,20 +1,11 @@
 import React from "react";
 import { StyleSheet, View, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Animated, {
-  and,
-  block,
-  call,
-  cond,
-  debug,
-  diffClamp,
-  eq,
-  useCode
-} from "react-native-reanimated";
+import Animated, { cond, diffClamp } from "react-native-reanimated";
 import { between } from "react-native-redash";
 import { useNavigation } from "react-navigation-hooks";
 import { NavigationStackProp } from "react-navigation-stack";
-import { Command, useOnPress } from "./Buttons";
+import { Command, useOnPress } from "./ClickWheel";
 
 const ITEM_HEIGHT = 45;
 const blue = processColor("#2980b9");

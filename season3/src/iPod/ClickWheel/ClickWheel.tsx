@@ -1,17 +1,11 @@
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
-import {
-  PanGestureHandler,
-  State,
-  TapGestureHandler
-} from "react-native-gesture-handler";
+import { StyleSheet, View } from "react-native";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
-  Value,
   abs,
   add,
   block,
   cond,
-  debug,
   eq,
   greaterThan,
   max,
@@ -22,8 +16,6 @@ import Animated, {
 import {
   canvas2Polar,
   onGestureEvent,
-  polar2Canvas,
-  toDeg,
   useDiff,
   useValues
 } from "react-native-redash";

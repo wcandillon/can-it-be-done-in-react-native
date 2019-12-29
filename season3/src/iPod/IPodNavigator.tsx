@@ -22,9 +22,8 @@ import {
   SceneDescriptorMap
 } from "react-navigation-stack/lib/typescript/types";
 
-import ClickWheel from "./ClickWheel";
+import ClickWheel, { Command } from "./ClickWheel";
 import StatusBar from "./StatusBar";
-import { Command } from "./Buttons";
 
 const { width } = Dimensions.get("window");
 const size = width - 32;
