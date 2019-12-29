@@ -96,9 +96,10 @@ const inViewport = (
   translateY: Animated.Node<number>
 ) => {
   const y = multiply(add(index, 1), ITEM_HEIGHT);
+  const translate = multiply(translateY, -1);
   return and(
-    greaterOrEq(y, translateY),
-    lessOrEq(y, add(translateY, CONTAINER_HEIGHT))
+    greaterOrEq(y, translate),
+    lessOrEq(y, add(translate, CONTAINER_HEIGHT))
   );
 };
 
@@ -113,14 +114,17 @@ export default ({ items, y, command }: ListProps) => {
     () =>
       block([
         debug("index", index),
+        debug("translateY", translateY),
+        debug("y", multiply(add(index, 1), ITEM_HEIGHT)),
+        debug("isInViewPort", inViewport(index, translateY)),
         cond(
           not(inViewport(index, translateY)),
           set(
             translateY,
             cond(
               goingUp,
-              [multiply(sub(index, 1), ITEM_HEIGHT)],
-              [add(multiply(index, -ITEM_HEIGHT), CONTAINER_HEIGHT)]
+              [multiply(index, ITEM_HEIGHT)],
+              [add(translateY, -ITEM_HEIGHT)]
             )
           )
         )
