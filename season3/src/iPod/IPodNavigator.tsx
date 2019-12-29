@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     width: size,
     height: size,
     backgroundColor: "white",
-    borderRadius: 16
+    borderRadius: 16,
+    overflow: "hidden"
   },
   clickWheel: {
     flex: 1,
@@ -47,6 +48,15 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
+
+export enum Command {
+  UNDETERMINED,
+  CENTER,
+  LEFT,
+  RIGHT,
+  TOP,
+  BOTTOM
+}
 
 export interface InjectedIPodProps {
   y: Animated.Node<number>;
@@ -63,6 +73,7 @@ const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
     navigation.state.routes[0].key
   ].getComponent() as FC<InjectedIPodProps>;
   const alpha = new Value(0);
+  const command = new Value(Command.UNDETERMINED);
   const y = interpolate(alpha, {
     inputRange: [0, 2 * Math.PI],
     outputRange: [0, size]
@@ -75,7 +86,7 @@ const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
         <Screen {...{ y }} />
       </View>
       <View style={styles.clickWheel}>
-        <ClickWheel {...{ alpha }} />
+        <ClickWheel {...{ alpha, command }} />
       </View>
     </SafeAreaView>
   );

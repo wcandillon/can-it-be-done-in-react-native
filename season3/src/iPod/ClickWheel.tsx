@@ -28,6 +28,9 @@ import {
   useValues
 } from "react-native-redash";
 
+import Buttons from "./Buttons";
+import { Command } from "./IPodNavigator";
+
 const { PI } = Math;
 const { width } = Dimensions.get("window");
 const size = 0.75 * (width - 32);
@@ -63,15 +66,14 @@ const styles = StyleSheet.create({
 
 interface ClickWheelProps {
   alpha: Animated.Value<number>;
+  command: Animated.Value<Command>;
 }
 
-export default ({ alpha }: ClickWheelProps) => {
+export default ({ alpha, command }: ClickWheelProps) => {
   const [state, x, y] = useValues([State.UNDETERMINED, 0, 0, 0, 0], []);
   const deltaX = useDiff(x, []);
   const deltaY = useDiff(y, []);
-  const tapState = new Value(0);
   const gestureHandler = onGestureEvent({ state, x, y });
-  const tapGestureHandler = onGestureEvent({ state: tapState });
   const x0 = cond(eq(state, State.ACTIVE), sub(x, deltaX), x);
   const y0 = cond(eq(state, State.ACTIVE), sub(y, deltaY), y);
   const a0 = canvas2Polar({ x: x0, y: y0 }, center).alpha;
@@ -80,13 +82,11 @@ export default ({ alpha }: ClickWheelProps) => {
   useCode(() => block([set(alpha, max(add(alpha, da), 0))]), [alpha, da]);
   return (
     <View style={styles.container}>
-      <TapGestureHandler {...tapGestureHandler}>
-        <Animated.View style={StyleSheet.absoluteFill}>
-          <PanGestureHandler {...gestureHandler}>
-            <Animated.View style={StyleSheet.absoluteFill} />
-          </PanGestureHandler>
-        </Animated.View>
-      </TapGestureHandler>
+      <Buttons {...{ command }}>
+        <PanGestureHandler {...gestureHandler}>
+          <Animated.View style={StyleSheet.absoluteFill} />
+        </PanGestureHandler>
+      </Buttons>
       <View style={styles.center} />
     </View>
   );
