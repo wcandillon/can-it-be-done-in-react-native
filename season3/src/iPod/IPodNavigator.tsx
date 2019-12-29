@@ -23,10 +23,11 @@ import {
 } from "react-navigation-stack/lib/typescript/types";
 
 import ClickWheel, { Command } from "./ClickWheel";
-import StatusBar from "./StatusBar";
+import StatusBar, { STATUS_BAR_HEIGHT } from "./StatusBar";
 
 const { width } = Dimensions.get("window");
-export const SCREEN_SIZE = width - 32;
+const SCREEN_SIZE = width - 32;
+export const CONTENT_HEIGHT = SCREEN_SIZE - STATUS_BAR_HEIGHT;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

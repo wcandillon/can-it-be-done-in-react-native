@@ -28,10 +28,8 @@ import { useNavigation } from "react-navigation-hooks";
 import { NavigationStackProp } from "react-navigation-stack";
 
 import { Command, useOnPress } from "./ClickWheel";
-import { SCREEN_SIZE } from "./IPodNavigator";
-import { STATUS_BAR_HEIGHT } from "./StatusBar";
+import { CONTENT_HEIGHT } from "./IPodNavigator";
 
-const CONTAINER_HEIGHT = SCREEN_SIZE - STATUS_BAR_HEIGHT;
 const ITEM_HEIGHT = 45;
 const blue = processColor("#2980b9");
 const white = processColor("white");
@@ -93,13 +91,14 @@ interface ListProps {
 
 const inViewport = (
   index: Animated.Node<number>,
-  translateY: Animated.Node<number>
+  translateY: Animated.Node<number>,
+  floor: Animated.Node<0 | 1>
 ) => {
-  const y = multiply(add(index, 1), ITEM_HEIGHT);
+  const y = multiply(add(index, not(floor)), ITEM_HEIGHT);
   const translate = multiply(translateY, -1);
   return and(
     greaterOrEq(y, translate),
-    lessOrEq(y, add(translate, CONTAINER_HEIGHT))
+    lessOrEq(y, add(translate, CONTENT_HEIGHT))
   );
 };
 
@@ -113,18 +112,14 @@ export default ({ items, y, command }: ListProps) => {
   useCode(
     () =>
       block([
-        debug("index", index),
-        debug("translateY", translateY),
-        debug("y", multiply(add(index, 1), ITEM_HEIGHT)),
-        debug("isInViewPort", inViewport(index, translateY)),
         cond(
-          not(inViewport(index, translateY)),
+          not(inViewport(index, translateY, goingUp)),
           set(
             translateY,
             cond(
               goingUp,
-              [multiply(index, ITEM_HEIGHT)],
-              [add(translateY, -ITEM_HEIGHT)]
+              [add(translateY, ITEM_HEIGHT)],
+              [sub(translateY, ITEM_HEIGHT)]
             )
           )
         )
