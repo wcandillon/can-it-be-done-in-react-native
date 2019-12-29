@@ -1,8 +1,10 @@
 import React, { ReactNode } from "react";
 import { Dimensions, StyleSheet } from "react-native";
+import { useFocusState } from "react-navigation-hooks";
 import Animated, {
   and,
   block,
+  call,
   cond,
   debug,
   eq,
@@ -12,7 +14,7 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
-import { onGestureEvent, useValues } from "react-native-redash";
+import { bin, onGestureEvent, useValues } from "react-native-redash";
 
 export enum Command {
   UNDETERMINED,
@@ -46,6 +48,7 @@ const RIGHT = {
   x: BUTTON_SIZE * 2,
   y: BUTTON_SIZE
 };
+
 const isInRegion = (
   x: Animated.Node<number>,
   y: Animated.Node<number>,
@@ -54,6 +57,22 @@ const isInRegion = (
   return and(
     and(greaterOrEq(x, region.x), lessOrEq(x, region.x + BUTTON_SIZE)),
     and(greaterOrEq(y, region.y), lessOrEq(y, region.y + BUTTON_SIZE))
+  );
+};
+
+export const useOnPress = (
+  command: Animated.Node<Command>,
+  target: Command,
+  onPress: () => void,
+  active: Animated.Adaptable<number> = 1
+) => {
+  useCode(
+    () =>
+      cond(and(active, eq(command, target)), [
+        // set(command, Command.UNDETERMINED),
+        call([], onPress)
+      ]),
+    [active, command, onPress, target]
   );
 };
 

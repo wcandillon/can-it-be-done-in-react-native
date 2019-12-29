@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
 
 export interface InjectedIPodProps {
   y: Animated.Node<number>;
+  command: Animated.Node<Command>;
 }
 
 interface IPodNavigatorProps {
@@ -62,7 +63,7 @@ interface IPodNavigatorProps {
 
 const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
   const Screen = descriptors[
-    navigation.state.routes[0].key
+    navigation.state.routes[navigation.state.routes.length - 1].key
   ].getComponent() as FC<InjectedIPodProps>;
   const alpha = new Value(0);
   const command = new Value(Command.UNDETERMINED);
@@ -75,7 +76,7 @@ const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
       <RNStatusBar hidden />
       <View style={styles.screen}>
         <StatusBar />
-        <Screen {...{ y }} />
+        <Screen {...{ y, command }} />
       </View>
       <View style={styles.clickWheel}>
         <ClickWheel {...{ alpha, command }} />
