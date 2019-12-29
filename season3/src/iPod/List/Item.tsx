@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, processColor } from "react-native";
+import { Image, StyleSheet, View, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated, { cond } from "react-native-reanimated";
 
@@ -20,13 +20,19 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontFamily: "Chicago"
+  },
+  thumbnail: {
+    width: 45,
+    height: 45,
+    marginHorizontal: 16
   }
 });
 
 export interface Item {
   screen: string;
   label: string;
-  icon: string;
+  icon?: string;
+  thumbnail?: string;
 }
 
 interface ItemProps extends Item {
@@ -35,20 +41,32 @@ interface ItemProps extends Item {
   onPress: () => void;
 }
 
-export default ({ icon, label, command, active, onPress }: ItemProps) => {
+export default ({
+  icon,
+  thumbnail,
+  label,
+  command,
+  active,
+  onPress
+}: ItemProps) => {
   const backgroundColor = cond(active, blue, white);
   const color = cond(active, white, black);
   useOnPress(command, Command.CENTER, onPress, active);
   return (
     <Animated.View style={[styles.item, { backgroundColor }]}>
-      <View>
-        <Icon name={icon} color="black" style={styles.icon} size={24} />
-        <Animated.View
-          style={{ ...StyleSheet.absoluteFillObject, opacity: active }}
-        >
-          <Icon name={icon} color="white" style={styles.icon} size={24} />
-        </Animated.View>
-      </View>
+      {icon && (
+        <View>
+          <Icon name={icon} color="black" style={styles.icon} size={24} />
+          <Animated.View
+            style={{ ...StyleSheet.absoluteFillObject, opacity: active }}
+          >
+            <Icon name={icon} color="white" style={styles.icon} size={24} />
+          </Animated.View>
+        </View>
+      )}
+      {thumbnail && (
+        <Image source={{ uri: thumbnail }} style={styles.thumbnail} />
+      )}
       <Animated.Text style={[styles.label, { color }]}>{label}</Animated.Text>
     </Animated.View>
   );

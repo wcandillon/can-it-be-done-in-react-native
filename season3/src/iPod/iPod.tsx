@@ -23,8 +23,7 @@ const Albums = ({ y, command }: InjectedIPodProps) => (
   <List
     items={data.albums.map(album => ({
       screen: "Album",
-      icon: "music",
-      // thumbnail: album.picture.uri,
+      thumbnail: album.picture.uri,
       label: album.name
     }))}
     {...{ y, command }}
