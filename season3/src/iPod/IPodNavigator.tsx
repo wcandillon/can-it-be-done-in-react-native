@@ -42,6 +42,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: "hidden"
   },
+  content: {
+    flex: 1,
+    overflow: "hidden"
+  },
   clickWheel: {
     flex: 1,
     justifyContent: "center",
@@ -75,7 +79,9 @@ const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
       <RNStatusBar hidden />
       <View style={styles.screen}>
         <StatusBar />
-        <Screen {...{ y, command }} />
+        <View style={styles.content}>
+          <Screen {...{ y, command }} />
+        </View>
       </View>
       <View style={styles.clickWheel}>
         <ClickWheel {...{ alpha, command }} />
