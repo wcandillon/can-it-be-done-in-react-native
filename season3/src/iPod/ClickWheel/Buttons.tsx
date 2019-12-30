@@ -13,6 +13,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
 import { onGestureEvent, useValues } from "react-native-redash";
+import { useNavigation } from "react-navigation-hooks";
+import { Navigation } from "../IPodNavigator";
 
 export enum Command {
   UNDETERMINED,
@@ -61,15 +63,18 @@ const isInRegion = (
 export const useOnPress = (
   command: Animated.Node<Command>,
   target: Command,
-  onPress: () => void,
+  onPress: (navigation: Navigation) => void,
   active: Animated.Adaptable<number> = 1
 ) => {
-  useCode(() => cond(and(active, eq(command, target)), call([], onPress)), [
-    active,
-    command,
-    onPress,
-    target
-  ]);
+  const navigation = useNavigation();
+  useCode(
+    () =>
+      cond(
+        and(active, eq(command, target)),
+        call([], () => onPress(navigation))
+      ),
+    [active, command, navigation, onPress, target]
+  );
 };
 
 interface ButtonsProps {

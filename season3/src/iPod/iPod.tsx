@@ -4,6 +4,7 @@ import { Alert } from "react-native";
 import { useNavigation } from "react-navigation-hooks";
 import createIPodNavigator, { InjectedIPodProps } from "./IPodNavigator";
 import List from "./List";
+import Player from "./Player";
 import data from "./data";
 
 const Menu = ({ y, command }: InjectedIPodProps) => (
@@ -25,8 +26,12 @@ const Playlists = ({ y, command }: InjectedIPodProps) => (
   <List
     items={data.playlists.map(playlist => ({
       label: playlist.name,
-      screen: "Playlist",
-      thumbnail: playlist.entries[0].album.picture.uri
+      screen: "Player",
+      thumbnail: playlist.entries[0].album.picture.uri,
+      params: {
+        tracks: playlist.entries.map(entry => entry.track),
+        selected: 0
+      }
     }))}
     {...{ y, command }}
   />
@@ -35,9 +40,13 @@ const Playlists = ({ y, command }: InjectedIPodProps) => (
 const Albums = ({ y, command }: InjectedIPodProps) => (
   <List
     items={data.albums.map(album => ({
-      screen: "Album",
+      screen: "Player",
       thumbnail: album.picture.uri,
-      label: album.name
+      label: album.name,
+      params: {
+        tracks: data.tracks(album.id),
+        selected: 0
+      }
     }))}
     {...{ y, command }}
   />
@@ -46,28 +55,41 @@ const Albums = ({ y, command }: InjectedIPodProps) => (
 const Artists = ({ y, command }: InjectedIPodProps) => (
   <List
     items={data.albums.map(album => ({
-      screen: "Artist",
+      screen: "Player",
       thumbnail: album.picture.uri,
-      label: album.artist
+      label: album.artist,
+      params: {
+        tracks: data.tracks(album.id),
+        selected: 0
+      }
     }))}
     {...{ y, command }}
   />
 );
 
-const Songs = ({ y, command }: InjectedIPodProps) => (
-  <List
-    items={data.albums
-      .map(album =>
-        data.tracks(album.id).map(track => ({
-          label: track.name,
-          thumbnail: album.picture.uri,
-          screen: "Player"
-        }))
-      )
-      .flat()}
-    {...{ y, command }}
-  />
-);
+const Songs = ({ y, command }: InjectedIPodProps) => {
+  const tracks = data.albums.map(album => data.tracks(album.id)).flat();
+  return (
+    <List
+      items={data.albums
+        .map(album =>
+          data.tracks(album.id).map(track => ({
+            label: track.name,
+            thumbnail: album.picture.uri,
+            screen: "Player",
+            params: { tracks, selected: 0 }
+          }))
+        )
+        .flat()
+        .map((item, index) => {
+          // eslint-disable-next-line no-param-reassign
+          item.params.selected = index;
+          return item;
+        })}
+      {...{ y, command }}
+    />
+  );
+};
 
 const NotImplementedYet = () => {
   const navigation = useNavigation();
@@ -79,6 +101,9 @@ const NotImplementedYet = () => {
 export default createIPodNavigator({
   Menu: {
     screen: Menu
+  },
+  Player: {
+    screen: Player
   },
   Playlists: {
     screen: Playlists

@@ -17,7 +17,7 @@ interface Picture {
   preview: string;
 }
 
-interface Track {
+export interface Track {
   name: string;
   uri: string;
 }
@@ -95,6 +95,11 @@ const playlists: Playlist[] = [
     ]
   }
 ];
+
+export interface PlayerParams {
+  tracks: Track[];
+  selected: number;
+}
 
 export default {
   albums,

@@ -10,7 +10,10 @@ import Animated, { Value, interpolate } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   CreateNavigatorConfig,
+  NavigationParams,
+  NavigationRoute,
   NavigationRouteConfigMap,
+  NavigationScreenProp,
   NavigationStackRouterConfig,
   StackRouter,
   createNavigator
@@ -22,6 +25,7 @@ import {
   SceneDescriptorMap
 } from "react-navigation-stack/lib/typescript/types";
 
+import { useNavigation } from "react-navigation-hooks";
 import ClickWheel, { Command } from "./ClickWheel";
 import StatusBar, { STATUS_BAR_HEIGHT } from "./StatusBar";
 
@@ -54,6 +58,11 @@ const styles = StyleSheet.create({
   }
 });
 
+export type Navigation = NavigationScreenProp<
+  NavigationRoute<NavigationParams>,
+  NavigationParams
+>;
+
 export interface InjectedIPodProps {
   y: Animated.Node<number>;
   command: Animated.Node<Command>;
@@ -65,7 +74,15 @@ interface IPodNavigatorProps {
   screenProps?: unknown;
 }
 
+export const useParams = <T extends {}>() => {
+  const navigation = useNavigation();
+  const { state } = navigation;
+  const { params } = state.routes[state.index];
+  return params as T;
+};
+
 const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
+  // console.log({ navigation });
   const Screen = descriptors[
     navigation.state.routes[navigation.state.routes.length - 1].key
   ].getComponent() as FC<InjectedIPodProps>;

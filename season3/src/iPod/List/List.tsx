@@ -19,9 +19,7 @@ import Animated, {
   sub,
   useCode
 } from "react-native-reanimated";
-import { between, withTransition } from "react-native-redash";
-import { useNavigation } from "react-navigation-hooks";
-import { NavigationStackProp } from "react-navigation-stack";
+import { between } from "react-native-redash";
 
 import { Command, useOnPress } from "../ClickWheel";
 import { CONTENT_HEIGHT } from "../IPodNavigator";
@@ -54,12 +52,11 @@ const inViewport = (
 };
 
 export default ({ items, y, command }: ListProps) => {
-  const navigation = useNavigation<NavigationStackProp>();
   const y1 = diffClamp(y, 0, items.length * ITEM_HEIGHT - 1);
   const translateY = new Value(0);
   const goingUp = lessThan(diff(y1), 0);
   const index = floor(divide(y1, ITEM_HEIGHT));
-  useOnPress(command, Command.TOP, () => navigation.navigate("Menu"));
+  useOnPress(command, Command.TOP, navigation => navigation.navigate("Menu"));
   useCode(
     () =>
       block([
@@ -82,7 +79,7 @@ export default ({ items, y, command }: ListProps) => {
       <Animated.View style={{ transform: [{ translateY }] }}>
         {items.map((item, key) => (
           <Item
-            onPress={() => navigation.navigate(item.screen)}
+            onPress={n => n.navigate(item.screen, item.params)}
             active={between(y1, key * ITEM_HEIGHT, (key + 1) * ITEM_HEIGHT)}
             {...{ command, key }}
             {...item}

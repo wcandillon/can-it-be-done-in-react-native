@@ -5,8 +5,9 @@ import Animated, { cond } from "react-native-reanimated";
 
 import { Command, useOnPress } from "../ClickWheel";
 import Image from "./Image";
-import { SCREEN_SIZE } from "../IPodNavigator";
 import Active from "./Active";
+import { PlayerParams } from "../data";
+import { Navigation } from "../IPodNavigator";
 
 const blue = processColor("#2980b9");
 const white = processColor("white");
@@ -40,12 +41,13 @@ export interface Item {
   label: string;
   icon?: string;
   thumbnail?: string;
+  params?: PlayerParams;
 }
 
 interface ItemProps extends Item {
   active: Animated.Node<0 | 1>;
   command: Animated.Node<Command>;
-  onPress: () => void;
+  onPress: (navigation: Navigation) => void;
 }
 
 export default ({
