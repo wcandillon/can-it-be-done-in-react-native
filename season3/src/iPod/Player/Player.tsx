@@ -7,7 +7,7 @@ import { Sound } from "expo-av/build/Audio";
 import { Command, useOnPress } from "../ClickWheel";
 import { PlayerParams, TrackWithInfo } from "../data";
 import { useParams } from "../IPodNavigator";
-import Image from "../List/Image";
+import Image from "../Image";
 
 interface PlayerProps {
   command: Animated.Node<Command>;

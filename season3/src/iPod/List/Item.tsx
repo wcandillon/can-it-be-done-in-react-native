@@ -4,7 +4,7 @@ import { Feather as Icon } from "@expo/vector-icons";
 import Animated, { cond } from "react-native-reanimated";
 
 import { Command, useOnPress } from "../ClickWheel";
-import Image from "./Image";
+import Image from "../Image";
 import Active from "./Active";
 import { PlayerParams } from "../data";
 import { Navigation } from "../IPodNavigator";
