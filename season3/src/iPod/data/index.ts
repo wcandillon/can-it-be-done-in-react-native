@@ -22,11 +22,6 @@ interface Track {
   uri: string;
 }
 
-export interface TrackWithInfo extends Track {
-  artist: string;
-  cover: Picture;
-}
-
 interface Album {
   id: string;
   name: string;
@@ -34,7 +29,7 @@ interface Album {
   picture: Picture;
 }
 
-interface PlaylistEntry {
+export interface PlaylistEntry {
   album: Album;
   track: Track;
 }
@@ -93,7 +88,7 @@ const playlists: Playlist[] = [
 ];
 
 export interface PlayerParams {
-  tracks: TrackWithInfo[];
+  entries: PlaylistEntry[];
   selected: number;
 }
 

@@ -29,11 +29,7 @@ const Playlists = ({ y, command }: InjectedIPodProps) => (
       screen: "Player",
       thumbnail: playlist.entries[0].album.picture.uri,
       params: {
-        tracks: playlist.entries.map(entry => ({
-          ...entry.track,
-          artist: entry.album.artist,
-          cover: entry.album.picture
-        })),
+        entries: playlist.entries,
         selected: 0
       }
     }))}
@@ -48,11 +44,7 @@ const Albums = ({ y, command }: InjectedIPodProps) => (
       thumbnail: album.picture.uri,
       label: album.name,
       params: {
-        tracks: data.tracks(album.id).map(track => ({
-          ...track,
-          artist: album.artist,
-          cover: album.picture
-        })),
+        entries: data.transformAlbumToPlaylist(album).entries,
         selected: 0
       }
     }))}
@@ -67,11 +59,7 @@ const Artists = ({ y, command }: InjectedIPodProps) => (
       thumbnail: album.picture.uri,
       label: album.artist,
       params: {
-        tracks: data.tracks(album.id).map(track => ({
-          ...track,
-          artist: album.artist,
-          cover: album.picture
-        })),
+        entries: data.transformAlbumToPlaylist(album).entries,
         selected: 0
       }
     }))}
@@ -80,25 +68,21 @@ const Artists = ({ y, command }: InjectedIPodProps) => (
 );
 
 const Songs = ({ y, command }: InjectedIPodProps) => {
-  const tracks = data.albums.map(album => data.tracks(album.id)).flat();
+  const tracks = data.albums
+    .map(album => data.transformAlbumToPlaylist(album).entries)
+    .flat();
   return (
     <List
       items={data.albums
-        .map(album =>
-          data.tracks(album.id).map(track => ({
-            label: track.name,
-            thumbnail: album.picture.uri,
-            screen: "Player",
-            params: {
-              tracks: tracks.map(t => ({
-                ...t,
-                artist: album.name,
-                cover: album.picture
-              })),
-              selected: 0
-            }
-          }))
-        )
+        .map(album => ({
+          screen: "Player",
+          thumbnail: album.picture.uri,
+          label: album.artist,
+          params: {
+            entries: tracks,
+            selected: 0
+          }
+        }))
         .flat()
         .map((item, index) => {
           // eslint-disable-next-line no-param-reassign
