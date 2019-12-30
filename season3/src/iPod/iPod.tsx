@@ -10,7 +10,6 @@ import data from "./data";
 const Menu = ({ y, command }: InjectedIPodProps) => (
   <List
     items={[
-      { icon: "play", label: "Now Playing", screen: "NowPlaying" },
       { icon: "list", label: "Playlists", screen: "Playlists" },
       { icon: "layers", label: "Albums", screen: "Albums" },
       { icon: "users", label: "Artists", screen: "Artists" },
