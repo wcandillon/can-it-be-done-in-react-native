@@ -6,13 +6,23 @@ import { Sound } from "expo-av/build/Audio";
 
 import ProgressBar from "./ProgressBar";
 import { Command, useOnPress } from "../ClickWheel";
-import { PlayerParams, PlaylistEntry } from "../data";
+import { PlayerParams } from "../data";
 import { SCREEN_SIZE, useParams } from "../IPodNavigator";
 import Image from "../Image";
 
 interface PlayerProps {
   command: Animated.Node<Command>;
 }
+
+Audio.setAudioModeAsync({
+  playsInSilentModeIOS: true,
+  allowsRecordingIOS: false,
+  staysActiveInBackground: false,
+  interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+  shouldDuckAndroid: false,
+  interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+  playThroughEarpieceAndroid: true
+});
 
 const COVER_SIZE = SCREEN_SIZE * 0.5 - 16;
 const styles = StyleSheet.create({

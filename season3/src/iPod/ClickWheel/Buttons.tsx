@@ -69,10 +69,10 @@ export const useOnPress = (
   const navigation = useNavigation();
   useCode(
     () =>
-      cond(
-        and(active, eq(command, target)),
-        call([], () => onPress(navigation))
-      ),
+      cond(and(active, eq(command, target)), [
+        call([], () => onPress(navigation)),
+        set(command, Command.UNDETERMINED)
+      ]),
     [active, command, navigation, onPress, target]
   );
 };
