@@ -19,7 +19,7 @@ import Animated, {
   sub,
   useCode
 } from "react-native-reanimated";
-import { between } from "react-native-redash";
+import { between, withTransition } from "react-native-redash";
 import { useNavigation } from "react-navigation-hooks";
 import { NavigationStackProp } from "react-navigation-stack";
 

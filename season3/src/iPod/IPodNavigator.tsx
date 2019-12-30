@@ -26,7 +26,7 @@ import ClickWheel, { Command } from "./ClickWheel";
 import StatusBar, { STATUS_BAR_HEIGHT } from "./StatusBar";
 
 const { width } = Dimensions.get("window");
-const SCREEN_SIZE = width - 32;
+export const SCREEN_SIZE = width - 32;
 export const CONTENT_HEIGHT = SCREEN_SIZE - STATUS_BAR_HEIGHT;
 const styles = StyleSheet.create({
   container: {

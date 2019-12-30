@@ -1,16 +1,15 @@
 import React from "react";
-import { StyleSheet, View, processColor } from "react-native";
+import { StyleSheet, Text, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated, { cond } from "react-native-reanimated";
 
 import { Command, useOnPress } from "../ClickWheel";
 import Image from "./Image";
-import { CONTENT_HEIGHT } from "../IPodNavigator";
+import { SCREEN_SIZE } from "../IPodNavigator";
 import Active from "./Active";
 
 const blue = processColor("#2980b9");
 const white = processColor("white");
-const black = processColor("black");
 const styles = StyleSheet.create({
   item: {
     flexDirection: "row",
@@ -20,10 +19,13 @@ const styles = StyleSheet.create({
   icon: {
     paddingHorizontal: 16
   },
+  labelContainer: {
+    flex: 1,
+    justifyContent: "center"
+  },
   label: {
     fontSize: 16,
     fontFamily: "Chicago",
-    flex: 1,
     flexWrap: "wrap"
   },
   thumbnail: {
@@ -55,7 +57,6 @@ export default ({
   onPress
 }: ItemProps) => {
   const backgroundColor = cond(active, blue, white);
-  const color = cond(active, white, black);
   useOnPress(command, Command.CENTER, onPress, active);
   return (
     <Animated.View style={[styles.item, { backgroundColor }]}>
@@ -65,9 +66,11 @@ export default ({
         </Active>
       )}
       {thumbnail && <Image source={thumbnail} style={styles.thumbnail} />}
-      <Animated.Text numberOfLines={1} style={[styles.label, { color }]}>
-        {label}
-      </Animated.Text>
+      <Active style={styles.labelContainer} {...{ active }}>
+        <Text numberOfLines={1} style={styles.label}>
+          {label}
+        </Text>
+      </Active>
     </Animated.View>
   );
 };
