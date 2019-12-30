@@ -2,16 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Sound } from "expo-av/build/Audio";
 import { ReText, useValues, withTransition } from "react-native-redash";
-import Animated, {
-  concat,
-  cond,
-  divide,
-  eq,
-  floor,
-  lessThan,
-  modulo,
-  multiply
-} from "react-native-reanimated";
+import Animated, { concat, multiply } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 
 const styles = StyleSheet.create({
@@ -36,16 +27,14 @@ const styles = StyleSheet.create({
   }
 });
 
-const minutes = (v: Animated.Node<number>) => {
-  const m1 = floor(divide(v, 1000 * 60));
-  const m = cond(eq(m1, -0), 0, m1);
-  return cond(lessThan(m, 10), concat("0", m), concat(m));
+const minutes = (v: number) => {
+  const m = Math.floor(v / (60 * 1000));
+  return m < 10 ? `0${m}` : `${m}`;
 };
 
-const seconds = (v: Animated.Node<number>) => {
-  const s1 = floor(divide(modulo(v, 1000 * 60), 1000));
-  const s = cond(eq(s1, -0), 0, s1);
-  return cond(lessThan(s, 10), concat("0", s), concat(s));
+const seconds = (v: number) => {
+  const s = Math.floor((v % (60 * 1000)) / 1000);
+  return s < 10 ? `0${s}` : `${s}`;
 };
 
 interface ProgressBarProps {
@@ -53,26 +42,29 @@ interface ProgressBarProps {
 }
 
 export default ({ playback }: ProgressBarProps) => {
-  const [position, total] = useValues<number>([0, 0], [playback]);
+  const [progress] = useValues<number>([0], []);
+  const [position, total] = useValues<string>(["00:00", "00:00"], []);
+  const transition = withTransition(progress);
   useEffect(() => {
     playback.setOnPlaybackStatusUpdate(status => {
       if (status.isLoaded) {
-        position.setValue(status.positionMillis);
-        total.setValue(status.playableDurationMillis as number);
+        const { positionMillis } = status;
+        const playableDurationMillis = status.playableDurationMillis as number;
+        progress.setValue(positionMillis / playableDurationMillis);
+        position.setValue(
+          `${minutes(positionMillis)}:${seconds(positionMillis)}`
+        );
+        total.setValue(
+          `${minutes(playableDurationMillis)}:${seconds(
+            playableDurationMillis
+          )}`
+        );
       }
     });
-  }, [playback, position, total]);
-  const progress = withTransition(divide(position, total));
-  const playedMinutes = minutes(position);
-  const playedSeconds = seconds(position);
-  const totalMinutes = minutes(total);
-  const totalSeconds = seconds(total);
+  }, [playback, position, progress, total]);
   return (
     <View style={styles.container}>
-      <ReText
-        style={styles.label}
-        text={concat(playedMinutes, ":", playedSeconds)}
-      />
+      <ReText style={styles.label} text={position} />
       <View style={styles.bar}>
         <LinearGradient
           style={styles.gradient}
@@ -84,7 +76,7 @@ export default ({ playback }: ProgressBarProps) => {
             top: 0,
             left: 0,
             bottom: 0,
-            width: concat(multiply(progress, 100), "%")
+            width: concat(multiply(transition, 100), "%")
           }}
         >
           <LinearGradient
@@ -93,10 +85,7 @@ export default ({ playback }: ProgressBarProps) => {
           />
         </Animated.View>
       </View>
-      <ReText
-        style={styles.label}
-        text={concat(totalMinutes, ":", totalSeconds)}
-      />
+      <ReText style={styles.label} text={total} />
     </View>
   );
 };
