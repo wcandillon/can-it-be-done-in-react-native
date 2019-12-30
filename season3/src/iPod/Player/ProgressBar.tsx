@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Sound } from "expo-av/build/Audio";
 import { ReText, useValues, withTransition } from "react-native-redash";
-import Animated, { concat, multiply } from "react-native-reanimated";
+import Animated, { Value, concat, multiply } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 
 const styles = StyleSheet.create({
@@ -42,23 +42,26 @@ interface ProgressBarProps {
 }
 
 export default ({ playback }: ProgressBarProps) => {
-  const [progress] = useValues<number>([0], []);
-  const [position, total] = useValues<string>(["00:00", "00:00"], []);
+  const progress = new Value<number>(0);
+  const position = new Value<string>("00:00");
+  const total = new Value<string>("00:00");
   const transition = withTransition(progress);
   useEffect(() => {
     playback.setOnPlaybackStatusUpdate(status => {
       if (status.isLoaded) {
         const { positionMillis } = status;
-        const playableDurationMillis = status.playableDurationMillis as number;
-        progress.setValue(positionMillis / playableDurationMillis);
-        position.setValue(
-          `${minutes(positionMillis)}:${seconds(positionMillis)}`
-        );
-        total.setValue(
-          `${minutes(playableDurationMillis)}:${seconds(
-            playableDurationMillis
-          )}`
-        );
+        const { playableDurationMillis } = status;
+        if (playableDurationMillis) {
+          progress.setValue(positionMillis / playableDurationMillis);
+          position.setValue(
+            `${minutes(positionMillis)}:${seconds(positionMillis)}`
+          );
+          total.setValue(
+            `${minutes(playableDurationMillis)}:${seconds(
+              playableDurationMillis
+            )}`
+          );
+        }
       }
     });
   }, [playback, position, progress, total]);

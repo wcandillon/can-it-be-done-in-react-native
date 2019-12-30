@@ -45,10 +45,12 @@ const styles = StyleSheet.create({
   },
   track: {
     fontFamily: "Chicago",
-    fontSize: 16
+    fontSize: 16,
+    textAlign: "center"
   },
   artist: {
-    fontFamily: "Chicago"
+    fontFamily: "Chicago",
+    textAlign: "center"
   }
 });
 
@@ -68,6 +70,16 @@ export default ({ command }: PlayerProps) => {
       setPlayback(sound);
     })();
   }, [entries, index]);
+  useEffect(
+    () => () => {
+      (async () => {
+        if (playback) {
+          await playback.unloadAsync();
+        }
+      })();
+    },
+    [playback]
+  );
   useOnPress(command, Command.BOTTOM, async () => {
     if (playback) {
       const status = await playback.getStatusAsync();
@@ -82,25 +94,25 @@ export default ({ command }: PlayerProps) => {
   });
   useOnPress(command, Command.TOP, async navigation => {
     if (playback) {
-      await playback.stopAsync();
+      await playback.unloadAsync();
     }
     navigation.navigate("Menu");
   });
   useOnPress(command, Command.LEFT, async () => {
     if (playback) {
-      await playback.stopAsync();
+      await playback.unloadAsync();
     }
     setIndex(entries[index - 1] ? index - 1 : 0);
   });
   useOnPress(command, Command.RIGHT, async () => {
     if (playback) {
-      await playback.stopAsync();
+      await playback.unloadAsync();
     }
     setIndex(entries[index + 1] ? index + 1 : index);
   });
   useOnPress(command, Command.TOP, async navigation => {
     if (playback) {
-      await playback.stopAsync();
+      await playback.unloadAsync();
     }
     navigation.navigate("Menu");
   });
