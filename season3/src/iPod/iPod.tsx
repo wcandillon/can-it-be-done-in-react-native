@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Alert } from "react-native";
+import { useNavigation } from "react-navigation-hooks";
 import createIPodNavigator, { InjectedIPodProps } from "./IPodNavigator";
 import List from "./List";
 import data from "./data";
@@ -19,6 +21,17 @@ const Menu = ({ y, command }: InjectedIPodProps) => (
   />
 );
 
+const Playlists = ({ y, command }: InjectedIPodProps) => (
+  <List
+    items={data.playlists.map(playlist => ({
+      label: playlist.name,
+      screen: "Playlist",
+      thumbnail: playlist.entries[0].album.picture.uri
+    }))}
+    {...{ y, command }}
+  />
+);
+
 const Albums = ({ y, command }: InjectedIPodProps) => (
   <List
     items={data.albums.map(album => ({
@@ -30,11 +43,59 @@ const Albums = ({ y, command }: InjectedIPodProps) => (
   />
 );
 
+const Artists = ({ y, command }: InjectedIPodProps) => (
+  <List
+    items={data.albums.map(album => ({
+      screen: "Artist",
+      thumbnail: album.picture.uri,
+      label: album.artist
+    }))}
+    {...{ y, command }}
+  />
+);
+
+const Songs = ({ y, command }: InjectedIPodProps) => (
+  <List
+    items={data.albums
+      .map(album =>
+        data.tracks(album.id).map(track => ({
+          label: track.name,
+          thumbnail: album.picture.uri,
+          screen: "Player"
+        }))
+      )
+      .flat()}
+    {...{ y, command }}
+  />
+);
+
+const NotImplementedYet = () => {
+  const navigation = useNavigation();
+  Alert.alert("Not Implemented Yet 🤷‍♂️");
+  navigation.navigate("Menu");
+  return null;
+};
+
 export default createIPodNavigator({
   Menu: {
     screen: Menu
   },
+  Playlists: {
+    screen: Playlists
+  },
   Albums: {
     screen: Albums
+  },
+  Artists: {
+    screen: Artists
+  },
+  Songs: {
+    screen: Songs
+  },
+  Shuffle: {
+    screen: NotImplementedYet
+  },
+  Settings: {
+    screen: NotImplementedYet
   }
 });

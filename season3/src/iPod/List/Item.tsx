@@ -5,6 +5,7 @@ import Animated, { cond } from "react-native-reanimated";
 
 import { Command, useOnPress } from "../ClickWheel";
 import Image from "./Image";
+import { CONTENT_HEIGHT } from "../IPodNavigator";
 
 const blue = processColor("#2980b9");
 const white = processColor("white");
@@ -20,7 +21,9 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontFamily: "Chicago"
+    fontFamily: "Chicago",
+    flex: 1,
+    flexWrap: "wrap"
   },
   thumbnail: {
     width: 45,
@@ -66,7 +69,9 @@ export default ({
         </View>
       )}
       {thumbnail && <Image source={thumbnail} style={styles.thumbnail} />}
-      <Animated.Text style={[styles.label, { color }]}>{label}</Animated.Text>
+      <Animated.Text numberOfLines={1} style={[styles.label, { color }]}>
+        {label}
+      </Animated.Text>
     </Animated.View>
   );
 };
