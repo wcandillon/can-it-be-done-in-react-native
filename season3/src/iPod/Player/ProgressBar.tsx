@@ -76,14 +76,7 @@ export default ({ playback }: ProgressBarProps) => {
       <View style={styles.bar}>
         <LinearGradient
           style={styles.gradient}
-          colors={[
-            "#D8D8D8",
-            "#FDFDFD",
-            "#F5F5F5",
-            "#F2F2F2",
-            "#E2E2E2",
-            "#EDEDED"
-          ]}
+          colors={["#ecf0f1", "#bdc3c7"]}
         />
         <Animated.View
           style={{
@@ -96,15 +89,7 @@ export default ({ playback }: ProgressBarProps) => {
         >
           <LinearGradient
             style={styles.gradient}
-            colors={[
-              "#7491EF",
-              "#778DF6",
-              "#6787EE",
-              "#708EF4",
-              "#417CF3",
-              "#56B3F9",
-              "#4F93D7"
-            ]}
+            colors={["#3498db", "#2980b9"]}
           />
         </Animated.View>
       </View>
