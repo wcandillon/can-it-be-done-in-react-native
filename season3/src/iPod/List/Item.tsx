@@ -6,6 +6,7 @@ import Animated, { cond } from "react-native-reanimated";
 import { Command, useOnPress } from "../ClickWheel";
 import Image from "./Image";
 import { CONTENT_HEIGHT } from "../IPodNavigator";
+import Active from "./Active";
 
 const blue = processColor("#2980b9");
 const white = processColor("white");
@@ -59,14 +60,9 @@ export default ({
   return (
     <Animated.View style={[styles.item, { backgroundColor }]}>
       {icon && (
-        <View>
+        <Active {...{ active }}>
           <Icon name={icon} color="black" style={styles.icon} size={24} />
-          <Animated.View
-            style={{ ...StyleSheet.absoluteFillObject, opacity: active }}
-          >
-            <Icon name={icon} color="white" style={styles.icon} size={24} />
-          </Animated.View>
-        </View>
+        </Active>
       )}
       {thumbnail && <Image source={thumbnail} style={styles.thumbnail} />}
       <Animated.Text numberOfLines={1} style={[styles.label, { color }]}>
