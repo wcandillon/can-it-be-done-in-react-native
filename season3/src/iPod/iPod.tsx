@@ -29,7 +29,11 @@ const Playlists = ({ y, command }: InjectedIPodProps) => (
       screen: "Player",
       thumbnail: playlist.entries[0].album.picture.uri,
       params: {
-        tracks: playlist.entries.map(entry => entry.track),
+        tracks: playlist.entries.map(entry => ({
+          ...entry.track,
+          artist: entry.album.artist,
+          cover: entry.album.picture
+        })),
         selected: 0
       }
     }))}
@@ -44,7 +48,11 @@ const Albums = ({ y, command }: InjectedIPodProps) => (
       thumbnail: album.picture.uri,
       label: album.name,
       params: {
-        tracks: data.tracks(album.id),
+        tracks: data.tracks(album.id).map(track => ({
+          ...track,
+          artist: album.artist,
+          cover: album.picture
+        })),
         selected: 0
       }
     }))}
@@ -59,7 +67,11 @@ const Artists = ({ y, command }: InjectedIPodProps) => (
       thumbnail: album.picture.uri,
       label: album.artist,
       params: {
-        tracks: data.tracks(album.id),
+        tracks: data.tracks(album.id).map(track => ({
+          ...track,
+          artist: album.artist,
+          cover: album.picture
+        })),
         selected: 0
       }
     }))}
@@ -77,7 +89,14 @@ const Songs = ({ y, command }: InjectedIPodProps) => {
             label: track.name,
             thumbnail: album.picture.uri,
             screen: "Player",
-            params: { tracks, selected: 0 }
+            params: {
+              tracks: tracks.map(t => ({
+                ...t,
+                artist: album.name,
+                cover: album.picture
+              })),
+              selected: 0
+            }
           }))
         )
         .flat()

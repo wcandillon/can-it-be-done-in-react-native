@@ -17,9 +17,14 @@ interface Picture {
   preview: string;
 }
 
-export interface Track {
+interface Track {
   name: string;
   uri: string;
+}
+
+export interface TrackWithInfo extends Track {
+  artist: string;
+  cover: Picture;
 }
 
 interface Album {
@@ -39,15 +44,6 @@ interface Playlist {
   name: string;
   entries: PlaylistEntry[];
 }
-
-/*
-interface Music {
-  albums: Album[];
-  tracks: (id: string) => Track[];
-  playlists: Playlist[];
-  transformAlbumToPlaylist: (album: Album) => Playlist;
-}
-*/
 
 const tracks: { [album: string]: Track[] } = {
   "hearts-were-gold": heartsWereGold,
@@ -97,7 +93,7 @@ const playlists: Playlist[] = [
 ];
 
 export interface PlayerParams {
-  tracks: Track[];
+  tracks: TrackWithInfo[];
   selected: number;
 }
 
