@@ -65,7 +65,7 @@ export type Navigation = NavigationScreenProp<
 
 export interface InjectedIPodProps {
   y: Animated.Node<number>;
-  command: Animated.Node<Command>;
+  command: Animated.Value<Command>;
 }
 
 interface IPodNavigatorProps {

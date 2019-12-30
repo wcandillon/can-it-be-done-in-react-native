@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 interface ListProps {
   items: ItemModel[];
   y: Animated.Node<number>;
-  command: Animated.Node<Command>;
+  command: Animated.Value<Command>;
 }
 
 const inViewport = (

@@ -46,7 +46,7 @@ export interface Item {
 
 interface ItemProps extends Item {
   active: Animated.Node<0 | 1>;
-  command: Animated.Node<Command>;
+  command: Animated.Value<Command>;
   onPress: (navigation: Navigation) => void;
 }
 

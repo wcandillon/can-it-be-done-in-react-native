@@ -61,7 +61,7 @@ const isInRegion = (
 };
 
 export const useOnPress = (
-  command: Animated.Node<Command>,
+  command: Animated.Value<Command>,
   target: Command,
   onPress: (navigation: Navigation) => void,
   active: Animated.Adaptable<number> = 1

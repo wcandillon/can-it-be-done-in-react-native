@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { Audio } from "expo-av";
@@ -11,7 +11,7 @@ import { SCREEN_SIZE, useParams } from "../IPodNavigator";
 import Image from "../Image";
 
 interface PlayerProps {
-  command: Animated.Node<Command>;
+  command: Animated.Value<Command>;
 }
 
 Audio.setAudioModeAsync({
