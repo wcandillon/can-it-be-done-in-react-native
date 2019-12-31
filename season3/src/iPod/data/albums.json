@@ -1,0 +1,111 @@
+[
+    {
+        "id": "hearts-were-gold",
+        "name": "Hearts were Gold",
+        "artist": "George Simpson",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/50ca0c1a0f0b13695fb75cc34c719df749d89621.png?alt=media&token=a2c00429-1e12-4ee9-8c49-b32d7827baaa",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABUklEQVQYGQ2QW0/UQACFv5nOdtu9FgggYIhXLkYSQsK+y4MP/gn/qjHxFxgSDTEoMbIodC8t7U5nOuM8nJyXc5JzPnH+9qM3xvO41FSzBqnaIMtwQyClxTQaa1qUJ6I3UJxN9lFKcPV9isfxcFeQ35Qk45g4daisl/DyeItnr/YYjEccvXlNuVzy5fMlWdZDxZ787wJ1sJHSbzziX87e2OGzMXm8zvuLE+qV5uf1LfpBow7X+njr2Fx9ox921sUuUZ7RocdqPiOZlzxf76ImMqQHHVQkMb9rUjtFLWaslSlG1zz1LUUSzsx+XJKqDpGMcK3kTzWnEi073Q6tc0TWII1BfNg98SMVsTUcspN00d5yvWogPC+tZVE32BbUp6rh4MUTRuenuFDY9mACoJv7W+LA8O7XPV+vpoh3+xMvU4XaHGCFAB/IBkNrpINiXlGUNf8BGtebELa2ozQAAAAASUVORK5CYII="
+        }
+    },
+    {
+        "id": "brother",
+        "name": "Brother",
+        "artist": "Daniel Duke",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b2866f5f437362dbfc6afef39cc8f334ef65e6e1.png?alt=media&token=73943072-6824-4cec-bd23-14c32396c7ee",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABcklEQVQYGQ2OzU4TUQBGz53eQmc6tHQKEgE7oQ2klCpsiLhCIJi4ga36Ci54G4kvAyQkbFASSgFBaErBIvRPKEz/5zqLb3E253xi4+sXFRlLMPIqxf5JgWrtnPnpGMn4DOOjNj3XxTBMxOe1D6riFAmFXuKL2uRbJZbS81h+yeXZT0RfgEBwEK1WfeDuLMvr0SSfFhd5YZq8seOk7ARXp1nKFzkufuwhi7d5HnoRbor3jN/8ZahjUsgc43MFd2VJ5T6L48nE9s6OUkIjd56n9OcWVylvgpD3ayJpYwwOUH+sIxcW3iKlH5/SODzIkE5PcfrrN7HJGO9XlgjoOo7zjNZsNj2DS6lc49vmLjNzs6igwVG+gCZ9uN0OAoXWaLk0W116Hn5cnyM8NMJEIo7u76f+1KDRbtPudJGF60csSxHUQ6wuv8N5ahMNRpDdPi5zVayIidRcxOb3LWUOGJ4BL9MCzU+t8o9nx/HSBtFhi3BY5z+Mrpak8e98cgAAAABJRU5ErkJggg=="
+        }
+    },
+    {
+        "id": "where-we-were",
+        "name": "Where We Were",
+        "artist": "Gus Harrower",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/36c19b9e8057a70027a5d35ca3c6e151f07a2155.png?alt=media&token=96571112-45f7-4c16-9546-05823399e24a",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABYklEQVQYGQ2QQU7bQABFn8fj2A6Jk2AQahGV0qpSQEJCiAXsonIMNr1Cj9LLdFmpuy7YlJbSFkIxEiEEkmA3TuLxTFwv/u7/96VnXfcuCkOBWQrsvwkiV1idLXSeU2hFNQjAWiLrjQZpPMca5sRfrhGDCLG/zaSiqLWb1MMGSmmksAXDsys4zbiIb9Hmkbdpi1kYkhUO1v0ddb+C9D0f2/7HJEkJanV+FVecjx+YpAsc3eeg7dM92kM83D1xdhlxOv6BtGZ0vCkMvzLsRQTE+FUXp+IitV4wzjJ++nN64z7b625JgdWRw1NqcISFsMvrVtii1miy5t0wUjafflvsT0OUlARixGathXRshF6W6+YWRzvfeX/8kcN2wudzxWV/RpEn+G5ZKqlSm4w3GxvcDj6wmJ6wovp0XmredXfxXIFe2cToUmUU/SmyZE76TTO7j3n2BnivV3nRfoUxpowqxef8B9EWnCIWEJi+AAAAAElFTkSuQmCC"
+        }
+    },
+    {
+        "id": "ribbons",
+        "name": "Ribbons",
+        "artist": "Lazy Day",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/f1b0e6d7a208319dad108f0abad44136e1765b0e.png?alt=media&token=2c15d8ba-ce10-4973-8d3a-641682222ed3",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABVklEQVQYGRWQzW7TQBSFvxlPazeGpCYlbYKQyL6bCokH4AF4IF6At+EV2ogVq7KqqAQEVKtJnMbJOLHjn3Gmw5WO7uIcXZ3vivGHz3bw+oTRWQfvSNEgSHeGQXSCkBJpGxarHer9x0teyBZhasy+pFgVZGnJ+Mwn6ods9IG8sogv149WmIZM79jqLUmSkq01qdt1ljM8DSiqBnUcBEgRMOyERL1TzodDPA7obMcynsMmIX5IUONXR1RN60zJwhqKtiV6GdKNeowu+vyYaCb3KaofKtZ7yf/xfUMoPFTgbkqP0iqe8oqyOCB1XrOvW+KF5tvkDrneMPIF75wuTInnAOn6yMYKqrKicMXfRgHjQYdB95jtLOb25jv3vxLeOCDx9S6ztQu2ZeleVLFernh8mDGLl0hPUrv+t380Kk8S/v6bM/0dM53Ouf65QmH5dHXuYHrUBoyFZw5XqtNj3QhvAAAAAElFTkSuQmCC"
+        }
+    },
+    {
+        "id": "do-something-beautiful",
+        "name": "Do Something Beautiful",
+        "artist": "Colour Colour",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/92b1e570706e642e932ea8549082f2a0deefcb34.png?alt=media&token=a321f2ce-632b-4419-bc86-771a3287a7f9",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABTklEQVQYGQ2Qv0/bQACFv7Pv7GCDQ4hIyg8ZEBDRTu2A6NypY8f+jR068iegDl2REBJqpxaihLSJzw6+Ox+3Pn3fk94T4nvnZdvggdh3pPYFGytMSDwRaWdwSYYcLf/Sv73mxXW4rV1UAOM0o2tWWO+ROJaTTwjxTXs/+8W4s9hsm3mUgDOI0DfoHI2IIB8iz/WCdFgyjRTzOOVdtyY3DUuV8ah6FMF7ciA+f/nq98tT7ucGG8xx4tjrtTihWI3fszHc53ctkH2e+fPzB31RUz9PSU+uUAdn0NaM3ZzeTHEYB/Do4pKbZczHyw9UlWaxWDBrIt7sXRBjebi/YzI5R9bVP3bymCJP2d7KsOsKrStGg02quuF/bdDrsN5aR3l0TNsa8jxhdzSit9rAhDwSgreTM3YGBbIsS6SUKKXCVwJrLT78p7UmSRKKosAYwyuN4ZB7DrVGlwAAAABJRU5ErkJggg=="
+        }
+    },
+    {
+        "id": "go-get-gone",
+        "name": "Go Get Gone",
+        "artist": "Worry Dolls",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/9debf84d0aa02bd64d270fb2c2aadfee05e1b9a2.png?alt=media&token=11a6b21b-b2ff-4896-b368-c824ee576602",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAC4jAAAuIwF4pT92AAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABHUlEQVQYGTVQTUsDMRB9M0m66mrFQtlDES+CpyJevHgR/7JePasnb4utRZCy9lDZbmFR2Y/EmaATEpLMm/feDH28vwbvPXT3fQ9rLQCSexfvTIwgy3pJhhAkGSKwaVskgwTWDeRLIV7KCOzloZvZYG//AEWxwvPjA+qqBFGsj0TCG+SDQcyolwu4ZY6EA2b5C7abDYxYiURaZpxDv/1E9XSHbDLB5fUNyO1gvS7BRkgEwxKR+qt4Q3oyxeH5Far6B4032E1TCJ2KQluMXlqy6KSRrmmQz+bw5JFlY3TSrHplBWqkx6doBDS/v8XQMS6mZ3DORjWVpv85shHG7xrlqkA6GmN4NEIvs9X4Ay50iJFeD7GEIHIscjoJ9afxCyIBj1hUtc9bAAAAAElFTkSuQmCC"
+        }
+    },
+    {
+        "id": "in-colour",
+        "name": "In Colour",
+        "artist": "Jamie XX",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/e5281e4435be698d29295dd5d89cd2b825bbae8d.png?alt=media&token=5c53ab01-40f7-4a8f-a8a3-0bdd8a06abd6",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABWElEQVQYGQ2OO2/TUABGz304dmzjJCUUaBQqpKpSiFiLhLIxMbCz8zNgYEdC3bv3D1TqVDVTZzqUSulQqUASkSY0hjRx/LgXT990zvnEYn/T5hNYjxTFtYedV0l+Roj4MaL2COsFaOuinSZgBCY1mLscGxcIq0H74FbRwkUZp9y2wfHAGshnDtkPhZUVRBCiVBWRVkhThaatkRsWv+mXwBh5I0i+dWCrQbH0WCWSdVnUc13q6w4ivMLUYWFhfvqQIn7AMigoH5Frgz7/U2O6OgfR4033C1NP8vXdGU+PptS3FZUFlBr08WiKlO/58PITm2GXgYo53L6l1rnntUhouBCWFbk/+UWr0uPFVpfvoyEfzy55Fm3Q2n3C0PX4rSUTCYq3e5+ze8ls9peDwZiTuwYto1mu1sRZhiwKKCz6udyhn0B/cAHVV3T9iPTfAhn4yChikmcIIfgPYKKB+//OxKYAAAAASUVORK5CYII="
+        }
+    },
+    {
+        "id": "mountains",
+        "name": "Mountains",
+        "artist": "Al Shields",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/46e6f4da8bc473d0144eebd8ce68281138b901ec.png?alt=media&token=695af75d-af4d-4c57-8041-642433c2a519",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAC4jAAAuIwF4pT92AAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAAA/UlEQVQYGV2OTVLDMAyFnxOlSRzjJmVRYM0M3H/DDeiC6QYWnIB009LhZ1rSODaSS7LAM7Ksp6dPVuvVQwgBUArxxIJfahTOMpK/PCXnBkj8N5I4ZFhIXdejdz3XCQbvMcsyJIniHs5EBQXvA5tcFD2b+t6x5qdNJMX4L13mES+Doglt3EhaGxBlOBy+WQvww8B3QJqmE0DMZG2NPC9QcDAOgSGfH3ucTj/Sj+ZI94ND27Y4HjtkM2IrYPQFKKX4x6LQWC6vQM8vr3hrNzDG4P7uFk1jBYyqqmBTC2stirIEbbd7NHWD3fsOj6sn3FzzNCWo67ksxtx+YXFZ4xe4b2zPu7knqgAAAABJRU5ErkJggg=="
+        }
+    },
+    {
+        "id": "pyk",
+        "name": "PYK",
+        "artist": "Young Karin",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/3c7f3319a80ad296f5aa6268f58130504d8ec684.png?alt=media&token=cde73b92-0bb4-4d6f-91d3-e5bcf80213c6",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABY0lEQVQYGR2QwU4TUQBFT997fTPTMq9MWxoWGIFUERcSm0CAlQvYsYDvYeEvuPUvjAtJRKNuSEgIcUdNZJIWSxBJoQhlpjOd8cX9Pbnn3gL7OzlU+FZQrNWPSJ0YrzKke9rhQ2eXjZVtxnGEQrjM6klcp8HlnyajJGZu4TUUwLgBrhBk0kcgShhdwzNNTs9TPh12ScYWsD3cZhSLmtwp2aDU3CuD8OaJLHTGI4buG66vXpBGI3I9hc5vbPVwSMANDxXBs9YmzdUysXQ47r+yvhJhYV/8RK33LnhufFQQU642ULrI4HZAu28wcoQqJAz+jhAHGtKJGpN+QJ6l/0d4nse8DJhSJdLsjv5FaB0jxfv+b07CkMg6Ke0Rxym9XyFSSsZJQuK1UN9nQ3J+sP+lzcdBi8WFGZxxj8f+W14+3aJunuCurKKWqidk9rO2f8nnva/UE5goQ2N6kenaO4qmSilb5h/nYXu4OhG6IwAAAABJRU5ErkJggg=="
+        }
+    },
+    {
+        "id": "melodrama",
+        "name": "Melodrama",
+        "artist": "Lorde",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/78db01a5cef4de7535e2eb8af8a13fc2097f872f.png?alt=media&token=6b55340d-de64-4e11-bce8-08f1617cc312",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABdElEQVQYGQ2QP0sbYQCHn3vz5nKXnrnkTAoGTAwmNIVSJTSFFIoWUlxcXJzaSUdHcekXaOlY6NIP0Kml0LUgNB9AnCLUQfPHaBtN0jfR5Ix33vrjgYfnp+nOhu9rUTxChKYuIpvAzRRxXEW30YBpHNvrIL1Jm5DUSYkbdCvNVXaFZLZIy7eo5BTyekzNE0hNjHHCirNuHXqKBXvIyW8FZpW9d4v07UfU9u8QYWuejtdk52WFj68C5akBgyFf376nUuzAwzl4EEIk02W4GjIb6VN9GmNrrQSUeTz/GqI5DvsSLAfZyD7DjH/ix+SC8d8whmkGoM3+wRGrBYe8dNnNuMgXmShnjQVm/g34EKkEmkQAfsFIlbkJJyk4E3KxKWJ9WUNlZhmRYN3rkdYDVXCWkQw2X/BfuViRW+Tyos52xOGzesKo/Qet/o03eRfcOL9aBufNHs/Tl8iYr8iZQSlTjkcSz/dY2iyRyhf43hX8HM/QrB1zDy/TfE/ZQiadAAAAAElFTkSuQmCC"
+        }
+    },
+    {
+        "id": "ibn-el-leil",
+        "name": "Ibn El Leil",
+        "artist": "Mashrou' Leila",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/745f8ff752c2b807b3e185d234b50eb6a0da3b58.png?alt=media&token=03e8ffcc-c54d-4dd4-8ec8-884bcf85e896",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABUklEQVQYGR2QTS8DURSGn3t7R6faaqOTakokihWJSETYsLDyR2z8H3+D2IsFiR0bQtihtKmZTj9MO525M26dnNXJmyfnecXN8mlKlILZcKNIks8y+xkg7vvoioSSQowTVKoEwtPIqoW/XcOrFSlhwnsuztkL8SAiXbKQYgobJmQaRXI5RdD64Dv0eVir0DxZBccQR1PiRDOdZBrqDXg+v8YuWpQO9unN13EaBdSth3pbSNlqW0TtEe1Ji6fPJis7mxzddHCivnk/Ja1ZqMuqxFmJCbwO12JI5/iARaloxWXyXci+9EjmMsjRzxdXVpuL5J2ujskpm9tBn5N6hrvDBul6AfkxQS15Q6TM8qBddh+72L8+3UIBei5euYrOz2CRGOtYE9iS10yCO/awByHVIADfZ4JGGzFhZGUYjnHNqRZpvJJFp17hvwnHoemUGc5ggoI/X5qWINQLKRwAAAAASUVORK5CYII="
+        }
+    },
+    {
+        "id": "shakira",
+        "name": "Shakira.",
+        "artist": "Shakira",
+        "picture": {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/c4d6e1e7dd7f241c149aa0dbe50f0ddd2f50dc86.png?alt=media&token=56ad3993-270c-46df-84fb-68a814136fd0",
+            "preview": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABYklEQVQYGR2PwU4aURhGz9y5MzBggVoFJmLjrhiTajTpRh+jb+Cuj9E+TJ+gq8adLmxDbCXRYCoLKXSMCiNDmRmce6e3/qt/8X0n37E6J8f5LIpwi0UcaaOzGK9SI5wl2FgIcjzHQWqtGQW3rDYaeOKJx+4R7ssmoedTW/ZxHfEclq9bLfxGEyEF0aiHtF2S2QObW+9YWW+zSOekSYI0R6lUZhj84br7nbqtcG2NUAle0cUWuRkAIteKeJHy86LHydfP/LUEYRwT3g54SuboHFSWmaLSz8/UCB196dHpT+ic/zIhhbAslAH9h8l0PiO3HUpLS1S2d1mrV0kKPsffzvA2dvCbDfQiQ6osZXp3z/LlBR/2t5n+HqIMUd906LffUi0dkJlpMpo+Mjo9ZfzpI+XD93hGZDDoU2jtMez+IJpMiLWRuQsCRldXBMbsfjzHWamTtd9gjUO8Qplq5QVrr2r8Az8Xo97q4mpYAAAAAElFTkSuQmCC"
+        }
+
+    }
+]

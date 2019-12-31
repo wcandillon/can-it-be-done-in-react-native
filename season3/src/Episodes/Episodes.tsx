@@ -6,10 +6,11 @@ import { StyleGuide } from "../components";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: StyleGuide.spacing * 2,
+    paddingVertical: StyleGuide.spacing * 2,
     backgroundColor: StyleGuide.palette.background,
     flexDirection: "row",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
+    flexWrap: "wrap"
   }
 });
 
@@ -33,6 +34,11 @@ export const episodes = [
     id: "UberEats",
     name: "UberEats",
     icon: require("../../assets/icons/uber-eats.png")
+  },
+  {
+    id: "iPod",
+    name: "iPod Classic",
+    icon: require("../../assets/icons/ipod.png")
   }
 ];
 
