@@ -1,9 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, processColor } from "react-native";
+import { StyleSheet, Text, View, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Animated, { cond } from "react-native-reanimated";
 
-import { Command, useOnPress } from "../ClickWheel";
+import { Command } from "../ClickWheel";
 import Image from "../Image";
 import Active from "./Active";
 import { PlayerParams } from "../data";
@@ -45,8 +44,6 @@ export interface Item {
 }
 
 interface ItemProps extends Item {
-  active: Animated.Node<0 | 1>;
-  command: Animated.Value<Command>;
   onPress: (navigation: Navigation) => void;
 }
 
@@ -58,21 +55,13 @@ export default ({
   active,
   onPress
 }: ItemProps) => {
-  const backgroundColor = cond(active, blue, white);
-  useOnPress(command, Command.CENTER, onPress, active);
   return (
-    <Animated.View style={[styles.item, { backgroundColor }]}>
-      {icon && (
-        <Active {...{ active }}>
-          <Icon name={icon} color="black" style={styles.icon} size={24} />
-        </Active>
-      )}
+    <View style={[styles.item]}>
+      {icon && <Icon name={icon} color="black" style={styles.icon} size={24} />}
       {thumbnail && <Image source={thumbnail} style={styles.thumbnail} />}
-      <Active style={styles.labelContainer} {...{ active }}>
-        <Text numberOfLines={1} style={styles.label}>
-          {label}
-        </Text>
-      </Active>
-    </Animated.View>
+      <Text numberOfLines={1} style={styles.label}>
+        {label}
+      </Text>
+    </View>
   );
 };

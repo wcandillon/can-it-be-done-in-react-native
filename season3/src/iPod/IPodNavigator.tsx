@@ -6,7 +6,6 @@ import {
   StyleSheet,
   View
 } from "react-native";
-import Animated, { Value, interpolate } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   CreateNavigatorConfig,
@@ -63,10 +62,7 @@ export type Navigation = NavigationScreenProp<
   NavigationParams
 >;
 
-export interface InjectedIPodProps {
-  y: Animated.Node<number>;
-  command: Animated.Value<Command>;
-}
+export interface InjectedIPodProps {}
 
 interface IPodNavigatorProps {
   navigation: NavigationStackProp;
@@ -86,23 +82,18 @@ const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
   const Screen = descriptors[
     navigation.state.routes[navigation.state.routes.length - 1].key
   ].getComponent() as FC<InjectedIPodProps>;
-  const alpha = new Value(0);
-  const command = new Value(Command.UNDETERMINED);
-  const y = interpolate(alpha, {
-    inputRange: [0, 2 * Math.PI],
-    outputRange: [0, SCREEN_SIZE]
-  });
+
   return (
     <SafeAreaView style={styles.container}>
       <RNStatusBar hidden />
       <View style={styles.screen}>
         <StatusBar />
         <View style={styles.content}>
-          <Screen {...{ y, command }} />
+          <Screen />
         </View>
       </View>
       <View style={styles.clickWheel}>
-        <ClickWheel {...{ alpha, command }} />
+        <ClickWheel />
       </View>
     </SafeAreaView>
   );
