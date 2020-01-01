@@ -26,13 +26,6 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      iPod: {
-        screen: iPod,
-        navigationOptions: {
-          title: "iPod Classic",
-          header: () => null
-        }
-      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
@@ -61,7 +54,14 @@ const AppNavigator = createAppContainer(
           title: "Uber Eats",
           header: () => null
         }
-      }
+      },
+      iPod: {
+        screen: iPod,
+        navigationOptions: {
+          title: "iPod Classic",
+          header: () => null
+        }
+      },
     },
     {
       defaultNavigationOptions: {
