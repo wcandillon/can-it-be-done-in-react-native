@@ -8,6 +8,7 @@ import Animated, {
   diff,
   diffClamp,
   lessThan,
+  multiply,
   not,
   set,
   sub,
@@ -46,7 +47,7 @@ export default ({ items, y: y1, command }: ListProps) => {
     () =>
       block([
         cond(
-          not(inViewport(y, translateY)),
+          not(inViewport(y, multiply(-1, translateY))),
           set(
             translateY,
             cond(
