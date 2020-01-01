@@ -12,7 +12,7 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
-import { onGestureEvent, useValues } from "react-native-redash";
+import { between, onGestureEvent, useValues } from "react-native-redash";
 import { useNavigation } from "react-navigation-hooks";
 import { Navigation } from "../IPodNavigator";
 
@@ -55,8 +55,8 @@ const isInRegion = (
   region: { x: number; y: number }
 ) => {
   return and(
-    and(greaterOrEq(x, region.x), lessOrEq(x, region.x + BUTTON_SIZE)),
-    and(greaterOrEq(y, region.y), lessOrEq(y, region.y + BUTTON_SIZE))
+    between(x, region.x, region.x + BUTTON_SIZE),
+    between(y, region.y, region.y + BUTTON_SIZE)
   );
 };
 
