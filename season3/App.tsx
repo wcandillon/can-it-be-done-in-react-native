@@ -14,6 +14,7 @@ import UberEats, {
   fonts as uberEatsFonts
 } from "./src/UberEats";
 import iPod, { fonts as ipodFonts } from "./src/iPod";
+import AppleActivity from "./src/AppleActivity";
 
 const fonts = { ...uberEatsFonts, ...ipodFonts };
 const assets: number[] = [
@@ -26,6 +27,9 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      AppleActivity: {
+        screen: AppleActivity
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
@@ -61,7 +65,7 @@ const AppNavigator = createAppContainer(
           title: "iPod Classic",
           header: () => null
         }
-      },
+      }
     },
     {
       defaultNavigationOptions: {
