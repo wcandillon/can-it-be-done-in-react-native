@@ -4,8 +4,7 @@ import { Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const { PI, cos, sin } = Math;
-const sampling = 2;
-const step = (2 * PI) / sampling;
+const step = PI;
 
 interface RingProps {
   index: number;
@@ -22,7 +21,7 @@ export default ({ strokeWidth, index, cx, cy, r, theta }: RingProps) => {
   const y = (α: number) => -r * sin(α) + cy;
   // A rx ry x-axis-rotation large-arc-flag sweep-flag x y
   const arc = (α: number) => `A ${r} ${r} 0 0 1 ${x(α)} ${y(α)}`;
-  const [d1, d2] = new Array(sampling).fill(0).map((_0, i) => {
+  const [d1, d2] = new Array(2).fill(0).map((_0, i) => {
     const α = i * step;
     return `M ${x(α)} ${y(α)} ${arc(α + step)}`;
   });
@@ -40,7 +39,7 @@ export default ({ strokeWidth, index, cx, cy, r, theta }: RingProps) => {
     <>
       <AnimatedPath
         fill="none"
-        stroke={`url(#angular-gradient-${index}-0)`}
+        stroke={`url(#angular-gradient-${index}-1)`}
         d={d1}
         strokeDasharray={`${length}, ${length}`}
         strokeDashoffset={strokeDashoffset1}
@@ -49,7 +48,7 @@ export default ({ strokeWidth, index, cx, cy, r, theta }: RingProps) => {
       />
       <AnimatedPath
         fill="none"
-        stroke={`url(#angular-gradient-${index}-1)`}
+        stroke={`url(#angular-gradient-${index}-0)`}
         d={d2}
         strokeDasharray={`${length}, ${length}`}
         strokeDashoffset={strokeDashoffset2}

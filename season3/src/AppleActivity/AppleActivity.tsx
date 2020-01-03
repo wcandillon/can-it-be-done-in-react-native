@@ -23,17 +23,17 @@ export default () => {
   useCode(() => set(progress, timing({ duration: 4000 })), [progress]);
   const p1 = interpolate(progress, {
     inputRange: [0, 1],
-    outputRange: [0, 0.3],
+    outputRange: [0, 0.7],
     extrapolate: Extrapolate.CLAMP
   });
   const p2 = interpolate(progress, {
     inputRange: [0, 1],
-    outputRange: [0, 1.5],
+    outputRange: [0, 1.4],
     extrapolate: Extrapolate.CLAMP
   });
   const p3 = interpolate(progress, {
     inputRange: [0, 1],
-    outputRange: [0, 3.5],
+    outputRange: [0, 3.6],
     extrapolate: Extrapolate.CLAMP
   });
   return (
@@ -49,13 +49,13 @@ export default () => {
         size={s2}
         color="#48E101"
         progress={p2}
-        maxProgress={1.5}
+        maxProgress={1.4}
         icon="chevrons-right"
       />
       <CircularProgress
         size={s3}
         color="#00C3DD"
-        maxProgress={3.5}
+        maxProgress={3.6}
         progress={p3}
         icon="chevron-up"
       />

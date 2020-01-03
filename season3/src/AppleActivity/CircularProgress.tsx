@@ -50,6 +50,10 @@ export default ({
     new Color(color).lighten(0.5).string(),
     color
   ]);
+  const getColor = progress => {
+    console.log({ progress });
+    return palette(progress);
+  };
   return (
     <View style={styles.container}>
       <Svg style={styles.svg} width={size} height={size}>
@@ -68,14 +72,14 @@ export default ({
           </RadialGradient>
           {new Array(layers).fill(0).map((_, i) => (
             <LinearGradient id={`angular-gradient-${i}-0`} key={`${i}-0`}>
-              <Stop stopColor={palette(i / layers)} offset="0%" />
-              <Stop stopColor={palette((i + 1) / layers)} offset="100%" />
+              <Stop stopColor={getColor(0)} offset="100%" />
+              <Stop stopColor={getColor(0.5)} offset="0%" />
             </LinearGradient>
           ))}
           {new Array(layers).fill(0).map((_, i) => (
             <LinearGradient id={`angular-gradient-${i}-1`} key={`${i}-1`}>
-              <Stop stopColor={palette(i / layers)} offset="100%" />
-              <Stop stopColor={palette((i + 1) / layers)} offset="0%" />
+              <Stop stopColor={getColor(0.5)} offset="0%" />
+              <Stop stopColor={getColor(1)} offset="100%" />
             </LinearGradient>
           ))}
         </Defs>

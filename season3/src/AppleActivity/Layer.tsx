@@ -13,7 +13,7 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
-import { polar2Canvas } from "react-native-redash";
+import { between, polar2Canvas } from "react-native-redash";
 
 import Ring from "./Ring";
 
@@ -56,7 +56,7 @@ export default ({
       <AnimatedCircle
         cx={add(x, shadowOffsetX)}
         cy={add(y, shadowOffsetY)}
-        opacity={neq(theta, 2 * PI)}
+        opacity={not(between(theta, 2 * PI - PI / 4, 2 * PI + PI / 4))}
         r={STROKE_WIDTH / 2}
         fill="url(#linecap-shadow)"
       />
