@@ -1,15 +1,20 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
-import Svg, { Circle, Defs, RadialGradient, Stop } from "react-native-svg";
+import Svg, {
+  Circle,
+  Defs,
+  LinearGradient,
+  RadialGradient,
+  Stop
+} from "react-native-svg";
+import interpolateColor from "color-interpolate";
 import Color from "color";
 import { Feather as Icon } from "@expo/vector-icons";
 
 import Layer, { STROKE_WIDTH } from "./Layer";
 
 export { STROKE_WIDTH };
-const { PI } = Math;
-const { multiply, sub } = Animated;
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -41,6 +46,10 @@ export default ({
   const backgroundColor = new Color(color).darken(0.8);
   const cx = size / 2;
   const cy = size / 2;
+  const palette = interpolateColor([
+    new Color(color).lighten(0.5).string(),
+    color
+  ]);
   return (
     <View style={styles.container}>
       <Svg style={styles.svg} width={size} height={size}>
@@ -57,6 +66,30 @@ export default ({
             <Stop offset="50%" stopColor="black" />
             <Stop stopColor="black" stopOpacity={0} offset="100%" />
           </RadialGradient>
+          {new Array(layers).fill(0).map((_, i) => (
+            <LinearGradient id={`angular-gradient-${i}-0`} key={`${i}-0`}>
+              <Stop
+                stopColor={palette(i / 2)}
+                offset={`${i / 2 >= 0.5 ? 100 : 0}%`}
+              />
+              <Stop
+                stopColor={palette((i + 1) / 2)}
+                offset={`${i / 2 >= 0.5 ? 0 : 100}%`}
+              />
+            </LinearGradient>
+          ))}
+          {new Array(layers).fill(0).map((_, i) => (
+            <LinearGradient id={`angular-gradient-${i}-1`} key={`${i}-1`}>
+              <Stop
+                stopColor={palette(i / 2)}
+                offset={`${i / 2 >= 0.5 ? 100 : 0}%`}
+              />
+              <Stop
+                stopColor={palette((i + 1) / 2)}
+                offset={`${i / 2 >= 0.5 ? 0 : 100}%`}
+              />
+            </LinearGradient>
+          ))}
         </Defs>
         <Circle
           stroke={backgroundColor.string()}
@@ -70,6 +103,7 @@ export default ({
         />
         {new Array(layers).fill(0).map((_, i) => (
           <Layer
+            index={i}
             key={i}
             hasStartingLineCap={i === 0}
             progress={interpolate(progress, {
@@ -77,7 +111,6 @@ export default ({
               outputRange: [0, 1],
               extrapolate: Extrapolate.CLAMP
             })}
-            //            color={new Color(color).darken(0.1 * i).string()}
             {...{
               color,
               cx,

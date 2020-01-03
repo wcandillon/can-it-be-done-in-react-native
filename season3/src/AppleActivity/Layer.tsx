@@ -15,6 +15,8 @@ import Animated, {
 import Svg, { Circle } from "react-native-svg";
 import { polar2Canvas } from "react-native-redash";
 
+import Ring from "./Ring";
+
 export const STROKE_WIDTH = 40;
 const { PI } = Math;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -26,13 +28,18 @@ interface LayerProps {
   color: string;
   size: number;
   hasStartingLineCap: boolean;
+  index: number;
 }
 
-export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
+export default ({
+  hasStartingLineCap,
+  progress,
+  color,
+  size,
+  index
+}: LayerProps) => {
   const r = (size - STROKE_WIDTH) / 2;
-  const circumference = r * 2 * PI;
   const theta = multiply(sub(1, progress), PI * 2);
-  const strokeDashoffset = multiply(theta, r);
   const cx = size / 2;
   const cy = size / 2;
   const { x, y } = polar2Canvas({ theta, radius: r }, { x: cx, y: cy });
@@ -63,6 +70,13 @@ export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
         r={STROKE_WIDTH / 2}
         fill={color}
       />
+      <Ring strokeWidth={STROKE_WIDTH} {...{ cx, cy, r, theta, index }} />
+    </>
+  );
+};
+
+/*
+
       <AnimatedCircle
         stroke={color}
         fill="none"
@@ -75,6 +89,4 @@ export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
           r
         }}
       />
-    </>
-  );
-};
+      */
