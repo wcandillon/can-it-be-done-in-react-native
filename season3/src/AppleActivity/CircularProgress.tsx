@@ -1,14 +1,15 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
 import Color from "color";
 import { Feather as Icon } from "@expo/vector-icons";
 
-export const STROKE_WIDTH = 40;
+import Layer, { STROKE_WIDTH } from "./Layer";
+
+export { STROKE_WIDTH };
 const { PI } = Math;
 const { multiply, sub } = Animated;
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -25,13 +26,18 @@ interface CircularProgressProps {
   color: string;
   size: number;
   progress: Animated.Node<number>;
+  maxProgress: number;
 }
 
-export default ({ color, size, progress, icon }: CircularProgressProps) => {
+export default ({
+  color,
+  size,
+  progress,
+  icon,
+  maxProgress
+}: CircularProgressProps) => {
+  const layers = Math.ceil(maxProgress);
   const r = (size - STROKE_WIDTH) / 2;
-  const circumference = r * 2 * PI;
-  const α = multiply(sub(1, progress), PI * 2);
-  const strokeDashoffset = multiply(α, r);
   const backgroundColor = new Color(color).darken(0.8);
   const cx = size / 2;
   const cy = size / 2;
@@ -48,19 +54,23 @@ export default ({ color, size, progress, icon }: CircularProgressProps) => {
             r
           }}
         />
-        <AnimatedCircle
-          stroke={color}
-          fill="none"
-          strokeDasharray={`${circumference}, ${circumference}`}
-          strokeLinecap="round"
-          strokeWidth={STROKE_WIDTH}
-          {...{
-            strokeDashoffset,
-            cx,
-            cy,
-            r
-          }}
-        />
+        {new Array(layers).fill(0).map((_, i) => (
+          <Layer
+            key={i}
+            progress={interpolate(progress, {
+              inputRange: [i, i + 1],
+              outputRange: [0, 1],
+              extrapolate: Extrapolate.CLAMP
+            })}
+            color={new Color(color).darken(0.1 * i).string()}
+            {...{
+              cx,
+              cy,
+              r,
+              size
+            }}
+          />
+        ))}
       </Svg>
       <View
         style={{
