@@ -21,6 +21,7 @@ interface LayerProps {
   progress: Animated.Node<number>;
   color: string;
   size: number;
+  opacity: number;
   hasStartingLineCap: boolean;
 }
 
@@ -38,6 +39,13 @@ export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
         <Circle cx={cx + r} cy={cy} r={STROKE_WIDTH / 2} fill={color} />
       )}
       <AnimatedCircle
+        cx={x}
+        cy={y}
+        opacity={neq(theta, 2 * PI)}
+        r={STROKE_WIDTH / 2}
+        fill={color}
+      />
+      <AnimatedCircle
         stroke={color}
         fill="none"
         strokeDasharray={`${circumference}, ${circumference}`}
@@ -48,13 +56,6 @@ export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
           cy,
           r
         }}
-      />
-      <AnimatedCircle
-        cx={x}
-        cy={y}
-        opacity={neq(theta, 2 * PI)}
-        r={STROKE_WIDTH / 2}
-        fill={color}
       />
     </>
   );

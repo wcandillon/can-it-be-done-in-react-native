@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
-import Svg, { Circle } from "react-native-svg";
+import Svg, { Circle, Defs, RadialGradient, Stop } from "react-native-svg";
 import Color from "color";
 import { Feather as Icon } from "@expo/vector-icons";
 
@@ -44,6 +44,21 @@ export default ({
   return (
     <View style={styles.container}>
       <Svg style={styles.svg} width={size} height={size}>
+        <Defs>
+          <RadialGradient
+            cx="49.29%"
+            cy="50%"
+            fx="49.29%"
+            fy="50%"
+            r="48.606%"
+            gradientTransform="matrix(0 1 -1.0224 0 1.004 .007)"
+            id="linecap-shadow"
+          >
+            <Stop offset="0%" />
+            <Stop offset="88.044%" stopColor="black" />
+            <Stop stopColor="black" stopOpacity={0} offset="100%" />
+          </RadialGradient>
+        </Defs>
         <Circle
           stroke={backgroundColor.string()}
           fill="none"
