@@ -39,19 +39,19 @@ export default ({ strokeWidth, index, cx, cy, r, theta }: RingProps) => {
     <>
       <AnimatedPath
         fill="none"
-        stroke={`url(#angular-gradient-${index}-1)`}
-        d={d1}
+        stroke={`url(#angular-gradient-${index}-0)`}
+        d={d2}
         strokeDasharray={`${length}, ${length}`}
-        strokeDashoffset={strokeDashoffset1}
+        strokeDashoffset={strokeDashoffset2}
         strokeLinecap="round"
         {...{ strokeWidth }}
       />
       <AnimatedPath
         fill="none"
-        stroke={`url(#angular-gradient-${index}-0)`}
-        d={d2}
+        stroke={`url(#angular-gradient-${index}-1)`}
+        d={d1}
         strokeDasharray={`${length}, ${length}`}
-        strokeDashoffset={strokeDashoffset2}
+        strokeDashoffset={strokeDashoffset1}
         strokeLinecap="round"
         {...{ strokeWidth }}
       />

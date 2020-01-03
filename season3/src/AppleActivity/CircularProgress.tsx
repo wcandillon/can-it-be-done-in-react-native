@@ -28,14 +28,16 @@ const styles = StyleSheet.create({
 
 interface CircularProgressProps {
   icon: string;
-  color: string;
+  startColor: string;
+  endColor: string;
   size: number;
   progress: Animated.Node<number>;
   maxProgress: number;
 }
 
 export default ({
-  color,
+  startColor,
+  endColor,
   size,
   progress,
   icon,
@@ -43,17 +45,10 @@ export default ({
 }: CircularProgressProps) => {
   const layers = Math.ceil(maxProgress);
   const r = (size - STROKE_WIDTH) / 2;
-  const backgroundColor = new Color(color).darken(0.8);
+  const backgroundColor = new Color(startColor).darken(0.8);
   const cx = size / 2;
   const cy = size / 2;
-  const palette = interpolateColor([
-    new Color(color).lighten(0.5).string(),
-    color
-  ]);
-  const getColor = progress => {
-    console.log({ progress });
-    return palette(progress);
-  };
+  const palette = interpolateColor([startColor, endColor]);
   return (
     <View style={styles.container}>
       <Svg style={styles.svg} width={size} height={size}>
@@ -66,20 +61,20 @@ export default ({
             r="50%"
             id="linecap-shadow"
           >
-            <Stop offset="0%" />
-            <Stop offset="50%" stopColor="black" />
+            <Stop offset="0%" stopOpacity={0} />
+            <Stop offset="90%" stopOpacity={0.4} stopColor="black" />
             <Stop stopColor="black" stopOpacity={0} offset="100%" />
           </RadialGradient>
           {new Array(layers).fill(0).map((_, i) => (
             <LinearGradient id={`angular-gradient-${i}-0`} key={`${i}-0`}>
-              <Stop stopColor={getColor(0)} offset="100%" />
-              <Stop stopColor={getColor(0.5)} offset="0%" />
+              <Stop stopColor={palette(i / layers)} offset="100%" />
+              <Stop stopColor={palette((i + 0.5) / layers)} offset="0%" />
             </LinearGradient>
           ))}
           {new Array(layers).fill(0).map((_, i) => (
             <LinearGradient id={`angular-gradient-${i}-1`} key={`${i}-1`}>
-              <Stop stopColor={getColor(0.5)} offset="0%" />
-              <Stop stopColor={getColor(1)} offset="100%" />
+              <Stop stopColor={palette((i + 0.5) / layers)} offset="0%" />
+              <Stop stopColor={palette((i + 1) / layers)} offset="100%" />
             </LinearGradient>
           ))}
         </Defs>
@@ -97,14 +92,12 @@ export default ({
           <Layer
             index={i}
             key={i}
-            hasStartingLineCap={i === 0}
             progress={interpolate(progress, {
               inputRange: [i, i + 1],
               outputRange: [0, 1],
               extrapolate: Extrapolate.CLAMP
             })}
             {...{
-              color,
               cx,
               cy,
               r,

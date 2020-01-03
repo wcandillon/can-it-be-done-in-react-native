@@ -1,18 +1,12 @@
 import React from "react";
-import { View } from "react-native";
 import Animated, {
   add,
-  cond,
-  debug,
-  greaterThan,
   interpolate,
   multiply,
-  neq,
   not,
-  sub,
-  useCode
+  sub
 } from "react-native-reanimated";
-import Svg, { Circle } from "react-native-svg";
+import { Circle } from "react-native-svg";
 import { between, polar2Canvas } from "react-native-redash";
 
 import Ring from "./Ring";
@@ -25,19 +19,11 @@ const so = 4;
 
 interface LayerProps {
   progress: Animated.Node<number>;
-  color: string;
   size: number;
-  hasStartingLineCap: boolean;
   index: number;
 }
 
-export default ({
-  hasStartingLineCap,
-  progress,
-  color,
-  size,
-  index
-}: LayerProps) => {
+export default ({ progress, size, index }: LayerProps) => {
   const r = (size - STROKE_WIDTH) / 2;
   const theta = multiply(sub(1, progress), PI * 2);
   const cx = size / 2;
@@ -51,12 +37,16 @@ export default ({
     inputRange,
     outputRange: [so, 0, -so, 0, so]
   });
+  const alpha = Math.acos(
+    (r * r + r * r - STROKE_WIDTH * STROKE_WIDTH) / (2 * r * r)
+  );
+
   return (
     <>
       <AnimatedCircle
         cx={add(x, shadowOffsetX)}
         cy={add(y, shadowOffsetY)}
-        opacity={not(between(theta, 2 * PI - PI / 4, 2 * PI + PI / 4))}
+        opacity={not(between(theta, 2 * PI - alpha, 2 * PI + alpha))}
         r={STROKE_WIDTH / 2}
         fill="url(#linecap-shadow)"
       />
@@ -64,32 +54,3 @@ export default ({
     </>
   );
 };
-
-/*
-
-      {hasStartingLineCap && (
-        <Circle cx={cx + r} cy={cy} r={STROKE_WIDTH / 2} fill={color} />
-      )}
-
-
-      <AnimatedCircle
-        cx={x}
-        cy={y}
-        opacity={neq(theta, 2 * PI)}
-        r={STROKE_WIDTH / 2}
-        fill={color}
-      />
-
-      <AnimatedCircle
-        stroke={color}
-        fill="none"
-        strokeDasharray={`${circumference}, ${circumference}`}
-        strokeWidth={STROKE_WIDTH}
-        {...{
-          strokeDashoffset,
-          cx,
-          cy,
-          r
-        }}
-      />
-      */

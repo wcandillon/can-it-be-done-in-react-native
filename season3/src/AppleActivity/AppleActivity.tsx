@@ -40,21 +40,24 @@ export default () => {
     <View style={styles.container}>
       <CircularProgress
         size={s1}
-        color="#DF0B18"
+        startColor="#E90216"
+        endColor="#FB2773"
         progress={p1}
         maxProgress={1}
         icon="chevron-right"
       />
       <CircularProgress
         size={s2}
-        color="#48E101"
+        startColor="#7FF104"
+        endColor="#BDFF04"
         progress={p2}
         maxProgress={1.4}
         icon="chevrons-right"
       />
       <CircularProgress
         size={s3}
-        color="#00C3DD"
+        startColor="#00BBE5"
+        endColor="#00FCD3"
         maxProgress={3.6}
         progress={p3}
         icon="chevron-up"
