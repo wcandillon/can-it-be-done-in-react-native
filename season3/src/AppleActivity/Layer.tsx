@@ -53,9 +53,6 @@ export default ({
   });
   return (
     <>
-      {hasStartingLineCap && (
-        <Circle cx={cx + r} cy={cy} r={STROKE_WIDTH / 2} fill={color} />
-      )}
       <AnimatedCircle
         cx={add(x, shadowOffsetX)}
         cy={add(y, shadowOffsetY)}
@@ -63,6 +60,18 @@ export default ({
         r={STROKE_WIDTH / 2}
         fill="url(#linecap-shadow)"
       />
+      <Ring strokeWidth={STROKE_WIDTH} {...{ cx, cy, r, theta, index }} />
+    </>
+  );
+};
+
+/*
+
+      {hasStartingLineCap && (
+        <Circle cx={cx + r} cy={cy} r={STROKE_WIDTH / 2} fill={color} />
+      )}
+
+
       <AnimatedCircle
         cx={x}
         cy={y}
@@ -70,12 +79,6 @@ export default ({
         r={STROKE_WIDTH / 2}
         fill={color}
       />
-      <Ring strokeWidth={STROKE_WIDTH} {...{ cx, cy, r, theta, index }} />
-    </>
-  );
-};
-
-/*
 
       <AnimatedCircle
         stroke={color}

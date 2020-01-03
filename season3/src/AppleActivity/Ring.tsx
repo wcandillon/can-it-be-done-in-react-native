@@ -44,6 +44,7 @@ export default ({ strokeWidth, index, cx, cy, r, theta }: RingProps) => {
         d={d1}
         strokeDasharray={`${length}, ${length}`}
         strokeDashoffset={strokeDashoffset1}
+        strokeLinecap="round"
         {...{ strokeWidth }}
       />
       <AnimatedPath
@@ -52,6 +53,7 @@ export default ({ strokeWidth, index, cx, cy, r, theta }: RingProps) => {
         d={d2}
         strokeDasharray={`${length}, ${length}`}
         strokeDashoffset={strokeDashoffset2}
+        strokeLinecap="round"
         {...{ strokeWidth }}
       />
     </>

@@ -68,26 +68,14 @@ export default ({
           </RadialGradient>
           {new Array(layers).fill(0).map((_, i) => (
             <LinearGradient id={`angular-gradient-${i}-0`} key={`${i}-0`}>
-              <Stop
-                stopColor={palette(i / 2)}
-                offset={`${i / 2 >= 0.5 ? 100 : 0}%`}
-              />
-              <Stop
-                stopColor={palette((i + 1) / 2)}
-                offset={`${i / 2 >= 0.5 ? 0 : 100}%`}
-              />
+              <Stop stopColor={palette(i / layers)} offset="0%" />
+              <Stop stopColor={palette((i + 1) / layers)} offset="100%" />
             </LinearGradient>
           ))}
           {new Array(layers).fill(0).map((_, i) => (
             <LinearGradient id={`angular-gradient-${i}-1`} key={`${i}-1`}>
-              <Stop
-                stopColor={palette(i / 2)}
-                offset={`${i / 2 >= 0.5 ? 100 : 0}%`}
-              />
-              <Stop
-                stopColor={palette((i + 1) / 2)}
-                offset={`${i / 2 >= 0.5 ? 0 : 100}%`}
-              />
+              <Stop stopColor={palette(i / layers)} offset="100%" />
+              <Stop stopColor={palette((i + 1) / layers)} offset="0%" />
             </LinearGradient>
           ))}
         </Defs>
