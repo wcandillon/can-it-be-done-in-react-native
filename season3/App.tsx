@@ -28,7 +28,10 @@ const AppNavigator = createAppContainer(
   createStackNavigator(
     {
       AppleActivity: {
-        screen: AppleActivity
+        screen: AppleActivity,
+        navigationOptions: {
+          title: "Activity Rings"
+        }
       },
       Episodes: {
         screen: Episodes,

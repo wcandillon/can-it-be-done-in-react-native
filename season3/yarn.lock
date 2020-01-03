@@ -1580,6 +1580,25 @@
     react-native-safe-area-view "^0.14.1"
     react-native-screens "^1.0.0 || ^1.0.0-alpha"
 
+"@types/color-convert@*":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@types/color-convert/-/color-convert-1.9.0.tgz#bfa8203e41e7c65471e9841d7e306a7cd8b5172d"
+  integrity sha512-OKGEfULrvSL2VRbkl/gnjjgbbF7ycIlpSsX7Nkab4MOWi5XxmgBYvuiQ7lcCFY5cPDz7MUNaKgxte2VRmtr4Fg==
+  dependencies:
+    "@types/color-name" "*"
+
+"@types/color-name@*":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
+  integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+
+"@types/color@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/color/-/color-3.0.1.tgz#2900490ed04da8116c5058cd5dba3572d5a25071"
+  integrity sha512-oeUWVaAwI+xINDUx+3F2vJkl/vVB03VChFF/Gl3iQCdbcakjuoJyMOba+3BXRtnBhxZ7uBYqQBi9EpLnvSoztA==
+  dependencies:
+    "@types/color-convert" "*"
+
 "@types/crypto-js@^3.1.43":
   version "3.1.43"
   resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.43.tgz#b859347d6289ba13e347c335a4c9efa63337a748"
@@ -5524,13 +5543,12 @@ react-native-reanimated@~1.4.0:
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.4.0.tgz#7f1acbf9be08492d834f512700570978052be2f9"
   integrity sha512-tO7nSNNP+iRLVbkcSS5GXyDBb7tSI02+XuRL3/S39EAr35rnvUy2JfeLUQG+fWSObJjnMVhasUDEUwlENk8IXw==
 
-react-native-redash@9.5.0:
-  version "9.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-9.5.0.tgz#65bd962c3e8b10bed2bb430d0d5ff8e085f2fe7e"
-  integrity sha512-TI0zu3nfNzFqp8IimxvKWB15zce/rB/RSw8FcbR2/rq8xH6wnccyFq66UOT4t/mr+bKSgdwsWD/uzykbblQkLA==
+react-native-redash@9.5.3:
+  version "9.5.3"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-9.5.3.tgz#fb29dcefdbff6411cedab42ca8c42dbc335c5562"
+  integrity sha512-SGm3SxVWUKQy0zT2jWW5cRvuvnNCtlAbgMxA/jwvpzUXKMqb01+SRfPbuRlMwPzBfFUopsf8MuSOmtQCROfNlQ==
   dependencies:
     abs-svg-path "^0.1.1"
-    color "^3.1.2"
     normalize-svg-path "^1.0.1"
     parse-svg-path "^0.1.2"
     use-memo-one "^1.1.1"

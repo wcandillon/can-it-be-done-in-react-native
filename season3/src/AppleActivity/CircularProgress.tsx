@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   svg: {
-    transform: [{ rotateZ: "270deg" }]
+    transform: [{ rotateZ: "0deg" }]
   }
 });
 
@@ -57,6 +57,7 @@ export default ({
         {new Array(layers).fill(0).map((_, i) => (
           <Layer
             key={i}
+            hasStartingLineCap={i === 0}
             progress={interpolate(progress, {
               inputRange: [i, i + 1],
               outputRange: [0, 1],

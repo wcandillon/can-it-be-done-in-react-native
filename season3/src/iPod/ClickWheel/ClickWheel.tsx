@@ -66,8 +66,8 @@ export default ({ alpha, command }: ClickWheelProps) => {
   const gestureHandler = onGestureEvent({ state, x, y });
   const x0 = cond(eq(state, State.ACTIVE), sub(x, deltaX), x);
   const y0 = cond(eq(state, State.ACTIVE), sub(y, deltaY), y);
-  const a0 = canvas2Polar({ x: x0, y: y0 }, center).alpha;
-  const a = canvas2Polar({ x, y }, center).alpha;
+  const a0 = canvas2Polar({ x: x0, y: y0 }, center).theta;
+  const a = canvas2Polar({ x, y }, center).theta;
   const da = delta(a0, a);
   useCode(() => block([set(alpha, max(add(alpha, da), 0))]), [alpha, da]);
   return (

@@ -2,6 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import Animated, { multiply, sub } from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
+import { polar2Canvas } from "react-native-redash";
 
 export const STROKE_WIDTH = 40;
 const { PI } = Math;
@@ -11,28 +12,35 @@ interface LayerProps {
   progress: Animated.Node<number>;
   color: string;
   size: number;
+  hasStartingLineCap: boolean;
 }
 
-export default ({ progress, color, size }: LayerProps) => {
+export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
   const r = (size - STROKE_WIDTH) / 2;
   const circumference = r * 2 * PI;
-  const α = multiply(sub(1, progress), PI * 2);
-  const strokeDashoffset = multiply(α, r);
+  const theta = multiply(sub(1, progress), PI * 2);
+  const strokeDashoffset = multiply(theta, r);
   const cx = size / 2;
   const cy = size / 2;
+  const { x, y } = polar2Canvas({ theta, radius: r }, { x: cx, y: cy });
   return (
-    <AnimatedCircle
-      stroke={color}
-      fill="none"
-      strokeDasharray={`${circumference}, ${circumference}`}
-      strokeLinecap="round"
-      strokeWidth={STROKE_WIDTH}
-      {...{
-        strokeDashoffset,
-        cx,
-        cy,
-        r
-      }}
-    />
+    <>
+      {hasStartingLineCap && (
+        <Circle cx={cx + r} cy={cy} r={STROKE_WIDTH / 2} fill={color} />
+      )}
+      <AnimatedCircle
+        stroke={color}
+        fill="none"
+        strokeDasharray={`${circumference}, ${circumference}`}
+        strokeWidth={STROKE_WIDTH}
+        {...{
+          strokeDashoffset,
+          cx,
+          cy,
+          r
+        }}
+      />
+      <AnimatedCircle cx={x} cy={y} r={STROKE_WIDTH / 2} fill={color} />
+    </>
   );
 };
