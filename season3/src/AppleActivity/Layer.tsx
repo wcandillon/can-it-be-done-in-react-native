@@ -21,7 +21,6 @@ interface LayerProps {
   progress: Animated.Node<number>;
   color: string;
   size: number;
-  opacity: number;
   hasStartingLineCap: boolean;
 }
 
@@ -38,6 +37,13 @@ export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
       {hasStartingLineCap && (
         <Circle cx={cx + r} cy={cy} r={STROKE_WIDTH / 2} fill={color} />
       )}
+      <AnimatedCircle
+        cx={x}
+        cy={y}
+        opacity={neq(theta, 2 * PI)}
+        r={STROKE_WIDTH / 2 + 4}
+        fill="url(#linecap-shadow)"
+      />
       <AnimatedCircle
         cx={x}
         cy={y}

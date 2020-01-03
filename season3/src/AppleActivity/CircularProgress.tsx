@@ -46,16 +46,15 @@ export default ({
       <Svg style={styles.svg} width={size} height={size}>
         <Defs>
           <RadialGradient
-            cx="49.29%"
+            cx="50%"
             cy="50%"
-            fx="49.29%"
+            fx="50%"
             fy="50%"
-            r="48.606%"
-            gradientTransform="matrix(0 1 -1.0224 0 1.004 .007)"
+            r="50%"
             id="linecap-shadow"
           >
             <Stop offset="0%" />
-            <Stop offset="88.044%" stopColor="black" />
+            <Stop offset="50%" stopColor="black" />
             <Stop stopColor="black" stopOpacity={0} offset="100%" />
           </RadialGradient>
         </Defs>
@@ -78,8 +77,9 @@ export default ({
               outputRange: [0, 1],
               extrapolate: Extrapolate.CLAMP
             })}
-            color={new Color(color).darken(0.1 * i).string()}
+            // color={new Color(color).darken(0.1 * i).string()}
             {...{
+              color,
               cx,
               cy,
               r,
