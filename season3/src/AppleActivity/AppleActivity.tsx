@@ -1,41 +1,61 @@
-import * as React from "react";
+import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
 import Animated from "react-native-reanimated";
-import { polar2Canvas, polar2Cartesian } from "./AnimatedHelpers";
+import { timing } from "react-native-redash";
 
+import CircularProgress, { STROKE_WIDTH } from "./CircularProgress";
+
+const { Value, useCode, set, interpolate, Extrapolate } = Animated;
 const { width } = Dimensions.get("window");
-const size = width - 32;
-const strokeWidth = 50;
-const { PI } = Math;
-const r = (size - strokeWidth) / 2;
-const center = {
-  x: size / 2,
-  y: size / 2
-};
-const startAngle = 0;
-const endAngle = PI + 0.99 * PI;
-const a3 = 2.5 * PI;
-const { x: x1, y: y1 } = polar2Canvas({ alpha: startAngle, radius: r }, center);
-const { x: x2, y: y2 } = polar2Canvas({ alpha: endAngle, radius: r }, center);
-const { x: x3, y: y3 } = polar2Canvas({ alpha: a3, radius: r }, center);
-console.log({ x2, y2 });
-// A rx ry x-axis-rotation large-arc-flag sweep-flag x y
-const d = `M ${x1} ${y1} A ${r} ${r} 0 1 0 ${x2} ${y2} A ${r} ${r} 0 1 0 ${x3} ${y3}`;
+const s1 = width - 64;
+const s2 = s1 - STROKE_WIDTH * 2;
+const s3 = s2 - STROKE_WIDTH * 2;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    backgroundColor: "#000001"
   }
 });
+
 export default () => {
+  const progress = new Value(0);
+  useCode(() => set(progress, timing({ duration: 4000 })), [progress]);
+  const p1 = interpolate(progress, {
+    inputRange: [0, 0.3],
+    outputRange: [0, 0.3],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const p2 = interpolate(progress, {
+    inputRange: [0, 0.5],
+    outputRange: [0, 0.5],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const p3 = interpolate(progress, {
+    inputRange: [0, 0.8],
+    outputRange: [0, 0.8],
+    extrapolate: Extrapolate.CLAMP
+  });
   return (
     <View style={styles.container}>
-      <Svg width={size} height={size}>
-        <Path stroke="white" fill="none" {...{ d, strokeWidth }} />
-        <Path stroke="blue" fill="none" {...{ d, strokeWidth }} />
-      </Svg>
+      <CircularProgress
+        size={s1}
+        color="#DF0B18"
+        progress={p1}
+        icon="chevron-right"
+      />
+      <CircularProgress
+        size={s2}
+        color="#48E101"
+        progress={p2}
+        icon="chevrons-right"
+      />
+      <CircularProgress
+        size={s3}
+        color="#00C3DD"
+        progress={p3}
+        icon="chevron-up"
+      />
     </View>
   );
 };
