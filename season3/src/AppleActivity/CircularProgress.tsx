@@ -77,7 +77,7 @@ export default ({
               outputRange: [0, 1],
               extrapolate: Extrapolate.CLAMP
             })}
-            // color={new Color(color).darken(0.1 * i).string()}
+            //            color={new Color(color).darken(0.1 * i).string()}
             {...{
               color,
               cx,

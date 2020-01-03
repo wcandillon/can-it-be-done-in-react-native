@@ -1,9 +1,11 @@
 import React from "react";
 import { View } from "react-native";
 import Animated, {
+  add,
   cond,
   debug,
   greaterThan,
+  interpolate,
   multiply,
   neq,
   not,
@@ -16,6 +18,7 @@ import { polar2Canvas } from "react-native-redash";
 export const STROKE_WIDTH = 40;
 const { PI } = Math;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const shadowOffset = 4;
 
 interface LayerProps {
   progress: Animated.Node<number>;
@@ -32,16 +35,24 @@ export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
   const cx = size / 2;
   const cy = size / 2;
   const { x, y } = polar2Canvas({ theta, radius: r }, { x: cx, y: cy });
+  const shadowOffsetX = interpolate(theta, {
+    inputRange: [0, PI / 2, PI, PI + PI / 2, 2 * PI],
+    outputRange: [0, 4, 0, -4, 0]
+  });
+  const shadowOffsetY = interpolate(theta, {
+    inputRange: [0, PI / 2, PI, PI + PI / 2, 2 * PI],
+    outputRange: [4, 0, -4, 0, 4]
+  });
   return (
     <>
       {hasStartingLineCap && (
         <Circle cx={cx + r} cy={cy} r={STROKE_WIDTH / 2} fill={color} />
       )}
       <AnimatedCircle
-        cx={x}
-        cy={y}
+        cx={add(x, shadowOffsetX)}
+        cy={add(y, shadowOffsetY)}
         opacity={neq(theta, 2 * PI)}
-        r={STROKE_WIDTH / 2 + 4}
+        r={STROKE_WIDTH / 2}
         fill="url(#linecap-shadow)"
       />
       <AnimatedCircle
