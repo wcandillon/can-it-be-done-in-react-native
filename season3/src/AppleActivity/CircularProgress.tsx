@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   svg: {
-    transform: [{ rotateZ: "0deg" }]
+    transform: [{ rotateZ: "270deg" }]
   }
 });
 

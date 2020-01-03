@@ -1,6 +1,15 @@
 import React from "react";
 import { View } from "react-native";
-import Animated, { multiply, sub } from "react-native-reanimated";
+import Animated, {
+  cond,
+  debug,
+  greaterThan,
+  multiply,
+  neq,
+  not,
+  sub,
+  useCode
+} from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
 import { polar2Canvas } from "react-native-redash";
 
@@ -40,7 +49,13 @@ export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
           r
         }}
       />
-      <AnimatedCircle cx={x} cy={y} r={STROKE_WIDTH / 2} fill={color} />
+      <AnimatedCircle
+        cx={x}
+        cy={y}
+        opacity={neq(theta, 2 * PI)}
+        r={STROKE_WIDTH / 2}
+        fill={color}
+      />
     </>
   );
 };
