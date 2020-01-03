@@ -18,7 +18,8 @@ import { polar2Canvas } from "react-native-redash";
 export const STROKE_WIDTH = 40;
 const { PI } = Math;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const shadowOffset = 4;
+const inputRange = [0, PI / 2, PI, PI + PI / 2, 2 * PI];
+const so = 4;
 
 interface LayerProps {
   progress: Animated.Node<number>;
@@ -36,12 +37,12 @@ export default ({ hasStartingLineCap, progress, color, size }: LayerProps) => {
   const cy = size / 2;
   const { x, y } = polar2Canvas({ theta, radius: r }, { x: cx, y: cy });
   const shadowOffsetX = interpolate(theta, {
-    inputRange: [0, PI / 2, PI, PI + PI / 2, 2 * PI],
-    outputRange: [0, 4, 0, -4, 0]
+    inputRange,
+    outputRange: [0, so, 0, -so, 0]
   });
   const shadowOffsetY = interpolate(theta, {
-    inputRange: [0, PI / 2, PI, PI + PI / 2, 2 * PI],
-    outputRange: [4, 0, -4, 0, 4]
+    inputRange,
+    outputRange: [so, 0, -so, 0, so]
   });
   return (
     <>
