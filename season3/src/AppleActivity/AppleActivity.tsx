@@ -96,8 +96,8 @@ export default () => {
       p.endShape();
       // 3. start linecap
       p.fill(FROM);
-      p.ellipse(0, 0, STROKE_WIDTH, STROKE_WIDTH);
       p.translate(-CX, -CY);
+      p.ellipse(SIZE - STROKE_WIDTH / 2, SIZE / 2, STROKE_WIDTH, STROKE_WIDTH);
       if (rot > 0) {
         p.rotate(rot);
       }
