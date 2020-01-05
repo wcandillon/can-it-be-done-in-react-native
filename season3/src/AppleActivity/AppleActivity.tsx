@@ -53,20 +53,35 @@ export default () => {
   const sketch = (p: any) => {
     p.setup = () => {
       START = new Date().getTime();
-      FROM = p.color(233, 2, 22);
-      TO = p.color(251, 39, 115);
+      FROM = p.color(0, 217, 253);
+      TO = p.color(0, 255, 169);
     };
 
     p.draw = () => {
-      p.background(0, 0, 1);
-      p.fill(0, 0, 1);
-      p.ellipse(CX, CY, SIZE - STROKE_WIDTH, SIZE - STROKE_WIDTH);
       const NOW = new Date().getTime();
       const progress = NOW - START > DURATION ? 1 : (NOW - START) / DURATION;
-      p.beginShape("triangles");
+      const { x: cx, y: cy } = polar2Canvas(
+        {
+          alpha: progress * TAU,
+          radius: SIZE / 2 - STROKE_WIDTH / 2
+        },
+        { x: SIZE / 2, y: SIZE / 2 }
+      );
+      p.background(0, 0, 1);
+      p.fill(0, 0, 1);
       p.noStroke();
+      p.ellipse(CX, CY, SIZE - STROKE_WIDTH * 2, SIZE - STROKE_WIDTH * 2);
+      p.fill(p.lerpColor(FROM, TO, progress));
+      p.ellipse(cx, cy, STROKE_WIDTH, STROKE_WIDTH);
+      p.fill(FROM);
+      p.ellipse(SIZE - STROKE_WIDTH / 2, SIZE / 2, STROKE_WIDTH, STROKE_WIDTH);
+      p.beginShape("triangles");
       SAMPLES.forEach(i => {
         const theta = i * DELTA;
+        const currentProgress = i / SAMPLING;
+        if (currentProgress > progress) {
+          return;
+        }
         const { x: x1, y: y1 } = polar2Canvas(
           {
             alpha: theta,
