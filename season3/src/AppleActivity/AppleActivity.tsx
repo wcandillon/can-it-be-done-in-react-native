@@ -1,19 +1,33 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, no-param-reassign */
 import React from "react";
+import { Dimensions, PixelRatio, View } from "react-native";
 import { ProcessingView } from "./ProcessingView";
 
-const { atan2, cos, sin, sqrt, PI } = Math;
+const { width } = Dimensions.get("window");
+const { cos, sin, PI } = Math;
+const TAU = 2 * PI;
 
-const cartesian2Canvas = ({ x, y }, center) => ({
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface PolarPoint {
+  alpha: number;
+  radius: number;
+}
+
+const cartesian2Canvas = ({ x, y }: Point, center: Point) => ({
   x: x + center.x,
   y: -y + center.y
 });
 
-const polar2Cartesian = ({ alpha, radius }) => ({
+const polar2Cartesian = ({ alpha, radius }: PolarPoint) => ({
   x: radius * cos(alpha),
   y: radius * sin(alpha)
 });
 
-const polar2Canvas = ({ alpha, radius }, center) =>
+const polar2Canvas = ({ alpha, radius }: PolarPoint, center: Point) =>
   cartesian2Canvas(
     polar2Cartesian({
       alpha,
@@ -22,20 +36,19 @@ const polar2Canvas = ({ alpha, radius }, center) =>
     center
   );
 
-const SIZE = 400;
+const SIZE = width * PixelRatio.get();
 const CX = SIZE / 2;
 const CY = SIZE / 2;
 const STROKE_WIDTH = 40;
 const SAMPLING = 360;
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
-const DELTA = (2 * Math.PI) / SAMPLING;
-let FROM;
-let TO;
+const DELTA = TAU / SAMPLING;
+let FROM: any;
+let TO: any;
 
 export default () => {
-  const sketch = p => {
+  const sketch = (p: any) => {
     p.setup = () => {
-      p.size(SIZE, SIZE);
       FROM = p.color(233, 2, 22);
       TO = p.color(251, 39, 115);
     };
@@ -64,10 +77,14 @@ export default () => {
           }
         );
         p.stroke(p.lerpColor(FROM, TO, i / SAMPLING));
-        p.strokeWeight(3);
+        p.strokeWeight(4);
         p.line(x1, y1, x2, y2);
       });
     };
   };
-  return <ProcessingView style={{ flex: 1 }} sketch={sketch} />;
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ProcessingView style={{ width, height: width }} {...{ sketch }} />
+    </View>
+  );
 };
