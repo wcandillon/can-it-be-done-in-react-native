@@ -41,12 +41,12 @@ export default ({
   icon,
   maxProgress
 }: CircularProgressProps) => {
-  const layers = Math.ceil(maxProgress);
+  const layers = new Array(Math.ceil(maxProgress)).fill(0).map((_, i) => i);
   const r = (size - STROKE_WIDTH) / 2;
   const backgroundColor = new Color(colors[0]).darken(0.8);
   const cx = size / 2;
   const cy = size / 2;
-  const palette = interpolateColor(colors);
+  const palette = interpolateColor(layers.map(() => colors).flat());
   return (
     <View style={styles.container}>
       <Svg style={styles.svg} width={size} height={size}>
@@ -63,16 +63,25 @@ export default ({
             <Stop offset="90%" stopOpacity={0.4} stopColor="black" />
             <Stop stopColor="black" stopOpacity={0} offset="100%" />
           </RadialGradient>
-          {new Array(layers).fill(0).map((_, i) => (
+          {layers.map(i => (
             <LinearGradient id={`angular-gradient-${i}-0`} key={`${i}-0`}>
-              <Stop stopColor={palette(i / layers)} offset="100%" />
-              <Stop stopColor={palette((i + 0.5) / layers)} offset="0%" />
+              <Stop stopColor={palette(i / layers.length)} offset="100%" />
+              <Stop
+                stopColor={palette((i + 0.5) / layers.length)}
+                offset="0%"
+              />
             </LinearGradient>
           ))}
-          {new Array(layers).fill(0).map((_, i) => (
+          {layers.map(i => (
             <LinearGradient id={`angular-gradient-${i}-1`} key={`${i}-1`}>
-              <Stop stopColor={palette((i + 0.5) / layers)} offset="0%" />
-              <Stop stopColor={palette((i + 1) / layers)} offset="100%" />
+              <Stop
+                stopColor={palette((i + 0.5) / layers.length)}
+                offset="0%"
+              />
+              <Stop
+                stopColor={palette((i + 1) / layers.length)}
+                offset="100%"
+              />
             </LinearGradient>
           ))}
         </Defs>
@@ -86,7 +95,7 @@ export default ({
             r
           }}
         />
-        {new Array(layers).fill(0).map((_, i) => (
+        {layers.map(i => (
           <Layer
             index={i}
             key={i}
