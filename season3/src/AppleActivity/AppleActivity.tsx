@@ -11,15 +11,15 @@ const TAU = 2 * PI;
 const SIZE = width * PixelRatio.get();
 const CX = SIZE / 2;
 const CY = SIZE / 2;
-const STROKE_WIDTH = 80 * PixelRatio.get();
-const SAMPLING = 100;
+const STROKE_WIDTH = 60 * PixelRatio.get();
+const SAMPLING = 75;
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
 const DELTA = TAU / SAMPLING;
 let FROM: any;
 let TO: any;
 let START: number;
 const DURATION = 5000;
-const MAX_PROGRESS = TAU * 2.5;
+const MAX_PROGRESS = TAU * 2.75;
 
 export default () => {
   const sketch = (p: any) => {
@@ -56,18 +56,18 @@ export default () => {
       p.translate(cx, cy);
       p.rotate(-alpha);
       p.fill(p.lerpColor(FROM, TO, alpha / TAU));
-      p.arc(0, 0, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
+      p.ellipse(0, 0, STROKE_WIDTH, STROKE_WIDTH);
       p.fill(0, 0, 1);
-      p.arc(-3, -3, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
+      p.arc(-6, -6, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
       p.rotate(alpha);
       p.translate(-cx, -cy);
-      p.beginShape("triangles");
+      // 3. start linecap
+      p.fill(FROM);
+      p.ellipse(SIZE / 2 - STROKE_WIDTH / 2, 0, STROKE_WIDTH, STROKE_WIDTH);
+
       SAMPLES.forEach(i => {
         const theta = i * DELTA;
         const currentProgress = i / SAMPLING;
-        if (currentProgress > progress) {
-          return;
-        }
         const { x: x1, y: y1 } = polar2Canvas(
           {
             alpha: theta,
@@ -88,16 +88,19 @@ export default () => {
             y: 0
           }
         );
-        p.fill(p.lerpColor(FROM, TO, i / SAMPLING));
+        p.noStroke();
+        p.fill(
+          currentProgress > progress
+            ? p.color(10, 20, 30)
+            : p.lerpColor(FROM, TO, i / SAMPLING)
+        );
+        p.beginShape(8);
         p.vertex(0, 0);
         p.vertex(x1, y1);
         p.vertex(x2, y2);
+        p.endShape();
       });
-      p.endShape();
-      // 3. start linecap
-      p.fill(FROM);
       p.translate(-CX, -CY);
-      p.ellipse(SIZE - STROKE_WIDTH / 2, SIZE / 2, STROKE_WIDTH, STROKE_WIDTH);
       if (rot > 0) {
         p.rotate(rot);
       }
