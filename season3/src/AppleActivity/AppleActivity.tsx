@@ -1,64 +1,73 @@
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { timing } from "react-native-redash";
+import { ProcessingView } from "./ProcessingView";
 
-import CircularProgress, { STROKE_WIDTH } from "./CircularProgress";
+const { atan2, cos, sin, sqrt, PI } = Math;
 
-const { Value, useCode, set, interpolate, Extrapolate } = Animated;
-const { width } = Dimensions.get("window");
-const s1 = width - 64;
-const s2 = s1 - STROKE_WIDTH * 2;
-const s3 = s2 - STROKE_WIDTH * 2;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000001"
-  }
+const cartesian2Canvas = ({ x, y }, center) => ({
+  x: x + center.x,
+  y: -y + center.y
 });
 
-export default () => {
-  const progress = new Value(0);
-  useCode(() => set(progress, timing({ duration: 4000 })), [progress]);
-  const p1 = interpolate(progress, {
-    inputRange: [0, 1],
-    outputRange: [0, 0.7],
-    extrapolate: Extrapolate.CLAMP
-  });
-  const p2 = interpolate(progress, {
-    inputRange: [0, 1],
-    outputRange: [0, 1.4],
-    extrapolate: Extrapolate.CLAMP
-  });
-  const p3 = interpolate(progress, {
-    inputRange: [0, 1],
-    outputRange: [0, 3.6],
-    extrapolate: Extrapolate.CLAMP
-  });
-  return (
-    <View style={styles.container}>
-      <CircularProgress
-        size={s1}
-        colors={["#E90216", "#FB2773"]}
-        progress={p1}
-        maxProgress={1}
-        icon="chevron-right"
-      />
-      <CircularProgress
-        size={s2}
-        colors={["#7FF104", "#BDFF04"]}
-        progress={p2}
-        maxProgress={1.4}
-        icon="chevrons-right"
-      />
-      <CircularProgress
-        size={s3}
-        colors={["#00BBE5", "#00FCD3"]}
-        maxProgress={3.6}
-        progress={p3}
-        icon="chevron-up"
-      />
-    </View>
+const polar2Cartesian = ({ alpha, radius }) => ({
+  x: radius * cos(alpha),
+  y: radius * sin(alpha)
+});
+
+const polar2Canvas = ({ alpha, radius }, center) =>
+  cartesian2Canvas(
+    polar2Cartesian({
+      alpha,
+      radius
+    }),
+    center
   );
+
+const SIZE = 400;
+const CX = SIZE / 2;
+const CY = SIZE / 2;
+const STROKE_WIDTH = 40;
+const SAMPLING = 360;
+const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
+const DELTA = (2 * Math.PI) / SAMPLING;
+let FROM;
+let TO;
+
+export default () => {
+  const sketch = p => {
+    p.setup = () => {
+      p.size(SIZE, SIZE);
+      FROM = p.color(233, 2, 22);
+      TO = p.color(251, 39, 115);
+    };
+
+    p.draw = () => {
+      SAMPLES.forEach(i => {
+        const theta = i * DELTA;
+        const { x: x1, y: y1 } = polar2Canvas(
+          {
+            alpha: theta,
+            radius: SIZE / 2 - STROKE_WIDTH
+          },
+          {
+            x: CX,
+            y: CY
+          }
+        );
+        const { x: x2, y: y2 } = polar2Canvas(
+          {
+            alpha: theta,
+            radius: SIZE / 2
+          },
+          {
+            x: CX,
+            y: CY
+          }
+        );
+        p.stroke(p.lerpColor(FROM, TO, i / SAMPLING));
+        p.strokeWeight(3);
+        p.line(x1, y1, x2, y2);
+      });
+    };
+  };
+  return <ProcessingView style={{ flex: 1 }} sketch={sketch} />;
 };
