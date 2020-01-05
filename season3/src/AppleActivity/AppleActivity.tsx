@@ -40,7 +40,7 @@ const polar2Canvas = ({ alpha, radius }: PolarPoint, center: Point) =>
 const SIZE = width * PixelRatio.get();
 const CX = SIZE / 2;
 const CY = SIZE / 2;
-const STROKE_WIDTH = 40 * PixelRatio.get();
+const STROKE_WIDTH = 80 * PixelRatio.get();
 const SAMPLING = 100;
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
 const DELTA = TAU / SAMPLING;
@@ -59,21 +59,15 @@ export default () => {
 
     p.draw = () => {
       p.background(0, 0, 1);
+      p.fill(0, 0, 1);
+      p.ellipse(CX, CY, SIZE - STROKE_WIDTH, SIZE - STROKE_WIDTH);
       const NOW = new Date().getTime();
       const progress = NOW - START > DURATION ? 1 : (NOW - START) / DURATION;
+      p.beginShape("triangles");
+      p.noStroke();
       SAMPLES.forEach(i => {
         const theta = i * DELTA;
         const { x: x1, y: y1 } = polar2Canvas(
-          {
-            alpha: theta,
-            radius: SIZE / 2 - STROKE_WIDTH
-          },
-          {
-            x: CX,
-            y: CY
-          }
-        );
-        const { x: x2, y: y2 } = polar2Canvas(
           {
             alpha: theta,
             radius: SIZE / 2
@@ -83,15 +77,22 @@ export default () => {
             y: CY
           }
         );
-        p.stroke(
-          i / SAMPLING >= progress
-            ? p.color(0, 0, 1)
-            : p.lerpColor(FROM, TO, i / SAMPLING)
+        const { x: x2, y: y2 } = polar2Canvas(
+          {
+            alpha: (i + 1) * DELTA,
+            radius: SIZE / 2
+          },
+          {
+            x: CX,
+            y: CY
+          }
         );
-        p.strokeWeight(STROKE_WIDTH);
-        p.strokeCap("round");
-        p.line(x1, y1, x2, y2);
+        p.fill(p.lerpColor(FROM, TO, i / SAMPLING));
+        p.vertex(CX, CY);
+        p.vertex(x1, y1);
+        p.vertex(x2, y2);
       });
+      p.endShape();
     };
   };
   return (
