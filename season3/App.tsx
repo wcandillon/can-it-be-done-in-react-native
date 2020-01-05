@@ -27,6 +27,12 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      AppleActivity: {
+        screen: AppleActivity,
+        navigationOptions: {
+          title: "Activity Rings"
+        }
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
@@ -61,12 +67,6 @@ const AppNavigator = createAppContainer(
         navigationOptions: {
           title: "iPod Classic",
           header: () => null
-        }
-      },
-      AppleActivity: {
-        screen: AppleActivity,
-        navigationOptions: {
-          title: "Activity Rings"
         }
       }
     },

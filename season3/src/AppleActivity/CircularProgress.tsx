@@ -28,16 +28,14 @@ const styles = StyleSheet.create({
 
 interface CircularProgressProps {
   icon: string;
-  startColor: string;
-  endColor: string;
+  colors: string[];
   size: number;
   progress: Animated.Node<number>;
   maxProgress: number;
 }
 
 export default ({
-  startColor,
-  endColor,
+  colors,
   size,
   progress,
   icon,
@@ -45,10 +43,10 @@ export default ({
 }: CircularProgressProps) => {
   const layers = Math.ceil(maxProgress);
   const r = (size - STROKE_WIDTH) / 2;
-  const backgroundColor = new Color(startColor).darken(0.8);
+  const backgroundColor = new Color(colors[0]).darken(0.8);
   const cx = size / 2;
   const cy = size / 2;
-  const palette = interpolateColor([startColor, endColor]);
+  const palette = interpolateColor(colors);
   return (
     <View style={styles.container}>
       <Svg style={styles.svg} width={size} height={size}>
