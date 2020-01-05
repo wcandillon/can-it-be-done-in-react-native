@@ -10,12 +10,14 @@ const TAU = 2 * PI;
 
 const S = width * PixelRatio.get();
 const STROKE_WIDTH = 40 * PixelRatio.get();
+const CX = S / 2;
+const CY = S / 2;
 const SAMPLING = 75;
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
 const DELTA = TAU / SAMPLING;
 
 let START: number;
-const DURATION = 5000;
+const DURATION = 2000;
 
 interface Params {
   progress: number;
@@ -39,8 +41,6 @@ const drawRing = (
 ) => {
   const progress = absoluteProgress / (TAU / total);
   const alpha = Math.min(progress * TAU, TAU);
-  const CX = S / 2;
-  const CY = S / 2;
   const { x: cx, y: cy } = polar2Canvas(
     {
       alpha,
@@ -105,10 +105,10 @@ const drawRing = (
     p.vertex(x2, y2);
     p.endShape();
   });
-  p.translate(-CX, -CY);
   if (rot > 0) {
     p.rotate(rot);
   }
+  p.translate(-CX, -CY);
 };
 
 export default () => {
@@ -121,6 +121,9 @@ export default () => {
       const NOW = new Date().getTime();
       const absoluteProgress =
         NOW - START > DURATION ? 1 : (NOW - START) / DURATION;
+      if (absoluteProgress === 1) {
+        p.noLoop();
+      }
       p.background(0, 0, 1);
       drawRing(p, {
         progress: absoluteProgress,
@@ -128,7 +131,7 @@ export default () => {
         startColor: p.color(0, 217, 253),
         endColor: p.color(0, 255, 169),
         backgroundColor: p.color(0, 72, 77),
-        total: TAU
+        total: 2.3 * TAU
       });
       drawRing(p, {
         progress: absoluteProgress,
@@ -136,7 +139,7 @@ export default () => {
         startColor: p.color(153, 255, 0),
         endColor: p.color(216, 255, 1),
         backgroundColor: p.color(47, 78, 0),
-        total: TAU
+        total: 0.5 * TAU
       });
       drawRing(p, {
         progress: absoluteProgress,
@@ -144,7 +147,7 @@ export default () => {
         startColor: p.color(249, 18, 78),
         endColor: p.color(249, 56, 133),
         backgroundColor: p.color(50, 1, 14),
-        total: TAU
+        total: 1.7 * TAU
       });
     };
   };
@@ -161,7 +164,7 @@ export default () => {
         style={{
           width,
           height: width,
-          transform: [{ rotate: "270deg" }]
+          transform: [{ rotate: "-270deg" }, { rotateY: "180deg" }]
         }}
         {...{ sketch }}
       />
