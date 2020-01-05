@@ -58,7 +58,7 @@ export default () => {
       p.fill(p.lerpColor(FROM, TO, alpha / TAU));
       p.ellipse(0, 0, STROKE_WIDTH, STROKE_WIDTH);
       p.fill(0, 0, 1);
-      p.arc(-6, -6, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
+      p.arc(-3, -3, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
       p.rotate(alpha);
       p.translate(-cx, -cy);
       // 3. start linecap
