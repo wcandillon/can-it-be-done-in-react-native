@@ -37,8 +37,7 @@ export default ({ progress, size, index }: LayerProps) => {
     inputRange,
     outputRange: [so, 0, -so, 0, so]
   });
-  // https://www.mathsisfun.com/algebra/trig-solving-sss-triangles.html
-  const alpha = Math.acos((2 * r ** 2 - STROKE_WIDTH ** 2) / (2 * r ** 2));
+  const alpha = 2 * Math.asin(STROKE_WIDTH / 2 / r);
   return (
     <>
       <AnimatedCircle
