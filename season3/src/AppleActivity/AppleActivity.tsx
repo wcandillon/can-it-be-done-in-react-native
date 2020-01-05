@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-param-reassign */
 import React from "react";
 import { Dimensions, PixelRatio, View } from "react-native";
+import Color from "color";
 import { ProcessingView } from "./ProcessingView";
 
 const { width } = Dimensions.get("window");
@@ -40,21 +41,26 @@ const SIZE = width * PixelRatio.get();
 const CX = SIZE / 2;
 const CY = SIZE / 2;
 const STROKE_WIDTH = 40 * PixelRatio.get();
-const SAMPLING = Math.ceil(PI * SIZE);
+const SAMPLING = 100;
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
 const DELTA = TAU / SAMPLING;
 let FROM: any;
 let TO: any;
+let START: number;
+const DURATION = 5000;
 
 export default () => {
   const sketch = (p: any) => {
     p.setup = () => {
+      START = new Date().getTime();
       FROM = p.color(233, 2, 22);
       TO = p.color(251, 39, 115);
     };
 
     p.draw = () => {
       p.background(0, 0, 1);
+      const NOW = new Date().getTime();
+      const progress = NOW - START > DURATION ? 1 : (NOW - START) / DURATION;
       SAMPLES.forEach(i => {
         const theta = i * DELTA;
         const { x: x1, y: y1 } = polar2Canvas(
@@ -77,11 +83,15 @@ export default () => {
             y: CY
           }
         );
-        p.stroke(p.lerpColor(FROM, TO, i / SAMPLING));
-        p.strokeWeight(1);
+        p.stroke(
+          i / SAMPLING >= progress
+            ? p.color(0, 0, 1)
+            : p.lerpColor(FROM, TO, i / SAMPLING)
+        );
+        p.strokeWeight(STROKE_WIDTH);
+        p.strokeCap("round");
         p.line(x1, y1, x2, y2);
       });
-      // p.smooth();
     };
   };
   return (
