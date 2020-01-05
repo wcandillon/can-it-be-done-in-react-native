@@ -19,6 +19,7 @@ let FROM: any;
 let TO: any;
 let START: number;
 const DURATION = 5000;
+const MAX_PROGRESS = TAU * 2.5;
 
 export default () => {
   const sketch = (p: any) => {
@@ -30,24 +31,31 @@ export default () => {
 
     p.draw = () => {
       const NOW = new Date().getTime();
-      const progress = NOW - START > DURATION ? 1 : (NOW - START) / DURATION;
-      const alpha = progress * TAU;
+      const absoluteProgress =
+        NOW - START > DURATION ? 1 : (NOW - START) / DURATION;
+      const progress = absoluteProgress / (TAU / MAX_PROGRESS);
+      const alpha = Math.min(progress * TAU, TAU);
       const { x: cx, y: cy } = polar2Canvas(
         {
           alpha,
           radius: SIZE / 2 - STROKE_WIDTH / 2
         },
-        { x: SIZE / 2, y: SIZE / 2 }
+        { x: 0, y: 0 }
       );
+      const rot = progress * TAU - TAU;
+      p.translate(CX, CY);
+      if (rot > 0) {
+        p.rotate(-rot);
+      }
       p.background(0, 0, 1);
       // 1. center black circle
       p.fill(0, 0, 1);
       p.noStroke();
-      p.ellipse(CX, CY, SIZE - STROKE_WIDTH * 2, SIZE - STROKE_WIDTH * 2);
+      p.ellipse(0, 0, SIZE - STROKE_WIDTH * 2, SIZE - STROKE_WIDTH * 2);
       // 2. end linecap
-      p.fill(p.lerpColor(FROM, TO, progress));
       p.translate(cx, cy);
       p.rotate(-alpha);
+      p.fill(p.lerpColor(FROM, TO, alpha / TAU));
       p.arc(0, 0, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
       p.fill(0, 0, 1);
       p.arc(-3, -3, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
@@ -66,8 +74,8 @@ export default () => {
             radius: SIZE / 2
           },
           {
-            x: CX,
-            y: CY
+            x: 0,
+            y: 0
           }
         );
         const { x: x2, y: y2 } = polar2Canvas(
@@ -76,19 +84,23 @@ export default () => {
             radius: SIZE / 2
           },
           {
-            x: CX,
-            y: CY
+            x: 0,
+            y: 0
           }
         );
         p.fill(p.lerpColor(FROM, TO, i / SAMPLING));
-        p.vertex(CX, CY);
+        p.vertex(0, 0);
         p.vertex(x1, y1);
         p.vertex(x2, y2);
       });
       p.endShape();
       // 3. start linecap
       p.fill(FROM);
-      p.ellipse(SIZE - STROKE_WIDTH / 2, SIZE / 2, STROKE_WIDTH, STROKE_WIDTH);
+      p.ellipse(0, 0, STROKE_WIDTH, STROKE_WIDTH);
+      p.translate(-CX, -CY);
+      if (rot > 0) {
+        p.rotate(rot);
+      }
     };
   };
   return (
