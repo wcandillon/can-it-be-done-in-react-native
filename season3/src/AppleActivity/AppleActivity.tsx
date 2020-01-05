@@ -1,41 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-param-reassign */
 import React from "react";
 import { Dimensions, PixelRatio, View } from "react-native";
-import Color from "color";
 import { ProcessingView } from "./ProcessingView";
+import { polar2Canvas } from "./Coordinates";
 
 const { width } = Dimensions.get("window");
-const { cos, sin, PI } = Math;
+const { PI } = Math;
 const TAU = 2 * PI;
-
-interface Point {
-  x: number;
-  y: number;
-}
-
-interface PolarPoint {
-  alpha: number;
-  radius: number;
-}
-
-const cartesian2Canvas = ({ x, y }: Point, center: Point) => ({
-  x: x + center.x,
-  y: -y + center.y
-});
-
-const polar2Cartesian = ({ alpha, radius }: PolarPoint) => ({
-  x: radius * cos(alpha),
-  y: radius * sin(alpha)
-});
-
-const polar2Canvas = ({ alpha, radius }: PolarPoint, center: Point) =>
-  cartesian2Canvas(
-    polar2Cartesian({
-      alpha,
-      radius
-    }),
-    center
-  );
 
 const SIZE = width * PixelRatio.get();
 const CX = SIZE / 2;
@@ -60,19 +31,23 @@ export default () => {
     p.draw = () => {
       const NOW = new Date().getTime();
       const progress = NOW - START > DURATION ? 1 : (NOW - START) / DURATION;
+      const alpha = progress * TAU;
       const { x: cx, y: cy } = polar2Canvas(
         {
-          alpha: progress * TAU,
+          alpha,
           radius: SIZE / 2 - STROKE_WIDTH / 2
         },
         { x: SIZE / 2, y: SIZE / 2 }
       );
       p.background(0, 0, 1);
+      // 1. center black circle
       p.fill(0, 0, 1);
       p.noStroke();
       p.ellipse(CX, CY, SIZE - STROKE_WIDTH * 2, SIZE - STROKE_WIDTH * 2);
+      // 2. end linecap
       p.fill(p.lerpColor(FROM, TO, progress));
       p.ellipse(cx, cy, STROKE_WIDTH, STROKE_WIDTH);
+      // 3. start linecap
       p.fill(FROM);
       p.ellipse(SIZE - STROKE_WIDTH / 2, SIZE / 2, STROKE_WIDTH, STROKE_WIDTH);
       p.beginShape("triangles");
