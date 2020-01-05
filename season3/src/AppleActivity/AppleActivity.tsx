@@ -39,8 +39,8 @@ const polar2Canvas = ({ alpha, radius }: PolarPoint, center: Point) =>
 const SIZE = width * PixelRatio.get();
 const CX = SIZE / 2;
 const CY = SIZE / 2;
-const STROKE_WIDTH = 40;
-const SAMPLING = 360;
+const STROKE_WIDTH = 40 * PixelRatio.get();
+const SAMPLING = Math.ceil(PI * SIZE);
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
 const DELTA = TAU / SAMPLING;
 let FROM: any;
@@ -54,6 +54,7 @@ export default () => {
     };
 
     p.draw = () => {
+      p.background(0, 0, 1);
       SAMPLES.forEach(i => {
         const theta = i * DELTA;
         const { x: x1, y: y1 } = polar2Canvas(
@@ -77,13 +78,21 @@ export default () => {
           }
         );
         p.stroke(p.lerpColor(FROM, TO, i / SAMPLING));
-        p.strokeWeight(4);
+        p.strokeWeight(1);
         p.line(x1, y1, x2, y2);
       });
+      // p.smooth();
     };
   };
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgb(0, 0, 1)"
+      }}
+    >
       <ProcessingView style={{ width, height: width }} {...{ sketch }} />
     </View>
   );
