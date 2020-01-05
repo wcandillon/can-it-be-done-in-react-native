@@ -46,10 +46,13 @@ export default () => {
       p.ellipse(CX, CY, SIZE - STROKE_WIDTH * 2, SIZE - STROKE_WIDTH * 2);
       // 2. end linecap
       p.fill(p.lerpColor(FROM, TO, progress));
-      p.ellipse(cx, cy, STROKE_WIDTH, STROKE_WIDTH);
-      // 3. start linecap
-      p.fill(FROM);
-      p.ellipse(SIZE - STROKE_WIDTH / 2, SIZE / 2, STROKE_WIDTH, STROKE_WIDTH);
+      p.translate(cx, cy);
+      p.rotate(-alpha);
+      p.arc(0, 0, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
+      p.fill(0, 0, 1);
+      p.arc(-3, -3, STROKE_WIDTH, STROKE_WIDTH, PI, TAU);
+      p.rotate(alpha);
+      p.translate(-cx, -cy);
       p.beginShape("triangles");
       SAMPLES.forEach(i => {
         const theta = i * DELTA;
@@ -83,6 +86,9 @@ export default () => {
         p.vertex(x2, y2);
       });
       p.endShape();
+      // 3. start linecap
+      p.fill(FROM);
+      p.ellipse(SIZE - STROKE_WIDTH / 2, SIZE / 2, STROKE_WIDTH, STROKE_WIDTH);
     };
   };
   return (
