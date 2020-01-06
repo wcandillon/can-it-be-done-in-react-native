@@ -38,7 +38,7 @@ export default ({ ring, progress: absoluteProgress }: CurtainProps) => {
         cy={CY}
         fill="transparent"
         strokeWidth={STROKE_WIDTH}
-        stroke="black"
+        stroke={ring.bg}
         strokeDasharray={`${circumference}, ${circumference}`}
         {...{ r, strokeDashoffset }}
       />
