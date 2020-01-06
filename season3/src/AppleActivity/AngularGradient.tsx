@@ -44,7 +44,7 @@ export default ({ ring }: AngularGradientProps) => {
           center
         );
         p.noStroke();
-        p.fill(p.lerpColor(start, end, i / SAMPLING));
+        p.fill(p.lerpColor(end, start, i / SAMPLING));
         p.vertex(center.x, center.y);
         p.vertex(x1, y1);
         p.vertex(x2, y2);
