@@ -33,9 +33,10 @@ const so = 4;
 interface RingProps {
   ring: Ring;
   progress: Animated.Node<number>;
+  onReady: () => void;
 }
 
-export default ({ ring, progress }: RingProps) => {
+export default ({ ring, progress, onReady }: RingProps) => {
   const theta = interpolate(progress, {
     inputRange: [0, 1],
     outputRange: [0, ring.value]
@@ -69,7 +70,7 @@ export default ({ ring, progress }: RingProps) => {
   return (
     <>
       <Animated.View style={[styles.overlay, { transform: [{ rotate }] }]}>
-        <AngularGradient {...{ ring }} />
+        <AngularGradient {...{ ring, onReady }} />
       </Animated.View>
       <View style={styles.overlay}>
         <Circle radius={ring.size / 2 - STROKE_WIDTH} backgroundColor="black" />

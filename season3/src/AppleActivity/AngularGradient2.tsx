@@ -34,14 +34,16 @@ void main() {
 
 interface AngularGradientProps {
   ring: Ring;
+  onReady: () => void;
 }
 
-export default ({ ring }: AngularGradientProps) => (
+export default ({ ring, onReady }: AngularGradientProps) => (
   <Surface
     style={{
       width: ring.size,
       height: ring.size
     }}
+    onLoad={onReady}
   >
     <Node
       shader={shaders.helloGL}
