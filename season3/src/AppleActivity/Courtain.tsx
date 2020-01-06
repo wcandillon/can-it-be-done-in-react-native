@@ -24,6 +24,12 @@ export default ({ ring, revolution }: CurtainProps) => {
   const strokeDashoffset = sub(circumference, multiply(α, -r));
   return (
     <Svg width={SIZE} height={SIZE}>
+      <Circle
+        cx={SIZE / 2 + ring.size / 2 - STROKE_WIDTH / 2}
+        cy={SIZE / 2}
+        r={STROKE_WIDTH / 2}
+        fill="blue"
+      />
       <AnimatedCircle
         cx={CX}
         cy={CY}
