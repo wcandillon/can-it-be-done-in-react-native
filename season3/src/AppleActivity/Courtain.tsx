@@ -14,14 +14,10 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 interface CurtainProps {
   ring: Ring;
-  progress: Animated.Node<number>;
+  alpha: Animated.Node<number>;
 }
 
-export default ({ ring, progress: absoluteProgress }: CurtainProps) => {
-  const alpha = interpolate(absoluteProgress, {
-    inputRange: [0, 1],
-    outputRange: [0, ring.value]
-  });
+export default ({ ring, alpha }: CurtainProps) => {
   const progress = interpolate(alpha, {
     inputRange: [0, TAU],
     outputRange: [0, 1],
