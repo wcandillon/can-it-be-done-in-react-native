@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-param-reassign */
 import React from "react";
-import { Dimensions, PixelRatio, View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { ProcessingView } from "./ProcessingView";
 import { polar2Canvas } from "./Coordinates";
+import { CX, CY, PI, R1, R2, R3, STROKE_WIDTH, TAU } from "./Constants";
 
 const { width } = Dimensions.get("window");
-const { PI } = Math;
-const TAU = 2 * PI;
 
-const S = width * PixelRatio.get();
-const STROKE_WIDTH = 40 * PixelRatio.get();
-const CX = S / 2;
-const CY = S / 2;
 const SAMPLING = 75;
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
 const DELTA = TAU / SAMPLING;
@@ -121,27 +116,27 @@ export default () => {
       p.background(0, 0, 0, 0);
       drawRing(p, {
         progress,
-        size: S - STROKE_WIDTH * 4,
-        startColor: p.color(0, 217, 253),
-        endColor: p.color(0, 255, 169),
-        backgroundColor: p.color(0, 72, 77),
-        total: 2.3 * TAU
+        size: R1.size,
+        startColor: p.color(...R1.start),
+        endColor: p.color(...R1.end),
+        backgroundColor: p.color(...R1.bg),
+        total: R1.value
       });
       drawRing(p, {
         progress,
-        size: S - STROKE_WIDTH * 2,
-        startColor: p.color(153, 255, 0),
-        endColor: p.color(216, 255, 1),
-        backgroundColor: p.color(47, 78, 0),
-        total: 0.5 * TAU
+        size: R2.size,
+        startColor: p.color(...R2.start),
+        endColor: p.color(...R2.end),
+        backgroundColor: p.color(...R2.bg),
+        total: R2.value
       });
       drawRing(p, {
         progress,
-        size: S,
-        startColor: p.color(249, 18, 78),
-        endColor: p.color(249, 56, 133),
-        backgroundColor: p.color(50, 1, 14),
-        total: 1.7 * TAU
+        size: R3.size,
+        startColor: p.color(...R3.start),
+        endColor: p.color(...R3.end),
+        backgroundColor: p.color(...R3.bg),
+        total: R3.value
       });
     };
   };
