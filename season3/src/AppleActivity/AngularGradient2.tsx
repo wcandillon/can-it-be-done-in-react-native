@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React from "react";
+// @ts-ignore
 import { Surface } from "gl-react-expo";
+// @ts-ignore
 import { GLSL, Node, Shaders } from "gl-react";
 import Color from "color";
 
