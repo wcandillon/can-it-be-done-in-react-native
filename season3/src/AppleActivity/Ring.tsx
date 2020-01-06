@@ -1,12 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, {
-  Extrapolate,
-  debug,
-  interpolate,
-  useCode
-} from "react-native-reanimated";
+import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
 
+import { bInterpolateColor } from "react-native-redash";
 import { Ring, STROKE_WIDTH, TAU } from "./Constants";
 import Circle from "./Circle";
 import AngularGradient from "./AngularGradient";
@@ -30,11 +26,17 @@ export default ({ ring, progress }: RingProps) => {
     inputRange: [0, 1],
     outputRange: [0, ring.value]
   });
+  const revolution = interpolate(alpha, {
+    inputRange: [0, TAU],
+    outputRange: [0, 1],
+    extrapolate: Extrapolate.CLAMP
+  });
   const rotate = interpolate(alpha, {
     inputRange: [TAU, 2 * TAU],
     outputRange: [0, TAU],
     extrapolateLeft: Extrapolate.CLAMP
   });
+  const backgroundColor = bInterpolateColor(revolution, ring.start, ring.end);
   return (
     <>
       <Animated.View style={[styles.overlay, { transform: [{ rotate }] }]}>
@@ -44,8 +46,11 @@ export default ({ ring, progress }: RingProps) => {
         <Circle radius={ring.size / 2 - STROKE_WIDTH} backgroundColor="black" />
       </View>
       <View style={styles.overlay}>
-        <Courtain {...{ ring, progress, alpha }} />
+        <Courtain {...{ ring, revolution, alpha }} />
       </View>
+      <Animated.View style={[styles.overlay]}>
+        <Circle radius={STROKE_WIDTH / 2} {...{ backgroundColor }} />
+      </Animated.View>
     </>
   );
 };

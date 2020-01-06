@@ -1,12 +1,12 @@
 import React from "react";
-import { View } from "react-native";
+import Animated from "react-native-reanimated";
 
 interface CircleProps {
-  backgroundColor: string;
+  backgroundColor: string | Animated.Node<number>;
   radius: number;
 }
 export default ({ radius, backgroundColor }: CircleProps) => (
-  <View
+  <Animated.View
     style={{
       backgroundColor,
       width: 2 * radius,

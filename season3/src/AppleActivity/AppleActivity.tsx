@@ -16,12 +16,12 @@ const styles = StyleSheet.create({
 export default () => {
   const [ready, setReady] = useState(false);
   const progress = new Value(0);
-  useCode(() => ready && set(progress, timing({ duration: 4000 })), [
+  useCode(() => ready && set(progress, timing({ duration: 1000 })), [
     progress,
     ready
   ]);
   useEffect(() => {
-    setTimeout(() => setReady(true), 2000);
+    setTimeout(() => setReady(true), 1000);
   }, []);
   return (
     <View style={styles.container}>

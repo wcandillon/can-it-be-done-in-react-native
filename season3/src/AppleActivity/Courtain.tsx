@@ -14,18 +14,13 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 interface CurtainProps {
   ring: Ring;
-  alpha: Animated.Node<number>;
+  revolution: Animated.Node<number>;
 }
 
-export default ({ ring, alpha }: CurtainProps) => {
-  const progress = interpolate(alpha, {
-    inputRange: [0, TAU],
-    outputRange: [0, 1],
-    extrapolate: Extrapolate.CLAMP
-  });
+export default ({ ring, revolution }: CurtainProps) => {
   const r = (ring.size - STROKE_WIDTH) / 2;
   const circumference = r * TAU;
-  const α = multiply(sub(1, progress), TAU);
+  const α = multiply(sub(1, revolution), TAU);
   const strokeDashoffset = sub(circumference, multiply(α, -r));
   return (
     <Svg width={SIZE} height={SIZE}>
