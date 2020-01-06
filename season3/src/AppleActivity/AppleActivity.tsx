@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Value, set, useCode } from "react-native-reanimated";
 
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 
 export default () => {
   const progress = new Value(0);
-  useCode(() => set(progress, timing({ duration: 5000 })), [progress]);
+  useCode(() => set(progress, timing({ duration: 1000 })), [progress]);
   return (
     <View style={styles.container}>
       {[R3, R2, R1].map((ring, i) => (
