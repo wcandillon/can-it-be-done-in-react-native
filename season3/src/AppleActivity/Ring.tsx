@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
+  multiply,
   sub
 } from "react-native-reanimated";
 
@@ -46,15 +47,9 @@ export default ({ ring, progress }: RingProps) => {
     extrapolateLeft: Extrapolate.CLAMP
   });
   const { x, y } = polar2Canvas(
-    { theta, radius: (ring.size - STROKE_WIDTH) / 2 },
+    { theta: multiply(-1, theta), radius: (ring.size - STROKE_WIDTH) / 2 },
     center
   );
-  const { x: x1, y: y1 } = polar2CanvasJS(
-    { theta: 0, radius: (ring.size - STROKE_WIDTH) / 2 },
-    center
-  );
-  const x2 = x1 - STROKE_WIDTH / 2;
-  const y2 = y1 - STROKE_WIDTH / 2;
   const translateX = sub(x, STROKE_WIDTH / 2);
   const translateY = sub(y, STROKE_WIDTH / 2);
   const backgroundColor = bInterpolateColor(revolution, ring.start, ring.end);
@@ -66,13 +61,6 @@ export default ({ ring, progress }: RingProps) => {
       <View style={styles.overlay}>
         <Circle radius={ring.size / 2 - STROKE_WIDTH} backgroundColor="black" />
       </View>
-      <Animated.View style={styles.overlay}>
-        <View style={{ width: SIZE, height: SIZE }}>
-          <View style={{ transform: [{ translateX: x2 }, { translateY: y2 }] }}>
-            <Circle radius={STROKE_WIDTH / 2} backgroundColor={ring.start} />
-          </View>
-        </View>
-      </Animated.View>
       <View style={styles.overlay}>
         <Courtain {...{ ring, revolution }} />
       </View>
