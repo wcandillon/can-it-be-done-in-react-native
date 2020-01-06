@@ -31,7 +31,7 @@ export const R2: Ring = {
   start: "rgb(153, 255, 0)",
   end: "rgb(216, 255, 1)",
   bg: "rgb(47, 78, 0)",
-  value: 0.7 * TAU,
+  value: 0.6 * TAU,
   size: SIZE - STROKE_WIDTH * 2
 };
 
