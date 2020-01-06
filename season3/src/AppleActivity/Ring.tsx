@@ -14,7 +14,7 @@ import { CX, CY, PI, Ring, SIZE, STROKE_WIDTH, TAU } from "./Constants";
 import Circle from "./Circle";
 import AngularGradient from "./AngularGradient";
 import Courtain from "./Courtain";
-import polar2CanvasJS from "./Coordinates";
+import Shadow from "./Shadow";
 
 const styles = StyleSheet.create({
   overlay: {
@@ -87,7 +87,7 @@ export default ({ ring, progress }: RingProps) => {
               ]
             }}
           >
-            <Circle radius={STROKE_WIDTH / 2} backgroundColor="black" />
+            <Shadow />
           </Animated.View>
         </View>
       </Animated.View>
