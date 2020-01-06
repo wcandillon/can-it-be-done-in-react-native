@@ -8,7 +8,7 @@ import Animated, {
   sub
 } from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
-import { CX, CY, PI, Ring, SIZE, STROKE_WIDTH, TAU } from "./Constants";
+import { CX, CY, Ring, SIZE, STROKE_WIDTH, TAU } from "./Constants";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 

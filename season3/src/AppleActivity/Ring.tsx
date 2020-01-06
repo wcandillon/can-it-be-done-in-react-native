@@ -1,9 +1,14 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
+import Animated, {
+  Extrapolate,
+  add,
+  interpolate,
+  sub
+} from "react-native-reanimated";
 
-import { bInterpolateColor } from "react-native-redash";
-import { Ring, STROKE_WIDTH, TAU } from "./Constants";
+import { bInterpolateColor, polar2Canvas } from "react-native-redash";
+import { CX, CY, PI, Ring, SIZE, STROKE_WIDTH, TAU } from "./Constants";
 import Circle from "./Circle";
 import AngularGradient from "./AngularGradient";
 import Courtain from "./Courtain";
@@ -22,20 +27,29 @@ interface RingProps {
 }
 
 export default ({ ring, progress }: RingProps) => {
-  const alpha = interpolate(progress, {
+  const theta = interpolate(progress, {
     inputRange: [0, 1],
     outputRange: [0, ring.value]
   });
-  const revolution = interpolate(alpha, {
+  const revolution = interpolate(theta, {
     inputRange: [0, TAU],
     outputRange: [0, 1],
     extrapolate: Extrapolate.CLAMP
   });
-  const rotate = interpolate(alpha, {
+  const rotate = interpolate(theta, {
     inputRange: [TAU, 2 * TAU],
     outputRange: [0, TAU],
     extrapolateLeft: Extrapolate.CLAMP
   });
+  const { x, y } = polar2Canvas(
+    { theta: 0, radius: (ring.size - STROKE_WIDTH) / 2 },
+    {
+      x: CX,
+      y: CY
+    }
+  );
+  const translateX = sub(x, STROKE_WIDTH / 2);
+  const translateY = sub(y, STROKE_WIDTH / 2);
   const backgroundColor = bInterpolateColor(revolution, ring.start, ring.end);
   return (
     <>
@@ -46,10 +60,16 @@ export default ({ ring, progress }: RingProps) => {
         <Circle radius={ring.size / 2 - STROKE_WIDTH} backgroundColor="black" />
       </View>
       <View style={styles.overlay}>
-        <Courtain {...{ ring, revolution, alpha }} />
+        <Courtain {...{ ring, revolution }} />
       </View>
-      <Animated.View style={[styles.overlay]}>
-        <Circle radius={STROKE_WIDTH / 2} {...{ backgroundColor }} />
+      <Animated.View style={styles.overlay}>
+        <View style={{ width: SIZE, height: SIZE }}>
+          <Animated.View
+            style={{ transform: [{ translateX }, { translateY }] }}
+          >
+            <Circle radius={STROKE_WIDTH / 2} {...{ backgroundColor }} />
+          </Animated.View>
+        </View>
       </Animated.View>
     </>
   );
