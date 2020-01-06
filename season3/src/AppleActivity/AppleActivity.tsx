@@ -16,9 +16,6 @@ const SAMPLING = 75;
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
 const DELTA = TAU / SAMPLING;
 
-let START: number;
-const DURATION = 2000;
-
 interface Params {
   progress: number;
   total: number;
@@ -111,22 +108,19 @@ const drawRing = (
   p.translate(-CX, -CY);
 };
 
+let progress = 0;
 export default () => {
   const sketch = (p: any) => {
-    p.setup = () => {
-      START = new Date().getTime();
-    };
+    p.setup = () => {};
 
     p.draw = () => {
-      const NOW = new Date().getTime();
-      const absoluteProgress =
-        NOW - START > DURATION ? 1 : (NOW - START) / DURATION;
-      if (absoluteProgress === 1) {
+      progress += 1 / SAMPLING;
+      if (progress >= 1) {
         p.noLoop();
       }
-      p.background(0, 0, 1);
+      p.background(0, 0, 0, 0);
       drawRing(p, {
-        progress: absoluteProgress,
+        progress,
         size: S - STROKE_WIDTH * 4,
         startColor: p.color(0, 217, 253),
         endColor: p.color(0, 255, 169),
@@ -134,7 +128,7 @@ export default () => {
         total: 2.3 * TAU
       });
       drawRing(p, {
-        progress: absoluteProgress,
+        progress,
         size: S - STROKE_WIDTH * 2,
         startColor: p.color(153, 255, 0),
         endColor: p.color(216, 255, 1),
@@ -142,7 +136,7 @@ export default () => {
         total: 0.5 * TAU
       });
       drawRing(p, {
-        progress: absoluteProgress,
+        progress,
         size: S,
         startColor: p.color(249, 18, 78),
         endColor: p.color(249, 56, 133),
