@@ -6,12 +6,7 @@ const Browser = require("processing-js/lib/Browser");
 Browser.window = window;
 const Processing = require("processing-js/src")(Browser);
 
-export default props => {
-  const onContextCreate = gl => {};
-  return <GLView {...props} {...{ onContextCreate }} />;
-};
-
-export class ProcessingView extends React.Component {
+export default class ProcessingView extends React.Component {
   componentWillUnmount() {
     if (this._p) {
       this._p.exit();

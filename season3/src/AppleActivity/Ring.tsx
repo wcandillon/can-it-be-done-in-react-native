@@ -1,8 +1,10 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { RingProps, STROKE_WIDTH } from "./Constants";
+import Animated from "react-native-reanimated";
 
+import { Ring, STROKE_WIDTH } from "./Constants";
 import Circle from "./Circle";
+import AngularGradient from "./AngularGradient";
 
 const styles = StyleSheet.create({
   overlay: {
@@ -12,11 +14,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default (ring: RingProps) => {
+interface RingProps {
+  ring: Ring;
+  progress: Animated.Node<number>;
+}
+
+export default ({ ring, progress }: RingProps) => {
   return (
     <>
       <View style={styles.overlay}>
-        <Circle radius={ring.size / 2} backgroundColor={ring.bg} />
+        <AngularGradient {...{ ring }} />
       </View>
       <View style={styles.overlay}>
         <Circle radius={ring.size / 2 - STROKE_WIDTH} backgroundColor="black" />
