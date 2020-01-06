@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 export default () => {
   const [ready, setReady] = useState(false);
   const progress = new Value(0);
-  useCode(() => ready && set(progress, timing({ duration: 1000 })), [
+  useCode(() => ready && set(progress, timing({ duration: 5000 })), [
     progress,
     ready
   ]);

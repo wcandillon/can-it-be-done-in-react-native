@@ -3,7 +3,7 @@ import React from "react";
 import { PixelRatio, processColor } from "react-native";
 import { CX, CY, Ring, SIZE, TAU } from "./Constants";
 import ProcessingView from "./ProcessingView";
-import { polar2Canvas } from "./Coordinates";
+import polar2Canvas from "./Coordinates";
 
 const SAMPLING = 75;
 const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
@@ -29,14 +29,14 @@ export default ({ ring }: AngularGradientProps) => {
         const theta = i * DELTA;
         const { x: x1, y: y1 } = polar2Canvas(
           {
-            alpha: theta,
+            theta,
             radius: size / 2
           },
           center
         );
         const { x: x2, y: y2 } = polar2Canvas(
           {
-            alpha: (i + 1) * DELTA,
+            theta: (i + 1) * DELTA,
             radius: size / 2
           },
           center
