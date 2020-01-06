@@ -14,15 +14,8 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const [ready, setReady] = useState(false);
   const progress = new Value(0);
-  useCode(() => ready && set(progress, timing({ duration: 5000 })), [
-    progress,
-    ready
-  ]);
-  useEffect(() => {
-    setTimeout(() => setReady(true), 1000);
-  }, []);
+  useCode(() => set(progress, timing({ duration: 5000 })), [progress]);
   return (
     <View style={styles.container}>
       {[R3, R2, R1].map((ring, i) => (
