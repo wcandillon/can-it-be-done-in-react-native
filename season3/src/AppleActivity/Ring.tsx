@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
+  add,
   interpolate,
   multiply,
   sub
@@ -46,8 +47,9 @@ export default ({ ring, progress }: RingProps) => {
     outputRange: [0, TAU],
     extrapolateLeft: Extrapolate.CLAMP
   });
+  const r = (ring.size - STROKE_WIDTH) / 2;
   const { x, y } = polar2Canvas(
-    { theta: multiply(-1, theta), radius: (ring.size - STROKE_WIDTH) / 2 },
+    { theta: multiply(-1, theta), radius: r },
     center
   );
   const translateX = sub(x, STROKE_WIDTH / 2);
