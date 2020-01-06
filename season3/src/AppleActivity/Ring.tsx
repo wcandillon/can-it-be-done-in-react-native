@@ -12,7 +12,7 @@ import Animated, {
 import { bInterpolateColor, polar2Canvas } from "react-native-redash";
 import { CX, CY, PI, Ring, SIZE, STROKE_WIDTH, TAU } from "./Constants";
 import Circle from "./Circle";
-import AngularGradient from "./AngularGradient2";
+import AngularGradient from "./AngularGradient";
 import Courtain from "./Courtain";
 import Shadow from "./Shadow";
 

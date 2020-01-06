@@ -1,65 +1,63 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, no-param-reassign */
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React from "react";
-import { PixelRatio, processColor } from "react-native";
-import { CX, CY, Ring, SIZE, TAU } from "./Constants";
-import ProcessingView from "./ProcessingView";
-import polar2Canvas from "./Coordinates";
+// @ts-ignore
+import { Surface } from "gl-react-expo";
+// @ts-ignore
+import { GLSL, Node, Shaders } from "gl-react";
+import Color from "color";
 
-const SAMPLING = 75;
-const SAMPLES = new Array(SAMPLING).fill(0).map((_, i) => i);
-const DELTA = TAU / SAMPLING;
+import { Ring } from "./Constants";
+
+const shaders = Shaders.create({
+  helloGL: {
+    frag: GLSL`
+#define PI  3.141592653589793
+#define TAU 6.283185307179586
+
+precision highp float;
+varying vec2 uv;
+uniform vec3 start, end;
+uniform float size;
+
+void main() {
+  float pct = distance(uv, vec2(0.5));
+  vec2 pos = vec2(0.5) - uv;
+  float r = length(pos) * 2.0;
+  float a = atan(pos.y, pos.x);
+  float progress = a * 0.5 / PI + 0.5;
+  vec3 color = mix(end, start, progress);
+  gl_FragColor = pct > size ? vec4(0.0) : vec4(color, 1.0);
+}
+`
+  }
+});
 
 interface AngularGradientProps {
   ring: Ring;
+  onReady: () => void;
 }
 
-export default ({ ring }: AngularGradientProps) => {
-  const start = processColor(ring.start);
-  const end = processColor(ring.end);
-  const size = ring.size * PixelRatio.get();
-  const center = {
-    x: CX * PixelRatio.get(),
-    y: CY * PixelRatio.get()
-  };
-  const sketch = (p: any) => {
-    p.setup = () => {
-      p.background(0, 0, 0, 0);
-      p.beginShape(8);
-      SAMPLES.forEach(i => {
-        const theta = i * DELTA;
-        const { x: x1, y: y1 } = polar2Canvas(
-          {
-            theta,
-            radius: size / 2
-          },
-          center
-        );
-        const { x: x2, y: y2 } = polar2Canvas(
-          {
-            theta: (i + 1) * DELTA,
-            radius: size / 2
-          },
-          center
-        );
-        p.noStroke();
-        p.fill(p.lerpColor(end, start, i / SAMPLING));
-        p.vertex(center.x, center.y);
-        p.vertex(x1, y1);
-        p.vertex(x2, y2);
-      });
-      p.endShape();
-      p.noLoop();
-    };
-
-    p.draw = () => {};
-  };
-  return (
-    <ProcessingView
-      style={{
-        width: SIZE,
-        height: SIZE
+export default ({ ring, onReady }: AngularGradientProps) => (
+  <Surface
+    style={{
+      width: ring.size,
+      height: ring.size
+    }}
+    onLoad={onReady}
+  >
+    <Node
+      shader={shaders.helloGL}
+      uniforms={{
+        start: new Color(ring.start)
+          .rgb()
+          .array()
+          .map(c => c / 255),
+        end: new Color(ring.end)
+          .rgb()
+          .array()
+          .map(c => c / 255),
+        size: (ring.size * 0.5) / ring.size
       }}
-      {...{ sketch }}
     />
-  );
-};
+  </Surface>
+);
