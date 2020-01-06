@@ -3800,26 +3800,26 @@ gl-format-compiler-error@^1.0.2:
     glsl-shader-name "^1.0.0"
     sprintf-js "^1.0.3"
 
-"gl-react-expo@https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Fgl-react-expo-3.16.15.tgz?alt=media&token=b255bf76-de93-43dd-85c2-d799f22fd6fc":
-  version "3.16.15"
-  resolved "https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Fgl-react-expo-3.16.15.tgz?alt=media&token=b255bf76-de93-43dd-85c2-d799f22fd6fc#0acf6fb99907b8f85dd411abce3de27c9d879a62"
+gl-react-expo@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/gl-react-expo/-/gl-react-expo-4.0.1.tgz#7512b65fd7e27d84f3405e737f8b334aed6b69fc"
+  integrity sha512-L4bwpqEolXmdc1YH8okN4qkfOW13/iLvevhJYgf2mHaLCRwhW1WDUJ18EEip8lUxaUmH9NmT9SC5DwMRiP0YSg==
   dependencies:
-    invariant "^2.2.1"
-    prop-types "^15.6.1"
-    webgltexture-loader-expo "https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Fwebgltexture-loader-expo-0.10.4.tgz?alt=media&token=8ff217bd-43ce-468b-be8e-2c2cddbb34de"
+    invariant "^2.2.4"
+    webgltexture-loader-expo "1.0.0"
 
-gl-react@^3.15.0:
-  version "3.17.2"
-  resolved "https://registry.yarnpkg.com/gl-react/-/gl-react-3.17.2.tgz#297fc667d0db3d530f81b7220519f59e5959c2ae"
-  integrity sha512-lO582lZltx7uk2mj4+qASKM3SWLbf6CwWHM7KhIFbUlUCPjRv0cGd9LlqGul0iHEYPrfB+CyqGj3c6vL7z5syw==
+gl-react@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/gl-react/-/gl-react-4.0.1.tgz#6b747084237dc2209eb3ed05162bb5941c5a6e94"
+  integrity sha512-/+wbFHVeh21wOS6g3v7r/zAdXoYMqn7xCB0CwLwMxBUwUsnV0jcvGS+8HDoup9Yd20xGt77p2c3gmrt2XtEEgg==
   dependencies:
     gl-shader "^4.2.1"
     invariant "^2.2.4"
     ndarray "^1.0.18"
     prop-types "^15.7.2"
     typedarray-pool "^1.1.0"
-    webgltexture-loader "^0.12.2"
-    webgltexture-loader-ndarray "^0.12.2"
+    webgltexture-loader "1.0.0"
+    webgltexture-loader-ndarray "1.0.0"
 
 gl-shader@^4.2.1:
   version "4.2.1"
@@ -4130,7 +4130,7 @@ inquirer@^6.4.1:
     strip-ansi "^5.1.0"
     through "^2.3.6"
 
-invariant@2.2.4, invariant@^2.2.1, invariant@^2.2.2, invariant@^2.2.4:
+invariant@2.2.4, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   dependencies:
@@ -7092,31 +7092,27 @@ weakmap-shim@^1.1.0:
   resolved "https://registry.yarnpkg.com/weakmap-shim/-/weakmap-shim-1.1.1.tgz#d65afd784109b2166e00ff571c33150ec2a40b49"
   integrity sha1-1lr9eEEJshZuAP9XHDMVDsKkC0k=
 
-"webgltexture-loader-expo@https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Fwebgltexture-loader-expo-0.10.4.tgz?alt=media&token=8ff217bd-43ce-468b-be8e-2c2cddbb34de":
-  version "0.10.4"
-  resolved "https://firebasestorage.googleapis.com/v0/b/react-native-ui-kits.appspot.com/o/npm%2Fwebgltexture-loader-expo-0.10.4.tgz?alt=media&token=8ff217bd-43ce-468b-be8e-2c2cddbb34de#781f3a94c8b4a48f98e0e58dd4261d314cb02690"
+webgltexture-loader-expo@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/webgltexture-loader-expo/-/webgltexture-loader-expo-1.0.0.tgz#e542636cdd6dbbda7c1c11eca50c8190988d773b"
+  integrity sha512-o0slPnFkZ1CfGNQKmaxfbDeA7RGJp6nvHzEM3kdnO9FgdtbMk0P8ZQueoNQrE9f6V+macLc37CE8bTZfEq+yUw==
   dependencies:
-    webgltexture-loader "^0.6.0"
+    webgltexture-loader "^1.0.0"
 
-webgltexture-loader-ndarray@^0.12.2:
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/webgltexture-loader-ndarray/-/webgltexture-loader-ndarray-0.12.2.tgz#bcc43673bc2936f2b94891e26122d50d5c95a1f2"
-  integrity sha512-DhaL1hcu+P9v7gWiP21sIC34Di1MmRNeEDnPLQNAeyFtLFemteKxrwdCz6ihm8LI8ng7NtAgoTJhcSePtO7b7w==
+webgltexture-loader-ndarray@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/webgltexture-loader-ndarray/-/webgltexture-loader-ndarray-1.0.0.tgz#844181c4cbe0cbc066750d66412c11d9205ad79a"
+  integrity sha512-ocEStCCkihBu+PyMr14ke2vv08c5wVObP5mH9AuPICcBvaS8zfxvMpoGc9dIxOxBC1reI/lzmpYxpYdoY/Ke8g==
   dependencies:
     ndarray "^1.0.18"
     ndarray-ops "^1.2.2"
     typedarray-pool "^1.1.0"
-    webgltexture-loader "^0.12.2"
+    webgltexture-loader "^1.0.0"
 
-webgltexture-loader@^0.12.2:
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/webgltexture-loader/-/webgltexture-loader-0.12.2.tgz#8a511a4aca2c442421d0fda74dfb4929a362748f"
-  integrity sha512-8CuVBLDSKdPY62s2BV6PSrbRmnZt701Huk0NuRLribrVAs+nKiLiU+9vrWiHk3nRI+Bgmi0101wbniYXhiXtNg==
-
-webgltexture-loader@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/webgltexture-loader/-/webgltexture-loader-0.6.0.tgz#95368723999dcc4c24024115375ab3ec18baf3fd"
-  integrity sha1-lTaHI5mdzEwkAkEVN1qz7Bi68/0=
+webgltexture-loader@1.0.0, webgltexture-loader@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/webgltexture-loader/-/webgltexture-loader-1.0.0.tgz#e3d5b687d79ac85bed29222a7931f1405b69da6a"
+  integrity sha512-TbQUdr0Bc3tcJ4pKIFoM9dKyLdYNf9Uxq05oZuIT+2e/vCcfaQS+WjNmW1FwYqaBrzcLr9CA/HBAmvyaS/REGw==
 
 whatwg-fetch@>=0.10.0, whatwg-fetch@^3.0.0:
   version "3.0.0"
