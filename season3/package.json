@@ -15,7 +15,6 @@
     "@react-native-community/masked-view": "0.1.5",
     "buffer": "^5.4.3",
     "color": "^3.1.2",
-    "color-interpolate": "^1.0.5",
     "crypto-js": "^3.1.9-1",
     "expo": "^36.0.0",
     "expo-asset": "~8.0.0",
