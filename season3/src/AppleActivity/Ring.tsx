@@ -5,6 +5,7 @@ import Animated from "react-native-reanimated";
 import { Ring, STROKE_WIDTH } from "./Constants";
 import Circle from "./Circle";
 import AngularGradient from "./AngularGradient";
+import Courtain from "./Courtain";
 
 const styles = StyleSheet.create({
   overlay: {
@@ -27,6 +28,9 @@ export default ({ ring, progress }: RingProps) => {
       </View>
       <View style={styles.overlay}>
         <Circle radius={ring.size / 2 - STROKE_WIDTH} backgroundColor="black" />
+      </View>
+      <View style={styles.overlay}>
+        <Courtain {...{ ring, progress }} />
       </View>
     </>
   );

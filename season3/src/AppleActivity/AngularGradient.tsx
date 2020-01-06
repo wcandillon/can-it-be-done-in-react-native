@@ -22,9 +22,7 @@ export default ({ ring }: AngularGradientProps) => {
     y: CY * PixelRatio.get()
   };
   const sketch = (p: any) => {
-    p.setup = () => {};
-
-    p.draw = () => {
+    p.setup = () => {
       p.background(0, 0, 0, 0);
       p.beginShape(8);
       SAMPLES.forEach(i => {
@@ -52,6 +50,8 @@ export default ({ ring }: AngularGradientProps) => {
       p.endShape();
       p.noLoop();
     };
+
+    p.draw = () => {};
   };
   return (
     <ProcessingView
