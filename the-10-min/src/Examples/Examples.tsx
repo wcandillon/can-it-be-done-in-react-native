@@ -17,6 +17,11 @@ export const examples = [
     screen: "Accordion",
     title: "Accordion",
     source: require("../../assets/examples/accordion.png")
+  },
+  {
+    screen: "ShaderAndMask",
+    title: "OpenGL Shader & Mask",
+    source: require("../../assets/examples/angular-gradient.png")
   }
 ];
 
