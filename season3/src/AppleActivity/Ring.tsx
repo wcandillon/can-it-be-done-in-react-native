@@ -12,7 +12,7 @@ import Animated, {
 import { bInterpolateColor, polar2Canvas } from "react-native-redash";
 import { CX, CY, PI, Ring, SIZE, STROKE_WIDTH, TAU } from "./Constants";
 import Circle from "./Circle";
-import AngularGradient from "./AngularGradient";
+import AngularGradient from "./AngularGradient2";
 import Courtain from "./Courtain";
 import Shadow from "./Shadow";
 
@@ -33,10 +33,9 @@ const so = 4;
 interface RingProps {
   ring: Ring;
   progress: Animated.Node<number>;
-  onReady: () => void;
 }
 
-export default ({ ring, progress, onReady }: RingProps) => {
+export default ({ ring, progress }: RingProps) => {
   const theta = interpolate(progress, {
     inputRange: [0, 1],
     outputRange: [0, ring.value]
@@ -70,7 +69,7 @@ export default ({ ring, progress, onReady }: RingProps) => {
   return (
     <>
       <Animated.View style={[styles.overlay, { transform: [{ rotate }] }]}>
-        <AngularGradient {...{ ring, onReady }} />
+        <AngularGradient {...{ ring }} />
       </Animated.View>
       <View style={styles.overlay}>
         <Circle radius={ring.size / 2 - STROKE_WIDTH} backgroundColor="black" />

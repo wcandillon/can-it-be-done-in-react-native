@@ -1,13 +1,5 @@
 import React from "react";
-import Animated, {
-  Extrapolate,
-  interpolate,
-  lessThan,
-  max,
-  min,
-  multiply,
-  sub
-} from "react-native-reanimated";
+import Animated, { lessThan, multiply, sub } from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
 import { CX, CY, Ring, SIZE, STROKE_WIDTH, TAU } from "./Constants";
 
