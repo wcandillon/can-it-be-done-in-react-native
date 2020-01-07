@@ -5,7 +5,7 @@ import { Value, set, useCode } from "react-native-reanimated";
 import { timing } from "react-native-redash";
 import { R1, R2, R3 } from "./Constants";
 import Ring from "./Ring";
-import Icons from "./Icons";
+import Stickers from "./Stickers";
 
 const styles = StyleSheet.create({
   root: {
@@ -29,7 +29,7 @@ export default () => {
           <Ring key={i} {...{ ring, progress }} />
         ))}
       </View>
-      <Icons />
+      <Stickers />
     </View>
   );
 };

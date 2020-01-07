@@ -22,9 +22,13 @@ uniform float size;
 void main() {
   float pct = distance(uv, vec2(0.5));
   vec2 pos = vec2(0.5) - uv;
-  float r = length(pos) * 2.0;
   float a = atan(pos.y, pos.x);
-  float progress = a * 0.5 / PI + 0.5;
+  // https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/atan.xhtml
+  // specifies that atan#2 goes form -PI/2 to PI/2
+  // we want to normalize a to go from 0 to 2PI and then progress is a/2PI
+  // a = [-PI/2; PI/2]; 2a + PI = [0; 2PI];
+  // We divide by 2PI to get the ratio
+  float progress = a / PI + 1.0;
   vec3 color = mix(end, start, progress);
   gl_FragColor = pct > size ? vec4(0.0) : vec4(color, 1.0);
 }
@@ -56,7 +60,7 @@ export default ({ ring, onReady }: AngularGradientProps) => (
           .rgb()
           .array()
           .map(c => c / 255),
-        size: (ring.size * 0.5) / ring.size
+        size: 0.5
       }}
     />
   </Surface>
