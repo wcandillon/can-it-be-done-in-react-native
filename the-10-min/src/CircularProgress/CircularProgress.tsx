@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { View } from "react-native";
 import Animated, {
   Extrapolate,
@@ -16,9 +16,11 @@ import { SIZE } from "../ShaderAndMask/Constants";
 
 interface CircularProgressProps {
   progress: Animated.Node<number>;
+  bg: ReactNode;
+  fg: ReactNode;
 }
 
-export default ({ progress }: CircularProgressProps) => {
+export default ({ progress, bg, fg }: CircularProgressProps) => {
   const theta = sub(TAU, multiply(progress, TAU));
   const bottomOpacity = greaterOrEq(theta, PI);
   const rotateTop = interpolate(theta, {
@@ -38,7 +40,7 @@ export default ({ progress }: CircularProgressProps) => {
           transform: transformOrigin(0, RADIUS / 2, { rotate: rotateTop })
         }}
       >
-        <HalfCircle />
+        <HalfCircle>{bg}</HalfCircle>
       </Animated.View>
       <Animated.View
         style={{
@@ -46,7 +48,7 @@ export default ({ progress }: CircularProgressProps) => {
           transform: transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom })
         }}
       >
-        <HalfCircle flipped />
+        <HalfCircle flipped>{bg}</HalfCircle>
       </Animated.View>
     </>
   );

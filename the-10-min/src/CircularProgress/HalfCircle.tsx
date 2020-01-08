@@ -1,12 +1,13 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { View } from "react-native";
 import { COLOR_BG, RADIUS } from "./Constants";
 
 interface HalfCircleProps {
   flipped?: boolean;
+  children: ReactNode;
 }
 
-export default ({ flipped }: HalfCircleProps) => {
+export default ({ flipped, children }: HalfCircleProps) => {
   return (
     <View
       style={{
@@ -21,9 +22,11 @@ export default ({ flipped }: HalfCircleProps) => {
           width: RADIUS * 2,
           height: RADIUS * 2,
           borderRadius: RADIUS,
-          backgroundColor: COLOR_BG
+          overflow: "hidden"
         }}
-      />
+      >
+        {children}
+      </View>
     </View>
   );
 };
