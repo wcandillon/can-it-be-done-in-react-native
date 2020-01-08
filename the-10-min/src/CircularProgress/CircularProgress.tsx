@@ -2,7 +2,9 @@ import React from "react";
 import { View } from "react-native";
 import Animated, {
   Extrapolate,
+  greaterOrEq,
   interpolate,
+  lessThan,
   multiply
 } from "react-native-reanimated";
 import { bInterpolate, transformOrigin } from "react-native-redash";
@@ -17,23 +19,30 @@ interface CircularProgressProps {
 
 export default ({ progress }: CircularProgressProps) => {
   const theta = multiply(progress, TAU);
+  const topOpacity = greaterOrEq(theta, PI);
   const rotateBottom = interpolate(theta, {
     inputRange: [0, PI],
     outputRange: [0, PI],
     extrapolate: Extrapolate.CLAMP
   });
+  const rotateTop = interpolate(theta, {
+    inputRange: [PI, TAU],
+    outputRange: [0, PI],
+    extrapolate: Extrapolate.CLAMP
+  });
   return (
     <>
-      <Animated.View style={{ opacity: 0 }}>
+      <Animated.View
+        style={{
+          opacity: topOpacity,
+          transform: transformOrigin(0, RADIUS / 2, { rotate: rotateTop })
+        }}
+      >
         <HalfCircle />
       </Animated.View>
       <Animated.View
         style={{
-          transform: [
-            { translateY: -RADIUS / 2 },
-            { rotate: rotateBottom },
-            { translateY: RADIUS / 2 }
-          ]
+          transform: transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom })
         }}
       >
         <HalfCircle flipped />
