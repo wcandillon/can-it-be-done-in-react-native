@@ -21,7 +21,7 @@ export const examples = [
   {
     screen: "ShaderAndMask",
     title: "OpenGL Shader & Mask",
-    source: require("../../assets/examples/angular-gradient.png")
+    source: require("../../assets/examples/shader.png")
   }
 ];
 

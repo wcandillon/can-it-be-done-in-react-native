@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { R1, R2, R3 } from "./Constants";
 import GradientShader from "./GradientShader";
+// Same result with MaskedView
+// import GradientMask from "./GradientMask";
 
 const styles = StyleSheet.create({
   container: {
@@ -16,6 +18,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  // Or: <GradientMask {...{ ring }} />
   return (
     <View style={styles.container}>
       {[R1, R2, R3].reverse().map((ring, key) => (
