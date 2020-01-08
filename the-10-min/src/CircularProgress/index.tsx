@@ -4,7 +4,7 @@ import { withTransition } from "react-native-redash";
 import { StyleSheet, View } from "react-native";
 
 import CircularProgress from "./CircularProgress";
-import { COLORS, COLOR_BG, COLOR_END, COLOR_START, RADIUS } from "./Constants";
+import { COLOR_BG, COLOR_END, COLOR_START, RADIUS } from "./Constants";
 import AngularGradient from "../components/AngularGradient";
 
 const styles = StyleSheet.create({
@@ -19,17 +19,15 @@ const styles = StyleSheet.create({
 export default () => {
   const progress = new Value(0);
   useCode(() => set(progress, 2.5), [progress]);
+  const fg = (
+    <AngularGradient size={RADIUS * 2} colors={[COLOR_START, COLOR_END]} />
+  );
   return (
     <View style={styles.container}>
       <CircularProgress
         progress={withTransition(progress, { duration: 10000 })}
-        fg={(flipped?: boolean) => (
-          <AngularGradient
-            size={RADIUS * 2}
-            colors={[COLOR_START, COLOR_END]}
-          />
-        )}
         bg={<View style={{ flex: 1, backgroundColor: COLOR_BG }} />}
+        {...{ fg }}
       />
     </View>
   );

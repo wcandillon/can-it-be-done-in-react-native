@@ -9,7 +9,7 @@ import Animated, {
   multiply,
   sub
 } from "react-native-reanimated";
-import { bInterpolate, transformOrigin } from "react-native-redash";
+import { transformOrigin } from "react-native-redash";
 
 import { PI, RADIUS, TAU } from "./Constants";
 import HalfCircle from "./HalfCircle";
@@ -17,7 +17,7 @@ import HalfCircle from "./HalfCircle";
 interface CircularProgressProps {
   progress: Animated.Node<number>;
   bg: ReactNode;
-  fg: (flipped?: boolean) => ReactNode;
+  fg: ReactNode;
 }
 
 export default ({ progress, bg, fg }: CircularProgressProps) => {
@@ -47,7 +47,7 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
             transform: [{ rotateY: "180deg" }]
           }}
         >
-          <HalfCircle>{fg()}</HalfCircle>
+          <HalfCircle>{fg}</HalfCircle>
         </View>
         <Animated.View
           style={{
@@ -66,7 +66,7 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
             ...StyleSheet.absoluteFillObject
           }}
         >
-          <HalfCircle flipped>{fg(true)}</HalfCircle>
+          <HalfCircle flipped>{fg}</HalfCircle>
         </View>
         <Animated.View
           style={{
