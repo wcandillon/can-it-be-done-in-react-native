@@ -16,11 +16,11 @@ const styles = StyleSheet.create({
 
 export default () => {
   const progress = new Value(0);
-  useCode(() => set(progress, 1), [progress]);
+  useCode(() => set(progress, 2.5), [progress]);
   return (
     <View style={styles.container}>
       <CircularProgress
-        progress={withTransition(progress, { duration: 4000 })}
+        progress={withTransition(progress, { duration: 10000 })}
       />
     </View>
   );
