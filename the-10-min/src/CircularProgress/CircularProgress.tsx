@@ -1,9 +1,10 @@
 import React, { ReactNode } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
   greaterOrEq,
   interpolate,
+  lessOrEq,
   lessThan,
   multiply,
   sub
@@ -21,34 +22,49 @@ interface CircularProgressProps {
 }
 
 export default ({ progress, bg, fg }: CircularProgressProps) => {
-  const theta = sub(TAU, multiply(progress, TAU));
-  const bottomOpacity = greaterOrEq(theta, PI);
+  const theta = multiply(progress, TAU);
+  const topOpacity = lessOrEq(theta, PI);
   const rotateTop = interpolate(theta, {
     inputRange: [0, PI],
-    outputRange: [0, -PI],
+    outputRange: [0, PI],
     extrapolate: Extrapolate.CLAMP
   });
   const rotateBottom = interpolate(theta, {
     inputRange: [PI, TAU],
-    outputRange: [0, -PI],
+    outputRange: [0, PI],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const zIndexTop = interpolate(theta, {
+    inputRange: [PI, PI, TAU],
+    outputRange: [0, 100, 100],
     extrapolate: Extrapolate.CLAMP
   });
   return (
     <>
-      <Animated.View
-        style={{
-          transform: transformOrigin(0, RADIUS / 2, { rotate: rotateTop })
-        }}
-      >
-        <HalfCircle>{bg}</HalfCircle>
+      <Animated.View style={{ zIndex: zIndexTop }}>
+        <View style={StyleSheet.absoluteFill}>
+          <HalfCircle>{fg}</HalfCircle>
+        </View>
+        <Animated.View
+          style={{
+            opacity: topOpacity,
+            transform: transformOrigin(0, RADIUS / 2, { rotate: rotateTop })
+          }}
+        >
+          <HalfCircle>{bg}</HalfCircle>
+        </Animated.View>
       </Animated.View>
-      <Animated.View
-        style={{
-          opacity: bottomOpacity,
-          transform: transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom })
-        }}
-      >
-        <HalfCircle flipped>{bg}</HalfCircle>
+      <Animated.View>
+        <View style={StyleSheet.absoluteFill}>
+          <HalfCircle flipped>{fg}</HalfCircle>
+        </View>
+        <Animated.View
+          style={{
+            transform: transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom })
+          }}
+        >
+          <HalfCircle flipped>{bg}</HalfCircle>
+        </Animated.View>
       </Animated.View>
     </>
   );
