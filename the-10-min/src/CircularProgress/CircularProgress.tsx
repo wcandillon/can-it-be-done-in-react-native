@@ -5,7 +5,8 @@ import Animated, {
   greaterOrEq,
   interpolate,
   lessThan,
-  multiply
+  multiply,
+  sub
 } from "react-native-reanimated";
 import { bInterpolate, transformOrigin } from "react-native-redash";
 
@@ -18,23 +19,22 @@ interface CircularProgressProps {
 }
 
 export default ({ progress }: CircularProgressProps) => {
-  const theta = multiply(progress, TAU);
-  const topOpacity = greaterOrEq(theta, PI);
-  const rotateBottom = interpolate(theta, {
+  const theta = sub(TAU, multiply(progress, TAU));
+  const bottomOpacity = greaterOrEq(theta, PI);
+  const rotateTop = interpolate(theta, {
     inputRange: [0, PI],
-    outputRange: [0, PI],
+    outputRange: [0, -PI],
     extrapolate: Extrapolate.CLAMP
   });
-  const rotateTop = interpolate(theta, {
+  const rotateBottom = interpolate(theta, {
     inputRange: [PI, TAU],
-    outputRange: [0, PI],
+    outputRange: [0, -PI],
     extrapolate: Extrapolate.CLAMP
   });
   return (
     <>
       <Animated.View
         style={{
-          opacity: topOpacity,
           transform: transformOrigin(0, RADIUS / 2, { rotate: rotateTop })
         }}
       >
@@ -42,6 +42,7 @@ export default ({ progress }: CircularProgressProps) => {
       </Animated.View>
       <Animated.View
         style={{
+          opacity: bottomOpacity,
           transform: transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom })
         }}
       >
