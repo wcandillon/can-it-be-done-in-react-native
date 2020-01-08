@@ -61,7 +61,11 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
         </Animated.View>
       </Animated.View>
       <Animated.View>
-        <View style={StyleSheet.absoluteFill}>
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject
+          }}
+        >
           <HalfCircle flipped>{fg(true)}</HalfCircle>
         </View>
         <Animated.View

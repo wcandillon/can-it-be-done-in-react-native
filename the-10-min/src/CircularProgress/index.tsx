@@ -26,9 +26,7 @@ export default () => {
         fg={(flipped?: boolean) => (
           <AngularGradient
             size={RADIUS * 2}
-            colors={
-              flipped ? [COLOR_START, COLOR_END] : [COLOR_END, COLOR_START]
-            }
+            colors={[COLOR_START, COLOR_END]}
           />
         )}
         bg={<View style={{ flex: 1, backgroundColor: COLOR_BG }} />}

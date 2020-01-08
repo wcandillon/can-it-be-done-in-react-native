@@ -22,7 +22,11 @@ export default ({ flipped, children }: HalfCircleProps) => {
           width: RADIUS * 2,
           height: RADIUS * 2,
           borderRadius: RADIUS,
-          overflow: "hidden"
+          overflow: "hidden",
+          transform: [
+            { rotate: flipped ? "180deg" : "0deg" },
+            { rotateY: flipped ? "180deg" : "0deg" }
+          ]
         }}
       >
         {children}
