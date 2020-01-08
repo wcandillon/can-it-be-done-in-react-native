@@ -22,6 +22,11 @@ export const examples = [
     screen: "ShaderAndMask",
     title: "OpenGL Shader & Mask",
     source: require("../../assets/examples/shader.png")
+  },
+  {
+    screen: "CircularsProgres",
+    title: "Circular Progress",
+    source: require("../../assets/examples/circular-progress.png")
   }
 ];
 
