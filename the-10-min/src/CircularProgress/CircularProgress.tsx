@@ -13,12 +13,11 @@ import { bInterpolate, transformOrigin } from "react-native-redash";
 
 import { PI, RADIUS, TAU } from "./Constants";
 import HalfCircle from "./HalfCircle";
-import { SIZE } from "../ShaderAndMask/Constants";
 
 interface CircularProgressProps {
   progress: Animated.Node<number>;
   bg: ReactNode;
-  fg: ReactNode;
+  fg: (flipped?: boolean) => ReactNode;
 }
 
 export default ({ progress, bg, fg }: CircularProgressProps) => {
@@ -42,13 +41,20 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
   return (
     <>
       <Animated.View style={{ zIndex: zIndexTop }}>
-        <View style={StyleSheet.absoluteFill}>
-          <HalfCircle>{fg}</HalfCircle>
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            transform: [{ rotateY: "180deg" }]
+          }}
+        >
+          <HalfCircle>{fg()}</HalfCircle>
         </View>
         <Animated.View
           style={{
             opacity: topOpacity,
-            transform: transformOrigin(0, RADIUS / 2, { rotate: rotateTop })
+            transform: [
+              ...transformOrigin(0, RADIUS / 2, { rotate: rotateTop })
+            ]
           }}
         >
           <HalfCircle>{bg}</HalfCircle>
@@ -56,11 +62,13 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
       </Animated.View>
       <Animated.View>
         <View style={StyleSheet.absoluteFill}>
-          <HalfCircle flipped>{fg}</HalfCircle>
+          <HalfCircle flipped>{fg(true)}</HalfCircle>
         </View>
         <Animated.View
           style={{
-            transform: transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom })
+            transform: [
+              ...transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom })
+            ]
           }}
         >
           <HalfCircle flipped>{bg}</HalfCircle>

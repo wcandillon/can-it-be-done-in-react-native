@@ -23,10 +23,10 @@ export default () => {
     <View style={styles.container}>
       <CircularProgress
         progress={withTransition(progress, { duration: 10000 })}
-        fg={(
+        fg={(flipped?: boolean) => (
           <AngularGradient
             size={RADIUS * 2}
-            colors={[COLOR_START, COLOR_END]}
+            colors={flipped ? ["blue", "red"] : ["red", "blue"]}
           />
         )}
         bg={<View style={{ flex: 1, backgroundColor: COLOR_BG }} />}
