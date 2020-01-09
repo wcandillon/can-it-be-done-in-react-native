@@ -23,9 +23,10 @@ interface RingProps {
 }
 
 export default ({ ring, theta }: RingProps) => {
-  const size = PixelRatio.roundToNearestPixel(ring.size);
   const radius = PixelRatio.roundToNearestPixel(ring.size / 2);
-  const fg = <AngularGradient colors={[ring.end, ring.start]} {...{ size }} />;
+  const fg = (
+    <AngularGradient colors={[ring.end, ring.start]} size={ring.size} />
+  );
   const bg = <View style={{ backgroundColor: ring.bg, flex: 1 }} />;
   const rotate = max(0, sub(theta, TAU));
   const opacity = lessThan(theta, TAU);
