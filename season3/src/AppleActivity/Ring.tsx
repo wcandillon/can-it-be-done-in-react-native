@@ -1,17 +1,12 @@
 import React from "react";
-import Animated, {
-  Extrapolate,
-  interpolate,
-  lessThan,
-  max,
-  min,
-  sub
-} from "react-native-reanimated";
+import Animated, { lessThan, max, min, sub } from "react-native-reanimated";
 import { StyleSheet, View } from "react-native";
 import { interpolateColor } from "react-native-redash";
+
 import { Ring, STROKE_WIDTH, TAU } from "./Constants";
 import CircularProgress from "./CircularProgress";
 import AngularGradient from "./AngularGradient";
+import Shadow from "./Shadow";
 
 const styles = StyleSheet.create({
   knob: {
@@ -54,6 +49,22 @@ export default ({ ring, theta }: RingProps) => {
           }
         ]}
       />
+      <Animated.View
+        style={[
+          styles.knob,
+          {
+            top: radius - STROKE_WIDTH / 2,
+            transform: [
+              { translateX: radius - STROKE_WIDTH / 2 },
+              { rotate: theta },
+              { translateX: -(radius - STROKE_WIDTH / 2) },
+              { translateY: -4 }
+            ]
+          }
+        ]}
+      >
+        <Shadow />
+      </Animated.View>
       <Animated.View
         style={[
           styles.knob,
