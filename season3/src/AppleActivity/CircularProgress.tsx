@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
@@ -13,8 +13,8 @@ import HalfCircle from "./HalfCircle";
 interface CircularProgressProps {
   theta: Animated.Node<number>;
   radius: number;
-  bg: string;
-  fg: string;
+  bg: ReactNode;
+  fg: ReactNode;
 }
 
 export default ({ theta, radius, fg, bg }: CircularProgressProps) => {
@@ -38,7 +38,7 @@ export default ({ theta, radius, fg, bg }: CircularProgressProps) => {
     <>
       <Animated.View style={{ zIndex: zIndexTop }}>
         <View style={StyleSheet.absoluteFill}>
-          <HalfCircle color={fg} {...{ radius }} />
+          <HalfCircle {...{ radius }}>{fg}</HalfCircle>
         </View>
         <Animated.View
           style={{
@@ -48,7 +48,7 @@ export default ({ theta, radius, fg, bg }: CircularProgressProps) => {
             ]
           }}
         >
-          <HalfCircle color={bg} {...{ radius }} />
+          <HalfCircle {...{ radius }}>{bg}</HalfCircle>
         </Animated.View>
       </Animated.View>
       <View
@@ -57,7 +57,7 @@ export default ({ theta, radius, fg, bg }: CircularProgressProps) => {
         }}
       >
         <View style={StyleSheet.absoluteFillObject}>
-          <HalfCircle color={fg} {...{ radius }} />
+          <HalfCircle {...{ radius }}>{fg}</HalfCircle>
         </View>
         <Animated.View
           style={{
@@ -69,7 +69,7 @@ export default ({ theta, radius, fg, bg }: CircularProgressProps) => {
             ]
           }}
         >
-          <HalfCircle color={bg} {...{ radius }} />
+          <HalfCircle {...{ radius }}>{bg}</HalfCircle>
         </Animated.View>
       </View>
     </>
