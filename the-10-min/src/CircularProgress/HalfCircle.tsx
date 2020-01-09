@@ -4,10 +4,10 @@ import { COLOR_BG, RADIUS } from "./Constants";
 
 interface HalfCircleProps {
   flipped?: boolean;
-  children: ReactNode;
+  color: string;
 }
 
-export default ({ flipped, children }: HalfCircleProps) => {
+export default ({ flipped, color }: HalfCircleProps) => {
   return (
     <View
       style={{
@@ -23,14 +23,9 @@ export default ({ flipped, children }: HalfCircleProps) => {
           height: RADIUS * 2,
           borderRadius: RADIUS,
           overflow: "hidden",
-          transform: [
-            { rotate: flipped ? "180deg" : "0deg" },
-            { rotateY: flipped ? "180deg" : "0deg" }
-          ]
+          backgroundColor: color
         }}
-      >
-        {children}
-      </View>
+      />
     </View>
   );
 };

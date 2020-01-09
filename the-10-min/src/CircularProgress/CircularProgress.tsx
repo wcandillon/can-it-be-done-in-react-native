@@ -16,8 +16,8 @@ import HalfCircle from "./HalfCircle";
 
 interface CircularProgressProps {
   progress: Animated.Node<number>;
-  bg: ReactNode;
-  fg: ReactNode;
+  bg: string;
+  fg: string;
 }
 
 export default ({ progress, bg, fg }: CircularProgressProps) => {
@@ -41,13 +41,8 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
   return (
     <>
       <Animated.View style={{ zIndex: zIndexTop }}>
-        <View
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            transform: [{ rotateY: "180deg" }]
-          }}
-        >
-          <HalfCircle>{fg}</HalfCircle>
+        <View style={StyleSheet.absoluteFill}>
+          <HalfCircle color={fg} />
         </View>
         <Animated.View
           style={{
@@ -57,27 +52,29 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
             ]
           }}
         >
-          <HalfCircle>{bg}</HalfCircle>
+          <HalfCircle color={bg} />
         </Animated.View>
       </Animated.View>
-      <Animated.View>
+      <View>
         <View
           style={{
-            ...StyleSheet.absoluteFillObject
+            ...StyleSheet.absoluteFillObject,
+            transform: [{ rotateX: "180deg" }]
           }}
         >
-          <HalfCircle flipped>{fg}</HalfCircle>
+          <HalfCircle color={fg} />
         </View>
         <Animated.View
           style={{
             transform: [
-              ...transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom })
+              ...transformOrigin(0, -RADIUS / 2, { rotate: rotateBottom }),
+              { rotateX: "180deg" }
             ]
           }}
         >
-          <HalfCircle flipped>{bg}</HalfCircle>
+          <HalfCircle color={bg} />
         </Animated.View>
-      </Animated.View>
+      </View>
     </>
   );
 };
