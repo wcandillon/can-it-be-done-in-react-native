@@ -13,8 +13,7 @@ export default ({ flipped, children, radius }: HalfCircleProps) => {
       style={{
         width: radius * 2,
         height: radius,
-        overflow: "hidden",
-        transform: [{ rotate: flipped ? "180deg" : "0deg" }]
+        overflow: "hidden"
       }}
     >
       <View
