@@ -1,6 +1,6 @@
 import React from "react";
 import Animated, { lessThan, max, min, sub } from "react-native-reanimated";
-import { StyleSheet, View } from "react-native";
+import { PixelRatio, StyleSheet, View } from "react-native";
 import { interpolateColor } from "react-native-redash";
 
 import { Ring, STROKE_WIDTH, TAU } from "./Constants";
@@ -23,10 +23,9 @@ interface RingProps {
 }
 
 export default ({ ring, theta }: RingProps) => {
-  const radius = ring.size / 2;
-  const fg = (
-    <AngularGradient size={ring.size} colors={[ring.end, ring.start]} />
-  );
+  const size = PixelRatio.roundToNearestPixel(ring.size);
+  const radius = PixelRatio.roundToNearestPixel(ring.size / 2);
+  const fg = <AngularGradient colors={[ring.end, ring.start]} {...{ size }} />;
   const bg = <View style={{ backgroundColor: ring.bg, flex: 1 }} />;
   const rotate = max(0, sub(theta, TAU));
   const opacity = lessThan(theta, TAU);
