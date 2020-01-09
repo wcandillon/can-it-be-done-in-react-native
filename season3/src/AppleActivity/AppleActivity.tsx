@@ -6,11 +6,12 @@ import { timing } from "react-native-redash";
 import { R1, R2, R3, STROKE_WIDTH } from "./Constants";
 import Ring from "./Ring";
 
+const backgroundColor = "#000001";
 const fgRadius = R1.size / 2 - STROKE_WIDTH;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000001"
+    backgroundColor
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   fg: {
-    backgroundColor: "#000001",
+    backgroundColor,
     borderRadius: fgRadius,
     width: fgRadius * 2,
     height: fgRadius * 2

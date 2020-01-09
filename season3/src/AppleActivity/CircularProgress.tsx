@@ -3,21 +3,21 @@ import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
-  lessOrEq,
-  multiply
+  lessOrEq
 } from "react-native-reanimated";
 import { transformOrigin } from "react-native-redash";
 
-import { PI, Ring, TAU } from "./Constants";
+import { PI, TAU } from "./Constants";
 import HalfCircle from "./HalfCircle";
 
 interface CircularProgressProps {
   theta: Animated.Node<number>;
-  ring: Ring;
+  radius: number;
+  bg: string;
+  fg: string;
 }
 
-export default ({ theta, ring }: CircularProgressProps) => {
-  const radius = ring.size / 2;
+export default ({ theta, radius, fg, bg }: CircularProgressProps) => {
   const topOpacity = lessOrEq(theta, PI);
   const rotateTop = interpolate(theta, {
     inputRange: [0, PI],
@@ -38,7 +38,7 @@ export default ({ theta, ring }: CircularProgressProps) => {
     <>
       <Animated.View style={{ zIndex: zIndexTop }}>
         <View style={StyleSheet.absoluteFill}>
-          <HalfCircle color={ring.start} {...{ radius }} />
+          <HalfCircle color={fg} {...{ radius }} />
         </View>
         <Animated.View
           style={{
@@ -48,7 +48,7 @@ export default ({ theta, ring }: CircularProgressProps) => {
             ]
           }}
         >
-          <HalfCircle color={ring.bg} {...{ radius }} />
+          <HalfCircle color={bg} {...{ radius }} />
         </Animated.View>
       </Animated.View>
       <View
@@ -57,7 +57,7 @@ export default ({ theta, ring }: CircularProgressProps) => {
         }}
       >
         <View style={StyleSheet.absoluteFillObject}>
-          <HalfCircle color={ring.start} {...{ radius }} />
+          <HalfCircle color={fg} {...{ radius }} />
         </View>
         <Animated.View
           style={{
@@ -69,7 +69,7 @@ export default ({ theta, ring }: CircularProgressProps) => {
             ]
           }}
         >
-          <HalfCircle color={ring.bg} {...{ radius }} />
+          <HalfCircle color={bg} {...{ radius }} />
         </Animated.View>
       </View>
     </>
