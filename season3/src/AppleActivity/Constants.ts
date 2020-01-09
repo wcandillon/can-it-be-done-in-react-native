@@ -15,7 +15,7 @@ export interface Ring {
   start: Color;
   end: Color;
   bg: Color;
-  value: number;
+  theta: number;
   size: number;
 }
 
@@ -23,7 +23,7 @@ export const R1: Ring = {
   start: "rgb(0, 217, 253)",
   end: "rgb(0, 255, 169)",
   bg: "rgb(0, 72, 77)",
-  value: 2.3 * TAU,
+  theta: 2.3 * TAU,
   size: SIZE - STROKE_WIDTH * 4
 };
 
@@ -31,7 +31,7 @@ export const R2: Ring = {
   start: "rgb(153, 255, 0)",
   end: "rgb(216, 255, 1)",
   bg: "rgb(47, 78, 0)",
-  value: 0.6 * TAU,
+  theta: 0.6 * TAU,
   size: SIZE - STROKE_WIDTH * 2
 };
 
@@ -39,6 +39,6 @@ export const R3: Ring = {
   start: "rgb(249, 18, 78)",
   end: "rgb(249, 56, 133)",
   bg: "rgb(50, 1, 14)",
-  value: 1.7 * TAU,
+  theta: 1.7 * TAU,
   size: SIZE
 };

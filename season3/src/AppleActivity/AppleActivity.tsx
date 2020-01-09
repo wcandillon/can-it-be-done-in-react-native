@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Value, set, useCode } from "react-native-reanimated";
+import { Value, multiply, set, useCode } from "react-native-reanimated";
 
 import { timing } from "react-native-redash";
 import { R1, R2, R3 } from "./Constants";
@@ -21,12 +21,12 @@ const rings = [R3, R2, R1];
 
 export default () => {
   const progress = new Value(0);
-  useCode(() => set(progress, timing({ duration: 2000 })), [progress]);
+  useCode(() => set(progress, timing({ duration: 3000 })), [progress]);
   return (
     <View style={styles.container}>
       {rings.map((ring, i) => (
         <View key={i} style={styles.overlay}>
-          <Ring {...{ ring, progress }} />
+          <Ring theta={multiply(ring.theta, progress)} {...{ ring }} />
         </View>
       ))}
     </View>
