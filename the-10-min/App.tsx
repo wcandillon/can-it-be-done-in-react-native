@@ -8,6 +8,7 @@ import Examples, { examples } from "./src/Examples";
 import AngularGradient from "./src/AngularGradient";
 import Accordion from "./src/Accordion";
 import ShaderAndMask from "./src/ShaderAndMask";
+import CircularProgress from "./src/CircularProgress";
 
 const assets: number[] = [...examples.map(example => example.source)];
 const fonts = {
@@ -19,6 +20,12 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      CircularProgress: {
+        screen: CircularProgress,
+        navigationOptions: {
+          title: "Circular Progress"
+        }
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {
