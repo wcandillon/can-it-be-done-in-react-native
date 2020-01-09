@@ -5,6 +5,7 @@ import { Value, multiply, set, useCode } from "react-native-reanimated";
 import { timing } from "react-native-redash";
 import { R1, R2, R3, STROKE_WIDTH } from "./Constants";
 import Ring from "./Ring";
+import Stickers from "./Stickers";
 
 const backgroundColor = "#000001";
 const fgRadius = R1.size / 2 - STROKE_WIDTH;
@@ -16,7 +17,8 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    transform: [{ rotate: "-270deg" }]
   },
   fg: {
     backgroundColor,
@@ -40,6 +42,7 @@ export default () => {
       <View style={styles.overlay}>
         <View style={styles.fg} />
       </View>
+      <Stickers />
     </View>
   );
 };
