@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { View } from "react-native";
-import { COLOR_BG, RADIUS } from "./Constants";
+import { RADIUS } from "./Constants";
 
 interface HalfCircleProps {
   flipped?: boolean;

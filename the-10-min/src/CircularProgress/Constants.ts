@@ -1,10 +1,11 @@
 import { Dimensions } from "react-native";
+import { StyleGuide } from "../components";
 
 const { width } = Dimensions.get("window");
 
 export const { PI } = Math;
 export const TAU = 2 * PI;
-export const RADIUS = width / 2;
-export const COLOR_START = "blue"; // "rgb(249, 18, 78)";
-export const COLOR_END = "red"; // "rgb(249, 56, 133)";
-export const COLOR_BG = "rgb(50, 1, 14)";
+export const RADIUS = width / 2 - 16;
+export const STROKE_WIDTH = 100;
+export const COLOR_FG = StyleGuide.palette.primary;
+export const COLOR_BG = "white";

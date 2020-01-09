@@ -4,14 +4,16 @@ import { withTransition } from "react-native-redash";
 import { StyleSheet, View } from "react-native";
 
 import CircularProgress from "./CircularProgress";
-import { COLOR_BG, COLOR_START } from "./Constants";
+import { COLOR_BG, COLOR_FG, RADIUS, STROKE_WIDTH } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#000001"
+    alignItems: "center"
   }
 });
 
@@ -20,11 +22,23 @@ export default () => {
   useCode(() => set(progress, 2.5), [progress]);
   return (
     <View style={styles.container}>
-      <CircularProgress
-        progress={withTransition(progress, { duration: 10000 })}
-        bg={COLOR_BG}
-        fg={COLOR_START}
-      />
+      <View style={styles.overlay}>
+        <CircularProgress
+          progress={withTransition(progress, { duration: 10000 })}
+          bg={COLOR_BG}
+          fg={COLOR_FG}
+        />
+      </View>
+      <View style={styles.overlay}>
+        <View
+          style={{
+            backgroundColor: COLOR_BG,
+            borderRadius: RADIUS,
+            width: RADIUS * 2 - STROKE_WIDTH,
+            height: RADIUS * 2 - STROKE_WIDTH
+          }}
+        />
+      </View>
     </View>
   );
 };

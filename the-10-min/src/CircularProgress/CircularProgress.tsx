@@ -35,7 +35,7 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
   });
   const zIndexTop = interpolate(theta, {
     inputRange: [PI, PI, TAU],
-    outputRange: [0, 100, 100],
+    outputRange: [0, 1, 1],
     extrapolate: Extrapolate.CLAMP
   });
   return (
