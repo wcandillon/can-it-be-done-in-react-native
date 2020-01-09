@@ -2,106 +2,77 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
-  add,
   interpolate,
-  modulo,
-  multiply,
-  sub
+  lessOrEq,
+  multiply
 } from "react-native-reanimated";
+import { transformOrigin } from "react-native-redash";
 
-import { bInterpolateColor, polar2Canvas } from "react-native-redash";
-import { CX, CY, PI, Ring, SIZE, STROKE_WIDTH, TAU } from "./Constants";
-import Circle from "./Circle";
-import AngularGradient from "./AngularGradient2";
-import Courtain from "./Courtain";
-import Shadow from "./Shadow";
+import { PI, Ring, TAU } from "./Constants";
+import HalfCircle from "./HalfCircle";
 
-const styles = StyleSheet.create({
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});
-const center = {
-  x: CX,
-  y: CY
-};
-const inputRange = [0, PI / 2, PI, PI + PI / 2, 2 * PI];
-const so = 4;
-
-interface RingProps {
-  ring: Ring;
+interface CircularProgressProps {
   progress: Animated.Node<number>;
+  ring: Ring;
 }
 
-export default ({ ring, progress }: RingProps) => {
-  const theta = interpolate(progress, {
-    inputRange: [0, 1],
-    outputRange: [0, ring.value]
-  });
-  const revolution = interpolate(theta, {
-    inputRange: [0, TAU],
-    outputRange: [0, 1],
+export default ({ progress, ring }: CircularProgressProps) => {
+  const radius = ring.size / 2;
+  const theta = multiply(progress, TAU);
+  const topOpacity = lessOrEq(theta, PI);
+  const rotateTop = interpolate(theta, {
+    inputRange: [0, PI],
+    outputRange: [0, PI],
     extrapolate: Extrapolate.CLAMP
   });
-  const rotate = interpolate(theta, {
-    inputRange: [TAU, 2 * TAU],
-    outputRange: [0, TAU],
-    extrapolateLeft: Extrapolate.CLAMP
+  const rotateBottom = interpolate(theta, {
+    inputRange: [PI, TAU],
+    outputRange: [0, PI],
+    extrapolate: Extrapolate.CLAMP
   });
-  const r = (ring.size - STROKE_WIDTH) / 2;
-  const { x, y } = polar2Canvas(
-    { theta: multiply(-1, theta), radius: r },
-    center
-  );
-  const translateX = sub(x, STROKE_WIDTH / 2);
-  const translateY = sub(y, STROKE_WIDTH / 2);
-  const backgroundColor = bInterpolateColor(revolution, ring.start, ring.end);
-  const shadowOffsetX = interpolate(modulo(theta, TAU), {
-    inputRange,
-    outputRange: [0, so, 0, -so, 0].reverse()
-  });
-  const shadowOffsetY = interpolate(modulo(theta, TAU), {
-    inputRange,
-    outputRange: [so, 0, -so, 0, so].reverse()
+  const zIndexTop = interpolate(theta, {
+    inputRange: [PI, PI, TAU],
+    outputRange: [0, 1, 1],
+    extrapolate: Extrapolate.CLAMP
   });
   return (
     <>
-      <Animated.View style={[styles.overlay, { transform: [{ rotate }] }]}>
-        <AngularGradient {...{ ring }} />
-      </Animated.View>
-      <View style={styles.overlay}>
-        <Circle radius={ring.size / 2 - STROKE_WIDTH} backgroundColor="black" />
-      </View>
-      <View style={styles.overlay}>
-        <Courtain {...{ ring, revolution }} />
-      </View>
-      <Animated.View style={styles.overlay}>
-        <View style={{ width: SIZE, height: SIZE }}>
-          <Animated.View
-            style={{
-              transform: [
-                { translateX: add(translateX, shadowOffsetX) },
-                { translateY: add(translateY, shadowOffsetY) }
-              ]
-            }}
-          >
-            <Shadow />
-          </Animated.View>
+      <Animated.View style={{ zIndex: zIndexTop }}>
+        <View style={StyleSheet.absoluteFill}>
+          <HalfCircle color={ring.start} {...{ radius }} />
         </View>
+        <Animated.View
+          style={{
+            opacity: topOpacity,
+            transform: [
+              ...transformOrigin({ x: 0, y: radius / 2 }, { rotate: rotateTop })
+            ]
+          }}
+        >
+          <HalfCircle color={ring.bg} {...{ radius }} />
+        </Animated.View>
       </Animated.View>
-      <Animated.View style={styles.overlay}>
-        <View style={{ width: SIZE, height: SIZE }}>
-          <Animated.View
-            style={{
-              transform: [{ translateX }, { translateY }]
-            }}
-          >
-            <Circle radius={STROKE_WIDTH / 2} {...{ backgroundColor }} />
-          </Animated.View>
+      <View
+        style={{
+          transform: [{ rotateX: "180deg" }, { rotateY: "180deg" }]
+        }}
+      >
+        <View style={StyleSheet.absoluteFillObject}>
+          <HalfCircle color={ring.start} {...{ radius }} />
         </View>
-      </Animated.View>
+        <Animated.View
+          style={{
+            transform: [
+              ...transformOrigin(
+                { x: 0, y: radius / 2 },
+                { rotate: rotateBottom }
+              )
+            ]
+          }}
+        >
+          <HalfCircle color={ring.bg} {...{ radius }} />
+        </Animated.View>
+      </View>
     </>
   );
 };
