@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { View } from "react-native";
 
 interface HalfCircleProps {
@@ -21,7 +21,11 @@ export default ({ flipped, children, radius }: HalfCircleProps) => {
           width: radius * 2,
           height: radius * 2,
           borderRadius: radius,
-          overflow: "hidden"
+          overflow: "hidden",
+          transform: [
+            { rotateX: flipped ? "180deg" : "0deg" },
+            { rotateY: !flipped ? "180deg" : "0deg" }
+          ]
         }}
       >
         {children}

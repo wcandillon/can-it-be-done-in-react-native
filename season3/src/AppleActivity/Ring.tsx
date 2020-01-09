@@ -12,7 +12,7 @@ interface RingProps {
 
 export default ({ ring, theta }: RingProps) => {
   const fg = (
-    <AngularGradient size={ring.size} colors={[ring.start, ring.end]} />
+    <AngularGradient size={ring.size} colors={[ring.end, ring.start]} />
   );
   const bg = <View style={{ backgroundColor: ring.bg, flex: 1 }} />;
   return (

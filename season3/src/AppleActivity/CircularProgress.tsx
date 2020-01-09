@@ -57,7 +57,9 @@ export default ({ theta, radius, fg, bg }: CircularProgressProps) => {
         }}
       >
         <View style={StyleSheet.absoluteFillObject}>
-          <HalfCircle {...{ radius }}>{fg}</HalfCircle>
+          <HalfCircle {...{ radius }} flipped>
+            {fg}
+          </HalfCircle>
         </View>
         <Animated.View
           style={{
@@ -69,7 +71,9 @@ export default ({ theta, radius, fg, bg }: CircularProgressProps) => {
             ]
           }}
         >
-          <HalfCircle {...{ radius }}>{bg}</HalfCircle>
+          <HalfCircle {...{ radius }} flipped>
+            {bg}
+          </HalfCircle>
         </Animated.View>
       </View>
     </>
