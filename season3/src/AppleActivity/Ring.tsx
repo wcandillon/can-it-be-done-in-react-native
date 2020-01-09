@@ -2,7 +2,9 @@ import React from "react";
 import Animated, {
   Extrapolate,
   interpolate,
-  min
+  max,
+  min,
+  sub
 } from "react-native-reanimated";
 import { View } from "react-native";
 import { Ring, TAU } from "./Constants";
@@ -19,11 +21,7 @@ export default ({ ring, theta }: RingProps) => {
     <AngularGradient size={ring.size} colors={[ring.end, ring.start]} />
   );
   const bg = <View style={{ backgroundColor: ring.bg, flex: 1 }} />;
-  const rotate = interpolate(theta, {
-    inputRange: [TAU, 2 * TAU],
-    outputRange: [0, 2 * TAU],
-    extrapolateLeft: Extrapolate.CLAMP
-  });
+  const rotate = max(0, sub(theta, TAU));
   return (
     <Animated.View style={{ transform: [{ rotate }] }}>
       <CircularProgress
