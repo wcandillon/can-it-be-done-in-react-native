@@ -3,9 +3,10 @@ import { StyleSheet, View } from "react-native";
 import { Value, multiply, set, useCode } from "react-native-reanimated";
 
 import { timing } from "react-native-redash";
-import { R1, R2, R3 } from "./Constants";
+import { R1, R2, R3, STROKE_WIDTH } from "./Constants";
 import Ring from "./Ring";
 
+const fgRadius = R1.size / 2 - STROKE_WIDTH;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -15,6 +16,12 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center"
+  },
+  fg: {
+    backgroundColor: "#000001",
+    borderRadius: fgRadius,
+    width: fgRadius * 2,
+    height: fgRadius * 2
   }
 });
 const rings = [R3, R2, R1];
@@ -29,6 +36,9 @@ export default () => {
           <Ring theta={multiply(ring.theta, progress)} {...{ ring }} />
         </View>
       ))}
+      <View style={styles.overlay}>
+        <View style={styles.fg} />
+      </View>
     </View>
   );
 };
