@@ -30,14 +30,9 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
     outputRange: [0, PI],
     extrapolate: Extrapolate.CLAMP
   });
-  const zIndexTop = interpolate(theta, {
-    inputRange: [PI, PI, TAU],
-    outputRange: [0, 1, 1],
-    extrapolate: Extrapolate.CLAMP
-  });
   return (
     <>
-      <Animated.View style={{ zIndex: zIndexTop }}>
+      <Animated.View style={{ zIndex: 1 }}>
         <View style={StyleSheet.absoluteFill}>
           <HalfCircle color={fg} />
         </View>
