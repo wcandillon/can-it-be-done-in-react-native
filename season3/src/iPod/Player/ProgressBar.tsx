@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Sound } from "expo-av/build/Audio";
-import { ReText, useValues, withTransition } from "react-native-redash";
+import { ReText, withTransition } from "react-native-redash";
 import Animated, { Value, concat, multiply } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 

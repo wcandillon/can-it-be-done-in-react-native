@@ -39,6 +39,11 @@ export const episodes = [
     id: "iPod",
     name: "iPod Classic",
     icon: require("../../assets/icons/ipod.png")
+  },
+  {
+    id: "AppleActivity",
+    name: "Activity Rings",
+    icon: require("../../assets/icons/apple-activity.png")
   }
 ];
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
@@ -9,16 +9,16 @@ import Animated, {
 
 import { transformOrigin } from "react-native-redash";
 import HalfCircle from "./HalfCircle";
-import { PI, RADIUS } from "./Constants";
+import { PI } from "./Constants";
 
 interface CircularProgressProps {
-  progress: Animated.Node<number>;
-  bg: string;
-  fg: string;
+  theta: Animated.Node<number>;
+  bg: ReactNode;
+  fg: ReactNode;
+  radius: number;
 }
 
-export default ({ progress, bg, fg }: CircularProgressProps) => {
-  const theta = multiply(progress, 2 * PI);
+export default ({ theta, bg, fg, radius }: CircularProgressProps) => {
   const opacity = lessThan(theta, PI);
   const rotate = interpolate(theta, {
     inputRange: [PI, 2 * PI],
@@ -28,26 +28,31 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
   return (
     <>
       <View style={{ zIndex: 1 }}>
-        <HalfCircle color={fg} />
+        <HalfCircle {...{ radius }}>
+          <View style={{ transform: [{ rotate: "180deg" }] }}>{fg}</View>
+        </HalfCircle>
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
-            transform: transformOrigin(0, RADIUS / 2, { rotate: theta }),
+            transform: transformOrigin(
+              { x: 0, y: radius / 2 },
+              { rotate: theta }
+            ),
             opacity
           }}
         >
-          <HalfCircle color={bg} />
+          <HalfCircle {...{ radius }}>{bg}</HalfCircle>
         </Animated.View>
       </View>
       <View style={{ transform: [{ rotate: "180deg" }] }}>
-        <HalfCircle color={fg} />
+        <HalfCircle {...{ radius }}>{fg}</HalfCircle>
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
-            transform: transformOrigin(0, RADIUS / 2, { rotate })
+            transform: transformOrigin({ x: 0, y: radius / 2 }, { rotate })
           }}
         >
-          <HalfCircle color={bg} />
+          <HalfCircle {...{ radius }}>{bg}</HalfCircle>
         </Animated.View>
       </View>
     </>

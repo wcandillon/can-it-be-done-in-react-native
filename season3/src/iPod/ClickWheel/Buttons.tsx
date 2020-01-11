@@ -6,8 +6,6 @@ import Animated, {
   call,
   cond,
   eq,
-  greaterOrEq,
-  lessOrEq,
   set,
   useCode
 } from "react-native-reanimated";
