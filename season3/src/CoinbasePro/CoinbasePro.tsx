@@ -1,23 +1,15 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import Animated, {
-  add,
-  call,
-  eq,
-  modulo,
-  onChange,
-  or,
-  sub,
-  useCode
-} from "react-native-reanimated";
+import Animated, { add, eq, modulo, sub } from "react-native-reanimated";
 import { onGestureEvent, useValues } from "react-native-redash";
-import * as Haptics from "expo-haptics";
 
 import data from "./data.json";
 import Chart, { size } from "./Chart";
 import Header from "./Header";
 import Line from "./Line";
+import Label from "./Label";
+import { Candle } from "./Candle.js";
 
 const candles = data.slice(0, 20);
 const styles = StyleSheet.create({
@@ -26,7 +18,11 @@ const styles = StyleSheet.create({
     backgroundColor: "black"
   }
 });
-
+const getDomain = (rows: Candle[]) => {
+  const values = rows.map(({ high, low }) => [high, low]).flat();
+  return [Math.min(...values), Math.max(...values)];
+};
+const domain = getDomain(candles);
 export default () => {
   const [x, y, state] = useValues([0, 0, State.UNDETERMINED], []);
   const gestureHandler = onGestureEvent({
@@ -37,21 +33,14 @@ export default () => {
   const caliber = size / candles.length;
   const translateX = add(sub(x, modulo(x, caliber)), caliber / 2);
   const opacity = eq(state, State.ACTIVE);
-  useCode(
-    () =>
-      onChange(
-        translateX,
-        call([], () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light))
-      ),
-    [translateX]
-  );
   return (
     <View style={styles.container}>
-      <Header />
+      <Header {...{ candles, translateX, caliber }} />
       <View>
-        <Chart {...{ candles }} />
+        <Chart {...{ candles, domain }} />
         <PanGestureHandler minDist={0} {...gestureHandler}>
           <Animated.View style={StyleSheet.absoluteFill}>
+            <Label {...{ y, size, domain }} />
             <Animated.View
               style={{
                 transform: [{ translateY: y }],

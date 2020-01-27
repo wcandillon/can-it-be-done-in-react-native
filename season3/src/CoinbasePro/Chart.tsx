@@ -9,16 +9,11 @@ export const { width: size } = Dimensions.get("window");
 
 interface ChartProps {
   candles: CandleModel[];
+  domain: [number, number];
 }
 
-const getDomain = (candles: CandleModel[]) => {
-  const values = candles.map(({ high, low }) => [high, low]).flat();
-  return [Math.min(...values), Math.max(...values)];
-};
-
-export default ({ candles }: ChartProps) => {
+export default ({ candles, domain }: ChartProps) => {
   const width = size / candles.length;
-  const domain = getDomain(candles);
   const scaleY = scaleLinear()
     .domain(domain)
     .range([size, 0]);
