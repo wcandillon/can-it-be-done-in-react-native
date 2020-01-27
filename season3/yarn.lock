@@ -3357,6 +3357,11 @@ expo-gl@~8.0.0:
     expo-gl-cpp "~8.0.0"
     prop-types "^15.7.2"
 
+expo-haptics@~8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-8.0.0.tgz#e52bfa8f294b2a8796e229f9b1cb2f35f6485c2d"
+  integrity sha512-HscO0Mg4N7pAQEOU/GWbriNIUmzeToldnRD7MTW1KsL/JYpxeaXPuB0NvonZ/IQ3MkgF5fP0okS/tZIbvXz9Lw==
+
 expo-keep-awake@~8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-8.0.0.tgz#f9200a876a5db86e3f0aec8843428a918cdc08d6"
