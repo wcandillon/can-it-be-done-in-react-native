@@ -5,7 +5,7 @@ import { scaleLinear } from "d3-scale";
 
 import Candle, { Candle as CandleModel } from "./Candle";
 
-const { width: size } = Dimensions.get("window");
+export const { width: size } = Dimensions.get("window");
 
 interface ChartProps {
   candles: CandleModel[];

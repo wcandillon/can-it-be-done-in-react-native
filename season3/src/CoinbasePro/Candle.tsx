@@ -28,8 +28,7 @@ export default ({ candle, index, width, scaleY, scaleBody }: CandleProps) => {
   const fill = close > open ? "#4AFA9A" : "#E33F64";
   const x = index * width;
   const max = Math.max(open, close);
-  const min = Math.min(close, open);
-  const body = max - min;
+  const min = Math.min(open, close);
   return (
     <>
       <Line
@@ -44,7 +43,7 @@ export default ({ candle, index, width, scaleY, scaleBody }: CandleProps) => {
         x={x + MARGIN}
         y={scaleY(max)}
         width={width - MARGIN * 2}
-        height={scaleBody(body)}
+        height={scaleBody(max - min)}
         {...{ fill }}
       />
     </>
