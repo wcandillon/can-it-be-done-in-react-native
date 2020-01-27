@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 export default () => {
   return (
     <View style={styles.container}>
-      <Chart candles={data.candles.slice(0, 20)} />
+      <Chart candles={data.slice(0, 30)} />
     </View>
   );
 };

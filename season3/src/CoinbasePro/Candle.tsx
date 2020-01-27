@@ -4,26 +4,32 @@ import { ScaleLinear } from "d3-scale";
 
 import { Line, Rect } from "react-native-svg";
 
-export const TIMESTAMP = 0;
-export const OPEN = 1;
-export const HIGH = 2;
-export const LOW = 3;
-export const CLOSE = 4;
-
 const MARGIN = 2;
 
+export interface Candle {
+  date: string;
+  day: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
 interface CandleProps {
-  candle: number[];
+  candle: Candle;
   index: number;
   width: number;
   scaleY: ScaleLinear<number, number>;
+  scaleBody: ScaleLinear<number, number>;
 }
 
-export default ({ candle, index, width, scaleY }: CandleProps) => {
-  const [timestamp, open, high, low, close] = candle;
+export default ({ candle, index, width, scaleY, scaleBody }: CandleProps) => {
+  const { close, open, high, low } = candle;
   const fill = close > open ? "#4AFA9A" : "#E33F64";
   const x = index * width;
-  const body = Math.max(open, close) - Math.min(open, close);
+  const max = Math.max(open, close);
+  const min = Math.min(close, open);
+  const body = max - min;
   return (
     <>
       <Line
@@ -36,9 +42,9 @@ export default ({ candle, index, width, scaleY }: CandleProps) => {
       />
       <Rect
         x={x + MARGIN}
-        y={scaleY(close > open ? close : open)}
+        y={scaleY(max)}
         width={width - MARGIN * 2}
-        height={scaleY(body)}
+        height={scaleBody(body)}
         {...{ fill }}
       />
     </>
