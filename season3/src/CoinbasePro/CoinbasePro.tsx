@@ -47,7 +47,6 @@ export default () => {
         <Chart {...{ candles, domain }} />
         <PanGestureHandler minDist={0} {...gestureHandler}>
           <Animated.View style={StyleSheet.absoluteFill}>
-            <Label y={translateY} {...{ size, domain, opacity }} />
             <Animated.View
               style={{
                 transform: [{ translateY }],
@@ -66,6 +65,7 @@ export default () => {
             >
               <Line x={0} y={size} />
             </Animated.View>
+            <Label y={translateY} {...{ size, domain, opacity }} />
           </Animated.View>
         </PanGestureHandler>
       </View>

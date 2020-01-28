@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Animated, {
   call,
   divide,
@@ -10,8 +10,36 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
+import moment from "moment";
 
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Candle } from "./Candle";
+import Row from "./Row";
+
+const styles = StyleSheet.create({
+  table: {
+    flexDirection: "row",
+    padding: 16
+  },
+  date: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "500"
+  },
+  column: {
+    flex: 1
+  },
+  separator: {
+    width: 16
+  }
+});
+
+const formatValue = (value: number) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  }).format(value);
 
 interface HeaderProps {
   translateX: Animated.Node<number>;
@@ -20,7 +48,9 @@ interface HeaderProps {
 }
 
 export default ({ translateX, caliber, candles }: HeaderProps) => {
-  const [candle, setCandle] = useState(candles[0]);
+  const [{ date, open, close, high, low, volume }, setCandle] = useState(
+    candles[0]
+  );
   useCode(
     () =>
       onChange(
@@ -32,5 +62,24 @@ export default ({ translateX, caliber, candles }: HeaderProps) => {
       ),
     [caliber, candles, translateX]
   );
-  return <View style={{ height: 200 }} />;
+  return (
+    <SafeAreaView>
+      <View style={styles.table}>
+        <View style={styles.column}>
+          <Row label="Open" value={formatValue(open)} />
+          <Row label="Close" value={formatValue(close)} />
+          <Row label="Volume" value={volume} />
+        </View>
+        <View style={styles.separator} />
+        <View style={styles.column}>
+          <Row label="High" value={formatValue(high)} />
+          <Row label="Low" value={formatValue(low)} />
+          <Row label="Change" value={volume} />
+        </View>
+      </View>
+      <Text style={styles.date}>
+        {moment(date).format("h:mm MMM Do, YYYY")}
+      </Text>
+    </SafeAreaView>
+  );
 };

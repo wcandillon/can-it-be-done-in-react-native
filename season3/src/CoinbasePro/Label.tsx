@@ -1,10 +1,8 @@
 import React from "react";
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, {
-  block,
   concat,
   cond,
-  debug,
   eq,
   floor,
   interpolate,
@@ -26,6 +24,17 @@ const styles = StyleSheet.create({
   }
 });
 
+const format = (value: Animated.Node<number>) => {
+  const int = floor(value);
+  const dec = floor(multiply(sub(value, int), 100));
+  const formattedDec = cond(
+    eq(dec, 0),
+    "00",
+    cond(lessThan(dec, 10), concat("0", dec), concat(dec))
+  );
+  return concat(int, ".", formattedDec, " $");
+};
+
 interface LabelProps {
   domain: [number, number];
   size: number;
@@ -38,20 +47,12 @@ export default ({ domain: [min, max], size, y, opacity }: LabelProps) => {
     inputRange: [0, size],
     outputRange: [min, max]
   });
-  const int = floor(value);
-  const dec = floor(multiply(sub(value, int), 100));
-  const formatted = cond(
-    eq(dec, 0),
-    "00",
-    cond(lessThan(dec, 10), concat("0", dec), dec)
-  );
-
   return (
     <Animated.View
       style={[styles.container, { transform: [{ translateY: y }], opacity }]}
     >
       <ReText
-        text={concat(int, ".", formatted, " $")}
+        text={format(value)}
         style={{ color: "black", fontVariant: ["tabular-nums"] }}
       />
     </Animated.View>

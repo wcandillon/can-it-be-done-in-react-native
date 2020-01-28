@@ -29,6 +29,7 @@
     "expo-linear-gradient": "~8.0.0",
     "gl-react": "4.0.1",
     "gl-react-expo": "4.0.1",
+    "moment": "^2.24.0",
     "patch-package": "^6.2.0",
     "react": "16.9.0",
     "react-dom": "16.9.0",
