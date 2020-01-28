@@ -27,12 +27,10 @@ export default ({ translateX, caliber, candles }: HeaderProps) => {
         translateX,
         call([floor(divide(translateX, caliber))], ([index]) => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          console.log({ index });
           setCandle(candles[index]);
         })
       ),
     [caliber, candles, translateX]
   );
-  console.log({ candle });
   return <View style={{ height: 200 }} />;
 };

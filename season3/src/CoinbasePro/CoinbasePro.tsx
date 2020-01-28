@@ -1,7 +1,13 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import Animated, { add, eq, modulo, sub } from "react-native-reanimated";
+import Animated, {
+  add,
+  diffClamp,
+  eq,
+  modulo,
+  sub
+} from "react-native-reanimated";
 import { onGestureEvent, useValues } from "react-native-redash";
 
 import data from "./data.json";
@@ -9,7 +15,7 @@ import Chart, { size } from "./Chart";
 import Header from "./Header";
 import Line from "./Line";
 import Label from "./Label";
-import { Candle } from "./Candle.js";
+import { Candle } from "./Candle";
 
 const candles = data.slice(0, 20);
 const styles = StyleSheet.create({
@@ -18,7 +24,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black"
   }
 });
-const getDomain = (rows: Candle[]) => {
+const getDomain = (rows: Candle[]): [number, number] => {
   const values = rows.map(({ high, low }) => [high, low]).flat();
   return [Math.min(...values), Math.max(...values)];
 };
@@ -31,6 +37,7 @@ export default () => {
     state
   });
   const caliber = size / candles.length;
+  const translateY = diffClamp(y, 0, size);
   const translateX = add(sub(x, modulo(x, caliber)), caliber / 2);
   const opacity = eq(state, State.ACTIVE);
   return (
@@ -40,10 +47,10 @@ export default () => {
         <Chart {...{ candles, domain }} />
         <PanGestureHandler minDist={0} {...gestureHandler}>
           <Animated.View style={StyleSheet.absoluteFill}>
-            <Label {...{ y, size, domain }} />
+            <Label y={translateY} {...{ size, domain, opacity }} />
             <Animated.View
               style={{
-                transform: [{ translateY: y }],
+                transform: [{ translateY }],
                 opacity,
                 ...StyleSheet.absoluteFillObject
               }}
