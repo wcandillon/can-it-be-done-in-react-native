@@ -44,6 +44,11 @@ export const episodes = [
     id: "AppleActivity",
     name: "Activity Rings",
     icon: require("../../assets/icons/apple-activity.png")
+  },
+  {
+    id: "CoinbasePro",
+    name: "Coinbase Pro",
+    icon: require("../../assets/icons/coinbase-pro.png")
   }
 ];
 

@@ -15,6 +15,7 @@ import UberEats, {
 } from "./src/UberEats";
 import iPod, { fonts as ipodFonts } from "./src/iPod";
 import AppleActivity from "./src/AppleActivity";
+import CoinbasePro from "./src/CoinbasePro";
 
 const fonts = { ...uberEatsFonts, ...ipodFonts };
 const assets: number[] = [
@@ -67,6 +68,13 @@ const AppNavigator = createAppContainer(
         screen: AppleActivity,
         navigationOptions: {
           title: "Activity Rings"
+        }
+      },
+      CoinbasePro: {
+        screen: CoinbasePro,
+        navigationOptions: {
+          title: "Coinbase Pro",
+          header: () => null
         }
       }
     },

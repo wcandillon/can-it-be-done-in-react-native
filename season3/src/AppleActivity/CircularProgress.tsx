@@ -3,8 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
-  lessThan,
-  multiply
+  lessThan
 } from "react-native-reanimated";
 
 import { transformOrigin } from "react-native-redash";
