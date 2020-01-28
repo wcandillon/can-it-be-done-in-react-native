@@ -62,6 +62,8 @@ export default ({ translateX, caliber, candles }: HeaderProps) => {
       ),
     [caliber, candles, translateX]
   );
+  const diff = `${((close - open) * 100) / open}`;
+  const change = close - open < 0 ? diff.substring(0, 5) : diff.substring(0, 4);
   return (
     <SafeAreaView>
       <View style={styles.table}>
@@ -74,7 +76,11 @@ export default ({ translateX, caliber, candles }: HeaderProps) => {
         <View style={styles.column}>
           <Row label="High" value={formatValue(high)} />
           <Row label="Low" value={formatValue(low)} />
-          <Row label="Change" value={volume} />
+          <Row
+            label="Change"
+            value={`${change}%`}
+            color={change > 0 ? "#4AFA9A" : "#E33F64"}
+          />
         </View>
       </View>
       <Text style={styles.date}>

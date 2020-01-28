@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 20,
-    color: "white",
     fontVariant: ["tabular-nums"]
   }
 });
@@ -20,13 +19,14 @@ const styles = StyleSheet.create({
 interface RowProps {
   label: string;
   value: string;
+  color?: string;
 }
 
-export default ({ label, value }: RowProps) => {
+export default ({ label, value, color }: RowProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value}</Text>
+      <Text style={[styles.value, { color: color || "white" }]}>{value}</Text>
     </View>
   );
 };

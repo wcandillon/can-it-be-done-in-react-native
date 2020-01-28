@@ -16,6 +16,7 @@ import Header from "./Header";
 import Line from "./Line";
 import Label from "./Label";
 import { Candle } from "./Candle";
+import Content from "./Content";
 
 const candles = data.slice(0, 20);
 const styles = StyleSheet.create({
@@ -69,6 +70,7 @@ export default () => {
           </Animated.View>
         </PanGestureHandler>
       </View>
+      <Content />
     </View>
   );
 };
