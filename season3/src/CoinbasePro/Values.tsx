@@ -36,11 +36,18 @@ const styles = StyleSheet.create({
   }
 });
 
-const formatValue = (value: number) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD"
-  }).format(value);
+const formatInt = (value: number) => {
+  const t = Math.floor(value / 1000);
+  return t < 1 ? t : `${t}, ${value % 1000}`;
+};
+
+const formatValue = (value: number) => {
+  const int = Math.floor(value);
+  const dec = Math.floor((value - int) * 100);
+  // eslint-disable-next-line no-nested-ternary
+  const formattedDec = dec === 0 ? "00" : dec < 10 ? `0${dec}` : `${dec}`;
+  return `$ ${formatInt(int)}.${formattedDec}`;
+};
 
 interface HeaderProps {
   translateX: Animated.Node<number>;

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import Animated, {
   concat,
   cond,
@@ -32,6 +32,9 @@ const formatInt = (value: Animated.Node<number>) => {
 };
 
 const format = (value: Animated.Node<number>) => {
+  if (Platform.OS === "android") {
+    return concat("$ ", divide(floor(multiply(value, 100)), 100));
+  }
   const int = floor(value);
   const dec = floor(multiply(sub(value, int), 100));
   const formattedDec = cond(
