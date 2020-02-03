@@ -20,17 +20,17 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      CircularProgress: {
-        screen: CircularProgress,
-        navigationOptions: {
-          title: "Circular Progress"
-        }
-      },
       Examples: {
         screen: Examples,
         navigationOptions: {
           title: "The 5 min React Native",
           headerBackTitle: null
+        }
+      },
+      CircularProgress: {
+        screen: CircularProgress,
+        navigationOptions: {
+          title: "Circular Progress"
         }
       },
       AngularGradient: {

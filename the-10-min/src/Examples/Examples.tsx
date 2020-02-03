@@ -24,7 +24,7 @@ export const examples = [
     source: require("../../assets/examples/shader.png")
   },
   {
-    screen: "CircularsProgres",
+    screen: "CircularProgress",
     title: "Circular Progress",
     source: require("../../assets/examples/circular-progress.png")
   }
