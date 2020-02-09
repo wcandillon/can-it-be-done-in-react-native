@@ -18,9 +18,12 @@ const Home = memo(({ dispatch }) => {
   return (
     <View
       style={{ flex: 1 }}
-      ref={ref => dispatch({ key: "startAncestor", node: nodeFromRef(ref) })}
+      ref={ref =>
+        ref && dispatch({ key: "startAncestor", node: nodeFromRef(ref) })}
     >
-      <SharedElement onNode={node => dispatch({ key: "startNode", node })}>
+      <SharedElement
+        onNode={node => node && dispatch({ key: "startNode", node })}
+      >
         <View style={{ backgroundColor: "blue", width: 300, height: 300 }} />
       </SharedElement>
       <Button

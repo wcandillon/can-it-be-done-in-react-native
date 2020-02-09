@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
-import React, { FC, memo, useContext, useEffect } from "react";
+import React, { FC, memo, useContext, useEffect, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import {
   CreateNavigatorConfig,
@@ -53,14 +53,30 @@ const SharedTransitionNavigator = ({
   const [{ startNode, startAncestor, endNode, endAncestor }] = useContext(
     SharedTransitionContext
   );
+  const { isTransitioning } = navigation.state;
+  useEffect(() => {
+    if (isTransitioning) {
+      Animated.timing(position, { duration: 2000, toValue: 1 }).start();
+    }
+  }, [isTransitioning, position]);
+  // console.log({ descriptors });
+  // position.addListener(v => console.log({ v, isTransitioning }));
+  /*
+  console.log({
+    startNode: !!startNode,
+    startAncestor: !!startAncestor,
+    endNode: !!endNode,
+    endAncestor: !!endAncestor,
+    isTransitioning
+  }); */
   return (
     <View style={styles.container}>
       <Screen />
-      {navigation.state.isTransitioning && (
+      {isTransitioning && (
         <View
           style={{
             ...StyleSheet.absoluteFillObject,
-            backgroundColor: "red"
+            backgroundColor: "white"
           }}
         >
           <SharedElementTransition
