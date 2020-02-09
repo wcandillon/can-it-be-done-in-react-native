@@ -6,6 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { LoadAssets, StyleGuide } from "./src/components";
 import Episodes, { episodes } from "./src/Episodes";
+import Reflectly from "./src/Reflectly";
 import Things from "./src/Things";
 import Chrome, { assets as chromeAssets } from "./src/Chrome";
 import LiquidSwipe, { assets as liquidSwipeAssets } from "./src/LiquidSwipe";
@@ -28,6 +29,13 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Reflectly: {
+        screen: Reflectly,
+        navigationOptions: {
+          title: "Can it be done in React Native?",
+          headerBackTitle: null
+        }
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {

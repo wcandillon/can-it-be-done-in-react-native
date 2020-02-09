@@ -5786,6 +5786,11 @@ react-native-safe-area-view@^0.14.1:
   dependencies:
     debounce "^1.2.0"
 
+react-native-shared-element@~0.5.1:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/react-native-shared-element/-/react-native-shared-element-0.5.5.tgz#d64daaa44eab16206064bf64ac9f8ea054e14658"
+  integrity sha512-gEDGCid+GHbOkxp3ILoyXH6gS1eim/ooI37OOpZj5dnc0ENozsU0rbQsVT0T2WFqkIJ7oG3OfzcRPg0m2eP1rQ==
+
 react-native-svg@9.13.3:
   version "9.13.3"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.13.3.tgz#6414b337d55af169ac2487ab70f3108404434446"
