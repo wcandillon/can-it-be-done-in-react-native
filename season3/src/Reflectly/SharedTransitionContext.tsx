@@ -29,6 +29,7 @@ const initialState: SharedTransitionState = {
 export const SharedTransitionContext: Context<[
   SharedTransitionState,
   Dispatch<SharedTransitionAction>
+  // createContext#0 doesn't seem to exist in the TS definition
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
 ]> = createContext();
@@ -48,9 +49,9 @@ interface SharedTransitionProviderProps {
 export const SharedTransitionProvider = ({
   children
 }: SharedTransitionProviderProps) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const value = useReducer(reducer, initialState);
   return (
-    <SharedTransitionContext.Provider value={[state, dispatch]}>
+    <SharedTransitionContext.Provider {...{ value }}>
       {children}
     </SharedTransitionContext.Provider>
   );

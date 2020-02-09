@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   SharedElement,
@@ -10,16 +10,23 @@ import { SharedTransitionContext } from "./SharedTransitionContext";
 
 const styles = StyleSheet.create({});
 
-export default () => {
-  const [, dispatch] = useContext(SharedTransitionContext);
+export const Note = memo(({ dispatch }) => {
   return (
     <View
       style={{ flex: 1 }}
       ref={ref => dispatch({ key: "endAncestor", node: nodeFromRef(ref) })}
     >
-      <SharedElement onNode={node => dispatch({ key: "endNode", node })}>
-        <View style={{ backgroundColor: "blue", flex: 1 }} />
+      <SharedElement
+        style={{ flex: 1 }}
+        onNode={node => dispatch({ key: "endNode", node })}
+      >
+        <View style={{ backgroundColor: "blue", width: 500, height: 500 }} />
       </SharedElement>
     </View>
   );
+});
+
+export default () => {
+  const [, dispatch] = useContext(SharedTransitionContext);
+  return <Note {...{ dispatch }} />;
 };

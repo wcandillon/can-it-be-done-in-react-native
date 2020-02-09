@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
-import React, { FC, useContext } from "react";
+import React, { FC, memo, useContext, useEffect } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import {
   CreateNavigatorConfig,
@@ -17,11 +17,7 @@ import {
   NavigationStackProp,
   SceneDescriptorMap
 } from "react-navigation-stack/lib/typescript/types";
-import {
-  SharedElement,
-  SharedElementTransition,
-  nodeFromRef
-} from "react-native-shared-element";
+import { SharedElementTransition } from "react-native-shared-element";
 
 import { useMemoOne } from "use-memo-one";
 import {
@@ -50,32 +46,39 @@ const SharedTransitionNavigator = ({
   navigation,
   descriptors
 }: SharedTransitionNavigatorProps) => {
-  const [{ startNode, startAncestor, endNode, endAncestor }] = useContext(
-    SharedTransitionContext
-  );
-  const position = useMemoOne(() => new Animated.Value(0), []);
   const Screen = descriptors[
     navigation.state.routes[navigation.state.routes.length - 1].key
   ].getComponent() as FC<{}>;
+  const position = useMemoOne(() => new Animated.Value(0), []);
+  const [{ startNode, startAncestor, endNode, endAncestor }] = useContext(
+    SharedTransitionContext
+  );
   return (
     <View style={styles.container}>
       <Screen />
-      <View style={StyleSheet.absoluteFill}>
-        <SharedElementTransition
-          start={{
-            node: startNode,
-            ancestor: startAncestor
+      {navigation.state.isTransitioning && (
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: "red"
           }}
-          end={{
-            node: endNode,
-            ancestor: endAncestor
-          }}
-          position={position}
-          animation="move"
-          resize="auto"
-          align="auto"
-        />
-      </View>
+        >
+          <SharedElementTransition
+            start={{
+              node: startNode,
+              ancestor: startAncestor
+            }}
+            end={{
+              node: endNode,
+              ancestor: endAncestor
+            }}
+            position={position}
+            animation="move"
+            resize="auto"
+            align="auto"
+          />
+        </View>
+      )}
     </View>
   );
 };
