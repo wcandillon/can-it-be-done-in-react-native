@@ -33,7 +33,7 @@ const AppNavigator = createAppContainer(
         screen: Reflectly,
         navigationOptions: {
           title: "Can it be done in React Native?",
-          headerBackTitle: null
+          header: () => null
         }
       },
       Episodes: {
