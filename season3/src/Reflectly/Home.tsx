@@ -1,25 +1,22 @@
 import React, { memo, useContext } from "react";
 import { Button, StyleSheet, Text, View, ViewBase } from "react-native";
-import {
-  SharedElement,
-  SharedElementTransition,
-  nodeFromRef
-} from "react-native-shared-element";
+import { SharedElement, nodeFromRef } from "react-native-shared-element";
 
 import { useNavigation } from "react-navigation-hooks";
-import { useMemoOne } from "use-memo-one";
-import { StyleGuide } from "../components";
-import { SharedTransitionContext } from "./SharedTransitionContext";
+
+import { useSharedTransitionDispatch } from "./SharedTransitionContext";
 
 const styles = StyleSheet.create({});
 
-const Home = memo(({ dispatch }) => {
+export default () => {
+  const dispatch = useSharedTransitionDispatch();
   const { navigate } = useNavigation();
   return (
     <View
       style={{ flex: 1 }}
       ref={ref =>
-        ref && dispatch({ key: "startAncestor", node: nodeFromRef(ref) })}
+        ref && dispatch({ key: "startAncestor", node: nodeFromRef(ref) })
+      }
     >
       <SharedElement
         onNode={node => node && dispatch({ key: "startNode", node })}
@@ -34,9 +31,4 @@ const Home = memo(({ dispatch }) => {
       />
     </View>
   );
-});
-
-export default () => {
-  const [, dispatch] = useContext(SharedTransitionContext);
-  return <Home {...{ dispatch }} />;
 };

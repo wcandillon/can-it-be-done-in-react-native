@@ -5,14 +5,12 @@ import {
   SharedElementTransition,
   nodeFromRef
 } from "react-native-shared-element";
-
 import { useNavigation } from "react-navigation-hooks";
-import { SharedTransitionContext } from "./SharedTransitionContext";
+import { useSharedTransitionDispatch } from "./SharedTransitionContext";
 
-const styles = StyleSheet.create({});
-
-export const Note = memo(({ dispatch }) => {
+export default () => {
   const { goBack } = useNavigation();
+  const dispatch = useSharedTransitionDispatch();
   return (
     <View
       style={{ flex: 1 }}
@@ -36,9 +34,4 @@ export const Note = memo(({ dispatch }) => {
       />
     </View>
   );
-});
-
-export default () => {
-  const [, dispatch] = useContext(SharedTransitionContext);
-  return <Note {...{ dispatch }} />;
 };

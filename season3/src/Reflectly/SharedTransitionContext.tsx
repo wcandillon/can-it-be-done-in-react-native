@@ -3,18 +3,20 @@ import React, {
   Dispatch,
   ReactNode,
   createContext,
+  useContext,
   useReducer
 } from "react";
 import { SharedElementNode } from "react-native-shared-element";
+import { useMemoOne } from "use-memo-one";
 
-interface SharedTransitionState {
+export interface SharedTransitionState {
   startNode: SharedElementNode | null;
   startAncestor: SharedElementNode | null;
   endNode: SharedElementNode | null;
   endAncestor: SharedElementNode | null;
 }
 
-interface SharedTransitionAction {
+export interface SharedTransitionAction {
   key: keyof SharedTransitionState;
   node: ReactNode;
 }
@@ -26,13 +28,17 @@ const initialState: SharedTransitionState = {
   endAncestor: null
 };
 
-export const SharedTransitionContext: Context<[
-  SharedTransitionState,
-  Dispatch<SharedTransitionAction>
+// createContext#0 doesn't seem to exist in the TS definition
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+const SharedTransitionState: Context<SharedTransitionState> = createContext();
+
+const SharedTransitionDispatch: Context<Dispatch<
+  SharedTransitionAction
   // createContext#0 doesn't seem to exist in the TS definition
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
-]> = createContext();
+>> = createContext();
 
 const reducer = (
   state: SharedTransitionState,
@@ -46,13 +52,20 @@ interface SharedTransitionProviderProps {
   children: ReactNode;
 }
 
+export const useSharedTransitionState = () => useContext(SharedTransitionState);
+
+export const useSharedTransitionDispatch = () =>
+  useContext(SharedTransitionDispatch);
+
 export const SharedTransitionProvider = ({
   children
 }: SharedTransitionProviderProps) => {
-  const value = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <SharedTransitionContext.Provider {...{ value }}>
-      {children}
-    </SharedTransitionContext.Provider>
+    <SharedTransitionDispatch.Provider value={dispatch}>
+      <SharedTransitionState.Provider value={state}>
+        {children}
+      </SharedTransitionState.Provider>
+    </SharedTransitionDispatch.Provider>
   );
 };

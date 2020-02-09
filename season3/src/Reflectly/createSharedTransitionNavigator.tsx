@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
-import React, { FC, memo, useContext, useEffect, useState } from "react";
+import React, { FC, memo, useEffect } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import {
   CreateNavigatorConfig,
@@ -19,10 +19,10 @@ import {
 } from "react-navigation-stack/lib/typescript/types";
 import { SharedElementTransition } from "react-native-shared-element";
 
-import { useMemoOne } from "use-memo-one";
+import { useCallbackOne, useMemoOne } from "use-memo-one";
 import {
-  SharedTransitionContext,
-  SharedTransitionProvider
+  SharedTransitionProvider,
+  useSharedTransitionState
 } from "./SharedTransitionContext";
 
 const styles = StyleSheet.create({
@@ -42,36 +42,39 @@ interface SharedTransitionNavigatorProps {
   screenProps?: unknown;
 }
 
+export interface InjectedSharedTransitionNavigatorProps {}
+
+const Screen = memo(
+  ({
+    Component
+  }: {
+    Component: FC<InjectedSharedTransitionNavigatorProps>;
+  }) => <Component />
+);
+
 const SharedTransitionNavigator = ({
   navigation,
   descriptors
 }: SharedTransitionNavigatorProps) => {
-  const Screen = descriptors[
+  const ScreenComp = descriptors[
     navigation.state.routes[navigation.state.routes.length - 1].key
-  ].getComponent() as FC<{}>;
+  ].getComponent() as FC<InjectedSharedTransitionNavigatorProps>;
   const position = useMemoOne(() => new Animated.Value(0), []);
-  const [{ startNode, startAncestor, endNode, endAncestor }] = useContext(
-    SharedTransitionContext
-  );
+  const {
+    startNode,
+    startAncestor,
+    endNode,
+    endAncestor
+  } = useSharedTransitionState();
   const { isTransitioning } = navigation.state;
   useEffect(() => {
     if (isTransitioning) {
       Animated.timing(position, { duration: 2000, toValue: 1 }).start();
     }
   }, [isTransitioning, position]);
-  // console.log({ descriptors });
-  // position.addListener(v => console.log({ v, isTransitioning }));
-  /*
-  console.log({
-    startNode: !!startNode,
-    startAncestor: !!startAncestor,
-    endNode: !!endNode,
-    endAncestor: !!endAncestor,
-    isTransitioning
-  }); */
   return (
     <View style={styles.container}>
-      <Screen />
+      <Screen Component={ScreenComp} />
       {isTransitioning && (
         <View
           style={{
