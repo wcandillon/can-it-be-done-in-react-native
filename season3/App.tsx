@@ -3,6 +3,7 @@ import { StatusBar } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { enableScreens } from "react-native-screens";
 
 import { LoadAssets, StyleGuide } from "./src/components";
 import Episodes, { episodes } from "./src/Episodes";
@@ -16,6 +17,9 @@ import UberEats, {
 import iPod, { fonts as ipodFonts } from "./src/iPod";
 import AppleActivity from "./src/AppleActivity";
 import CoinbasePro from "./src/CoinbasePro";
+import Reflectly from "./src/Reflectly";
+
+enableScreens();
 
 const fonts = { ...uberEatsFonts, ...ipodFonts };
 const assets: number[] = [
@@ -28,6 +32,13 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Reflectly: {
+        screen: Reflectly,
+        navigationOptions: {
+          title: "Reflectly",
+          header: () => null
+        }
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
