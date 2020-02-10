@@ -22,6 +22,4 @@ const Home = () => {
   );
 };
 
-Home.sharedElements = () => ["thumbnail"];
-
 export default Home;
