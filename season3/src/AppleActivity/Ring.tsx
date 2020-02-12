@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
 
 interface RingProps {
   ring: Ring;
-  theta: Animated.Node<number>;
 }
 
-export default ({ ring, theta }: RingProps) => {
+export default ({ ring }: RingProps) => {
+  const theta = TAU;
   const radius = PixelRatio.roundToNearestPixel(ring.size / 2);
   const fg = (
     <AngularGradient colors={[ring.start, ring.end]} size={ring.size} />

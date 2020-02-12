@@ -17,8 +17,7 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
-    alignItems: "center",
-    transform: [{ rotate: "-270deg" }]
+    alignItems: "center"
   },
   fg: {
     backgroundColor,
@@ -27,22 +26,13 @@ const styles = StyleSheet.create({
     height: fgRadius * 2
   }
 });
-const rings = [R3, R2, R1];
 
 export default () => {
-  const progress = new Value(0);
-  useCode(() => set(progress, timing({ duration: 3000 })), [progress]);
   return (
     <View style={styles.container}>
-      {rings.map((ring, i) => (
-        <View key={i} style={styles.overlay}>
-          <Ring theta={multiply(ring.theta, progress)} {...{ ring }} />
-        </View>
-      ))}
       <View style={styles.overlay}>
-        <View style={styles.fg} />
+        <Ring ring={R1} />
       </View>
-      <Stickers />
     </View>
   );
 };
