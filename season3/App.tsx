@@ -42,15 +42,13 @@ const AppNavigator = createAppContainer(
       Episodes: {
         screen: Episodes,
         navigationOptions: {
-          title: "Can it be done in React Native?",
-          headerBackTitle: null
+          title: "Can it be done in React Native?"
         }
       },
       LiquidSwipe: {
         screen: LiquidSwipe,
         navigationOptions: {
-          title: "Liquid Swipe",
-          gesturesEnabled: false
+          title: "Liquid Swipe"
         }
       },
       Things: {

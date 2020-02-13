@@ -7,7 +7,5 @@ export default createSharedElementStackNavigator(
     Home,
     Note
   },
-  {
-    initialRouteName: "Note"
-  }
+  {}
 );
