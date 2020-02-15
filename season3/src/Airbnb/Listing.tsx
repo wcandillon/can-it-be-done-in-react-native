@@ -72,11 +72,11 @@ const Listing = () => {
             [
               set(
                 translateX,
-                timing({ from: translationX, to: 0, duration: 3000 })
+                timing({ from: translationX, to: 0, duration: 1000 })
               ),
               set(
                 translateY,
-                timing({ from: translationY, to: 0, duration: 3000 })
+                timing({ from: translationY, to: 0, duration: 1000 })
               )
             ],
             [set(translateY, translationY), set(translateX, translationX)]
@@ -101,7 +101,8 @@ const Listing = () => {
           style={{
             flex: 1,
             backgroundColor: "white",
-            borderRadius
+            borderRadius,
+            transform: [{ translateX }, { translateY }, { scale }]
           }}
         >
           <View>
@@ -109,9 +110,7 @@ const Listing = () => {
               <Animated.Image
                 style={{
                   height: width,
-                  width,
-                  top: translateY,
-                  left: translateX
+                  width
                 }}
                 resizeMode="cover"
                 source={require("./assets/tiny-home.jpg")}

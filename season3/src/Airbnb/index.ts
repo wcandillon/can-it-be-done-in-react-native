@@ -30,13 +30,13 @@ export default createSharedElementStackNavigator(
         open: {
           animation: "timing",
           config: {
-            duration: 3000
+            duration: 1000
           }
         },
         close: {
           animation: "timing",
           config: {
-            duration: 3000
+            duration: 1000
           }
         }
       },

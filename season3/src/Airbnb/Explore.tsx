@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
 
 const Explore = () => {
   const { navigate, isFocused } = useNavigation();
+  console.log("render");
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={() => navigate("Listing")}>
