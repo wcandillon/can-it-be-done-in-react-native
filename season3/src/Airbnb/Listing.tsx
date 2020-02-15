@@ -11,6 +11,7 @@ import Animated, {
   debug,
   eq,
   interpolate,
+  set,
   useCode
 } from "react-native-reanimated";
 import {
@@ -22,9 +23,9 @@ import {
 import {
   onGestureEvent,
   snapPoint,
-  useValues,
-  withSpring,
-  withSpringTransition
+  spring,
+  timing,
+  useValues
 } from "react-native-redash";
 import { useMemoOne } from "use-memo-one";
 import { Description } from "./components";
@@ -42,6 +43,7 @@ const Listing = () => {
     [0, 0, 0, State.UNDETERMINED],
     []
   );
+  const snapTo = snapPoint(translationY, velocityY, [0, height]);
   const translateY = translationY;
   const translateX = translationX;
   const scale = interpolate(translateY, {
@@ -61,10 +63,24 @@ const Listing = () => {
   useCode(
     () =>
       cond(
-        eq(state, State.END),
-        call([], () => goBack())
+        and(eq(state, State.END), eq(snapTo, height)),
+        call([], () => goBack()),
+        cond(
+          eq(state, State.END),
+          [
+            set(
+              translateX,
+              timing({ from: translationX, to: 0, duration: 5000 })
+            ),
+            set(
+              translateY,
+              timing({ from: translationY, to: 0, duration: 5000 })
+            )
+          ],
+          [set(translateY, translationY), set(translateX, translationX)]
+        )
       ),
-    [goBack, state]
+    [goBack, snapTo, state, translateX, translateY, translationX, translationY]
   );
   return (
     <PanGestureHandler {...gestureHandler}>
