@@ -5,6 +5,7 @@ import { useNavigation } from "react-navigation-hooks";
 import Animated, {
   Extrapolate,
   Value,
+  and,
   call,
   cond,
   debug,
@@ -41,17 +42,8 @@ const Listing = () => {
     [0, 0, 0, State.UNDETERMINED],
     []
   );
-  const snapback = cond(
-    eq(state, State.END),
-    snapPoint(translationY, velocityY, [0, height]),
-    0
-  );
-  const translateY = cond(snapback, withSpringTransition(0), translationY);
-  const translateX = cond(
-    eq(state, State.ACTIVE),
-    translationX,
-    withSpringTransition(0)
-  );
+  const translateY = translationY;
+  const translateX = translationX;
   const scale = interpolate(translateY, {
     inputRange: [0, height / 2],
     outputRange: [1, 0.75],
@@ -69,10 +61,10 @@ const Listing = () => {
   useCode(
     () =>
       cond(
-        eq(snapback, height),
+        eq(state, State.END),
         call([], () => goBack())
       ),
-    [goBack, snapback]
+    [goBack, state]
   );
   return (
     <PanGestureHandler {...gestureHandler}>

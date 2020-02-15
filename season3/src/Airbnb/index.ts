@@ -26,6 +26,20 @@ export default createSharedElementStackNavigator(
     headerMode: "none",
     defaultNavigationOptions: {
       ...TransitionPresets.ModalSlideFromBottomIOS,
+      transitionSpec: {
+        open: {
+          animation: "timing",
+          config: {
+            duration: 5000
+          }
+        },
+        close: {
+          animation: "timing",
+          config: {
+            duration: 5000
+          }
+        }
+      },
       gestureEnabled: false,
       cardStyle: {
         backgroundColor: "transparent"

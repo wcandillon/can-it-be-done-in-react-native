@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dimensions,
   Image,
@@ -14,24 +14,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "white"
   }
 });
 
-export default () => {
+const Explore = () => {
   const { navigate, isFocused } = useNavigation();
   return (
     <View style={styles.container}>
       <SharedElement id="thumbnail">
         <TouchableWithoutFeedback onPress={() => navigate("Listing")}>
-          {isFocused && (
-            <Image
-              style={{ height: 150, width: width - 32 }}
-              source={require("./assets/tiny-home.jpg")}
-            />
-          )}
+          <Image
+            style={{
+              height: 150,
+              width: width - 32,
+              opacity: isFocused() ? 1 : 0
+            }}
+            source={require("./assets/tiny-home.jpg")}
+          />
         </TouchableWithoutFeedback>
       </SharedElement>
     </View>
   );
 };
+
+Explore.sharedElements = () => ["thumbnail"];
+
+export default Explore;
