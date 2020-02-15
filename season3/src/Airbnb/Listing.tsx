@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
 import Animated, {
@@ -42,8 +42,8 @@ const Listing = () => {
     snapBack,
     state
   ] = useValues([0, 0, 0, 0, 0, 0, State.UNDETERMINED], []);
-  const snapTo = snapPoint(translationY, velocityY, [height, height]);
-  const scale = interpolate(translateY, {
+  const snapTo = snapPoint(translationY, velocityY, [0, height]);
+  const scale = interpolate(translationY, {
     inputRange: [0, height / 2],
     outputRange: [1, 0.75],
     extrapolate: Extrapolate.CLAMP
@@ -111,11 +111,9 @@ const Listing = () => {
                   height: width,
                   width,
                   top: translateY,
-                  left: translateX,
-                  borderTopLeftRadius: borderRadius,
-                  borderTopRightRadius: borderRadius,
-                  resizeMode: "cover"
+                  left: translateX
                 }}
+                resizeMode="cover"
                 source={require("./assets/tiny-home.jpg")}
               />
             </SharedElement>

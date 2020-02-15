@@ -23,8 +23,8 @@ const Explore = () => {
   const { navigate, isFocused } = useNavigation();
   return (
     <View style={styles.container}>
-      <SharedElement id="thumbnail">
-        <TouchableWithoutFeedback onPress={() => navigate("Listing")}>
+      <TouchableWithoutFeedback onPress={() => navigate("Listing")}>
+        <SharedElement id="thumbnail">
           <Image
             style={{
               height: 150,
@@ -34,12 +34,12 @@ const Explore = () => {
             resizeMode="cover"
             source={require("./assets/tiny-home.jpg")}
           />
-        </TouchableWithoutFeedback>
-      </SharedElement>
+        </SharedElement>
+      </TouchableWithoutFeedback>
     </View>
   );
 };
 
-Explore.sharedElements = () => ["thumbnail"];
+Explore.sharedElements = () => [{ id: "thumbnail", resize: "auto" }];
 
 export default Explore;
