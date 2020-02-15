@@ -1,51 +1,47 @@
-import React, { memo } from "react";
-import { Dimensions, Image, StyleSheet, View } from "react-native";
+import React from "react";
+import { Dimensions, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
 import Animated, {
   Extrapolate,
-  Value,
   and,
+  block,
   call,
   cond,
   debug,
+  diff,
   eq,
   interpolate,
+  neq,
+  not,
   set,
   useCode
 } from "react-native-reanimated";
-import {
-  PanGestureHandler,
-  State,
-  TouchableWithoutFeedback
-} from "react-native-gesture-handler";
-
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 import {
   onGestureEvent,
   snapPoint,
-  spring,
   timing,
   useValues
 } from "react-native-redash";
 import { useMemoOne } from "use-memo-one";
+
 import { Description } from "./components";
 
 const { width, height } = Dimensions.get("window");
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
 
 const Listing = () => {
   const { goBack } = useNavigation();
-  const [translationX, translationY, velocityY, state] = useValues(
-    [0, 0, 0, State.UNDETERMINED],
-    []
-  );
+  const [
+    translationX,
+    translationY,
+    velocityY,
+    translateX,
+    translateY,
+    snapBack,
+    state
+  ] = useValues([0, 0, 0, 0, 0, 0, State.UNDETERMINED], []);
   const snapTo = snapPoint(translationY, velocityY, [0, height]);
-  const translateY = translationY;
-  const translateX = translationX;
   const scale = interpolate(translateY, {
     inputRange: [0, height / 2],
     outputRange: [1, 0.75],
@@ -62,25 +58,40 @@ const Listing = () => {
   );
   useCode(
     () =>
-      cond(
-        and(eq(state, State.END), eq(snapTo, height)),
-        call([], () => goBack()),
+      block([
+        set(
+          snapBack,
+          and(eq(state, State.END), eq(snapTo, height), not(snapBack))
+        ),
         cond(
-          eq(state, State.END),
-          [
-            set(
-              translateX,
-              timing({ from: translationX, to: 0, duration: 5000 })
-            ),
-            set(
-              translateY,
-              timing({ from: translationY, to: 0, duration: 5000 })
-            )
-          ],
-          [set(translateY, translationY), set(translateX, translationX)]
+          snapBack,
+          call([], () => goBack()),
+          cond(
+            eq(state, State.END),
+            [
+              set(
+                translateX,
+                timing({ from: translationX, to: 0, duration: 3000 })
+              ),
+              set(
+                translateY,
+                timing({ from: translationY, to: 0, duration: 3000 })
+              )
+            ],
+            [set(translateY, translationY), set(translateX, translationX)]
+          )
         )
-      ),
-    [goBack, snapTo, state, translateX, translateY, translationX, translationY]
+      ]),
+    [
+      goBack,
+      snapBack,
+      snapTo,
+      state,
+      translateX,
+      translateY,
+      translationX,
+      translationY
+    ]
   );
   return (
     <PanGestureHandler {...gestureHandler}>
@@ -110,7 +121,5 @@ const Listing = () => {
     </PanGestureHandler>
   );
 };
-
-Listing.sharedElements = () => ["thumbnail"];
 
 export default Listing;
