@@ -17,16 +17,20 @@ import UberEats, {
 import iPod, { fonts as ipodFonts } from "./src/iPod";
 import AppleActivity from "./src/AppleActivity";
 import CoinbasePro from "./src/CoinbasePro";
-import Airbnb from "./src/Airbnb";
+import Airbnb, {
+  assets as airbnbAssets,
+  fonts as airbnbFonts
+} from "./src/Airbnb";
 
 enableScreens();
 
-const fonts = { ...uberEatsFonts, ...ipodFonts };
+const fonts = { ...uberEatsFonts, ...ipodFonts, ...airbnbFonts };
 const assets: number[] = [
   ...episodes.map(episode => episode.icon),
   ...liquidSwipeAssets,
   ...chromeAssets,
-  ...uberEatsAssets
+  ...uberEatsAssets,
+  ...airbnbAssets
 ];
 
 const AppNavigator = createAppContainer(

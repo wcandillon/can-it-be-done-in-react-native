@@ -5,8 +5,15 @@ import Listing from "./Listing";
 
 export const assets = [
   require("./assets/tiny-home.jpg"),
-  require("./assets/cook-house.jpg")
+  require("./assets/cook-house.jpg"),
+  require("./assets/host.jpg")
 ];
+
+export const fonts = {
+  CerealBook: require("./assets/fonts/AirbnbCerealBook.ttf"),
+  CerealMedium: require("./assets/fonts/AirbnbCerealMedium.ttf"),
+  CerealLight: require("./assets/fonts/AirbnbCerealLight.ttf")
+};
 
 export default createSharedElementStackNavigator(
   {
