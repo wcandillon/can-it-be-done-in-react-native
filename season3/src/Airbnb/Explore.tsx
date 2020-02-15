@@ -19,15 +19,17 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const { navigate } = useNavigation();
+  const { navigate, isFocused } = useNavigation();
   return (
     <View style={styles.container}>
       <SharedElement id="thumbnail">
         <TouchableWithoutFeedback onPress={() => navigate("Listing")}>
-          <Image
-            style={{ height: 150, width: width - 32 }}
-            source={require("./assets/tiny-home.jpg")}
-          />
+          {isFocused && (
+            <Image
+              style={{ height: 150, width: width - 32 }}
+              source={require("./assets/tiny-home.jpg")}
+            />
+          )}
         </TouchableWithoutFeedback>
       </SharedElement>
     </View>

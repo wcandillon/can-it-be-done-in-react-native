@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 
 export default () => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Tiny House</Text>
       <View>
         <Text style={styles.text}>
@@ -70,6 +70,6 @@ export default () => {
         </View>
         <View style={styles.divider} />
       </View>
-    </ScrollView>
+    </View>
   );
 };

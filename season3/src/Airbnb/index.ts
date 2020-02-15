@@ -25,7 +25,11 @@ export default createSharedElementStackNavigator(
     mode: "modal",
     headerMode: "none",
     defaultNavigationOptions: {
-      ...TransitionPresets.ModalSlideFromBottomIOS
+      ...TransitionPresets.ModalSlideFromBottomIOS,
+      gestureEnabled: false,
+      cardStyle: {
+        backgroundColor: "transparent"
+      }
     }
   }
 );
