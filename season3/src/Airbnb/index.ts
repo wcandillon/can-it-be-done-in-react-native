@@ -1,3 +1,4 @@
+import { TransitionPresets } from "react-navigation-stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 import Explore from "./Explore";
@@ -22,6 +23,9 @@ export default createSharedElementStackNavigator(
   },
   {
     mode: "modal",
-    headerMode: "none"
+    headerMode: "none",
+    defaultNavigationOptions: {
+      ...TransitionPresets.ModalSlideFromBottomIOS
+    }
   }
 );
