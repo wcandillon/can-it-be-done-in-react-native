@@ -31,6 +31,7 @@ const Explore = () => {
               width: width - 32,
               opacity: isFocused() ? 1 : 0
             }}
+            resizeMode="cover"
             source={require("./assets/tiny-home.jpg")}
           />
         </TouchableWithoutFeedback>

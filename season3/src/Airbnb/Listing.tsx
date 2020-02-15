@@ -12,6 +12,7 @@ import Animated, {
   diff,
   eq,
   interpolate,
+  multiply,
   neq,
   not,
   set,
@@ -41,7 +42,7 @@ const Listing = () => {
     snapBack,
     state
   ] = useValues([0, 0, 0, 0, 0, 0, State.UNDETERMINED], []);
-  const snapTo = snapPoint(translationY, velocityY, [0, height]);
+  const snapTo = snapPoint(translationY, velocityY, [height, height]);
   const scale = interpolate(translateY, {
     inputRange: [0, height / 2],
     outputRange: [1, 0.75],
@@ -94,31 +95,35 @@ const Listing = () => {
     ]
   );
   return (
-    <PanGestureHandler {...gestureHandler}>
-      <Animated.View
-        style={{
-          flex: 1,
-          backgroundColor: "white",
-          transform: [{ translateX }, { translateY }, { scale }],
-          borderRadius
-        }}
-      >
-        <View>
-          <SharedElement id="thumbnail">
-            <Animated.Image
-              style={{
-                height: width,
-                width,
-                borderTopLeftRadius: borderRadius,
-                borderTopRightRadius: borderRadius
-              }}
-              source={require("./assets/tiny-home.jpg")}
-            />
-          </SharedElement>
-        </View>
-        <Description />
-      </Animated.View>
-    </PanGestureHandler>
+    <View style={{ flex: 1 }}>
+      <PanGestureHandler {...gestureHandler}>
+        <Animated.View
+          style={{
+            flex: 1,
+            backgroundColor: "white",
+            borderRadius
+          }}
+        >
+          <View>
+            <SharedElement id="thumbnail">
+              <Animated.Image
+                style={{
+                  height: width,
+                  width,
+                  top: translateY,
+                  left: translateX,
+                  borderTopLeftRadius: borderRadius,
+                  borderTopRightRadius: borderRadius,
+                  resizeMode: "cover"
+                }}
+                source={require("./assets/tiny-home.jpg")}
+              />
+            </SharedElement>
+          </View>
+          <Description />
+        </Animated.View>
+      </PanGestureHandler>
+    </View>
   );
 };
 
