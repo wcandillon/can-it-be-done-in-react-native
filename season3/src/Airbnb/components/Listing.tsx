@@ -22,11 +22,15 @@ const styles = StyleSheet.create({
   details: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8
+    marginBottom: 4
   },
   rating: {
     flexDirection: "row",
     alignItems: "center"
+  },
+  ratingLabel: {
+    fontFamily: "CerealBook",
+    marginLeft: 4
   },
   superhost: {
     borderColor: "black",
@@ -74,7 +78,9 @@ export default ({ listing }: ListingProps) => {
             </View>
             <View style={styles.rating}>
               <Icon name="star" color="rgb(255, 56, 92)" />
-              <Text>{`${listing.rating} (${listing.ratingCount})`}</Text>
+              <Text style={styles.ratingLabel}>
+                {`${listing.rating} (${listing.ratingCount})`}
+              </Text>
             </View>
           </View>
           <Text style={styles.title}>{listing.title}</Text>
