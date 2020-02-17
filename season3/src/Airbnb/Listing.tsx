@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, Image, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
 import Animated, {
@@ -10,7 +10,6 @@ import Animated, {
   cond,
   eq,
   interpolate,
-  multiply,
   not,
   set,
   useCode
@@ -23,11 +22,18 @@ import {
   useValues
 } from "react-native-redash";
 import { useMemoOne } from "use-memo-one";
+import { Feather as Icon } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Description } from "./components";
 
 const { width, height } = Dimensions.get("window");
-
+const styles = StyleSheet.create({
+  thumbnailOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    padding: 16
+  }
+});
 const Listing = () => {
   const { goBack } = useNavigation();
   const [
@@ -107,6 +113,14 @@ const Listing = () => {
                 source={require("./assets/tiny-home.jpg")}
               />
             </SharedElement>
+            <SafeAreaView style={styles.thumbnailOverlay}>
+              <Icon.Button
+                name="x"
+                backgroundColor="transparent"
+                underlayColor="transparent"
+                onPress={() => goBack()}
+              />
+            </SafeAreaView>
           </View>
           <Description />
         </Animated.View>
