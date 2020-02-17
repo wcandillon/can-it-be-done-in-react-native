@@ -43,6 +43,4 @@ const Explore = () => {
   );
 };
 
-Explore.sharedElements = () => listings.map(({ id }) => id);
-
 export default Explore;

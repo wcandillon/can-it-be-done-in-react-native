@@ -136,4 +136,8 @@ const Listing = () => {
   );
 };
 
+Listing.sharedElements = (navigation: ReturnType<typeof useNavigation>) => {
+  const listing = navigation.getParam("listing");
+  return [listing.id];
+};
 export default Listing;
