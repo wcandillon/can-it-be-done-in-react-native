@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     padding: 8,
-    marginRight: 4
+    marginRight: 8
   },
   label: {
     fontFamily: "CerealBook"
@@ -57,7 +57,7 @@ export default () => {
     <View style={styles.container}>
       <View style={styles.search}>
         <Icon name="arrow-left" size={24} style={styles.icon} />
-        <Text>Anywhere Stay</Text>
+        <Text>Anywhere · Stay</Text>
       </View>
       <View style={styles.chips}>
         <Chip label="Dates" />

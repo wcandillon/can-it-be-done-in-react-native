@@ -42,7 +42,9 @@ const styles = StyleSheet.create({
   }
 });
 const Listing = () => {
-  const { goBack } = useNavigation();
+  const { goBack, getParam } = useNavigation();
+  const listing = getParam("listing");
+  console.log({ listing });
   const [
     translationX,
     translationY,
@@ -110,11 +112,11 @@ const Listing = () => {
           }}
         >
           <View>
-            <SharedElement id="thumbnail">
+            <SharedElement id={listing.id}>
               <Image
                 style={styles.image}
                 resizeMode="cover"
-                source={require("./assets/tiny-home.jpg")}
+                source={listing.picture}
               />
             </SharedElement>
             <SafeAreaView style={styles.thumbnailOverlay}>
