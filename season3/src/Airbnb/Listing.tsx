@@ -67,6 +67,8 @@ const Listing = () => {
   useCode(
     () =>
       block([
+        set(translateY, translationY),
+        set(translateX, translationX),
         set(
           snapBack,
           and(eq(state, State.END), eq(snapTo, height), not(snapBack))
@@ -74,20 +76,16 @@ const Listing = () => {
         cond(
           snapBack,
           call([], () => goBack()),
-          cond(
-            eq(state, State.END),
-            [
-              set(
-                translateX,
-                timing({ from: translationX, to: 0, duration: 1000 })
-              ),
-              set(
-                translateY,
-                timing({ from: translationY, to: 0, duration: 1000 })
-              )
-            ],
-            [set(translateY, translationY), set(translateX, translationX)]
-          )
+          cond(eq(state, State.END), [
+            set(
+              translateX,
+              timing({ from: translationX, to: 0, duration: 1000 })
+            ),
+            set(
+              translateY,
+              timing({ from: translationY, to: 0, duration: 1000 })
+            )
+          ])
         )
       ]),
     [
@@ -103,13 +101,16 @@ const Listing = () => {
   );
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
       <PanGestureHandler {...gestureHandler}>
         <Animated.View
           style={{
             flex: 1,
             backgroundColor: "white",
-            transform: [{ translateX }, { translateY }, { scale: 1 }]
+            transform: [
+              { translateX: translationX },
+              { translateY: translationY },
+              { scale }
+            ]
           }}
         >
           <View>
