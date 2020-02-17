@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, Image, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
 import Animated, {
@@ -8,12 +8,9 @@ import Animated, {
   block,
   call,
   cond,
-  debug,
-  diff,
   eq,
   interpolate,
   multiply,
-  neq,
   not,
   set,
   useCode
@@ -46,11 +43,6 @@ const Listing = () => {
   const scale = interpolate(translateY, {
     inputRange: [0, height / 2],
     outputRange: [1, 0.75],
-    extrapolate: Extrapolate.CLAMP
-  });
-  const borderRadius = interpolate(translateY, {
-    inputRange: [0, 32],
-    outputRange: [0, 16],
     extrapolate: Extrapolate.CLAMP
   });
   const gestureHandler = useMemoOne(
@@ -101,13 +93,12 @@ const Listing = () => {
           style={{
             flex: 1,
             backgroundColor: "white",
-            borderRadius,
             transform: [{ translateX }, { translateY }, { scale }]
           }}
         >
           <View>
             <SharedElement id="thumbnail">
-              <Animated.Image
+              <Image
                 style={{
                   height: width,
                   width

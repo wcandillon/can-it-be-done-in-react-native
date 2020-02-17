@@ -25,7 +25,6 @@ export default createSharedElementStackNavigator(
     mode: "modal",
     headerMode: "none",
     defaultNavigationOptions: {
-      ...TransitionPresets.ModalSlideFromBottomIOS,
       transitionSpec: {
         open: {
           animation: "timing",
@@ -39,6 +38,14 @@ export default createSharedElementStackNavigator(
             duration: 1000
           }
         }
+      },
+      cardStyleInterpolator: ({ current: { progress } }) => {
+        const opacity = progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 1],
+          extrapolate: "clamp"
+        });
+        return { cardStyle: { opacity } };
       },
       gestureEnabled: false,
       cardStyle: {
