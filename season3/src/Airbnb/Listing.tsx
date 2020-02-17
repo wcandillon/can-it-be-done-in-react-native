@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, Image, StyleSheet, View } from "react-native";
+import { Dimensions, Image, StatusBar, StyleSheet, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
 import Animated, {
@@ -103,6 +103,7 @@ const Listing = () => {
   );
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <PanGestureHandler {...gestureHandler}>
         <Animated.View
           style={{

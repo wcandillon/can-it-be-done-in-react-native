@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header, Listing } from "./components";
+import { Listing as ListingModel } from "./components/Listing";
 
-const listings = [
+const listings: ListingModel[] = [
   {
     id: "tiny-home",
     title: "Tiny Home",
@@ -33,6 +34,7 @@ const styles = StyleSheet.create({
 const Explore = () => {
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <Header />
       {listings.map(listing => (
         <Listing key={listing.id} {...{ listing }} />
