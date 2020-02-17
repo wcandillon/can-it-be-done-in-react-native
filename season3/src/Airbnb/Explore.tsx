@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Button,
   Dimensions,
   Image,
   StyleSheet,
@@ -9,21 +10,23 @@ import {
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
 
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "./components";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    alignItems: "center"
   }
 });
 
 const Explore = () => {
   const { navigate, isFocused } = useNavigation();
   return (
-    <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => navigate("Listing")}>
+    <SafeAreaView style={styles.container}>
+      <View>
         <SharedElement id="thumbnail">
           <Image
             style={{
@@ -35,8 +38,9 @@ const Explore = () => {
             source={require("./assets/tiny-home.jpg")}
           />
         </SharedElement>
-      </TouchableWithoutFeedback>
-    </View>
+      </View>
+      <Button title="hello" onPress={() => navigate("Listing")} />
+    </SafeAreaView>
   );
 };
 

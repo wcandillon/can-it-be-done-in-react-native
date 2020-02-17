@@ -29,6 +29,13 @@ import { Description } from "./components";
 
 const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  image: {
+    width,
+    height: width
+  },
   thumbnailOverlay: {
     ...StyleSheet.absoluteFillObject,
     padding: 16
@@ -93,7 +100,7 @@ const Listing = () => {
     ]
   );
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <PanGestureHandler {...gestureHandler}>
         <Animated.View
           style={{
@@ -105,10 +112,7 @@ const Listing = () => {
           <View>
             <SharedElement id="thumbnail">
               <Image
-                style={{
-                  height: width,
-                  width
-                }}
+                style={styles.image}
                 resizeMode="cover"
                 source={require("./assets/tiny-home.jpg")}
               />
