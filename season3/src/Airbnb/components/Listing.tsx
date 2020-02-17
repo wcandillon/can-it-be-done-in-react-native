@@ -67,7 +67,7 @@ export default ({ listing }: ListingProps) => {
     }
   }, [hasFocus]);
   return (
-    <View key={listing.id} style={[styles.listing, { opacity }]}>
+    <View key={listing.id} style={styles.listing}>
       <TouchableWithoutFeedback
         onPress={() => {
           setOpacity(0);
@@ -77,7 +77,7 @@ export default ({ listing }: ListingProps) => {
         <View>
           <SharedElement id={listing.id}>
             <Image
-              style={styles.image}
+              style={[styles.image, { opacity }]}
               resizeMode="cover"
               source={listing.picture}
             />

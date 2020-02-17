@@ -1,4 +1,3 @@
-import { TransitionPresets } from "react-navigation-stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 import Explore from "./Explore";

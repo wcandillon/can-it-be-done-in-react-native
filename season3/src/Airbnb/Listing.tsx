@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Dimensions, Image, StatusBar, StyleSheet, View } from "react-native";
+import React from "react";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
 import Animated, {
@@ -8,7 +8,6 @@ import Animated, {
   block,
   call,
   cond,
-  debug,
   eq,
   interpolate,
   set,
