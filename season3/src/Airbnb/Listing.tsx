@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions, Image, StatusBar, StyleSheet, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
@@ -8,9 +8,9 @@ import Animated, {
   block,
   call,
   cond,
+  debug,
   eq,
   interpolate,
-  not,
   set,
   useCode
 } from "react-native-reanimated";
@@ -67,37 +67,33 @@ const Listing = () => {
   useCode(
     () =>
       block([
-        set(translateY, translationY),
-        set(translateX, translationX),
-        set(
-          snapBack,
-          and(eq(state, State.END), eq(snapTo, height), not(snapBack))
+        cond(
+          and(eq(state, State.END), eq(snapTo, height), eq(snapBack, 0)),
+          set(snapBack, 1)
         ),
         cond(
           snapBack,
           call([], () => goBack()),
-          cond(eq(state, State.END), [
-            set(
-              translateX,
-              timing({ from: translationX, to: 0, duration: 1000 })
-            ),
-            set(
-              translateY,
-              timing({ from: translationY, to: 0, duration: 1000 })
-            )
-          ])
+          cond(
+            eq(state, State.END),
+            [
+              set(
+                translateX,
+                timing({ from: translationX, to: 0, duration: 250 })
+              ),
+              set(
+                translateY,
+                timing({ from: translationY, to: 0, duration: 250 })
+              )
+            ],
+            [set(translateX, translationX), set(translateY, translationY)]
+          )
         )
       ]),
-    [
-      goBack,
-      snapBack,
-      snapTo,
-      state,
-      translateX,
-      translateY,
-      translationX,
-      translationY
-    ]
+    // we disable the deps because we don't want the identity change on
+    // snapPoint to trigger a side effect
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
   return (
     <View style={styles.container}>
@@ -106,11 +102,7 @@ const Listing = () => {
           style={{
             flex: 1,
             backgroundColor: "white",
-            transform: [
-              { translateX: translationX },
-              { translateY: translationY },
-              { scale }
-            ]
+            transform: [{ translateX }, { translateY }, { scale }]
           }}
         >
           <View>

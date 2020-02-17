@@ -22,7 +22,7 @@ import Airbnb, {
   fonts as airbnbFonts
 } from "./src/Airbnb";
 
-// enableScreens();
+enableScreens();
 
 const fonts = { ...uberEatsFonts, ...ipodFonts, ...airbnbFonts };
 const assets: number[] = [

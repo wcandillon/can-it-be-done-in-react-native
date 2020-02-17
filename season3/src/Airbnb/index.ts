@@ -25,20 +25,6 @@ export default createSharedElementStackNavigator(
     mode: "modal",
     headerMode: "none",
     defaultNavigationOptions: {
-      transitionSpec: {
-        open: {
-          animation: "timing",
-          config: {
-            duration: 3000
-          }
-        },
-        close: {
-          animation: "timing",
-          config: {
-            duration: 3000
-          }
-        }
-      },
       cardStyleInterpolator: ({ current: { progress } }) => {
         const opacity = progress.interpolate({
           inputRange: [0, 1],
