@@ -1,20 +1,9 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View
-} from "react-native";
-import { SharedElement } from "react-navigation-shared-element";
-import { useNavigation } from "react-navigation-hooks";
+import React from "react";
+import { StyleSheet } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Header } from "./components";
+import { Header, Listing } from "./components";
 
-const { width } = Dimensions.get("window");
 const listings = [
   {
     id: "tiny-home",
@@ -38,45 +27,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     alignItems: "center"
-  },
-  listing: {
-    marginBottom: 16
-  },
-  image: {
-    height: 150,
-    width: width - 32,
-    marginVertical: 8
-  },
-  title: {
-    fontFamily: "CerealMedium",
-    fontSize: 18
   }
 });
 
 const Explore = () => {
-  const { navigate, isFocused } = useNavigation();
-  // const opacity = isFocused() ? 1 : 0;
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       {listings.map(listing => (
-        <View key={listing.id} style={styles.listing}>
-          <TouchableWithoutFeedback
-            onPress={() => navigate("Listing", { listing })}
-          >
-            <View>
-              <SharedElement id={listing.id}>
-                <Image
-                  style={styles.image}
-                  resizeMode="cover"
-                  source={listing.picture}
-                />
-              </SharedElement>
-              <Text style={styles.title}>{listing.title}</Text>
-              <Text style={styles.title}>{listing.subtitle}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
+        <Listing key={listing.id} {...{ listing }} />
       ))}
     </SafeAreaView>
   );

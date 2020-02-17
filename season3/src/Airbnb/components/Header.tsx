@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "CerealMedium",
     fontSize: 22,
-    marginVertical: 16
+    marginTop: 16
   }
 });
 

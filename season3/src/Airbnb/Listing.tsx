@@ -26,6 +26,7 @@ import { Feather as Icon } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Description } from "./components";
+import { Listing as ListingModel } from "./components/Listing";
 
 const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -43,8 +44,7 @@ const styles = StyleSheet.create({
 });
 const Listing = () => {
   const { goBack, getParam } = useNavigation();
-  const listing = getParam("listing");
-  console.log({ listing });
+  const listing: ListingModel = getParam("listing");
   const [
     translationX,
     translationY,
