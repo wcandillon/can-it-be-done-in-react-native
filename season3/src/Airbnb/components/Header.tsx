@@ -4,8 +4,11 @@ import { Feather as Icon } from "@expo/vector-icons";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    alignSelf: "stretch"
+    width: "100%",
+    padding: 16
+  },
+  icon: {
+    marginRight: 8
   },
   chips: {
     flexDirection: "row"
@@ -35,6 +38,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     marginBottom: 16
+  },
+  title: {
+    fontFamily: "CerealMedium",
+    fontSize: 22,
+    marginVertical: 16
   }
 });
 
@@ -48,7 +56,7 @@ export default () => {
   return (
     <View style={styles.container}>
       <View style={styles.search}>
-        <Icon name="arrow-left" />
+        <Icon name="arrow-left" size={24} style={styles.icon} />
         <Text>Anywhere Stay</Text>
       </View>
       <View style={styles.chips}>
@@ -56,6 +64,7 @@ export default () => {
         <Chip label="Guests" />
         <Chip label="Filters" />
       </View>
+      <Text style={styles.title}>300+ places to stay</Text>
     </View>
   );
 };

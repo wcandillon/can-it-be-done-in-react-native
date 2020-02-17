@@ -19,27 +19,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     alignItems: "center"
+  },
+  image: {
+    height: 150,
+    width: width - 32
   }
 });
 
 const Explore = () => {
   const { navigate, isFocused } = useNavigation();
+  // const opacity = isFocused() ? 1 : 0;
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      <Header />
+      <TouchableWithoutFeedback onPress={() => navigate("Listing")}>
         <SharedElement id="thumbnail">
           <Image
-            style={{
-              height: 150,
-              width: width - 32,
-              opacity: isFocused() ? 1 : 0
-            }}
+            style={styles.image}
             resizeMode="cover"
             source={require("./assets/tiny-home.jpg")}
           />
         </SharedElement>
-      </View>
-      <Button title="hello" onPress={() => navigate("Listing")} />
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

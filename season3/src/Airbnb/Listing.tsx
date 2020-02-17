@@ -106,7 +106,7 @@ const Listing = () => {
           style={{
             flex: 1,
             backgroundColor: "white",
-            transform: [{ translateX }, { translateY }, { scale }]
+            transform: [{ translateX }, { translateY }, { scale: 1 }]
           }}
         >
           <View>
