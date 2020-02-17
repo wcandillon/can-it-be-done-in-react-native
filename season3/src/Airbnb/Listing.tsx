@@ -43,7 +43,7 @@ const Listing = () => {
     state
   ] = useValues([0, 0, 0, 0, 0, 0, State.UNDETERMINED], []);
   const snapTo = snapPoint(translationY, velocityY, [0, height]);
-  const scale = interpolate(translationY, {
+  const scale = interpolate(translateY, {
     inputRange: [0, height / 2],
     outputRange: [1, 0.75],
     extrapolate: Extrapolate.CLAMP

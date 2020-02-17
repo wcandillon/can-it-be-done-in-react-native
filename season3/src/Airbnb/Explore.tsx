@@ -9,6 +9,8 @@ import {
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
 
+import { Header } from "./components";
+
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
@@ -21,7 +23,6 @@ const styles = StyleSheet.create({
 
 const Explore = () => {
   const { navigate, isFocused } = useNavigation();
-  console.log("render");
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={() => navigate("Listing")}>
