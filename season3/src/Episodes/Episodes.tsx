@@ -49,6 +49,11 @@ export const episodes = [
     id: "CoinbasePro",
     name: "Coinbase Pro",
     icon: require("../../assets/icons/coinbase-pro.png")
+  },
+  {
+    id: "Airbnb",
+    name: "Airbnb",
+    icon: require("../../assets/icons/uber-eats.png")
   }
 ];
 

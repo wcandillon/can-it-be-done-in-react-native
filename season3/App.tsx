@@ -36,17 +36,17 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Episodes: {
+        screen: Episodes,
+        navigationOptions: {
+          title: "Can it be done in React Native?"
+        }
+      },
       Airbnb: {
         screen: Airbnb,
         navigationOptions: {
           title: "Airbnb",
           header: () => null
-        }
-      },
-      Episodes: {
-        screen: Episodes,
-        navigationOptions: {
-          title: "Can it be done in React Native?"
         }
       },
       LiquidSwipe: {
