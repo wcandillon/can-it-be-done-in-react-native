@@ -10,6 +10,7 @@ import Animated, { Value, interpolate } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   CreateNavigatorConfig,
+  NavigationDescriptor,
   NavigationParams,
   NavigationRoute,
   NavigationRouteConfigMap,
@@ -21,9 +22,8 @@ import {
 import {
   NavigationStackConfig,
   NavigationStackOptions,
-  NavigationStackProp,
-  SceneDescriptorMap
-} from "react-navigation-stack/lib/typescript/types";
+  NavigationStackProp
+} from "react-navigation-stack";
 
 import { useNavigation } from "react-navigation-hooks";
 import ClickWheel, { Command } from "./ClickWheel";
@@ -70,7 +70,7 @@ export interface InjectedIPodProps {
 
 interface IPodNavigatorProps {
   navigation: NavigationStackProp;
-  descriptors: SceneDescriptorMap;
+  descriptors: { [key: string]: NavigationDescriptor };
   screenProps?: unknown;
 }
 

@@ -38,12 +38,15 @@
     "react-native-reanimated": "~1.4.0",
     "react-native-redash": "9.5.3",
     "react-native-safe-area-context": "0.6.0",
+    "react-native-screens": "2.0.0-alpha.12",
+    "react-native-shared-element": "~0.5.1",
     "react-native-svg": "9.13.3",
     "react-native-web": "^0.11.7",
     "react-native-webview": "7.4.3",
     "react-navigation": "^4.0.10",
     "react-navigation-hooks": "^1.0.3",
-    "react-navigation-stack": "^1.9.3",
+    "react-navigation-shared-element": "^2.0.2",
+    "react-navigation-stack": "2.1.1",
     "use-memo-one": "^1.1.1"
   },
   "devDependencies": {
