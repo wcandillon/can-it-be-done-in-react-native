@@ -9,6 +9,11 @@ import { StyleGuide, Thumbnail } from "../components";
 
 export const examples = [
   {
+    screen: "Slider",
+    title: "Custom Slider",
+    source: require("../../assets/examples/accordion.png")
+  },
+  {
     screen: "AngularGradient",
     title: "Angular Gradient",
     source: require("../../assets/examples/angular-gradient.png")

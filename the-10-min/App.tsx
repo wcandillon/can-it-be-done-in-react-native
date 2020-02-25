@@ -9,8 +9,12 @@ import AngularGradient from "./src/AngularGradient";
 import Accordion from "./src/Accordion";
 import ShaderAndMask from "./src/ShaderAndMask";
 import CircularProgress from "./src/CircularProgress";
+import Slider, { assets as sliderAssets } from "./src/Slider";
 
-const assets: number[] = [...examples.map(example => example.source)];
+const assets: number[] = [
+  ...examples.map(example => example.source),
+  ...sliderAssets
+];
 const fonts = {
   "SFProText-Bold": require("./assets/fonts/SF-Pro-Text-Bold.otf"),
   "SFProText-Semibold": require("./assets/fonts/SF-Pro-Text-Semibold.otf"),
@@ -24,6 +28,13 @@ const AppNavigator = createAppContainer(
         screen: Examples,
         navigationOptions: {
           title: "The 5 min React Native",
+          headerBackTitle: null
+        }
+      },
+      Slider: {
+        screen: Slider,
+        navigationOptions: {
+          title: "Custom Slider",
           headerBackTitle: null
         }
       },
