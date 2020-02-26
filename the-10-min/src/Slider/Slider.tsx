@@ -21,7 +21,8 @@ import Knob, { KNOB_SIZE } from "./Knob";
 import { StyleGuide } from "../components";
 
 const { width } = Dimensions.get("window");
-const SLIDER_WIDTH = width - 100;
+const SLIDER_WIDTH = width - 150;
+const RULER_HEIGHT = 20;
 
 const styles = StyleSheet.create({
   container: {
@@ -36,9 +37,27 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   backgroundSlider: {
-    height: 20,
-    backgroundColor: "white",
-    borderRadius: 10
+    height: RULER_HEIGHT,
+    backgroundColor: "white"
+  },
+  sides: {
+    ...StyleSheet.absoluteFillObject,
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  left: {
+    height: RULER_HEIGHT,
+    width: RULER_HEIGHT,
+    borderRadius: RULER_HEIGHT / 2,
+    backgroundColor: StyleGuide.palette.primary,
+    left: -RULER_HEIGHT / 2
+  },
+  right: {
+    left: RULER_HEIGHT / 2,
+    height: RULER_HEIGHT,
+    width: RULER_HEIGHT,
+    borderRadius: RULER_HEIGHT / 2,
+    backgroundColor: "white"
   }
 });
 
@@ -72,13 +91,15 @@ export default () => {
       <View style={styles.slider}>
         <View>
           <View style={styles.backgroundSlider} />
+          <View style={styles.sides}>
+            <View style={styles.left} />
+            <View style={styles.right} />
+          </View>
           <Animated.View
             style={[
               styles.backgroundSlider,
               {
                 ...StyleSheet.absoluteFillObject,
-                left: 10,
-                borderRadius: 0,
                 backgroundColor: StyleGuide.palette.primary,
                 transform: [
                   { translateX: -SLIDER_WIDTH / 2 },
@@ -87,14 +108,6 @@ export default () => {
                 ]
               }
             ]}
-          />
-          <View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              backgroundColor: StyleGuide.palette.primary,
-              borderRadius: 10,
-              width: 20
-            }}
           />
         </View>
         <PanGestureHandler minDist={0} {...gestureHandler}>
