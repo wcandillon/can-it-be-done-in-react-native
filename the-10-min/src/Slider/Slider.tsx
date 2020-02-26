@@ -2,6 +2,7 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
+  Extrapolate,
   Value,
   call,
   concat,
@@ -73,7 +74,8 @@ export default () => {
   });
   const scaleX = interpolate(x, {
     inputRange: [0, SLIDER_WIDTH],
-    outputRange: [0, 1]
+    // https://github.com/facebook/react-native/issues/6278
+    outputRange: [0.0001, 1]
   });
   const value = round(multiply(divide(x, SLIDER_WIDTH), 100));
   const label = concat(value);
