@@ -72,7 +72,6 @@ export default () => {
       <View style={styles.slider}>
         <View>
           <View style={styles.backgroundSlider} />
-
           <Animated.View
             style={[
               styles.backgroundSlider,
@@ -98,7 +97,7 @@ export default () => {
             }}
           />
         </View>
-        <PanGestureHandler {...gestureHandler}>
+        <PanGestureHandler minDist={0} {...gestureHandler}>
           <Animated.View
             style={{
               position: "absolute",

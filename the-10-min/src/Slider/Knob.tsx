@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
-import Animated, { eq } from "react-native-reanimated";
+import Animated, { eq, not } from "react-native-reanimated";
 import { State } from "react-native-gesture-handler";
 
 interface KnobProps {
@@ -25,7 +25,7 @@ export default ({ state }: KnobProps) => {
   const opacity = eq(state, State.ACTIVE);
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={require("./assets/down.png")} />
+      <Animated.Image style={[styles.image, { opacity: not(opacity) }]} source={require("./assets/down.png")} />
       <Animated.Image
         style={[styles.image, { opacity }]}
         source={require("./assets/up.png")}
