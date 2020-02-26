@@ -11,7 +11,7 @@ export const examples = [
   {
     screen: "Slider",
     title: "Custom Slider",
-    source: require("../../assets/examples/accordion.png")
+    source: require("../../assets/examples/slider.png")
   },
   {
     screen: "AngularGradient",
