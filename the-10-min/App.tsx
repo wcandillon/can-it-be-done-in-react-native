@@ -10,6 +10,7 @@ import Accordion from "./src/Accordion";
 import ShaderAndMask from "./src/ShaderAndMask";
 import CircularProgress from "./src/CircularProgress";
 import Slider, { assets as sliderAssets } from "./src/Slider";
+import Tabbar from "./src/Tabbar";
 
 const assets: number[] = [
   ...examples.map(example => example.source),
@@ -24,6 +25,13 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Tabbar: {
+        screen: Tabbar,
+        navigationOptions: {
+          title: "Tabbar",
+          headerBackTitle: null
+        }
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {

@@ -1,3 +1,6 @@
 {
-  "extends": "react-native-wcandillon"
+  "extends": "react-native-wcandillon",
+  "rules": {
+    "react/no-array-index-key": 0
+  }
 }
