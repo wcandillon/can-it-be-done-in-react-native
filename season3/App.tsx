@@ -21,6 +21,7 @@ import Airbnb, {
   assets as airbnbAssets,
   fonts as airbnbFonts
 } from "./src/Airbnb";
+import WhatsApp from "./src/WhatsApp";
 
 enableScreens();
 
@@ -36,6 +37,13 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      WhatsApp: {
+        screen: WhatsApp,
+        navigationOptions: {
+          title: "WhatsApp",
+          header: () => null
+        }
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
