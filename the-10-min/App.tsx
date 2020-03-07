@@ -25,13 +25,6 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      Tabbar: {
-        screen: Tabbar,
-        navigationOptions: {
-          title: "Tabbar",
-          headerBackTitle: null
-        }
-      },
       Examples: {
         screen: Examples,
         navigationOptions: {
@@ -68,6 +61,13 @@ const AppNavigator = createAppContainer(
         screen: ShaderAndMask,
         navigationOptions: {
           title: "Shader And Mask"
+        }
+      },
+      Tabbar: {
+        screen: Tabbar,
+        navigationOptions: {
+          title: "Tabbar",
+          headerBackTitle: null
         }
       }
     },

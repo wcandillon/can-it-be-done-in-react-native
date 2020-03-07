@@ -32,6 +32,11 @@ export const examples = [
     screen: "CircularProgress",
     title: "Circular Progress",
     source: require("../../assets/examples/circular-progress.png")
+  },
+  {
+    screen: "Tabbar",
+    title: "Tabbar",
+    source: require("../../assets/examples/accordion.png")
   }
 ];
 
