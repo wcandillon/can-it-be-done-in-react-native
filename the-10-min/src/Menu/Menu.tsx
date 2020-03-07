@@ -39,7 +39,7 @@ export default () => {
           ]
         }}
       >
-        <Screen onPress={() => open.setValue(1)} />
+        <Screen {...{ open, transition }} />
         <Animated.View
           pointerEvents="none"
           style={{

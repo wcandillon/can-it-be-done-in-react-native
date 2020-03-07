@@ -15,18 +15,13 @@ import {
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated, {
   Value,
-  add,
-  and,
   block,
   cond,
-  debug,
   diffClamp,
   divide,
   eq,
   multiply,
-  neq,
   not,
-  onChange,
   set,
   sub,
   useCode
@@ -34,7 +29,6 @@ import Animated, {
 import {
   bInterpolate,
   onGestureEvent,
-  withOffset,
   withSpring,
   withTransition
 } from "react-native-redash";

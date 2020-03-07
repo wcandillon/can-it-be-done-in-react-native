@@ -1,8 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { bInterpolate } from "react-native-redash";
+import Animated from "react-native-reanimated";
 
 interface ScreenProps {
-  onPress: () => void;
+  open: Animated.Value<number>;
+  transition: Animated.Node<number>;
 }
 
 const styles = StyleSheet.create({
@@ -15,7 +18,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 20,
     padding: 16
   },
@@ -25,14 +28,15 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ({ onPress }: ScreenProps) => {
+export default ({ open, transition }: ScreenProps) => {
+  const borderRadius = bInterpolate(transition, 0, 20);
   return (
-    <View style={styles.container}>
-      <TouchableOpacity {...{ onPress }}>
+    <Animated.View style={[styles.container, { borderRadius }]}>
+      <TouchableOpacity onPress={() => open.setValue(1)}>
         <View style={styles.button}>
           <Text style={styles.label}>Show Menu</Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
