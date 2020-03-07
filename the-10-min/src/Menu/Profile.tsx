@@ -17,6 +17,7 @@ import Animated, {
   Value,
   block,
   cond,
+  debug,
   diffClamp,
   divide,
   eq,
@@ -28,9 +29,9 @@ import Animated, {
 } from "react-native-reanimated";
 import {
   bInterpolate,
+  clamp,
   onGestureEvent,
-  withSpring,
-  withTransition
+  withSpring
 } from "react-native-redash";
 import { StyleGuide } from "../components";
 
@@ -104,13 +105,13 @@ interface ProfileProps {
 }
 
 export default ({ open, transition }: ProfileProps) => {
-  const triggeredManually = new Value(0);
+  const triggeredManually = new Value<0 | 1>(0);
   const offset = new Value(MIN);
   const velocityX = new Value(0);
   const translationX = new Value(0);
   const state = new Value(State.UNDETERMINED);
   const translateX = withSpring({
-    value: diffClamp(translationX, MIN, MAX + PADDING),
+    value: clamp(translationX, MIN, MAX + PADDING),
     velocity: velocityX,
     snapPoints: [MIN, MAX],
     state,
