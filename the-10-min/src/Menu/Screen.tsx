@@ -12,6 +12,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     borderRadius: 16
+  },
+  button: {
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 16
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "500"
   }
 });
 
@@ -19,7 +29,9 @@ export default ({ onPress }: ScreenProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity {...{ onPress }}>
-        <Text>Show Menu</Text>
+        <View style={styles.button}>
+          <Text style={styles.label}>Show Menu</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );

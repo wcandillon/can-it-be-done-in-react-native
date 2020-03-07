@@ -38,6 +38,7 @@ import {
   withSpring,
   withTransition
 } from "react-native-redash";
+import { StyleGuide } from "../components";
 
 const d = Dimensions.get("window");
 const width = d.width * 0.75;
@@ -60,7 +61,32 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50
   },
-  divider: {}
+  title: {
+    fontWeight: "bold",
+    marginTop: 16
+  },
+  handle: {
+    color: StyleGuide.palette.primary,
+    textDecorationLine: "underline"
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#D8DAE0",
+    width: "100%",
+    marginVertical: 32
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 8
+  },
+  icon: {
+    marginRight: 8
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "500"
+  }
 });
 
 interface RowProps {
@@ -71,9 +97,9 @@ interface RowProps {
 
 const Row = ({ icon, label, href }: RowProps) => (
   <TouchableOpacity onPress={() => Linking.openURL(href)}>
-    <View>
-      <Icon name={icon} />
-      <Text>{label}</Text>
+    <View style={styles.row}>
+      <Icon name={icon} size={24} style={styles.icon} />
+      <Text style={styles.label}>{label}</Text>
     </View>
   </TouchableOpacity>
 );
@@ -143,8 +169,8 @@ export default ({ open }: ProfileProps) => {
             source={require("./assets/avatar.jpg")}
             style={styles.avatar}
           />
-          <Text>William Candillon</Text>
-          <Text>https://www.youtube.com/user/wcandill</Text>
+          <Text style={styles.title}>William Candillon</Text>
+          <Text style={styles.handle}>@wcandillon</Text>
           <View style={styles.divider} />
           <View>
             <Row

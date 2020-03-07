@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
-import {
-  bInterpolate,
-  useTransition,
-  withTransition
-} from "react-native-redash";
+import { bInterpolate, withTransition } from "react-native-redash";
 import Animated, { Value } from "react-native-reanimated";
 import Screen from "./Screen";
 import Profile from "./Profile";
