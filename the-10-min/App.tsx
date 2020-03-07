@@ -11,6 +11,7 @@ import ShaderAndMask from "./src/ShaderAndMask";
 import CircularProgress from "./src/CircularProgress";
 import Slider, { assets as sliderAssets } from "./src/Slider";
 import Tabbar from "./src/Tabbar";
+import Menu from "./src/Menu";
 
 const assets: number[] = [
   ...examples.map(example => example.source),
@@ -25,6 +26,13 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Menu: {
+        screen: Menu,
+        navigationOptions: {
+          title: "The 3D Menu",
+          headerBackTitle: null
+        }
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {
