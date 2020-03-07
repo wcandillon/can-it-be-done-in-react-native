@@ -23,7 +23,12 @@ import Animated, {
   sub,
   useCode
 } from "react-native-reanimated";
-import { bInterpolate, onGestureEvent } from "react-native-redash";
+import {
+  bInterpolate,
+  onGestureEvent,
+  withOffset,
+  withSpring
+} from "react-native-redash";
 
 const d = Dimensions.get("window");
 const width = d.width * 0.75;
@@ -65,23 +70,29 @@ interface ProfileProps {
   transition: Animated.Node<number>;
 }
 
-export default ({ transition }: ProfileProps) => {
+// { transition }: ProfileProps
+export default () => {
+  // const offset = new Value(0);
+  const velocityX = new Value(0);
   const translationX = new Value(0);
   const state = new Value(State.UNDETERMINED);
-  const trx = cond(
-    eq(state, State.ACTIVE),
-    diffClamp(divide(translationX, width), 0, 1),
-    transition
-  );
+  const x = withSpring({
+    value: diffClamp(translationX, -width, 100),
+    velocity: velocityX,
+    snapPoints: [-width, 0],
+    state
+    // offset
+  });
+  const trx = sub(1, divide(x, -width));
   const opacity = bInterpolate(trx, 0.5, 1);
   const scale = bInterpolate(trx, 1, 0.9);
   const translateX = bInterpolate(trx, -width, 0);
   const rotateY = bInterpolate(trx, Math.PI / 2, 0);
   const gestureHandler = onGestureEvent({
     translationX,
+    velocityX,
     state
   });
-  useCode(() => debug("trx", trx), [trx]);
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View
