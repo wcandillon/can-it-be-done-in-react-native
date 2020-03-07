@@ -16,6 +16,8 @@ import { Feather as Icon } from "@expo/vector-icons";
 import Animated, {
   Value,
   add,
+  and,
+  block,
   cond,
   debug,
   diffClamp,
@@ -23,6 +25,7 @@ import Animated, {
   eq,
   multiply,
   neq,
+  not,
   onChange,
   set,
   sub,
@@ -80,7 +83,8 @@ interface ProfileProps {
 }
 
 export default ({ open }: ProfileProps) => {
-  const offset = new Value(0);
+  const triggeredManually = new Value(0);
+  const offset = new Value(MIN);
   const velocityX = new Value(0);
   const translationX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -89,7 +93,12 @@ export default ({ open }: ProfileProps) => {
     velocity: velocityX,
     snapPoints: [MIN, MAX],
     state,
-    onSnap: ([point]) => point === MIN && open.setValue(0),
+    onSnap: ([point]) => {
+      if (point === MIN) {
+        triggeredManually.setValue(1);
+        open.setValue(0);
+      }
+    },
     offset
   });
   const trx = sub(1, divide(translateX, MIN));
@@ -102,10 +111,18 @@ export default ({ open }: ProfileProps) => {
     state
   });
   const transition = withTransition(open);
-  useCode(() => set(offset, sub(MIN, multiply(transition, MIN))), [
-    offset,
-    transition
-  ]);
+  useCode(
+    () =>
+      block([
+        cond(eq(state, State.ACTIVE), set(triggeredManually, 0)),
+        cond(eq(open, transition), set(triggeredManually, 0)),
+        cond(
+          not(triggeredManually),
+          set(offset, sub(MIN, multiply(transition, MIN)))
+        )
+      ]),
+    [offset, open, state, transition, triggeredManually]
+  );
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View
