@@ -23,6 +23,7 @@ import Animated, {
   eq,
   multiply,
   neq,
+  onChange,
   set,
   sub,
   useCode
@@ -31,7 +32,8 @@ import {
   bInterpolate,
   onGestureEvent,
   withOffset,
-  withSpring
+  withSpring,
+  withTransition
 } from "react-native-redash";
 
 const d = Dimensions.get("window");
@@ -74,11 +76,10 @@ const Row = ({ icon, label, href }: RowProps) => (
 );
 
 interface ProfileProps {
-  onPress: () => void;
-  transition: Animated.Node<number>;
+  open: Animated.Value<number>;
 }
 
-export default ({ onPress, transition }: ProfileProps) => {
+export default ({ open }: ProfileProps) => {
   const offset = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
@@ -88,7 +89,7 @@ export default ({ onPress, transition }: ProfileProps) => {
     velocity: velocityX,
     snapPoints: [MIN, MAX],
     state,
-    onSnap: ([point]) => point === MIN && onPress(),
+    onSnap: ([point]) => point === MIN && open.setValue(0),
     offset
   });
   const trx = sub(1, divide(translateX, MIN));
@@ -100,14 +101,11 @@ export default ({ onPress, transition }: ProfileProps) => {
     velocityX,
     state
   });
-  useCode(
-    () =>
-      cond(
-        neq(state, State.ACTIVE),
-        set(offset, sub(MIN, multiply(transition, MIN)))
-      ),
-    [offset, state, transition]
-  );
+  const transition = withTransition(open);
+  useCode(() => set(offset, sub(MIN, multiply(transition, MIN))), [
+    offset,
+    transition
+  ]);
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View

@@ -54,7 +54,7 @@ export default () => {
         />
       </Animated.View>
       <View style={styles.layer} pointerEvents="box-none">
-        <Profile onPress={() => open.setValue(0)} {...{ transition }} />
+        <Profile {...{ open, transition }} />
       </View>
     </View>
   );
