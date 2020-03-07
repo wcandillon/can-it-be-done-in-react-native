@@ -21,7 +21,7 @@ import Airbnb, {
   assets as airbnbAssets,
   fonts as airbnbFonts
 } from "./src/Airbnb";
-import WhatsApp from "./src/WhatsApp";
+import WhatsApp, { assets as whatsappAssets } from "./src/WhatsApp";
 
 enableScreens();
 
@@ -31,7 +31,8 @@ const assets: number[] = [
   ...liquidSwipeAssets,
   ...chromeAssets,
   ...uberEatsAssets,
-  ...airbnbAssets
+  ...airbnbAssets,
+  ...whatsappAssets
 ];
 
 const AppNavigator = createAppContainer(

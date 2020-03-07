@@ -1,18 +1,25 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
+  Value,
   block,
   debug,
   diffClamp,
+  multiply,
+  sub,
   useCode
 } from "react-native-reanimated";
-import { onGestureEvent, useValues } from "react-native-redash";
+import { onGestureEvent, useValues, withOffset } from "react-native-redash";
 import { withScaleOffset } from "./AnimatedHelpers";
 
+const { width, height } = Dimensions.get("window");
+const middleX = width / 2;
+const middleY = height / 2;
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: "black"
   },
   image: {
     ...StyleSheet.absoluteFillObject,
@@ -23,7 +30,7 @@ const styles = StyleSheet.create({
 
 export default () => {
   const [state, scaling, focalX, focalY] = useValues(
-    [State.UNDETERMINED, 1, 0, 0],
+    [State.UNDETERMINED, 1, middleX, middleY],
     []
   );
   const gestureHandler = onGestureEvent({
@@ -32,23 +39,25 @@ export default () => {
     focalX,
     focalY
   });
-  const s = diffClamp(withScaleOffset(scaling, state), 1, 8);
-  useCode(() => block([debug("focalX", focalX), debug("focalY", focalY)]), [
-    focalX,
-    focalY
-  ]);
+  const scale = diffClamp(withScaleOffset(scaling, state), 1, 4);
+  const x = multiply(focalX, scale);
+  const y = multiply(focalY, scale);
+  const translateX = diffClamp(sub(middleX, x), 0, width);
+  const translateY = diffClamp(sub(middleY, y), 0, height);
   return (
     <View style={styles.container}>
       <PinchGestureHandler {...gestureHandler}>
-        <Animated.Image
-          style={[
-            styles.image,
-            {
-              transform: [{ scale: s }]
-            }
-          ]}
-          source={require("./assets/pic1.jpg")}
-        />
+        <Animated.View style={StyleSheet.absoluteFill}>
+          <Animated.Image
+            style={[
+              styles.image,
+              {
+                transform: [{ translateX }, { translateY }, { scale }]
+              }
+            ]}
+            source={require("./assets/pic1.jpg")}
+          />
+        </Animated.View>
       </PinchGestureHandler>
     </View>
   );
