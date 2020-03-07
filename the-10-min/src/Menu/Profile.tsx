@@ -15,11 +15,15 @@ import {
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated, {
   Value,
+  add,
   cond,
   debug,
   diffClamp,
   divide,
   eq,
+  multiply,
+  neq,
+  set,
   sub,
   useCode
 } from "react-native-reanimated";
@@ -34,6 +38,9 @@ const d = Dimensions.get("window");
 const width = d.width * 0.75;
 const height = d.height * 0.5;
 const perspective = { perspective: 1000 };
+const MIN = -width;
+const MAX = 0;
+const PADDING = 100;
 const styles = StyleSheet.create({
   container: {
     width,
@@ -67,32 +74,40 @@ const Row = ({ icon, label, href }: RowProps) => (
 );
 
 interface ProfileProps {
+  onPress: () => void;
   transition: Animated.Node<number>;
 }
 
-// { transition }: ProfileProps
-export default () => {
-  // const offset = new Value(0);
+export default ({ onPress, transition }: ProfileProps) => {
+  const offset = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
   const state = new Value(State.UNDETERMINED);
-  const x = withSpring({
-    value: diffClamp(translationX, -width, 100),
+  const translateX = withSpring({
+    value: diffClamp(translationX, MIN, MAX + PADDING),
     velocity: velocityX,
-    snapPoints: [-width, 0],
-    state
-    // offset
+    snapPoints: [MIN, MAX],
+    state,
+    onSnap: ([point]) => point === MIN && onPress(),
+    offset
   });
-  const trx = sub(1, divide(x, -width));
+  const trx = sub(1, divide(translateX, MIN));
   const opacity = bInterpolate(trx, 0.5, 1);
   const scale = bInterpolate(trx, 1, 0.9);
-  const translateX = bInterpolate(trx, -width, 0);
   const rotateY = bInterpolate(trx, Math.PI / 2, 0);
   const gestureHandler = onGestureEvent({
     translationX,
     velocityX,
     state
   });
+  useCode(
+    () =>
+      cond(
+        neq(state, State.ACTIVE),
+        set(offset, sub(MIN, multiply(transition, MIN)))
+      ),
+    [offset, state, transition]
+  );
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View

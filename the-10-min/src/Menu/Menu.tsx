@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
-import { bInterpolate, useTransition } from "react-native-redash";
-import Animated from "react-native-reanimated";
+import {
+  bInterpolate,
+  useTransition,
+  withTransition
+} from "react-native-redash";
+import Animated, { Value } from "react-native-reanimated";
 import Screen from "./Screen";
 import Profile from "./Profile";
 
@@ -20,8 +24,8 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const [open, setOpen] = useState(true);
-  const transition = useTransition(open);
+  const open = new Value(0);
+  const transition = withTransition(open);
   const rotateY = bInterpolate(transition, 0, -Math.PI / 4);
   const scale = bInterpolate(transition, 1, 0.9);
   const opacity = bInterpolate(transition, 0, 0.5);
@@ -39,7 +43,7 @@ export default () => {
           ]
         }}
       >
-        <Screen onPress={() => setOpen(prev => !prev)} />
+        <Screen onPress={() => open.setValue(1)} />
         <Animated.View
           pointerEvents="none"
           style={{
@@ -50,7 +54,7 @@ export default () => {
         />
       </Animated.View>
       <View style={styles.layer} pointerEvents="box-none">
-        <Profile {...{ transition }} />
+        <Profile onPress={() => open.setValue(0)} {...{ transition }} />
       </View>
     </View>
   );
