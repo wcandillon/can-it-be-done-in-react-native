@@ -100,9 +100,10 @@ const Row = ({ icon, label, href }: RowProps) => (
 
 interface ProfileProps {
   open: Animated.Value<number>;
+  transition: Animated.Node<number>;
 }
 
-export default ({ open }: ProfileProps) => {
+export default ({ open, transition }: ProfileProps) => {
   const triggeredManually = new Value(0);
   const offset = new Value(MIN);
   const velocityX = new Value(0);
@@ -130,7 +131,6 @@ export default ({ open }: ProfileProps) => {
     velocityX,
     state
   });
-  const transition = withTransition(open);
   useCode(
     () =>
       block([
