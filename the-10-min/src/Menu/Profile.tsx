@@ -15,8 +15,10 @@ import {
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated, {
   Value,
+  and,
   block,
   cond,
+  debug,
   divide,
   eq,
   multiply,
@@ -26,6 +28,7 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 import {
+  approximates,
   bInterpolate,
   clamp,
   onGestureEvent,
@@ -113,12 +116,6 @@ export default ({ open, transition }: ProfileProps) => {
     velocity: velocityX,
     snapPoints: [MIN, MAX],
     state,
-    onSnap: ([point]) => {
-      if (point === MIN) {
-        triggeredManually.setValue(1);
-        open.setValue(0);
-      }
-    },
     offset
   });
   const trx = sub(1, divide(translateX, MIN));
@@ -133,14 +130,18 @@ export default ({ open, transition }: ProfileProps) => {
   useCode(
     () =>
       block([
-        cond(eq(state, State.ACTIVE), set(triggeredManually, 0)),
+        cond(and(eq(state, State.END), approximates(trx, 0, 0.1)), [
+          set(triggeredManually, 1),
+          set(open, 0)
+        ]),
+        // cond(eq(state, State.ACTIVE), set(triggeredManually, 0)),
         cond(eq(open, transition), set(triggeredManually, 0)),
         cond(
           not(triggeredManually),
           set(offset, sub(MIN, multiply(transition, MIN)))
         )
       ]),
-    [offset, open, state, transition, triggeredManually]
+    [offset, open, state, transition, triggeredManually, trx]
   );
   return (
     <PanGestureHandler {...gestureHandler}>
