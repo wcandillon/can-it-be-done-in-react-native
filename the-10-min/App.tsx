@@ -29,7 +29,7 @@ const AppNavigator = createAppContainer(
       Menu: {
         screen: Menu,
         navigationOptions: {
-          title: "The 3D Menu",
+          title: "3D Menu",
           headerBackTitle: null
         }
       },

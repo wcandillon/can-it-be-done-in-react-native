@@ -35,6 +35,14 @@ import {
 } from "react-native-redash";
 import { StyleGuide } from "../components";
 
+const config = {
+  damping: 40,
+  mass: 1,
+  stiffness: 300,
+  overshootClamping: false,
+  restSpeedThreshold: 1,
+  restDisplacementThreshold: 1
+};
 const d = Dimensions.get("window");
 const width = d.width * 0.75;
 const height = d.height * 0.5;
@@ -121,7 +129,8 @@ export default ({ open, transition }: ProfileProps) => {
         open.setValue(0);
       }
     },
-    offset
+    offset,
+    config
   });
   const trx = sub(1, divide(translateX, MIN));
   const opacity = bInterpolate(trx, 0.5, 1);
