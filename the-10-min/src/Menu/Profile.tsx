@@ -21,6 +21,7 @@ import Animated, {
   debug,
   divide,
   eq,
+  lessThan,
   multiply,
   not,
   set,
@@ -32,15 +33,19 @@ import {
   bInterpolate,
   clamp,
   onGestureEvent,
+  snapPoint,
   withSpring
 } from "react-native-redash";
+import { LinearGradient } from "expo-linear-gradient";
+
 import { StyleGuide } from "../components";
 
 const d = Dimensions.get("window");
 const width = d.width * 0.75;
 const height = d.height * 0.5;
 const perspective = { perspective: 1000 };
-const MIN = -width;
+const alpha = Math.PI / 4;
+const MIN = -width * Math.tan(alpha);
 const MAX = 0;
 const PADDING = 100;
 const styles = StyleSheet.create({
@@ -51,6 +56,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center"
+  },
+  gradient: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 24
   },
   avatar: {
     width: 100,
@@ -103,10 +112,10 @@ const Row = ({ icon, label, href }: RowProps) => (
 interface ProfileProps {
   open: Animated.Value<number>;
   transition: Animated.Node<number>;
+  triggeredManually: Animated.Value<0 | 1>;
 }
 
-export default ({ open, transition }: ProfileProps) => {
-  const triggeredManually = new Value<0 | 1>(0);
+export default ({ open, transition, triggeredManually }: ProfileProps) => {
   const offset = new Value(MIN);
   const velocityX = new Value(0);
   const translationX = new Value(0);
@@ -121,27 +130,31 @@ export default ({ open, transition }: ProfileProps) => {
   const trx = sub(1, divide(translateX, MIN));
   const opacity = bInterpolate(trx, 0.5, 1);
   const scale = bInterpolate(trx, 1, 0.9);
-  const rotateY = bInterpolate(trx, Math.PI / 2, 0);
+  const rotateY = bInterpolate(trx, alpha, 0);
   const gestureHandler = onGestureEvent({
     translationX,
     velocityX,
     state
   });
+  const snapTo = snapPoint(translationX, velocityX, [MIN, MAX]);
   useCode(
     () =>
       block([
-        cond(and(eq(state, State.END), approximates(trx, 0, 0.1)), [
-          set(triggeredManually, 1),
-          set(open, 0)
-        ]),
-        // cond(eq(state, State.ACTIVE), set(triggeredManually, 0)),
-        cond(eq(open, transition), set(triggeredManually, 0)),
+        cond(
+          and(
+            eq(state, State.END),
+            lessThan(trx, 0.1),
+            eq(snapTo, MIN),
+            not(triggeredManually)
+          ),
+          [set(triggeredManually, 1), set(open, 0)]
+        ),
         cond(
           not(triggeredManually),
           set(offset, sub(MIN, multiply(transition, MIN)))
         )
       ]),
-    [offset, open, state, transition, triggeredManually, trx]
+    [offset, open, snapTo, state, transition, triggeredManually, trx]
   );
   return (
     <PanGestureHandler {...gestureHandler}>
@@ -159,6 +172,10 @@ export default ({ open, transition }: ProfileProps) => {
         }}
       >
         <View style={styles.container}>
+          <LinearGradient
+            style={styles.gradient}
+            colors={["#FEFEFE", "#D2D6DE"]}
+          />
           <Image
             source={require("./assets/avatar.jpg")}
             style={styles.avatar}

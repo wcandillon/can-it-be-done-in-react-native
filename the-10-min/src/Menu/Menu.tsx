@@ -25,6 +25,7 @@ export default () => {
   const rotateY = bInterpolate(transition, 0, -Math.PI / 4);
   const scale = bInterpolate(transition, 1, 0.9);
   const opacity = bInterpolate(transition, 0, 0.5);
+  const triggeredManually = new Value<0 | 1>(0);
   return (
     <View style={styles.container}>
       <Animated.View
@@ -39,7 +40,7 @@ export default () => {
           ]
         }}
       >
-        <Screen {...{ open, transition }} />
+        <Screen {...{ open, transition, triggeredManually }} />
         <Animated.View
           pointerEvents="none"
           style={{
@@ -50,7 +51,7 @@ export default () => {
         />
       </Animated.View>
       <View style={styles.layer} pointerEvents="box-none">
-        <Profile {...{ open, transition }} />
+        <Profile {...{ open, transition, triggeredManually }} />
       </View>
     </View>
   );
