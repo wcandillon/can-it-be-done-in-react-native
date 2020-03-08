@@ -5,6 +5,7 @@ import { bInterpolate, withTransition } from "react-native-redash";
 import Animated, { Value } from "react-native-reanimated";
 import Screen from "./Screen";
 import Profile from "./Profile";
+import { alpha } from "./Constants";
 
 const { width } = Dimensions.get("window");
 const perspective = { perspective: 1000 };
@@ -22,10 +23,9 @@ const styles = StyleSheet.create({
 export default () => {
   const open = new Value(0);
   const transition = withTransition(open);
-  const rotateY = bInterpolate(transition, 0, -Math.PI / 4);
+  const rotateY = bInterpolate(transition, 0, -alpha);
   const scale = bInterpolate(transition, 1, 0.9);
   const opacity = bInterpolate(transition, 0, 0.5);
-  const triggeredManually = new Value<0 | 1>(0);
   return (
     <View style={styles.container}>
       <Animated.View
@@ -40,7 +40,7 @@ export default () => {
           ]
         }}
       >
-        <Screen {...{ open, transition, triggeredManually }} />
+        <Screen {...{ open, transition }} />
         <Animated.View
           pointerEvents="none"
           style={{
@@ -51,7 +51,7 @@ export default () => {
         />
       </Animated.View>
       <View style={styles.layer} pointerEvents="box-none">
-        <Profile {...{ open, transition, triggeredManually }} />
+        <Profile {...{ open, transition }} />
       </View>
     </View>
   );

@@ -21,6 +21,7 @@
     "expo-camera": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-gl": "~8.0.0",
+    "expo-linear-gradient": "~8.0.0",
     "gl-react": "^4.0.1",
     "gl-react-expo": "^4.0.1",
     "react": "16.9.0",

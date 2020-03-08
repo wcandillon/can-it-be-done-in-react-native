@@ -6,7 +6,6 @@ import Animated from "react-native-reanimated";
 interface ScreenProps {
   open: Animated.Value<number>;
   transition: Animated.Node<number>;
-  triggeredManually: Animated.Value<0 | 1>;
 }
 
 const styles = StyleSheet.create({
@@ -29,16 +28,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ({ open, transition, triggeredManually }: ScreenProps) => {
+export default ({ open, transition }: ScreenProps) => {
   const borderRadius = bInterpolate(transition, 0, 20);
   return (
     <Animated.View style={[styles.container, { borderRadius }]}>
-      <TouchableOpacity
-        onPress={() => {
-          triggeredManually.setValue(0);
-          open.setValue(1);
-        }}
-      >
+      <TouchableOpacity onPress={() => open.setValue(1)}>
         <View style={styles.button}>
           <Text style={styles.label}>Show Menu</Text>
         </View>
