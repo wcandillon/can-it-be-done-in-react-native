@@ -25,6 +25,7 @@ import {
   clamp,
   onGestureEvent,
   snapPoint,
+  spring,
   timing
 } from "react-native-redash";
 
@@ -73,7 +74,11 @@ export default ({ open, transition: trx }: ProfileProps) => {
         cond(and(eq(state, State.END), not(isInteractionDone)), [
           set(
             transition,
-            timing({ clock, from: gestureTransition, to: snapTo })
+            cond(
+              eq(snapTo, 1),
+              spring({ clock, from: gestureTransition, to: snapTo }),
+              timing({ clock, from: transition, to: 0, duration: 150 })
+            )
           ),
           cond(not(clockRunning(clock)), [
             set(isInteractionDone, 1),
