@@ -27,10 +27,10 @@ import {
   clamp,
   onGestureEvent,
   snapPoint,
+  spring,
   timing
 } from "react-native-redash";
 
-import { spring } from "./AnimatedHelpers";
 import { alpha, perspective } from "./Constants";
 import Content, { width } from "./Content";
 
