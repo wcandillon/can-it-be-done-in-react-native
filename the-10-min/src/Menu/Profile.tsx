@@ -8,6 +8,7 @@ import Animated, {
   debug,
   divide,
   eq,
+  interpolate,
   multiply,
   onChange,
   set,
@@ -44,7 +45,15 @@ export default ({ open, transition }: ProfileProps) => {
     snapPoints: [MIN, MAX],
     state
   });
-  const trx = transition;
+  const isActive = eq(transition, 1);
+  const trx = cond(
+    isActive,
+    interpolate(x, {
+      inputRange: [MIN, MAX],
+      outputRange: [0, 1]
+    }),
+    transition
+  );
   const translateX = bInterpolate(trx, MIN, 0);
   const opacity = bInterpolate(trx, 0.5, 1);
   const scale = bInterpolate(trx, 1, 1);
