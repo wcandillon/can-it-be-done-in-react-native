@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { bInterpolate } from "react-native-redash";
 import Animated, { Value } from "react-native-reanimated";
 import { useToggle } from "./AnimatedHelpers";
+import { State } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -25,16 +26,15 @@ const styles = StyleSheet.create({
 });
 
 interface ScreenProps {
-  transition: Animated.Value<number>;
+  state: Animated.Value<State>;
+  transition: Animated.Node<number>;
 }
 
-export default ({ transition }: ScreenProps) => {
-  const shouldOpen = new Value<0 | 1>(0);
+export default ({ state, transition }: ScreenProps) => {
   const borderRadius = bInterpolate(transition, 0, 20);
-  useToggle(transition, shouldOpen);
   return (
     <Animated.View style={[styles.container, { borderRadius }]}>
-      <TouchableOpacity onPress={() => shouldOpen.setValue(1)}>
+      <TouchableOpacity onPress={() => state.setValue(State.OPENING)}>
         <View style={styles.button}>
           <Text style={styles.label}>Show Menu</Text>
         </View>

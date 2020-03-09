@@ -1,11 +1,18 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
-import { bInterpolate, withTransition } from "react-native-redash";
-import Animated, { Value, debug, useCode } from "react-native-reanimated";
+import { bInterpolate, timing } from "react-native-redash";
+import Animated, {
+  Value,
+  block,
+  cond,
+  eq,
+  set,
+  useCode
+} from "react-native-reanimated";
 import Screen from "./Screen";
 import Profile from "./Profile";
-import { alpha } from "./Constants";
+import { State, alpha } from "./Constants";
 
 const { width } = Dimensions.get("window");
 const perspective = { perspective: 1000 };
@@ -21,10 +28,23 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const state = new Value(State.CLOSING);
   const transition = new Value(0);
   const rotateY = bInterpolate(transition, 0, -alpha);
   const scale = bInterpolate(transition, 1, 0.9);
   const opacity = bInterpolate(transition, 0, 0.5);
+  useCode(
+    () =>
+      block([
+        cond(eq(state, State.OPENING), [
+          set(transition, timing({ from: 0, to: 1 }))
+        ]),
+        cond(eq(state, State.CLOSING), [
+          set(transition, timing({ from: 1, to: 0 }))
+        ])
+      ]),
+    [state, transition]
+  );
   return (
     <View style={styles.container}>
       <Animated.View
@@ -39,7 +59,7 @@ export default () => {
           ]
         }}
       >
-        <Screen {...{ transition }} />
+        <Screen {...{ state, transition }} />
         <Animated.View
           pointerEvents="none"
           style={{
@@ -50,7 +70,7 @@ export default () => {
         />
       </Animated.View>
       <View style={styles.layer} pointerEvents="box-none">
-        <Profile {...{ transition }} />
+        <Profile {...{ transition, state }} />
       </View>
     </View>
   );

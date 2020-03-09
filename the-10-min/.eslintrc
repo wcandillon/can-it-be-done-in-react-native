@@ -1,7 +1,6 @@
 {
   "extends": "react-native-wcandillon",
   "rules": {
-    "react/no-array-index-key": 0,
-    "import/prefer-default-export": 0
+    "react/no-array-index-key": 0
   }
 }

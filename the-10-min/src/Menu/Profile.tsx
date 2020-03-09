@@ -1,19 +1,14 @@
 import React from "react";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import {
+  State as GestureState,
+  PanGestureHandler
+} from "react-native-gesture-handler";
 import Animated, {
-  Clock,
   Value,
-  and,
   block,
-  clockRunning,
   cond,
-  debug,
-  divide,
   eq,
   interpolate,
-  neq,
-  not,
-  onChange,
   set,
   useCode
 } from "react-native-reanimated";
@@ -21,77 +16,55 @@ import {
   bInterpolate,
   clamp,
   onGestureEvent,
-  snapPoint,
   timing
 } from "react-native-redash";
 
-import { alpha, perspective } from "./Constants";
+import { State, alpha, perspective } from "./Constants";
 import Content, { width } from "./Content";
-import { useToggle } from "./AnimatedHelpers";
 
 const MIN = -width * Math.tan(alpha);
 const MAX = 0;
 const PADDING = 100;
 
 interface ProfileProps {
-  transition: Animated.Value<number>;
+  state: Animated.Value<State>;
 }
 
-export default ({ transition }: ProfileProps) => {
-  const clock = new Clock();
-  const isSnapping = new Value(0);
-  const isClosing = new Value(0);
-  const localTransition = new Value(0);
+export default ({ state }: ProfileProps) => {
+  const transition = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
-  const state = new Value(State.UNDETERMINED);
+  const gestureState = new Value(GestureState.UNDETERMINED);
   const x = clamp(translationX, MIN, MAX + PADDING);
-  const gestureTransition = interpolate(x, {
-    inputRange: [MIN, MAX],
-    outputRange: [0, 1]
-  });
-  const trx = cond(eq(state, State.ACTIVE), gestureTransition, localTransition);
-  const translateX = bInterpolate(trx, MIN, 0);
-  const opacity = bInterpolate(trx, 0.5, 1);
-  const scale = bInterpolate(trx, 1, 1);
-  const rotateY = bInterpolate(trx, alpha, 0);
+  const translateX = bInterpolate(transition, MIN, 0);
+  const opacity = bInterpolate(transition, 0.5, 1);
+  const scale = bInterpolate(transition, 1, 1);
+  const rotateY = bInterpolate(transition, alpha, 0);
   const gestureHandler = onGestureEvent({
     translationX,
     velocityX,
-    state
+    state: gestureState
   });
-  const snapTo = eq(snapPoint(x, velocityX, [MIN, MAX]), MIN);
-  useToggle(transition, isClosing, 1, 0);
   useCode(
     () =>
       block([
-        cond(not(isClosing), set(localTransition, transition)),
-        onChange(state, cond(eq(state, State.END), set(isSnapping, 1))),
-        cond(isSnapping, [
+        cond(eq(gestureState, GestureState.ACTIVE), [
+          set(state, State.DRAGGING)
+        ]),
+        cond(eq(state, State.OPENING), [
+          set(transition, timing({ from: 0, to: 1 }))
+        ]),
+        cond(eq(state, State.DRAGGING), [
           set(
-            localTransition,
-            timing({
-              clock,
-              from: gestureTransition,
-              to: not(snapTo)
+            transition,
+            interpolate(x, {
+              inputRange: [MIN, MAX],
+              outputRange: [0, 1]
             })
-          ),
-          cond(and(isSnapping, not(clockRunning(clock))), [
-            set(isClosing, snapTo),
-            set(isSnapping, 0)
-          ])
+          )
         ])
       ]),
-    [
-      clock,
-      gestureTransition,
-      isClosing,
-      isSnapping,
-      localTransition,
-      snapTo,
-      state,
-      transition
-    ]
+    [gestureState, state, transition, x]
   );
   return (
     <PanGestureHandler {...gestureHandler}>
