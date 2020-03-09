@@ -17,11 +17,13 @@ import Animated, {
   and,
   block,
   cond,
+  debug,
   divide,
   eq,
   lessThan,
   multiply,
   not,
+  onChange,
   set,
   sub,
   useCode
@@ -47,7 +49,7 @@ interface ProfileProps {
 }
 
 export default ({ open, transition }: ProfileProps) => {
-  const offset = new Value(MIN);
+  const offset = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
   const state = new Value(State.UNDETERMINED);
@@ -71,6 +73,18 @@ export default ({ open, transition }: ProfileProps) => {
   useCode(
     () =>
       block([
+        cond(and(eq(open, 0), eq(transition, 0)), set(offset, MIN)),
+        cond(eq(open, 1), set(offset, sub(MIN, multiply(transition, MIN)))),
+        cond(and(eq(state, State.END), lessThan(trx, 0.1), eq(snapTo, MIN)), [
+          set(open, 0)
+        ])
+      ]),
+    [offset, open, snapTo, state, transition, trx]
+  );
+  /*
+  useCode(
+    () =>
+      block([
         cond(and(eq(state, State.END), lessThan(trx, 0.1), eq(snapTo, MIN)), [
           set(open, 0)
         ]),
@@ -78,6 +92,7 @@ export default ({ open, transition }: ProfileProps) => {
       ]),
     [offset, open, snapTo, state, transition, trx]
   );
+  */
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View
