@@ -1,10 +1,17 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 import { bInterpolate } from "react-native-redash";
-import Animated, { Value } from "react-native-reanimated";
-import { useToggle } from "./AnimatedHelpers";
-import { State } from "./Constants";
+import Animated from "react-native-reanimated";
 
+import { alpha, perspective } from "./Constants";
+
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -26,19 +33,46 @@ const styles = StyleSheet.create({
 });
 
 interface ScreenProps {
-  state: Animated.Value<State>;
+  open: Animated.Value<0 | 1>;
   transition: Animated.Node<number>;
 }
 
-export default ({ state, transition }: ScreenProps) => {
+export default ({ open, transition }: ScreenProps) => {
+  const rotateY = bInterpolate(transition, 0, -alpha);
+  const scale = bInterpolate(transition, 1, 0.9);
+  const opacity = bInterpolate(transition, 0, 0.5);
   const borderRadius = bInterpolate(transition, 0, 20);
   return (
-    <Animated.View style={[styles.container, { borderRadius }]}>
-      <TouchableOpacity onPress={() => state.setValue(State.OPENING)}>
-        <View style={styles.button}>
-          <Text style={styles.label}>Show Menu</Text>
-        </View>
-      </TouchableOpacity>
-    </Animated.View>
+    <>
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            borderRadius,
+            transform: [
+              perspective,
+              { translateX: width / 2 },
+              { rotateY },
+              { translateX: -width / 2 },
+              { scale }
+            ]
+          }
+        ]}
+      >
+        <TouchableOpacity onPress={() => open.setValue(1)}>
+          <View style={styles.button}>
+            <Text style={styles.label}>Show Menu</Text>
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
+      <Animated.View
+        pointerEvents="none"
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: "black",
+          opacity
+        }}
+      />
+    </>
   );
 };
