@@ -62,11 +62,12 @@ export default ({ open, transition: trx }: ProfileProps) => {
     inputRange: [MIN, MAX],
     outputRange: [0, 1]
   });
+  const isOpening = and(neq(diff(trx), 0), open);
   const snapTo = eq(snapPoint(x, velocityX, [MIN, MAX]), MAX);
   useCode(
     () =>
       block([
-        cond(and(neq(diff(trx), 0), open), set(transition, trx)),
+        cond(isOpening, set(transition, trx)),
         cond(eq(state, State.ACTIVE), [
           set(isInteractionDone, 0),
           set(transition, gestureTransition)
@@ -90,6 +91,7 @@ export default ({ open, transition: trx }: ProfileProps) => {
       clock,
       gestureTransition,
       isInteractionDone,
+      isOpening,
       open,
       snapTo,
       state,
