@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { StyleGuide } from "../components";
 
 const d = Dimensions.get("window");

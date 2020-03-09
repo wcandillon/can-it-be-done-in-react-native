@@ -1,24 +1,17 @@
 import React from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text } from "react-native";
 import { bInterpolate, onGestureEvent } from "react-native-redash";
 import Animated, {
   Value,
   cond,
-  debug,
   eq,
-  not,
   onChange,
   set,
   useCode
 } from "react-native-reanimated";
 
-import {
-  State,
-  TapGestureHandler,
-  TouchableOpacity
-} from "react-native-gesture-handler";
+import { State, TapGestureHandler } from "react-native-gesture-handler";
 import { alpha, perspective } from "./Constants";
-import TapHandler from "../components/TapHandler";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({

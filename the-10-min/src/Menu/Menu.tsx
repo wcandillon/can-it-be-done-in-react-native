@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { withSpringTransition, withTransition } from "react-native-redash";
-import { SpringUtils, Value, cond, eq } from "react-native-reanimated";
+import { withSpringTransition } from "react-native-redash";
+import { SpringUtils, Value } from "react-native-reanimated";
 import Screen from "./Screen";
 import Profile from "./Profile";
 
