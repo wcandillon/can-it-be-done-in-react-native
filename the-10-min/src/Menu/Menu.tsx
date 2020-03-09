@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { withTransition } from "react-native-redash";
-import { Value, cond, eq } from "react-native-reanimated";
+import { withSpringTransition, withTransition } from "react-native-redash";
+import { SpringUtils, Value, cond, eq } from "react-native-reanimated";
 import Screen from "./Screen";
 import Profile from "./Profile";
 
@@ -19,7 +19,10 @@ const styles = StyleSheet.create({
 
 export default () => {
   const open = new Value(0);
-  const transition = withTransition(open);
+  const transition = withSpringTransition(
+    open,
+    SpringUtils.makeDefaultConfig()
+  );
   return (
     <View style={styles.container}>
       <Screen {...{ open, transition }} />
