@@ -22,7 +22,7 @@ import {
   clamp,
   onGestureEvent,
   snapPoint,
-  spring
+  timing
 } from "react-native-redash";
 
 import { alpha, perspective } from "./Constants";
@@ -70,7 +70,7 @@ export default ({ transition }: ProfileProps) => {
         cond(isSnapping, [
           set(
             localTransition,
-            spring({
+            timing({
               clock,
               from: gestureTransition,
               to: cond(eq(snapTo, MIN), 0, 1)

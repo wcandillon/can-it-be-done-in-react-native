@@ -7,7 +7,7 @@ import Animated, {
   set,
   useCode
 } from "react-native-reanimated";
-import { spring } from "react-native-redash";
+import { timing } from "react-native-redash";
 
 export const useToggle = (
   transition: Animated.Value<number>,
@@ -19,7 +19,7 @@ export const useToggle = (
   useCode(
     () =>
       block([
-        cond(trigger, set(transition, spring({ clock, from, to }))),
+        cond(trigger, set(transition, timing({ clock, from, to }))),
         cond(not(clockRunning(clock)), set(trigger, 0))
       ]),
     [clock, from, to, transition, trigger]

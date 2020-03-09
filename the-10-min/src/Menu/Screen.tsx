@@ -1,17 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { bInterpolate, spring } from "react-native-redash";
-import Animated, {
-  Clock,
-  Value,
-  block,
-  clockRunning,
-  cond,
-  eq,
-  not,
-  set,
-  useCode
-} from "react-native-reanimated";
+import { bInterpolate } from "react-native-redash";
+import Animated, { Value } from "react-native-reanimated";
 import { useToggle } from "./AnimatedHelpers";
 
 const styles = StyleSheet.create({
