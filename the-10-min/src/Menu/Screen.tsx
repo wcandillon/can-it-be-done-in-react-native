@@ -12,6 +12,7 @@ import Animated, {
   set,
   useCode
 } from "react-native-reanimated";
+import { useToggle } from "./AnimatedHelpers";
 
 const styles = StyleSheet.create({
   container: {
@@ -36,21 +37,6 @@ const styles = StyleSheet.create({
 interface ScreenProps {
   transition: Animated.Value<number>;
 }
-
-const useToggle = (
-  transition: Animated.Value<number>,
-  trigger: Animated.Value<0 | 1>
-) => {
-  const clock = new Clock();
-  useCode(
-    () =>
-      block([
-        cond(trigger, set(transition, spring({ clock, from: 0, to: 1 }))),
-        cond(not(clockRunning(clock)), set(trigger, 0))
-      ]),
-    [clock, transition, trigger]
-  );
-};
 
 export default ({ transition }: ScreenProps) => {
   const shouldOpen = new Value<0 | 1>(0);

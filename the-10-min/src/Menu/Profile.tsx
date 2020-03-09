@@ -27,25 +27,11 @@ import {
 
 import { alpha, perspective } from "./Constants";
 import Content, { width } from "./Content";
+import { useToggle } from "./AnimatedHelpers";
 
 const MIN = -width * Math.tan(alpha);
 const MAX = 0;
 const PADDING = 100;
-
-const useToggle = (
-  transition: Animated.Value<number>,
-  trigger: Animated.Value<0 | 1>
-) => {
-  const clock = new Clock();
-  useCode(
-    () =>
-      block([
-        cond(trigger, set(transition, spring({ clock, from: 1, to: 0 }))),
-        cond(not(clockRunning(clock)), set(trigger, 0))
-      ]),
-    [clock, transition, trigger]
-  );
-};
 
 interface ProfileProps {
   transition: Animated.Value<number>;
@@ -53,7 +39,7 @@ interface ProfileProps {
 
 export default ({ transition }: ProfileProps) => {
   const clock = new Clock();
-  const shouldClose = new Value(0);
+  const isSnapping = new Value(0);
   const localTransition = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
@@ -74,14 +60,14 @@ export default ({ transition }: ProfileProps) => {
     state
   });
   const snapTo = snapPoint(x, velocityX, [MIN, MAX]);
-  const trigger = new Value(0);
-  useToggle(transition, trigger);
+  const isClosing = new Value(0);
+  useToggle(transition, isClosing, 1, 0);
   useCode(
     () =>
       block([
-        set(localTransition, transition),
-        onChange(state, cond(eq(state, State.END), set(shouldClose, 1))),
-        cond(shouldClose, [
+        cond(not(isClosing), set(localTransition, transition)),
+        onChange(state, cond(eq(state, State.END), set(isSnapping, 1))),
+        cond(isSnapping, [
           set(
             localTransition,
             spring({
@@ -90,22 +76,21 @@ export default ({ transition }: ProfileProps) => {
               to: cond(eq(snapTo, MIN), 0, 1)
             })
           ),
-          cond(not(clockRunning(clock)), [
-            set(trigger, eq(snapTo, MIN)),
-            cond(neq(snapTo, MIN), set(shouldClose, 0)),
-            cond(eq(transition, 0), set(shouldClose, 0))
+          cond(and(isSnapping, not(clockRunning(clock))), [
+            set(isClosing, eq(snapTo, MIN)),
+            set(isSnapping, 0)
           ])
         ])
       ]),
     [
       clock,
       gestureTransition,
+      isClosing,
+      isSnapping,
       localTransition,
-      shouldClose,
       snapTo,
       state,
-      transition,
-      trigger
+      transition
     ]
   );
   return (
