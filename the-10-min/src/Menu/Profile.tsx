@@ -10,6 +10,7 @@ import Animated, {
   cond,
   debug,
   diff,
+  divide,
   eq,
   interpolate,
   lessThan,
@@ -18,6 +19,7 @@ import Animated, {
   not,
   onChange,
   set,
+  stopClock,
   useCode
 } from "react-native-reanimated";
 import {
@@ -25,10 +27,10 @@ import {
   clamp,
   onGestureEvent,
   snapPoint,
-  spring,
   timing
 } from "react-native-redash";
 
+import { spring } from "./AnimatedHelpers";
 import { alpha, perspective } from "./Constants";
 import Content, { width } from "./Content";
 
@@ -68,6 +70,7 @@ export default ({ open, transition: trx }: ProfileProps) => {
     () =>
       block([
         cond(isOpening, set(transition, trx)),
+        cond(eq(state, State.BEGAN), stopClock(clock)),
         cond(eq(state, State.ACTIVE), [
           set(isInteractionDone, 0),
           set(transition, gestureTransition)
@@ -77,7 +80,12 @@ export default ({ open, transition: trx }: ProfileProps) => {
             transition,
             cond(
               eq(snapTo, 1),
-              spring({ clock, from: gestureTransition, to: 1 }),
+              spring({
+                clock,
+                velocity: divide(velocityX, -MIN),
+                from: gestureTransition,
+                to: 1
+              }),
               timing({ clock, from: gestureTransition, to: 0 })
             )
           ),
@@ -96,7 +104,8 @@ export default ({ open, transition: trx }: ProfileProps) => {
       snapTo,
       state,
       transition,
-      trx
+      trx,
+      velocityX
     ]
   );
   return (
