@@ -9,9 +9,12 @@ import Animated, {
   clockRunning,
   cond,
   debug,
+  diff,
   eq,
   interpolate,
+  lessThan,
   multiply,
+  neq,
   not,
   onChange,
   set,
@@ -37,10 +40,9 @@ interface ProfileProps {
   transition: Animated.Node<number>;
 }
 
-export default ({ open }: ProfileProps) => {
+export default ({ open, transition: trx }: ProfileProps) => {
   const clock = new Clock();
   const isInteractionDone = new Value(0);
-  const shouldOpen = new Value(0);
   const transition = new Value(0);
   const translationX = new Value(0);
   const velocityX = new Value(0);
@@ -63,11 +65,7 @@ export default ({ open }: ProfileProps) => {
   useCode(
     () =>
       block([
-        onChange(open, set(shouldOpen, open)),
-        cond(shouldOpen, [
-          set(transition, timing({ clock, from: 0, to: 1 })),
-          cond(not(clockRunning(clock)), set(shouldOpen, 0))
-        ]),
+        cond(and(neq(diff(trx), 0), open), set(transition, trx)),
         cond(eq(state, State.ACTIVE), [
           set(isInteractionDone, 0),
           set(transition, gestureTransition)
@@ -79,7 +77,7 @@ export default ({ open }: ProfileProps) => {
           ),
           cond(not(clockRunning(clock)), [
             set(isInteractionDone, 1),
-            cond(eq(snapTo, 0), [call([], () => open.setValue(0))])
+            cond(eq(snapTo, 0), set(open, 0))
           ])
         ])
       ]),
@@ -88,10 +86,10 @@ export default ({ open }: ProfileProps) => {
       gestureTransition,
       isInteractionDone,
       open,
-      shouldOpen,
       snapTo,
       state,
-      transition
+      transition,
+      trx
     ]
   );
   return (

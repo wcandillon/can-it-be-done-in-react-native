@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import { withTransition } from "react-native-redash";
-import { Value } from "react-native-reanimated";
+import { Value, cond, eq } from "react-native-reanimated";
 import Screen from "./Screen";
 import Profile from "./Profile";
 
