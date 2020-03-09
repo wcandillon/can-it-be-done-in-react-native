@@ -1,25 +1,33 @@
 import React from "react";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
+  Clock,
   Value,
   and,
   block,
+  clockRunning,
   cond,
   debug,
   divide,
   eq,
   interpolate,
+  lessThan,
   multiply,
+  neq,
+  not,
   onChange,
+  or,
   set,
   sub,
   useCode
 } from "react-native-reanimated";
 import {
+  approximates,
   bInterpolate,
   clamp,
   onGestureEvent,
   snapPoint,
+  timing,
   withSpring
 } from "react-native-redash";
 
@@ -31,29 +39,30 @@ const MAX = 0;
 const PADDING = 100;
 
 interface ProfileProps {
-  open: Animated.Value<number>;
-  transition: Animated.Node<number>;
+  transition: Animated.Value<number>;
 }
 
-export default ({ open, transition }: ProfileProps) => {
+export default ({ transition }: ProfileProps) => {
+  const clock = new Clock();
+  const shouldClose = new Value(0);
+  const localTransition = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
   const state = new Value(State.UNDETERMINED);
-  const x = withSpring({
+  const x = clamp(translationX, MIN, MAX + PADDING);
+  /*
+  withSpring({
     value: clamp(translationX, MIN, MAX + PADDING),
     velocity: velocityX,
     snapPoints: [MIN, MAX],
     state
   });
-  const isActive = eq(transition, 1);
-  const trx = cond(
-    isActive,
-    interpolate(x, {
-      inputRange: [MIN, MAX],
-      outputRange: [0, 1]
-    }),
-    transition
-  );
+  */
+  const gestureTransition = interpolate(x, {
+    inputRange: [MIN, MAX],
+    outputRange: [0, 1]
+  });
+  const trx = cond(eq(state, State.ACTIVE), gestureTransition, localTransition);
   const translateX = bInterpolate(trx, MIN, 0);
   const opacity = bInterpolate(trx, 0.5, 1);
   const scale = bInterpolate(trx, 1, 1);
@@ -63,6 +72,39 @@ export default ({ open, transition }: ProfileProps) => {
     velocityX,
     state
   });
+  const snapTo = snapPoint(x, velocityX, [MIN, MAX]);
+  useCode(
+    () =>
+      block([
+        set(localTransition, transition),
+        onChange(state, cond(eq(state, State.END), set(shouldClose, 1))),
+        cond(shouldClose, [
+          set(
+            localTransition,
+            timing({
+              clock,
+              from: gestureTransition,
+              to: cond(eq(snapTo, MIN), 0, 1)
+            })
+          ),
+          cond(not(clockRunning(clock)), set(shouldClose, 0))
+        ]),
+        cond(and(eq(localTransition, 0), neq(transition, 0)), [
+          set(transition, timing({ from: 1, to: 0 }))
+        ])
+        // cond(eq(open, 0), set(offset, MIN)),
+        //  cond(shouldClose, [set(state, State.UNDETERMINED), set(open, 0)])
+      ]),
+    [
+      clock,
+      gestureTransition,
+      localTransition,
+      shouldClose,
+      snapTo,
+      state,
+      transition
+    ]
+  );
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View
@@ -78,7 +120,7 @@ export default ({ open, transition }: ProfileProps) => {
           ]
         }}
       >
-        <Content {...{ open }} />
+        <Content />
       </Animated.View>
     </PanGestureHandler>
   );

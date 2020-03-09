@@ -1,12 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { bInterpolate } from "react-native-redash";
-import Animated from "react-native-reanimated";
-
-interface ScreenProps {
-  open: Animated.Value<number>;
-  transition: Animated.Node<number>;
-}
+import { bInterpolate, timing } from "react-native-redash";
+import Animated, {
+  Value,
+  block,
+  cond,
+  eq,
+  set,
+  useCode
+} from "react-native-reanimated";
 
 const styles = StyleSheet.create({
   container: {
@@ -28,11 +30,24 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ({ open, transition }: ScreenProps) => {
+interface ScreenProps {
+  transition: Animated.Value<number>;
+}
+
+export default ({ transition }: ScreenProps) => {
+  const shouldOpen = new Value<0 | 1>(0);
   const borderRadius = bInterpolate(transition, 0, 20);
+  useCode(
+    () =>
+      block([
+        cond(shouldOpen, set(transition, timing({ from: 0, to: 1 }))),
+        cond(eq(transition, 1), set(shouldOpen, 0))
+      ]),
+    [shouldOpen, transition]
+  );
   return (
     <Animated.View style={[styles.container, { borderRadius }]}>
-      <TouchableOpacity onPress={() => open.setValue(1)}>
+      <TouchableOpacity onPress={() => shouldOpen.setValue(1)}>
         <View style={styles.button}>
           <Text style={styles.label}>Show Menu</Text>
         </View>

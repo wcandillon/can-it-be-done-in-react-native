@@ -77,12 +77,10 @@ const Row = ({ icon, label, href }: RowProps) => (
   </TouchableOpacity>
 );
 
-export default ({ open }) => (
+export default () => (
   <View style={styles.container}>
     <LinearGradient style={styles.gradient} colors={["#FEFEFE", "#D2D6DE"]} />
-    <TouchableWithoutFeedback onPress={() => open.setValue(0)}>
-      <Image source={require("./assets/avatar.jpg")} style={styles.avatar} />
-    </TouchableWithoutFeedback>
+    <Image source={require("./assets/avatar.jpg")} style={styles.avatar} />
     <Text style={styles.title}>William Candillon</Text>
     <Text style={styles.handle}>@wcandillon</Text>
     <View style={styles.divider} />

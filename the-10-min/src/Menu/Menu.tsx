@@ -21,8 +21,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const open = new Value(0);
-  const transition = withTransition(open);
+  const transition = new Value(0);
   const rotateY = bInterpolate(transition, 0, -alpha);
   const scale = bInterpolate(transition, 1, 0.9);
   const opacity = bInterpolate(transition, 0, 0.5);
@@ -40,7 +39,7 @@ export default () => {
           ]
         }}
       >
-        <Screen {...{ open, transition }} />
+        <Screen {...{ transition }} />
         <Animated.View
           pointerEvents="none"
           style={{
@@ -51,7 +50,7 @@ export default () => {
         />
       </Animated.View>
       <View style={styles.layer} pointerEvents="box-none">
-        <Profile {...{ open, transition }} />
+        <Profile {...{ transition }} />
       </View>
     </View>
   );
