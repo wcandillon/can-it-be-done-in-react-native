@@ -76,8 +76,8 @@ export default ({ open, transition: trx }: ProfileProps) => {
             transition,
             cond(
               eq(snapTo, 1),
-              spring({ clock, from: gestureTransition, to: snapTo }),
-              timing({ clock, from: transition, to: 0, duration: 150 })
+              spring({ clock, from: gestureTransition, to: 1 }),
+              timing({ clock, from: gestureTransition, to: 0 })
             )
           ),
           cond(not(clockRunning(clock)), [
