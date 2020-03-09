@@ -45,7 +45,7 @@ export default ({ state }: ProfileProps) => {
   const x = clamp(translationX, MIN, MAX + PADDING);
   const translateX = bInterpolate(transition, MIN, 0);
   const opacity = bInterpolate(transition, 0.5, 1);
-  const scale = bInterpolate(transition, 1, 1);
+  const scale = bInterpolate(transition, 1, 0.9);
   const rotateY = bInterpolate(transition, alpha, 0);
   const gestureHandler = onGestureEvent({
     translationX,
@@ -60,7 +60,7 @@ export default ({ state }: ProfileProps) => {
   useCode(
     () =>
       block([
-        cond(eq(gestureState, GestureState.ACTIVE), [
+        cond(eq(gestureState, GestureState.BEGAN), [
           set(state, State.DRAGGING)
         ]),
         cond(
@@ -70,6 +70,7 @@ export default ({ state }: ProfileProps) => {
         cond(eq(state, State.OPENING), [
           set(transition, timing({ from: 0, to: 1 }))
         ]),
+        cond(eq(state, State.CLOSING), set(transition, 0)),
         cond(eq(state, State.SNAPPING), [
           set(
             transition,
@@ -84,7 +85,7 @@ export default ({ state }: ProfileProps) => {
     [clock, gestureState, gestureTransition, snapTo, state, transition]
   );
   return (
-    <PanGestureHandler {...gestureHandler}>
+    <PanGestureHandler minDist={0} {...gestureHandler}>
       <Animated.View
         style={{
           opacity,
