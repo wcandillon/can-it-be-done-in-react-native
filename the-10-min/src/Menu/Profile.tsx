@@ -11,24 +11,18 @@ import Animated, {
   divide,
   eq,
   interpolate,
-  lessThan,
-  multiply,
   neq,
   not,
   onChange,
-  or,
   set,
-  sub,
   useCode
 } from "react-native-reanimated";
 import {
-  approximates,
   bInterpolate,
   clamp,
   onGestureEvent,
   snapPoint,
-  timing,
-  withSpring
+  spring
 } from "react-native-redash";
 
 import { alpha, perspective } from "./Constants";
@@ -37,6 +31,21 @@ import Content, { width } from "./Content";
 const MIN = -width * Math.tan(alpha);
 const MAX = 0;
 const PADDING = 100;
+
+const useToggle = (
+  transition: Animated.Value<number>,
+  trigger: Animated.Value<0 | 1>
+) => {
+  const clock = new Clock();
+  useCode(
+    () =>
+      block([
+        cond(trigger, set(transition, spring({ clock, from: 1, to: 0 }))),
+        cond(not(clockRunning(clock)), set(trigger, 0))
+      ]),
+    [clock, transition, trigger]
+  );
+};
 
 interface ProfileProps {
   transition: Animated.Value<number>;
@@ -50,14 +59,6 @@ export default ({ transition }: ProfileProps) => {
   const translationX = new Value(0);
   const state = new Value(State.UNDETERMINED);
   const x = clamp(translationX, MIN, MAX + PADDING);
-  /*
-  withSpring({
-    value: clamp(translationX, MIN, MAX + PADDING),
-    velocity: velocityX,
-    snapPoints: [MIN, MAX],
-    state
-  });
-  */
   const gestureTransition = interpolate(x, {
     inputRange: [MIN, MAX],
     outputRange: [0, 1]
@@ -73,6 +74,8 @@ export default ({ transition }: ProfileProps) => {
     state
   });
   const snapTo = snapPoint(x, velocityX, [MIN, MAX]);
+  const trigger = new Value(0);
+  useToggle(transition, trigger);
   useCode(
     () =>
       block([
@@ -81,19 +84,18 @@ export default ({ transition }: ProfileProps) => {
         cond(shouldClose, [
           set(
             localTransition,
-            timing({
+            spring({
               clock,
               from: gestureTransition,
               to: cond(eq(snapTo, MIN), 0, 1)
             })
           ),
-          cond(not(clockRunning(clock)), set(shouldClose, 0))
-        ]),
-        cond(and(eq(localTransition, 0), neq(transition, 0)), [
-          set(transition, timing({ from: 1, to: 0 }))
+          cond(not(clockRunning(clock)), [
+            set(trigger, eq(snapTo, MIN)),
+            cond(neq(snapTo, MIN), set(shouldClose, 0)),
+            cond(eq(transition, 0), set(shouldClose, 0))
+          ])
         ])
-        // cond(eq(open, 0), set(offset, MIN)),
-        //  cond(shouldClose, [set(state, State.UNDETERMINED), set(open, 0)])
       ]),
     [
       clock,
@@ -102,7 +104,8 @@ export default ({ transition }: ProfileProps) => {
       shouldClose,
       snapTo,
       state,
-      transition
+      transition,
+      trigger
     ]
   );
   return (

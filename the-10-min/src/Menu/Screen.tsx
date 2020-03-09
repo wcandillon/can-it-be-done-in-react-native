@@ -1,11 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { bInterpolate, timing } from "react-native-redash";
+import { bInterpolate, spring } from "react-native-redash";
 import Animated, {
+  Clock,
   Value,
   block,
+  clockRunning,
   cond,
   eq,
+  not,
   set,
   useCode
 } from "react-native-reanimated";
@@ -34,17 +37,25 @@ interface ScreenProps {
   transition: Animated.Value<number>;
 }
 
-export default ({ transition }: ScreenProps) => {
-  const shouldOpen = new Value<0 | 1>(0);
-  const borderRadius = bInterpolate(transition, 0, 20);
+const useToggle = (
+  transition: Animated.Value<number>,
+  trigger: Animated.Value<0 | 1>
+) => {
+  const clock = new Clock();
   useCode(
     () =>
       block([
-        cond(shouldOpen, set(transition, timing({ from: 0, to: 1 }))),
-        cond(eq(transition, 1), set(shouldOpen, 0))
+        cond(trigger, set(transition, spring({ clock, from: 0, to: 1 }))),
+        cond(not(clockRunning(clock)), set(trigger, 0))
       ]),
-    [shouldOpen, transition]
+    [clock, transition, trigger]
   );
+};
+
+export default ({ transition }: ScreenProps) => {
+  const shouldOpen = new Value<0 | 1>(0);
+  const borderRadius = bInterpolate(transition, 0, 20);
+  useToggle(transition, shouldOpen);
   return (
     <Animated.View style={[styles.container, { borderRadius }]}>
       <TouchableOpacity onPress={() => shouldOpen.setValue(1)}>
