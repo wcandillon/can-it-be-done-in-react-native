@@ -40,6 +40,7 @@ interface ProfileProps {
 export default ({ transition }: ProfileProps) => {
   const clock = new Clock();
   const isSnapping = new Value(0);
+  const isClosing = new Value(0);
   const localTransition = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
@@ -59,8 +60,7 @@ export default ({ transition }: ProfileProps) => {
     velocityX,
     state
   });
-  const snapTo = snapPoint(x, velocityX, [MIN, MAX]);
-  const isClosing = new Value(0);
+  const snapTo = eq(snapPoint(x, velocityX, [MIN, MAX]), MIN);
   useToggle(transition, isClosing, 1, 0);
   useCode(
     () =>
@@ -73,11 +73,11 @@ export default ({ transition }: ProfileProps) => {
             timing({
               clock,
               from: gestureTransition,
-              to: cond(eq(snapTo, MIN), 0, 1)
+              to: not(snapTo)
             })
           ),
           cond(and(isSnapping, not(clockRunning(clock))), [
-            set(isClosing, eq(snapTo, MIN)),
+            set(isClosing, snapTo),
             set(isSnapping, 0)
           ])
         ])
