@@ -10,6 +10,7 @@ import Animated, {
   block,
   clockRunning,
   cond,
+  debug,
   eq,
   interpolate,
   not,
