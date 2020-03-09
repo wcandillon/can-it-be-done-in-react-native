@@ -1,17 +1,5 @@
 import React from "react";
-import {
-  Dimensions,
-  Image,
-  Linking,
-  StyleSheet,
-  Text,
-  View
-} from "react-native";
-import {
-  PanGestureHandler,
-  State,
-  TouchableOpacity
-} from "react-native-gesture-handler";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
   Value,
   and,
@@ -20,9 +8,7 @@ import Animated, {
   debug,
   divide,
   eq,
-  lessThan,
   multiply,
-  not,
   onChange,
   set,
   sub,
@@ -49,18 +35,17 @@ interface ProfileProps {
 }
 
 export default ({ open, transition }: ProfileProps) => {
-  const offset = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
   const state = new Value(State.UNDETERMINED);
-  const translateX = withSpring({
+  const x = withSpring({
     value: clamp(translationX, MIN, MAX + PADDING),
     velocity: velocityX,
     snapPoints: [MIN, MAX],
-    state,
-    offset
+    state
   });
-  const trx = sub(1, divide(translateX, MIN));
+  const trx = transition;
+  const translateX = bInterpolate(trx, MIN, 0);
   const opacity = bInterpolate(trx, 0.5, 1);
   const scale = bInterpolate(trx, 1, 1);
   const rotateY = bInterpolate(trx, alpha, 0);
@@ -69,30 +54,6 @@ export default ({ open, transition }: ProfileProps) => {
     velocityX,
     state
   });
-  const snapTo = snapPoint(translationX, velocityX, [MIN, MAX]);
-  useCode(
-    () =>
-      block([
-        cond(and(eq(open, 0), eq(transition, 0)), set(offset, MIN)),
-        cond(eq(open, 1), set(offset, sub(MIN, multiply(transition, MIN)))),
-        cond(and(eq(state, State.END), lessThan(trx, 0.1), eq(snapTo, MIN)), [
-          set(open, 0)
-        ])
-      ]),
-    [offset, open, snapTo, state, transition, trx]
-  );
-  /*
-  useCode(
-    () =>
-      block([
-        cond(and(eq(state, State.END), lessThan(trx, 0.1), eq(snapTo, MIN)), [
-          set(open, 0)
-        ]),
-        cond(eq(open, 1), set(offset, sub(MIN, multiply(transition, MIN))))
-      ]),
-    [offset, open, snapTo, state, transition, trx]
-  );
-  */
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View
@@ -108,7 +69,7 @@ export default ({ open, transition }: ProfileProps) => {
           ]
         }}
       >
-        <Content />
+        <Content {...{ open }} />
       </Animated.View>
     </PanGestureHandler>
   );

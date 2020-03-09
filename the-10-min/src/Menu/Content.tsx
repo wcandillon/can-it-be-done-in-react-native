@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { StyleGuide } from "../components";
 
 const d = Dimensions.get("window");
@@ -76,10 +77,12 @@ const Row = ({ icon, label, href }: RowProps) => (
   </TouchableOpacity>
 );
 
-export default () => (
+export default ({ open }) => (
   <View style={styles.container}>
     <LinearGradient style={styles.gradient} colors={["#FEFEFE", "#D2D6DE"]} />
-    <Image source={require("./assets/avatar.jpg")} style={styles.avatar} />
+    <TouchableWithoutFeedback onPress={() => open.setValue(0)}>
+      <Image source={require("./assets/avatar.jpg")} style={styles.avatar} />
+    </TouchableWithoutFeedback>
     <Text style={styles.title}>William Candillon</Text>
     <Text style={styles.handle}>@wcandillon</Text>
     <View style={styles.divider} />
