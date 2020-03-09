@@ -4,7 +4,8 @@ export enum State {
   OPENING,
   CLOSING,
   DRAGGING,
-  SNAPPING
+  SNAPPING,
+  RESTING
 }
 export const alpha = Math.PI / 4;
 export const perspective =

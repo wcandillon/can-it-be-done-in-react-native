@@ -4,11 +4,15 @@ import {
   PanGestureHandler
 } from "react-native-gesture-handler";
 import Animated, {
+  Clock,
   Value,
+  and,
   block,
+  clockRunning,
   cond,
   eq,
   interpolate,
+  not,
   set,
   useCode
 } from "react-native-reanimated";
@@ -16,6 +20,7 @@ import {
   bInterpolate,
   clamp,
   onGestureEvent,
+  snapPoint,
   timing
 } from "react-native-redash";
 
@@ -31,6 +36,7 @@ interface ProfileProps {
 }
 
 export default ({ state }: ProfileProps) => {
+  const clock = new Clock();
   const transition = new Value(0);
   const velocityX = new Value(0);
   const translationX = new Value(0);
@@ -45,26 +51,36 @@ export default ({ state }: ProfileProps) => {
     velocityX,
     state: gestureState
   });
+  const gestureTransition = interpolate(x, {
+    inputRange: [MIN, MAX],
+    outputRange: [0, 1]
+  });
+  const snapTo = eq(snapPoint(x, velocityX, [MIN, MAX]), 0);
   useCode(
     () =>
       block([
         cond(eq(gestureState, GestureState.ACTIVE), [
           set(state, State.DRAGGING)
         ]),
+        cond(
+          cond(eq(state, State.DRAGGING), eq(gestureState, GestureState.END)),
+          [set(state, State.SNAPPING)]
+        ),
         cond(eq(state, State.OPENING), [
           set(transition, timing({ from: 0, to: 1 }))
         ]),
-        cond(eq(state, State.DRAGGING), [
+        cond(eq(state, State.SNAPPING), [
           set(
             transition,
-            interpolate(x, {
-              inputRange: [MIN, MAX],
-              outputRange: [0, 1]
-            })
-          )
-        ])
+            timing({ clock, from: gestureTransition, to: snapTo })
+          ),
+          cond(not(clockRunning(clock)), [
+            set(state, cond(snapTo, State.RESTING, State.CLOSING))
+          ])
+        ]),
+        cond(eq(state, State.DRAGGING), [set(transition, gestureTransition)])
       ]),
-    [gestureState, state, transition, x]
+    [clock, gestureState, gestureTransition, snapTo, state, transition]
   );
   return (
     <PanGestureHandler {...gestureHandler}>
