@@ -32,7 +32,10 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
-            transform: transformOrigin(0, RADIUS / 2, { rotate: theta }),
+            transform: transformOrigin(
+              { x: 0, y: RADIUS / 2 },
+              { rotate: theta }
+            ),
             opacity
           }}
         >
@@ -44,7 +47,7 @@ export default ({ progress, bg, fg }: CircularProgressProps) => {
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
-            transform: transformOrigin(0, RADIUS / 2, { rotate })
+            transform: transformOrigin({ x: 0, y: RADIUS / 2 }, { rotate })
           }}
         >
           <HalfCircle color={bg} />

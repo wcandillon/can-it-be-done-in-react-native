@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
 import { bInterpolate, bInterpolateColor } from "react-native-redash";
@@ -23,8 +23,8 @@ export default ({ transition }: ChevronProps) => {
   const rotateZ = bInterpolate(transition, Math.PI, 0);
   const backgroundColor = bInterpolateColor(
     transition,
-    { r: 82, g: 82, b: 81 },
-    { r: 228, g: 86, b: 69 }
+    processColor("#525251"),
+    processColor("#e45645")
   ) as Animated.Node<number>;
   return (
     <Animated.View
