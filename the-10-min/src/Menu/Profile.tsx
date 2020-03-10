@@ -40,7 +40,7 @@ interface ProfileProps {
 
 export default ({ open, transition: trx }: ProfileProps) => {
   const clock = new Clock();
-  const isInteractionDone = new Value(0);
+  const isDone = new Value(0);
   const transition = new Value(0);
   const translationX = new Value(0);
   const velocityX = new Value(0);
@@ -67,10 +67,10 @@ export default ({ open, transition: trx }: ProfileProps) => {
         cond(isOpening, set(transition, trx)),
         cond(eq(state, State.BEGAN), stopClock(clock)),
         cond(eq(state, State.ACTIVE), [
-          set(isInteractionDone, 0),
+          set(isDone, 0),
           set(transition, gestureTransition)
         ]),
-        cond(and(eq(state, State.END), not(isInteractionDone)), [
+        cond(and(eq(state, State.END), not(isDone)), [
           set(
             transition,
             cond(
@@ -85,7 +85,7 @@ export default ({ open, transition: trx }: ProfileProps) => {
             )
           ),
           cond(not(clockRunning(clock)), [
-            set(isInteractionDone, 1),
+            set(isDone, 1),
             cond(eq(snapTo, 0), set(open, 0))
           ])
         ])
@@ -93,7 +93,7 @@ export default ({ open, transition: trx }: ProfileProps) => {
     [
       clock,
       gestureTransition,
-      isInteractionDone,
+      isDone,
       isOpening,
       open,
       snapTo,
