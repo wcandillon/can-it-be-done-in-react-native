@@ -1,16 +1,9 @@
 import React from "react";
 import { Dimensions, StyleSheet, Text } from "react-native";
-import { bInterpolate, onGestureEvent } from "react-native-redash";
-import Animated, {
-  Value,
-  cond,
-  eq,
-  onChange,
-  set,
-  useCode
-} from "react-native-reanimated";
+import { bInterpolate } from "react-native-redash";
+import Animated from "react-native-reanimated";
 
-import { State, TapGestureHandler } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { alpha, perspective } from "./Constants";
 
 const { width } = Dimensions.get("window");
@@ -40,16 +33,10 @@ interface ScreenProps {
 }
 
 export default ({ open, transition }: ScreenProps) => {
-  const state = new Value(State.UNDETERMINED);
   const rotateY = bInterpolate(transition, 0, -alpha);
   const scale = bInterpolate(transition, 1, 0.9);
   const opacity = bInterpolate(transition, 0, 0.5);
   const borderRadius = bInterpolate(transition, 0, 20);
-  const gestureHandler = onGestureEvent({ state });
-  useCode(() => onChange(state, cond(eq(state, State.END), set(open, 1))), [
-    open,
-    state
-  ]);
   return (
     <>
       <Animated.View
@@ -67,11 +54,11 @@ export default ({ open, transition }: ScreenProps) => {
           }
         ]}
       >
-        <TapGestureHandler {...gestureHandler}>
+        <TouchableOpacity onPress={() => open.setValue(1)}>
           <Animated.View style={styles.button}>
             <Text style={styles.label}>Show Menu</Text>
           </Animated.View>
-        </TapGestureHandler>
+        </TouchableOpacity>
       </Animated.View>
       <Animated.View
         pointerEvents="none"
