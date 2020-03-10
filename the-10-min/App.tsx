@@ -26,13 +26,6 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      Menu: {
-        screen: Menu,
-        navigationOptions: {
-          title: "3D Menu",
-          headerBackTitle: null
-        }
-      },
       Examples: {
         screen: Examples,
         navigationOptions: {
@@ -75,6 +68,13 @@ const AppNavigator = createAppContainer(
         screen: Tabbar,
         navigationOptions: {
           title: "Tabbar",
+          headerBackTitle: null
+        }
+      },
+      Menu: {
+        screen: Menu,
+        navigationOptions: {
+          title: "3D Menu",
           headerBackTitle: null
         }
       }

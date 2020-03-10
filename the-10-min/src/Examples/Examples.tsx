@@ -37,6 +37,11 @@ export const examples = [
     screen: "Tabbar",
     title: "Tabbar",
     source: require("../../assets/examples/accordion.png")
+  },
+  {
+    screen: "Menu",
+    title: "3D Menu",
+    source: require("../../assets/examples/accordion.png")
   }
 ];
 
