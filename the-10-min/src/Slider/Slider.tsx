@@ -2,7 +2,6 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
-  Extrapolate,
   Value,
   call,
   concat,
