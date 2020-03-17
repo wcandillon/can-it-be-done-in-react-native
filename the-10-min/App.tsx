@@ -12,6 +12,7 @@ import CircularProgress from "./src/CircularProgress";
 import Slider, { assets as sliderAssets } from "./src/Slider";
 import Tabbar from "./src/Tabbar";
 import Menu from "./src/Menu";
+import TapGesture from "./src/TapGesture";
 
 const assets: number[] = [
   ...examples.map(example => example.source),
@@ -36,8 +37,7 @@ const AppNavigator = createAppContainer(
       Slider: {
         screen: Slider,
         navigationOptions: {
-          title: "Custom Slider",
-          headerBackTitle: null
+          title: "Custom Slider"
         }
       },
       CircularProgress: {
@@ -76,6 +76,12 @@ const AppNavigator = createAppContainer(
         navigationOptions: {
           title: "3D Menu",
           headerBackTitle: null
+        }
+      },
+      TapGesture: {
+        screen: TapGesture,
+        navigationOptions: {
+          title: "Tap Gesture"
         }
       }
     },
