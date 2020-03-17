@@ -6,25 +6,28 @@ import { bInterpolate } from "react-native-redash";
 import { StyleGuide } from "../components";
 import CircularProgress from "../components/CircularProgress";
 
-const SIZE = 100;
-const ICON_SIZE = 72;
+const SIZE = 150;
+const ICON_SIZE = 92;
 const PADDING = (SIZE - ICON_SIZE) / 2;
+const STROKE_WIDTH = 10;
 
 const styles = StyleSheet.create({
   container: {
     width: SIZE,
     height: SIZE,
-    borderRadius: SIZE / 2
+    borderRadius: SIZE / 2,
+    justifyContent: "center",
+    alignItems: "center"
   },
-  content: {
-    marginTop: PADDING,
-    marginLeft: PADDING
+  icon: {
+    top: PADDING - STROKE_WIDTH,
+    left: PADDING - STROKE_WIDTH
   },
   background: {
     backgroundColor: "white",
-    height: ICON_SIZE,
-    width: ICON_SIZE,
-    borderRadius: ICON_SIZE / 2
+    height: SIZE - STROKE_WIDTH * 2,
+    width: SIZE - STROKE_WIDTH * 2,
+    borderRadius: (SIZE - STROKE_WIDTH * 2) / 2
   }
 });
 
@@ -35,7 +38,7 @@ interface ButtonProps {
 //  check-circle
 //
 export default ({ progress }: ButtonProps) => {
-  const height = bInterpolate(progress, 0, SIZE);
+  const height = bInterpolate(progress, 0, ICON_SIZE);
   return (
     <View>
       <View style={StyleSheet.absoluteFill}>
@@ -47,28 +50,29 @@ export default ({ progress }: ButtonProps) => {
         />
       </View>
       <View style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.background}>
-            <Icon
-              name="fingerprint"
-              color={StyleGuide.palette.background}
-              size={72}
-            />
-          </View>
-          <Animated.View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              overflow: "hidden",
-              height
-            }}
-          >
-            <Icon
-              name="fingerprint"
-              color={StyleGuide.palette.primary}
-              size={ICON_SIZE}
-            />
-          </Animated.View>
+        <View style={styles.background}>
+          <Icon
+            name="fingerprint"
+            color={StyleGuide.palette.background}
+            size={ICON_SIZE}
+            style={styles.icon}
+          />
         </View>
+        <Animated.View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            overflow: "hidden",
+            height,
+            left: PADDING,
+            top: PADDING
+          }}
+        >
+          <Icon
+            name="fingerprint"
+            color={StyleGuide.palette.primary}
+            size={ICON_SIZE}
+          />
+        </Animated.View>
       </View>
     </View>
   );
