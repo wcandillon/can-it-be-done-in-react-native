@@ -23,7 +23,7 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 
-import { onGestureEvent, timing, withTransition } from "react-native-redash";
+import { onGestureEvent, withTransition } from "react-native-redash";
 import Button from "./Button";
 
 const styles = StyleSheet.create({
@@ -38,7 +38,9 @@ const styles = StyleSheet.create({
 export default () => {
   const state = new Value(State.UNDETERMINED);
   const isActive = eq(state, State.BEGAN);
-  const progress = withTransition(isActive, { duration: 2000 });
+  const progress = withTransition(isActive, {
+    duration: cond(isActive, 1000, 250)
+  });
   const gestureHandler = onGestureEvent({ state });
   return (
     <View style={styles.container}>
