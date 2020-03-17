@@ -41,7 +41,12 @@ export const examples = [
   {
     screen: "Menu",
     title: "3D Menu",
-    source: require("../../assets/examples/accordion.png")
+    source: require("../../assets/examples/3d.png")
+  },
+  {
+    screen: "TapGesture",
+    title: "Tap Gesture",
+    source: require("../../assets/examples/tap-gesture.png")
   }
 ];
 

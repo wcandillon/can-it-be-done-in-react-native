@@ -1,32 +1,35 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { call, cond, eq, useCode } from "react-native-reanimated";
-import { MaterialCommunityIcons as Icon } from "@expo/vector-icons";
+import { MaterialIcons as Icon } from "@expo/vector-icons";
 import { bInterpolate } from "react-native-redash";
-import { StyleGuide } from "../components";
 import CircularProgress from "../components/CircularProgress";
+import { StyleGuide } from "../components";
 
 const SIZE = 150;
-const ICON_SIZE = 92;
-const PADDING = (SIZE - ICON_SIZE) / 2;
 const STROKE_WIDTH = 10;
+const ICON_SIZE = 96;
+const CONTENT_SIZE = SIZE - STROKE_WIDTH * 2;
+
 const styles = StyleSheet.create({
   container: {
-    width: SIZE,
-    height: SIZE,
-    borderRadius: SIZE / 2,
-    justifyContent: "center",
-    alignItems: "center"
+    position: "absolute",
+    top: STROKE_WIDTH,
+    left: STROKE_WIDTH,
+    right: STROKE_WIDTH,
+    bottom: STROKE_WIDTH,
+    backgroundColor: "white",
+    borderRadius: CONTENT_SIZE / 2,
+    zIndex: 100
   },
   icon: {
-    top: PADDING - STROKE_WIDTH,
-    left: PADDING - STROKE_WIDTH
+    top: (CONTENT_SIZE - ICON_SIZE) / 2,
+    left: (CONTENT_SIZE - ICON_SIZE) / 2
   },
-  background: {
-    backgroundColor: "white",
-    height: SIZE - STROKE_WIDTH * 2,
-    width: SIZE - STROKE_WIDTH * 2,
-    borderRadius: (SIZE - STROKE_WIDTH * 2) / 2
+  activeIcon: {
+    position: "absolute",
+    top: (CONTENT_SIZE - ICON_SIZE) / 2,
+    left: (CONTENT_SIZE - ICON_SIZE) / 2
   }
 });
 
@@ -47,41 +50,28 @@ export default ({ progress }: ButtonProps) => {
   );
   return (
     <View>
-      <View style={StyleSheet.absoluteFill}>
-        <CircularProgress
-          {...{ progress }}
-          radius={SIZE / 2}
-          fg={StyleGuide.palette.primary}
-          bg="white"
-        />
-      </View>
+      <CircularProgress
+        radius={SIZE / 2}
+        bg="white"
+        fg={StyleGuide.palette.primary}
+        {...{ progress }}
+      />
       <View style={styles.container}>
-        <View style={styles.background}>
-          <Icon
-            name={active ? "check-circle" : "fingerprint"}
-            color={
-              active
-                ? StyleGuide.palette.primary
-                : StyleGuide.palette.background
-            }
-            size={ICON_SIZE}
-            style={styles.icon}
-          />
-        </View>
+        <Icon
+          name={active ? "check-circle" : "fingerprint"}
+          size={ICON_SIZE}
+          color={
+            active ? StyleGuide.palette.primary : StyleGuide.palette.background
+          }
+          style={styles.icon}
+        />
         <Animated.View
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            overflow: "hidden",
-            height,
-            left: PADDING,
-            top: PADDING
-          }}
+          style={[styles.activeIcon, { height, opacity: active ? 0 : 1 }]}
         >
           <Icon
             name="fingerprint"
-            color={StyleGuide.palette.primary}
             size={ICON_SIZE}
-            style={{ opacity: active ? 0 : 1 }}
+            color={StyleGuide.palette.primary}
           />
         </Animated.View>
       </View>

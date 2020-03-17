@@ -27,12 +27,6 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      TapGesture: {
-        screen: TapGesture,
-        navigationOptions: {
-          title: "Tap Gesture"
-        }
-      },
       Examples: {
         screen: Examples,
         navigationOptions: {
@@ -82,6 +76,12 @@ const AppNavigator = createAppContainer(
         navigationOptions: {
           title: "3D Menu",
           headerBackTitle: null
+        }
+      },
+      TapGesture: {
+        screen: TapGesture,
+        navigationOptions: {
+          title: "Tap Gesture"
         }
       }
     },
