@@ -23,7 +23,11 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 
-import { onGestureEvent, withTransition } from "react-native-redash";
+import {
+  bInterpolate,
+  onGestureEvent,
+  withTransition
+} from "react-native-redash";
 import Button from "./Button";
 
 const styles = StyleSheet.create({
@@ -42,10 +46,11 @@ export default () => {
     duration: cond(isActive, 1000, 250)
   });
   const gestureHandler = onGestureEvent({ state });
+  const scale = bInterpolate(progress, 1, 1.2);
   return (
     <View style={styles.container}>
       <TapGestureHandler {...gestureHandler}>
-        <Animated.View>
+        <Animated.View style={{ transform: [{ scale }] }}>
           <Button {...{ progress }} />
         </Animated.View>
       </TapGestureHandler>
