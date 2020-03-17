@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { call, cond, eq, useCode } from "react-native-reanimated";
 import { MaterialCommunityIcons as Icon } from "@expo/vector-icons";
 import { bInterpolate } from "react-native-redash";
 import { StyleGuide } from "../components";
@@ -10,7 +10,6 @@ const SIZE = 150;
 const ICON_SIZE = 92;
 const PADDING = (SIZE - ICON_SIZE) / 2;
 const STROKE_WIDTH = 10;
-
 const styles = StyleSheet.create({
   container: {
     width: SIZE,
@@ -35,10 +34,17 @@ interface ButtonProps {
   progress: Animated.Node<number>;
 }
 
-//  check-circle
-//
 export default ({ progress }: ButtonProps) => {
+  const [active, setActive] = useState(false);
   const height = bInterpolate(progress, 0, ICON_SIZE);
+  useCode(
+    () =>
+      cond(
+        eq(progress, 1),
+        call([], () => setActive(true))
+      ),
+    [progress]
+  );
   return (
     <View>
       <View style={StyleSheet.absoluteFill}>
@@ -52,8 +58,12 @@ export default ({ progress }: ButtonProps) => {
       <View style={styles.container}>
         <View style={styles.background}>
           <Icon
-            name="fingerprint"
-            color={StyleGuide.palette.background}
+            name={active ? "check-circle" : "fingerprint"}
+            color={
+              active
+                ? StyleGuide.palette.primary
+                : StyleGuide.palette.background
+            }
             size={ICON_SIZE}
             style={styles.icon}
           />
@@ -71,6 +81,7 @@ export default ({ progress }: ButtonProps) => {
             name="fingerprint"
             color={StyleGuide.palette.primary}
             size={ICON_SIZE}
+            style={{ opacity: active ? 0 : 1 }}
           />
         </Animated.View>
       </View>
