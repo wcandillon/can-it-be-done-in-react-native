@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { eq, sub } from "react-native-reanimated";
-import { withTransition } from "react-native-redash";
+import Animated, { eq, interpolate, sub } from "react-native-reanimated";
+import { bInterpolate, withTransition } from "react-native-redash";
 import { Colors, ICON_SIZE, PADDING } from "./icons/Constants";
 
 interface WeaveProps {
@@ -28,8 +28,13 @@ const styles = StyleSheet.create({
 export default ({ active, index }: WeaveProps) => {
   const isActive = eq(active, index);
   const activeTransition = withTransition(isActive, { duration: 250 });
-  const scale = activeTransition;
-  const opacity = sub(1, activeTransition);
+  // scale=0 doesn't work on Android
+  const scale = bInterpolate(activeTransition, 0.1, 1.5);
+  // Because scale=0 doesn't work we need this interpolation
+  const opacity = interpolate(activeTransition, {
+    inputRange: [0, 0.5, 1],
+    outputRange: [0, 1, 0]
+  });
   return (
     <View style={styles.container}>
       <Animated.View
