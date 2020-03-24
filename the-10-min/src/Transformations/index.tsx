@@ -2,11 +2,13 @@ import React from "react";
 import { Button, View } from "react-native";
 import {
   NavigationStackScreenProps,
-  createStackNavigator
+  createStackNavigator,
 } from "react-navigation-stack";
 
+import TransformOrigin from "./TransformOrigin";
+
 const Transformations = ({
-  navigation: { push }
+  navigation: { push },
 }: NavigationStackScreenProps) => (
   <View>
     <Button onPress={() => push("TransformOrigin")} title="Transform Origin" />
@@ -16,19 +18,19 @@ const Transformations = ({
   </View>
 );
 
+export const assets = [require("./assets/card.png")];
+
 export default createStackNavigator({
   Transformations: {
     screen: Transformations,
     navigationOptions: {
-      title: "Transformations",
-      header: null
-    }
+      header: null,
+    },
   },
   TransformOrigin: {
-    screen: Transformations,
+    screen: TransformOrigin,
     navigationOptions: {
-      title: "Transformations",
-      header: null
-    }
-  }
+      header: null,
+    },
+  },
 });

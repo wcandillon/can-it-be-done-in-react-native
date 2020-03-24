@@ -12,13 +12,13 @@ export const KNOB_SIZE = 75;
 const styles = StyleSheet.create({
   container: {
     width: KNOB_SIZE,
-    height: KNOB_SIZE
+    height: KNOB_SIZE,
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     width: undefined,
-    height: undefined
-  }
+    height: undefined,
+  },
 });
 
 export default ({ state }: KnobProps) => {

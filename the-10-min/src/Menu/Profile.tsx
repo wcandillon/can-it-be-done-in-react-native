@@ -15,7 +15,7 @@ import Animated, {
   not,
   set,
   stopClock,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import {
   bInterpolate,
@@ -23,7 +23,7 @@ import {
   onGestureEvent,
   snapPoint,
   spring,
-  timing
+  timing,
 } from "react-native-redash";
 
 import { alpha, perspective } from "./Constants";
@@ -53,11 +53,11 @@ export default ({ open, transition: trx }: ProfileProps) => {
   const gestureHandler = onGestureEvent({
     translationX,
     velocityX,
-    state
+    state,
   });
   const gestureTransition = interpolate(x, {
     inputRange: [MIN, MAX],
-    outputRange: [0, 1]
+    outputRange: [0, 1],
   });
   const isOpening = and(neq(diff(trx), 0), open);
   const snapTo = eq(snapPoint(x, velocityX, [MIN, MAX]), MAX);
@@ -68,7 +68,7 @@ export default ({ open, transition: trx }: ProfileProps) => {
         cond(eq(state, State.BEGAN), stopClock(clock)),
         cond(eq(state, State.ACTIVE), [
           set(isDone, 0),
-          set(transition, gestureTransition)
+          set(transition, gestureTransition),
         ]),
         cond(and(eq(state, State.END), not(isDone)), [
           set(
@@ -79,16 +79,16 @@ export default ({ open, transition: trx }: ProfileProps) => {
                 clock,
                 velocity: divide(velocityX, -MIN),
                 from: gestureTransition,
-                to: 1
+                to: 1,
               }),
               timing({ clock, from: gestureTransition, to: 0 })
             )
           ),
           cond(not(clockRunning(clock)), [
             set(isDone, 1),
-            cond(eq(snapTo, 0), set(open, 0))
-          ])
-        ])
+            cond(eq(snapTo, 0), set(open, 0)),
+          ]),
+        ]),
       ]),
     [
       clock,
@@ -100,7 +100,7 @@ export default ({ open, transition: trx }: ProfileProps) => {
       state,
       transition,
       trx,
-      velocityX
+      velocityX,
     ]
   );
   return (
@@ -114,8 +114,8 @@ export default ({ open, transition: trx }: ProfileProps) => {
             { translateX: -width / 2 },
             { rotateY },
             { translateX: width / 2 },
-            { scale }
-          ]
+            { scale },
+          ],
         }}
       >
         <Content />

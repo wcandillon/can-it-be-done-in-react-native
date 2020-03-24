@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,43 +22,43 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     backgroundColor: "white",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   gradient: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 24
+    borderRadius: 24,
   },
   avatar: {
     width: 100,
     height: 100,
-    borderRadius: 50
+    borderRadius: 50,
   },
   title: {
     fontWeight: "bold",
-    marginTop: 16
+    marginTop: 16,
   },
   handle: {
     color: StyleGuide.palette.primary,
-    textDecorationLine: "underline"
+    textDecorationLine: "underline",
   },
   divider: {
     height: 1,
     backgroundColor: "#D8DAE0",
     width: "100%",
-    marginVertical: 32
+    marginVertical: 32,
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 8
+    marginVertical: 8,
   },
   icon: {
-    marginRight: 8
+    marginRight: 8,
   },
   label: {
     fontSize: 16,
-    fontWeight: "500"
-  }
+    fontWeight: "500",
+  },
 });
 
 interface RowProps {

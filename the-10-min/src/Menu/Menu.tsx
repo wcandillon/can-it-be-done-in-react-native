@@ -9,12 +9,12 @@ import Profile from "./Profile";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   layer: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });
 
 export default () => {

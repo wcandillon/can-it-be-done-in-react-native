@@ -7,13 +7,13 @@ import AngularGradient from "../components/AngularGradient";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000001"
+    backgroundColor: "#000001",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 export default () => {

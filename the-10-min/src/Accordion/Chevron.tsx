@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
     width: size,
     borderRadius: size / 2,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 interface ChevronProps {

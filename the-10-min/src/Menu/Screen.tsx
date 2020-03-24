@@ -13,18 +13,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,
-    backgroundColor: "#F6F5F9"
+    backgroundColor: "#F6F5F9",
   },
   button: {
     borderColor: "black",
     borderWidth: 2,
     borderRadius: 20,
-    padding: 16
+    padding: 16,
   },
   label: {
     fontSize: 16,
-    fontWeight: "500"
-  }
+    fontWeight: "500",
+  },
 });
 
 interface ScreenProps {
@@ -49,9 +49,9 @@ export default ({ open, transition }: ScreenProps) => {
               { translateX: width / 2 },
               { rotateY },
               { translateX: -width / 2 },
-              { scale }
-            ]
-          }
+              { scale },
+            ],
+          },
         ]}
       >
         <TouchableOpacity onPress={() => open.setValue(1)}>
@@ -65,7 +65,7 @@ export default ({ open, transition }: ScreenProps) => {
         style={{
           ...StyleSheet.absoluteFillObject,
           backgroundColor: "black",
-          opacity
+          opacity,
         }}
       />
     </>

@@ -6,7 +6,7 @@ import Animated, {
   divide,
   interpolate,
   multiply,
-  neq
+  neq,
 } from "react-native-reanimated";
 import { withSpringTransition } from "react-native-redash";
 import { Colors, ICON_SIZE, PADDING, SEGMENT } from "./icons/Constants";
@@ -23,11 +23,11 @@ const HEIGHT = ICON_SIZE + PADDING * 2;
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   particules: {
     justifyContent: "center",
-    height: HEIGHT
+    height: HEIGHT,
   },
 
   particule: {
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     top: 0,
     width: size,
     height: size,
-    borderRadius: size / 2
-  }
+    borderRadius: size / 2,
+  },
 });
 
 export default ({ transition, activeTransition }: PariculesProps) => {
@@ -46,32 +46,32 @@ export default ({ transition, activeTransition }: PariculesProps) => {
   const x = add(multiply(transition, SEGMENT), SEGMENT / 2 - size / 2);
   const top = interpolate(activeTransition, {
     inputRange: [0, 0.5, 1],
-    outputRange: [middle, PADDING / 2, middle]
+    outputRange: [middle, PADDING / 2, middle],
   });
   const bottom = interpolate(activeTransition, {
     inputRange: [0, 0.5, 1],
-    outputRange: [middle, HEIGHT - PADDING / 2, middle]
+    outputRange: [middle, HEIGHT - PADDING / 2, middle],
   });
   const s = interpolate(activeTransition, {
     inputRange: [0, 0.5, 1],
-    outputRange: [0.75, 1, 0.75]
+    outputRange: [0.75, 1, 0.75],
   });
   const opacity = and(neq(activeTransition, 0), neq(activeTransition, 1));
   return (
     <View style={styles.container} pointerEvents="none">
       <View style={styles.particules}>
-        {topParticules.map(particule => {
+        {topParticules.map((particule) => {
           const subParticules = topParticules.slice(0, particule);
           const translateX = subParticules.reduce(
-            acc => withSpringTransition(acc),
+            (acc) => withSpringTransition(acc),
             x
           );
           const translateY = subParticules.reduce(
-            acc => withSpringTransition(acc),
+            (acc) => withSpringTransition(acc),
             top
           );
           const scale = subParticules.reduce(
-            acc => withSpringTransition(acc),
+            (acc) => withSpringTransition(acc),
             s
           );
           return (
@@ -81,24 +81,24 @@ export default ({ transition, activeTransition }: PariculesProps) => {
                 styles.particule,
                 {
                   opacity,
-                  transform: [{ translateX }, { translateY }, { scale }]
-                }
+                  transform: [{ translateX }, { translateY }, { scale }],
+                },
               ]}
             />
           );
         })}
-        {bottomParticules.map(particule => {
+        {bottomParticules.map((particule) => {
           const subParticules = bottomParticules.slice(0, particule);
           const translateX = subParticules.reduce(
-            acc => withSpringTransition(acc),
+            (acc) => withSpringTransition(acc),
             divide(add(x, withSpringTransition(x)), 2)
           );
           const translateY = subParticules.reduce(
-            acc => withSpringTransition(acc),
+            (acc) => withSpringTransition(acc),
             divide(add(bottom, withSpringTransition(bottom)), 2)
           );
           const scale = subParticules.reduce(
-            acc => withSpringTransition(acc),
+            (acc) => withSpringTransition(acc),
             divide(add(s, withSpringTransition(s)), 2)
           );
           return (
@@ -108,8 +108,8 @@ export default ({ transition, activeTransition }: PariculesProps) => {
                 styles.particule,
                 {
                   opacity,
-                  transform: [{ translateX }, { translateY }, { scale }]
-                }
+                  transform: [{ translateX }, { translateY }, { scale }],
+                },
               ]}
             />
           );

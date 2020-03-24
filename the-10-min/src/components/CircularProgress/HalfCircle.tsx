@@ -12,7 +12,7 @@ export default ({ color, radius }: HalfCircleProps) => {
       style={{
         width: radius * 2,
         height: radius,
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       <View
@@ -20,7 +20,7 @@ export default ({ color, radius }: HalfCircleProps) => {
           backgroundColor: color,
           width: radius * 2,
           height: radius * 2,
-          borderRadius: radius
+          borderRadius: radius,
         }}
       />
     </View>

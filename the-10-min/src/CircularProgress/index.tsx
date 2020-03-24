@@ -8,13 +8,13 @@ import { COLOR_BG, COLOR_FG, RADIUS, STROKE_WIDTH } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 export default () => {
@@ -31,7 +31,7 @@ export default () => {
             width: RADIUS * 2 - STROKE_WIDTH,
             height: RADIUS * 2 - STROKE_WIDTH,
             borderRadius: RADIUS - STROKE_WIDTH / 2,
-            backgroundColor: COLOR_BG
+            backgroundColor: COLOR_BG,
           }}
         />
       </View>

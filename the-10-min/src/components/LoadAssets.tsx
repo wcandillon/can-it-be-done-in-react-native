@@ -15,7 +15,7 @@ const usePromiseAll = (promises: Promise<void | void[]>[], cb: () => void) =>
 const useLoadAssets = (assets: number[], fonts: FontSource): boolean => {
   const [ready, setReady] = useState(false);
   usePromiseAll(
-    [Font.loadAsync(fonts), ...assets.map(asset => Asset.loadAsync(asset))],
+    [Font.loadAsync(fonts), ...assets.map((asset) => Asset.loadAsync(asset))],
     () => setReady(true)
   );
   return ready;
