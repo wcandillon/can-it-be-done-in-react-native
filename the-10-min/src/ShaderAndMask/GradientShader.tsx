@@ -27,8 +27,8 @@ void main() {
   vec3 color = mix(end, start, progress);
   gl_FragColor = pct > size ? vec4(0.0) : vec4(color, 1.0);
 }
-`
-  }
+`,
+  },
 });
 
 interface AngularGradientProps {
@@ -39,7 +39,7 @@ export default ({ ring }: AngularGradientProps) => (
   <Surface
     style={{
       width: ring.size,
-      height: ring.size
+      height: ring.size,
     }}
   >
     <Node
@@ -48,12 +48,12 @@ export default ({ ring }: AngularGradientProps) => (
         start: new Color(ring.start)
           .rgb()
           .array()
-          .map(c => c / 255),
+          .map((c) => c / 255),
         end: new Color(ring.end)
           .rgb()
           .array()
-          .map(c => c / 255),
-        size: 0.5
+          .map((c) => c / 255),
+        size: 0.5,
       }}
     />
   </Surface>

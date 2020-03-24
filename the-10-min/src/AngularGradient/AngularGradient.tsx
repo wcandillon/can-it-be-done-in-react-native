@@ -7,7 +7,7 @@ import Svg, {
   G,
   LinearGradient,
   Path,
-  Stop
+  Stop,
 } from "react-native-svg";
 import Animated from "react-native-reanimated";
 import { StyleGuide } from "../components";
@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   svg: {
-    transform: [{ rotateZ: "-90deg" }]
-  }
+    transform: [{ rotateZ: "-90deg" }],
+  },
 });
 
 export default () => {

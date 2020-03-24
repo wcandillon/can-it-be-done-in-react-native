@@ -17,23 +17,23 @@ const tabs = [
   { icon: <Chat /> },
   { icon: <Camera /> },
   { icon: <Bell /> },
-  { icon: <User /> }
+  { icon: <User /> },
 ];
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   tabs: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   tab: {
     width: SEGMENT,
     height: ICON_SIZE + PADDING * 2,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 export default () => {
@@ -44,7 +44,7 @@ export default () => {
     () =>
       block([
         onChange(active, set(activeTransition, 0)),
-        set(activeTransition, timing({ duration: DURATION }))
+        set(activeTransition, timing({ duration: DURATION })),
       ]),
     [active, activeTransition]
   );

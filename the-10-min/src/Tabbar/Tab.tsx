@@ -4,7 +4,7 @@ import Animated, {
   cond,
   eq,
   greaterThan,
-  interpolate
+  interpolate,
 } from "react-native-reanimated";
 import { withTransition } from "react-native-redash";
 import { DURATION, ICON_SIZE } from "./icons/Constants";
@@ -19,8 +19,8 @@ interface TabProps {
 
 const styles = StyleSheet.create({
   icon: {
-    overflow: "hidden"
-  }
+    overflow: "hidden",
+  },
 });
 
 export default ({ children, active, transition, index, onPress }: TabProps) => {
@@ -29,7 +29,7 @@ export default ({ children, active, transition, index, onPress }: TabProps) => {
   const isGoingLeft = greaterThan(transition, active);
   const width = interpolate(activeTransition, {
     inputRange: [0, 1],
-    outputRange: [0, ICON_SIZE]
+    outputRange: [0, ICON_SIZE],
   });
   const direction = cond(
     isActive,
@@ -42,7 +42,7 @@ export default ({ children, active, transition, index, onPress }: TabProps) => {
         style={{
           direction,
           width: ICON_SIZE,
-          height: ICON_SIZE
+          height: ICON_SIZE,
         }}
       >
         <View style={StyleSheet.absoluteFill}>{children}</View>

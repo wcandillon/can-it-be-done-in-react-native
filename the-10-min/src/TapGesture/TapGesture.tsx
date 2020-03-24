@@ -5,7 +5,7 @@ import Animated, { Value, cond, eq } from "react-native-reanimated";
 import {
   bInterpolate,
   onGestureEvent,
-  withTransition
+  withTransition,
 } from "react-native-redash";
 import Button from "./Button";
 
@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#E8EDFF"
-  }
+    backgroundColor: "#E8EDFF",
+  },
 });
 
 export default () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { eq, interpolate, sub } from "react-native-reanimated";
+import Animated, { eq, interpolate } from "react-native-reanimated";
 import { bInterpolate, withTransition } from "react-native-redash";
 import { Colors, ICON_SIZE, PADDING } from "./icons/Constants";
 
@@ -14,15 +14,15 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   weave: {
     borderRadius: SIZE / 2,
     width: SIZE,
     height: SIZE,
     borderWidth: 4,
-    borderColor: Colors.primary
-  }
+    borderColor: Colors.primary,
+  },
 });
 
 export default ({ active, index }: WeaveProps) => {
@@ -33,7 +33,7 @@ export default ({ active, index }: WeaveProps) => {
   // Because scale=0 doesn't work we need this interpolation
   const opacity = interpolate(activeTransition, {
     inputRange: [0, 0.5, 1],
-    outputRange: [0, 1, 0]
+    outputRange: [0, 1, 0],
   });
   return (
     <View style={styles.container}>

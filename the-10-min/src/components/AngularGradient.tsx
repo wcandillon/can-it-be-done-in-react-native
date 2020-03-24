@@ -14,7 +14,7 @@ export default ({ size, colors: [start, end] }: AngularGradient2Props) => {
         width: size,
         height: size,
         backgroundColor: "transparent",
-        borderRadius: size / 2
+        borderRadius: size / 2,
       }}
       source={require("./mask.png")}
     />
@@ -25,7 +25,7 @@ export default ({ size, colors: [start, end] }: AngularGradient2Props) => {
         width: size,
         height: size,
         backgroundColor: start,
-        borderRadius: size / 2
+        borderRadius: size / 2,
       }}
     >
       <MaskedView style={{ flex: 1 }} {...{ maskElement }}>
@@ -33,7 +33,7 @@ export default ({ size, colors: [start, end] }: AngularGradient2Props) => {
           style={{
             flex: 1,
             backgroundColor: end,
-            borderRadius: size / 2
+            borderRadius: size / 2,
           }}
         />
       </MaskedView>

@@ -10,20 +10,20 @@ const list: ListModel = {
     { name: "Lawrence Fullter Fitzgerald", points: "$3.45" },
     { name: "Jacob Mullins", points: "$3.45" },
     { name: "Jesus Lewis", points: "$3.45" },
-    { name: "Johnny Marr", points: "$2.56" }
-  ]
+    { name: "Johnny Marr", points: "$2.56" },
+  ],
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f4f4f6",
-    padding: 16
+    padding: 16,
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
 });
 
 export default () => {

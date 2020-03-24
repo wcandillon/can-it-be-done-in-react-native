@@ -13,7 +13,7 @@ import Animated, {
   multiply,
   round,
   sub,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import { ReText, onGestureEvent, withOffset } from "react-native-redash";
 
@@ -29,36 +29,36 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#a9cbee",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   slider: {
     width: SLIDER_WIDTH,
     height: KNOB_SIZE,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   backgroundSlider: {
     height: RULER_HEIGHT,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   sides: {
     ...StyleSheet.absoluteFillObject,
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   left: {
     height: RULER_HEIGHT,
     width: RULER_HEIGHT,
     borderRadius: RULER_HEIGHT / 2,
     backgroundColor: StyleGuide.palette.primary,
-    left: -RULER_HEIGHT / 2
+    left: -RULER_HEIGHT / 2,
   },
   right: {
     left: RULER_HEIGHT / 2,
     height: RULER_HEIGHT,
     width: RULER_HEIGHT,
     borderRadius: RULER_HEIGHT / 2,
-    backgroundColor: "white"
-  }
+    backgroundColor: "white",
+  },
 });
 
 export default () => {
@@ -69,12 +69,12 @@ export default () => {
   const translateX = sub(x, KNOB_SIZE / 2);
   const rotate = interpolate(x, {
     inputRange: [0, SLIDER_WIDTH],
-    outputRange: [0, 4 * Math.PI]
+    outputRange: [0, 4 * Math.PI],
   });
   const scaleX = interpolate(x, {
     inputRange: [0, SLIDER_WIDTH],
     // https://github.com/facebook/react-native/issues/6278
-    outputRange: [0.0001, 1]
+    outputRange: [0.0001, 1],
   });
   const value = round(multiply(divide(x, SLIDER_WIDTH), 100));
   const label = concat(value);
@@ -105,9 +105,9 @@ export default () => {
                 transform: [
                   { translateX: -SLIDER_WIDTH / 2 },
                   { scaleX },
-                  { translateX: SLIDER_WIDTH / 2 }
-                ]
-              }
+                  { translateX: SLIDER_WIDTH / 2 },
+                ],
+              },
             ]}
           />
         </View>
@@ -119,13 +119,13 @@ export default () => {
               left: 0,
               width: KNOB_SIZE,
               height: KNOB_SIZE,
-              transform: [{ translateX }]
+              transform: [{ translateX }],
             }}
           >
             <Animated.View
               style={{
                 ...StyleSheet.absoluteFillObject,
-                transform: [{ rotate }]
+                transform: [{ rotate }],
               }}
             >
               <Knob {...{ state }} />

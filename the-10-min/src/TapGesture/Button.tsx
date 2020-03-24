@@ -20,17 +20,17 @@ const styles = StyleSheet.create({
     bottom: STROKE_WIDTH,
     backgroundColor: "white",
     borderRadius: CONTENT_SIZE / 2,
-    zIndex: 100
+    zIndex: 100,
   },
   icon: {
     top: (CONTENT_SIZE - ICON_SIZE) / 2,
-    left: (CONTENT_SIZE - ICON_SIZE) / 2
+    left: (CONTENT_SIZE - ICON_SIZE) / 2,
   },
   activeIcon: {
     position: "absolute",
     top: (CONTENT_SIZE - ICON_SIZE) / 2,
-    left: (CONTENT_SIZE - ICON_SIZE) / 2
-  }
+    left: (CONTENT_SIZE - ICON_SIZE) / 2,
+  },
 });
 
 interface ButtonProps {

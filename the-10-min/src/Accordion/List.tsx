@@ -16,15 +16,15 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 8,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 16,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   items: {
-    overflow: "hidden"
-  }
+    overflow: "hidden",
+  },
 });
 
 export interface List {
@@ -46,18 +46,18 @@ export default ({ list }: ListProps) => {
   );
   const bottomRadius = interpolate(transition, {
     inputRange: [0, 16 / 400],
-    outputRange: [8, 0]
+    outputRange: [8, 0],
   });
   return (
     <>
-      <TouchableWithoutFeedback onPress={() => setOpen(prev => !prev)}>
+      <TouchableWithoutFeedback onPress={() => setOpen((prev) => !prev)}>
         <Animated.View
           style={[
             styles.container,
             {
               borderBottomLeftRadius: bottomRadius,
-              borderBottomRightRadius: bottomRadius
-            }
+              borderBottomRightRadius: bottomRadius,
+            },
           ]}
         >
           <Text style={styles.title}>Total Points</Text>
