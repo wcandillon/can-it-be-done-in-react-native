@@ -7,6 +7,8 @@ import {
 
 import TransformOrigin from "./TransformOrigin";
 import ScaleTransform from "./ScaleTransform";
+import Perspective from "./Perspective";
+// import 3DTransform from "./3DTransform";
 
 const Transformations = ({
   navigation: { push },
@@ -14,8 +16,8 @@ const Transformations = ({
   <View>
     <Button onPress={() => push("TransformOrigin")} title="Transform Origin" />
     <Button onPress={() => push("ScaleTransform")} title="Scale Transform" />
-    <Button title="Perspective" />
-    <Button title="3D Transform" />
+    <Button onPress={() => push("Perspective")} title="Perspective" />
+    <Button onPress={() => push("3DTransform")} title="3D Transform" />
   </View>
 );
 
@@ -24,18 +26,22 @@ export const assets = [
   require("./assets/card2.png"),
   require("./assets/card3.png"),
   require("./assets/zurich.jpg"),
+  require("./assets/queen-of-spade.png"),
 ];
 
 export default createStackNavigator(
   {
-    ScaleTransform: {
-      screen: ScaleTransform,
+    Perspective: {
+      screen: Perspective,
     },
     Transformations: {
       screen: Transformations,
     },
     TransformOrigin: {
       screen: TransformOrigin,
+    },
+    ScaleTransform: {
+      screen: ScaleTransform,
     },
   },
   {

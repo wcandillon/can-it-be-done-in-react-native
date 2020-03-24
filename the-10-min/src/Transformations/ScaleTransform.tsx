@@ -1,17 +1,8 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
-import {
-  PanGestureHandler,
-  PinchGestureHandler,
-  State,
-} from "react-native-gesture-handler";
-import {
-  clamp,
-  onGestureEvent,
-  transformOrigin,
-  withOffset,
-} from "react-native-redash";
+import { PinchGestureHandler, State } from "react-native-gesture-handler";
+import { onGestureEvent } from "react-native-redash";
 
 const { width, height } = Dimensions.get("window");
 const center = {
@@ -43,16 +34,15 @@ export default () => {
   });
   const fx = focalX;
   const fy = focalY;
+  const translateX = multiply(-1, sub(fx, center.x), sub(scale, 1));
+  const translateY = multiply(-1, sub(fy, center.y), sub(scale, 1));
   return (
     <PinchGestureHandler {...pinchGestureHandler}>
       <Animated.Image
         style={[
           styles.image,
           {
-            transform: transformOrigin(
-              { x: sub(fx, center.x), y: sub(fy, center.y) },
-              { scale }
-            ),
+            transform: [{ translateX }, { translateY }, { scale }],
           },
         ]}
         source={require("./assets/zurich.jpg")}
