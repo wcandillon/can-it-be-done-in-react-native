@@ -18,17 +18,21 @@ const Transformations = ({
   </View>
 );
 
-export const assets = [require("./assets/card.png")];
+export const assets = [
+  require("./assets/card1.png"),
+  require("./assets/card2.png"),
+  require("./assets/card3.png"),
+];
 
 export default createStackNavigator({
-  Transformations: {
-    screen: Transformations,
+  TransformOrigin: {
+    screen: TransformOrigin,
     navigationOptions: {
       header: null,
     },
   },
-  TransformOrigin: {
-    screen: TransformOrigin,
+  Transformations: {
+    screen: Transformations,
     navigationOptions: {
       header: null,
     },
