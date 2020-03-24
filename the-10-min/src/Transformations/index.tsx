@@ -6,15 +6,16 @@ import {
 } from "react-navigation-stack";
 
 import TransformOrigin from "./TransformOrigin";
+import ScaleTransform from "./ScaleTransform";
 
 const Transformations = ({
   navigation: { push },
 }: NavigationStackScreenProps) => (
   <View>
     <Button onPress={() => push("TransformOrigin")} title="Transform Origin" />
-    <Button title="Scale Transforms" />
+    <Button onPress={() => push("ScaleTransform")} title="Scale Transform" />
     <Button title="Perspective" />
-    <Button title="3D Transforms" />
+    <Button title="3D Transform" />
   </View>
 );
 
@@ -22,19 +23,24 @@ export const assets = [
   require("./assets/card1.png"),
   require("./assets/card2.png"),
   require("./assets/card3.png"),
+  require("./assets/zurich.jpg"),
 ];
 
-export default createStackNavigator({
-  TransformOrigin: {
-    screen: TransformOrigin,
-    navigationOptions: {
-      header: null,
+export default createStackNavigator(
+  {
+    ScaleTransform: {
+      screen: ScaleTransform,
+    },
+    Transformations: {
+      screen: Transformations,
+    },
+    TransformOrigin: {
+      screen: TransformOrigin,
     },
   },
-  Transformations: {
-    screen: Transformations,
-    navigationOptions: {
+  {
+    defaultNavigationOptions: {
       header: null,
     },
-  },
-});
+  }
+);
