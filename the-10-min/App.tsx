@@ -13,6 +13,7 @@ import Slider, { assets as sliderAssets } from "./src/Slider";
 import Tabbar from "./src/Tabbar";
 import Menu from "./src/Menu";
 import TapGesture from "./src/TapGesture";
+import Transformations from "./src/Transformations";
 
 const assets: number[] = [
   ...examples.map(example => example.source),
@@ -27,6 +28,12 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Transform: {
+        screen: Transformations,
+        navigationOptions: {
+          title: "Transformations"
+        }
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {
