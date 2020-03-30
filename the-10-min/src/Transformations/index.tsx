@@ -29,14 +29,14 @@ export const assets = [
 
 export default createStackNavigator(
   {
+    ScaleTransform: {
+      screen: ScaleTransform,
+    },
     Transformations: {
       screen: Transformations,
     },
     TransformOrigin: {
       screen: TransformOrigin,
-    },
-    ScaleTransform: {
-      screen: ScaleTransform,
     },
     ThreeDTransform: {
       screen: ThreeDTransform,
