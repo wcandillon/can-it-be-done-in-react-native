@@ -5,7 +5,11 @@ import { createStackNavigator } from "react-navigation-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { enableScreens } from "react-native-screens";
 
-import { LoadAssets, StyleGuide } from "./src/components";
+import {
+  LoadAssets,
+  StyleGuide,
+  assets as componentAssets
+} from "./src/components";
 import Episodes, { episodes } from "./src/Episodes";
 import Things from "./src/Things";
 import Chrome, { assets as chromeAssets } from "./src/Chrome";
@@ -17,6 +21,7 @@ import UberEats, {
 import iPod, { fonts as ipodFonts } from "./src/iPod";
 import AppleActivity from "./src/AppleActivity";
 import CoinbasePro from "./src/CoinbasePro";
+import Instagram from "./src/Instagram";
 import Airbnb, {
   assets as airbnbAssets,
   fonts as airbnbFonts
@@ -30,7 +35,8 @@ const assets: number[] = [
   ...liquidSwipeAssets,
   ...chromeAssets,
   ...uberEatsAssets,
-  ...airbnbAssets
+  ...airbnbAssets,
+  ...componentAssets
 ];
 
 const AppNavigator = createAppContainer(
@@ -87,6 +93,13 @@ const AppNavigator = createAppContainer(
         screen: CoinbasePro,
         navigationOptions: {
           title: "Coinbase Pro",
+          header: () => null
+        }
+      },
+      Instagram: {
+        screen: Instagram,
+        navigationOptions: {
+          title: "Instagram",
           header: () => null
         }
       }

@@ -53,7 +53,12 @@ export const episodes = [
   {
     id: "Airbnb",
     name: "Airbnb",
-    icon: require("../../assets/icons/uber-eats.png")
+    icon: require("../../assets/icons/airbnb.png")
+  },
+  {
+    id: "Instagram",
+    name: "Instagram",
+    icon: require("../../assets/icons/instagram.png")
   }
 ];
 
