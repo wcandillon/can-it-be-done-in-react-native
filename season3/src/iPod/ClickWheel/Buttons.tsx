@@ -69,7 +69,8 @@ export const useOnPress = (
     () =>
       cond(and(active, eq(command, target)), [
         call([], () => onPress(navigation)),
-        set(command, Command.UNDETERMINED)
+        set(command, Command.UNDETERMINED),
+        1
       ]),
     [active, command, navigation, onPress, target]
   );
@@ -108,7 +109,8 @@ export default ({ command, children }: ButtonsProps) => {
               )
             )
           ),
-          set(state, State.UNDETERMINED)
+          set(state, State.UNDETERMINED),
+          1
         ])
       ]),
     [command, state, x, y]
