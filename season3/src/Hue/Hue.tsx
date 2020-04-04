@@ -5,6 +5,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { Surface } from "gl-react-expo";
 // @ts-ignore
 import { GLSL, Node, Shaders } from "gl-react";
+import Picker from "./Picker";
 
 const { width } = Dimensions.get("window");
 const size = width - 32;
@@ -69,6 +70,7 @@ export default () => (
       <Surface style={styles.surface}>
         <Node shader={shaders.helloGL} />
       </Surface>
+      <Picker />
     </View>
   </View>
 );
