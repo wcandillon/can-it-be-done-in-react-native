@@ -65,8 +65,10 @@ void main() {
 
 export default () => (
   <View style={styles.container}>
-    <Surface style={styles.surface}>
-      <Node shader={shaders.helloGL} />
-    </Surface>
+    <View>
+      <Surface style={styles.surface}>
+        <Node shader={shaders.helloGL} />
+      </Surface>
+    </View>
   </View>
 );
