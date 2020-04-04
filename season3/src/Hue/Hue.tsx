@@ -5,10 +5,8 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { Surface } from "gl-react-expo";
 // @ts-ignore
 import { GLSL, Node, Shaders } from "gl-react";
-import Picker from "./Picker";
+import Picker, { CANVAS_SIZE } from "./Picker";
 
-const { width } = Dimensions.get("window");
-const size = width - 32;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -17,9 +15,8 @@ const styles = StyleSheet.create({
     backgroundColor: "black"
   },
   surface: {
-    width: size,
-    height: size
-    // borderRadius: size / 2
+    width: CANVAS_SIZE,
+    height: CANVAS_SIZE
   }
 });
 
