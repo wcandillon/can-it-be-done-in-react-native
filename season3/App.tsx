@@ -26,6 +26,7 @@ import Airbnb, {
   assets as airbnbAssets,
   fonts as airbnbFonts
 } from "./src/Airbnb";
+import Hue from "./src/Hue";
 
 enableScreens();
 
@@ -42,6 +43,13 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Hue: {
+        screen: Hue,
+        navigationOptions: {
+          title: "Hue",
+          header: () => null
+        }
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
