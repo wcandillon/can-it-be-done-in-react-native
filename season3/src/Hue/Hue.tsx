@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
   },
   surface: {
     width: size,
-    height: size,
-    borderRadius: size / 2
+    height: size
+    // borderRadius: size / 2
   }
 });
 
@@ -53,11 +53,11 @@ vec3 hsv2rgb(vec3 c)
 }
 
 void main() {
-  float pct = distance(uv, vec2(0.5));
+  float mag = distance(uv, vec2(0.5));
   vec2 pos = vec2(0.5) - uv;
   float a = atan(pos.y, pos.x);
   float progress = a * 0.5 / PI + 0.5;
-  gl_FragColor = vec4(hsv2rgb(vec3(progress, pct, 1.0)), 1.0);
+  gl_FragColor = mag < 0.5 ? vec4(hsv2rgb(vec3(progress, mag * 2.0, 1.0)), 1.0) : vec4(0.0, 0.0, 0.0, 1.0);
 }
 `
   }
