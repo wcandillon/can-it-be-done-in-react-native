@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "black"
   },
   surface: {
     width: size,
@@ -56,7 +57,7 @@ void main() {
   vec2 pos = vec2(0.5) - uv;
   float a = atan(pos.y, pos.x);
   float progress = a * 0.5 / PI + 0.5;
-  gl_FragColor = vec4(hsv2rgb(vec3(progress, pct, 1)), 1);
+  gl_FragColor = vec4(hsv2rgb(vec3(progress, pct, 1.0)), 1.0);
 }
 `
   }
