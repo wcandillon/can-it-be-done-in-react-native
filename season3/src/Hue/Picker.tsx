@@ -6,15 +6,13 @@ import Animated, {
   abs,
   add,
   color,
-  cond,
   debug,
-  diffClamp,
   divide,
   floor,
   interpolate,
-  lessThan,
   modulo,
   multiply,
+  proc,
   round,
   sub,
   useCode
@@ -26,49 +24,50 @@ import {
   clamp,
   onGestureEvent,
   polar2Canvas,
-  toDeg,
   translate,
   withOffset
 } from "react-native-redash";
 
 const fract = (x: Animated.Node<number>) => sub(x, floor(x));
 const mix = (
+  a: Animated.Adaptable<number>,
   x: Animated.Adaptable<number>,
-  y: Animated.Adaptable<number>,
-  a: Animated.Adaptable<number>
+  y: Animated.Adaptable<number>
 ) => bInterpolate(a, x, y);
 
-const hsv2rgb = (
-  h: Animated.Adaptable<number>,
-  s: Animated.Adaptable<number>,
-  v: Animated.Adaptable<number>
-) => {
-  // vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  const K = {
-    x: 1,
-    y: 2 / 3,
-    z: 1 / 3,
-    w: 3
-  };
-  // vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-  const p = {
-    x: abs(sub(multiply(fract(add(h, K.x)), 6), K.w)),
-    y: abs(sub(multiply(fract(add(h, K.y)), 6), K.w)),
-    z: abs(sub(multiply(fract(add(h, K.z)), 6), K.w))
-  };
-  //   return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-  const rgb = {
-    x: multiply(v, mix(K.x, clamp(sub(p.x, K.x), 0, 1), s)),
-    y: multiply(v, mix(K.x, clamp(sub(p.y, K.x), 0, 1), s)),
-    z: multiply(v, mix(K.x, clamp(sub(p.z, K.x), 0, 1), s))
-  };
-  const result = {
-    x: round(multiply(rgb.x, 255)),
-    y: round(multiply(rgb.y, 255)),
-    z: round(multiply(rgb.z, 255))
-  };
-  return color(result.x, result.y, result.z);
-};
+const hsv2rgb = proc(
+  (
+    h: Animated.Adaptable<number>,
+    s: Animated.Adaptable<number>,
+    v: Animated.Adaptable<number>
+  ) => {
+    // vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    const K = {
+      x: 1,
+      y: 2 / 3,
+      z: 1 / 3,
+      w: 3
+    };
+    // vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    const p = {
+      x: abs(sub(multiply(fract(add(h, K.x)), 6), K.w)),
+      y: abs(sub(multiply(fract(add(h, K.y)), 6), K.w)),
+      z: abs(sub(multiply(fract(add(h, K.z)), 6), K.w))
+    };
+    // return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+    const rgb = {
+      x: multiply(v, mix(s, K.x, clamp(sub(p.x, K.x), 0, 1))),
+      y: multiply(v, mix(s, K.x, clamp(sub(p.y, K.x), 0, 1))),
+      z: multiply(v, mix(s, K.x, clamp(sub(p.z, K.x), 0, 1)))
+    };
+    const result = {
+      x: round(multiply(rgb.x, 255)),
+      y: round(multiply(rgb.y, 255)),
+      z: round(multiply(rgb.z, 255))
+    };
+    return color(result.x, result.y, result.z);
+  }
+);
 
 const { width } = Dimensions.get("window");
 export const PICKER_SIZE = 40;
