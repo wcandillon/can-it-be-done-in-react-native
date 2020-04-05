@@ -56,12 +56,16 @@ vec3 hsv2rgb(vec3 c)
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
+float quadraticIn(float t) {
+  return t * t;
+}
+
 void main() {
   float mag = distance(uv, vec2(0.5));
   vec2 pos = vec2(0.5) - uv;
   float a = atan(pos.y, pos.x);
   float progress = a * 0.5 / PI + 0.5;
-  gl_FragColor = mag < 0.5 ? vec4(hsv2rgb(vec3(progress, mag * 2.0, 1.0)), 1.0) : vec4(0.0, 0.0, 0.0, 1.0);
+  gl_FragColor = mag < 0.5 ? vec4(hsv2rgb(vec3(progress, quadraticIn(mag * 2.0), 1.0)), 1.0) : vec4(0.0, 0.0, 0.0, 1.0);
 }
 `
   }

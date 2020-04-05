@@ -4,11 +4,16 @@ import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Svg, { Path } from "react-native-svg";
 import Animated, {
   Value,
+  add,
   cond,
   divide,
   eq,
   modulo,
+  multiply,
+  pow,
   set,
+  sin,
+  sub,
   useCode
 } from "react-native-reanimated";
 import {
@@ -22,7 +27,7 @@ import {
 } from "react-native-redash";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-
+const quadraticIn = (t: Animated.Node<number>) => pow(t, 2);
 const { width } = Dimensions.get("window");
 const PICKER_WIDTH = 30;
 const PICKER_HEIGHT = (PICKER_WIDTH * 60) / 40;
@@ -63,7 +68,12 @@ export default ({ h, s, backgroundColor }: PickerProps) => {
     0,
     divide(l.radius, CANVAS_SIZE / 2)
   );
-  useCode(() => [set(h, hue), set(s, saturation)], [h, hue, s, saturation]);
+  useCode(() => [set(h, hue), set(s, quadraticIn(saturation))], [
+    h,
+    hue,
+    s,
+    saturation
+  ]);
   return (
     <View style={StyleSheet.absoluteFill}>
       <PanGestureHandler {...gestureHandler}>
