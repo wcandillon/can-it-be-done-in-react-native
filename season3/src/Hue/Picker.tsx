@@ -57,14 +57,13 @@ export default ({ h, s, backgroundColor }: PickerProps) => {
     theta: polar.theta,
     radius: clamp(polar.radius, 0, CANVAS_SIZE / 2)
   };
-  const angle = divide(modulo(l.theta, 2 * Math.PI), 2 * Math.PI);
-  useCode(
-    () => [
-      set(h, angle),
-      set(s, cond(eq(l.radius, 0), 0, divide(l.radius, CANVAS_SIZE / 2)))
-    ],
-    [angle, h, l.radius, s]
+  const hue = divide(modulo(l.theta, 2 * Math.PI), 2 * Math.PI);
+  const saturation = cond(
+    eq(l.radius, 0),
+    0,
+    divide(l.radius, CANVAS_SIZE / 2)
   );
+  useCode(() => [set(h, hue), set(s, saturation)], [h, hue, s, saturation]);
   return (
     <View style={StyleSheet.absoluteFill}>
       <PanGestureHandler {...gestureHandler}>
