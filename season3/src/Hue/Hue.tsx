@@ -5,23 +5,28 @@ import { StyleSheet, View } from "react-native";
 import { Surface } from "gl-react-expo";
 // @ts-ignore
 import { GLSL, Node, Shaders } from "gl-react";
+import { Value } from "react-native-reanimated";
 import Picker, { CANVAS_SIZE } from "./Picker";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "space-between",
     backgroundColor: "black"
   },
   surface: {
     width: CANVAS_SIZE,
     height: CANVAS_SIZE
+  },
+  hue: {
+    alignSelf: "center"
   }
 });
 
 const shaders = Shaders.create({
-  helloGL: {
+  hue: {
     frag: GLSL`
 #define PI  3.141592653589793
 #define TAU 6.283185307179586
@@ -61,13 +66,20 @@ void main() {
   }
 });
 
-export default () => (
-  <View style={styles.container}>
-    <View>
-      <Surface style={styles.surface}>
-        <Node shader={shaders.helloGL} />
-      </Surface>
-      <Picker />
+export default () => {
+  const h = new Value(0);
+  const s = new Value(0);
+  const v = new Value(1);
+  return (
+    <View style={styles.container}>
+      <Header {...{ h, s, v }} />
+      <View style={styles.hue}>
+        <Surface style={styles.surface}>
+          <Node shader={shaders.hue} />
+        </Surface>
+        <Picker {...{ h, s, v }} />
+      </View>
+      <Footer />
     </View>
-  </View>
-);
+  );
+};

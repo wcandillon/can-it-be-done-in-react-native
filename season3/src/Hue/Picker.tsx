@@ -1,89 +1,50 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
+import Svg, { Path } from "react-native-svg";
 import Animated, {
   Value,
-  abs,
-  add,
-  color,
-  debug,
+  cond,
   divide,
-  floor,
-  interpolate,
+  eq,
   modulo,
-  multiply,
-  proc,
-  round,
-  sub,
+  set,
   useCode
 } from "react-native-reanimated";
 import {
-  Vector,
-  bInterpolate,
   canvas2Polar,
   clamp,
+  hsv2rgb,
+  mix,
   onGestureEvent,
   polar2Canvas,
   translate,
-  withOffset
+  vec,
+  withOffset,
+  withTransition
 } from "react-native-redash";
 
-const fract = (x: Animated.Node<number>) => sub(x, floor(x));
-const mix = (
-  a: Animated.Adaptable<number>,
-  x: Animated.Adaptable<number>,
-  y: Animated.Adaptable<number>
-) => bInterpolate(a, x, y);
-
-const hsv2rgb = proc(
-  (
-    h: Animated.Adaptable<number>,
-    s: Animated.Adaptable<number>,
-    v: Animated.Adaptable<number>
-  ) => {
-    // vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    const K = {
-      x: 1,
-      y: 2 / 3,
-      z: 1 / 3,
-      w: 3
-    };
-    // vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-    const p = {
-      x: abs(sub(multiply(fract(add(h, K.x)), 6), K.w)),
-      y: abs(sub(multiply(fract(add(h, K.y)), 6), K.w)),
-      z: abs(sub(multiply(fract(add(h, K.z)), 6), K.w))
-    };
-    // return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-    const rgb = {
-      x: multiply(v, mix(s, K.x, clamp(sub(p.x, K.x), 0, 1))),
-      y: multiply(v, mix(s, K.x, clamp(sub(p.y, K.x), 0, 1))),
-      z: multiply(v, mix(s, K.x, clamp(sub(p.z, K.x), 0, 1)))
-    };
-    const result = {
-      x: round(multiply(rgb.x, 255)),
-      y: round(multiply(rgb.y, 255)),
-      z: round(multiply(rgb.z, 255))
-    };
-    return color(result.x, result.y, result.z);
-  }
-);
+const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const { width } = Dimensions.get("window");
-export const PICKER_SIZE = 40;
-export const CANVAS_SIZE = width - PICKER_SIZE * 2;
+const PICKER_WIDTH = 30;
+const PICKER_HEIGHT = (PICKER_WIDTH * 60) / 40;
+const STROKE_WIDTH = 4;
+export const CANVAS_SIZE = width - PICKER_WIDTH * 2;
 const CENTER = {
   x: CANVAS_SIZE / 2,
   y: CANVAS_SIZE / 2
 };
-const OFFSET = {
-  x: CANVAS_SIZE / 2 - PICKER_SIZE / 2,
-  y: CANVAS_SIZE / 2 - PICKER_SIZE / 2
-};
 
-export default () => {
+interface PickerProps {
+  h: Animated.Value<number>;
+  s: Animated.Value<number>;
+  v: Animated.Value<number>;
+}
+
+export default ({ h, s, v }: PickerProps) => {
   const state = new Value(State.UNDETERMINED);
-  const translation = Vector.create(0, 0);
+  const translation = vec.create(0, 0);
   const gestureHandler = onGestureEvent({
     state,
     translationX: translation.x,
@@ -93,47 +54,60 @@ export default () => {
     x: withOffset(translation.x, state),
     y: withOffset(translation.y, state)
   };
-  const vec = Vector.add(offset, OFFSET);
-  const polar = canvas2Polar(vec, CENTER);
-  const v = {
+  const v2 = vec.add(offset, CENTER);
+  const polar = canvas2Polar(v2, CENTER);
+  const l = {
     theta: polar.theta,
     radius: clamp(polar.radius, 0, CANVAS_SIZE / 2)
   };
-  // a * 0.5 / PI + 0.5;
-  const angle = modulo(v.theta, 2 * Math.PI);
-  const backgroundColor = hsv2rgb(
-    interpolate(angle, {
-      inputRange: [0, 2 * Math.PI],
-      outputRange: [0, 1]
-    }),
-    divide(v.radius, CANVAS_SIZE / 2),
-    1
-  );
+  const angle = divide(modulo(l.theta, 2 * Math.PI), 2 * Math.PI);
+  const backgroundColor = hsv2rgb(h, s, v);
+  const scale = mix(withTransition(eq(state, State.ACTIVE)), 1, 1.5);
   useCode(
-    () =>
-      debug(
-        "angle",
-        interpolate(angle, {
-          inputRange: [0, 2 * Math.PI],
-          outputRange: [0, 1]
-        })
-      ),
-    [angle]
+    () => [
+      set(h, angle),
+      set(s, cond(eq(l.radius, 0), 0, divide(l.radius, CANVAS_SIZE / 2)))
+    ],
+    [angle, h, l.radius, s]
   );
   return (
     <View style={StyleSheet.absoluteFill}>
       <PanGestureHandler {...gestureHandler}>
         <Animated.View
           style={{
-            borderColor: "white",
-            borderWidth: 4,
-            width: PICKER_SIZE,
-            height: PICKER_SIZE,
-            borderRadius: PICKER_SIZE / 2,
-            backgroundColor,
-            transform: translate(polar2Canvas(v, CENTER))
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 12
+            },
+            shadowOpacity: 0.58,
+            shadowRadius: 16.0,
+            elevation: 24,
+            transform: [
+              ...translate(polar2Canvas(l, CENTER)),
+              ...translate({
+                x: -PICKER_WIDTH / 2,
+                y: -PICKER_HEIGHT / 2
+              })
+            ]
           }}
-        />
+        >
+          <Svg
+            width={PICKER_WIDTH + STROKE_WIDTH * 2}
+            height={PICKER_HEIGHT}
+            style={{ top: -PICKER_HEIGHT / 2 }}
+            viewBox={`-${STROKE_WIDTH / 2} -${STROKE_WIDTH / 2} ${44 +
+              STROKE_WIDTH} ${60 + STROKE_WIDTH}`}
+          >
+            <AnimatedPath
+              d="M22 .889C9.943.889.167 10.664.167 22.723.167 37.127 22 59.111 22 59.111S43.833 37.43 43.833 22.723C43.833 10.664 34.057.889 22 .889z"
+              fill={backgroundColor}
+              stroke="#fff"
+              strokeWidth={STROKE_WIDTH}
+              fillRule="evenodd"
+            />
+          </Svg>
+        </Animated.View>
       </PanGestureHandler>
     </View>
   );
