@@ -4,6 +4,8 @@ import Animated from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { hsv2rgb } from "react-native-redash";
 
+import Slider from "./Slider";
+
 const BUTTON_SIZE = 35;
 const styles = StyleSheet.create({
   container: {
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
     width: BUTTON_SIZE,
     height: BUTTON_SIZE,
     borderRadius: BUTTON_SIZE / 2,
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
     justifyContent: "center",
     alignItems: "center"
   }
@@ -50,18 +52,21 @@ interface HeaderProps {
 export default ({ h, s, v }: HeaderProps) => {
   const backgroundColor = hsv2rgb(h, s, v);
   return (
-    <Animated.View style={{ backgroundColor }}>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <View style={styles.side}>
-            <Button name="arrow-left" />
-            <Text style={styles.name}>Living Room</Text>
+    <View>
+      <Animated.View style={{ backgroundColor }}>
+        <SafeAreaView>
+          <View style={styles.container}>
+            <View style={styles.side}>
+              <Button name="arrow-left" />
+              <Text style={styles.name}>Living Room</Text>
+            </View>
+            <View style={styles.side}>
+              <Button name="more-horizontal" />
+            </View>
           </View>
-          <View style={styles.side}>
-            <Button name="more-horizontal" />
-          </View>
-        </View>
-      </SafeAreaView>
-    </Animated.View>
+        </SafeAreaView>
+      </Animated.View>
+      <Slider {...{ v }} />
+    </View>
   );
 };
