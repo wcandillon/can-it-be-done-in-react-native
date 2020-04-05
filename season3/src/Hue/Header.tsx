@@ -61,7 +61,7 @@ export default ({ h, s, v, backgroundColor }: HeaderProps) => {
   const bg2 = color(r, g, b);
   return (
     <View>
-      <Animated.View style={{ backgroundColor: bg2 }}>
+      <Animated.View style={{ backgroundColor: color(r, g, b) }}>
         <SafeAreaView>
           <View style={styles.container}>
             <View style={styles.side}>

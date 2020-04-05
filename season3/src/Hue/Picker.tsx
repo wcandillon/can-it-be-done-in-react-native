@@ -36,7 +36,7 @@ const CENTER = {
 interface PickerProps {
   h: Animated.Value<number>;
   s: Animated.Value<number>;
-  backgroundColor: Animated.Value<number>;
+  backgroundColor: Animated.Node<number>;
 }
 
 export default ({ h, s, backgroundColor }: PickerProps) => {
