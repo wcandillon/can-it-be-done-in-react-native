@@ -24,8 +24,8 @@ const l = (c1: Animated.Node<number>) => {
   );
 };
 
-const white = color(0, 0, 0);
-const black = color(255, 255, 255);
+const black = color(0, 0, 0);
+const white = color(255, 255, 255);
 const BUTTON_SIZE = 35;
 const styles = StyleSheet.create({
   container: {
@@ -70,15 +70,11 @@ interface HeaderProps {
 }
 
 export default ({ h, s, v, backgroundColor }: HeaderProps) => {
-  const bg2 = hsv2color(h, s, 1);
+  const { r, g, b } = hsv2rgb(h, s, 1);
+  const bg2 = color(r, g, b);
+  const L = add(multiply(0.299, r), multiply(0.587, g), multiply(0.114, b));
   // https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
-  const { r, g, b } = hsv2rgb(h, s, v);
-  const L = add(
-    multiply(0.2126, l(r)),
-    multiply(0.7152, l(g)),
-    multiply(0.0722, l(b))
-  );
-  const textColor = cond(greaterThan(L, 0.179), white, black);
+  const textColor = cond(greaterThan(L, 186), black, white);
   return (
     <View>
       <Animated.View style={{ backgroundColor: bg2 }}>
