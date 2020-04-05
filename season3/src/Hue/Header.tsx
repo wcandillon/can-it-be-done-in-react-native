@@ -50,10 +50,11 @@ interface HeaderProps {
 }
 
 export default ({ h, s, v }: HeaderProps) => {
-  const backgroundColor = hsv2rgb(h, s, v);
+  const bg1 = hsv2rgb(h, s, v);
+  const bg2 = hsv2rgb(h, s, 1);
   return (
     <View>
-      <Animated.View style={{ backgroundColor }}>
+      <Animated.View style={{ backgroundColor: bg2 }}>
         <SafeAreaView>
           <View style={styles.container}>
             <View style={styles.side}>
@@ -66,7 +67,7 @@ export default ({ h, s, v }: HeaderProps) => {
           </View>
         </SafeAreaView>
       </Animated.View>
-      <Slider {...{ v }} />
+      <Slider {...{ v, bg1, bg2 }} />
     </View>
   );
 };

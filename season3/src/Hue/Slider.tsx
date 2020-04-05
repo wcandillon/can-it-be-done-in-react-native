@@ -9,14 +9,18 @@ import Animated, {
   useCode
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import { clamp, onGestureEvent, withOffset } from "react-native-redash";
+import {
+  clamp,
+  hsv2rgb,
+  onGestureEvent,
+  withOffset
+} from "react-native-redash";
 
 const { width } = Dimensions.get("window");
 const SIZE = 30;
 const upperBound = width - SIZE;
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "red",
     borderRadius: SIZE / 2
   },
   cursor: {
@@ -24,14 +28,26 @@ const styles = StyleSheet.create({
     height: SIZE,
     borderRadius: SIZE / 2,
     backgroundColor: "white"
+  },
+  background: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: SIZE / 2
   }
 });
 
 interface SliderProps {
-  v: Animated.Value<number>;
+  h: Animated.Node<number>;
+  s: Animated.Node<number>;
+  v: Animated.Node<number>;
+  bg1: Animated.Node<number>;
+  bg2: Animated.Node<number>;
 }
 
-export default ({ v }: SliderProps) => {
+export default ({ h, s, v, bg1, bg2 }: SliderProps) => {
+  const bg = hsv2rgb(h, s, 1);
   const state = new Value(0);
   const translationX = new Value(0);
   const offset = new Value(upperBound);
@@ -46,12 +62,15 @@ export default ({ v }: SliderProps) => {
   );
   useCode(() => set(v, divide(translateX, upperBound)), [translateX, v]);
   return (
-    <View style={styles.container}>
-      <PanGestureHandler {...gestureHandler}>
-        <Animated.View
-          style={[styles.cursor, { transform: [{ translateX }] }]}
-        />
-      </PanGestureHandler>
+    <View>
+      <Animated.View style={[styles.background, { backgroundColor: bg2 }]} />
+      <Animated.View style={[styles.container, { backgroundColor: bg1 }]}>
+        <PanGestureHandler {...gestureHandler}>
+          <Animated.View
+            style={[styles.cursor, { transform: [{ translateX }] }]}
+          />
+        </PanGestureHandler>
+      </Animated.View>
     </View>
   );
 };
