@@ -14,14 +14,11 @@ import Animated, {
 import {
   canvas2Polar,
   clamp,
-  hsv2rgb,
-  mix,
   onGestureEvent,
   polar2Canvas,
   translate,
   vec,
-  withOffset,
-  withTransition
+  withOffset
 } from "react-native-redash";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -39,10 +36,10 @@ const CENTER = {
 interface PickerProps {
   h: Animated.Value<number>;
   s: Animated.Value<number>;
-  v: Animated.Value<number>;
+  backgroundColor: Animated.Value<number>;
 }
 
-export default ({ h, s, v }: PickerProps) => {
+export default ({ h, s, backgroundColor }: PickerProps) => {
   const state = new Value(State.UNDETERMINED);
   const translation = vec.create(0, 0);
   const gestureHandler = onGestureEvent({
@@ -61,8 +58,6 @@ export default ({ h, s, v }: PickerProps) => {
     radius: clamp(polar.radius, 0, CANVAS_SIZE / 2)
   };
   const angle = divide(modulo(l.theta, 2 * Math.PI), 2 * Math.PI);
-  const backgroundColor = hsv2rgb(h, s, v);
-  const scale = mix(withTransition(eq(state, State.ACTIVE)), 1, 1.5);
   useCode(
     () => [
       set(h, angle),

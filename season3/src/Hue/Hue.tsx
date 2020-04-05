@@ -6,6 +6,7 @@ import { Surface } from "gl-react-expo";
 // @ts-ignore
 import { GLSL, Node, Shaders } from "gl-react";
 import { Value } from "react-native-reanimated";
+import { hsv2color } from "react-native-redash";
 import Picker, { CANVAS_SIZE } from "./Picker";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -70,14 +71,15 @@ export default () => {
   const h = new Value(0);
   const s = new Value(0);
   const v = new Value(1);
+  const backgroundColor = hsv2color(h, s, v);
   return (
     <View style={styles.container}>
-      <Header {...{ h, s, v }} />
+      <Header {...{ h, s, v, backgroundColor }} />
       <View style={styles.hue}>
         <Surface style={styles.surface}>
           <Node shader={shaders.hue} />
         </Surface>
-        <Picker {...{ h, s, v }} />
+        <Picker {...{ h, s, backgroundColor }} />
       </View>
       <Footer />
     </View>

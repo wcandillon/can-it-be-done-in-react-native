@@ -1,11 +1,31 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import Animated from "react-native-reanimated";
+import { SafeAreaView, StyleSheet, View } from "react-native";
+import Animated, {
+  add,
+  color,
+  cond,
+  divide,
+  greaterThan,
+  lessOrEq,
+  multiply,
+  pow
+} from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
-import { hsv2rgb } from "react-native-redash";
+import { hsv2color, hsv2rgb } from "react-native-redash";
 
 import Slider from "./Slider";
 
+const l = (c1: Animated.Node<number>) => {
+  const c = divide(c1, 255);
+  return cond(
+    lessOrEq(c, 0.03928),
+    divide(c, 12.92),
+    pow(divide(add(c, 0.055), 1.055), 2.4)
+  );
+};
+
+const white = color(0, 0, 0);
+const black = color(255, 255, 255);
 const BUTTON_SIZE = 35;
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +35,6 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    color: "white",
     fontWeight: "500",
     marginLeft: 8
   },
@@ -46,12 +65,20 @@ const Button = ({ name }: ButtonProps) => (
 interface HeaderProps {
   h: Animated.Node<number>;
   s: Animated.Node<number>;
-  v: Animated.Node<number>;
+  v: Animated.Value<number>;
+  backgroundColor: Animated.Node<number>;
 }
 
-export default ({ h, s, v }: HeaderProps) => {
-  const bg1 = hsv2rgb(h, s, v);
-  const bg2 = hsv2rgb(h, s, 1);
+export default ({ h, s, v, backgroundColor }: HeaderProps) => {
+  const bg2 = hsv2color(h, s, 1);
+  // https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
+  const { r, g, b } = hsv2rgb(h, s, v);
+  const L = add(
+    multiply(0.2126, l(r)),
+    multiply(0.7152, l(g)),
+    multiply(0.0722, l(b))
+  );
+  const textColor = cond(greaterThan(L, 0.179), white, black);
   return (
     <View>
       <Animated.View style={{ backgroundColor: bg2 }}>
@@ -59,7 +86,9 @@ export default ({ h, s, v }: HeaderProps) => {
           <View style={styles.container}>
             <View style={styles.side}>
               <Button name="arrow-left" />
-              <Text style={styles.name}>Living Room</Text>
+              <Animated.Text style={[styles.name, { color: textColor }]}>
+                Living Room
+              </Animated.Text>
             </View>
             <View style={styles.side}>
               <Button name="more-horizontal" />
@@ -67,7 +96,7 @@ export default ({ h, s, v }: HeaderProps) => {
           </View>
         </SafeAreaView>
       </Animated.View>
-      <Slider {...{ v, bg1, bg2 }} />
+      <Slider {...{ v, bg1: backgroundColor, bg2 }} />
     </View>
   );
 };
