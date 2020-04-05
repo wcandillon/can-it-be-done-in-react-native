@@ -1,17 +1,33 @@
 import React from "react";
-import { StyleSheet, Switch, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { SafeAreaView } from "react-navigation";
 import { Feather as Icon } from "@expo/vector-icons";
 import { hsv2rgb } from "react-native-redash";
 
+const BUTTON_SIZE = 35;
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16
   },
   name: {
-    fontSize: 16,
-    color: "white"
+    fontSize: 18,
+    color: "white",
+    fontWeight: "500",
+    marginLeft: 8
+  },
+  side: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  button: {
+    width: BUTTON_SIZE,
+    height: BUTTON_SIZE,
+    borderRadius: BUTTON_SIZE / 2,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
@@ -20,8 +36,8 @@ interface ButtonProps {
 }
 
 const Button = ({ name }: ButtonProps) => (
-  <View>
-    <Icon {...{ name }} />
+  <View style={styles.button}>
+    <Icon size={18} color="white" {...{ name }} />
   </View>
 );
 
@@ -35,14 +51,15 @@ export default ({ h, s, v }: HeaderProps) => {
   const backgroundColor = hsv2rgb(h, s, v);
   return (
     <Animated.View style={{ backgroundColor }}>
-      <SafeAreaView style={styles.container}>
-        <View>
-          <Button name="arrow-left" />
-          <Text style={styles.name}>Living Room</Text>
-        </View>
-        <View>
-          <Button name="more-horizontal" />
-          <Switch />
+      <SafeAreaView>
+        <View style={styles.container}>
+          <View style={styles.side}>
+            <Button name="arrow-left" />
+            <Text style={styles.name}>Living Room</Text>
+          </View>
+          <View style={styles.side}>
+            <Button name="more-horizontal" />
+          </View>
         </View>
       </SafeAreaView>
     </Animated.View>
