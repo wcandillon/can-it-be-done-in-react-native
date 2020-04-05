@@ -2,19 +2,13 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   Value,
-  debug,
   diffClamp,
   divide,
   set,
   useCode
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import {
-  clamp,
-  hsv2rgb,
-  onGestureEvent,
-  withOffset
-} from "react-native-redash";
+import { onGestureEvent, withOffset } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
 const SIZE = 30;
@@ -39,15 +33,12 @@ const styles = StyleSheet.create({
 });
 
 interface SliderProps {
-  h: Animated.Node<number>;
-  s: Animated.Node<number>;
-  v: Animated.Node<number>;
+  v: Animated.Value<number>;
   bg1: Animated.Node<number>;
   bg2: Animated.Node<number>;
 }
 
-export default ({ h, s, v, bg1, bg2 }: SliderProps) => {
-  const bg = hsv2rgb(h, s, 1);
+export default ({ v, bg1, bg2 }: SliderProps) => {
   const state = new Value(0);
   const translationX = new Value(0);
   const offset = new Value(upperBound);
@@ -55,7 +46,7 @@ export default ({ h, s, v, bg1, bg2 }: SliderProps) => {
     translationX,
     state
   });
-  const translateX = clamp(
+  const translateX = diffClamp(
     withOffset(translationX, state, offset),
     0,
     upperBound
