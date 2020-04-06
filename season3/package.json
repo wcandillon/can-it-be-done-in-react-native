@@ -7,8 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint --ext .js,.ts,.tsx .",
-    "tsc": "tsc",
-    "postinstall": "patch-package"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
@@ -28,8 +27,8 @@
     "expo-gl": "~8.1.0",
     "expo-haptics": "~8.1.0",
     "expo-linear-gradient": "~8.1.0",
-    "gl-react": "4.0.1",
-    "gl-react-expo": "4.0.1",
+    "gl-react": "^4.0.1",
+    "gl-react-expo": "^4.0.1",
     "moment": "^2.24.0",
     "patch-package": "^6.2.0",
     "react": "16.9.0",
@@ -37,7 +36,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-reanimated": "~1.7.0",
-    "react-native-redash": "10.1.1",
+    "react-native-redash": "11.2.0",
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
     "react-native-shared-element": "0.5.6",

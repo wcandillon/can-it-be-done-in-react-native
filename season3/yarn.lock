@@ -4639,7 +4639,7 @@ gl-format-compiler-error@^1.0.2:
     glsl-shader-name "^1.0.0"
     sprintf-js "^1.0.3"
 
-gl-react-expo@4.0.1:
+gl-react-expo@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/gl-react-expo/-/gl-react-expo-4.0.1.tgz#7512b65fd7e27d84f3405e737f8b334aed6b69fc"
   integrity sha512-L4bwpqEolXmdc1YH8okN4qkfOW13/iLvevhJYgf2mHaLCRwhW1WDUJ18EEip8lUxaUmH9NmT9SC5DwMRiP0YSg==
@@ -4647,7 +4647,7 @@ gl-react-expo@4.0.1:
     invariant "^2.2.4"
     webgltexture-loader-expo "1.0.0"
 
-gl-react@4.0.1:
+gl-react@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/gl-react/-/gl-react-4.0.1.tgz#6b747084237dc2209eb3ed05162bb5941c5a6e94"
   integrity sha512-/+wbFHVeh21wOS6g3v7r/zAdXoYMqn7xCB0CwLwMxBUwUsnV0jcvGS+8HDoup9Yd20xGt77p2c3gmrt2XtEEgg==
@@ -7481,10 +7481,10 @@ react-native-reanimated@~1.7.0:
   dependencies:
     fbjs "^1.0.0"
 
-react-native-redash@10.1.1:
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-10.1.1.tgz#228564f2a9cee2406b8f87b1c90c2fdf7d81cdfb"
-  integrity sha512-VxyKygf//IzDgJfK5oFK0KYSaxxpuXwwVE2rldtINRByuCIZIUx8QVE3pmxG7XYc15T4OHC3l7wug+tLsLI44w==
+react-native-redash@11.2.0:
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-11.2.0.tgz#92ec4546174fdcd9a68252470428421e353088d9"
+  integrity sha512-32uyvm9Ahk2CzbNBt4h4LQLmZOBQuVHj7lL5O8mEUj44P+esEj4HDSTSC7WOPZVProwtR2zojwUJtXEU7HAVFQ==
   dependencies:
     abs-svg-path "^0.1.1"
     normalize-svg-path "^1.0.1"
