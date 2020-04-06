@@ -4,16 +4,12 @@ import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Svg, { Path } from "react-native-svg";
 import Animated, {
   Value,
-  add,
   cond,
   divide,
   eq,
   modulo,
-  multiply,
   pow,
   set,
-  sin,
-  sub,
   useCode
 } from "react-native-reanimated";
 import {
@@ -104,6 +100,7 @@ export default ({ h, s, backgroundColor }: PickerProps) => {
               STROKE_WIDTH} ${60 + STROKE_WIDTH}`}
           >
             <AnimatedPath
+              // eslint-disable-next-line max-len
               d="M22 .889C9.943.889.167 10.664.167 22.723.167 37.127 22 59.111 22 59.111S43.833 37.43 43.833 22.723C43.833 10.664 34.057.889 22 .889z"
               fill={backgroundColor}
               stroke="#fff"

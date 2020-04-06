@@ -59,6 +59,11 @@ export const episodes = [
     id: "Instagram",
     name: "Instagram",
     icon: require("../../assets/icons/instagram.png")
+  },
+  {
+    id: "Hue",
+    name: "Hue",
+    icon: require("../../assets/icons/hue.png")
   }
 ];
 

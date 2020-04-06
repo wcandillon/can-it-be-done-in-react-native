@@ -1,13 +1,6 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import Animated, {
-  add,
-  color,
-  cond,
-  divide,
-  lessOrEq,
-  pow
-} from "react-native-reanimated";
+import Animated, { color } from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { colorForBackground, hsv2rgb } from "react-native-redash";
 
@@ -58,7 +51,7 @@ interface HeaderProps {
 
 export default ({ h, s, v, backgroundColor }: HeaderProps) => {
   const { r, g, b } = hsv2rgb(h, s, 1);
-  const bg2 = color(r, g, b);
+  const backgroundWithoutValue = color(r, g, b);
   return (
     <View>
       <Animated.View style={{ backgroundColor: color(r, g, b) }}>
@@ -78,7 +71,7 @@ export default ({ h, s, v, backgroundColor }: HeaderProps) => {
           </View>
         </SafeAreaView>
       </Animated.View>
-      <Slider {...{ v, bg1: backgroundColor, bg2 }} />
+      <Slider {...{ v, backgroundColor, backgroundWithoutValue }} />
     </View>
   );
 };

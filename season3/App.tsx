@@ -43,13 +43,6 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      Hue: {
-        screen: Hue,
-        navigationOptions: {
-          title: "Hue",
-          header: () => null
-        }
-      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
@@ -108,6 +101,13 @@ const AppNavigator = createAppContainer(
         screen: Instagram,
         navigationOptions: {
           title: "Instagram",
+          header: () => null
+        }
+      },
+      Hue: {
+        screen: Hue,
+        navigationOptions: {
+          title: "Hue",
           header: () => null
         }
       }

@@ -34,11 +34,15 @@ const styles = StyleSheet.create({
 
 interface SliderProps {
   v: Animated.Value<number>;
-  bg1: Animated.Node<number>;
-  bg2: Animated.Node<number>;
+  backgroundColor: Animated.Node<number>;
+  backgroundWithoutValue: Animated.Node<number>;
 }
 
-export default ({ v, bg1, bg2 }: SliderProps) => {
+export default ({
+  v,
+  backgroundColor,
+  backgroundWithoutValue
+}: SliderProps) => {
   const state = new Value(0);
   const translationX = new Value(0);
   const offset = new Value(upperBound);
@@ -54,8 +58,10 @@ export default ({ v, bg1, bg2 }: SliderProps) => {
   useCode(() => set(v, divide(translateX, upperBound)), [translateX, v]);
   return (
     <View>
-      <Animated.View style={[styles.background, { backgroundColor: bg2 }]} />
-      <Animated.View style={[styles.container, { backgroundColor: bg1 }]}>
+      <Animated.View
+        style={[styles.background, { backgroundColor: backgroundWithoutValue }]}
+      />
+      <Animated.View style={[styles.container, { backgroundColor }]}>
         <PanGestureHandler {...gestureHandler}>
           <Animated.View
             style={[styles.cursor, { transform: [{ translateX }] }]}
