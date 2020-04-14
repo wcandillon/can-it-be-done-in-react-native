@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-import { bInterpolate } from "react-native-redash";
+import { mix } from "react-native-redash";
 import StyleGuide from "./StyleGuide";
 import Text from "./Text";
 import TapHandler from "./TapHandler";
@@ -50,7 +50,7 @@ export default ({
   comingSoon,
 }: ThumbnailProps) => {
   const value = new Value(0);
-  const scale = bInterpolate(value, 1, 1.5);
+  const scale = mix(value, 1, 1.5);
   return (
     <TapHandler {...{ onPress, value }}>
       <View style={styles.container}>

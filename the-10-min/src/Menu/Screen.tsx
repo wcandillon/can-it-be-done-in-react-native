@@ -1,6 +1,6 @@
 import React from "react";
 import { Dimensions, StyleSheet, Text } from "react-native";
-import { bInterpolate } from "react-native-redash";
+import { mix } from "react-native-redash";
 import Animated from "react-native-reanimated";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -33,10 +33,10 @@ interface ScreenProps {
 }
 
 export default ({ open, transition }: ScreenProps) => {
-  const rotateY = bInterpolate(transition, 0, -alpha);
-  const scale = bInterpolate(transition, 1, 0.9);
-  const opacity = bInterpolate(transition, 0, 0.5);
-  const borderRadius = bInterpolate(transition, 0, 20);
+  const rotateY = mix(transition, 0, -alpha);
+  const scale = mix(transition, 1, 0.9);
+  const opacity = mix(transition, 0, 0.5);
+  const borderRadius = mix(transition, 0, 20);
   return (
     <>
       <Animated.View

@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
 import Animated, { Value, cond, eq } from "react-native-reanimated";
 import {
-  bInterpolate,
+  mix,
   onGestureEvent,
   withTransition,
 } from "react-native-redash";
@@ -24,7 +24,7 @@ export default () => {
   const isActive = eq(state, State.BEGAN);
   const duration = cond(isActive, 2000, 250);
   const progress = withTransition(isActive, { duration });
-  const scale = bInterpolate(progress, 1, 1.2);
+  const scale = mix(progress, 1, 1.2);
   return (
     <View style={styles.container}>
       <TapGestureHandler {...gestureHandler}>

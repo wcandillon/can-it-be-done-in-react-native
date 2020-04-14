@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { call, cond, eq, useCode } from "react-native-reanimated";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
-import { bInterpolate } from "react-native-redash";
+import { mix } from "react-native-redash";
 import CircularProgress from "../components/CircularProgress";
 import { StyleGuide } from "../components";
 
@@ -39,7 +39,7 @@ interface ButtonProps {
 
 export default ({ progress }: ButtonProps) => {
   const [active, setActive] = useState(false);
-  const height = bInterpolate(progress, 0, ICON_SIZE);
+  const height = mix(progress, 0, ICON_SIZE);
   useCode(
     () =>
       cond(

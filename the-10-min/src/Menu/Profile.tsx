@@ -18,7 +18,7 @@ import Animated, {
   useCode,
 } from "react-native-reanimated";
 import {
-  bInterpolate,
+  mix,
   clamp,
   onGestureEvent,
   snapPoint,
@@ -46,10 +46,10 @@ export default ({ open, transition: trx }: ProfileProps) => {
   const velocityX = new Value(0);
   const state = new Value(State.UNDETERMINED);
   const x = clamp(translationX, MIN, MAX + PADDING);
-  const translateX = bInterpolate(transition, MIN, 0);
-  const opacity = bInterpolate(transition, 0.5, 1);
-  const scale = bInterpolate(transition, 1, 0.9);
-  const rotateY = bInterpolate(transition, alpha, 0);
+  const translateX = mix(transition, MIN, 0);
+  const opacity = mix(transition, 0.5, 1);
+  const scale = mix(transition, 1, 0.9);
+  const rotateY = mix(transition, alpha, 0);
   const gestureHandler = onGestureEvent({
     translationX,
     velocityX,
