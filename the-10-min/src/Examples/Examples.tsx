@@ -48,6 +48,11 @@ export const examples = [
     title: "Tap Gesture",
     source: require("../../assets/examples/tap-gesture.png"),
   },
+  {
+    screen: "PinchGesture",
+    title: "PinchGesture",
+    source: require("../../assets/examples/tap-gesture.png"),
+  },
 ];
 
 const styles = StyleSheet.create({

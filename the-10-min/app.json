@@ -3,7 +3,6 @@
     "name": "the-10-min",
     "slug": "the-10-min",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",

@@ -16,6 +16,7 @@ import TapGesture from "./src/TapGesture";
 import Transformations, {
   assets as transformAssets,
 } from "./src/Transformations";
+import PinchGesture from "./src/PinchGesture";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
@@ -31,6 +32,12 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      PinchGesture: {
+        screen: PinchGesture,
+        navigationOptions: {
+          title: "Pinch Gesture",
+        },
+      },
       Transform: {
         screen: Transformations,
         navigationOptions: {
