@@ -18,8 +18,8 @@ import Animated, {
   useCode,
 } from "react-native-reanimated";
 import {
-  mix,
   clamp,
+  mix,
   onGestureEvent,
   snapPoint,
   spring,

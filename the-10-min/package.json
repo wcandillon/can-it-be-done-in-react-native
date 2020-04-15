@@ -41,7 +41,7 @@
     "@types/react-native": "^0.60.22",
     "babel-preset-expo": "^8.1.0",
     "eslint": "^6.3.0",
-    "eslint-config-react-native-wcandillon": "2.7.0",
+    "eslint-config-react-native-wcandillon": "2.8.0",
     "patch-package": "^6.1.2",
     "typescript": "^3.8.3"
   },

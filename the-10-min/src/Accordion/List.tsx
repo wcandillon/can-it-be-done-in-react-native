@@ -39,11 +39,7 @@ interface ListProps {
 export default ({ list }: ListProps) => {
   const [open, setOpen] = useState(false);
   const transition = useTransition(open);
-  const height = mix(
-    transition,
-    0,
-    LIST_ITEM_HEIGHT * list.items.length
-  );
+  const height = mix(transition, 0, LIST_ITEM_HEIGHT * list.items.length);
   const bottomRadius = interpolate(transition, {
     inputRange: [0, 16 / 400],
     outputRange: [8, 0],
