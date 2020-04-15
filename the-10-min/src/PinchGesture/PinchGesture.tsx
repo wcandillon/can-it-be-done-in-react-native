@@ -12,6 +12,7 @@ import Animated, {
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
 import {
   onGestureEvent,
+  pinchActive,
   pinchBegan,
   translate,
   vec,
@@ -41,7 +42,9 @@ export default () => {
   const scaleOffset = new Value(1);
   const offset = vec.createValue(0, 0);
   const state = new Value(State.UNDETERMINED);
+  const numberOfPointers = new Value(0);
   const pinchGestureHandler = onGestureEvent({
+    numberOfPointers,
     scale,
     state,
     focalX: focal.x,
@@ -58,7 +61,7 @@ export default () => {
         ),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(
-          eq(state, State.ACTIVE),
+          pinchActive(state),
           vec.set(pinch, vec.sub(adjustedFocal, origin))
         ),
         cond(eq(state, State.END), [
