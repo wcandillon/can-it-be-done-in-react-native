@@ -4,16 +4,12 @@ import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Svg, { Path } from "react-native-svg";
 import Animated, {
   Value,
-  add,
   cond,
   divide,
   eq,
   modulo,
-  multiply,
   pow,
   set,
-  sin,
-  sub,
   useCode
 } from "react-native-reanimated";
 import {
