@@ -1,13 +1,6 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import Animated, {
-  add,
-  color,
-  cond,
-  divide,
-  lessOrEq,
-  pow
-} from "react-native-reanimated";
+import Animated, { color } from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { colorForBackground, hsv2rgb } from "react-native-redash";
 

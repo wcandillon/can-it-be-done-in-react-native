@@ -55,15 +55,14 @@ export default () => {
   useCode(
     () =>
       block([
-        vec.set(
-          translation,
-          vec.add(pinch, origin, vec.multiply(-1, scale, origin))
-        ),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
-        cond(
-          pinchActive(state),
-          vec.set(pinch, vec.sub(adjustedFocal, origin))
-        ),
+        cond(pinchActive(state, numberOfPointers), [
+          vec.set(pinch, vec.sub(adjustedFocal, origin)),
+          vec.set(
+            translation,
+            vec.add(pinch, origin, vec.multiply(-1, scale, origin))
+          ),
+        ]),
         cond(eq(state, State.END), [
           vec.set(offset, vec.add(offset, translation)),
           set(scaleOffset, multiply(scale, scaleOffset)),
@@ -77,6 +76,7 @@ export default () => {
     [
       adjustedFocal,
       focal,
+      numberOfPointers,
       offset,
       origin,
       pinch,

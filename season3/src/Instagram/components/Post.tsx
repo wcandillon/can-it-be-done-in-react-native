@@ -1,10 +1,9 @@
 import React, { RefObject } from "react";
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import Animated, {
   Value,
   block,
   cond,
-  diff,
   eq,
   set,
   useCode
@@ -67,7 +66,9 @@ export default ({
   const pinch = vec.createValue(0, 0);
   const focal = vec.createValue(0, 0);
   const scale = new Value(1);
+  const numberOfPointers = new Value(0);
   const pinchGestureHandler = onGestureEvent({
+    numberOfPointers,
     scale,
     state,
     focalX: focal.x,
@@ -86,7 +87,7 @@ export default ({
       block([
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(
-          pinchActive(state),
+          pinchActive(state, numberOfPointers),
           vec.set(pinch, vec.invert(vec.sub(origin, adjustedFocal)))
         ),
         cond(eq(state, State.END), [
@@ -95,7 +96,7 @@ export default ({
           set(scale, timing({ from: scale, to: 1 }))
         ])
       ]),
-    [adjustedFocal, origin, pinch, scale, state]
+    [adjustedFocal, numberOfPointers, origin, pinch, scale, state]
   );
   return (
     <>

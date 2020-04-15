@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
@@ -42,7 +43,7 @@ interface PickerProps {
 
 export default ({ h, s, backgroundColor }: PickerProps) => {
   const state = new Value(State.UNDETERMINED);
-  const translation = vec.create(0, 0);
+  const translation = vec.createValue(0, 0);
   const gestureHandler = onGestureEvent({
     state,
     translationX: translation.x,
