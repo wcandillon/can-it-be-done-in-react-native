@@ -59,7 +59,7 @@ export default () => {
           {arcs.map((_d, key) => {
             const isReversed = key / sampling >= 0.5;
             return (
-              <LinearGradient id={`gradient-${key}`} {...{ key }}>
+              <LinearGradient key={key} id={`gradient-${key}`}>
                 <Stop
                   stopColor={palette(key / sampling)}
                   offset={`${isReversed ? 100 : 0}%`}
@@ -77,9 +77,10 @@ export default () => {
         >
           {arcs.map((d, key) => (
             <Path
+              key={key}
               fill="transparent"
               stroke={`url(#gradient-${key})`}
-              {...{ strokeWidth, d, key }}
+              {...{ strokeWidth, d }}
             />
           ))}
         </G>

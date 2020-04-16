@@ -62,7 +62,11 @@ export default ({ list }: ListProps) => {
       </TouchableWithoutFeedback>
       <Animated.View style={[styles.items, { height }]}>
         {list.items.map((item, key) => (
-          <Item {...{ item, key }} isLast={key === list.items.length - 1} />
+          <Item
+            key={key}
+            isLast={key === list.items.length - 1}
+            {...{ item }}
+          />
         ))}
       </Animated.View>
     </>

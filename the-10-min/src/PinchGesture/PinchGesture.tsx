@@ -73,18 +73,7 @@ export default () => {
           vec.set(pinch, 0),
         ]),
       ]),
-    [
-      adjustedFocal,
-      focal,
-      numberOfPointers,
-      offset,
-      origin,
-      pinch,
-      scale,
-      scaleOffset,
-      state,
-      translation,
-    ]
+    [adjustedFocal]
   );
   return (
     <View style={styles.container}>
