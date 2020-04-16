@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: wWidth,
-    resizeMode: "cover"
-  }
+    resizeMode: "cover",
+  },
 });
 
 interface HeaderImageProps {
@@ -26,12 +26,12 @@ export default ({ y }: HeaderImageProps) => {
   const height = interpolate(y, {
     inputRange: [-100, 0],
     outputRange: [HEADER_IMAGE_HEIGHT + 100, HEADER_IMAGE_HEIGHT],
-    extrapolateRight: Extrapolate.CLAMP
+    extrapolateRight: Extrapolate.CLAMP,
   });
   const top = interpolate(y, {
     inputRange: [0, 100],
     outputRange: [0, -100],
-    extrapolateLeft: Extrapolate.CLAMP
+    extrapolateLeft: Extrapolate.CLAMP,
   });
   return (
     <Animated.Image

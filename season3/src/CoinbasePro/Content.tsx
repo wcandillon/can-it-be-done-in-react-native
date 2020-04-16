@@ -5,31 +5,31 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   tabs: {
     flexDirection: "row",
-    padding: 16
+    padding: 16,
   },
   tabActive: {
     borderBottomWidth: 1,
     borderColor: "white",
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   tabLabelActive: {
     color: "white",
-    fontSize: 20
+    fontSize: 20,
   },
   tab: {
     borderBottomWidth: 1,
     borderColor: "#222324",
     paddingBottom: 8,
-    flex: 1
+    flex: 1,
   },
   tabLabel: {
     fontSize: 20,
     color: "#222324",
-    marginLeft: 16
+    marginLeft: 16,
   },
   actions: {
     flexDirection: "row",
@@ -37,35 +37,35 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#222324",
     borderRadius: 8,
-    padding: 16
+    padding: 16,
   },
   content: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   noOrders: {
     color: "#222324",
     marginLeft: 4,
     fontSize: 20,
-    marginTop: 16
+    marginTop: 16,
   },
   values: {
-    flex: 1
+    flex: 1,
   },
   value: {
     color: "white",
-    fontSize: 16
+    fontSize: 16,
   },
   button: {
     paddingVertical: 8,
     paddingHorizontal: 16,
     margin: 4,
-    borderRadius: 8
+    borderRadius: 8,
   },
   label: {
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });
 
 interface ButtonProps {

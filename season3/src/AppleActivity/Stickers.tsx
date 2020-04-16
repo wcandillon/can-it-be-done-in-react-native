@@ -8,12 +8,12 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   canvas: {
     width: SIZE,
-    height: SIZE
-  }
+    height: SIZE,
+  },
 });
 
 export default () => {
@@ -25,7 +25,7 @@ export default () => {
           style={{
             position: "absolute",
             top: 0,
-            left: SIZE / 2 - STROKE_WIDTH / 2
+            left: SIZE / 2 - STROKE_WIDTH / 2,
           }}
           color="black"
           size={STROKE_WIDTH}
@@ -35,7 +35,7 @@ export default () => {
           style={{
             position: "absolute",
             top: STROKE_WIDTH,
-            left: SIZE / 2 - STROKE_WIDTH / 2
+            left: SIZE / 2 - STROKE_WIDTH / 2,
           }}
           color="black"
           size={STROKE_WIDTH}
@@ -45,7 +45,7 @@ export default () => {
           style={{
             position: "absolute",
             top: STROKE_WIDTH * 2,
-            left: SIZE / 2 - STROKE_WIDTH / 2
+            left: SIZE / 2 - STROKE_WIDTH / 2,
           }}
           color="black"
           size={STROKE_WIDTH}

@@ -5,7 +5,7 @@ import Animated, {
   divide,
   floor,
   onChange,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
 import moment from "moment";
@@ -16,24 +16,24 @@ import Row from "./Row";
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   table: {
     flexDirection: "row",
-    padding: 16
+    padding: 16,
   },
   date: {
     color: "white",
     textAlign: "center",
     fontSize: 20,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   column: {
-    flex: 1
+    flex: 1,
   },
   separator: {
-    width: 16
-  }
+    width: 16,
+  },
 });
 
 const formatInt = (value: number) => {

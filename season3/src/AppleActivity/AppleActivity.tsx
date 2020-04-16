@@ -12,20 +12,20 @@ const fgRadius = R1.size / 2 - STROKE_WIDTH;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor
+    backgroundColor,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
-    transform: [{ rotate: "-270deg" }]
+    transform: [{ rotate: "-270deg" }],
   },
   fg: {
     backgroundColor,
     borderRadius: fgRadius,
     width: fgRadius * 2,
-    height: fgRadius * 2
-  }
+    height: fgRadius * 2,
+  },
 });
 const rings = [R3, R2, R1];
 

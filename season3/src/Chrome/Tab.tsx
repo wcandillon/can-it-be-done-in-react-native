@@ -13,28 +13,28 @@ export const tabs: Tab[] = [
   {
     id: 1,
     name: "React Native",
-    thumbnail: require("./thumbnails/react-native.png")
+    thumbnail: require("./thumbnails/react-native.png"),
   },
   {
     id: 2,
     name: "Expo",
-    thumbnail: require("./thumbnails/expo.io.png")
+    thumbnail: require("./thumbnails/expo.io.png"),
   },
   {
     id: 3,
     name: "Apple",
-    thumbnail: require("./thumbnails/www.apple.com.png")
+    thumbnail: require("./thumbnails/www.apple.com.png"),
   },
   {
     id: 4,
     name: "Start React Native",
-    thumbnail: require("./thumbnails/start-react-native.dev.png")
+    thumbnail: require("./thumbnails/start-react-native.dev.png"),
   },
   {
     id: 5,
     name: "Google",
-    thumbnail: require("./thumbnails/www.google.com.png")
-  }
+    thumbnail: require("./thumbnails/www.google.com.png"),
+  },
 ];
 const styles = StyleSheet.create({
   container: { width: TAB_SIZE, height: TAB_SIZE },
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     width: undefined,
     height: undefined,
     borderRadius: 16,
-    margin: 16
-  }
+    margin: 16,
+  },
 });
 
 export interface TabProps {

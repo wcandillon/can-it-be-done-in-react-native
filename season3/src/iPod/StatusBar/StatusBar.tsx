@@ -16,23 +16,23 @@ const styles = StyleSheet.create({
     height: STATUS_BAR_HEIGHT,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
   flex: {
     flex: 1,
     justifyContent: "center",
-    alignSelf: "stretch"
+    alignSelf: "stretch",
   },
   battery: {
     flex: 1,
     alignSelf: "stretch",
     justifyContent: "center",
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   time: {
     fontFamily: "Chicago",
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });
 
 export default () => {

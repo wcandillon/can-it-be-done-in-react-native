@@ -16,12 +16,12 @@ export const verticalPanGestureHandler = () => {
   const gestureHandler = onGestureEvent({
     translationY,
     velocityY,
-    state
+    state,
   });
   return {
     translationY,
     state,
     velocityY,
-    gestureHandler
+    gestureHandler,
   };
 };

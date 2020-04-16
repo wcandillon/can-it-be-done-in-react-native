@@ -12,7 +12,7 @@ import Animated, {
   not,
   set,
   sub,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import { between } from "react-native-redash";
 
@@ -23,8 +23,8 @@ import Item, { Item as ItemModel } from "./Item";
 const ITEM_HEIGHT = 45;
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 interface ListProps {
@@ -42,7 +42,7 @@ export default ({ items, y: y1, command }: ListProps) => {
   const y = diffClamp(y1, 0, items.length * ITEM_HEIGHT - 1);
   const translateY = new Value(0);
   const goingUp = lessThan(diff(y), 0);
-  useOnPress(command, Command.TOP, navigation => navigation.navigate("Menu"));
+  useOnPress(command, Command.TOP, (navigation) => navigation.navigate("Menu"));
   useCode(
     () =>
       block([
@@ -56,7 +56,7 @@ export default ({ items, y: y1, command }: ListProps) => {
               [sub(translateY, ITEM_HEIGHT)]
             )
           )
-        )
+        ),
       ]),
     [goingUp, translateY, y]
   );
@@ -65,9 +65,10 @@ export default ({ items, y: y1, command }: ListProps) => {
       <Animated.View style={{ transform: [{ translateY }] }}>
         {items.map((item, key) => (
           <Item
-            onPress={n => n.navigate(item.screen, item.params)}
+            key={key}
+            onPress={(n) => n.navigate(item.screen, item.params)}
             active={between(y, key * ITEM_HEIGHT, (key + 1) * ITEM_HEIGHT)}
-            {...{ command, key }}
+            {...{ command }}
             {...item}
           />
         ))}

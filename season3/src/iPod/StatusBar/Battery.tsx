@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
   svg: {
     width: 24,
     height: 24,
-    marginRight: 8
-  }
+    marginRight: 8,
+  },
 });
 export default () => {
   const [level, setLevel] = useState(0);

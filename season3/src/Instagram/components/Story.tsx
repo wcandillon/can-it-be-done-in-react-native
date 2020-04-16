@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
     width: 75,
     paddingVertical: 8,
     alignItems: "center",
-    marginLeft: 8
+    marginLeft: 8,
   },
   label: {
-    marginTop: 8
+    marginTop: 8,
   },
   avatar: {
     position: "absolute",
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     width: SIZE - MARGIN * 2,
     height: SIZE - MARGIN * 2,
     borderRadius: (SIZE - MARGIN) / 2,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   margin: {
     position: "absolute",
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     height: SIZE - MARGIN * 2,
     borderRadius: (SIZE - MARGIN) / 2,
     borderWidth: MARGIN,
-    borderColor: "white"
+    borderColor: "white",
   },
   add: {
     position: "absolute",
@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderColor: "white",
-    borderWidth: MARGIN
-  }
+    borderWidth: MARGIN,
+  },
 });
 
 interface StoryProps {

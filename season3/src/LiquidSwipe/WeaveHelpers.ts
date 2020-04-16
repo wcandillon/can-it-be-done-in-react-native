@@ -11,7 +11,7 @@ const {
   sub,
   multiply,
   exp,
-  cos
+  cos,
 } = Animated;
 
 export const initialVertRadius = 82;

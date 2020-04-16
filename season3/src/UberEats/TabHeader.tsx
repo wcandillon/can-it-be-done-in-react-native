@@ -9,7 +9,7 @@ import Animated, {
   interpolate,
   lessOrEq,
   set,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import MaskedView from "@react-native-community/masked-view";
 
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     height: 45,
     marginBottom: 8,
-    flexDirection: "row"
-  }
+    flexDirection: "row",
+  },
 });
 
 interface TabHeaderProps {
@@ -42,7 +42,7 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
   const indexTransition = withTransition(index);
   const width = interpolate(indexTransition, {
     inputRange: tabs.map((_, i) => i),
-    outputRange: measurements
+    outputRange: measurements,
   });
   const translateX = interpolate(indexTransition, {
     inputRange: tabs.map((_tab, i) => i),
@@ -54,13 +54,13 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
             .reduce((acc, m) => acc + m, 0) -
         8 * i
       );
-    })
+    }),
   });
   const style = {
     borderRadius: 24,
     backgroundColor: "black",
     width,
-    flex: 1
+    flex: 1,
   };
   const maskElement = <Animated.View {...{ style }} />;
   useCode(
@@ -85,7 +85,7 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
-          transform: [{ translateX }]
+          transform: [{ translateX }],
         }}
       >
         <Tabs
@@ -104,9 +104,9 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
               ? {
                   backgroundColor: "transparent",
                   borderColor: "black",
-                  borderWidth: 1
+                  borderWidth: 1,
                 }
-              : {}
+              : {},
           ]}
         />
       </View>
@@ -116,12 +116,12 @@ export default ({ transition, y, tabs, scrollView }: TabHeaderProps) => {
           <Animated.View
             style={{
               ...StyleSheet.absoluteFillObject,
-              transform: [{ translateX }]
+              transform: [{ translateX }],
             }}
           >
             <Tabs
               active
-              onPress={i => {
+              onPress={(i) => {
                 if (scrollView.current) {
                   scrollView.current
                     .getNode()

@@ -12,14 +12,14 @@ import {
   sideWidth,
   waveHorRadius,
   waveHorRadiusBack,
-  waveVertRadius
+  waveVertRadius,
 } from "./WeaveHelpers";
 import Content from "./Content";
 import Button from "./Button";
 
 export const assets = [
   require("./assets/firstPageImage.png"),
-  require("./assets/secondPageImage.png")
+  require("./assets/secondPageImage.png"),
 ];
 
 const { width } = Dimensions.get("window");
@@ -27,8 +27,8 @@ const { Value, cond, multiply, divide, interpolate } = Animated;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 export default () => {
@@ -40,7 +40,7 @@ export default () => {
     translationX,
     velocityX,
     y,
-    state
+    state,
   });
   const maxDist = width - initialSideWidth;
   const isBack = new Value(0);
@@ -48,11 +48,11 @@ export default () => {
     isBack,
     interpolate(translationX, {
       inputRange: [0, maxDist],
-      outputRange: [1, 0]
+      outputRange: [1, 0],
     }),
     interpolate(translationX, {
       inputRange: [-maxDist, 0],
-      outputRange: [0.4, 0]
+      outputRange: [0.4, 0],
     })
   );
   const progress = snapProgress(

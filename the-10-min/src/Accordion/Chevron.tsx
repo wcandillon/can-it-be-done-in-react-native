@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, processColor } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
-import { bInterpolateColor, mix } from "react-native-redash";
+import { mix, mixColor } from "react-native-redash";
 
 const size = 30;
 const styles = StyleSheet.create({
@@ -21,7 +21,7 @@ interface ChevronProps {
 
 export default ({ transition }: ChevronProps) => {
   const rotateZ = mix(transition, Math.PI, 0);
-  const backgroundColor = bInterpolateColor(
+  const backgroundColor = mixColor(
     transition,
     processColor("#525251"),
     processColor("#e45645")

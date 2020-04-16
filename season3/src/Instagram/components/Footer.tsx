@@ -9,14 +9,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FAF9F9",
     paddingTop: 0,
     borderTopWidth: 1,
-    borderColor: "#DADADA"
+    borderColor: "#DADADA",
   },
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 16,
-    height: FOOTER_HEIGHT
-  }
+    height: FOOTER_HEIGHT,
+  },
 });
 
 export default () => {

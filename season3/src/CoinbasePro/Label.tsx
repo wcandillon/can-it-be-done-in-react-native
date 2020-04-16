@@ -10,7 +10,7 @@ import Animated, {
   lessThan,
   modulo,
   multiply,
-  sub
+  sub,
 } from "react-native-reanimated";
 import { ReText } from "react-native-redash";
 
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     padding: 4,
     marginTop: 4,
     flexDirection: "row",
-    justifyContent: "space-between"
-  }
+    justifyContent: "space-between",
+  },
 });
 
 const formatInt = (value: Animated.Node<number>) => {
@@ -55,7 +55,7 @@ interface LabelProps {
 export default ({ domain: [min, max], size, y, opacity }: LabelProps) => {
   const value = interpolate(y, {
     inputRange: [0, size],
-    outputRange: [min, max]
+    outputRange: [min, max],
   });
   return (
     <Animated.View

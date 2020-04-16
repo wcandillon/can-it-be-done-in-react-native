@@ -15,25 +15,25 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: "row",
     alignItems: "center",
-    height: 45
+    height: 45,
   },
   icon: {
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
   labelContainer: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   label: {
     fontSize: 16,
     fontFamily: "Chicago",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   thumbnail: {
     width: 45,
     height: 45,
-    marginHorizontal: 16
-  }
+    marginHorizontal: 16,
+  },
 });
 
 export interface Item {
@@ -56,7 +56,7 @@ export default ({
   label,
   command,
   active,
-  onPress
+  onPress,
 }: ItemProps) => {
   const backgroundColor = cond(active, blue, white);
   useOnPress(command, Command.CENTER, onPress, active);

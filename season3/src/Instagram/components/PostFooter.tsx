@@ -6,43 +6,43 @@ const styles = StyleSheet.create({
   actions: {
     padding: 16,
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   username: {
     fontWeight: "500",
-    fontSize: 16
+    fontSize: 16,
   },
   leftActions: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   icon: {
-    marginRight: 16
+    marginRight: 16,
   },
   caption: {
     marginLeft: 16,
-    marginBottom: 8
+    marginBottom: 8,
   },
   likes: {
     marginLeft: 16,
     marginBottom: 16,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 8
+    marginRight: 8,
   },
   header: {
     flexDirection: "row",
     padding: 8,
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   headerLeft: {
     flexDirection: "row",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 interface PostFooterProps {

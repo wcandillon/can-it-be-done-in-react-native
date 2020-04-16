@@ -19,7 +19,7 @@ export default () => {
           style={{
             transform: [
               { translateX: -CARD_WIDTH / 2 },
-              { rotateZ: Math.PI / 6 },
+              { rotateZ: `${Math.PI / 6}rad` },
               { translateX: CARD_WIDTH / 2 },
             ],
           }}
@@ -41,7 +41,7 @@ export default () => {
           style={{
             transform: [
               { translateX: -CARD_WIDTH / 2 },
-              { rotateZ: -Math.PI / 6 },
+              { rotateZ: `${-Math.PI / 6}rad` },
               { translateX: CARD_WIDTH / 2 },
             ],
           }}

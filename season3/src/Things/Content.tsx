@@ -5,25 +5,25 @@ import { StyleGuide } from "../components";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16
+    padding: 16,
   },
   mainTitle: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16
+    marginBottom: 16,
   },
   radio: {
     borderWidth: 4,
     borderColor: StyleGuide.palette.primary,
     width: 32,
     height: 32,
-    borderRadius: 16
+    borderRadius: 16,
   },
   projectTitle: {
     ...StyleGuide.typography.title1,
     fontWeight: "bold",
     flex: 1,
-    marginLeft: 8
+    marginLeft: 8,
   },
   titleContainer: {
     flexDirection: "row",
@@ -31,24 +31,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "#e6e5ea",
     paddingBottom: 8,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   title: {
     ...StyleGuide.typography.title2,
     fontWeight: "bold",
-    color: StyleGuide.palette.primary
+    color: StyleGuide.palette.primary,
   },
   section: {
     marginTop: StyleGuide.spacing * 4,
-    marginBottom: StyleGuide.spacing * 2
+    marginBottom: StyleGuide.spacing * 2,
   },
   todo: {
     flexDirection: "row",
     marginVertical: StyleGuide.spacing,
-    alignItems: "center"
+    alignItems: "center",
   },
   label: {
-    ...StyleGuide.typography.body
+    ...StyleGuide.typography.body,
   },
   checkbox: {
     width: 24,
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 2,
     borderColor: "#e6e5ea",
-    marginRight: 8
-  }
+    marginRight: 8,
+  },
 });
 
 interface SectionProps {

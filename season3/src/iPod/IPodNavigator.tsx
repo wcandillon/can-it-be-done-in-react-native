@@ -4,7 +4,7 @@ import {
   Dimensions,
   StatusBar as RNStatusBar,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 import Animated, { Value, interpolate } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,12 +17,12 @@ import {
   NavigationScreenProp,
   NavigationStackRouterConfig,
   StackRouter,
-  createNavigator
+  createNavigator,
 } from "react-navigation";
 import {
   NavigationStackConfig,
   NavigationStackOptions,
-  NavigationStackProp
+  NavigationStackProp,
 } from "react-navigation-stack";
 
 import { useNavigation } from "react-navigation-hooks";
@@ -38,24 +38,24 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     padding: 16,
     alignItems: "center",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
   },
   screen: {
     width: SCREEN_SIZE,
     height: SCREEN_SIZE,
     backgroundColor: "white",
     borderRadius: 16,
-    overflow: "hidden"
+    overflow: "hidden",
   },
   content: {
     flex: 1,
-    overflow: "hidden"
+    overflow: "hidden",
   },
   clickWheel: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 export type Navigation = NavigationScreenProp<
@@ -90,7 +90,7 @@ const IPodNavigator = ({ navigation, descriptors }: IPodNavigatorProps) => {
   const command = new Value(Command.UNDETERMINED);
   const y = interpolate(alpha, {
     inputRange: [0, 2 * Math.PI],
-    outputRange: [0, SCREEN_SIZE]
+    outputRange: [0, SCREEN_SIZE],
   });
   return (
     <SafeAreaView style={styles.container}>

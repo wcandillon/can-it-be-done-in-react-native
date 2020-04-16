@@ -11,13 +11,13 @@ import Animated, {
   max,
   set,
   sub,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import {
   canvas2Polar,
   onGestureEvent,
   useDiff,
-  useValues
+  useValues,
 } from "react-native-redash";
 
 import Buttons, { Command, size } from "./Buttons";
@@ -27,7 +27,7 @@ const { PI } = Math;
 const hole = size * 0.39;
 const center = {
   x: size / 2,
-  y: size / 2
+  y: size / 2,
 };
 const delta = (a0: Animated.Node<number>, a: Animated.Node<number>) => {
   const da = sub(a0, a);
@@ -44,14 +44,14 @@ const styles = StyleSheet.create({
     borderRadius: size / 2,
     backgroundColor: "#323232",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   center: {
     width: hole,
     height: hole,
     borderRadius: hole / 2,
-    backgroundColor: "black"
-  }
+    backgroundColor: "black",
+  },
 });
 
 interface ClickWheelProps {

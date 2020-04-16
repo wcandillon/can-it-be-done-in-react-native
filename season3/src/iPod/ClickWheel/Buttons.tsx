@@ -7,7 +7,7 @@ import Animated, {
   cond,
   eq,
   set,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
 import { between, onGestureEvent, useValues } from "react-native-redash";
@@ -20,7 +20,7 @@ export enum Command {
   LEFT,
   RIGHT,
   TOP,
-  BOTTOM
+  BOTTOM,
 }
 
 const { width } = Dimensions.get("window");
@@ -28,23 +28,23 @@ export const size = 0.75 * (width - 32);
 const BUTTON_SIZE = size / 3;
 const TOP = {
   x: BUTTON_SIZE,
-  y: 0
+  y: 0,
 };
 const BOTTOM = {
   x: BUTTON_SIZE,
-  y: BUTTON_SIZE * 2
+  y: BUTTON_SIZE * 2,
 };
 const LEFT = {
   x: 0,
-  y: BUTTON_SIZE
+  y: BUTTON_SIZE,
 };
 const CENTER = {
   x: BUTTON_SIZE,
-  y: BUTTON_SIZE
+  y: BUTTON_SIZE,
 };
 const RIGHT = {
   x: BUTTON_SIZE * 2,
-  y: BUTTON_SIZE
+  y: BUTTON_SIZE,
 };
 
 const isInRegion = (
@@ -70,7 +70,7 @@ export const useOnPress = (
       cond(and(active, eq(command, target)), [
         call([], () => onPress(navigation)),
         set(command, Command.UNDETERMINED),
-        1
+        1,
       ]),
     [active, command, navigation, onPress, target]
   );
@@ -110,8 +110,8 @@ export default ({ command, children }: ButtonsProps) => {
             )
           ),
           set(state, State.UNDETERMINED),
-          1
-        ])
+          1,
+        ]),
       ]),
     [command, state, x, y]
   );

@@ -5,7 +5,7 @@ import Animated, {
   diffClamp,
   divide,
   set,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { onGestureEvent, withOffset } from "react-native-redash";
@@ -15,21 +15,21 @@ const SIZE = 30;
 const upperBound = width - SIZE;
 const styles = StyleSheet.create({
   container: {
-    borderRadius: SIZE / 2
+    borderRadius: SIZE / 2,
   },
   cursor: {
     width: SIZE,
     height: SIZE,
     borderRadius: SIZE / 2,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   background: {
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    height: SIZE / 2
-  }
+    height: SIZE / 2,
+  },
 });
 
 interface SliderProps {
@@ -44,7 +44,7 @@ export default ({ v, bg1, bg2 }: SliderProps) => {
   const offset = new Value(upperBound);
   const gestureHandler = onGestureEvent({
     translationX,
-    state
+    state,
   });
   const translateX = diffClamp(
     withOffset(translationX, state, offset),

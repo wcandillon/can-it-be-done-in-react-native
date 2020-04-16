@@ -14,9 +14,7 @@ interface ChartProps {
 
 export default ({ candles, domain }: ChartProps) => {
   const width = size / candles.length;
-  const scaleY = scaleLinear()
-    .domain(domain)
-    .range([size, 0]);
+  const scaleY = scaleLinear().domain(domain).range([size, 0]);
   const scaleBody = scaleLinear()
     .domain([0, Math.max(...domain) - Math.min(...domain)])
     .range([0, size]);

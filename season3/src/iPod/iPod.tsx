@@ -15,7 +15,7 @@ const Menu = ({ y, command }: InjectedIPodProps) => (
       { icon: "users", label: "Artists", screen: "Artists" },
       { icon: "music", label: "Songs", screen: "Songs" },
       { icon: "shuffle", label: "Shuffle", screen: "Shuffle" },
-      { icon: "settings", label: "Settings", screen: "Settings" }
+      { icon: "settings", label: "Settings", screen: "Settings" },
     ]}
     {...{ y, command }}
   />
@@ -23,14 +23,14 @@ const Menu = ({ y, command }: InjectedIPodProps) => (
 
 const Playlists = ({ y, command }: InjectedIPodProps) => (
   <List
-    items={data.playlists.map(playlist => ({
+    items={data.playlists.map((playlist) => ({
       label: playlist.name,
       screen: "Player",
       thumbnail: playlist.entries[0].album.picture.uri,
       params: {
         entries: playlist.entries,
-        selected: 0
-      }
+        selected: 0,
+      },
     }))}
     {...{ y, command }}
   />
@@ -38,14 +38,14 @@ const Playlists = ({ y, command }: InjectedIPodProps) => (
 
 const Albums = ({ y, command }: InjectedIPodProps) => (
   <List
-    items={data.albums.map(album => ({
+    items={data.albums.map((album) => ({
       screen: "Player",
       thumbnail: album.picture.uri,
       label: album.name,
       params: {
         entries: data.transformAlbumToPlaylist(album).entries,
-        selected: 0
-      }
+        selected: 0,
+      },
     }))}
     {...{ y, command }}
   />
@@ -53,14 +53,14 @@ const Albums = ({ y, command }: InjectedIPodProps) => (
 
 const Artists = ({ y, command }: InjectedIPodProps) => (
   <List
-    items={data.albums.map(album => ({
+    items={data.albums.map((album) => ({
       screen: "Player",
       thumbnail: album.picture.uri,
       label: album.artist,
       params: {
         entries: data.transformAlbumToPlaylist(album).entries,
-        selected: 0
-      }
+        selected: 0,
+      },
     }))}
     {...{ y, command }}
   />
@@ -68,19 +68,19 @@ const Artists = ({ y, command }: InjectedIPodProps) => (
 
 const Songs = ({ y, command }: InjectedIPodProps) => {
   const tracks = data.albums
-    .map(album => data.transformAlbumToPlaylist(album).entries)
+    .map((album) => data.transformAlbumToPlaylist(album).entries)
     .flat();
   return (
     <List
       items={tracks
-        .map(track => ({
+        .map((track) => ({
           screen: "Player",
           thumbnail: track.album.picture.uri,
           label: track.track.name,
           params: {
             entries: tracks,
-            selected: 0
-          }
+            selected: 0,
+          },
         }))
         .flat()
         .map((item, index) => {
@@ -102,27 +102,27 @@ const NotImplementedYet = () => {
 
 export default createIPodNavigator({
   Menu: {
-    screen: Menu
+    screen: Menu,
   },
   Player: {
-    screen: Player
+    screen: Player,
   },
   Playlists: {
-    screen: Playlists
+    screen: Playlists,
   },
   Albums: {
-    screen: Albums
+    screen: Albums,
   },
   Artists: {
-    screen: Artists
+    screen: Artists,
   },
   Songs: {
-    screen: Songs
+    screen: Songs,
   },
   Shuffle: {
-    screen: NotImplementedYet
+    screen: NotImplementedYet,
   },
   Settings: {
-    screen: NotImplementedYet
-  }
+    screen: NotImplementedYet,
+  },
 });

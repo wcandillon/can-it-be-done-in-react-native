@@ -11,16 +11,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 16
+    padding: 16,
   },
   name: {
     fontSize: 18,
     fontWeight: "500",
-    marginLeft: 8
+    marginLeft: 8,
   },
   side: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   button: {
     width: BUTTON_SIZE,
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     borderRadius: BUTTON_SIZE / 2,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 interface ButtonProps {

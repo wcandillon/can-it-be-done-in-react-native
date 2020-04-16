@@ -15,15 +15,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   surface: {
     width: CANVAS_SIZE,
-    height: CANVAS_SIZE
+    height: CANVAS_SIZE,
   },
   hue: {
-    alignSelf: "center"
-  }
+    alignSelf: "center",
+  },
 });
 
 const shaders = Shaders.create({
@@ -67,8 +67,8 @@ void main() {
   float progress = a * 0.5 / PI + 0.5;
   gl_FragColor = mag < 0.5 ? vec4(hsv2rgb(vec3(progress, quadraticIn(mag * 2.0), 1.0)), 1.0) : vec4(0.0, 0.0, 0.0, 1.0);
 }
-`
-  }
+`,
+  },
 });
 
 export default () => {

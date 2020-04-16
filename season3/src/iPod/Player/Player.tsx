@@ -21,37 +21,37 @@ Audio.setAudioModeAsync({
   interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
   shouldDuckAndroid: false,
   interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-  playThroughEarpieceAndroid: true
+  playThroughEarpieceAndroid: true,
 });
 
 const COVER_SIZE = SCREEN_SIZE * 0.5 - 16;
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   content: {
     flex: 1,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   cover: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   metadata: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   track: {
     fontFamily: "Chicago",
     fontSize: 16,
-    textAlign: "center"
+    textAlign: "center",
   },
   artist: {
     fontFamily: "Chicago",
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });
 
 export default ({ command }: PlayerProps) => {
@@ -92,7 +92,7 @@ export default ({ command }: PlayerProps) => {
       }
     }
   });
-  useOnPress(command, Command.TOP, async navigation => {
+  useOnPress(command, Command.TOP, async (navigation) => {
     if (playback) {
       await playback.unloadAsync();
     }
@@ -110,7 +110,7 @@ export default ({ command }: PlayerProps) => {
     }
     setIndex(entries[index + 1] ? index + 1 : index);
   });
-  useOnPress(command, Command.TOP, async navigation => {
+  useOnPress(command, Command.TOP, async (navigation) => {
     if (playback) {
       await playback.unloadAsync();
     }

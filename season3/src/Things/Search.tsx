@@ -20,15 +20,15 @@ const styles = StyleSheet.create({
     right: 0,
     top: -CONTAINER_HEIGHT,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   search: {
     width: size,
     height: size,
     borderRadius: size / 2,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 interface SearchProps {
@@ -40,12 +40,12 @@ export default memo(({ translateY }: SearchProps) => {
   const searchTranslateY = clamp(chevronTranslateY, 0, THRESHOLD);
   const backgroundColor = interpolateColor(translateY, {
     inputRange: [CONTAINER_HEIGHT, THRESHOLD],
-    outputRange: [grey, primary]
+    outputRange: [grey, primary],
   }) as Animated.Node<number>;
   const opacity = interpolate(translateY, {
     inputRange: [CONTAINER_HEIGHT, THRESHOLD],
     outputRange: [1, 0],
-    extrapolate: Extrapolate.CLAMP
+    extrapolate: Extrapolate.CLAMP,
   });
   const oppositeOpacity = sub(1, opacity);
   return (
@@ -55,8 +55,8 @@ export default memo(({ translateY }: SearchProps) => {
           styles.search,
           {
             backgroundColor,
-            transform: [{ translateY: searchTranslateY }]
-          }
+            transform: [{ translateY: searchTranslateY }],
+          },
         ]}
       >
         <Icon name="search" size={32} color="white" />

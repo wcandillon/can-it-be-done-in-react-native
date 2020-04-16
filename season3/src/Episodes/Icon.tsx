@@ -12,17 +12,17 @@ const styles = StyleSheet.create({
   container: {
     width: size,
     borderRadius,
-    marginBottom: StyleGuide.spacing * 2
+    marginBottom: StyleGuide.spacing * 2,
   },
   icon: {
     width: size,
     height: size,
-    borderRadius
+    borderRadius,
   },
   name: {
     marginTop: StyleGuide.spacing / 2,
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });
 
 interface IconProps {

@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     width: STROKE_WIDTH,
     height: STROKE_WIDTH,
-    borderRadius: STROKE_WIDTH / 2
-  }
+    borderRadius: STROKE_WIDTH / 2,
+  },
 });
 
 interface RingProps {
@@ -32,7 +32,7 @@ export default ({ ring, theta }: RingProps) => {
   const opacity = lessThan(theta, TAU);
   const backgroundColor = interpolateColor(theta, {
     inputRange: [0, TAU],
-    outputRange: [ring.start, ring.end]
+    outputRange: [ring.start, ring.end],
   });
   return (
     <View>
@@ -45,8 +45,8 @@ export default ({ ring, theta }: RingProps) => {
           {
             opacity,
             backgroundColor: ring.start,
-            top: radius - STROKE_WIDTH / 2
-          }
+            top: radius - STROKE_WIDTH / 2,
+          },
         ]}
       />
       <Animated.View
@@ -58,9 +58,9 @@ export default ({ ring, theta }: RingProps) => {
               { translateX: radius - STROKE_WIDTH / 2 },
               { rotate: theta },
               { translateX: -(radius - STROKE_WIDTH / 2) },
-              { translateY: -4 }
-            ]
-          }
+              { translateY: -4 },
+            ],
+          },
         ]}
       >
         <Shadow />
@@ -74,9 +74,9 @@ export default ({ ring, theta }: RingProps) => {
             transform: [
               { translateX: radius - STROKE_WIDTH / 2 },
               { rotate: theta },
-              { translateX: -(radius - STROKE_WIDTH / 2) }
-            ]
-          }
+              { translateX: -(radius - STROKE_WIDTH / 2) },
+            ],
+          },
         ]}
       />
     </View>

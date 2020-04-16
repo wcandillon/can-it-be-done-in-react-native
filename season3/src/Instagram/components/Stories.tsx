@@ -8,8 +8,8 @@ import Story from "./Story";
 const styles = StyleSheet.create({
   container: {
     borderBottomWidth: 1,
-    borderColor: "#DADADA"
-  }
+    borderColor: "#DADADA",
+  },
 });
 
 export default () => {
@@ -17,7 +17,7 @@ export default () => {
     <View style={styles.container}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <Story label="Your story" picture="https://bit.ly/3avypzV" add />
-        {users.map(user => (
+        {users.map((user) => (
           <Story label={user.id} picture={user.picture} key={user.id} />
         ))}
       </ScrollView>

@@ -5,24 +5,24 @@ import { Feather as Icon } from "@expo/vector-icons";
 const styles = StyleSheet.create({
   username: {
     fontWeight: "500",
-    fontSize: 16
+    fontSize: 16,
   },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 8
+    marginRight: 8,
   },
   header: {
     flexDirection: "row",
     padding: 8,
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   headerLeft: {
     flexDirection: "row",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 interface PostHeaderProps {

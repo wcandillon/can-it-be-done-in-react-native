@@ -6,19 +6,19 @@ import Listing from "./Listing";
 export const assets = [
   require("./assets/tiny-home.jpg"),
   require("./assets/cook-house.jpg"),
-  require("./assets/host.jpg")
+  require("./assets/host.jpg"),
 ];
 
 export const fonts = {
   CerealBook: require("./assets/fonts/AirbnbCerealBook.ttf"),
   CerealMedium: require("./assets/fonts/AirbnbCerealMedium.ttf"),
-  CerealLight: require("./assets/fonts/AirbnbCerealLight.ttf")
+  CerealLight: require("./assets/fonts/AirbnbCerealLight.ttf"),
 };
 
 export default createSharedElementStackNavigator(
   {
     Explore,
-    Listing
+    Listing,
   },
   {
     mode: "modal",
@@ -28,14 +28,14 @@ export default createSharedElementStackNavigator(
         const opacity = progress.interpolate({
           inputRange: [0, 1],
           outputRange: [0, 1],
-          extrapolate: "clamp"
+          extrapolate: "clamp",
         });
         return { cardStyle: { opacity } };
       },
       gestureEnabled: false,
       cardStyle: {
-        backgroundColor: "transparent"
-      }
-    }
+        backgroundColor: "transparent",
+      },
+    },
   }
 );

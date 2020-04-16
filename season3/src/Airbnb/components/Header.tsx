@@ -5,23 +5,23 @@ import { Feather as Icon } from "@expo/vector-icons";
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    padding: 16
+    padding: 16,
   },
   icon: {
-    marginRight: 8
+    marginRight: 8,
   },
   chips: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   chip: {
     borderRadius: 30,
     borderWidth: 1,
     borderColor: "black",
     padding: 8,
-    marginRight: 8
+    marginRight: 8,
   },
   label: {
-    fontFamily: "CerealBook"
+    fontFamily: "CerealBook",
   },
   search: {
     flexDirection: "row",
@@ -32,18 +32,18 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginBottom: 16
+    marginBottom: 16,
   },
   title: {
     fontFamily: "CerealMedium",
     fontSize: 22,
-    marginTop: 16
-  }
+    marginTop: 16,
+  },
 });
 
 const Chip = ({ label }: { label: string }) => (

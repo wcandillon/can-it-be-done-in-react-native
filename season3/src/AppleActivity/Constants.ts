@@ -24,7 +24,7 @@ export const R1: Ring = {
   end: "rgb(0, 255, 169)",
   bg: "rgb(0, 72, 77)",
   theta: 2.3 * TAU,
-  size: SIZE - STROKE_WIDTH * 4
+  size: SIZE - STROKE_WIDTH * 4,
 };
 
 export const R2: Ring = {
@@ -32,7 +32,7 @@ export const R2: Ring = {
   end: "rgb(216, 255, 1)",
   bg: "rgb(47, 78, 0)",
   theta: 0.6 * TAU,
-  size: SIZE - STROKE_WIDTH * 2
+  size: SIZE - STROKE_WIDTH * 2,
 };
 
 export const R3: Ring = {
@@ -40,5 +40,5 @@ export const R3: Ring = {
   end: "rgb(249, 56, 133)",
   bg: "rgb(50, 1, 14)",
   theta: 1.7 * TAU,
-  size: SIZE
+  size: SIZE,
 };

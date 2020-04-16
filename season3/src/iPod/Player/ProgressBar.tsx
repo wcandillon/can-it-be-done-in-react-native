@@ -7,24 +7,24 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   bar: {
     marginVertical: 16,
     flex: 1,
-    height: 16
+    height: 16,
   },
   gradient: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 8
+    borderRadius: 8,
   },
   label: {
     marginHorizontal: 8,
     fontFamily: "Chicago",
     width: 45,
     fontSize: 12,
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });
 
 const minutes = (v: number) => {
@@ -47,7 +47,7 @@ export default ({ playback }: ProgressBarProps) => {
   const total = new Value<string>("00:00");
   const transition = withTransition(progress);
   useEffect(() => {
-    playback.setOnPlaybackStatusUpdate(status => {
+    playback.setOnPlaybackStatusUpdate((status) => {
       if (status.isLoaded) {
         const { positionMillis } = status;
         const { playableDurationMillis } = status;
@@ -79,7 +79,7 @@ export default ({ playback }: ProgressBarProps) => {
             top: 0,
             left: 0,
             bottom: 0,
-            width: concat(multiply(transition, 100), "%")
+            width: concat(multiply(transition, 100), "%"),
           }}
         >
           <LinearGradient

@@ -4,16 +4,16 @@ import { StyleSheet, Text, View } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   label: {
     fontSize: 20,
-    color: "grey"
+    color: "grey",
   },
   value: {
     fontSize: 20,
-    fontVariant: ["tabular-nums"]
-  }
+    fontVariant: ["tabular-nums"],
+  },
 });
 
 interface RowProps {

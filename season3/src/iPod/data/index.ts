@@ -52,12 +52,12 @@ const tracks: { [album: string]: Track[] } = {
   pyk,
   melodrama,
   "ibn-el-leil": ibnRlLeil,
-  shakira
+  shakira,
 };
 
 const entry = (albumId: string, trackName: string): PlaylistEntry => ({
-  album: albums.find(album => album.id === albumId) as Album,
-  track: tracks[albumId].find(track => track.name === trackName) as Track
+  album: albums.find((album) => album.id === albumId) as Album,
+  track: tracks[albumId].find((track) => track.name === trackName) as Track,
 });
 
 const playlists: Playlist[] = [
@@ -70,8 +70,8 @@ const playlists: Playlist[] = [
       entry("shakira", "Dare (La La La)"),
       entry("in-colour", "Loud Places (feat. Romy)"),
       entry("do-something-beautiful", "Do Something Beautiful"),
-      entry("pyk", "Bones")
-    ]
+      entry("pyk", "Bones"),
+    ],
   },
   {
     id: "little-victories",
@@ -82,9 +82,9 @@ const playlists: Playlist[] = [
       entry("where-we-were", "Cell Dilution"),
       entry("hearts-were-gold", "Hearts Were Gold"),
       entry("melodrama", "Green Light"),
-      entry("shakira", "Dare (La La La)")
-    ]
-  }
+      entry("shakira", "Dare (La La La)"),
+    ],
+  },
 ];
 
 export interface PlayerParams {
@@ -99,6 +99,6 @@ export default {
   transformAlbumToPlaylist: (album: Album): Playlist => ({
     id: album.id,
     name: album.name,
-    entries: tracks[album.id].map(track => ({ album, track }))
-  })
+    entries: tracks[album.id].map((track) => ({ album, track })),
+  }),
 };

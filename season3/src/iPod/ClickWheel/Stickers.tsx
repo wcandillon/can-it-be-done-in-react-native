@@ -5,28 +5,28 @@ import { MaterialCommunityIcons as Icon } from "@expo/vector-icons";
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    padding: 12
+    padding: 12,
   },
   top: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   middle: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
   bottom: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   menu: {
     color: "white",
     textAlign: "center",
-    fontWeight: "700"
-  }
+    fontWeight: "700",
+  },
 });
 
 export default () => {

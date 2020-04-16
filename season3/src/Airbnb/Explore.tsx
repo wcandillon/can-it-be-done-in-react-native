@@ -12,7 +12,7 @@ const listings: ListingModel[] = [
     subtitle: "Entire Flat · 1 Bed",
     picture: require("./assets/tiny-home.jpg"),
     rating: 4.93,
-    ratingCount: 861
+    ratingCount: 861,
   },
   {
     id: "cook-house",
@@ -20,22 +20,22 @@ const listings: ListingModel[] = [
     subtitle: "Entire Flat · 1 Bed",
     picture: require("./assets/cook-house.jpg"),
     rating: 4.93,
-    ratingCount: 861
-  }
+    ratingCount: 861,
+  },
 ];
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 const Explore = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      {listings.map(listing => (
+      {listings.map((listing) => (
         <Listing key={listing.id} {...{ listing }} />
       ))}
     </SafeAreaView>

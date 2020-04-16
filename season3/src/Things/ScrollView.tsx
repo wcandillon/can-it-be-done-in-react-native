@@ -31,7 +31,7 @@ const {
   neq,
   diff,
   pow,
-  min
+  min,
 } = Animated;
 
 const friction = (ratio: Animated.Node<number>) =>
@@ -50,7 +50,7 @@ const withScroll = ({
   velocityY,
   state: gestureState,
   containerHeight,
-  contentHeight
+  contentHeight,
 }: WithScrollParams) => {
   const clock = new Clock();
   const delta = new Value(0);
@@ -59,7 +59,7 @@ const withScroll = ({
     time: new Value(0),
     position: new Value(0),
     velocity: new Value(0),
-    finished: new Value(0)
+    finished: new Value(0),
   };
   const upperBound = 0;
   const lowerBound = -1 * (contentHeight - containerHeight);
@@ -69,7 +69,7 @@ const withScroll = ({
   );
   const config = {
     ...SpringUtils.makeDefaultConfig(),
-    toValue: new Value(0)
+    toValue: new Value(0),
   };
   const overscroll = sub(
     state.position,
@@ -97,7 +97,7 @@ const withScroll = ({
           )
         ),
         set(state.velocity, velocityY),
-        set(state.time, 0)
+        set(state.time, 0),
       ],
       [
         set(translationY, 0),
@@ -110,21 +110,21 @@ const withScroll = ({
               config.toValue,
               snapPoint(state.position, state.velocity, [
                 lowerBound,
-                upperBound
+                upperBound,
               ])
             ),
-            spring(clock, state, config)
+            spring(clock, state, config),
           ]
-        )
+        ),
       ]
     ),
-    state.position
+    state.position,
   ]);
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 interface ScrollViewProps {
@@ -150,13 +150,13 @@ export default memo(({ children, translateY, onPull }: ScrollViewProps) => {
             velocityY,
             state,
             containerHeight,
-            contentHeight
+            contentHeight,
           })
         ),
         cond(
           and(greaterOrEq(translateY, THRESHOLD), neq(state, State.ACTIVE)),
           call([], onPull)
-        )
+        ),
       ]),
     [
       containerHeight,
@@ -165,7 +165,7 @@ export default memo(({ children, translateY, onPull }: ScrollViewProps) => {
       state,
       translateY,
       translationY,
-      velocityY
+      velocityY,
     ]
   );
   return (
@@ -173,16 +173,16 @@ export default memo(({ children, translateY, onPull }: ScrollViewProps) => {
       style={styles.container}
       onLayout={({
         nativeEvent: {
-          layout: { height }
-        }
+          layout: { height },
+        },
       }) => setContainerHeight(height)}
     >
       <PanGestureHandler {...gestureHandler}>
         <Animated.View
           onLayout={({
             nativeEvent: {
-              layout: { height }
-            }
+              layout: { height },
+            },
           }) => setContentHeight(height)}
           style={{ transform: [{ translateY }] }}
         >

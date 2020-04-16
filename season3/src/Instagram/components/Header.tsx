@@ -11,14 +11,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FAF9F9",
     paddingBottom: 0,
     borderBottomWidth: 1,
-    borderColor: "#DADADA"
+    borderColor: "#DADADA",
   },
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 16,
-    height: HEADER_HEIGHT
-  }
+    height: HEADER_HEIGHT,
+  },
 });
 
 export default () => {

@@ -5,7 +5,7 @@ import {
   Platform,
   StatusBar,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 import ReAnimated, { Value, cond, eq, or } from "react-native-reanimated";
 import { useSafeArea } from "react-native-safe-area-context";
@@ -13,7 +13,7 @@ import Constants from "expo-constants";
 import {
   PinchGestureHandler,
   ScrollView,
-  State
+  State,
 } from "react-native-gesture-handler";
 
 import { Header, Post, Stories } from "./components";
@@ -31,8 +31,8 @@ const bottom =
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white"
-  }
+    backgroundColor: "white",
+  },
 });
 
 export default () => {
@@ -42,10 +42,10 @@ export default () => {
   const insets = useSafeArea();
   const paddingTop = HEADER_HEIGHT + insets.top;
   const paddingBottom = FOOTER_HEIGHT + insets.bottom;
-  const items = posts.map(post => ({
+  const items = posts.map((post) => ({
     post,
     state: new Value(State.UNDETERMINED),
-    pinchRef: useRef<PinchGestureHandler>(null)
+    pinchRef: useRef<PinchGestureHandler>(null),
   }));
   const pinchRefs = items.map(({ pinchRef }) => pinchRef);
   const isActive = or(
@@ -66,10 +66,10 @@ export default () => {
         simultaneousHandlers={pinchRefs}
         contentContainerStyle={{
           paddingTop,
-          paddingBottom
+          paddingBottom,
         }}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y } } }], {
-          useNativeDriver: true
+          useNativeDriver: true,
         })}
       >
         <Animated.View
@@ -79,7 +79,7 @@ export default () => {
             left: 0,
             right: 0,
             height: HEADER_HEIGHT,
-            transform: [{ translateY: y }]
+            transform: [{ translateY: y }],
           }}
         >
           <Header />
@@ -98,7 +98,7 @@ export default () => {
             right: 0,
             top: bottom - insets.bottom,
             height: FOOTER_HEIGHT,
-            transform: [{ translateY: y }]
+            transform: [{ translateY: y }],
           }}
         >
           <Footer />
@@ -108,7 +108,7 @@ export default () => {
             ...StyleSheet.absoluteFillObject,
             zIndex: 2,
             backgroundColor: "black",
-            opacity
+            opacity,
           }}
           pointerEvents="none"
         />

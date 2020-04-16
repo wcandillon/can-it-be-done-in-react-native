@@ -16,7 +16,7 @@ export default ({ children, active, style }: ActiveProps) => {
         style={{ ...StyleSheet.absoluteFillObject, opacity: active }}
       >
         {cloneElement(children, {
-          style: [children.props.style, { color: "white" }]
+          style: [children.props.style, { color: "white" }],
         })}
       </Animated.View>
     </View>

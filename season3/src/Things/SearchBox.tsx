@@ -4,25 +4,25 @@ import {
   Text,
   TextInput,
   TouchableWithoutFeedback,
-  View
+  View,
 } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.2)"
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
   container: {
     marginTop: 64,
     marginHorizontal: 32,
     borderRadius: 16,
     backgroundColor: "#fdfcff",
-    padding: 16
+    padding: 16,
   },
   row: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   input: {
     flex: 1,
@@ -30,18 +30,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 8,
     height: 32,
-    padding: 4
+    padding: 4,
   },
   button: {
     borderRadius: 8,
     padding: 4,
     paddingHorizontal: 8,
     justifyContent: "center",
-    height: 32
+    height: 32,
   },
   content: {
-    marginTop: 32
-  }
+    marginTop: 32,
+  },
 });
 
 interface SearchBoxProps {

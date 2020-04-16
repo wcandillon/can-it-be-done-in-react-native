@@ -14,13 +14,13 @@ interface ButtonProps {
 export default ({ progress, y }: ButtonProps) => {
   const translateX = interpolate(progress, {
     inputRange: [0, 0.4],
-    outputRange: [width - size - 8, 0]
+    outputRange: [width - size - 8, 0],
   });
   const translateY = sub(y, size / 2);
   const opacity = interpolate(progress, {
     inputRange: [0, 0.1],
     outputRange: [1, 0],
-    extrapolate: Extrapolate.CLAMP
+    extrapolate: Extrapolate.CLAMP,
   });
   return (
     <Animated.View
@@ -34,7 +34,7 @@ export default ({ progress, y }: ButtonProps) => {
         justifyContent: "center",
         alignItems: "center",
         transform: [{ translateX }, { translateY }],
-        opacity
+        opacity,
       }}
     >
       <Icon name="chevron-left" color="black" size={40} />

@@ -7,31 +7,31 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#232425",
     flexDirection: "row",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
   },
   tab: {
     margin: 16,
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 const tabs = [
   {
     icon: "home",
-    label: "Home"
+    label: "Home",
   },
   {
     icon: "clock",
-    label: "Routines"
+    label: "Routines",
   },
   {
     icon: "rocket",
-    label: "Explore"
+    label: "Explore",
   },
   {
     icon: "cog",
-    label: "Settings"
-  }
+    label: "Settings",
+  },
 ];
 
 interface TabProps {
@@ -53,7 +53,7 @@ const Tab = ({ icon, label, active }: TabProps) => {
 export default () => {
   return (
     <SafeAreaView style={styles.container}>
-      {tabs.map(tab => (
+      {tabs.map((tab) => (
         <Tab active={tab.icon === "home"} key={tab.icon} {...tab} />
       ))}
     </SafeAreaView>

@@ -7,8 +7,8 @@ import { TabModel } from "./Content";
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    flexDirection: "row"
-  }
+    flexDirection: "row",
+  },
 });
 
 interface TabsProps {

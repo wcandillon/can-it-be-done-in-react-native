@@ -8,13 +8,13 @@ const { Value } = Animated;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1c1d1e"
-  }
+    backgroundColor: "#1c1d1e",
+  },
 });
 export default () => {
   const offsets = tabs.map((_, index) => ({
     x: new Value(index % TAB_COLUMNS === 0 ? 0 : TAB_SIZE),
-    y: new Value(Math.floor(index / TAB_COLUMNS) * TAB_SIZE)
+    y: new Value(Math.floor(index / TAB_COLUMNS) * TAB_SIZE),
   }));
   return (
     <View style={styles.container}>

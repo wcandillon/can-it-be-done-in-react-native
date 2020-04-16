@@ -21,20 +21,20 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    right: 0
+    right: 0,
   },
   header: {
     flexDirection: "row",
     height: MIN_HEADER_HEIGHT,
     alignItems: "center",
-    paddingHorizontal: PADDING
+    paddingHorizontal: PADDING,
   },
   title: {
     fontFamily: "UberMoveMedium",
     fontSize: 18,
     marginLeft: PADDING,
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 interface HeaderProps {
@@ -52,21 +52,21 @@ export default ({ y, tabs, scrollView }: HeaderProps) => {
   const translateX = interpolate(y, {
     inputRange: [0, HEADER_IMAGE_HEIGHT],
     outputRange: [-ICON_SIZE - PADDING, 0],
-    extrapolate: Extrapolate.CLAMP
+    extrapolate: Extrapolate.CLAMP,
   });
   const translateY = interpolate(y, {
     inputRange: [-100, 0, HEADER_IMAGE_HEIGHT],
     outputRange: [
       HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT + 100,
       HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT,
-      0
+      0,
     ],
-    extrapolateRight: Extrapolate.CLAMP
+    extrapolateRight: Extrapolate.CLAMP,
   });
   const opacity = transition;
   useCode(() => block([set(toggle, greaterThan(y, HEADER_IMAGE_HEIGHT))]), [
     toggle,
-    y
+    y,
   ]);
   return (
     <Animated.View style={[styles.container, { paddingTop }]}>
@@ -74,7 +74,7 @@ export default ({ y, tabs, scrollView }: HeaderProps) => {
         style={{
           ...StyleSheet.absoluteFillObject,
           opacity,
-          backgroundColor: "white"
+          backgroundColor: "white",
         }}
       />
       <View style={styles.header}>
@@ -91,7 +91,7 @@ export default ({ y, tabs, scrollView }: HeaderProps) => {
         <Animated.Text
           style={[
             styles.title,
-            { transform: [{ translateX }, { translateY }] }
+            { transform: [{ translateX }, { translateY }] },
           ]}
         >
           Miss Miu Europaallee

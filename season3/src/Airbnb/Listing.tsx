@@ -11,14 +11,14 @@ import Animated, {
   eq,
   interpolate,
   set,
-  useCode
+  useCode,
 } from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import {
   onGestureEvent,
   snapPoint,
   timing,
-  useValues
+  useValues,
 } from "react-native-redash";
 import { useMemoOne } from "use-memo-one";
 import { Feather as Icon } from "@expo/vector-icons";
@@ -30,16 +30,16 @@ import { Listing as ListingModel } from "./components/Listing";
 const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   image: {
     width,
-    height: width
+    height: width,
   },
   thumbnailOverlay: {
     ...StyleSheet.absoluteFillObject,
-    padding: 16
-  }
+    padding: 16,
+  },
 });
 const Listing = () => {
   const { goBack, getParam } = useNavigation();
@@ -51,13 +51,13 @@ const Listing = () => {
     translateX,
     translateY,
     snapBack,
-    state
+    state,
   ] = useValues([0, 0, 0, 0, 0, 0, State.UNDETERMINED], []);
   const snapTo = snapPoint(translationY, velocityY, [0, height]);
   const scale = interpolate(translateY, {
     inputRange: [0, height / 2],
     outputRange: [1, 0.75],
-    extrapolate: Extrapolate.CLAMP
+    extrapolate: Extrapolate.CLAMP,
   });
   const gestureHandler = useMemoOne(
     () => onGestureEvent({ translationX, translationY, velocityY, state }),
@@ -83,11 +83,11 @@ const Listing = () => {
               set(
                 translateY,
                 timing({ from: translationY, to: 0, duration: 250 })
-              )
+              ),
             ],
             [set(translateX, translationX), set(translateY, translationY)]
           )
-        )
+        ),
       ]),
     // we disable the deps because we don't want the identity change on
     // snapPoint to trigger a side effect
@@ -101,7 +101,7 @@ const Listing = () => {
           style={{
             flex: 1,
             backgroundColor: "white",
-            transform: [{ translateX }, { translateY }, { scale }]
+            transform: [{ translateX }, { translateY }, { scale }],
           }}
         >
           <View>

@@ -8,12 +8,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 8
+    marginRight: 8,
   },
   text: {
     fontSize: 14,
-    fontFamily: "UberMoveRegular"
-  }
+    fontFamily: "UberMoveRegular",
+  },
 });
 
 interface TabProps {
@@ -31,8 +31,8 @@ export default ({ name, color, onMeasurement, onPress }: TabProps) => {
           onMeasurement
             ? ({
                 nativeEvent: {
-                  layout: { width }
-                }
+                  layout: { width },
+                },
               }) => onMeasurement(width)
             : undefined
         }

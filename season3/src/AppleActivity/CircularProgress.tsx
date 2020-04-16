@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
-  lessThan
+  lessThan,
 } from "react-native-reanimated";
 
 import { transformOrigin } from "react-native-redash";
@@ -22,7 +22,7 @@ export default ({ theta, bg, fg, radius }: CircularProgressProps) => {
   const rotate = interpolate(theta, {
     inputRange: [PI, 2 * PI],
     outputRange: [0, PI],
-    extrapolate: Extrapolate.CLAMP
+    extrapolate: Extrapolate.CLAMP,
   });
   return (
     <>
@@ -37,7 +37,7 @@ export default ({ theta, bg, fg, radius }: CircularProgressProps) => {
               { x: 0, y: radius / 2 },
               { rotate: theta }
             ),
-            opacity
+            opacity,
           }}
         >
           <HalfCircle {...{ radius }}>{bg}</HalfCircle>
@@ -48,7 +48,7 @@ export default ({ theta, bg, fg, radius }: CircularProgressProps) => {
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
-            transform: transformOrigin({ x: 0, y: radius / 2 }, { rotate })
+            transform: transformOrigin({ x: 0, y: radius / 2 }, { rotate }),
           }}
         >
           <HalfCircle {...{ radius }}>{bg}</HalfCircle>

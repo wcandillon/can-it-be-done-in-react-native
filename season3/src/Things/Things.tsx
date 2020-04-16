@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import Animated, {
   Transition,
   Transitioning,
-  TransitioningView
+  TransitioningView,
 } from "react-native-reanimated";
 import { StyleSheet } from "react-native";
 
@@ -15,8 +15,8 @@ import SearchBox from "./SearchBox";
 const { Value } = Animated;
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 const transition = (
   <Transition.Together>
