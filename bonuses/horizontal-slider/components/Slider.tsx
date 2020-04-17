@@ -1,11 +1,10 @@
 import * as React from "react";
 import { View, Dimensions, StyleSheet } from "react-native";
-import { DangerZone } from "expo";
+import Animated from "react-native-reanimated";
 
 import Cursor from "./Cursor";
 import Labels from "./Labels";
 
-const { Animated } = DangerZone;
 const {
   Value, max, add, round, divide,
 } = Animated;

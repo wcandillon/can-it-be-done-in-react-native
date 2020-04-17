@@ -1,15 +1,11 @@
 import * as React from "react";
 import { View, StyleSheet } from "react-native";
-import { DangerZone } from "expo";
-import { interpolateColors } from "react-native-redash";
+import { mixColor } from "react-native-redash";
+import Animated from "react-native-reanimated";
 
-const { Animated } = DangerZone;
 const {
-  Value, cond, eq, lessOrEq, add, round, divide,
+  Value, cond, lessOrEq, add, round, divide,
 } = Animated;
-
-const white = { r: 255, g: 255, b: 255 };
-const gray = { r: 128, g: 128, b: 128 };
 
 interface LabelProps {
   x: typeof Value;
@@ -30,10 +26,9 @@ export default ({ count, x, size }: LabelProps) => {
     >
       {
         (new Array(count)).fill(0).map((e, i) => {
-          const color = interpolateColors(
+          const color = mixColor(
             cond(lessOrEq(index, i), 0, 1),
-            [0, 1],
-            [gray, white],
+            "gray", "white",
           );
           return (
             <View key={i} style={{ flex: 1 }}>

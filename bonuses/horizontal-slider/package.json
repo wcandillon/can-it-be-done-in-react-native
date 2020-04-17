@@ -9,14 +9,16 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "expo": "^32.0.0",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-redash": "1.2.4"
+    "expo": "^37.0.0",
+    "react": "16.9.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
+    "react-native-gesture-handler": "~1.6.0",
+    "react-native-reanimated": "~1.7.0",
+    "react-native-redash": "12.1.6"
   },
   "devDependencies": {
     "@types/expo": "^32.0.12",
-    "babel-preset-expo": "^5.0.0",
+    "babel-preset-expo": "^8.1.0",
     "eslint": "^5.16.0",
     "eslint-config-react-native-wcandillon": "^1.0.6"
   },
