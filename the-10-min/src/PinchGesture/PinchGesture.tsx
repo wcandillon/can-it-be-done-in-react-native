@@ -1,21 +1,22 @@
 import React from "react";
-import { Dimensions, Platform, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   Value,
-  and,
   block,
   cond,
-  debug,
-  diff,
   eq,
   multiply,
-  not,
-  proc,
   set,
   useCode,
 } from "react-native-reanimated";
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
-import { onGestureEvent, translate, vec } from "react-native-redash";
+import {
+  onGestureEvent,
+  pinchActive,
+  pinchBegan,
+  translate,
+  vec,
+} from "react-native-redash";
 
 const { width, height } = Dimensions.get("window");
 const CANVAS = vec.create(width, height);
@@ -32,17 +33,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
 });
-// See: https://github.com/kmagiera/react-native-gesture-handler/issues/553
-export const pinchBegan = proc((state: Animated.Node<State>) =>
-  Platform.OS === "ios"
-    ? eq(state, State.BEGAN)
-    : eq(diff(state), State.ACTIVE - State.BEGAN)
-);
-
-export const pinchActive = proc(
-  (state: Animated.Node<State>, numberOfPointers: Animated.Node<number>) =>
-    and(eq(state, State.ACTIVE), eq(numberOfPointers, 2))
-);
 
 export default () => {
   const origin = vec.createValue(0, 0);
