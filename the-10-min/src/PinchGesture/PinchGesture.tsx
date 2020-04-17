@@ -41,13 +41,7 @@ export const pinchBegan = proc((state: Animated.Node<State>) =>
 
 export const pinchActive = proc(
   (state: Animated.Node<State>, numberOfPointers: Animated.Node<number>) =>
-    Platform.OS === "ios"
-      ? and(eq(state, State.ACTIVE), eq(numberOfPointers, 2))
-      : and(
-          eq(state, State.ACTIVE),
-          not(pinchBegan(state)),
-          eq(numberOfPointers, 2)
-        )
+    and(eq(state, State.ACTIVE), eq(numberOfPointers, 2))
 );
 
 export default () => {
@@ -71,11 +65,7 @@ export default () => {
   useCode(
     () =>
       block([
-        cond(pinchBegan(state), [
-          debug("originX", origin.x),
-          debug("originY", origin.y),
-          vec.set(origin, adjustedFocal),
-        ]),
+        cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
           vec.set(pinch, vec.sub(adjustedFocal, origin)),
           vec.set(
