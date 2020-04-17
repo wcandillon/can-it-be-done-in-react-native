@@ -32,12 +32,6 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      PinchGesture: {
-        screen: PinchGesture,
-        navigationOptions: {
-          title: "Pinch Gesture",
-        },
-      },
       Examples: {
         screen: Examples,
         navigationOptions: {
@@ -99,6 +93,12 @@ const AppNavigator = createAppContainer(
         screen: Transformations,
         navigationOptions: {
           title: "Transformations",
+        },
+      },
+      PinchGesture: {
+        screen: PinchGesture,
+        navigationOptions: {
+          title: "Pinch Gesture",
         },
       },
     },
