@@ -1,18 +1,24 @@
 import * as React from "react";
-import { View, Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 import Cursor from "./Cursor";
 import Labels from "./Labels";
 
-const {
-  Value, max, add, round, divide,
-} = Animated;
+const { Value, max, add } = Animated;
 
 const { width: totalWidth } = Dimensions.get("window");
 const count = 5;
 const width = totalWidth / count;
 const height = width;
+const styles = StyleSheet.create({
+  container: {
+    width: totalWidth,
+    height,
+    borderRadius: height / 2,
+    backgroundColor: "#f1f2f6",
+  },
+});
 
 export default () => {
   const x = new Value(0);
@@ -35,12 +41,3 @@ export default () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: totalWidth,
-    height,
-    borderRadius: height / 2,
-    backgroundColor: "#f1f2f6",
-  },
-});

@@ -1,16 +1,24 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import {
-  ReText, onGestureEvent, snapPoint, timing, clamp,
+  ReText,
+  clamp,
+  onGestureEvent,
+  snapPoint,
+  timing,
 } from "react-native-redash";
 import Animated, {
-  useCode, set, cond, eq,
+  cond,
+  eq,
+  floor,
+  lessThan,
+  modulo,
+  set,
+  useCode,
 } from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 
-const {
-  Value, round, divide, concat, add,
-} = Animated;
+const { Value, round, divide, concat, add } = Animated;
 
 interface CursorProps {
   x: Animated.Value<number>;
@@ -18,8 +26,8 @@ interface CursorProps {
   count: number;
 }
 
-export default ({ size, count, x } : CursorProps) => {
-  const snapPoints = new Array(count).fill(0).map((e, i) => (i * size));
+export default ({ size, count, x }: CursorProps) => {
+  const snapPoints = new Array(count).fill(0).map((e, i) => i * size);
   const index = round(divide(x, size));
   const translationX = new Value(0);
   const velocityX = new Value(0);
@@ -27,8 +35,22 @@ export default ({ size, count, x } : CursorProps) => {
   const gestureHandler = onGestureEvent({ state, translationX, velocityX });
   const offset = new Value(0);
   const value = add(offset, translationX);
-  const translateX = clamp(cond(eq(state, State.END), set(offset, timing({ from: value, to: snapPoint(value, velocityX, snapPoints) })), value), 0, (count - 1) * size);
-  useCode(() => set(x, translateX), []);
+  const translateX = clamp(
+    cond(
+      eq(state, State.END),
+      set(
+        offset,
+        timing({
+          from: value,
+          to: snapPoint(value, velocityX, snapPoints),
+        })
+      ),
+      value
+    ),
+    0,
+    (count - 1) * size
+  );
+  useCode(() => set(x, translateX), [x, translateX]);
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View
@@ -48,14 +70,11 @@ export default ({ size, count, x } : CursorProps) => {
           shadowRadius: 3.84,
           justifyContent: "center",
           alignItems: "center",
-          transform: [{ translateX }],
+          transform: [{ translateX: x }],
         }}
       >
-
         <ReText style={{ fontSize: 24 }} text={concat(add(index, 1))} />
-
       </Animated.View>
-
     </PanGestureHandler>
   );
 };
