@@ -51,7 +51,7 @@ export const examples = [
   {
     screen: "PinchGesture",
     title: "PinchGesture",
-    source: require("../../assets/examples/tap-gesture.png"),
+    source: require("../../assets/examples/pinch-gesture.png"),
   },
 ];
 

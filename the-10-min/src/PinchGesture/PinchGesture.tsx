@@ -56,7 +56,6 @@ export default () => {
   useCode(
     () =>
       block([
-        set(scale, multiply(gestureScale, scaleOffset)),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
           vec.set(pinch, vec.sub(adjustedFocal, origin)),
@@ -67,11 +66,13 @@ export default () => {
         ]),
         cond(eq(state, State.END), [
           vec.set(offset, vec.add(offset, translation)),
+          set(scaleOffset, scale),
           set(gestureScale, 1),
           vec.set(translation, 0),
           vec.set(focal, 0),
           vec.set(pinch, 0),
         ]),
+        set(scale, multiply(gestureScale, scaleOffset)),
       ]),
     [
       adjustedFocal,
