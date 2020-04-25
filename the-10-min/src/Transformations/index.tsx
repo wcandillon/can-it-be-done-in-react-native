@@ -29,11 +29,11 @@ export const assets = [
 
 export default createStackNavigator(
   {
-    Transformations: {
-      screen: Transformations,
-    },
     TransformOrigin: {
       screen: TransformOrigin,
+    },
+    Transformations: {
+      screen: Transformations,
     },
     ScaleTransform: {
       screen: ScaleTransform,
