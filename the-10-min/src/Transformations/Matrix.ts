@@ -220,7 +220,7 @@ export const accumulatedTransform = (transforms: Transforms) => {
     if (key === "rotate" || key === "rotateZ") {
       return multiply4(acc, rotateZMatrix(value));
     }
-    //  return exhaustiveCheck(key);
+    return exhaustiveCheck(key);
   }, identityMatrix);
   // https://www.w3.org/TR/css-transforms-1/#decomposing-a-2d-matrix
   // https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix
