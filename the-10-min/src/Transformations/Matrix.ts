@@ -224,21 +224,7 @@ export const accumulatedTransform = (transforms: Transforms) => {
   }, identityMatrix);
   // https://www.w3.org/TR/css-transforms-1/#decomposing-a-2d-matrix
   // https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix
-  /*
-
-	E=(m[0]+m[3])/2
-	F=(m[0]-m[3])/2
-	G=(m[2]+m[1])/2
-  H=(m[2]-m[1])/2
-  */
   // https://gist.github.com/Breton/9d217e0375de055d563b9a0b758d4ae6
-  /*
-  const m = [
-    [1, Math.tan(Math.PI / 12), 50],
-    [Math.tan(Math.PI / 12), 1, 50],
-    [0, 0, 1],
-  ];
-  */
   const a = m[0][0];
   const b = m[1][0];
   const c = m[0][1];
@@ -253,13 +239,10 @@ export const accumulatedTransform = (transforms: Transforms) => {
   const R = sqrt(add(pow(F, 2), pow(G, 2)));
   const scaleX = add(Q, R);
   const scaleY = sub(Q, R);
-  const a1 = atan(divide(G, F));
-  const a2 = atan(divide(H, E));
+  const a1 = atan2(G, F);
+  const a2 = atan2(H, E);
   const theta = divide(sub(a2, a1), 2);
   const phi = divide(add(a2, a1), 2);
-
-  // The requested parameters are then theta,
-  // sx, sy, phi,
   return {
     translateX,
     translateY,
