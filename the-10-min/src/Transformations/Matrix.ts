@@ -1,5 +1,5 @@
 import Animated, { abs, block, debug, tan } from "react-native-reanimated";
-import { Vector, vec } from "react-native-redash";
+import { Vector, atan2, vec } from "react-native-redash";
 
 const {
   and,
@@ -153,42 +153,6 @@ const multiply4 = (m1: Matrix3, m2: Matrix3) => {
       multiplyRowByCol(m1[2], col2),
     ],
   ] as const;
-};
-
-// https://github.com/maxkueng/victor/blob/master/index.js
-// https://www.w3.org/TR/2011/WD-css3-2d-transforms-20111215/#matrix-decomposition
-// Double check with https://dev.w3.org/Graphics-FX/modules/2D-transforms/spec/2DTransforms.html
-const length = (v: Vector) => sqrt(add(pow(v.x, 2), pow(v.y, 2)));
-const normalize = (v: Vector) => vec.divide(v, length(v));
-const dot = (v1: Vector, v2: Vector) =>
-  add(multiply(v1.x, v2.x), multiply(v1.y, v2.y));
-const cross = (v1: Vector, v2: Vector) =>
-  sub(multiply(v1.x, v2.y), multiply(v1.y, v2.x));
-const combine = (
-  a: Vector,
-  b: Vector,
-  ascl: Animated.Adaptable<number>,
-  bscl: Animated.Adaptable<number>
-) => {
-  return {
-    x: add(multiply(ascl, a.x), multiply(bscl, b.x)),
-    y: add(multiply(ascl, a.y), multiply(bscl, b.y)),
-  };
-};
-
-export const atan2 = (
-  y: Animated.Adaptable<number>,
-  x: Animated.Adaptable<number>
-) => {
-  const coeff1 = Math.PI / 4;
-  const coeff2 = 3 * coeff1;
-  const absY = abs(y);
-  const angle = cond(
-    greaterOrEq(x, 0),
-    [sub(coeff1, multiply(coeff1, divide(sub(x, absY), add(x, absY))))],
-    [sub(coeff2, multiply(coeff1, divide(add(x, absY), sub(absY, x))))]
-  );
-  return cond(lessThan(y, 0), multiply(angle, -1), cond(eq(y, 0), 0, angle));
 };
 
 // eslint-disable-next-line import/prefer-default-export
