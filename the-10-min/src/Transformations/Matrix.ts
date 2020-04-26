@@ -1,5 +1,5 @@
-import Animated, { tan } from "react-native-reanimated";
-import { Vector, atan2, vec } from "react-native-redash";
+import Animated, { abs, block, debug, tan } from "react-native-reanimated";
+import { Vector, vec } from "react-native-redash";
 
 const {
   and,
@@ -176,6 +176,21 @@ const combine = (
   };
 };
 
+export const atan2 = (
+  y: Animated.Adaptable<number>,
+  x: Animated.Adaptable<number>
+) => {
+  const coeff1 = Math.PI / 4;
+  const coeff2 = 3 * coeff1;
+  const absY = abs(y);
+  const angle = cond(
+    greaterOrEq(x, 0),
+    [sub(coeff1, multiply(coeff1, divide(sub(x, absY), add(x, absY))))],
+    [sub(coeff2, multiply(coeff1, divide(add(x, absY), sub(absY, x))))]
+  );
+  return cond(lessThan(y, 0), multiply(angle, -1), cond(eq(y, 0), 0, angle));
+};
+
 // eslint-disable-next-line import/prefer-default-export
 export const accumulatedTransform = (transforms: Transforms) => {
   const matrix = transforms.reduce((acc, transform) => {
@@ -205,23 +220,37 @@ export const accumulatedTransform = (transforms: Transforms) => {
     if (key === "rotate" || key === "rotateZ") {
       return multiply4(acc, rotateZMatrix(value));
     }
-    return exhaustiveCheck(key);
+    //  return exhaustiveCheck(key);
   }, identityMatrix);
   // https://www.w3.org/TR/css-transforms-1/#decomposing-a-2d-matrix
   // https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix
-  const a = matrix[0][0];
-  const b = matrix[1][0];
-  const c = matrix[0][1];
-  const d = matrix[1][1];
-  const translateX = matrix[0][2];
-  const translateY = matrix[1][2];
+  /*
+
+	E=(m[0]+m[3])/2
+	F=(m[0]-m[3])/2
+	G=(m[2]+m[1])/2
+  H=(m[2]-m[1])/2
+  */
+  // https://gist.github.com/Breton/9d217e0375de055d563b9a0b758d4ae6
+  const m = [
+    [1, Math.tan(Math.PI / 12), 50],
+    [Math.tan(Math.PI / 12), 1, 50],
+    [0, 0, 1],
+  ];
+  const a = m[0][0];
+  const b = m[1][0];
+  const c = m[0][1];
+  const d = m[1][1];
+  const translateX = m[0][2];
+  const translateY = m[1][2];
   const E = divide(add(a, d), 2);
   const F = divide(sub(a, d), 2);
   const G = divide(add(c, b), 2);
   const H = divide(sub(c, b), 2);
-
   const Q = sqrt(add(pow(E, 2), pow(H, 2)));
   const R = sqrt(add(pow(F, 2), pow(G, 2)));
+  const scaleX = add(Q, R);
+  const scaleY = sub(Q, R);
   const a1 = atan2(G, F);
   const a2 = atan2(H, E);
   const theta = divide(sub(a2, a1), 2);
@@ -233,8 +262,8 @@ export const accumulatedTransform = (transforms: Transforms) => {
     translateX,
     translateY,
     rotateZ: multiply(-1, phi),
-    scaleX: add(Q, R),
-    scaleY: sub(Q, R),
+    scaleX,
+    scaleY,
     skewX: multiply(-1, theta),
   };
 };

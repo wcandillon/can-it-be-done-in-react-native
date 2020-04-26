@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
-import Unmatrix from "unmatrix";
 
-import Animated, { debug, useCode } from "react-native-reanimated";
-import Card, { CARD_WIDTH, Cards } from "./components/Card";
+import Animated from "react-native-reanimated";
+import Card, { Cards } from "./components/Card";
 import { accumulatedTransform } from "./Matrix";
 
 const styles = StyleSheet.create({
@@ -15,12 +14,32 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const transform = [
-    { skewX: -Math.PI / 6 },
-    { translateX: -CARD_WIDTH / 2 },
-    { rotateZ: -Math.PI / 6 },
-    { translateX: CARD_WIDTH / 2 },
-    { skewY: Math.PI / 6 },
+  const m = [
+    [1, Math.tan(Math.PI / 12), 0, 50],
+    [Math.tan(Math.PI / 12), 1, 0, 50],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+  ];
+  const matrix = [
+    m[0][0],
+    m[1][0],
+    m[2][0],
+    m[3][0],
+
+    m[0][1],
+    m[1][1],
+    m[2][1],
+    m[3][1],
+
+    m[0][2],
+    m[1][2],
+    m[2][2],
+    m[3][2],
+
+    m[0][3],
+    m[1][3],
+    m[2][3],
+    m[3][3],
   ];
   const {
     translateX,
@@ -29,31 +48,31 @@ export default () => {
     scaleY,
     skewX,
     rotateZ,
-  } = accumulatedTransform(transform);
+  } = accumulatedTransform([]);
 
   return (
     <>
       <View style={styles.overlay}>
-        <Animated.View
+        <View
           style={{
             opacity: 1,
-            transform,
+            transform: [{ matrix }],
           }}
         >
           <Card type={Cards.Card1} />
-        </Animated.View>
+        </View>
       </View>
       <View style={styles.overlay}>
         <Animated.View
           style={{
-            opacity: 0.8,
+            opacity: 0.5,
             transform: [
               { translateY },
               { translateX },
-              { rotateZ },
-              { skewX },
+              { rotateZ: skewX },
               { scaleX },
               { scaleY },
+              { rotateZ },
             ],
           }}
         >
