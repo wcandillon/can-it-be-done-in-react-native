@@ -15,10 +15,12 @@ const styles = StyleSheet.create({
 
 export default () => {
   const transform = [
-    { translateX: 50 },
-    { translateY: -50 },
-    { skewX: 0 },
-    { skewY: Math.PI / 3 },
+    { translateX: 0 },
+    { translateY: 0 },
+    { scale: 1.25 },
+    { skewX: -Math.PI / 12 },
+    { skewY: -Math.PI / 12 },
+    { rotateZ: Math.PI / 2 },
   ];
 
   const {
@@ -39,7 +41,7 @@ export default () => {
             transform,
           }}
         >
-          <Card type={Cards.Card1} />
+          <Card type={Cards.Card3} />
         </View>
       </View>
       <View style={styles.overlay}>

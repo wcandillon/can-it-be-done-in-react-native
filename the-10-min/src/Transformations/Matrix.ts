@@ -253,8 +253,8 @@ export const accumulatedTransform = (transforms: Transforms) => {
   const R = sqrt(add(pow(F, 2), pow(G, 2)));
   const scaleX = add(Q, R);
   const scaleY = sub(Q, R);
-  const a1 = atan2(G, F);
-  const a2 = atan2(H, E);
+  const a1 = atan(divide(G, F));
+  const a2 = atan(divide(H, E));
   const theta = divide(sub(a2, a1), 2);
   const phi = divide(add(a2, a1), 2);
 
