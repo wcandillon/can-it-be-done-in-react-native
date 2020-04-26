@@ -14,6 +14,12 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const transform = [
+    { skewX: Math.PI / 12 },
+    { skewY: Math.PI / 12 },
+    { translateX: 50 },
+    { translateY: 50 },
+  ];
   const m = [
     [1, Math.tan(Math.PI / 12), 0, 50],
     [Math.tan(Math.PI / 12), 1, 0, 50],
@@ -48,7 +54,12 @@ export default () => {
     scaleY,
     skewX,
     rotateZ,
-  } = accumulatedTransform([]);
+  } = accumulatedTransform([
+    { skewX: Math.PI / 12 },
+    { skewY: Math.PI / 12 },
+    { translateX: 50 },
+    { translateY: 50 },
+  ]);
 
   return (
     <>
@@ -56,7 +67,7 @@ export default () => {
         <View
           style={{
             opacity: 1,
-            transform: [{ matrix }],
+            transform,
           }}
         >
           <Card type={Cards.Card1} />

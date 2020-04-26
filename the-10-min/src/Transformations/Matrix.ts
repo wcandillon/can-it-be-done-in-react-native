@@ -193,7 +193,7 @@ export const atan2 = (
 
 // eslint-disable-next-line import/prefer-default-export
 export const accumulatedTransform = (transforms: Transforms) => {
-  const matrix = transforms.reduce((acc, transform) => {
+  const m = transforms.reduce((acc, transform) => {
     const key = Object.keys(transform)[0] as TransformName;
     const value = (transform as Pick<Transformations, typeof key>)[key];
     if (key === "translateX") {
@@ -232,11 +232,13 @@ export const accumulatedTransform = (transforms: Transforms) => {
   H=(m[2]-m[1])/2
   */
   // https://gist.github.com/Breton/9d217e0375de055d563b9a0b758d4ae6
+  /*
   const m = [
     [1, Math.tan(Math.PI / 12), 50],
     [Math.tan(Math.PI / 12), 1, 50],
     [0, 0, 1],
   ];
+  */
   const a = m[0][0];
   const b = m[1][0];
   const c = m[0][1];
