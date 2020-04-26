@@ -17,10 +17,12 @@ export default () => {
   const transform = [
     { translateX: 0 },
     { translateY: 0 },
+    // { rotateZ: Math.PI / 6 },
+    { skewX: Math.PI * 1.3 },
+    // { skewY: Math.PI / 3 },
+    // { skewX: -Math.PI / 3 },
+    // { skewY: -Math.PI / 3 },
     { scale: 1.25 },
-    { skewX: -Math.PI / 12 },
-    { skewY: -Math.PI / 12 },
-    { rotateZ: Math.PI / 2 },
   ];
 
   const {

@@ -1,5 +1,11 @@
-import Animated, { abs, block, debug, tan } from "react-native-reanimated";
-import { Vector, atan2, vec } from "react-native-redash";
+import Animated, {
+  abs,
+  block,
+  debug,
+  greaterThan,
+  tan,
+} from "react-native-reanimated";
+import { Vector, vec } from "react-native-redash";
 
 const {
   and,
@@ -17,6 +23,31 @@ const {
   atan,
   pow,
 } = Animated;
+
+const atan2 = (
+  y: Animated.Adaptable<number>,
+  x: Animated.Adaptable<number>
+) => {
+  const a = atan(divide(y, x));
+  const { PI } = Math;
+  return cond(
+    greaterThan(x, 0),
+    a,
+    cond(
+      and(lessThan(x, 0), greaterOrEq(y, 0)),
+      add(a, PI),
+      cond(
+        and(lessThan(x, 0), lessThan(y, 0)),
+        sub(a, PI),
+        cond(
+          and(eq(x, 0), greaterThan(y, 0)),
+          PI / 2,
+          cond(and(eq(x, 0), lessThan(y, 0)), -PI / 2, 0)
+        )
+      )
+    )
+  );
+};
 
 type Column3 = readonly [
   Animated.Adaptable<number>,
