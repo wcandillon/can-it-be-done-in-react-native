@@ -80,7 +80,7 @@ const Face = ({
             backgroundColor,
             width: size,
             height: size,
-            transform: [{ rotateY }, { rotateX }],
+            transform: [{ perspective }, { rotateY }, { rotateX }],
           }}
         />
       </View>
