@@ -128,7 +128,7 @@ const perspectiveMatrix = (p: Animated.Adaptable<number>): Matrix4 => [
   [1, 0, 0, 0],
   [0, 1, 0, 0],
   [0, 0, 1, 0],
-  [0, 0, 0, divide(-1, p)],
+  [0, 0, divide(-1, p), 0],
 ];
 
 const rotateXMatrix = (r: Animated.Adaptable<number>): Matrix4 => [

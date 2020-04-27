@@ -16,6 +16,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { loop, mix, translateZ as tz } from "react-native-redash";
 import { decompose2d, multiply4, processTransform } from "./Matrix";
+import processTransform2 from "./ProcessTransform";
 
 const styles = StyleSheet.create({
   container: {
@@ -36,11 +37,17 @@ const Face = ({
   backgroundColor: string;
   rotate: [Animated.Adaptable<number>, Animated.Adaptable<number>];
 }) => {
-  const matrix3d = processTransform([
+  const tr = [
     { perspective },
-    { rotateY },
-    { rotateX },
-  ]);
+    { rotateY: Math.PI / 4 },
+    { rotateX: Math.PI / 4 + Math.PI / 2 },
+  ];
+  const trAsString = [
+    { perspective },
+    { rotateY: `${Math.PI / 4}rad` },
+    { rotateX: `${Math.PI / 4 + Math.PI / 2}rad` },
+  ];
+  const matrix3d = processTransform(tr);
 
   // http://learnwebgl.brown37.net/08_projections/projections_ortho.html
   // http://www.songho.ca/opengl/gl_projectionmatrix.html
@@ -60,6 +67,7 @@ const Face = ({
     [0, 0, 1, 0],
     [0, 0, 0, 1],
   ]);
+  console.log(processTransform2([{ perspective }]));
   /*
   const matrix2d = multiply4(matrix3d, [
     [h / aspect, 0, 0, 0],
@@ -99,11 +107,11 @@ const Face = ({
       <View style={styles.container}>
         <Animated.View
           style={{
-            opacity: 0,
+            opacity: 0.9,
             backgroundColor,
             width: size,
             height: size,
-            transform: [{ perspective }, { rotateY }, { rotateX }],
+            transform: [{ matrix: processTransform2(trAsString) }],
           }}
         />
       </View>
