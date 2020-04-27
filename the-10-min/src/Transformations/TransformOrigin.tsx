@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-
+import processTransform from "./ProcessTransform";
 import Card, { Cards } from "./components/Card";
 import { accumulatedTransform } from "./Matrix";
 
@@ -15,16 +15,27 @@ const styles = StyleSheet.create({
 
 export default () => {
   const transform = [
-    { translateX: 0 },
-    { translateY: 0 },
-    { rotateZ: Math.PI / 6 },
+    { translateX: 50 },
+    { translateY: 50 },
     { skewX: Math.PI * 1.3 },
     { skewY: Math.PI / 3 },
     { skewX: -Math.PI / 3 },
     { skewY: -Math.PI / 3 },
+    { rotateZ: Math.PI / 6 },
     { scale: 1.25 },
   ];
-
+  console.log(
+    processTransform([
+      { translateX: 50 },
+      { translateY: 50 },
+      { skewX: `${Math.PI * 1.3}rad` },
+      { skewY: `${Math.PI / 3}rad` },
+      { skewX: `${-Math.PI / 3}rad` },
+      { skewY: `${-Math.PI / 3}rad` },
+      { rotateZ: `${Math.PI / 6}rad` },
+      { scale: 1.25 },
+    ])
+  );
   const {
     translateX,
     translateY,
@@ -40,10 +51,42 @@ export default () => {
         <View
           style={{
             opacity: 1,
-            transform,
+            transform: [
+              {
+                matrix: processTransform([
+                  { translateX: 50 },
+                  { translateY: 50 },
+                  { skewX: `${Math.PI * 1.3}rad` },
+                  { skewY: `${Math.PI / 3}rad` },
+                  { skewX: `${-Math.PI / 3}rad` },
+                  { skewY: `${-Math.PI / 3}rad` },
+                  { rotateZ: `${Math.PI / 6}rad` },
+                  { scale: 1.25 },
+                ]),
+              },
+            ],
           }}
         >
           <Card type={Cards.Card3} />
+        </View>
+      </View>
+      <View style={styles.overlay}>
+        <View
+          style={{
+            opacity: 0.8,
+            transform: [
+              { translateX: 50 },
+              { translateY: 50 },
+              { skewX: `${Math.PI * 1.3}rad` },
+              { skewY: `${Math.PI / 3}rad` },
+              { skewX: `${-Math.PI / 3}rad` },
+              { skewY: `${-Math.PI / 3}rad` },
+              { rotateZ: `${Math.PI / 6}rad` },
+              { scale: 1.25 },
+            ],
+          }}
+        >
+          <Card type={Cards.Card1} />
         </View>
       </View>
       <View style={styles.overlay}>

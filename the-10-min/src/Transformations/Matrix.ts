@@ -189,6 +189,7 @@ export const accumulatedTransform = (transforms: Transforms) => {
   // https://www.w3.org/TR/css-transforms-1/#decomposing-a-2d-matrix
   // https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix
   // https://gist.github.com/Breton/9d217e0375de055d563b9a0b758d4ae6
+
   const a = m[0][0];
   const b = m[1][0];
   const c = m[0][1];
