@@ -5,7 +5,7 @@ import {
   createStackNavigator,
 } from "react-navigation-stack";
 
-import TransformOrigin from "./TransformOrigin2";
+import TransformOrigin from "./TransformOrigin";
 import ScaleTransform from "./ScaleTransform";
 import ThreeDTransform from "./3DTransform";
 

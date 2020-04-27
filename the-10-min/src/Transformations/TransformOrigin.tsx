@@ -13,7 +13,7 @@ import Animated, {
   useCode,
 } from "react-native-reanimated";
 import { loop, mix, translateZ as tz } from "react-native-redash";
-import { accumulatedTransform, multiply4 } from "./Matrix";
+import { decompose2d, multiply4, processTransform } from "./Matrix";
 
 const styles = StyleSheet.create({
   container: {
@@ -33,11 +33,15 @@ const Face = ({
   backgroundColor: string;
   rotate: [Animated.Adaptable<number>, Animated.Adaptable<number>];
 }) => {
-  const transform3d = accumulatedTransform([{ rotateY }, { rotateX }]);
-  const transform2d = multiply4(transform3d, [
+  const matrix3d = processTransform([
+    { perspective },
+    { rotateY },
+    { rotateX },
+  ]);
+  const matrix2d = multiply4(matrix3d, [
     [1, 0, 0, 0],
     [0, 1, 0, 0],
-    [0, 0, 0, 0],
+    [0, 0, 1, 0],
     [0, 0, 0, 1],
   ]);
   const {
@@ -47,7 +51,7 @@ const Face = ({
     scaleY,
     skewX,
     rotateZ,
-  } = accumulatedTransform(transform2d);
+  } = decompose2d(matrix2d);
 
   return (
     <>

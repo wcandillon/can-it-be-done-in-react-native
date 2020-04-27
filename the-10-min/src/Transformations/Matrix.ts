@@ -161,7 +161,7 @@ const multiplyRowByCol = (row: Row4, col: Column4) => {
   );
 };
 
-const multiply4 = (m1: Matrix4, m2: Matrix4) => {
+export const multiply4 = (m1: Matrix4, m2: Matrix4) => {
   const col0 = [m2[0][0], m2[1][0], m2[2][0], m2[3][0]] as const;
   const col1 = [m2[0][1], m2[1][1], m2[2][1], m2[3][1]] as const;
   const col2 = [m2[0][2], m2[1][2], m2[2][2], m2[3][2]] as const;
@@ -195,8 +195,8 @@ const multiply4 = (m1: Matrix4, m2: Matrix4) => {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const decompose2d = (transforms: Transforms) => {
-  const m = transforms.reduce((acc, transform) => {
+export const processTransform = (transforms: Transforms) =>
+  transforms.reduce((acc, transform) => {
     const key = Object.keys(transform)[0] as TransformName;
     const value = (transform as Pick<Transformations, typeof key>)[key];
     if (key === "translateX") {
@@ -237,10 +237,10 @@ export const decompose2d = (transforms: Transforms) => {
     }
     return exhaustiveCheck(key);
   }, identityMatrix);
-  // https://www.w3.org/TR/css-transforms-1/#decomposing-a-2d-matrix
-  // https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix
-  // https://gist.github.com/Breton/9d217e0375de055d563b9a0b758d4ae6
-
+// https://www.w3.org/TR/css-transforms-1/#decomposing-a-2d-matrix
+// https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix
+// https://gist.github.com/Breton/9d217e0375de055d563b9a0b758d4ae6
+export const decompose2d = (m: Matrix4) => {
   const a = m[0][0];
   const b = m[1][0];
   const c = m[0][1];
