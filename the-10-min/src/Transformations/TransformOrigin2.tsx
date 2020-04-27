@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import processTransform from "./ProcessTransform";
 import Card, { Cards } from "./components/Card";
-import { accumulatedTransform } from "./Matrix";
+import { decompose2d } from "./Matrix";
 
 const styles = StyleSheet.create({
   overlay: {
@@ -17,8 +17,8 @@ export default () => {
   const transform = [
     { translateX: 50 },
     { translateY: 50 },
-    { skewX: Math.PI / 3 },
-    // { skewY: Math.PI / 3 },
+    { skewX: Math.PI / 13 },
+    { skewY: Math.PI / 13 },
     // { skewX: -Math.PI / 3 },
     // { skewY: -Math.PI / 3 },
     { rotateZ: Math.PI / 6 },
@@ -28,8 +28,8 @@ export default () => {
     processTransform([
       { translateX: 50 },
       { translateY: 50 },
-      { skewX: `${Math.PI / 3}rad` },
-      // { skewY: `${Math.PI / 3}rad` },
+      { skewX: `${Math.PI / 13}rad` },
+      { skewY: `${Math.PI / 13}rad` },
       // { skewX: `${-Math.PI / 3}rad` },
       // { skewY: `${-Math.PI / 3}rad` },
       { rotateZ: `${Math.PI / 6}rad` },
@@ -43,7 +43,7 @@ export default () => {
     scaleY,
     skewX,
     rotateZ,
-  } = accumulatedTransform(transform);
+  } = decompose2d(transform);
 
   return (
     <>
@@ -56,8 +56,8 @@ export default () => {
                 matrix: processTransform([
                   { translateX: 50 },
                   { translateY: 50 },
-                  { skewX: `${Math.PI / 3}rad` },
-                  // { skewY: `${Math.PI / 3}rad` },
+                  { skewX: `${Math.PI / 13}rad` },
+                  { skewY: `${Math.PI / 13}rad` },
                   // { skewX: `${-Math.PI / 3}rad` },
                   // { skewY: `${-Math.PI / 3}rad` },
                   { rotateZ: `${Math.PI / 6}rad` },
@@ -84,7 +84,7 @@ export default () => {
             ],
           }}
         >
-          <Card type={Cards.Card2} />
+          <Card type={Cards.Card3} />
         </Animated.View>
       </View>
     </>

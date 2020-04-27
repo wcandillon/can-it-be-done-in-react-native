@@ -195,7 +195,7 @@ const multiply4 = (m1: Matrix4, m2: Matrix4) => {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const accumulatedTransform = (transforms: Transforms) => {
+export const decompose2d = (transforms: Transforms) => {
   const m = transforms.reduce((acc, transform) => {
     const key = Object.keys(transform)[0] as TransformName;
     const value = (transform as Pick<Transformations, typeof key>)[key];
