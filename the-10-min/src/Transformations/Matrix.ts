@@ -127,8 +127,8 @@ const scaleYMatrix = (s: Animated.Adaptable<number>): Matrix4 => [
 const perspectiveMatrix = (p: Animated.Adaptable<number>): Matrix4 => [
   [1, 0, 0, 0],
   [0, 1, 0, 0],
-  [0, 0, 1, multiply(-1, p)],
-  [0, 0, 0, 1],
+  [0, 0, 1, 0],
+  [0, 0, 0, divide(-1, p)],
 ];
 
 const rotateXMatrix = (r: Animated.Adaptable<number>): Matrix4 => [
@@ -152,7 +152,7 @@ const rotateZMatrix = (r: Animated.Adaptable<number>): Matrix4 => [
   [0, 0, 0, 1],
 ];
 
-const multiplyRowByCol = (row: Row4, col: Column4) => {
+export const dot = (row: Row4, col: Column4) => {
   return add(
     multiply(row[0], col[0]),
     multiply(row[1], col[1]),
@@ -167,30 +167,10 @@ export const multiply4 = (m1: Matrix4, m2: Matrix4) => {
   const col2 = [m2[0][2], m2[1][2], m2[2][2], m2[3][2]] as const;
   const col3 = [m2[0][3], m2[1][3], m2[2][3], m2[3][3]] as const;
   return [
-    [
-      multiplyRowByCol(m1[0], col0),
-      multiplyRowByCol(m1[0], col1),
-      multiplyRowByCol(m1[0], col2),
-      multiplyRowByCol(m1[0], col3),
-    ],
-    [
-      multiplyRowByCol(m1[1], col0),
-      multiplyRowByCol(m1[1], col1),
-      multiplyRowByCol(m1[1], col2),
-      multiplyRowByCol(m1[1], col3),
-    ],
-    [
-      multiplyRowByCol(m1[2], col0),
-      multiplyRowByCol(m1[2], col1),
-      multiplyRowByCol(m1[2], col2),
-      multiplyRowByCol(m1[2], col3),
-    ],
-    [
-      multiplyRowByCol(m1[3], col0),
-      multiplyRowByCol(m1[3], col1),
-      multiplyRowByCol(m1[3], col2),
-      multiplyRowByCol(m1[3], col3),
-    ],
+    [dot(m1[0], col0), dot(m1[0], col1), dot(m1[0], col2), dot(m1[0], col3)],
+    [dot(m1[1], col0), dot(m1[1], col1), dot(m1[1], col2), dot(m1[1], col3)],
+    [dot(m1[2], col0), dot(m1[2], col1), dot(m1[2], col2), dot(m1[2], col3)],
+    [dot(m1[3], col0), dot(m1[3], col1), dot(m1[3], col2), dot(m1[3], col3)],
   ] as const;
 };
 

@@ -12,9 +12,7 @@ import { Feather as Icon } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleGuide } from "../components";
 
-const d = Dimensions.get("window");
-export const width = d.width * 0.75;
-export const height = d.height * 0.5;
+const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     width,

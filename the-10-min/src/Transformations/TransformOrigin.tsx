@@ -4,7 +4,9 @@ import Animated, {
   Easing,
   Value,
   add,
+  call,
   cos,
+  divide,
   interpolate,
   multiply,
   set,
@@ -23,6 +25,7 @@ const styles = StyleSheet.create({
   },
 });
 
+const { width, height } = Dimensions.get("window");
 const perspective = 600;
 const size = 200;
 
@@ -38,12 +41,33 @@ const Face = ({
     { rotateY },
     { rotateX },
   ]);
+
+  // http://learnwebgl.brown37.net/08_projections/projections_ortho.html
+  // http://www.songho.ca/opengl/gl_projectionmatrix.html
+  const fovInRadians = 0.872665;
+  const aspect = width / height;
+  const near = size;
+  const far = size * 2;
+  const h = 1 / Math.tan(fovInRadians / 2);
+  const rDepth = 1 / (near - far);
+  const C = (far + near) * rDepth;
+  const D = 2 * (far * near * rDepth);
+  const Z = matrix3d[2][2];
+  // add(matrix3d[2][0], matrix3d[2][1], matrix3d[2][2], matrix3d[2][3]);
   const matrix2d = multiply4(matrix3d, [
     [1, 0, 0, 0],
     [0, 1, 0, 0],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
   ]);
+  /*
+  const matrix2d = multiply4(matrix3d, [
+    [h / aspect, 0, 0, 0],
+    [0, h, 0, 0],
+    [0, 0, C, D],
+    [0, 0, -1, 0],
+  ]);
+  */
   const {
     translateX: tx,
     translateY: ty,
@@ -52,7 +76,6 @@ const Face = ({
     skewX,
     rotateZ,
   } = decompose2d(matrix2d);
-
   return (
     <>
       <View style={styles.container}>
@@ -76,7 +99,7 @@ const Face = ({
       <View style={styles.container}>
         <Animated.View
           style={{
-            opacity: 0.5,
+            opacity: 0,
             backgroundColor,
             width: size,
             height: size,
@@ -89,7 +112,7 @@ const Face = ({
 };
 
 export default () => {
-  const progress = new Value(0);
+  const progress = new Value(Math.PI / 6);
   useCode(() => set(progress, loop({ duration: 4000 })), [progress]);
   const rotateY = mix(progress, 0, 2 * Math.PI);
   return (
@@ -155,3 +178,14 @@ export default () => {
         {...{ progress }}
       />
       */
+
+const debugMatrix = (m) =>
+  call([...m[0], ...m[1], ...m[2], ...m[3]], (v) =>
+    console.log(`
+[
+  [${v[0]}, ${v[1]}, ${v[2]}, ${v[3]}] 
+  [${v[4]}, ${v[5]}, ${v[6]}, ${v[7]}]
+  [${v[8]}, ${v[9]}, ${v[10]}, ${v[11]}]
+  [${v[12]}, ${v[13]}, ${v[14]}, ${v[15]}]
+]`)
+  );
