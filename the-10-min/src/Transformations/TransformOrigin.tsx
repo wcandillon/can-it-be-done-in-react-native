@@ -1,111 +1,153 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
-import processTransform from "./ProcessTransform";
-import Card, { Cards } from "./components/Card";
-import { accumulatedTransform } from "./Matrix";
+import { Dimensions, StyleSheet, View } from "react-native";
+import Animated, {
+  Easing,
+  Value,
+  add,
+  cos,
+  interpolate,
+  multiply,
+  set,
+  sin,
+  sub,
+  useCode,
+} from "react-native-reanimated";
+import { loop, mix, translateZ as tz } from "react-native-redash";
+import { accumulatedTransform, multiply4 } from "./Matrix";
 
 const styles = StyleSheet.create({
-  overlay: {
+  container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
   },
 });
 
-export default () => {
-  const transform = [
-    { translateX: 50 },
-    { translateY: 50 },
-    { skewX: Math.PI * 1.3 },
-    { skewY: Math.PI / 3 },
-    { skewX: -Math.PI / 3 },
-    { skewY: -Math.PI / 3 },
-    { rotateZ: Math.PI / 6 },
-    { scale: 1.25 },
-  ];
-  console.log(
-    processTransform([
-      { translateX: 50 },
-      { translateY: 50 },
-      { skewX: `${Math.PI * 1.3}rad` },
-      { skewY: `${Math.PI / 3}rad` },
-      { skewX: `${-Math.PI / 3}rad` },
-      { skewY: `${-Math.PI / 3}rad` },
-      { rotateZ: `${Math.PI / 6}rad` },
-      { scale: 1.25 },
-    ])
-  );
+const perspective = 600;
+const size = 200;
+
+const Face = ({
+  backgroundColor,
+  rotate: [rotateX, rotateY],
+}: {
+  backgroundColor: string;
+  rotate: [Animated.Adaptable<number>, Animated.Adaptable<number>];
+}) => {
+  const transform3d = accumulatedTransform([{ rotateY }, { rotateX }]);
+  const transform2d = multiply4(transform3d, [
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 1],
+  ]);
   const {
-    translateX,
-    translateY,
+    translateX: tx,
+    translateY: ty,
     scaleX,
     scaleY,
     skewX,
     rotateZ,
-  } = accumulatedTransform(transform);
+  } = accumulatedTransform(transform2d);
 
   return (
     <>
-      <View style={styles.overlay}>
-        <View
-          style={{
-            opacity: 1,
-            transform: [
-              {
-                matrix: processTransform([
-                  { translateX: 50 },
-                  { translateY: 50 },
-                  { skewX: `${Math.PI * 1.3}rad` },
-                  { skewY: `${Math.PI / 3}rad` },
-                  { skewX: `${-Math.PI / 3}rad` },
-                  { skewY: `${-Math.PI / 3}rad` },
-                  { rotateZ: `${Math.PI / 6}rad` },
-                  { scale: 1.25 },
-                ]),
-              },
-            ],
-          }}
-        >
-          <Card type={Cards.Card3} />
-        </View>
-      </View>
-      <View style={styles.overlay}>
-        <View
-          style={{
-            opacity: 0.8,
-            transform: [
-              { translateX: 50 },
-              { translateY: 50 },
-              { skewX: `${Math.PI * 1.3}rad` },
-              { skewY: `${Math.PI / 3}rad` },
-              { skewX: `${-Math.PI / 3}rad` },
-              { skewY: `${-Math.PI / 3}rad` },
-              { rotateZ: `${Math.PI / 6}rad` },
-              { scale: 1.25 },
-            ],
-          }}
-        >
-          <Card type={Cards.Card1} />
-        </View>
-      </View>
-      <View style={styles.overlay}>
+      <View style={styles.container}>
         <Animated.View
           style={{
-            opacity: 0.8,
+            opacity: 0.5,
+            backgroundColor,
+            width: size,
+            height: size,
             transform: [
-              { translateY },
-              { translateX },
+              { translateY: ty },
+              { translateX: tx },
               { rotateZ: skewX },
               { scaleX },
               { scaleY },
               { rotateZ },
             ],
           }}
-        >
-          <Card type={Cards.Card2} />
-        </Animated.View>
+        />
+      </View>
+      <View style={styles.container}>
+        <Animated.View
+          style={{
+            opacity: 0.5,
+            backgroundColor,
+            width: size,
+            height: size,
+            transform: [{ rotateY }, { rotateX }],
+          }}
+        />
       </View>
     </>
   );
 };
+
+export default () => {
+  const progress = new Value(0);
+  useCode(() => set(progress, loop({ duration: 4000 })), [progress]);
+  const rotateY = mix(progress, 0, 2 * Math.PI);
+  return (
+    <>
+      <Face
+        rotate={[0, rotateY]}
+        translate={[0, 0, 0]}
+        backgroundColor="#4c72e0"
+        {...{ progress }}
+      />
+      <Face
+        rotate={[0, add(rotateY, Math.PI / 2)]}
+        translate={[0, 0, 0]}
+        backgroundColor="#de7c92"
+        {...{ progress }}
+      />
+    </>
+  );
+};
+
+/*
+
+      <Face
+        translate={[0, 0, radius]}
+        rotate={[r, 0]}
+        backgroundColor="#4c72e0"
+        {...{ progress }}
+      />
+        {this.renderFront("#4c72e0")}
+        {this.renderBack("#8697df")}
+        {this.renderLeft("#b5bce2")}
+        {this.renderRight("#e5afb9")}
+        {this.renderTop("#de7c92")}
+        {this.renderBottom("#d1426b")}
+      <Face
+        translate={[0, 0, radius]}
+        rotate={[r, 0]}
+        backgroundColor="blue"
+        {...{ progress }}
+      />
+      <Face
+        translate={[x, y, y]}
+        rotate={[r, 0]}
+        backgroundColor="orange"
+        {...{ progress }}
+      />
+      <Face
+        translate={[y, y, y]}
+        rotate={[r, 0]}
+        backgroundColor="yellow"
+        {...{ progress }}
+      />
+      <Face
+        translate={[y, y, x]}
+        rotate={[r, 0]}
+        backgroundColor="green"
+        {...{ progress }}
+      />
+      <Face
+        translate={[y, x, x]}
+        rotate={[r, 0]}
+        backgroundColor="red"
+        {...{ progress }}
+      />
+      */
