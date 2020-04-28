@@ -17,6 +17,7 @@ import Transformations, {
   assets as transformAssets,
 } from "./src/Transformations";
 import PinchGesture from "./src/PinchGesture";
+import RotationGesture from "./src/RotationGesture";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
@@ -99,6 +100,12 @@ const AppNavigator = createAppContainer(
         screen: PinchGesture,
         navigationOptions: {
           title: "Pinch Gesture",
+        },
+      },
+      RotationGesture: {
+        screen: RotationGesture,
+        navigationOptions: {
+          title: "Rotation Gesture",
         },
       },
     },
