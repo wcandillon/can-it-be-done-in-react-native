@@ -18,6 +18,13 @@ const {
   pow,
 } = Animated;
 
+type Column3 = readonly [
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>
+];
+type Row3 = Column3;
+
 type Column4 = readonly [
   Animated.Adaptable<number>,
   Animated.Adaptable<number>,
@@ -26,7 +33,9 @@ type Column4 = readonly [
 ];
 
 type Row4 = Column4;
-type Matrix4 = readonly [Column4, Column4, Column4, Column4];
+// type Matrix3x4 = readonly [Row4, Row4, Row4];
+type Matrix3 = readonly [Row3, Row3, Row3];
+type Matrix4 = readonly [Row4, Row4, Row4, Row4];
 
 type TransformName =
   | "translateX"
@@ -128,7 +137,7 @@ const perspectiveMatrix = (p: Animated.Adaptable<number>): Matrix4 => [
   [1, 0, 0, 0],
   [0, 1, 0, 0],
   [0, 0, 1, 0],
-  [0, 0, divide(-1, p), 0],
+  [0, 0, divide(-1, p), 1],
 ];
 
 const rotateXMatrix = (r: Animated.Adaptable<number>): Matrix4 => [
@@ -152,7 +161,15 @@ const rotateZMatrix = (r: Animated.Adaptable<number>): Matrix4 => [
   [0, 0, 0, 1],
 ];
 
-export const dot = (row: Row4, col: Column4) => {
+const dot3 = (row: Row3, col: Column3) => {
+  return add(
+    multiply(row[0], col[0]),
+    multiply(row[1], col[1]),
+    multiply(row[2], col[2])
+  );
+};
+
+const dot4 = (row: Row4, col: Column4) => {
   return add(
     multiply(row[0], col[0]),
     multiply(row[1], col[1]),
@@ -161,16 +178,47 @@ export const dot = (row: Row4, col: Column4) => {
   );
 };
 
+export const multiply3 = (m1: Matrix3, m2: Matrix3) => {
+  const col0 = [m2[0][0], m2[1][0], m2[2][0]] as const;
+  const col1 = [m2[0][1], m2[1][1], m2[2][1]] as const;
+  const col2 = [m2[0][2], m2[1][2], m2[2][2]] as const;
+  return [
+    [dot3(m1[0], col0), dot3(m1[0], col1), dot3(m1[0], col2)],
+    [dot3(m1[1], col0), dot3(m1[1], col1), dot3(m1[1], col2)],
+    [dot3(m1[2], col0), dot3(m1[2], col1), dot3(m1[2], col2)],
+  ] as const;
+};
+
 export const multiply4 = (m1: Matrix4, m2: Matrix4) => {
   const col0 = [m2[0][0], m2[1][0], m2[2][0], m2[3][0]] as const;
   const col1 = [m2[0][1], m2[1][1], m2[2][1], m2[3][1]] as const;
   const col2 = [m2[0][2], m2[1][2], m2[2][2], m2[3][2]] as const;
   const col3 = [m2[0][3], m2[1][3], m2[2][3], m2[3][3]] as const;
   return [
-    [dot(m1[0], col0), dot(m1[0], col1), dot(m1[0], col2), dot(m1[0], col3)],
-    [dot(m1[1], col0), dot(m1[1], col1), dot(m1[1], col2), dot(m1[1], col3)],
-    [dot(m1[2], col0), dot(m1[2], col1), dot(m1[2], col2), dot(m1[2], col3)],
-    [dot(m1[3], col0), dot(m1[3], col1), dot(m1[3], col2), dot(m1[3], col3)],
+    [
+      dot4(m1[0], col0),
+      dot4(m1[0], col1),
+      dot4(m1[0], col2),
+      dot4(m1[0], col3),
+    ],
+    [
+      dot4(m1[1], col0),
+      dot4(m1[1], col1),
+      dot4(m1[1], col2),
+      dot4(m1[1], col3),
+    ],
+    [
+      dot4(m1[2], col0),
+      dot4(m1[2], col1),
+      dot4(m1[2], col2),
+      dot4(m1[2], col3),
+    ],
+    [
+      dot4(m1[3], col0),
+      dot4(m1[3], col1),
+      dot4(m1[3], col2),
+      dot4(m1[3], col3),
+    ],
   ] as const;
 };
 
@@ -217,6 +265,7 @@ export const processTransform = (transforms: Transforms) =>
     }
     return exhaustiveCheck(key);
   }, identityMatrix);
+
 // https://www.w3.org/TR/css-transforms-1/#decomposing-a-2d-matrix
 // https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix
 // https://gist.github.com/Breton/9d217e0375de055d563b9a0b758d4ae6

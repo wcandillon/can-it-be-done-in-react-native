@@ -15,7 +15,12 @@ import Animated, {
   useCode,
 } from "react-native-reanimated";
 import { loop, mix, translateZ as tz } from "react-native-redash";
-import { decompose2d, multiply4, processTransform } from "./Matrix";
+import {
+  decompose2d,
+  multiply4,
+  multiply4x3,
+  processTransform,
+} from "./Matrix";
 import processTransform2 from "./ProcessTransform";
 
 const styles = StyleSheet.create({
@@ -30,17 +35,25 @@ const { width, height } = Dimensions.get("window");
 const perspective = 600;
 const size = 200;
 
-const Face = ({
-  backgroundColor,
-  rotate: [rotateX, rotateY],
-}: {
+type Vec3 = [
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>
+];
+
+interface FaceProps {
   backgroundColor: string;
-  rotate: [Animated.Adaptable<number>, Animated.Adaptable<number>];
-}) => {
+  translate: Vec3;
+  rotate: Vec3;
+}
+
+const Face = ({ backgroundColor, translate, rotate }: FaceProps) => {
   const tr = [
-    { perspective },
-    { rotateY: Math.PI / 4 },
-    { rotateX: Math.PI / 4 + Math.PI / 2 },
+    { translateX: translate[0] },
+    { translateY: translate[1] },
+    { rotateY: rotate[1] },
+    { rotateX: rotate[0] },
+    { rotateZ: rotate[2] },
   ];
   const trAsString = [
     { perspective },
@@ -61,21 +74,21 @@ const Face = ({
   const D = 2 * (far * near * rDepth);
   const Z = matrix3d[2][2];
   // add(matrix3d[2][0], matrix3d[2][1], matrix3d[2][2], matrix3d[2][3]);
+  /*
   const matrix2d = multiply4(matrix3d, [
     [1, 0, 0, 0],
     [0, 1, 0, 0],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
   ]);
-  console.log(processTransform2([{ perspective }]));
-  /*
-  const matrix2d = multiply4(matrix3d, [
-    [h / aspect, 0, 0, 0],
-    [0, h, 0, 0],
-    [0, 0, C, D],
-    [0, 0, -1, 0],
-  ]);
   */
+
+  const matrix2d = multiply4(matrix3d, [
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+  ]);
   const {
     translateX: tx,
     translateY: ty,
@@ -107,8 +120,19 @@ const Face = ({
       <View style={styles.container}>
         <Animated.View
           style={{
-            opacity: 0.9,
-            backgroundColor,
+            opacity: 0,
+            backgroundColor: "cyan",
+            width: size,
+            height: size,
+            transform: trAsString,
+          }}
+        />
+      </View>
+      <View style={styles.container}>
+        <Animated.View
+          style={{
+            opacity: 0,
+            backgroundColor: "red",
             width: size,
             height: size,
             transform: [{ matrix: processTransform2(trAsString) }],
@@ -120,21 +144,27 @@ const Face = ({
 };
 
 export default () => {
-  const progress = new Value(Math.PI / 6);
+  const progress = new Value(0);
   useCode(() => set(progress, loop({ duration: 4000 })), [progress]);
-  const rotateY = mix(progress, 0, 2 * Math.PI);
+  const r = Math.PI / 4; // mix(progress, 0, 2 * Math.PI);
   return (
     <>
       <Face
-        rotate={[0, rotateY]}
-        translate={[0, 0, 0]}
-        backgroundColor="#4c72e0"
+        rotate={[r, r, r]}
+        translate={[0, size / 2, 0]}
+        backgroundColor="green"
         {...{ progress }}
       />
       <Face
-        rotate={[0, add(rotateY, Math.PI / 2)]}
+        rotate={[r, r, r]}
+        translate={[0, -size / 2, 0]}
+        backgroundColor="red"
+        {...{ progress }}
+      />
+      <Face
+        rotate={[r, r, add(r, Math.PI / 2)]}
         translate={[0, 0, 0]}
-        backgroundColor="#de7c92"
+        backgroundColor="violet"
         {...{ progress }}
       />
     </>
