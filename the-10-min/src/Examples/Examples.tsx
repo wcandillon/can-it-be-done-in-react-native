@@ -58,6 +58,11 @@ export const examples = [
     title: "RotationGesture",
     source: require("../../assets/examples/pinch-gesture.png"),
   },
+  {
+    screen: "ThreeD",
+    title: "3D Projections",
+    source: require("../../assets/examples/3d.png"),
+  },
 ];
 
 const styles = StyleSheet.create({

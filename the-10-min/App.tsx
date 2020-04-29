@@ -18,6 +18,7 @@ import Transformations, {
 } from "./src/Transformations";
 import PinchGesture from "./src/PinchGesture";
 import RotationGesture from "./src/RotationGesture";
+import ThreeD from "./src/ThreeD";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
@@ -33,6 +34,12 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      ThreeD: {
+        screen: ThreeD,
+        navigationOptions: {
+          title: "3D Projections",
+        },
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {
