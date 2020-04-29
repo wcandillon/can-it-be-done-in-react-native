@@ -3,6 +3,7 @@
    "rules": {
       "react/no-array-index-key": "off",
       "react/jsx-no-bind": "off",
-      "import/prefer-default-export": "off"
+      "import/prefer-default-export": "off",
+      "import/no-anonymous-default-export": 0
    }
 }

@@ -28,7 +28,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-reanimated": "~1.7.0",
-    "react-native-redash": "12.2.0",
+    "react-native-redash": "13.1.0",
     "react-native-svg": "11.0.1",
     "react-native-web": "^0.11.7",
     "react-navigation": "^4.0.6",
@@ -41,7 +41,7 @@
     "@types/react-native": "^0.60.22",
     "babel-preset-expo": "^8.1.0",
     "eslint": "^6.8.0",
-    "eslint-config-react-native-wcandillon": "2.9.1",
+    "eslint-config-react-native-wcandillon": "2.9.3",
     "patch-package": "^6.1.2",
     "typescript": "^3.8.3"
   },
