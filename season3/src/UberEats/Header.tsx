@@ -1,7 +1,7 @@
 import React, { RefObject } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { useValues, withTimingTransition } from "react-native-redash";
+import { useValue, withTimingTransition } from "react-native-redash";
 import { Feather as Icon } from "@expo/vector-icons";
 import { useSafeArea } from "react-native-safe-area-context";
 
@@ -45,7 +45,7 @@ interface HeaderProps {
 
 export default ({ y, tabs, scrollView }: HeaderProps) => {
   const { goBack } = useNavigation();
-  const [toggle] = useValues<0 | 1>([0], []);
+  const toggle = useValue<0 | 1>(0);
   const insets = useSafeArea();
   const transition = withTimingTransition(toggle, { duration: 100 });
   const { top: paddingTop } = insets;

@@ -60,9 +60,9 @@ interface ClickWheelProps {
 }
 
 export default ({ alpha, command }: ClickWheelProps) => {
-  const [state, x, y] = useValues([State.UNDETERMINED, 0, 0, 0, 0], []);
-  const deltaX = useDiff(x, []);
-  const deltaY = useDiff(y, []);
+  const [state, x, y] = useValues([State.UNDETERMINED, 0, 0, 0, 0]);
+  const deltaX = useDiff(x);
+  const deltaY = useDiff(y);
   const gestureHandler = onGestureEvent({ state, x, y });
   const x0 = cond(eq(state, State.ACTIVE), sub(x, deltaX), x);
   const y0 = cond(eq(state, State.ACTIVE), sub(y, deltaY), y);

@@ -32,7 +32,7 @@ const getDomain = (rows: Candle[]): [number, number] => {
 };
 const domain = getDomain(candles);
 export default () => {
-  const [x, y, state] = useValues([0, 0, State.UNDETERMINED], []);
+  const [x, y, state] = useValues([0, 0, State.UNDETERMINED]);
   const gestureHandler = onGestureEvent({
     x,
     y,
