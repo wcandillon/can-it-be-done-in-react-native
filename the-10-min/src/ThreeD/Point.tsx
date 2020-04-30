@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
   point: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: StyleGuide.palette.primary,
+    top: -2.5,
+    left: -2.5,
     height: 10,
     width: 10,
     borderRadius: 5,

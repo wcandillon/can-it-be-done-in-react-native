@@ -69,22 +69,22 @@ function general2DProjection(
 // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
 // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
 // http://jsfiddle.net/dFrHS/1/
-export function transform2d(w, h, x1, y1, x2, y2, x3, y3, x4, y4) {
+export function transform2d(s, x1, y1, x2, y2, x3, y3, x4, y4) {
   const t = general2DProjection(
     0,
     0,
     x1,
     y1,
-    w,
+    s,
     0,
     x2,
     y2,
     0,
-    h,
+    s,
     x3,
     y3,
-    w,
-    h,
+    s,
+    s,
     x4,
     y4
   );

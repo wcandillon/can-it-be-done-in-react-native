@@ -41,7 +41,7 @@ const Face = ({ points, theta, backgroundColor }: FaceProps) => {
     scaleX,
     scaleY,
   } = decompose2d(
-    transform2d(SIZE, SIZE, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y)
+    transform2d(SIZE, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y)
   );
 
   return (
@@ -52,8 +52,8 @@ const Face = ({ points, theta, backgroundColor }: FaceProps) => {
         height: 100,
         backgroundColor,
         transform: [
-          { translateX: add(width / 2 + 2.5, translateX) },
-          { translateY: add(width / 2 + 2.5, translateY) },
+          { translateX: add(width / 2, translateX) },
+          { translateY: add(width / 2, translateY) },
           { rotateZ: skewX },
           { scaleX },
           { scaleY },

@@ -25,7 +25,7 @@ const points = [...frontface];
 const ThreeD = () => {
   const progress = useValue(0);
   useCode(() => set(progress, loop({ duration: 4000 })), [progress]);
-  const theta = 0.4; // mix(progress, 0, 2 * Math.PI);
+  const theta = mix(progress, 0, 2 * Math.PI);
   return (
     <View style={StyleSheet.absoluteFill}>
       {points.map((point, index) => (
