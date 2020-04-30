@@ -48,7 +48,7 @@ const rightface = [
   { x: 0.5, y: -0.5, z: -0.5 },
 ] as const;
 
-const points = [...frontface, ...topface];
+const points = [...frontface, ...backface];
 
 const ThreeD = () => {
   const progress = useValue(0);
@@ -60,12 +60,6 @@ const ThreeD = () => {
         label="Back"
         points={backface}
         backgroundColor="#7BFF70"
-        {...{ theta }}
-      />
-      <Face
-        label="Top"
-        points={topface}
-        backgroundColor="#7CFFFF"
         {...{ theta }}
       />
       <Face
@@ -87,16 +81,22 @@ const ThreeD = () => {
         {...{ theta }}
       />
       <Face
+        label="Top"
+        points={topface}
+        backgroundColor="#7CFFFF"
+        {...{ theta }}
+      />
+      <Face
         label="Front"
         points={frontface}
         backgroundColor="#FF665E"
         {...{ theta }}
       />
+      {points.map((point, index) => (
+        <Point key={index} {...{ theta }} {...point} />
+      ))}
     </View>
   );
 };
 
-/*
-
-      */
 export default ThreeD;

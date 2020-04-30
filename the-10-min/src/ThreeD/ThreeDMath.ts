@@ -11,7 +11,7 @@ export interface Point {
 }
 
 const { width } = Dimensions.get("window");
-export const SIZE = 100;
+export const SIZE = 200;
 
 export const scaleToCanvas = (v: Vector) =>
   vec.add(width / 2, vec.multiply(SIZE, v));
