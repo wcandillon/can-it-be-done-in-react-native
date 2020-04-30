@@ -9,7 +9,7 @@ export type Vec4 = readonly [
   Animated.Adaptable<number>
 ];
 
-type Matrix4 = readonly [Vec4, Vec4, Vec4, Vec4];
+export type Matrix4 = readonly [Vec4, Vec4, Vec4, Vec4];
 
 type TransformName =
   | "translateX"
@@ -136,7 +136,7 @@ const rotateZMatrix = (r: Animated.Adaptable<number>): Matrix4 => [
   [0, 0, 0, 1],
 ];
 
-const dot4 = (row: Vec4, col: Vec4) => {
+export const dot4 = (row: Vec4, col: Vec4) => {
   return add(
     multiply(row[0], col[0]),
     multiply(row[1], col[1]),
