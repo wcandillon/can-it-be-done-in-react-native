@@ -1,17 +1,19 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import Animated, { add, debug, useCode } from "react-native-reanimated";
+import { Dimensions, StyleSheet } from "react-native";
+import Animated, { add } from "react-native-reanimated";
 import { decompose2d, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
 import { Point, matrixVecMul, scaleToCanvas } from "./ThreeDMath";
 import { transform2d } from "./Matrix3";
 
 interface FaceProps {
-  points: [Point, Point, Point, Point];
+  points: readonly [Point, Point, Point, Point];
   theta: Animated.Node<number>;
+  backgroundColor: string;
 }
 
-const Face = ({ points, theta }: FaceProps) => {
+const { width } = Dimensions.get("window");
+const Face = ({ points, theta, backgroundColor }: FaceProps) => {
   const m = processTransform([
     { rotateY: theta },
     { rotateX: theta },
@@ -38,21 +40,19 @@ const Face = ({ points, theta }: FaceProps) => {
     scaleX,
     scaleY,
   } = decompose2d(transform2d(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y));
-  const d = transform2d(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
   // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
   // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
   // http://jsfiddle.net/dFrHS/1/
-  useCode(() => [debug("d[2][2]", add(d[2][2], 0))], []);
   return (
     <Animated.View
       style={{
         ...StyleSheet.absoluteFillObject,
         width: 100,
         height: 100,
-        backgroundColor: "cyan",
+        backgroundColor,
         transform: [
-          { translateX },
-          { translateY },
+          { translateX: add(width / 2, translateX) },
+          { translateY: add(width / 2, translateY) },
           { rotateZ: skewX },
           { scaleX },
           { scaleY },

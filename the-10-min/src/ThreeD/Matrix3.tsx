@@ -115,5 +115,5 @@ export function transform2d(x1, y1, x2, y2, x3, y3, x4, y4) {
     [t[0], t[3], t[6]],
     [t[1], t[4], t[7]],
     [t[2], t[5], t[8]],
-  ];
+  ] as const;
 }

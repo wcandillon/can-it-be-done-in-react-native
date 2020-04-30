@@ -5,9 +5,9 @@ import { Vector, vec } from "react-native-redash";
 import { Matrix4, Vec4, dot4 } from "./Matrix4";
 
 export interface Point {
-  x: number;
-  y: number;
-  z: number;
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
 }
 
 const { width } = Dimensions.get("window");
