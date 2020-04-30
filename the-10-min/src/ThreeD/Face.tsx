@@ -1,11 +1,6 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
-import Animated, {
-  add,
-  debug,
-  multiply,
-  useCode,
-} from "react-native-reanimated";
+import { Dimensions, StyleSheet, Text } from "react-native";
+import Animated from "react-native-reanimated";
 import { decompose2d, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
 import { Point, SIZE, matrixVecMul } from "./ThreeDMath";
@@ -15,6 +10,7 @@ interface FaceProps {
   points: readonly [Point, Point, Point, Point];
   theta: Animated.Node<number>;
   backgroundColor: string;
+  label: string;
 }
 export type Vec3 = readonly [
   Animated.Adaptable<number>,
@@ -26,7 +22,7 @@ const { width } = Dimensions.get("window");
 
 export type Matrix3 = readonly [Vec3, Vec3, Vec3];
 
-const Face = ({ points, theta, backgroundColor }: FaceProps) => {
+const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
   const m = processTransform([
     { rotateY: theta },
     { rotateX: theta },
@@ -58,6 +54,8 @@ const Face = ({ points, theta, backgroundColor }: FaceProps) => {
     <Animated.View
       style={{
         ...StyleSheet.absoluteFillObject,
+        justifyContent: "center",
+        alignItems: "center",
         top: width / 2 - SIZE / 2,
         left: width / 2 - SIZE / 2,
         width: SIZE,
@@ -76,7 +74,9 @@ const Face = ({ points, theta, backgroundColor }: FaceProps) => {
           // { translateY: SIZE / 2 },
         ],
       }}
-    />
+    >
+      <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
+    </Animated.View>
   );
 };
 
