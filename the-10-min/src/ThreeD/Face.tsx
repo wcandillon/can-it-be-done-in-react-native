@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import Animated, { debug, useCode } from "react-native-reanimated";
+import Animated, { add, debug, useCode } from "react-native-reanimated";
 import { decompose2d, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
 import { Point, matrixVecMul, scaleToCanvas } from "./ThreeDMath";
@@ -42,7 +42,7 @@ const Face = ({ points, theta }: FaceProps) => {
   // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
   // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
   // http://jsfiddle.net/dFrHS/1/
-  useCode(() => [debug("d[2][2]", d[2][2])], []);
+  useCode(() => [debug("d[2][2]", add(d[2][2], 0))], []);
   return (
     <Animated.View
       style={{
