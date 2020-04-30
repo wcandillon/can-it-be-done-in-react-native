@@ -64,16 +64,16 @@ const Face = ({ points, theta, backgroundColor }: FaceProps) => {
         height: SIZE,
         backgroundColor,
         transform: [
-          { translateX: -SIZE / 2 },
-          { translateY: -SIZE / 2 },
+          // { translateX: -SIZE / 2 },
+          // { translateY: -SIZE / 2 },
           { translateX },
           { translateY },
           { rotateZ: skewX },
           { scaleX },
           { scaleY },
           { rotateZ },
-          { translateX: SIZE / 2 },
-          { translateY: SIZE / 2 },
+          // { translateX: SIZE / 2 },
+          // { translateY: SIZE / 2 },
         ],
       }}
     />
