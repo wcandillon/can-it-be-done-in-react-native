@@ -4,7 +4,6 @@ import { loop, mix, useValue } from "react-native-redash";
 import { set, useCode } from "react-native-reanimated";
 
 import Face from "./Face";
-import Point from "./Point";
 
 const backface = [
   { x: -0.5, y: -0.5, z: -0.5 },
@@ -48,8 +47,6 @@ const rightface = [
   { x: 0.5, y: -0.5, z: -0.5 },
 ] as const;
 
-const points = [...frontface, ...backface];
-
 const ThreeD = () => {
   const progress = useValue(0);
   useCode(() => set(progress, loop({ duration: 4000 })), [progress]);
@@ -92,9 +89,6 @@ const ThreeD = () => {
         backgroundColor="#FF665E"
         {...{ theta }}
       />
-      {points.map((point, index) => (
-        <Point key={index} {...{ theta }} {...point} />
-      ))}
     </View>
   );
 };
