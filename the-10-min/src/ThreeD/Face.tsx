@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { decompose2d, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
-import { Point, matrixVecMul, scaleToCanvas } from "./ThreeDMath";
+import { Point, SIZE, matrixVecMul } from "./ThreeDMath";
 import { transform2d } from "./Matrix3";
 
 interface FaceProps {
@@ -26,25 +26,6 @@ const { width } = Dimensions.get("window");
 
 export type Matrix3 = readonly [Vec3, Vec3, Vec3];
 
-const dot3 = (row: Vec3, col: Vec3) =>
-  add(
-    multiply(row[0], col[0]),
-    multiply(row[1], col[1]),
-    multiply(row[2], col[2])
-  );
-
-const mul3 = (m1: Matrix3, m2: Matrix3) => {
-  const col0 = [m2[0][0], m2[1][0], m2[2][0]] as const;
-  const col1 = [m2[0][1], m2[1][1], m2[2][1]] as const;
-  const col2 = [m2[0][2], m2[1][2], m2[2][2]] as const;
-  return [
-    [dot3(m1[0], col0), dot3(m1[0], col1), dot3(m1[0], col2)],
-    [dot3(m1[1], col0), dot3(m1[1], col1), dot3(m1[1], col2)],
-    [dot3(m1[2], col0), dot3(m1[2], col1), dot3(m1[2], col2)],
-  ] as const;
-};
-
-const SIZE = 100;
 const Face = ({ points, theta, backgroundColor }: FaceProps) => {
   const m = processTransform([
     { rotateY: theta },
@@ -71,30 +52,28 @@ const Face = ({ points, theta, backgroundColor }: FaceProps) => {
     skewX,
     scaleX,
     scaleY,
-  } = decompose2d(
-    mul3(transform2d(1, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y), [
-      [SIZE, 0, 0],
-      [0, SIZE, 0],
-      [0, 0, 1],
-    ])
-  );
+  } = decompose2d(transform2d(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y));
 
   return (
     <Animated.View
       style={{
         ...StyleSheet.absoluteFillObject,
-        top: width / 2,
-        left: width / 2,
-        width: 1,
-        height: 1,
+        top: width / 2 - SIZE / 2,
+        left: width / 2 - SIZE / 2,
+        width: SIZE,
+        height: SIZE,
         backgroundColor,
         transform: [
+          { translateX: -SIZE / 2 },
+          { translateY: -SIZE / 2 },
           { translateX },
           { translateY },
           { rotateZ: skewX },
           { scaleX },
           { scaleY },
           { rotateZ },
+          { translateX: SIZE / 2 },
+          { translateY: SIZE / 2 },
         ],
       }}
     />

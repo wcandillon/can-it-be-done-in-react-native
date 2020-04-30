@@ -11,10 +11,10 @@ export interface Point {
 }
 
 const { width } = Dimensions.get("window");
-const size = 100;
+export const SIZE = 100;
 
 export const scaleToCanvas = (v: Vector) =>
-  vec.add(width / 2, vec.multiply(size, v));
+  vec.add(width / 2, vec.multiply(SIZE, v));
 
 export const matrixVecMul = (m: Matrix4, v: Vec4) => [
   dot4(m[0], v),
