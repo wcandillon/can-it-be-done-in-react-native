@@ -1,9 +1,10 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import Animated, { multiply } from "react-native-reanimated";
-import { atan2, vec } from "react-native-redash";
+import Animated, { debug, useCode } from "react-native-reanimated";
+import { decompose2d, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
-import { Point, matrixVecMul, scaleToCanvas, solve } from "./ThreeDMath";
+import { Point, matrixVecMul, scaleToCanvas } from "./ThreeDMath";
+import { transform2d } from "./Matrix3";
 
 interface FaceProps {
   points: [Point, Point, Point, Point];
@@ -28,22 +29,34 @@ const Face = ({ points, theta }: FaceProps) => {
 
   const p4V = matrixVecMul(m, [points[3].x, points[3].y, points[3].z, 1]);
   const p4 = scaleToCanvas(vec.create(p4V[0], p4V[1]));
-  const H = solve(points[0], points[1], points[2], points[3], p1, p2, p3, p4);
+
+  const {
+    translateX,
+    translateY,
+    rotateZ,
+    skewX,
+    scaleX,
+    scaleY,
+  } = decompose2d(transform2d(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y));
+  const d = transform2d(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
   // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
   // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
+  // http://jsfiddle.net/dFrHS/1/
+  useCode(() => [debug("d[2][2]", d[2][2])], []);
   return (
     <Animated.View
       style={{
         ...StyleSheet.absoluteFillObject,
-        width: 1,
-        height: 1,
+        width: 100,
+        height: 100,
         backgroundColor: "cyan",
         transform: [
-          { translateX: p1.x },
-          { translateY: p1.y },
-          { scaleY: b },
-          { scaleX: h },
-          { skewX: a },
+          { translateX },
+          { translateY },
+          { rotateZ: skewX },
+          { scaleX },
+          { scaleY },
+          { rotateZ },
         ],
       }}
     />
