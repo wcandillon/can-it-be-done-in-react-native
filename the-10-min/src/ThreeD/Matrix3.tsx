@@ -66,15 +66,11 @@ function general2DProjection(
   return multmm(d, adj(s));
 }
 
-function project(m, x, y) {
-  const v = multmv(m, [x, y, 1]);
-  return [divide(v[0], v[2]), divide(v[1], v[2])];
-}
-
-export function transform2d(x1, y1, x2, y2, x3, y3, x4, y4) {
-  const w = 100;
-  const h = 100;
-  let t = general2DProjection(
+// https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
+// https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
+// http://jsfiddle.net/dFrHS/1/
+export function transform2d(w, h, x1, y1, x2, y2, x3, y3, x4, y4) {
+  const t = general2DProjection(
     0,
     0,
     x1,
@@ -93,24 +89,6 @@ export function transform2d(x1, y1, x2, y2, x3, y3, x4, y4) {
     y4
   );
   for (let i = 0; i != 9; ++i) t[i] = divide(t[i], t[8]);
-  t = [
-    t[0],
-    t[3],
-    0,
-    t[6],
-    t[1],
-    t[4],
-    0,
-    t[7],
-    0,
-    0,
-    1,
-    0,
-    t[2],
-    t[5],
-    0,
-    t[8],
-  ];
   return [
     [t[0], t[3], t[6]],
     [t[1], t[4], t[7]],
