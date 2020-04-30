@@ -52,8 +52,8 @@ const Face = ({ points, theta, backgroundColor }: FaceProps) => {
         height: 100,
         backgroundColor,
         transform: [
-          { translateX: add(width / 2, translateX) },
-          { translateY: add(width / 2, translateY) },
+          { translateX: add(width / 2 + 2.5, translateX) },
+          { translateY: add(width / 2 + 2.5, translateY) },
           { rotateZ: skewX },
           { scaleX },
           { scaleY },
