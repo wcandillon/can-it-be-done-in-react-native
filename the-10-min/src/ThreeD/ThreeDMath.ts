@@ -16,9 +16,5 @@ export const SIZE = 200;
 export const scaleToCanvas = (v: Vector) =>
   vec.add(width / 2, vec.multiply(SIZE, v));
 
-export const matrixVecMul = (m: Matrix4, v: Vec4) => [
-  dot4(m[0], v),
-  dot4(m[1], v),
-  dot4(m[2], v),
-  dot4(m[3], v),
-];
+export const matrixVecMul = (m: Matrix4, v: Vec4) =>
+  [dot4(m[0], v), dot4(m[1], v), dot4(m[2], v), dot4(m[3], v)] as const;
