@@ -1,12 +1,18 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import Animated from "react-native-reanimated";
+import { Dimensions, StyleSheet } from "react-native";
+import Animated, { divide, multiply, sub } from "react-native-reanimated";
 
 import { vec } from "react-native-redash";
 import { StyleGuide } from "../components";
 import { processTransform } from "./Matrix4";
-import { Point as PointModel, matrixVecMul, scaleToCanvas } from "./ThreeDMath";
+import {
+  Point as PointModel,
+  SIZE,
+  matrixVecMul,
+  scaleToCanvas,
+} from "./ThreeDMath";
 
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   point: {
     ...StyleSheet.absoluteFillObject,
@@ -30,7 +36,12 @@ const Point = ({ x, y, z, theta }: PointProps) => {
     { rotateZ: theta },
   ]);
   const vec4 = matrixVecMul(m, [x, y, z, 1]);
-  const tr = scaleToCanvas(vec.create(vec4[0], vec4[1]));
+  const distance = 2;
+  const perspective = divide(1, sub(distance, vec4[2]));
+  const tr = scaleToCanvas(
+    multiply(vec4[0], perspective),
+    multiply(vec4[1], perspective)
+  );
   return (
     <Animated.View
       style={[

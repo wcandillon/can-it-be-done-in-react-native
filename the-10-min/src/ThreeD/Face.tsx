@@ -65,6 +65,7 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
     <Animated.View
       style={{
         ...StyleSheet.absoluteFillObject,
+        opacity: 0,
         justifyContent: "center",
         alignItems: "center",
         top: width / 2 - SIZE / 2,

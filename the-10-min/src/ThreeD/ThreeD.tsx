@@ -1,9 +1,11 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { loop, mix, useValue } from "react-native-redash";
+import { loop, mix, useLoop, useValue } from "react-native-redash";
 import { set, useCode } from "react-native-reanimated";
 
 import Face from "./Face";
+import Point from "./Point";
+
 import Gesture from "./Gesture";
 
 const backface = [
@@ -48,10 +50,16 @@ const rightface = [
   { x: 0.5, y: -0.5, z: -0.5 },
 ] as const;
 
+const points = [...backface, ...frontface];
+
 const ThreeD = () => {
-  const theta = useValue(0);
+  const progress = useLoop(4000, false);
+  const theta = mix(progress, 0, 2 * Math.PI);
   return (
     <View style={StyleSheet.absoluteFill}>
+      {points.map((point, index) => (
+        <Point key={index} {...{ theta }} {...point} />
+      ))}
       <Face
         label="Back"
         points={backface}
@@ -88,7 +96,6 @@ const ThreeD = () => {
         backgroundColor="#FF665E"
         {...{ theta }}
       />
-      <Gesture {...{ theta }} />
     </View>
   );
 };
