@@ -1,5 +1,16 @@
 import { add, divide, multiply, sub } from "react-native-reanimated";
-import { SIZE } from "./ThreeDMath";
+import { Vector } from "react-native-redash";
+
+interface VectorPair {
+  o: Vector;
+  p: Vector;
+}
+interface Points<T> {
+  p1: T;
+  p2: T;
+  p3: T;
+  p4: T;
+}
 
 function adj(m) {
   // Compute the adjugate of m
@@ -38,57 +49,23 @@ function multmv(m, v) {
   ];
 }
 
-function basisToPoints(x1, y1, x2, y2, x3, y3, x4, y4) {
-  const m = [x1, x2, x3, y1, y2, y3, 1, 1, 1];
-  const v = multmv(adj(m), [x4, y4, 1]);
+function basisToPoints({ p1, p2, p3, p4 }: Points<Vector>) {
+  const m = [p1.x, p2.x, p3.x, p1.y, p2.y, p3.y, 1, 1, 1];
+  const v = multmv(adj(m), [p4.x, p4.y, 1]);
   return multmm(m, [v[0], 0, 0, 0, v[1], 0, 0, 0, v[2]]);
 }
 
-function general2DProjection(
-  x1s,
-  y1s,
-  x1d,
-  y1d,
-  x2s,
-  y2s,
-  x2d,
-  y2d,
-  x3s,
-  y3s,
-  x3d,
-  y3d,
-  x4s,
-  y4s,
-  x4d,
-  y4d
-) {
-  const s = basisToPoints(x1s, y1s, x2s, y2s, x3s, y3s, x4s, y4s);
-  const d = basisToPoints(x1d, y1d, x2d, y2d, x3d, y3d, x4d, y4d);
+function general2DProjection({ p1, p2, p3, p4 }: Points<VectorPair>) {
+  const s = basisToPoints({ p1: p1.o, p2: p2.o, p3: p3.o, p4: p4.o });
+  const d = basisToPoints({ p1: p1.p, p2: p2.p, p3: p3.p, p4: p4.p });
   return multmm(d, adj(s));
 }
 
 // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
 // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
 // http://jsfiddle.net/dFrHS/1/
-export function transform2d(x1, y1, x2, y2, x3, y3, x4, y4) {
-  const t = general2DProjection(
-    -SIZE / 2,
-    -SIZE / 2,
-    multiply(x1, SIZE),
-    multiply(y1, SIZE),
-    SIZE / 2,
-    -SIZE / 2,
-    multiply(x2, SIZE),
-    multiply(y2, SIZE),
-    -SIZE / 2,
-    SIZE / 2,
-    multiply(x3, SIZE),
-    multiply(y3, SIZE),
-    SIZE / 2,
-    SIZE / 2,
-    multiply(x4, SIZE),
-    multiply(y4, SIZE)
-  );
+export function transform2d(points: Points<VectorPair>) {
+  const t = general2DProjection(points);
   for (let i = 0; i != 9; ++i) t[i] = divide(t[i], t[8]);
   return [
     [t[0], t[1], t[2]],

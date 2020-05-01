@@ -22,3 +22,9 @@ export const scaleToCanvas = (
 
 export const matrixVecMul = (m: Matrix4, v: Vec4) =>
   [dot4(m[0], v), dot4(m[1], v), dot4(m[2], v), dot4(m[3], v)] as const;
+
+export const vec3 = (
+  x: Animated.Adaptable<number>,
+  y: Animated.Adaptable<number>,
+  z: Animated.Adaptable<number>
+) => ({ x, y, z });

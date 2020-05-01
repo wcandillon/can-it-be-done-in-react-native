@@ -9,7 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { decompose2d, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
-import { DISTANCE, Point, SIZE, matrixVecMul } from "./ThreeDMath";
+import { DISTANCE, Point, SIZE, matrixVecMul, vec3 } from "./ThreeDMath";
 import { transform2d } from "./Matrix3";
 
 interface FaceProps {
@@ -38,21 +38,37 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
 
   const p1V = matrixVecMul(m, [points[0].x, points[0].y, points[0].z, 1]);
   const z1 = divide(1, sub(DISTANCE, p1V[2]));
-  const p1 = vec.create(multiply(p1V[0], z1), multiply(p1V[1], z1));
+  const p1 = vec3(multiply(p1V[0], z1), multiply(p1V[1], z1), 1);
 
   const p2V = matrixVecMul(m, [points[1].x, points[1].y, points[1].z, 1]);
   const z2 = divide(1, sub(DISTANCE, p2V[2]));
-  const p2 = vec.create(multiply(p2V[0], z2), multiply(p2V[1], z2));
+  const p2 = vec3(multiply(p2V[0], z2), multiply(p2V[1], z2), 1);
 
   const p3V = matrixVecMul(m, [points[2].x, points[2].y, points[2].z, 1]);
   const z3 = divide(1, sub(DISTANCE, p3V[2]));
-  const p3 = vec.create(multiply(p3V[0], z3), multiply(p3V[1], z3));
+  const p3 = vec3(multiply(p3V[0], z3), multiply(p3V[1], z3), 1);
 
   const p4V = matrixVecMul(m, [points[3].x, points[3].y, points[3].z, 1]);
   const z4 = divide(1, sub(DISTANCE, p4V[2]));
-  const p4 = vec.create(multiply(p4V[0], z4), multiply(p4V[1], z4));
-
-  const shape2d = transform2d(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
+  const p4 = vec3(multiply(p4V[0], z4), multiply(p4V[1], z4), 1);
+  const shape2d = transform2d({
+    p1: {
+      o: vec.create(-SIZE / 2),
+      p: vec.multiply(p1, SIZE),
+    },
+    p2: {
+      o: vec.create(SIZE / 2, -SIZE / 2),
+      p: vec.multiply(p2, SIZE),
+    },
+    p3: {
+      o: vec.create(-SIZE / 2, SIZE / 2),
+      p: vec.multiply(p3, SIZE),
+    },
+    p4: {
+      o: vec.create(SIZE / 2),
+      p: vec.multiply(p4, SIZE),
+    },
+  });
   const {
     translateX,
     translateY,

@@ -66,6 +66,20 @@ const ThreeD = () => {
         backgroundColor="#7BFF70"
         {...{ theta }}
       />
+
+      <Face
+        label="Front"
+        points={frontface}
+        backgroundColor="#FF665E"
+        {...{ theta }}
+      />
+    </View>
+  );
+};
+
+export default ThreeD;
+
+/*
       <Face
         label="Bottom"
         points={bottomface}
@@ -90,14 +104,4 @@ const ThreeD = () => {
         backgroundColor="#7CFFFF"
         {...{ theta }}
       />
-      <Face
-        label="Front"
-        points={frontface}
-        backgroundColor="#FF665E"
-        {...{ theta }}
-      />
-    </View>
-  );
-};
-
-export default ThreeD;
+      */
