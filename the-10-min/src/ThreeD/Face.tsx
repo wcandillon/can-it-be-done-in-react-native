@@ -32,7 +32,7 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
   const m = processTransform([
     //   { perspective: 4 },
     { rotateY: theta },
-    // { rotateX: theta },
+    { rotateX: theta },
     { rotateZ: theta },
   ]);
 
