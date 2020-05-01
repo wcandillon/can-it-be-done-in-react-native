@@ -1,5 +1,5 @@
 import { add, divide, multiply, sub } from "react-native-reanimated";
-import { Vector } from "react-native-redash";
+import { Vector, vec } from "react-native-redash";
 
 interface VectorPair {
   o: Vector;
@@ -64,12 +64,29 @@ function general2DProjection({ p1, p2, p3, p4 }: Points<VectorPair>) {
 // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
 // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
 // http://jsfiddle.net/dFrHS/1/
-export function transform2d(points: Points<VectorPair>) {
-  const t = general2DProjection(points);
+export const transform2d = (points: Points<VectorPair>, size: number) => {
+  const t = general2DProjection({
+    p1: {
+      o: vec.multiply(points.p1.o, size),
+      p: vec.multiply(points.p1.p, size),
+    },
+    p2: {
+      o: vec.multiply(points.p2.o, size),
+      p: vec.multiply(points.p2.p, size),
+    },
+    p3: {
+      o: vec.multiply(points.p3.o, size),
+      p: vec.multiply(points.p3.p, size),
+    },
+    p4: {
+      o: vec.multiply(points.p4.o, size),
+      p: vec.multiply(points.p4.p, size),
+    },
+  });
   for (let i = 0; i != 9; ++i) t[i] = divide(t[i], t[8]);
   return [
     [t[0], t[1], t[2]],
     [t[3], t[4], t[5]],
     [t[6], t[7], t[8]],
   ] as const;
-}
+};

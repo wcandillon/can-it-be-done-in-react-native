@@ -54,7 +54,7 @@ const points = [...backface, ...frontface];
 
 const ThreeD = () => {
   const progress = useLoop(4000, false);
-  const theta = 0; // mix(progress, 0, 2 * Math.PI);
+  const theta = mix(progress, 0, 2 * Math.PI);
   return (
     <View style={StyleSheet.absoluteFill}>
       <Face

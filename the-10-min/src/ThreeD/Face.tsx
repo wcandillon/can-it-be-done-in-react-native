@@ -32,7 +32,7 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
   const m = processTransform([
     //   { perspective: 4 },
     { rotateY: theta },
-    { rotateX: theta },
+    // { rotateX: theta },
     { rotateZ: theta },
   ]);
 
@@ -51,24 +51,27 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
   const p4V = matrixVecMul(m, [points[3].x, points[3].y, points[3].z, 1]);
   const z4 = divide(1, sub(DISTANCE, p4V[2]));
   const p4 = vec3(multiply(p4V[0], z4), multiply(p4V[1], z4), 1);
-  const shape2d = transform2d({
-    p1: {
-      o: vec.multiply(points[0], SIZE),
-      p: vec.multiply(p1, SIZE),
+  const shape2d = transform2d(
+    {
+      p1: {
+        o: points[0],
+        p: p1,
+      },
+      p2: {
+        o: points[1],
+        p: p2,
+      },
+      p3: {
+        o: points[2],
+        p: p3,
+      },
+      p4: {
+        o: points[3],
+        p: p4,
+      },
     },
-    p2: {
-      o: vec.multiply(points[1], SIZE),
-      p: vec.multiply(p2, SIZE),
-    },
-    p3: {
-      o: vec.multiply(points[2], SIZE),
-      p: vec.multiply(p3, SIZE),
-    },
-    p4: {
-      o: vec.multiply(points[3], SIZE),
-      p: vec.multiply(p4, SIZE),
-    },
-  });
+    SIZE
+  );
   const {
     translateX,
     translateY,
