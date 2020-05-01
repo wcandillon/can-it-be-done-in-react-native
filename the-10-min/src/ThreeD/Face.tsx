@@ -51,6 +51,7 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
   const z4 = 1; // divide(d, p4V[2]);
   const p4 = vec.create(multiply(p4V[0], z4), multiply(p4V[1], z4));
 
+  const shape2d = transform2d(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
   const {
     translateX,
     translateY,
@@ -58,7 +59,7 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
     skewX,
     scaleX,
     scaleY,
-  } = decompose2d(transform2d(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y));
+  } = decompose2d(shape2d);
 
   return (
     <Animated.View
