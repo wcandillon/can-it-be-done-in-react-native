@@ -53,19 +53,19 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
   const p4 = vec3(multiply(p4V[0], z4), multiply(p4V[1], z4), 1);
   const shape2d = transform2d({
     p1: {
-      o: vec.create(-SIZE / 2),
+      o: vec.multiply(points[0], SIZE),
       p: vec.multiply(p1, SIZE),
     },
     p2: {
-      o: vec.create(SIZE / 2, -SIZE / 2),
+      o: vec.multiply(points[1], SIZE),
       p: vec.multiply(p2, SIZE),
     },
     p3: {
-      o: vec.create(-SIZE / 2, SIZE / 2),
+      o: vec.multiply(points[2], SIZE),
       p: vec.multiply(p3, SIZE),
     },
     p4: {
-      o: vec.create(SIZE / 2),
+      o: vec.multiply(points[3], SIZE),
       p: vec.multiply(p4, SIZE),
     },
   });

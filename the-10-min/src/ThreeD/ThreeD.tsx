@@ -54,25 +54,24 @@ const points = [...backface, ...frontface];
 
 const ThreeD = () => {
   const progress = useLoop(4000, false);
-  const theta = mix(progress, 0, 2 * Math.PI);
+  const theta = 0; // mix(progress, 0, 2 * Math.PI);
   return (
     <View style={StyleSheet.absoluteFill}>
-      {points.map((point, index) => (
-        <Point key={index} {...{ theta }} {...point} />
-      ))}
       <Face
         label="Back"
         points={backface}
         backgroundColor="#7BFF70"
         {...{ theta }}
       />
-
       <Face
         label="Front"
         points={frontface}
         backgroundColor="#FF665E"
         {...{ theta }}
       />
+      {points.map((point, index) => (
+        <Point key={index} {...{ theta }} {...point} />
+      ))}
     </View>
   );
 };
