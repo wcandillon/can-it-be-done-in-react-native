@@ -6,6 +6,7 @@ import { vec } from "react-native-redash";
 import { StyleGuide } from "../components";
 import { processTransform } from "./Matrix4";
 import {
+  DISTANCE,
   Point as PointModel,
   SIZE,
   matrixVecMul,
@@ -36,8 +37,7 @@ const Point = ({ x, y, z, theta }: PointProps) => {
     { rotateZ: theta },
   ]);
   const vec4 = matrixVecMul(m, [x, y, z, 1]);
-  const distance = 2;
-  const perspective = divide(1, sub(distance, vec4[2]));
+  const perspective = divide(1, sub(DISTANCE, vec4[2]));
   const tr = scaleToCanvas(
     multiply(vec4[0], perspective),
     multiply(vec4[1], perspective)

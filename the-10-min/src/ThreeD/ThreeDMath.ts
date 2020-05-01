@@ -13,6 +13,7 @@ export interface Point {
 
 const { width } = Dimensions.get("window");
 export const SIZE = 200;
+export const DISTANCE = 2;
 
 export const scaleToCanvas = (
   x: Animated.Adaptable<number>,
