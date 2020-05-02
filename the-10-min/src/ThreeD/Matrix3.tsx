@@ -1,4 +1,4 @@
-import Animated, { divide, multiply, sub } from "react-native-reanimated";
+import { divide, multiply, sub } from "react-native-reanimated";
 import { Matrix3, Vector, matrixVecMul, multiply3 } from "react-native-redash";
 
 interface Quadrilateral {
@@ -12,31 +12,6 @@ interface Parameters {
   canvas: Quadrilateral;
   projected: Quadrilateral;
 }
-
-type FlatMatrix3 = readonly [
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>
-];
-
-const flatten = (m: Matrix3) =>
-  [
-    m[0][0],
-    m[0][1],
-    m[0][2],
-    m[1][0],
-    m[1][1],
-    m[1][2],
-    m[2][0],
-    m[2][1],
-    m[2][2],
-  ] as const;
 
 const adjugate = (m: Matrix3) => {
   return [
