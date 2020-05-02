@@ -51,26 +51,24 @@ const inflate = (m: FlatMatrix3) =>
     [m[6], m[7], m[8]],
   ] as const;
 
-const adj = (m: FlatMatrix3) => {
+const adjugate = (m: Matrix3) => {
   return [
-    sub(multiply(m[4], m[8]), multiply(m[5], m[7])),
-    sub(multiply(m[2], m[7]), multiply(m[1], m[8])),
-    sub(multiply(m[1], m[5]), multiply(m[2], m[4])),
-    sub(multiply(m[5], m[6]), multiply(m[3], m[8])),
-    sub(multiply(m[0], m[8]), multiply(m[2], m[6])),
-    sub(multiply(m[2], m[3]), multiply(m[0], m[5])),
-    sub(multiply(m[3], m[7]), multiply(m[4], m[6])),
-    sub(multiply(m[1], m[6]), multiply(m[0], m[7])),
-    sub(multiply(m[0], m[4]), multiply(m[1], m[3])),
+    sub(multiply(m[1][1], m[2][2]), multiply(m[1][2], m[2][1])),
+    sub(multiply(m[0][2], m[2][1]), multiply(m[0][1], m[2][2])),
+    sub(multiply(m[0][1], m[1][2]), multiply(m[0][2], m[1][1])),
+    sub(multiply(m[1][2], m[2][0]), multiply(m[1][0], m[2][2])),
+    sub(multiply(m[0][0], m[2][2]), multiply(m[0][2], m[2][0])),
+    sub(multiply(m[0][2], m[1][0]), multiply(m[0][0], m[1][2])),
+    sub(multiply(m[1][0], m[2][1]), multiply(m[1][1], m[2][0])),
+    sub(multiply(m[0][1], m[2][0]), multiply(m[0][0], m[2][1])),
+    sub(multiply(m[0][0], m[1][1]), multiply(m[0][1], m[1][0])),
   ] as const;
 };
 
 const basisToPoints = ({ p1, p2, p3, p4 }: Quadrilateral) => {
-  const m = [p1.x, p2.x, p3.x, p1.y, p2.y, p3.y, 1, 1, 1] as const;
-  const v = matrixVecMul(inflate(adj(m)), [p4.x, p4.y, 1]) as Vec3;
-  return flatten(
-    multiply3(inflate(m), inflate([v[0], 0, 0, 0, v[1], 0, 0, 0, v[2]]))
-  );
+  const m = inflate([p1.x, p2.x, p3.x, p1.y, p2.y, p3.y, 1, 1, 1]);
+  const v = matrixVecMul(inflate(adjugate(m)), [p4.x, p4.y, 1]);
+  return multiply3(m, inflate([v[0], 0, 0, 0, v[1], 0, 0, 0, v[2]]));
 };
 
 // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
@@ -79,7 +77,7 @@ const basisToPoints = ({ p1, p2, p3, p4 }: Quadrilateral) => {
 export const transform2d = (params: Parameters) => {
   const s = basisToPoints(params.canvas);
   const d = basisToPoints(params.projected);
-  const t = flatten(multiply3(inflate(d), inflate(adj(s))));
+  const t = flatten(multiply3(d, inflate(adjugate(s))));
   return [
     [divide(t[0], t[8]), divide(t[1], t[8]), divide(t[2], t[8])],
     [divide(t[3], t[8]), divide(t[4], t[8]), divide(t[5], t[8])],
