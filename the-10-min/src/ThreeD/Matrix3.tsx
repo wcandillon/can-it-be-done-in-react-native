@@ -56,17 +56,13 @@ function basisToPoints({ p1, p2, p3, p4 }: Quadrilateral) {
   return multmm(m, [v[0], 0, 0, 0, v[1], 0, 0, 0, v[2]]);
 }
 
-function general2DProjection(params: Parameters) {
-  const s = basisToPoints(params.canvas);
-  const d = basisToPoints(params.projected);
-  return multmm(d, adj(s));
-}
-
 // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
 // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
 // http://jsfiddle.net/dFrHS/1/
 export const transform2d = (params: Parameters) => {
-  const t = general2DProjection(params);
+  const s = basisToPoints(params.canvas);
+  const d = basisToPoints(params.projected);
+  const t = multmm(d, adj(s));
   return [
     [divide(t[0], t[8]), divide(t[1], t[8]), divide(t[2], t[8])],
     [divide(t[3], t[8]), divide(t[4], t[8]), divide(t[5], t[8])],
