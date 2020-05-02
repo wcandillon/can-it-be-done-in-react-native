@@ -3,13 +3,7 @@ import { Dimensions, StyleSheet, Text } from "react-native";
 import Animated, { divide, multiply, sub } from "react-native-reanimated";
 import { decompose2d, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
-import {
-  DISTANCE,
-  Point,
-  SIZE,
-  matrixVecMul,
-  scaleToCanvas,
-} from "./ThreeDMath";
+import { DISTANCE, Point, SIZE, matrixVecMul } from "./ThreeDMath";
 import { transform2d } from "./Matrix3";
 
 interface FaceProps {
@@ -23,37 +17,6 @@ export type Vec3 = readonly [
   Animated.Adaptable<number>,
   Animated.Adaptable<number>
 ];
-
-const { width } = Dimensions.get("window");
-const styles = StyleSheet.create({
-  point: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "red", // StyleGuide.palette.primary
-    height: 10,
-    width: 10,
-    borderRadius: 5,
-  },
-});
-
-interface PointProps {
-  point: {
-    x: Animated.Adaptable<number>;
-    y: Animated.Adaptable<number>;
-  };
-}
-
-const PointComp = ({ point: { x, y } }: PointProps) => {
-  return (
-    <Animated.View
-      style={[
-        styles.point,
-        {
-          transform: [{ translateX: x }, { translateY: y }],
-        },
-      ]}
-    />
-  );
-};
 
 export type Matrix3 = readonly [Vec3, Vec3, Vec3];
 
@@ -119,35 +82,29 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
   } = decompose2d(shape2d);
 
   return (
-    <>
-      <Animated.View
-        style={{
-          ...StyleSheet.absoluteFillObject,
-          opacity: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          width: SIZE,
-          height: SIZE,
-          top: -SIZE / 2,
-          left: -SIZE / 2,
-          backgroundColor,
-          transform: [
-            { translateX },
-            { translateY },
-            { rotateZ: skewX },
-            { scaleX },
-            { scaleY },
-            { rotateZ },
-          ],
-        }}
-      >
-        <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
-      </Animated.View>
-      <PointComp point={vec.multiply(p1, SIZE)} />
-      <PointComp point={vec.multiply(p2, SIZE)} />
-      <PointComp point={vec.multiply(p3, SIZE)} />
-      <PointComp point={vec.multiply(p4, SIZE)} />
-    </>
+    <Animated.View
+      style={{
+        ...StyleSheet.absoluteFillObject,
+        opacity: 0.61,
+        justifyContent: "center",
+        alignItems: "center",
+        width: SIZE,
+        height: SIZE,
+        top: -SIZE / 2,
+        left: -SIZE / 2,
+        backgroundColor,
+        transform: [
+          { translateX },
+          { translateY },
+          { rotateZ: skewX },
+          { scaleX },
+          { scaleY },
+          { rotateZ },
+        ],
+      }}
+    >
+      <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
+    </Animated.View>
   );
 };
 

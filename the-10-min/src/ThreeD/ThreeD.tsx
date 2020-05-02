@@ -49,7 +49,7 @@ const rightface = [
   { x: 0.5, y: -0.5, z: -0.5 },
 ] as const;
 
-const points = [...frontface];
+// const points = [...frontface];
 
 const ThreeD = () => {
   const progress = useLoop(4000, false);
@@ -58,20 +58,16 @@ const ThreeD = () => {
     <View style={{ flex: 1, top: width / 2, left: width / 2 }}>
       <Face
         label="Back"
-        points={frontface}
+        points={backface}
         backgroundColor="#7BFF70"
         {...{ theta }}
       />
-      {points.map((point, index) => (
-        <Point key={index} {...{ point, theta }} {...point} />
-      ))}
-    </View>
-  );
-};
-
-export default ThreeD;
-
-/*
+      <Face
+        label="Front"
+        points={frontface}
+        backgroundColor="#FF665E"
+        {...{ theta }}
+      />
       <Face
         label="Bottom"
         points={bottomface}
@@ -96,4 +92,8 @@ export default ThreeD;
         backgroundColor="#7CFFFF"
         {...{ theta }}
       />
-      */
+    </View>
+  );
+};
+
+export default ThreeD;
