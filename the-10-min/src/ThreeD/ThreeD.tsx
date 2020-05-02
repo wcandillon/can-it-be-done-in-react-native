@@ -91,10 +91,6 @@ const ThreeD = () => {
         backgroundColor="#7CFFFF"
         {...{ theta }}
       />
-
-      {points.map((point, index) => (
-        <Point key={index} {...{ theta }} {...point} />
-      ))}
     </View>
   );
 };

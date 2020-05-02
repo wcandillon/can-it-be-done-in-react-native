@@ -1,6 +1,7 @@
 import React from "react";
 import { Dimensions, StyleSheet, Text } from "react-native";
 import Animated, {
+  add,
   debug,
   divide,
   multiply,
@@ -9,7 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Vector, decompose2d, translate, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
-import { DISTANCE, Point, SIZE, matrixVecMul } from "./ThreeDMath";
+import { Point, SIZE, matrixVecMul } from "./ThreeDMath";
 import { transform2d } from "./Matrix3";
 import { StyleGuide } from "../components";
 
@@ -47,6 +48,7 @@ const PointComp = ({ point }: PointProps) => (
   />
 );
 
+const DISTANCE = 600;
 const Face = ({
   points: ogpoints,
   theta,
@@ -58,26 +60,25 @@ const Face = ({
     { rotateX: theta },
     { rotateZ: theta },
   ]);
-
   const points = ogpoints.map((o) => ({
     x: multiply(o.x, SIZE),
     y: multiply(o.y, SIZE),
     z: multiply(o.z, SIZE),
   }));
   const p1V = matrixVecMul(m, [points[0].x, points[0].y, points[0].z, 1]);
-  const z1 = 1; // divide(1, sub(DISTANCE, p1V[2]));
+  const z1 = divide(DISTANCE, sub(p1V[2], DISTANCE));
   const p1 = vec.create(multiply(p1V[0], z1), multiply(p1V[1], z1));
 
   const p2V = matrixVecMul(m, [points[1].x, points[1].y, points[1].z, 1]);
-  const z2 = 1; // divide(1, sub(DISTANCE, p2V[2]));
+  const z2 = divide(DISTANCE, sub(p2V[2], DISTANCE));
   const p2 = vec.create(multiply(p2V[0], z2), multiply(p2V[1], z2));
 
   const p3V = matrixVecMul(m, [points[2].x, points[2].y, points[2].z, 1]);
-  const z3 = 1; // divide(1, sub(DISTANCE, p3V[2]));
+  const z3 = divide(DISTANCE, sub(p3V[2], DISTANCE));
   const p3 = vec.create(multiply(p3V[0], z3), multiply(p3V[1], z3));
 
   const p4V = matrixVecMul(m, [points[3].x, points[3].y, points[3].z, 1]);
-  const z4 = 1; // divide(1, sub(DISTANCE, p4V[2]));
+  const z4 = divide(DISTANCE, sub(p4V[2], DISTANCE));
   const p4 = vec.create(multiply(p4V[0], z4), multiply(p4V[1], z4));
 
   const shape2d = transform2d({
