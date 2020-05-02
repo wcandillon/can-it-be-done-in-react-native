@@ -67,10 +67,9 @@ function general2DProjection(params: Parameters) {
 // http://jsfiddle.net/dFrHS/1/
 export const transform2d = (params: Parameters) => {
   const t = general2DProjection(params);
-  for (let i = 0; i != 9; ++i) t[i] = divide(t[i], t[8]);
   return [
-    [t[0], t[1], t[2]],
-    [t[3], t[4], t[5]],
-    [t[6], t[7], t[8]],
+    [divide(t[0], t[8]), divide(t[1], t[8]), divide(t[2], t[8])],
+    [divide(t[3], t[8]), divide(t[4], t[8]), divide(t[5], t[8])],
+    [divide(t[6], t[8]), divide(t[7], t[8]), 1],
   ] as const;
 };
