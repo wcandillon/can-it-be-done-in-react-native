@@ -1,5 +1,5 @@
 import Animated, { add, divide, multiply, sub } from "react-native-reanimated";
-import { Matrix3, Vector } from "react-native-redash";
+import { Matrix3, Vec3, Vector, matrixVecMul } from "react-native-redash";
 
 interface Quadrilateral {
   p1: Vector;
@@ -58,10 +58,10 @@ const adj = (m1: FlatMatrix3) => {
     sub(multiply(m[3], m[7]), multiply(m[4], m[6])),
     sub(multiply(m[1], m[6]), multiply(m[0], m[7])),
     sub(multiply(m[0], m[4]), multiply(m[1], m[3])),
-  ];
+  ] as const;
 };
 
-function multmm(a, b): FlatMatrix3 {
+function multmm(a: FlatMatrix3, b: FlatMatrix3): FlatMatrix3 {
   // return flatten(multiply3(inflate(a), inflate(b)));
   // multiply two matrices
   const c = Array(9);
@@ -77,14 +77,15 @@ function multmm(a, b): FlatMatrix3 {
   return c;
 }
 
-function multmv(m, v) {
+const multmv = (m: FlatMatrix3, v: Vec3) => {
+  // return matrixVecMul(inflate(m));
   // multiply matrix and vector
   return [
     add(multiply(m[0], v[0]), multiply(m[1], v[1]), multiply(m[2], v[2])),
     add(multiply(m[3], v[0]), multiply(m[4], v[1]), multiply(m[5], v[2])),
     add(multiply(m[6], v[0]), multiply(m[7], v[1]), multiply(m[8], v[2])),
   ] as const;
-}
+};
 
 function basisToPoints({ p1, p2, p3, p4 }: Quadrilateral) {
   const m = [p1.x, p2.x, p3.x, p1.y, p2.y, p3.y, 1, 1, 1] as const;
