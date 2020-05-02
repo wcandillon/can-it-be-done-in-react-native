@@ -49,6 +49,12 @@ const PointComp = ({ point }: PointProps) => (
 );
 
 const DISTANCE = 600;
+const canvas = {
+  p1: vec.create(-SIZE / 2, -SIZE / 2),
+  p2: vec.create(-SIZE / 2, SIZE / 2),
+  p3: vec.create(SIZE / 2, -SIZE / 2),
+  p4: vec.create(SIZE / 2, SIZE / 2),
+};
 const Face = ({
   points: ogpoints,
   theta,
@@ -82,21 +88,12 @@ const Face = ({
   const p4 = vec.create(multiply(p4V[0], z4), multiply(p4V[1], z4));
 
   const shape2d = transform2d({
-    p1: {
-      o: vec.create(-SIZE / 2, -SIZE / 2),
-      p: p1,
-    },
-    p2: {
-      o: vec.create(-SIZE / 2, SIZE / 2),
-      p: p2,
-    },
-    p3: {
-      o: vec.create(SIZE / 2, -SIZE / 2),
-      p: p3,
-    },
-    p4: {
-      o: vec.create(SIZE / 2, SIZE / 2),
-      p: p4,
+    canvas,
+    projected: {
+      p1,
+      p2,
+      p3,
+      p4,
     },
   });
 

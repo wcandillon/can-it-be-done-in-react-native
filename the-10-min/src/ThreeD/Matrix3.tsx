@@ -1,15 +1,16 @@
 import { add, divide, multiply, sub } from "react-native-reanimated";
 import { Vector, vec } from "react-native-redash";
 
-interface VectorPair {
-  o: Vector;
-  p: Vector;
+interface Quadrilateral {
+  p1: Vector;
+  p2: Vector;
+  p3: Vector;
+  p4: Vector;
 }
-interface Points<T> {
-  p1: T;
-  p2: T;
-  p3: T;
-  p4: T;
+
+interface Parameters {
+  canvas: Quadrilateral;
+  projected: Quadrilateral;
 }
 
 function adj(m) {
@@ -49,23 +50,23 @@ function multmv(m, v) {
   ];
 }
 
-function basisToPoints({ p1, p2, p3, p4 }: Points<Vector>) {
+function basisToPoints({ p1, p2, p3, p4 }: Quadrilateral) {
   const m = [p1.x, p2.x, p3.x, p1.y, p2.y, p3.y, 1, 1, 1];
   const v = multmv(adj(m), [p4.x, p4.y, 1]);
   return multmm(m, [v[0], 0, 0, 0, v[1], 0, 0, 0, v[2]]);
 }
 
-function general2DProjection({ p1, p2, p3, p4 }: Points<VectorPair>) {
-  const s = basisToPoints({ p1: p1.o, p2: p2.o, p3: p3.o, p4: p4.o });
-  const d = basisToPoints({ p1: p1.p, p2: p2.p, p3: p3.p, p4: p4.p });
+function general2DProjection(params: Parameters) {
+  const s = basisToPoints(params.canvas);
+  const d = basisToPoints(params.projected);
   return multmm(d, adj(s));
 }
 
 // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
 // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
 // http://jsfiddle.net/dFrHS/1/
-export const transform2d = (points: Points<VectorPair>) => {
-  const t = general2DProjection(points);
+export const transform2d = (params: Parameters) => {
+  const t = general2DProjection(params);
   for (let i = 0; i != 9; ++i) t[i] = divide(t[i], t[8]);
   return [
     [t[0], t[1], t[2]],
