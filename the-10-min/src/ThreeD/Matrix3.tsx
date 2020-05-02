@@ -1,5 +1,11 @@
 import Animated, { add, divide, multiply, sub } from "react-native-reanimated";
-import { Matrix3, Vec3, Vector, matrixVecMul } from "react-native-redash";
+import {
+  Matrix3,
+  Vec3,
+  Vector,
+  matrixVecMul,
+  multiply3,
+} from "react-native-redash";
 
 interface Quadrilateral {
   p1: Vector;
@@ -28,26 +34,24 @@ type FlatMatrix3 = readonly [
 const flatten = (m: Matrix3) =>
   [
     m[0][0],
-    m[1][0],
-    m[2][0],
     m[0][1],
-    m[1][1],
-    m[2][1],
     m[0][2],
+    m[1][0],
+    m[1][1],
     m[1][2],
+    m[2][0],
+    m[2][1],
     m[2][2],
   ] as const;
 
 const inflate = (m: FlatMatrix3) =>
   [
-    [m[0], m[3], m[6]],
-    [m[1], m[4], m[7]],
-    [m[2], m[5], m[8]],
+    [m[0], m[1], m[2]],
+    [m[3], m[4], m[5]],
+    [m[6], m[7], m[8]],
   ] as const;
 
-const adj = (m1: FlatMatrix3) => {
-  // Compute the adjugate of m
-  const m = flatten(inflate(m1));
+const adj = (m: FlatMatrix3) => {
   return [
     sub(multiply(m[4], m[8]), multiply(m[5], m[7])),
     sub(multiply(m[2], m[7]), multiply(m[1], m[8])),
@@ -61,20 +65,8 @@ const adj = (m1: FlatMatrix3) => {
   ] as const;
 };
 
-function multmm(a: FlatMatrix3, b: FlatMatrix3): FlatMatrix3 {
-  // return flatten(multiply3(inflate(a), inflate(b)));
-  // multiply two matrices
-  const c = Array(9);
-  for (let i = 0; i != 3; ++i) {
-    for (let j = 0; j != 3; ++j) {
-      c[3 * i + j] = add(
-        multiply(a[3 * i + 0], b[3 * 0 + j]),
-        multiply(a[3 * i + 1], b[3 * 1 + j]),
-        multiply(a[3 * i + 2], b[3 * 2 + j])
-      );
-    }
-  }
-  return c;
+function multmm(a: FlatMatrix3, b: FlatMatrix3) {
+  return flatten(multiply3(inflate(a), inflate(b)));
 }
 
 const multmv = (m: FlatMatrix3, v: Vec3) => {
