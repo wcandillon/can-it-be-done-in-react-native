@@ -1,4 +1,4 @@
-import { add, divide, multiply, sub } from "react-native-reanimated";
+import Animated, { add, divide, multiply, sub } from "react-native-reanimated";
 import { Vector, vec } from "react-native-redash";
 
 interface Quadrilateral {
@@ -13,8 +13,41 @@ interface Parameters {
   projected: Quadrilateral;
 }
 
-function adj(m) {
+type FlatMatrix3 = [
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>,
+  Animated.Adaptable<number>
+];
+
+const flatten = (m: Matrix3) =>
+  [
+    m[0][0],
+    m[1][0],
+    m[2][0],
+    m[0][1],
+    m[1][1],
+    m[2][1],
+    m[0][2],
+    m[1][2],
+    m[2][2],
+  ] as const;
+
+const inflate = (m: FlatMatrix) =>
+  [
+    [m[0], m[3], m[6]],
+    [m[1], m[4], m[7]],
+    [m[2], m[5], m[8]],
+  ] as const;
+
+const adj = (m1: FlatMatrix3) => {
   // Compute the adjugate of m
+  const m = flatten(inflate(m1));
   return [
     sub(multiply(m[4], m[8]), multiply(m[5], m[7])),
     sub(multiply(m[2], m[7]), multiply(m[1], m[8])),
@@ -26,8 +59,9 @@ function adj(m) {
     sub(multiply(m[1], m[6]), multiply(m[0], m[7])),
     sub(multiply(m[0], m[4]), multiply(m[1], m[3])),
   ];
-}
-function multmm(a, b) {
+};
+
+function multmm(a, b): FlatMatrix3 {
   // multiply two matrices
   const c = Array(9);
   for (let i = 0; i != 3; ++i) {
@@ -41,17 +75,18 @@ function multmm(a, b) {
   }
   return c;
 }
+
 function multmv(m, v) {
   // multiply matrix and vector
   return [
     add(multiply(m[0], v[0]), multiply(m[1], v[1]), multiply(m[2], v[2])),
     add(multiply(m[3], v[0]), multiply(m[4], v[1]), multiply(m[5], v[2])),
     add(multiply(m[6], v[0]), multiply(m[7], v[1]), multiply(m[8], v[2])),
-  ];
+  ] as const;
 }
 
 function basisToPoints({ p1, p2, p3, p4 }: Quadrilateral) {
-  const m = [p1.x, p2.x, p3.x, p1.y, p2.y, p3.y, 1, 1, 1];
+  const m = [p1.x, p2.x, p3.x, p1.y, p2.y, p3.y, 1, 1, 1] as const;
   const v = multmv(adj(m), [p4.x, p4.y, 1]);
   return multmm(m, [v[0], 0, 0, 0, v[1], 0, 0, 0, v[2]]);
 }
