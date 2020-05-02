@@ -83,19 +83,19 @@ const Face = ({
 
   const shape2d = transform2d({
     p1: {
-      o: points[0],
+      o: vec.create(-SIZE / 2, -SIZE / 2),
       p: p1,
     },
     p2: {
-      o: points[1],
+      o: vec.create(-SIZE / 2, SIZE / 2),
       p: p2,
     },
     p3: {
-      o: points[2],
+      o: vec.create(SIZE / 2, -SIZE / 2),
       p: p3,
     },
     p4: {
-      o: points[3],
+      o: vec.create(SIZE / 2, SIZE / 2),
       p: p4,
     },
   });
