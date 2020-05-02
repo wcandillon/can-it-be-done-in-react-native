@@ -1,15 +1,14 @@
 import React from "react";
-import { Dimensions, StyleSheet, Text } from "react-native";
-import Animated, {
-  add,
-  debug,
-  divide,
-  multiply,
-  sub,
-  useCode,
-} from "react-native-reanimated";
-import { Vector, decompose2d, translate, vec } from "react-native-redash";
-import { Matrix4, processTransform } from "./Matrix4";
+import { StyleSheet, Text } from "react-native";
+import Animated, { divide, multiply } from "react-native-reanimated";
+import {
+  Vector,
+  decompose2d,
+  multiply3,
+  translate,
+  vec,
+} from "react-native-redash";
+import { Matrix4, multiply4, processTransform } from "./Matrix4";
 import { Point, SIZE, matrixVecMul, vec3 } from "./ThreeDMath";
 import { transform2d } from "./Matrix3";
 import { StyleGuide } from "../components";
@@ -19,6 +18,7 @@ interface FaceProps {
   theta: Animated.Node<number>;
   backgroundColor: string;
   label: string;
+  flip: boolean;
 }
 
 export type Vec3 = readonly [
@@ -51,10 +51,27 @@ const PointComp = ({ point }: PointProps) => (
 
 const DISTANCE = 600;
 
-const point = (m: Matrix4, { x, y, z }: ReturnType<typeof vec3>) => {
-  const pV = matrixVecMul(m, [x, y, z, 1]);
-  const z1 = divide(DISTANCE, sub(pV[2], DISTANCE));
-  return vec.create(multiply(pV[0], z1), multiply(pV[1], z1));
+const createPerspective = (
+  fovInRadians: number,
+  aspect: number,
+  near: number,
+  far: number
+) => {
+  const h = 1 / Math.tan(fovInRadians / 2);
+  const rDepth = 1 / (near - far);
+  const C = (far + near) * rDepth;
+  const D = 2 * (far * near * rDepth);
+  return [
+    [h / aspect, 0, 0, 0],
+    [0, h, 0, 0],
+    [0, 0, C, D],
+    [0, 0, -1, 0],
+  ] as const;
+};
+
+const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
+  const [x, y, z, w] = matrixVecMul(m, [p.x, p.y, p.z, 1]);
+  return vec.create(divide(x, 1), divide(y, 1));
 };
 
 const canvas = {
@@ -69,11 +86,18 @@ const Face = ({
   backgroundColor,
   label,
 }: FaceProps) => {
-  const m = processTransform([
+  const transform = processTransform([
     { rotateY: theta },
     { rotateX: theta },
     { rotateZ: theta },
   ]);
+  /*
+  https://p5js.org/reference/#/p5/perspective
+When called with no arguments, the defaults provided are equivalent to perspective(PI/3.0, width/height, eyeZ/10.0, eyeZ10.0), where eyeZ is equal to ((height/2.0) / tan(PI60.0/360.0));
+  */
+  const perspective = createPerspective(Math.PI / 3, 1, 0.1, 100);
+  const m = multiply4(transform, perspective);
+
   const points = ogpoints.map((o) => ({
     x: multiply(o.x, SIZE),
     y: multiply(o.y, SIZE),
