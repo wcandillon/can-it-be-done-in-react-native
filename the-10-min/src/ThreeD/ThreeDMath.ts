@@ -12,6 +12,7 @@ export interface Point {
 }
 
 export const SIZE = 200;
+export const DISTANCE = 600;
 
 export const matrixVecMul = (m: Matrix4, v: Vec4) =>
   [dot4(m[0], v), dot4(m[1], v), dot4(m[2], v), dot4(m[3], v)] as const;
