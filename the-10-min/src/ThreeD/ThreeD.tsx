@@ -49,7 +49,7 @@ const rightface = [
   { x: 0.5, y: -0.5, z: -0.5 },
 ] as const;
 
-// const points = [...frontface];
+const points = [...bottomface];
 
 const ThreeD = () => {
   const progress = useLoop(4000, false);
@@ -92,6 +92,9 @@ const ThreeD = () => {
         backgroundColor="#7CFFFF"
         {...{ theta }}
       />
+      {points.map((point, index) => (
+        <Point key={index} {...{ theta }} {...point} />
+      ))}
     </View>
   );
 };
