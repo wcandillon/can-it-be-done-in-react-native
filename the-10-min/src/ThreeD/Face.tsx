@@ -7,10 +7,11 @@ import Animated, {
   sub,
   useCode,
 } from "react-native-reanimated";
-import { decompose2d, vec } from "react-native-redash";
+import { Vector, decompose2d, translate, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
 import { DISTANCE, Point, SIZE, matrixVecMul } from "./ThreeDMath";
 import { transform2d } from "./Matrix3";
+import { StyleGuide } from "../components";
 
 interface FaceProps {
   points: readonly [Point, Point, Point, Point];
@@ -25,6 +26,26 @@ export type Vec3 = readonly [
 ];
 
 export type Matrix3 = readonly [Vec3, Vec3, Vec3];
+
+interface PCProps {
+  point: Vector;
+}
+
+const PC = ({ point }: PCProps) => (
+  <Animated.View
+    style={[
+      {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: StyleGuide.palette.primary,
+        height: 10,
+        width: 10,
+        borderRadius: 5,
+        opacity: 0.5,
+        transform: translate(vec.multiply(point, SIZE)),
+      },
+    ]}
+  />
+);
 
 const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
   const m = processTransform([
@@ -113,8 +134,7 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
           height: SIZE,
           top: -SIZE / 2,
           left: -SIZE / 2,
-          borderColor: backgroundColor,
-          borderWidth: 4,
+          backgroundColor,
           transform: [
             { translateX },
             { translateY },
@@ -127,6 +147,10 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
       >
         <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
       </Animated.View>
+      <PC point={p1} />
+      <PC point={p2} />
+      <PC point={p3} />
+      <PC point={p4} />
     </>
   );
 };
