@@ -1,5 +1,5 @@
 import Animated, { add, divide, multiply, sub } from "react-native-reanimated";
-import { Vector, vec } from "react-native-redash";
+import { Matrix3, Vector } from "react-native-redash";
 
 interface Quadrilateral {
   p1: Vector;
@@ -13,7 +13,7 @@ interface Parameters {
   projected: Quadrilateral;
 }
 
-type FlatMatrix3 = [
+type FlatMatrix3 = readonly [
   Animated.Adaptable<number>,
   Animated.Adaptable<number>,
   Animated.Adaptable<number>,
@@ -38,7 +38,7 @@ const flatten = (m: Matrix3) =>
     m[2][2],
   ] as const;
 
-const inflate = (m: FlatMatrix) =>
+const inflate = (m: FlatMatrix3) =>
   [
     [m[0], m[3], m[6]],
     [m[1], m[4], m[7]],
@@ -62,6 +62,7 @@ const adj = (m1: FlatMatrix3) => {
 };
 
 function multmm(a, b): FlatMatrix3 {
+  // return flatten(multiply3(inflate(a), inflate(b)));
   // multiply two matrices
   const c = Array(9);
   for (let i = 0; i != 3; ++i) {
