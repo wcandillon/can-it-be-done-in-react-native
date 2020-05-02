@@ -1,12 +1,11 @@
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
-import { loop, mix, useLoop, useValue } from "react-native-redash";
-import { add, set, useCode } from "react-native-reanimated";
+import { Dimensions, View } from "react-native";
+import { mix, useLoop } from "react-native-redash";
 
 import Face from "./Face";
 import Point from "./Point";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 const backface = [
   { x: -0.5, y: -0.5, z: -0.5 },
   { x: 0.5, y: -0.5, z: -0.5 },
@@ -49,13 +48,13 @@ const rightface = [
   { x: 0.5, y: -0.5, z: -0.5 },
 ] as const;
 
-const points = [...bottomface];
+const points = [...frontface, ...backface];
 
 const ThreeD = () => {
   const progress = useLoop(4000, false);
   const theta = mix(progress, 0, 2 * Math.PI);
   return (
-    <View style={{ flex: 1, top: width / 2, left: width / 2 }}>
+    <View style={{ flex: 1, top: height / 2 - 128, left: width / 2 }}>
       <Face
         label="Back"
         points={backface}
@@ -92,6 +91,10 @@ const ThreeD = () => {
         backgroundColor="#7CFFFF"
         {...{ theta }}
       />
+
+      {points.map((point, index) => (
+        <Point key={index} {...{ theta }} {...point} />
+      ))}
     </View>
   );
 };

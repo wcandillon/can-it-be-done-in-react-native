@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, { divide, multiply, sub } from "react-native-reanimated";
 
 import { vec } from "react-native-redash";
@@ -10,14 +10,12 @@ import {
   Point as PointModel,
   SIZE,
   matrixVecMul,
-  scaleToCanvas,
 } from "./ThreeDMath";
 
-const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   point: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: StyleGuide.palette.primary,
+    backgroundColor: "red",
     height: 10,
     width: 10,
     borderRadius: 5,
@@ -28,6 +26,11 @@ interface PointProps extends PointModel {
   theta: Animated.Node<number>;
 }
 
+const scaleToCanvas = (
+  x: Animated.Adaptable<number>,
+  y: Animated.Adaptable<number>
+) => vec.multiply(SIZE, vec.create(x, y));
+
 const Point = ({ x, y, z, theta }: PointProps) => {
   const m = processTransform([
     { rotateY: theta },
@@ -35,7 +38,7 @@ const Point = ({ x, y, z, theta }: PointProps) => {
     { rotateZ: theta },
   ]);
   const vec4 = matrixVecMul(m, [x, y, z, 1]);
-  const perspective = divide(1, sub(DISTANCE, vec4[2]));
+  const perspective = divide(1, sub(2, vec4[2]));
   const tr = scaleToCanvas(
     multiply(vec4[0], perspective),
     multiply(vec4[1], perspective)

@@ -64,7 +64,7 @@ function general2DProjection({ p1, p2, p3, p4 }: Points<VectorPair>) {
 // https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript
 // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
 // http://jsfiddle.net/dFrHS/1/
-export const transform2d = (points: Points<VectorPair>, size: number) => {
+export const transform2d = (points: Points<VectorPair>) => {
   const t = general2DProjection(points);
   for (let i = 0; i != 9; ++i) t[i] = divide(t[i], t[8]);
   return [
