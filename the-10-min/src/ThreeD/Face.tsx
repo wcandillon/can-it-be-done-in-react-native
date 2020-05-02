@@ -9,8 +9,8 @@ import Animated, {
   useCode,
 } from "react-native-reanimated";
 import { Vector, decompose2d, translate, vec } from "react-native-redash";
-import { processTransform } from "./Matrix4";
-import { Point, SIZE, matrixVecMul } from "./ThreeDMath";
+import { Matrix4, processTransform } from "./Matrix4";
+import { Point, SIZE, matrixVecMul, vec3 } from "./ThreeDMath";
 import { transform2d } from "./Matrix3";
 import { StyleGuide } from "../components";
 
@@ -20,6 +20,7 @@ interface FaceProps {
   backgroundColor: string;
   label: string;
 }
+
 export type Vec3 = readonly [
   Animated.Adaptable<number>,
   Animated.Adaptable<number>,
@@ -49,6 +50,13 @@ const PointComp = ({ point }: PointProps) => (
 );
 
 const DISTANCE = 600;
+
+const point = (m: Matrix4, { x, y, z }: ReturnType<typeof vec3>) => {
+  const pV = matrixVecMul(m, [x, y, z, 1]);
+  const z1 = divide(DISTANCE, sub(pV[2], DISTANCE));
+  return vec.create(multiply(pV[0], z1), multiply(pV[1], z1));
+};
+
 const canvas = {
   p1: vec.create(-SIZE / 2, -SIZE / 2),
   p2: vec.create(-SIZE / 2, SIZE / 2),
@@ -71,21 +79,11 @@ const Face = ({
     y: multiply(o.y, SIZE),
     z: multiply(o.z, SIZE),
   }));
-  const p1V = matrixVecMul(m, [points[0].x, points[0].y, points[0].z, 1]);
-  const z1 = divide(DISTANCE, sub(p1V[2], DISTANCE));
-  const p1 = vec.create(multiply(p1V[0], z1), multiply(p1V[1], z1));
 
-  const p2V = matrixVecMul(m, [points[1].x, points[1].y, points[1].z, 1]);
-  const z2 = divide(DISTANCE, sub(p2V[2], DISTANCE));
-  const p2 = vec.create(multiply(p2V[0], z2), multiply(p2V[1], z2));
-
-  const p3V = matrixVecMul(m, [points[2].x, points[2].y, points[2].z, 1]);
-  const z3 = divide(DISTANCE, sub(p3V[2], DISTANCE));
-  const p3 = vec.create(multiply(p3V[0], z3), multiply(p3V[1], z3));
-
-  const p4V = matrixVecMul(m, [points[3].x, points[3].y, points[3].z, 1]);
-  const z4 = divide(DISTANCE, sub(p4V[2], DISTANCE));
-  const p4 = vec.create(multiply(p4V[0], z4), multiply(p4V[1], z4));
+  const p1 = point(m, points[0]);
+  const p2 = point(m, points[1]);
+  const p3 = point(m, points[2]);
+  const p4 = point(m, points[3]);
 
   const shape2d = transform2d({
     canvas,

@@ -1,6 +1,4 @@
 /* eslint-disable no-plusplus */
-import { Dimensions } from "react-native";
-import { vec } from "react-native-redash";
 
 import Animated from "react-native-reanimated";
 import { Matrix4, Vec4, dot4 } from "./Matrix4";
