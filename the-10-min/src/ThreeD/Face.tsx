@@ -1,6 +1,12 @@
 import React from "react";
 import { Dimensions, StyleSheet, Text } from "react-native";
-import Animated, { divide, multiply, sub } from "react-native-reanimated";
+import Animated, {
+  debug,
+  divide,
+  multiply,
+  sub,
+  useCode,
+} from "react-native-reanimated";
 import { decompose2d, vec } from "react-native-redash";
 import { processTransform } from "./Matrix4";
 import { DISTANCE, Point, SIZE, matrixVecMul } from "./ThreeDMath";
@@ -80,31 +86,48 @@ const Face = ({ points, theta, backgroundColor, label }: FaceProps) => {
     scaleX,
     scaleY,
   } = decompose2d(shape2d);
-
+  /*
+  useCode(
+    () => [
+      debug("p1.x", multiply(p1.x, SIZE)),
+      debug("p1.y", multiply(p1.y, SIZE)),
+      debug("p2.x", multiply(p2.x, SIZE)),
+      debug("p2.y", multiply(p2.y, SIZE)),
+      debug("p3.x", multiply(p1.x, SIZE)),
+      debug("p3.y", multiply(p1.y, SIZE)),
+      debug("p4.x", multiply(p1.x, SIZE)),
+      debug("p4.y", multiply(p1.y, SIZE)),
+    ],
+    []
+  );
+  */
   return (
-    <Animated.View
-      style={{
-        ...StyleSheet.absoluteFillObject,
-        opacity: 0.61,
-        justifyContent: "center",
-        alignItems: "center",
-        width: SIZE,
-        height: SIZE,
-        top: -SIZE / 2,
-        left: -SIZE / 2,
-        backgroundColor,
-        transform: [
-          { translateX },
-          { translateY },
-          { rotateZ: skewX },
-          { scaleX },
-          { scaleY },
-          { rotateZ },
-        ],
-      }}
-    >
-      <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
-    </Animated.View>
+    <>
+      <Animated.View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          opacity: 0.61,
+          justifyContent: "center",
+          alignItems: "center",
+          width: SIZE,
+          height: SIZE,
+          top: -SIZE / 2,
+          left: -SIZE / 2,
+          borderColor: backgroundColor,
+          borderWidth: 4,
+          transform: [
+            { translateX },
+            { translateY },
+            { rotateZ: skewX },
+            { scaleX },
+            { scaleY },
+            { rotateZ },
+          ],
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
+      </Animated.View>
+    </>
   );
 };
 

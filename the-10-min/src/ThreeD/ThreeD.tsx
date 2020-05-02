@@ -1,7 +1,7 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { loop, mix, useLoop, useValue } from "react-native-redash";
-import { set, useCode } from "react-native-reanimated";
+import { add, set, useCode } from "react-native-reanimated";
 
 import Face from "./Face";
 import Point from "./Point";
@@ -100,3 +100,6 @@ const ThreeD = () => {
 };
 
 export default ThreeD;
+
+/*
+ */
