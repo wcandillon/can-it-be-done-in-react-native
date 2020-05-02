@@ -65,24 +65,7 @@ function general2DProjection({ p1, p2, p3, p4 }: Points<VectorPair>) {
 // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/
 // http://jsfiddle.net/dFrHS/1/
 export const transform2d = (points: Points<VectorPair>, size: number) => {
-  const t = general2DProjection({
-    p1: {
-      o: vec.multiply(points.p1.o, size),
-      p: vec.multiply(points.p1.p, size),
-    },
-    p2: {
-      o: vec.multiply(points.p2.o, size),
-      p: vec.multiply(points.p2.p, size),
-    },
-    p3: {
-      o: vec.multiply(points.p3.o, size),
-      p: vec.multiply(points.p3.p, size),
-    },
-    p4: {
-      o: vec.multiply(points.p4.o, size),
-      p: vec.multiply(points.p4.p, size),
-    },
-  });
+  const t = general2DProjection(points);
   for (let i = 0; i != 9; ++i) t[i] = divide(t[i], t[8]);
   return [
     [t[0], t[1], t[2]],

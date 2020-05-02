@@ -18,7 +18,7 @@ export const DISTANCE = 2;
 export const scaleToCanvas = (
   x: Animated.Adaptable<number>,
   y: Animated.Adaptable<number>
-) => vec.add(width / 2, vec.multiply(SIZE, vec.create(x, y)));
+) => vec.add(0, vec.multiply(SIZE, vec.create(x, y)));
 
 export const matrixVecMul = (m: Matrix4, v: Vec4) =>
   [dot4(m[0], v), dot4(m[1], v), dot4(m[2], v), dot4(m[3], v)] as const;

@@ -18,8 +18,6 @@ const styles = StyleSheet.create({
   point: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: StyleGuide.palette.primary,
-    top: -2.5,
-    left: -2.5,
     height: 10,
     width: 10,
     borderRadius: 5,
@@ -47,6 +45,7 @@ const Point = ({ x, y, z, theta }: PointProps) => {
       style={[
         styles.point,
         {
+          opacity: 0.5,
           transform: [{ translateX: tr.x }, { translateY: tr.y }],
         },
       ]}
