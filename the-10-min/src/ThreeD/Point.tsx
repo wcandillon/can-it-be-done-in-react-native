@@ -1,10 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { add, divide, sub } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
-import { vec } from "react-native-redash";
-import { processTransform } from "./Matrix4";
-import { Point as PointModel, SIZE, matrixVecMul } from "./ThreeDMath";
+import { Point as PointModel } from "./ThreeDMath";
 
 const styles = StyleSheet.create({
   container: {
@@ -34,10 +32,7 @@ const Point = ({ point: { x, y } }: PointProps) => {
         style={[
           styles.point,
           {
-            transform: [
-              { translateX: sub(x, SIZE / 2) },
-              { translateY: sub(y, SIZE / 2) },
-            ],
+            transform: [{ translateX: x }, { translateY: y }],
           },
         ]}
       />

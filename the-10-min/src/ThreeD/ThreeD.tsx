@@ -17,17 +17,17 @@ const styles = StyleSheet.create({
   },
 });
 const backface = [
-  { x: 0, y: 0, z: -SIZE / 2 },
-  { x: SIZE, y: 0, z: -SIZE / 2 },
-  { x: 0, y: SIZE, z: -SIZE / 2 },
-  { x: SIZE, y: SIZE, z: -SIZE / 2 },
+  { x: -SIZE / 2, y: -SIZE / 2, z: -SIZE / 2 },
+  { x: SIZE / 2, y: -SIZE / 2, z: -SIZE / 2 },
+  { x: -SIZE / 2, y: SIZE / 2, z: -SIZE / 2 },
+  { x: SIZE / 2, y: SIZE / 2, z: -SIZE / 2 },
 ] as const;
 
 const frontface = [
-  { x: 0, y: 0, z: SIZE / 2 },
-  { x: SIZE, y: 0, z: SIZE / 2 },
-  { x: 0, y: SIZE, z: SIZE / 2 },
-  { x: SIZE, y: SIZE, z: SIZE / 2 },
+  { x: -SIZE / 2, y: -SIZE / 2, z: SIZE / 2 },
+  { x: SIZE / 2, y: -SIZE / 2, z: SIZE / 2 },
+  { x: -SIZE / 2, y: SIZE / 2, z: SIZE / 2 },
+  { x: SIZE / 2, y: SIZE / 2, z: SIZE / 2 },
 ] as const;
 
 const points = [...frontface, ...backface];
@@ -42,12 +42,9 @@ const ThreeD = () => {
   const [rotateX, rotateY] = useValues([0, 0]);
 
   const m = processTransform3d([
-    { translateX: SIZE / 2 },
-    { translateY: SIZE / 2 },
+    { perspective: 600 },
     { rotateY },
     { rotateX },
-    { translateX: -SIZE / 2 },
-    { translateY: -SIZE / 2 },
   ]);
 
   const p1 = project(m, points[0]);
@@ -70,7 +67,7 @@ const ThreeD = () => {
         backgroundColor="#e74c3c"
         points={[p3, p4, p7, p8]}
       />
-      <Face label="Left" backgroundColor="#9b59b6" points={[p1, p3, p5, p7]} />
+      <Face label="Left" backgroundColor="#00d2d3" points={[p1, p3, p5, p7]} />
       <Face label="Right" backgroundColor="#f1c40f" points={[p2, p4, p6, p8]} />
       <Point point={p1} />
       <Point point={p2} />
