@@ -117,8 +117,6 @@ const Face = ({
         alignItems: "center",
         width: SIZE,
         height: SIZE,
-        top: -SIZE / 2,
-        left: -SIZE / 2,
         backgroundColor,
         zIndex: avg(p1.z, p2.z, p3.z, p4.z),
         transform: [

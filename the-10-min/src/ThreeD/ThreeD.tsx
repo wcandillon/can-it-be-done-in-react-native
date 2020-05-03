@@ -47,13 +47,18 @@ const rightface = [
   { x: 0.5, y: -0.5, z: -0.5 },
 ] as const;
 
-const points = [...frontface, ...backface];
+// const points = [...frontface, ...backface];
 
 const ThreeD = () => {
   const progress = useLoop(4000, false);
   const theta = mix(progress, 0, 2 * Math.PI);
   return (
-    <View style={{ flex: 1, top: height / 2 - 128, left: width / 2 }}>
+    <View
+      style={{
+        flex: 1,
+        transform: [{ translateX: width / 4 }, { translateY: height / 4 }],
+      }}
+    >
       <Face
         label="Left"
         points={leftface}
