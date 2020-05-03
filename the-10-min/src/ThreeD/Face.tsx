@@ -2,13 +2,13 @@ import React from "react";
 import { StyleSheet, Text } from "react-native";
 import Animated, { add, divide } from "react-native-reanimated";
 import { decompose2d, vec } from "react-native-redash";
-import { Matrix4, matrixVecMul4 } from "./Matrix4";
-import { Point, SIZE, transform2d, vec3 } from "./ThreeDMath";
+import { Point, SIZE, transform2d } from "./ThreeDMath";
 
 interface FaceProps {
   points: readonly [Point, Point, Point, Point];
   backgroundColor: string;
   label: string;
+  flipY?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -38,6 +38,7 @@ const Face = ({
   points: [p1, p2, p3, p4],
   backgroundColor,
   label,
+  flipY,
 }: FaceProps) => {
   const shape2d = transform2d({
     canvas,
@@ -61,7 +62,7 @@ const Face = ({
     <Animated.View style={[styles.container, { zIndex }]} pointerEvents="none">
       <Animated.View
         style={{
-          opacity: 0.61,
+          opacity: 1,
           width: SIZE,
           height: SIZE,
           backgroundColor,
@@ -78,6 +79,7 @@ const Face = ({
             { rotateZ },
             { translateX: SIZE / 2 },
             { translateY: SIZE / 2 },
+            { rotateY: flipY ? Math.PI : 0 },
           ],
         }}
       >

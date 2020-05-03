@@ -21,11 +21,7 @@ interface PointProps extends PointModel {
 }
 
 const Point = ({ x, y, z, theta }: PointProps) => {
-  const m = processTransform([
-    { rotateY: theta },
-    { rotateX: theta },
-    { rotateZ: theta },
-  ]);
+  const m = processTransform([{ rotateY: theta }, { rotateX: theta }]);
   const vec4 = matrixVecMul(m, [x, y, z, 1]);
   // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
   const perspective = divide(1, sub(2, vec4[2]));

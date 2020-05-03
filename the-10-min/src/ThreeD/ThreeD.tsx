@@ -60,16 +60,31 @@ const ThreeD = () => {
 
   return (
     <View style={styles.container}>
-      <Face label="Back" backgroundColor="#495DFF" points={[p5, p6, p7, p8]} />
-      <Face label="Front" backgroundColor="#FFFF72" points={[p1, p2, p3, p4]} />
-      <Face label="Top" backgroundColor="#7BFF70" points={[p1, p2, p5, p6]} />
+      <Face
+        label="Back"
+        backgroundColor="#2ed573"
+        points={[p5, p6, p7, p8]}
+        flipY
+      />
+      <Face label="Front" backgroundColor="#ff9ff3" points={[p1, p2, p3, p4]} />
+      <Face
+        label="Top"
+        backgroundColor="#1e90ff"
+        points={[p1, p2, p5, p6]}
+        flipY
+      />
       <Face
         label="Bottom"
-        backgroundColor="#FF665E"
+        backgroundColor="#e74c3c"
         points={[p3, p4, p7, p8]}
       />
-      <Face label="Left" backgroundColor="#FF6AFF" points={[p1, p3, p5, p7]} />
-      <Face label="Right" backgroundColor="#7CFFFF" points={[p2, p4, p6, p8]} />
+      <Face label="Left" backgroundColor="#9b59b6" points={[p1, p3, p5, p7]} />
+      <Face
+        label="Right"
+        backgroundColor="#f1c40f"
+        points={[p2, p4, p6, p8]}
+        flipY
+      />
       <Gesture {...{ rotateX, rotateY }} />
     </View>
   );
