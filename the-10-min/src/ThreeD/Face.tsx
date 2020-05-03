@@ -1,14 +1,20 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
-import Animated, { add, divide, multiply } from "react-native-reanimated";
-import { decompose2d, vec } from "react-native-redash";
+import { Dimensions, StyleSheet, Text } from "react-native";
+import Animated, {
+  add,
+  debug,
+  divide,
+  multiply,
+  useCode,
+} from "react-native-reanimated";
+import { decompose2d, useDebug, vec } from "react-native-redash";
 import {
   Matrix4,
   matrixVecMul4,
   multiply4,
   processTransform3d,
 } from "./Matrix4";
-import { Point, SIZE, transform2d, vec3 } from "./ThreeDMath";
+import { DISTANCE, Point, SIZE, transform2d, vec3 } from "./ThreeDMath";
 
 interface FaceProps {
   points: readonly [Point, Point, Point, Point];
@@ -17,14 +23,7 @@ interface FaceProps {
   label: string;
 }
 
-export type Vec3 = readonly [
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>,
-  Animated.Adaptable<number>
-];
-
-export type Matrix3 = readonly [Vec3, Vec3, Vec3];
-
+const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -83,8 +82,13 @@ const Face = ({
   ]);
 
   const eyeZ = 1;
-  const perspective = createPerspective(Math.PI / 2, 1, eyeZ / 10, eyeZ * 10);
-  const m = multiply4(transform, perspective);
+  const perspective = createPerspective(
+    Math.PI / 3,
+    width / height,
+    eyeZ / 10,
+    eyeZ * 10
+  );
+  const m = transform; // multiply4(transform, perspective);
 
   const points = ogpoints.map((o) => ({
     x: multiply(o.x, SIZE),
@@ -115,17 +119,17 @@ const Face = ({
     scaleX,
     scaleY,
   } = decompose2d(shape2d);
-
+  const zIndex = avg(p1.z, p2.z, p3.z, p4.z);
   return (
-    <Animated.View
-      style={[styles.container, { zIndex: avg(p1.z, p2.z, p3.z, p4.z) }]}
-    >
+    <Animated.View style={[styles.container, { zIndex }]}>
       <Animated.View
         style={{
-          opacity: 1,
+          opacity: 0.61,
           width: SIZE,
           height: SIZE,
           backgroundColor,
+          justifyContent: "center",
+          alignItems: "center",
           transform: [
             { translateX },
             { translateY },
@@ -136,7 +140,7 @@ const Face = ({
           ],
         }}
       >
-        <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
+        <Text style={{ color: "white", fontSize: 24 }}>{label}</Text>
       </Animated.View>
     </Animated.View>
   );
