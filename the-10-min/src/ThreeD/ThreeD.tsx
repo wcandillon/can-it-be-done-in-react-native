@@ -37,7 +37,7 @@ const points = [...frontface, ...backface].map((o) => ({
 // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
 const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
   const [x, y, z, w] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
-  return { x: divide(x, 1), y: divide(y, 1), z: divide(z, 1) };
+  return { x: divide(x, w), y: divide(y, w), z: divide(z, w) };
 };
 
 const ThreeD = () => {
