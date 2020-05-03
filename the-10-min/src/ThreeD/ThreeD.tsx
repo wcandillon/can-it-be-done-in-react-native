@@ -35,7 +35,7 @@ const points = [...frontface, ...backface].map((o) => ({
 }));
 
 // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
-const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
+const project = (m: Matrix4, p: ReturnType<typeof vec3>) => {
   const [x, y, z, w] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
   return { x: divide(x, w), y: divide(y, w), z: divide(z, w) };
 };
@@ -49,15 +49,15 @@ const ThreeD = () => {
     { rotateX },
   ]);
 
-  const p1 = point(m, points[0]);
-  const p2 = point(m, points[1]);
-  const p3 = point(m, points[2]);
-  const p4 = point(m, points[3]);
+  const p1 = project(m, points[0]);
+  const p2 = project(m, points[1]);
+  const p3 = project(m, points[2]);
+  const p4 = project(m, points[3]);
 
-  const p5 = point(m, points[4]);
-  const p6 = point(m, points[5]);
-  const p7 = point(m, points[6]);
-  const p8 = point(m, points[7]);
+  const p5 = project(m, points[4]);
+  const p6 = project(m, points[5]);
+  const p7 = project(m, points[6]);
+  const p8 = project(m, points[7]);
 
   return (
     <View style={styles.container}>
