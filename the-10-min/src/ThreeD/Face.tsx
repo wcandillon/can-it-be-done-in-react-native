@@ -62,7 +62,7 @@ const Face = ({
     <Animated.View style={[styles.container, { zIndex }]} pointerEvents="none">
       <Animated.View
         style={{
-          opacity: 1,
+          opacity: 0.61,
           width: SIZE,
           height: SIZE,
           backgroundColor,

@@ -8,6 +8,8 @@ import Gesture from "./Gesture";
 import { DISTANCE, SIZE, vec3 } from "./ThreeDMath";
 import { Matrix4, matrixVecMul4, processTransform3d } from "./Matrix4";
 
+import Point from "./Point";
+
 const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
@@ -60,31 +62,24 @@ const ThreeD = () => {
 
   return (
     <View style={styles.container}>
-      <Face
-        label="Back"
-        backgroundColor="#2ed573"
-        points={[p5, p6, p7, p8]}
-        flipY
-      />
+      <Face label="Back" backgroundColor="#2ed573" points={[p5, p6, p7, p8]} />
       <Face label="Front" backgroundColor="#ff9ff3" points={[p1, p2, p3, p4]} />
-      <Face
-        label="Top"
-        backgroundColor="#1e90ff"
-        points={[p1, p2, p5, p6]}
-        flipY
-      />
+      <Face label="Top" backgroundColor="#1e90ff" points={[p1, p2, p5, p6]} />
       <Face
         label="Bottom"
         backgroundColor="#e74c3c"
         points={[p3, p4, p7, p8]}
       />
       <Face label="Left" backgroundColor="#9b59b6" points={[p1, p3, p5, p7]} />
-      <Face
-        label="Right"
-        backgroundColor="#f1c40f"
-        points={[p2, p4, p6, p8]}
-        flipY
-      />
+      <Face label="Right" backgroundColor="#f1c40f" points={[p2, p4, p6, p8]} />
+      <Point point={p1} />
+      <Point point={p2} />
+      <Point point={p3} />
+      <Point point={p4} />
+      <Point point={p5} />
+      <Point point={p6} />
+      <Point point={p7} />
+      <Point point={p8} />
       <Gesture {...{ rotateX, rotateY }} />
     </View>
   );
