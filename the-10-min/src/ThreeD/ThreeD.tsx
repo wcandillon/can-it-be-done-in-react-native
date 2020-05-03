@@ -29,9 +29,9 @@ const frontface = [
 ] as const;
 
 const points = [...frontface, ...backface].map((o) => ({
-  x: multiply(o.x, SIZE),
-  y: multiply(o.y, SIZE),
-  z: multiply(o.z, SIZE),
+  x: o.x * SIZE,
+  y: o.y * SIZE,
+  z: o.z * SIZE,
 }));
 
 // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
