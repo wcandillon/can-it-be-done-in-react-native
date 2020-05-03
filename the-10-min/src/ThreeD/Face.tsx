@@ -25,6 +25,14 @@ export type Vec3 = readonly [
 
 export type Matrix3 = readonly [Vec3, Vec3, Vec3];
 
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
+
 const avg = (
   ...v: [
     Animated.Adaptable<number>,
@@ -110,26 +118,26 @@ const Face = ({
 
   return (
     <Animated.View
-      style={{
-        ...StyleSheet.absoluteFillObject,
-        opacity: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        width: SIZE,
-        height: SIZE,
-        backgroundColor,
-        zIndex: avg(p1.z, p2.z, p3.z, p4.z),
-        transform: [
-          { translateX },
-          { translateY },
-          { rotateZ: skewX },
-          { scaleX },
-          { scaleY },
-          { rotateZ },
-        ],
-      }}
+      style={[styles.container, { zIndex: avg(p1.z, p2.z, p3.z, p4.z) }]}
     >
-      <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
+      <Animated.View
+        style={{
+          opacity: 1,
+          width: SIZE,
+          height: SIZE,
+          backgroundColor,
+          transform: [
+            { translateX },
+            { translateY },
+            { rotateZ: skewX },
+            { scaleX },
+            { scaleY },
+            { rotateZ },
+          ],
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
+      </Animated.View>
     </Animated.View>
   );
 };

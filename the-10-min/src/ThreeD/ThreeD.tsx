@@ -1,10 +1,15 @@
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { mix, useLoop } from "react-native-redash";
 
 import Face from "./Face";
 
 const { width, height } = Dimensions.get("window");
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 const backface = [
   { x: -0.5, y: -0.5, z: -0.5 },
   { x: 0.5, y: -0.5, z: -0.5 },
@@ -53,12 +58,7 @@ const ThreeD = () => {
   const progress = useLoop(4000, false);
   const theta = mix(progress, 0, 2 * Math.PI);
   return (
-    <View
-      style={{
-        flex: 1,
-        transform: [{ translateX: width / 4 }, { translateY: height / 4 }],
-      }}
-    >
+    <View style={styles.container}>
       <Face
         label="Left"
         points={leftface}
