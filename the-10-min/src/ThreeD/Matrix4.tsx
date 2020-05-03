@@ -145,6 +145,9 @@ export const dot4 = (row: Vec4, col: Vec4) => {
   );
 };
 
+export const matrixVecMul4 = (m: Matrix4, v: Vec4) =>
+  [dot4(m[0], v), dot4(m[1], v), dot4(m[2], v), dot4(m[3], v)] as const;
+
 export const multiply4 = (m1: Matrix4, m2: Matrix4) => {
   const col0 = [m2[0][0], m2[1][0], m2[2][0], m2[3][0]] as const;
   const col1 = [m2[0][1], m2[1][1], m2[2][1], m2[3][1]] as const;
@@ -178,7 +181,7 @@ export const multiply4 = (m1: Matrix4, m2: Matrix4) => {
   ] as const;
 };
 
-export const processTransform = (transforms: Transforms) =>
+export const processTransform3d = (transforms: Transforms) =>
   transforms.reduce((acc, transform) => {
     const key = Object.keys(transform)[0] as TransformName;
     const value = (transform as Pick<Transformations, typeof key>)[key];

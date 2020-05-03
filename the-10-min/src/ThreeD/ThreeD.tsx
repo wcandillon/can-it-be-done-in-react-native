@@ -3,7 +3,6 @@ import { Dimensions, View } from "react-native";
 import { mix, useLoop } from "react-native-redash";
 
 import Face from "./Face";
-import Point from "./Point";
 
 const { width, height } = Dimensions.get("window");
 const backface = [
@@ -96,10 +95,3 @@ const ThreeD = () => {
 };
 
 export default ThreeD;
-
-/*     
-      {points.map((point, index) => (
-        <Point key={index} {...{ theta }} {...point} />
-      ))}
-
- */

@@ -2,7 +2,6 @@
 
 import Animated, { divide, multiply, sub } from "react-native-reanimated";
 import { Matrix3, Vector, matrixVecMul, multiply3 } from "react-native-redash";
-import { Matrix4, Vec4, dot4 } from "./Matrix4";
 
 export interface Point {
   readonly x: number;
@@ -12,9 +11,6 @@ export interface Point {
 
 export const SIZE = 200;
 export const DISTANCE = 600;
-
-export const matrixVecMul4 = (m: Matrix4, v: Vec4) =>
-  [dot4(m[0], v), dot4(m[1], v), dot4(m[2], v), dot4(m[3], v)] as const;
 
 export const vec3 = (
   x: Animated.Adaptable<number>,

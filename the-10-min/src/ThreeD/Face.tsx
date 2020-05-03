@@ -1,10 +1,14 @@
 import React from "react";
-import { Dimensions, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import Animated, { add, divide, multiply } from "react-native-reanimated";
-import { Vector, decompose2d, translate, vec } from "react-native-redash";
-import { Matrix4, multiply4, processTransform } from "./Matrix4";
-import { Point, SIZE, matrixVecMul4, transform2d, vec3 } from "./ThreeDMath";
-import { StyleGuide } from "../components";
+import { decompose2d, vec } from "react-native-redash";
+import {
+  Matrix4,
+  matrixVecMul4,
+  multiply4,
+  processTransform3d,
+} from "./Matrix4";
+import { Point, SIZE, transform2d, vec3 } from "./ThreeDMath";
 
 interface FaceProps {
   points: readonly [Point, Point, Point, Point];
@@ -20,26 +24,6 @@ export type Vec3 = readonly [
 ];
 
 export type Matrix3 = readonly [Vec3, Vec3, Vec3];
-
-interface PointProps {
-  point: Vector;
-}
-
-const PointComp = ({ point }: PointProps) => (
-  <Animated.View
-    style={[
-      {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: StyleGuide.palette.primary,
-        height: 10,
-        width: 10,
-        borderRadius: 5,
-        opacity: 0.5,
-        transform: translate(point),
-      },
-    ]}
-  />
-);
 
 const avg = (
   ...v: [
@@ -85,7 +69,7 @@ const Face = ({
   backgroundColor,
   label,
 }: FaceProps) => {
-  const transform = processTransform([
+  const transform = processTransform3d([
     { rotateY: theta },
     { rotateX: theta },
     // { rotateZ: theta },
@@ -126,36 +110,30 @@ const Face = ({
   } = decompose2d(shape2d);
 
   return (
-    <>
-      <Animated.View
-        style={{
-          ...StyleSheet.absoluteFillObject,
-          opacity: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          width: SIZE,
-          height: SIZE,
-          top: -SIZE / 2,
-          left: -SIZE / 2,
-          backgroundColor,
-          zIndex: avg(p1.z, p2.z, p3.z, p4.z),
-          transform: [
-            { translateX },
-            { translateY },
-            { rotateZ: skewX },
-            { scaleX },
-            { scaleY },
-            { rotateZ },
-          ],
-        }}
-      >
-        <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
-      </Animated.View>
-      <PointComp point={p1} />
-      <PointComp point={p2} />
-      <PointComp point={p3} />
-      <PointComp point={p4} />
-    </>
+    <Animated.View
+      style={{
+        ...StyleSheet.absoluteFillObject,
+        opacity: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        width: SIZE,
+        height: SIZE,
+        top: -SIZE / 2,
+        left: -SIZE / 2,
+        backgroundColor,
+        zIndex: avg(p1.z, p2.z, p3.z, p4.z),
+        transform: [
+          { translateX },
+          { translateY },
+          { rotateZ: skewX },
+          { scaleX },
+          { scaleY },
+          { rotateZ },
+        ],
+      }}
+    >
+      <Text style={{ color: "white", fontSize: 16 }}>{label}</Text>
+    </Animated.View>
   );
 };
 
