@@ -2,10 +2,10 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { mix, useLoop, useValues } from "react-native-redash";
 
-import { debug, divide, multiply, useCode } from "react-native-reanimated";
+import { debug, divide, multiply, sub, useCode } from "react-native-reanimated";
 import Face from "./Face";
 import Gesture from "./Gesture";
-import { SIZE, vec3 } from "./ThreeDMath";
+import { DISTANCE, SIZE, vec3 } from "./ThreeDMath";
 import { Matrix4, matrixVecMul4, processTransform3d } from "./Matrix4";
 
 const { width, height } = Dimensions.get("window");
@@ -15,38 +15,37 @@ const styles = StyleSheet.create({
   },
 });
 const backface = [
-  { x: -0.5, y: -0.5, z: -0.5 },
-  { x: 0.5, y: -0.5, z: -0.5 },
-  { x: -0.5, y: 0.5, z: -0.5 },
-  { x: 0.5, y: 0.5, z: -0.5 },
+  { x: 0, y: 0, z: -SIZE / 2 },
+  { x: SIZE, y: 0, z: -SIZE / 2 },
+  { x: 0, y: SIZE, z: -SIZE / 2 },
+  { x: SIZE, y: SIZE, z: -SIZE / 2 },
 ] as const;
 
 const frontface = [
-  { x: -0.5, y: -0.5, z: 0.5 },
-  { x: 0.5, y: -0.5, z: 0.5 },
-  { x: -0.5, y: 0.5, z: 0.5 },
-  { x: 0.5, y: 0.5, z: 0.5 },
+  { x: 0, y: 0, z: SIZE / 2 },
+  { x: SIZE, y: 0, z: SIZE / 2 },
+  { x: 0, y: SIZE, z: SIZE / 2 },
+  { x: SIZE, y: SIZE, z: SIZE / 2 },
 ] as const;
 
-const points = [...frontface, ...backface].map((o) => ({
-  x: o.x * SIZE,
-  y: o.y * SIZE,
-  z: o.z * SIZE,
-}));
+const points = [...frontface, ...backface];
 
 // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
 const project = (m: Matrix4, p: ReturnType<typeof vec3>) => {
   const [x, y, z, w] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
-  return { x: divide(x, w), y: divide(y, w), z: divide(z, w) };
+  return { x: multiply(x, w), y: multiply(y, w), z: multiply(z, w) };
 };
 
 const ThreeD = () => {
   const [rotateX, rotateY] = useValues([0, 0]);
 
   const m = processTransform3d([
-    { perspective: 600 },
+    { translateX: SIZE / 2 },
+    { translateY: SIZE / 2 },
     { rotateY },
     { rotateX },
+    { translateX: -SIZE / 2 },
+    { translateY: -SIZE / 2 },
   ]);
 
   const p1 = project(m, points[0]);

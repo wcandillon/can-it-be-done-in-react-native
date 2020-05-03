@@ -28,10 +28,10 @@ const avg = (
 ) => divide(add(...v), v.length);
 
 const canvas = {
-  p1: vec.create(-SIZE / 2, -SIZE / 2),
-  p2: vec.create(-SIZE / 2, SIZE / 2),
-  p3: vec.create(SIZE / 2, -SIZE / 2),
-  p4: vec.create(SIZE / 2, SIZE / 2),
+  p1: vec.create(0, 0),
+  p2: vec.create(SIZE, 0),
+  p3: vec.create(0, SIZE),
+  p4: vec.create(SIZE, SIZE),
 };
 
 const Face = ({
@@ -68,12 +68,16 @@ const Face = ({
           justifyContent: "center",
           alignItems: "center",
           transform: [
+            { translateX: -SIZE / 2 },
+            { translateY: -SIZE / 2 },
             { translateX },
             { translateY },
             { rotateZ: skewX },
             { scaleX },
             { scaleY },
             { rotateZ },
+            { translateX: SIZE / 2 },
+            { translateY: SIZE / 2 },
           ],
         }}
       >
