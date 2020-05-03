@@ -1,8 +1,10 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { mix, useLoop } from "react-native-redash";
+import { mix, useLoop, useValues } from "react-native-redash";
 
+import { debug, useCode } from "react-native-reanimated";
 import Face from "./Face";
+import Gesture from "./Gesture";
 
 const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -55,46 +57,46 @@ const rightface = [
 // const points = [...frontface, ...backface];
 
 const ThreeD = () => {
-  const progress = useLoop(4000, false);
-  const theta = mix(progress, 0, 2 * Math.PI);
+  const [rotateX, rotateY] = useValues([0, 0]);
   return (
     <View style={styles.container}>
       <Face
         label="Left"
         points={leftface}
         backgroundColor="#FFFF72"
-        {...{ theta }}
+        {...{ rotateX, rotateY }}
       />
       <Face
         label="Right"
         points={rightface}
         backgroundColor="#495DFF"
-        {...{ theta }}
+        {...{ rotateX, rotateY }}
       />
       <Face
         label="Back"
         points={backface}
         backgroundColor="#7BFF70"
-        {...{ theta }}
+        {...{ rotateX, rotateY }}
       />
       <Face
         label="Front"
         points={frontface}
         backgroundColor="#FF665E"
-        {...{ theta }}
+        {...{ rotateX, rotateY }}
       />
       <Face
         label="Bottom"
         points={bottomface}
         backgroundColor="#FF6AFF"
-        {...{ theta }}
+        {...{ rotateX, rotateY }}
       />
       <Face
         label="Top"
         points={topface}
         backgroundColor="#7CFFFF"
-        {...{ theta }}
+        {...{ rotateX, rotateY }}
       />
+      <Gesture {...{ rotateX, rotateY }} />
     </View>
   );
 };

@@ -19,7 +19,8 @@ import { DISTANCE, Point, SIZE, transform2d, vec3 } from "./ThreeDMath";
 
 interface FaceProps {
   points: readonly [Point, Point, Point, Point];
-  theta: Animated.Node<number>;
+  rotateX: Animated.Node<number>;
+  rotateY: Animated.Node<number>;
   backgroundColor: string;
   label: string;
 }
@@ -61,8 +62,8 @@ const createPerspective = (
 
 const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
   const [x, y, z] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
-  const perspective = divide(600, sub(600, z));
-  return { x: multiply(x, perspective), y: multiply(y, perspective), z };
+  // const perspective = divide(600, sub(600, z));
+  return { x, y, z };
 };
 
 const canvas = {
@@ -74,18 +75,16 @@ const canvas = {
 
 const Face = ({
   points: ogpoints,
-  theta,
+  rotateX,
+  rotateY,
   backgroundColor,
   label,
 }: FaceProps) => {
-  const transform = processTransform3d([
-    { rotateY: theta },
-    { rotateX: theta },
-  ]);
+  const transform = processTransform3d([{ rotateY }, { rotateX }]);
 
   const eyeZ = 1;
   const perspective = createPerspective(Math.PI / 3, 1, eyeZ / 10, eyeZ * 10);
-  const m = transform; // multiply4(transform, perspective);
+  const m = transform; // /multiply4(transform, perspective);
 
   const points = ogpoints.map((o) => ({
     x: multiply(o.x, SIZE),
@@ -118,10 +117,10 @@ const Face = ({
   } = decompose2d(shape2d);
   const zIndex = avg(p1.z, p2.z, p3.z, p4.z);
   return (
-    <Animated.View style={[styles.container, { zIndex }]}>
+    <Animated.View style={[styles.container, { zIndex }]} pointerEvents="none">
       <Animated.View
         style={{
-          opacity: 0.61,
+          opacity: 1, // 0.61,
           width: SIZE,
           height: SIZE,
           backgroundColor,

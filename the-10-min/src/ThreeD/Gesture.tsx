@@ -1,25 +1,32 @@
 import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import Animated, { set, useCode } from "react-native-reanimated";
-import {
-  canvas2Polar,
-  usePanGestureHandler,
-  withOffset,
-} from "react-native-redash";
+import Animated, {
+  divide,
+  multiply,
+  set,
+  useCode,
+} from "react-native-reanimated";
+import { usePanGestureHandler, withOffset } from "react-native-redash";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 interface GestureProps {
-  theta: Animated.Value<number>;
+  rotateX: Animated.Value<number>;
+  rotateY: Animated.Value<number>;
 }
 
-const Gesture = ({ theta }: GestureProps) => {
+const Gesture = ({ rotateX, rotateY }: GestureProps) => {
   const { gestureHandler, translation, state } = usePanGestureHandler();
   const x = withOffset(translation.x, state);
   const y = withOffset(translation.y, state);
-  const p = canvas2Polar({ x, y }, { x: width / 2, y: width / 2 });
-  useCode(() => set(theta, p.theta), [p.theta, theta]);
+  useCode(
+    () => [
+      set(rotateY, multiply(divide(x, width), 2 * Math.PI)),
+      set(rotateX, multiply(divide(y, height), 2 * Math.PI)),
+    ],
+    [rotateX, rotateY, x, y]
+  );
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View style={StyleSheet.absoluteFill} />
