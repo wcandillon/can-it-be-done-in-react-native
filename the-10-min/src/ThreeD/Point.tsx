@@ -27,6 +27,7 @@ const Point = ({ x, y, z, theta }: PointProps) => {
     { rotateZ: theta },
   ]);
   const vec4 = matrixVecMul(m, [x, y, z, 1]);
+  // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
   const perspective = divide(1, sub(2, vec4[2]));
   const tr = vec.multiply(
     SIZE,

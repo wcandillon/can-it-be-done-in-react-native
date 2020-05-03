@@ -61,9 +61,9 @@ const createPerspective = (
 };
 
 const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
-  const [x, y, z] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
+  const [x, y, z, w] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
   // const perspective = divide(600, sub(600, z));
-  return { x, y, z };
+  return { x: divide(x, w), y: divide(y, w), z };
 };
 
 const canvas = {
@@ -80,11 +80,20 @@ const Face = ({
   backgroundColor,
   label,
 }: FaceProps) => {
-  const transform = processTransform3d([{ rotateY }, { rotateX }]);
+  // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
+  const m = processTransform3d([
+    { perspective: 600 },
+    { rotateY },
+    { rotateX },
+  ]);
 
   const eyeZ = 1;
-  const perspective = createPerspective(Math.PI / 3, 1, eyeZ / 10, eyeZ * 10);
-  const m = transform; // /multiply4(transform, perspective);
+  const perspective = createPerspective(
+    Math.PI / 3,
+    width / height,
+    eyeZ / 10,
+    eyeZ * 10
+  );
 
   const points = ogpoints.map((o) => ({
     x: multiply(o.x, SIZE),
@@ -120,7 +129,7 @@ const Face = ({
     <Animated.View style={[styles.container, { zIndex }]} pointerEvents="none">
       <Animated.View
         style={{
-          opacity: 1, // 0.61,
+          opacity: 0.61,
           width: SIZE,
           height: SIZE,
           backgroundColor,
