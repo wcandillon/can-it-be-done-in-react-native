@@ -1,6 +1,12 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
-import Animated, { divide, multiply } from "react-native-reanimated";
+import { Dimensions, StyleSheet, Text } from "react-native";
+import Animated, {
+  add,
+  debug,
+  divide,
+  multiply,
+  useCode,
+} from "react-native-reanimated";
 import {
   Vector,
   decompose2d,
@@ -49,7 +55,16 @@ const PointComp = ({ point }: PointProps) => (
   />
 );
 
+const { width, height } = Dimensions.get("window");
 const DISTANCE = 600;
+
+const avg = (
+  ...v: [
+    Animated.Adaptable<number>,
+    Animated.Adaptable<number>,
+    ...Animated.Adaptable<number>[]
+  ]
+) => divide(add(...v), v.length);
 
 const createPerspective = (
   fovInRadians: number,
@@ -70,8 +85,8 @@ const createPerspective = (
 };
 
 const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
-  const [x, y, z, w] = matrixVecMul(m, [p.x, p.y, p.z, 1]);
-  return vec.create(divide(x, 1), divide(y, 1));
+  const [x, y, z] = matrixVecMul(m, [p.x, p.y, p.z, 1]);
+  return { x, y, z };
 };
 
 const canvas = {
@@ -80,6 +95,7 @@ const canvas = {
   p3: vec.create(SIZE / 2, -SIZE / 2),
   p4: vec.create(SIZE / 2, SIZE / 2),
 };
+
 const Face = ({
   points: ogpoints,
   theta,
@@ -89,13 +105,11 @@ const Face = ({
   const transform = processTransform([
     { rotateY: theta },
     { rotateX: theta },
-    { rotateZ: theta },
+    // { rotateZ: theta },
   ]);
-  /*
-  https://p5js.org/reference/#/p5/perspective
-When called with no arguments, the defaults provided are equivalent to perspective(PI/3.0, width/height, eyeZ/10.0, eyeZ10.0), where eyeZ is equal to ((height/2.0) / tan(PI60.0/360.0));
-  */
-  const perspective = createPerspective(Math.PI / 3, 1, 0.1, 100);
+
+  const eyeZ = 1;
+  const perspective = createPerspective(Math.PI / 2, 1, eyeZ / 10, eyeZ * 10);
   const m = multiply4(transform, perspective);
 
   const points = ogpoints.map((o) => ({
@@ -133,7 +147,7 @@ When called with no arguments, the defaults provided are equivalent to perspecti
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
-          opacity: 0.61,
+          opacity: 1,
           justifyContent: "center",
           alignItems: "center",
           width: SIZE,
@@ -141,6 +155,7 @@ When called with no arguments, the defaults provided are equivalent to perspecti
           top: -SIZE / 2,
           left: -SIZE / 2,
           backgroundColor,
+          zIndex: add(500, avg(p1.z, p2.z, p3.z, p4.z)),
           transform: [
             { translateX },
             { translateY },
