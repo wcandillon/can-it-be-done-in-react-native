@@ -7,7 +7,11 @@ import Animated, {
   set,
   useCode,
 } from "react-native-reanimated";
-import { usePanGestureHandler, withOffset } from "react-native-redash";
+import {
+  usePanGestureHandler,
+  withDecay,
+  withOffset,
+} from "react-native-redash";
 
 const { width, height } = Dimensions.get("window");
 
@@ -17,9 +21,14 @@ interface GestureProps {
 }
 
 const Gesture = ({ rotateX, rotateY }: GestureProps) => {
-  const { gestureHandler, translation, state } = usePanGestureHandler();
-  const x = withOffset(translation.x, state);
-  const y = withOffset(translation.y, state);
+  const {
+    gestureHandler,
+    translation,
+    velocity,
+    state,
+  } = usePanGestureHandler();
+  const x = withDecay({ value: translation.x, velocity: velocity.x, state });
+  const y = withDecay({ value: translation.y, velocity: velocity.y, state });
   useCode(
     () => [
       set(rotateY, multiply(divide(x, width), 2 * Math.PI)),
