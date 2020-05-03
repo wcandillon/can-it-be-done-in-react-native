@@ -21,17 +21,17 @@ const frontface = [
 ] as const;
 
 const topface = [
+  { x: -0.5, y: -0.5, z: 0.5 },
+  { x: 0.5, y: -0.5, z: 0.5 },
+  { x: -0.5, y: -0.5, z: -0.5 },
+  { x: 0.5, y: -0.5, z: -0.5 },
+] as const;
+
+const bottomface = [
   { x: -0.5, y: 0.5, z: 0.5 },
   { x: 0.5, y: 0.5, z: 0.5 },
   { x: -0.5, y: 0.5, z: -0.5 },
   { x: 0.5, y: 0.5, z: -0.5 },
-] as const;
-
-const bottomface = [
-  { x: 0.5, y: 0.5, z: 0.5 },
-  { x: 0.5, y: -0.5, z: 0.5 },
-  { x: 0.5, y: 0.5, z: -0.5 },
-  { x: 0.5, y: -0.5, z: -0.5 },
 ] as const;
 
 const leftface = [
@@ -56,15 +56,15 @@ const ThreeD = () => {
   return (
     <View style={{ flex: 1, top: height / 2 - 128, left: width / 2 }}>
       <Face
-        label="Bottom"
-        points={bottomface}
-        backgroundColor="#FF6AFF"
+        label="Left"
+        points={leftface}
+        backgroundColor="#FFFF72"
         {...{ theta }}
       />
       <Face
-        label="Top"
-        points={topface}
-        backgroundColor="#7CFFFF"
+        label="Right"
+        points={rightface}
+        backgroundColor="#495DFF"
         {...{ theta }}
       />
     </View>
@@ -90,16 +90,16 @@ export default ThreeD;
         backgroundColor="#FF665E"
         {...{ theta }}
       />
-      <Face
-        label="Left"
-        points={leftface}
-        backgroundColor="#FFFF72"
+        <Face
+        label="Bottom"
+        points={bottomface}
+        backgroundColor="#FF6AFF"
         {...{ theta }}
       />
       <Face
-        label="Right"
-        points={rightface}
-        backgroundColor="#495DFF"
+        label="Top"
+        points={topface}
+        backgroundColor="#7CFFFF"
         {...{ theta }}
       />
  */
