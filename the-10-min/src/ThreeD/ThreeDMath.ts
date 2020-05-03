@@ -4,9 +4,9 @@ import Animated, { divide, multiply, sub } from "react-native-reanimated";
 import { Matrix3, Vector, matrixVecMul, multiply3 } from "react-native-redash";
 
 export interface Point {
-  readonly x: number;
-  readonly y: number;
-  readonly z: number;
+  readonly x: Animated.Adaptable<number>;
+  readonly y: Animated.Adaptable<number>;
+  readonly z: Animated.Adaptable<number>;
 }
 
 export const SIZE = 200;

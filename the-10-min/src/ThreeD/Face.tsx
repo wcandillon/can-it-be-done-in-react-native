@@ -1,31 +1,16 @@
 import React from "react";
-import { Dimensions, StyleSheet, Text } from "react-native";
-import Animated, {
-  add,
-  debug,
-  divide,
-  multiply,
-  sub,
-  useCode,
-} from "react-native-reanimated";
-import { decompose2d, useDebug, vec } from "react-native-redash";
-import {
-  Matrix4,
-  matrixVecMul4,
-  multiply4,
-  processTransform3d,
-} from "./Matrix4";
-import { DISTANCE, Point, SIZE, transform2d, vec3 } from "./ThreeDMath";
+import { StyleSheet, Text } from "react-native";
+import Animated, { add, divide } from "react-native-reanimated";
+import { decompose2d, vec } from "react-native-redash";
+import { Matrix4, matrixVecMul4 } from "./Matrix4";
+import { Point, SIZE, transform2d, vec3 } from "./ThreeDMath";
 
 interface FaceProps {
   points: readonly [Point, Point, Point, Point];
-  rotateX: Animated.Node<number>;
-  rotateY: Animated.Node<number>;
   backgroundColor: string;
   label: string;
 }
 
-const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -42,29 +27,6 @@ const avg = (
   ]
 ) => divide(add(...v), v.length);
 
-const createPerspective = (
-  fovInRadians: number,
-  aspect: number,
-  near: number,
-  far: number
-) => {
-  const h = 1 / Math.tan(fovInRadians / 2);
-  const rDepth = 1 / (near - far);
-  const C = (far + near) * rDepth;
-  const D = 2 * (far * near * rDepth);
-  return [
-    [h / aspect, 0, 0, 0],
-    [0, h, 0, 0],
-    [0, 0, C, D],
-    [0, 0, -1, 0],
-  ] as const;
-};
-
-const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
-  const [x, y, z, w] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
-  return { x: divide(x, w), y: divide(y, w), z };
-};
-
 const canvas = {
   p1: vec.create(-SIZE / 2, -SIZE / 2),
   p2: vec.create(-SIZE / 2, SIZE / 2),
@@ -73,35 +35,10 @@ const canvas = {
 };
 
 const Face = ({
-  points: ogpoints,
-  rotateX,
-  rotateY,
+  points: [p1, p2, p3, p4],
   backgroundColor,
   label,
 }: FaceProps) => {
-  // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
-  const fov = Math.PI / 3.0;
-  const eyeZ = height / 2.0 / Math.tan(fov / 2.0);
-  const perspective = {
-    matrix: createPerspective(fov, width / height, eyeZ / 10, eyeZ * 10),
-  };
-  const m = processTransform3d([
-    { perspective: 600 },
-    { rotateY },
-    { rotateX },
-  ]);
-
-  const points = ogpoints.map((o) => ({
-    x: multiply(o.x, SIZE),
-    y: multiply(o.y, SIZE),
-    z: multiply(o.z, SIZE),
-  }));
-
-  const p1 = point(m, points[0]);
-  const p2 = point(m, points[1]);
-  const p3 = point(m, points[2]);
-  const p4 = point(m, points[3]);
-
   const shape2d = transform2d({
     canvas,
     projected: {
@@ -111,7 +48,6 @@ const Face = ({
       p4,
     },
   });
-
   const {
     translateX,
     translateY,
