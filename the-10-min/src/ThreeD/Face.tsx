@@ -5,6 +5,7 @@ import Animated, {
   debug,
   divide,
   multiply,
+  sub,
   useCode,
 } from "react-native-reanimated";
 import { decompose2d, useDebug, vec } from "react-native-redash";
@@ -60,7 +61,8 @@ const createPerspective = (
 
 const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
   const [x, y, z] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
-  return { x, y, z };
+  const perspective = divide(600, sub(600, z));
+  return { x: multiply(x, perspective), y: multiply(y, perspective), z };
 };
 
 const canvas = {
@@ -82,12 +84,7 @@ const Face = ({
   ]);
 
   const eyeZ = 1;
-  const perspective = createPerspective(
-    Math.PI / 3,
-    width / height,
-    eyeZ / 10,
-    eyeZ * 10
-  );
+  const perspective = createPerspective(Math.PI / 3, 1, eyeZ / 10, eyeZ * 10);
   const m = transform; // multiply4(transform, perspective);
 
   const points = ogpoints.map((o) => ({
