@@ -25,8 +25,13 @@ type TransformName =
   | "perspective"
   | "rotateX"
   | "rotateY"
-  | "rotateZ";
-type Transformations = { [Name in TransformName]: Animated.Adaptable<number> };
+  | "rotateZ"
+  | "matrix";
+type Transformations = {
+  [Name in TransformName]: Name extends "matrix"
+    ? Matrix4
+    : Animated.Adaptable<number>;
+};
 export type Transforms = (
   | Pick<Transformations, "translateX">
   | Pick<Transformations, "translateY">
@@ -34,18 +39,21 @@ export type Transforms = (
   | Pick<Transformations, "scale">
   | Pick<Transformations, "scaleX">
   | Pick<Transformations, "scaleY">
+  | Pick<Transformations, "skewX">
+  | Pick<Transformations, "skewY">
   | Pick<Transformations, "perspective">
   | Pick<Transformations, "rotateX">
   | Pick<Transformations, "rotateY">
   | Pick<Transformations, "rotateZ">
   | Pick<Transformations, "rotate">
+  | Pick<Transformations, "matrix">
 )[];
 
 const exhaustiveCheck = (a: never): never => {
   throw new Error(`Unexhaustive handling for ${a}`);
 };
 
-const identityMatrix: Matrix4 = [
+export const identityMatrix4: Matrix4 = [
   [1, 0, 0, 0],
   [0, 1, 0, 0],
   [0, 0, 1, 0],
@@ -184,42 +192,57 @@ export const multiply4 = (m1: Matrix4, m2: Matrix4) => {
 export const processTransform3d = (transforms: Transforms) =>
   transforms.reduce((acc, transform) => {
     const key = Object.keys(transform)[0] as TransformName;
-    const value = (transform as Pick<Transformations, typeof key>)[key];
     if (key === "translateX") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, translateXMatrix(value));
     }
     if (key === "translateY") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, translateYMatrix(value));
     }
     if (key === "translateZ") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, translateZMatrix(value));
     }
     if (key === "scale") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, scaleMatrix(value));
     }
     if (key === "scaleX") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, scaleXMatrix(value));
     }
     if (key === "scaleY") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, scaleYMatrix(value));
     }
     if (key === "skewX") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, skewXMatrix(value));
     }
     if (key === "skewY") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, skewYMatrix(value));
     }
     if (key === "rotateX") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, rotateXMatrix(value));
     }
     if (key === "rotateY") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, rotateYMatrix(value));
     }
     if (key === "perspective") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, perspectiveMatrix(value));
     }
     if (key === "rotate" || key === "rotateZ") {
+      const value = (transform as Pick<Transformations, typeof key>)[key];
       return multiply4(acc, rotateZMatrix(value));
     }
+    if (key === "matrix") {
+      const matrix = (transform as Pick<Transformations, typeof key>)[key];
+      return multiply4(acc, matrix);
+    }
     return exhaustiveCheck(key);
-  }, identityMatrix);
+  }, identityMatrix4);
