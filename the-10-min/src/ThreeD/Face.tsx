@@ -72,7 +72,6 @@ const Face = ({
   const transform = processTransform3d([
     { rotateY: theta },
     { rotateX: theta },
-    // { rotateZ: theta },
   ]);
 
   const eyeZ = 1;
