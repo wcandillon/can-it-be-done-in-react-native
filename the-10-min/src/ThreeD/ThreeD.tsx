@@ -56,34 +56,9 @@ const ThreeD = () => {
   return (
     <View style={{ flex: 1, top: height / 2 - 128, left: width / 2 }}>
       <Face
-        label="Back"
-        points={backface}
-        backgroundColor="#7BFF70"
-        flip
-        {...{ theta }}
-      />
-      <Face
-        label="Front"
-        points={frontface}
-        backgroundColor="#FF665E"
-        {...{ theta }}
-      />
-      <Face
         label="Bottom"
         points={bottomface}
         backgroundColor="#FF6AFF"
-        {...{ theta }}
-      />
-      <Face
-        label="Left"
-        points={leftface}
-        backgroundColor="#FFFF72"
-        {...{ theta }}
-      />
-      <Face
-        label="Right"
-        points={rightface}
-        backgroundColor="#495DFF"
         {...{ theta }}
       />
       <Face
@@ -102,4 +77,29 @@ export default ThreeD;
       {points.map((point, index) => (
         <Point key={index} {...{ theta }} {...point} />
       ))}
+     <Face
+        label="Back"
+        points={backface}
+        backgroundColor="#7BFF70"
+        flip
+        {...{ theta }}
+      />
+      <Face
+        label="Front"
+        points={frontface}
+        backgroundColor="#FF665E"
+        {...{ theta }}
+      />
+      <Face
+        label="Left"
+        points={leftface}
+        backgroundColor="#FFFF72"
+        {...{ theta }}
+      />
+      <Face
+        label="Right"
+        points={rightface}
+        backgroundColor="#495DFF"
+        {...{ theta }}
+      />
  */

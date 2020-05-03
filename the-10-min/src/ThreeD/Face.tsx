@@ -24,7 +24,6 @@ interface FaceProps {
   theta: Animated.Node<number>;
   backgroundColor: string;
   label: string;
-  flip: boolean;
 }
 
 export type Vec3 = readonly [
