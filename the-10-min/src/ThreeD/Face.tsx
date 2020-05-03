@@ -1,22 +1,9 @@
 import React from "react";
 import { Dimensions, StyleSheet, Text } from "react-native";
-import Animated, {
-  add,
-  debug,
-  divide,
-  multiply,
-  useCode,
-} from "react-native-reanimated";
-import {
-  Vector,
-  decompose2d,
-  multiply3,
-  translate,
-  vec,
-} from "react-native-redash";
+import Animated, { add, divide, multiply } from "react-native-reanimated";
+import { Vector, decompose2d, translate, vec } from "react-native-redash";
 import { Matrix4, multiply4, processTransform } from "./Matrix4";
-import { Point, SIZE, matrixVecMul, vec3 } from "./ThreeDMath";
-import { transform2d } from "./Matrix3";
+import { Point, SIZE, matrixVecMul4, transform2d, vec3 } from "./ThreeDMath";
 import { StyleGuide } from "../components";
 
 interface FaceProps {
@@ -54,9 +41,6 @@ const PointComp = ({ point }: PointProps) => (
   />
 );
 
-const { width, height } = Dimensions.get("window");
-const DISTANCE = 600;
-
 const avg = (
   ...v: [
     Animated.Adaptable<number>,
@@ -84,7 +68,7 @@ const createPerspective = (
 };
 
 const point = (m: Matrix4, p: ReturnType<typeof vec3>) => {
-  const [x, y, z] = matrixVecMul(m, [p.x, p.y, p.z, 1]);
+  const [x, y, z] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
   return { x, y, z };
 };
 
@@ -154,7 +138,7 @@ const Face = ({
           top: -SIZE / 2,
           left: -SIZE / 2,
           backgroundColor,
-          zIndex: add(500, avg(p1.z, p2.z, p3.z, p4.z)),
+          zIndex: avg(p1.z, p2.z, p3.z, p4.z),
           transform: [
             { translateX },
             { translateY },
