@@ -1,9 +1,17 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { mix, translate, useLoop, useValues, vec } from "react-native-redash";
+import {
+  mix,
+  string,
+  translate,
+  useLoop,
+  useValues,
+  vec,
+} from "react-native-redash";
 
 import Animated, {
   add,
+  concat,
   debug,
   divide,
   multiply,
@@ -29,17 +37,17 @@ const styles = StyleSheet.create({
   },
 });
 const backface = [
-  { x: 0, y: 0, z: -SIZE / 2 },
-  { x: SIZE, y: 0, z: -SIZE / 2 },
-  { x: SIZE, y: SIZE, z: -SIZE / 2 },
-  { x: 0, y: SIZE, z: -SIZE / 2 },
+  { x: -SIZE / 2, y: -SIZE / 2, z: -SIZE / 2 },
+  { x: SIZE / 2, y: -SIZE / 2, z: -SIZE / 2 },
+  { x: SIZE / 2, y: SIZE / 2, z: -SIZE / 2 },
+  { x: -SIZE / 2, y: SIZE / 2, z: -SIZE / 2 },
 ] as const;
 
 const frontface = [
-  { x: 0, y: 0, z: SIZE / 2 },
-  { x: SIZE, y: 0, z: SIZE / 2 },
-  { x: SIZE, y: SIZE, z: SIZE / 2 },
-  { x: 0, y: SIZE, z: SIZE / 2 },
+  { x: -SIZE / 2, y: -SIZE / 2, z: SIZE / 2 },
+  { x: SIZE / 2, y: -SIZE / 2, z: SIZE / 2 },
+  { x: SIZE / 2, y: SIZE / 2, z: SIZE / 2 },
+  { x: -SIZE / 2, y: SIZE / 2, z: SIZE / 2 },
 ] as const;
 
 const points = [...frontface, ...backface];
@@ -47,10 +55,10 @@ const points = [...frontface, ...backface];
 // https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
 const project = (m: Matrix4, p: ReturnType<typeof vec3>) => {
   const [x, y, z, w] = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
-  const w1 = divide(DISTANCE, sub(DISTANCE, multiply(-1, z)));
+  // const w1 = divide(DISTANCE, sub(DISTANCE, multiply(-1, z)));
   return {
-    x: add(divide(x, w1), width / 4),
-    y: add(divide(y, w1), height / 4),
+    x: add(divide(x, w), width / 2),
+    y: add(divide(y, w), width / 2),
     z: divide(z, w),
   };
 };
@@ -60,10 +68,9 @@ const ThreeD = () => {
 
   const center = vec.create(SIZE / 2);
   const m = processTransform3d([
-    ...translate(center),
+    { perspective: 600 },
     { rotateY },
     { rotateX },
-    ...translate(vec.multiply(-1, center)),
   ]);
 
   const p1 = project(m, points[0]);
@@ -80,14 +87,6 @@ const ThreeD = () => {
   return (
     <View style={styles.container}>
       <Svg width={width} height={height}>
-        <AnimatedCircle r={5} fill="blue" cx={p1.x} cy={p1.y} />
-        <AnimatedCircle r={5} fill="blue" cx={p2.x} cy={p2.y} />
-        <AnimatedCircle r={5} fill="blue" cx={p3.x} cy={p3.y} />
-        <AnimatedCircle r={5} fill="blue" cx={p4.x} cy={p4.y} />
-        <AnimatedCircle r={5} fill="blue" cx={p5.x} cy={p5.y} />
-        <AnimatedCircle r={5} fill="blue" cx={p6.x} cy={p6.y} />
-        <AnimatedCircle r={5} fill="blue" cx={p7.x} cy={p7.y} />
-        <AnimatedCircle r={5} fill="blue" cx={p8.x} cy={p8.y} />
         {prj.map((p, i) => (
           <AnimatedCircle key={i} r={5} fill="blue" cx={p.x} cy={p.y} />
         ))}
@@ -119,6 +118,22 @@ const ThreeD = () => {
             />
           </React.Fragment>
         ))}
+        <AnimatedPolygon
+          fill="rgba(100, 200, 300, 0.61)"
+          points={string`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`}
+        />
+        <AnimatedPolygon
+          fill="rgba(200, 100, 400, 0.61)"
+          points={string`${p5.x},${p5.y} ${p6.x},${p6.y} ${p7.x},${p7.y} ${p8.x},${p8.y}`}
+        />
+        <AnimatedPolygon
+          fill="rgba(400, 200, 0, 0.61)"
+          points={string` ${p5.x},${p5.y} ${p1.x},${p1.y} ${p2.x},${p2.y} ${p6.x},${p6.y}`}
+        />
+        <AnimatedPolygon
+          fill="rgba(100, 200, 100, 0.61)"
+          points={string` ${p7.x},${p7.y} ${p3.x},${p3.y} ${p4.x},${p4.y} ${p8.x},${p8.y}`}
+        />
       </Svg>
       <Gesture {...{ rotateX, rotateY }} />
     </View>
