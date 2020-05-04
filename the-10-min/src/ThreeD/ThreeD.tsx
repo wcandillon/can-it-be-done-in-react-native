@@ -118,6 +118,7 @@ const ThreeD = () => {
             />
           </React.Fragment>
         ))}
+
         <AnimatedPolygon
           fill="rgba(100, 200, 300, 0.61)"
           points={string`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`}
@@ -142,23 +143,4 @@ const ThreeD = () => {
 
 export default ThreeD;
 /*
-
-<Face label="Back" backgroundColor="#2ed573" points={[p5, p6, p7, p8]} />
-      <Face label="Front" backgroundColor="#ff9ff3" points={[p1, p2, p3, p4]} />
-      <Point point={p1} />
-      <Point point={p2} />
-      <Point point={p3} />
-      <Point point={p4} />
-      <Point point={p5} />
-      <Point point={p6} />
-      <Point point={p7} />
-      <Point point={p8} />
-      <Face label="Top" backgroundColor="#1e90ff" points={[p1, p2, p5, p6]} />
-      <Face
-        label="Bottom"
-        backgroundColor="#e74c3c"
-        points={[p3, p4, p7, p8]}
-      />
-      <Face label="Left" backgroundColor="#00d2d3" points={[p1, p3, p5, p7]} />
-      <Face label="Right" backgroundColor="#f1c40f" points={[p2, p4, p6, p8]} />
-      */
+ */
