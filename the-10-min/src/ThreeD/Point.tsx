@@ -2,7 +2,8 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-import { Point as PointModel } from "./ThreeDMath";
+import { translate, vec } from "react-native-redash";
+import { Point as PointModel, SIZE } from "./ThreeDMath";
 
 const styles = StyleSheet.create({
   container: {
@@ -32,7 +33,7 @@ const Point = ({ point: { x, y } }: PointProps) => {
         style={[
           styles.point,
           {
-            transform: [{ translateX: x }, { translateY: y }],
+            transform: [...translate(vec.sub({ x, y }, SIZE / 2))],
           },
         ]}
       />
