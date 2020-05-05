@@ -46,17 +46,22 @@ export const examples = [
   {
     screen: "TapGesture",
     title: "Tap Gesture",
-    source: require("../../assets/examples/tap-gesture.png"),
+    source: require("../../assets/examples/3d.png"),
   },
   {
     screen: "PinchGesture",
-    title: "PinchGesture",
+    title: "Pinch Gesture",
     source: require("../../assets/examples/pinch-gesture.png"),
   },
   {
     screen: "RotationGesture",
-    title: "RotationGesture",
+    title: "Rotation Gesture",
     source: require("../../assets/examples/pinch-gesture.png"),
+  },
+  {
+    screen: "Skew",
+    title: "Skew Transform",
+    source: require("../../assets/examples/shader.png"),
   },
 ];
 

@@ -18,6 +18,7 @@ import Transformations, {
 } from "./src/Transformations";
 import PinchGesture from "./src/PinchGesture";
 import RotationGesture from "./src/RotationGesture";
+import Skew from "./src/Skew";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
@@ -36,7 +37,7 @@ const AppNavigator = createAppContainer(
       Examples: {
         screen: Examples,
         navigationOptions: {
-          title: "The 5 min React Native",
+          title: "The 10-min React Native",
           headerBackTitle: null,
         },
       },
@@ -106,6 +107,12 @@ const AppNavigator = createAppContainer(
         screen: RotationGesture,
         navigationOptions: {
           title: "Rotation Gesture",
+        },
+      },
+      Skew: {
+        screen: Skew,
+        navigationOptions: {
+          title: "Skew Transform",
         },
       },
     },
