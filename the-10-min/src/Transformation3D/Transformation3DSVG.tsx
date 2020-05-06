@@ -12,12 +12,14 @@ import {
   useValues,
   vec,
 } from "react-native-redash";
+import Svg, { Circle, Polygon } from "react-native-svg";
 import Animated, { divide } from "react-native-reanimated";
 import { SIZE } from "./Constants";
 import Gesture from "./Gesture";
-import Face from "./Face";
 
 const { width, height } = Dimensions.get("window");
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const AnimatedPolygon = Animated.createAnimatedComponent(Polygon);
 
 const backface = [
   { x: -0.5, y: -0.5, z: -0.5 },
@@ -52,15 +54,34 @@ const Transformations3D = () => {
   });
   const [p1, p2, p3, p4, p5, p6, p7, p8] = points;
   return (
-    <View style={{ flex: 1 }}>
-      <Face backgroundColor="#1abc9c" points={[p1, p2, p3, p4]} />
-      <Face backgroundColor="#3498db" points={[p5, p6, p7, p8]} />
-      <Face backgroundColor="#2ecc71" points={[p1, p2, p5, p6]} />
-      <Face backgroundColor="#e74c3c" points={[p3, p4, p7, p8]} />
-      <Face backgroundColor="#9b59b6" points={[p2, p4, p6, p8]} />
-      <Face backgroundColor="#e67e22" points={[p1, p3, p5, p7]} />
+    <>
+      <Svg width={width} height={height}>
+        {points.map(({ x, y }, index) => (
+          <AnimatedCircle key={index} r={5} fill="blue" cx={x} cy={y} />
+        ))}
+        <AnimatedPolygon
+          opacity={0.5}
+          fill="#1abc9c"
+          points={serialize(p1, p2, p4, p3)}
+        />
+        <AnimatedPolygon
+          opacity={0.5}
+          fill="#3498db"
+          points={serialize(p5, p6, p8, p7)}
+        />
+        <AnimatedPolygon
+          opacity={0.5}
+          fill="#2ecc71"
+          points={serialize(p1, p2, p6, p5)}
+        />
+        <AnimatedPolygon
+          opacity={0.5}
+          fill="#e74c3c"
+          points={serialize(p3, p4, p8, p7)}
+        />
+      </Svg>
       <Gesture {...{ rotateX, rotateY }} />
-    </View>
+    </>
   );
 };
 
