@@ -19,6 +19,7 @@ import Transformations, {
 import PinchGesture from "./src/PinchGesture";
 import RotationGesture from "./src/RotationGesture";
 import Skew from "./src/Skew";
+import Transformation3D from "./src/Transformation3D";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
@@ -34,6 +35,12 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Transformation3D: {
+        screen: Transformation3D,
+        navigationOptions: {
+          title: "3D Transformations",
+        },
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {

@@ -63,6 +63,11 @@ export const examples = [
     title: "Skew Transform",
     source: require("../../assets/examples/shader.png"),
   },
+  {
+    screen: "Transformation3D",
+    title: "3D Transformations",
+    source: require("../../assets/examples/3d.png"),
+  },
 ];
 
 const styles = StyleSheet.create({
