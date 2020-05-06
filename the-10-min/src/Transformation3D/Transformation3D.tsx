@@ -52,7 +52,7 @@ const Transformations3D = () => {
   });
   const [p1, p2, p3, p4, p5, p6, p7, p8] = points;
   return (
-    <View style={{ flex: 1 }}>
+    <>
       <Face backgroundColor="#1abc9c" points={[p1, p2, p3, p4]} />
       <Face backgroundColor="#3498db" points={[p5, p6, p7, p8]} />
       <Face backgroundColor="#2ecc71" points={[p1, p2, p5, p6]} />
@@ -60,7 +60,7 @@ const Transformations3D = () => {
       <Face backgroundColor="#9b59b6" points={[p2, p4, p6, p8]} />
       <Face backgroundColor="#e67e22" points={[p1, p3, p5, p7]} />
       <Gesture {...{ rotateX, rotateY }} />
-    </View>
+    </>
   );
 };
 
