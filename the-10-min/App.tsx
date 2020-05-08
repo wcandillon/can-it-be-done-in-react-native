@@ -35,12 +35,6 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      Transformation3D: {
-        screen: Transformation3D,
-        navigationOptions: {
-          title: "3D Transformations",
-        },
-      },
       Examples: {
         screen: Examples,
         navigationOptions: {
@@ -120,6 +114,12 @@ const AppNavigator = createAppContainer(
         screen: Skew,
         navigationOptions: {
           title: "Skew Transform",
+        },
+      },
+      Transformation3D: {
+        screen: Transformation3D,
+        navigationOptions: {
+          title: "3D Transformations",
         },
       },
     },
