@@ -6,6 +6,7 @@ import {
   avg,
   matrixVecMul4,
   mix,
+  multiply4,
   processTransform3d,
   string,
   useLoop,
@@ -40,11 +41,30 @@ const points3D = [...frontface, ...backface];
 const serialize = (p1: Vector, p2: Vector, p3: Vector, p4: Vector) =>
   string`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`;
 
+const createPerspective = (
+  fovInRadians: number,
+  aspect: number,
+  near: number,
+  far: number
+) => {
+  const h = 1 / Math.tan(fovInRadians / 2);
+  const rDepth = 1 / (near - far);
+  const C = (far + near) * rDepth;
+  const D = 2 * (far * near * rDepth);
+  return [
+    [h / aspect, 0, 0, 0],
+    [0, h, 0, 0],
+    [0, 0, C, D],
+    [0, 0, -1, 0],
+  ] as const;
+};
+
 const Transformations3D = () => {
   const [rotateX, rotateY] = useValues([0, 0]);
+  const projection = createPerspective(Math.PI / 3.0, width / height, 0.1, 500);
   const transform = processTransform3d([{ rotateY }, { rotateX }]);
   const points = points3D.map((p) => {
-    const [x, y, z, w] = matrixVecMul4(transform, [
+    const [x, y, z, w] = matrixVecMul4(multiply4(projection, transform), [
       p.x * SIZE,
       p.y * SIZE,
       p.z * SIZE,

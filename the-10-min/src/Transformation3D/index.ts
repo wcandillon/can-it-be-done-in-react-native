@@ -1,1 +1,1 @@
-export { default } from "./Transformation3D";
+export { default } from "./Transformation3DSVG";
