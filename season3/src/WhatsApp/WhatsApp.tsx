@@ -21,48 +21,35 @@ export const assets = [
 
 const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "black",
-  },
   picture: {
     width,
     height,
   },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    width: undefined,
+    height: undefined,
+  },
 });
 
 const WhatsApp = () => {
-  const {
-    gestureHandler,
-    translation,
-    velocity,
-    state,
-  } = usePanGestureHandler();
-  const translateX = withSpring({
-    value: translation.x,
-    velocity: velocity.x,
-    snapPoints: assets.map((_, i) => -i * width),
-    state,
-  });
   return (
-    <PanGestureHandler {...gestureHandler}>
-      <Animated.View style={styles.container}>
-        <Animated.View
-          style={{
-            height,
-            width: width * assets.length,
-            flexDirection: "row",
-            transform: [{ translateX }],
-          }}
-        >
-          {assets.map((asset) => (
-            <View key={asset} style={styles.picture}>
-              <ImageViewer source={asset} />
-            </View>
-          ))}
-        </Animated.View>
+    <ImageViewer>
+      <Animated.View
+        style={{
+          height,
+          width: width * assets.length,
+          flexDirection: "row",
+          transform: [{ translateX: 0 }],
+        }}
+      >
+        {assets.map((asset) => (
+          <View key={asset} style={styles.picture}>
+            <Image source={asset} style={styles.image} />
+          </View>
+        ))}
       </Animated.View>
-    </PanGestureHandler>
+    </ImageViewer>
   );
 };
 
