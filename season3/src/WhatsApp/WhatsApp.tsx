@@ -1,6 +1,14 @@
 import React from "react";
 import { Dimensions, Image, StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
+import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  diffClamp,
+  translate,
+  usePanGestureHandler,
+  withOffset,
+  withSpring,
+} from "react-native-redash";
 
 export const assets = [
   require("./assets/1.jpg"),
@@ -12,6 +20,10 @@ export const assets = [
 
 const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "black",
+  },
   picture: {
     width,
     height,
@@ -24,23 +36,37 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
-  const translateX = -width * 3;
+  const {
+    gestureHandler,
+    translation,
+    velocity,
+    state,
+  } = usePanGestureHandler();
+  const translateX = withSpring({
+    value: translation.x,
+    velocity: velocity.x,
+    snapPoints: assets.map((_, i) => -i * width),
+    state,
+  });
   return (
-    <Animated.View
-      style={{
-        height,
-        width: width * assets.length,
-        flexDirection: "row",
-        backgroundColor: "black",
-        transform: [{ translateX }],
-      }}
-    >
-      {assets.map((asset) => (
-        <View key={asset} style={styles.picture}>
-          <Image source={asset} style={styles.image} />
-        </View>
-      ))}
-    </Animated.View>
+    <PanGestureHandler {...gestureHandler}>
+      <Animated.View style={styles.container}>
+        <Animated.View
+          style={{
+            height,
+            width: width * assets.length,
+            flexDirection: "row",
+            transform: [{ translateX }],
+          }}
+        >
+          {assets.map((asset) => (
+            <View key={asset} style={styles.picture}>
+              <Image source={asset} style={styles.image} />
+            </View>
+          ))}
+        </Animated.View>
+      </Animated.View>
+    </PanGestureHandler>
   );
 };
 
