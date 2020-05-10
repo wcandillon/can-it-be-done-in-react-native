@@ -1,6 +1,7 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
+  add,
   cond,
   eq,
   lessThan,
@@ -39,11 +40,11 @@ const WhatsApp = () => {
   const [translate] = useVectors([0]);
   const minX = min(multiply(-0.5, width, sub(scale, 1)), 0);
   const right = sub(translate.x, minX);
-  const translateX = cond(lessThan(right, 0), right, 0);
-  /*
-    const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
-  const maxVec = vec.max(vec.minus(minVec), 0);
-  */
+  const translateX = add(
+    multiply(currentIndex, width),
+    cond(lessThan(right, 0), right, 0)
+  );
+
   return (
     <ImageViewer {...{ scale, translate, panState }}>
       <Animated.View
