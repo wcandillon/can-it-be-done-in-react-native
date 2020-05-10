@@ -28,7 +28,7 @@ import {
 } from "react-native-redash";
 
 const { width, height } = Dimensions.get("window");
-const CANVAS = vec.create(width, height);
+export const CANVAS = vec.create(width, height);
 const CENTER = vec.divide(CANVAS, 2);
 const styles = StyleSheet.create({
   container: {
@@ -38,13 +38,18 @@ const styles = StyleSheet.create({
 });
 
 interface PinchGestureProps {
-  translateX: Animated.Value<number>;
+  panState: Animated.Value<number>;
   scale: Animated.Value<number>;
   translate: Vector<Animated.Value<number>>;
   children: ReactNode;
 }
 
-const PinchGesture = ({ children, scale, translate }: PinchGestureProps) => {
+const PinchGesture = ({
+  children,
+  scale,
+  translate,
+  panState,
+}: PinchGestureProps) => {
   const origin = vec.createValue(0);
   const focal = vec.createValue(0);
   const gestureScale = new Value(1);
@@ -59,7 +64,6 @@ const PinchGesture = ({ children, scale, translate }: PinchGestureProps) => {
   });
 
   const pan = vec.createValue(0);
-  const panState = new Value(State.END);
   const panGestureHandler = onGestureEvent({
     translationX: pan.x,
     translationY: pan.y,
