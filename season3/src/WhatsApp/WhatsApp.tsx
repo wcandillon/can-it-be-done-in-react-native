@@ -9,6 +9,7 @@ import {
   withOffset,
   withSpring,
 } from "react-native-redash";
+import ImageViewer from "./ImageViewer";
 
 export const assets = [
   require("./assets/1.jpg"),
@@ -27,11 +28,6 @@ const styles = StyleSheet.create({
   picture: {
     width,
     height,
-  },
-  image: {
-    ...StyleSheet.absoluteFillObject,
-    width: undefined,
-    height: undefined,
   },
 });
 
@@ -61,7 +57,7 @@ const WhatsApp = () => {
         >
           {assets.map((asset) => (
             <View key={asset} style={styles.picture}>
-              <Image source={asset} style={styles.image} />
+              <ImageViewer source={asset} />
             </View>
           ))}
         </Animated.View>
