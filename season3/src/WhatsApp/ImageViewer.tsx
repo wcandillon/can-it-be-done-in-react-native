@@ -18,12 +18,12 @@ import {
   State,
 } from "react-native-gesture-handler";
 import {
+  Vector,
   clamp,
   onGestureEvent,
   pinchActive,
   pinchBegan,
   timing,
-  translate,
   vec,
 } from "react-native-redash";
 
@@ -38,10 +38,13 @@ const styles = StyleSheet.create({
 });
 
 interface PinchGestureProps {
+  translateX: Animated.Value<number>;
+  scale: Animated.Value<number>;
+  translate: Vector<Animated.Value<number>>;
   children: ReactNode;
 }
 
-const PinchGesture = ({ children }: PinchGestureProps) => {
+const PinchGesture = ({ children, scale, translate }: PinchGestureProps) => {
   const origin = vec.createValue(0);
   const focal = vec.createValue(0);
   const gestureScale = new Value(1);
@@ -64,7 +67,6 @@ const PinchGesture = ({ children }: PinchGestureProps) => {
   });
 
   const scaleOffset = new Value(1);
-  const scale = new Value(1);
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
   const offset = vec.createValue(0);
@@ -111,6 +113,7 @@ const PinchGesture = ({ children }: PinchGestureProps) => {
           ),
         ]),
         set(scale, multiply(gestureScale, scaleOffset)),
+        vec.set(translate, vec.add(offset, translation)),
       ]),
     [
       adjustedFocal,
@@ -128,6 +131,7 @@ const PinchGesture = ({ children }: PinchGestureProps) => {
       pinchState,
       scale,
       scaleOffset,
+      translate,
       translation,
     ]
   );
@@ -136,17 +140,7 @@ const PinchGesture = ({ children }: PinchGestureProps) => {
       <PinchGestureHandler {...pinchGestureHandler}>
         <Animated.View style={StyleSheet.absoluteFillObject}>
           <PanGestureHandler {...panGestureHandler}>
-            <Animated.View
-              style={[
-                StyleSheet.absoluteFill,
-                {
-                  transform: [
-                    ...translate(vec.add(offset, translation)),
-                    { scale },
-                  ],
-                },
-              ]}
-            >
+            <Animated.View style={StyleSheet.absoluteFill}>
               {children}
             </Animated.View>
           </PanGestureHandler>
