@@ -1,13 +1,6 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import Animated, {
-  add,
-  block,
-  cond,
-  eq,
-  set,
-  useCode,
-} from "react-native-reanimated";
+import { StyleSheet } from "react-native";
+import Animated, { add, cond, eq, set, useCode } from "react-native-reanimated";
 import {
   snapPoint,
   timing,
