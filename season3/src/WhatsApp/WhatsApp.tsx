@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
+  const index = useValue(0);
   const offsetX = useValue(0);
   const translateX = useValue(0);
   const scale = useValue(1);
@@ -104,6 +105,7 @@ const WhatsApp = () => {
   );
   return (
     <ImageViewer
+      pan={translation}
       panState={state}
       panGestureHandler={gestureHandler}
       {...{ scale, translate }}
@@ -117,10 +119,23 @@ const WhatsApp = () => {
             transform: [{ translateX }],
           }}
         >
-          {assets.map((asset, index) => {
+          {assets.map((asset, i) => {
+            const active = eq(i, index);
             return (
               <View key={asset} style={styles.picture}>
-                <Animated.Image source={asset} style={styles.image} />
+                <Animated.Image
+                  source={asset}
+                  style={[
+                    styles.image,
+                    {
+                      transform: [
+                        { translateX: cond(active, translate.x, 0) },
+                        { translateY: cond(active, translate.y, 0) },
+                        { scale },
+                      ],
+                    },
+                  ]}
+                />
               </View>
             );
           })}

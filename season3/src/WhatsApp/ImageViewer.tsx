@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 });
 
 interface PinchGestureProps {
+  pan: Vector<Animated.Value<number>>;
   panState: Animated.Value<number>;
   panGestureHandler: {
     onHandlerStateChange: (...args: unknown[]) => void;
@@ -54,6 +55,7 @@ const PinchGesture = ({
   scale,
   translate,
   panGestureHandler,
+  pan,
   panState,
 }: PinchGestureProps) => {
   const origin = vec.createValue(0);
@@ -69,8 +71,6 @@ const PinchGesture = ({
     focalY: focal.y,
   });
 
-  const pan = vec.createValue(0);
-
   const scaleOffset = new Value(1);
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
@@ -80,7 +80,10 @@ const PinchGesture = ({
   useCode(
     () =>
       block([
-        cond(eq(panState, State.ACTIVE), vec.set(translation, pan)),
+        cond(
+          eq(panState, State.ACTIVE),
+          vec.set(translation, vec.clamp(pan, minVec, maxVec))
+        ),
         cond(pinchBegan(pinchState), vec.set(origin, adjustedFocal)),
         cond(pinchActive(pinchState, numberOfPointers), [
           vec.set(
