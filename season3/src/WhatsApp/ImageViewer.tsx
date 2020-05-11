@@ -8,10 +8,12 @@ import Animated, {
   max,
   multiply,
   set,
+  sub,
   useCode,
 } from "react-native-reanimated";
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
 import {
+  clamp,
   onGestureEvent,
   pinchActive,
   pinchBegan,
@@ -39,9 +41,17 @@ const styles = StyleSheet.create({
 
 interface ImageViewerProps {
   source: number;
+  translateX: Animated.Value<number>;
+  translationX: Animated.Node<number>;
+  isActive: Animated.Node<number>;
 }
 
-const ImageViewer = ({ source }: ImageViewerProps) => {
+const ImageViewer = ({
+  source,
+  translateX,
+  translationX,
+  isActive,
+}: ImageViewerProps) => {
   const origin = vec.createValue(0);
   const pinch = vec.createValue(0);
   const focal = vec.createValue(0);
@@ -58,12 +68,24 @@ const ImageViewer = ({ source }: ImageViewerProps) => {
 
   const scaleOffset = new Value(1);
   const scale = new Value(1);
+  const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
+  const maxVec = vec.max(vec.minus(minVec), 0);
   const offset = vec.createValue(0);
   const translation = vec.createValue(0);
   const adjustedFocal = vec.sub(focal, vec.add(CENTER, offset));
   useCode(
     () =>
       block([
+        cond(isActive, [
+          set(translateX, translationX),
+          /*
+          set(translation.x, clamp(translation.x, minVec.x, maxVec.x)),
+          set(
+            translateX,
+            sub(translateX, clamp(translation.x, minVec.x, maxVec.x))
+          ),
+          */
+        ]),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
           vec.set(pinch, vec.sub(adjustedFocal, origin)),
@@ -82,7 +104,6 @@ const ImageViewer = ({ source }: ImageViewerProps) => {
         ]),
         set(scale, multiply(gestureScale, scaleOffset)),
       ]),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   return (

@@ -1,9 +1,22 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import Animated, { add, cond, eq, set, useCode } from "react-native-reanimated";
+import Animated, {
+  add,
+  and,
+  clockRunning,
+  cond,
+  debug,
+  divide,
+  eq,
+  floor,
+  not,
+  set,
+  useCode,
+} from "react-native-reanimated";
 import {
   snapPoint,
   timing,
+  useClock,
   usePanGestureHandler,
   useValue,
 } from "react-native-redash";
@@ -33,6 +46,8 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
+  const clock = useClock();
+  const index = useValue(0);
   const offsetX = useValue(0);
   const translateX = useValue(0);
   const {
@@ -44,15 +59,14 @@ const WhatsApp = () => {
   const snapTo = snapPoint(translateX, velocity.x, snapPoints);
   useCode(
     () => [
-      cond(eq(state, State.ACTIVE), [
-        set(translateX, add(offsetX, translation.x)),
-      ]),
       cond(eq(state, State.END), [
-        set(translateX, timing({ from: translateX, to: snapTo })),
+        set(translateX, timing({ clock, from: translateX, to: snapTo })),
         set(offsetX, translateX),
+        cond(not(clockRunning(clock)), [
+          set(index, floor(divide(translateX, -width))),
+        ]),
       ]),
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   return (
@@ -61,8 +75,13 @@ const WhatsApp = () => {
         <Animated.View
           style={[styles.pictures, { transform: [{ translateX }] }]}
         >
-          {assets.map((source) => (
-            <ImageViewer key={source} {...{ source }} />
+          {assets.map((source, i) => (
+            <ImageViewer
+              key={source}
+              isActive={and(eq(index, i), eq(state, State.ACTIVE))}
+              translationX={add(offsetX, translation.x)}
+              {...{ source, translateX }}
+            />
           ))}
         </Animated.View>
       </Animated.View>
