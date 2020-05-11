@@ -5,10 +5,12 @@ import Animated, {
   and,
   block,
   cond,
+  debug,
   eq,
   event,
   max,
   multiply,
+  onChange,
   set,
   sub,
   useCode,
@@ -20,11 +22,9 @@ import {
 } from "react-native-gesture-handler";
 import {
   Vector,
-  clamp,
   onGestureEvent,
   pinchActive,
   pinchBegan,
-  timing,
   vec,
 } from "react-native-redash";
 
@@ -48,12 +48,14 @@ interface PinchGestureProps {
   scale: Animated.Value<number>;
   translate: Vector<Animated.Value<number>>;
   children: ReactNode;
+  index: Animated.Node<number>;
 }
 
 const PinchGesture = ({
   children,
   scale,
   translate,
+  index,
   panGestureHandler,
   pan,
   panState,
@@ -80,6 +82,13 @@ const PinchGesture = ({
   useCode(
     () =>
       block([
+        onChange(index, [
+          debug("onChange(index)", index),
+          set(scaleOffset, 1),
+          vec.set(offset, 0),
+          set(scale, 1),
+          vec.set(translate, 0),
+        ]),
         cond(
           eq(panState, State.ACTIVE),
           vec.set(translation, vec.clamp(pan, minVec, maxVec))

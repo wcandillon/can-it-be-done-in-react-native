@@ -95,11 +95,10 @@ const WhatsApp = () => {
   const newIndex = floor(divide(offsetX, -width));
   useCode(
     () => [
-      debug("currentIndex", index),
-      debug("scale", scale),
-      debug("x", x),
-      debug("left", left),
-      onChange(index, [set(scale, 1)]),
+      // debug("currentIndex", index),
+      // debug("scale", scale),
+      // debug("x", x),
+      // debug("left", left),
       cond(eq(state, State.ACTIVE), [set(translateX, left)]),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to: snapTo })),
@@ -107,6 +106,7 @@ const WhatsApp = () => {
         cond(and(not(clockRunning(clock)), neq(index, newIndex)), [
           // set(scale, 1),
           // vec.set(translation, 0),
+          debug("set(index)", newIndex),
           set(index, newIndex),
         ]),
       ]),
@@ -119,7 +119,7 @@ const WhatsApp = () => {
       pan={translation}
       panState={state}
       panGestureHandler={gestureHandler}
-      {...{ scale, translate }}
+      {...{ scale, translate, index }}
     >
       <Animated.View style={styles.container}>
         <Animated.View
