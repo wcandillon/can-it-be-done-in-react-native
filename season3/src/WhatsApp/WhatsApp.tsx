@@ -71,6 +71,8 @@ const styles = StyleSheet.create({
 const WhatsApp = () => {
   const offsetX = useValue(0);
   const translateX = useValue(0);
+  const scale = useValue(1);
+  const translate = useVector(0);
   const {
     gestureHandler,
     translation,
@@ -96,7 +98,11 @@ const WhatsApp = () => {
     []
   );
   return (
-    <PanGestureHandler {...gestureHandler}>
+    <ImageViewer
+      panState={state}
+      panGestureHandler={gestureHandler}
+      {...{ scale, translate }}
+    >
       <Animated.View style={styles.container}>
         <Animated.View
           style={{
@@ -115,7 +121,7 @@ const WhatsApp = () => {
           })}
         </Animated.View>
       </Animated.View>
-    </PanGestureHandler>
+    </ImageViewer>
   );
 };
 

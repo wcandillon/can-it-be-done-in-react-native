@@ -6,6 +6,7 @@ import Animated, {
   block,
   cond,
   eq,
+  event,
   max,
   multiply,
   set,
@@ -39,9 +40,12 @@ const styles = StyleSheet.create({
 
 interface PinchGestureProps {
   panState: Animated.Value<number>;
+  panGestureHandler: {
+    onHandlerStateChange: (...args: unknown[]) => void;
+    onGestureEvent: (...args: unknown[]) => void;
+  };
   scale: Animated.Value<number>;
   translate: Vector<Animated.Value<number>>;
-  velocity: Vector<Animated.Value<number>>;
   children: ReactNode;
 }
 
@@ -49,7 +53,7 @@ const PinchGesture = ({
   children,
   scale,
   translate,
-  velocity,
+  panGestureHandler,
   panState,
 }: PinchGestureProps) => {
   const origin = vec.createValue(0);
@@ -66,13 +70,6 @@ const PinchGesture = ({
   });
 
   const pan = vec.createValue(0);
-  const panGestureHandler = onGestureEvent({
-    translationX: pan.x,
-    translationY: pan.y,
-    velocityX: velocity.x,
-    velocityY: velocity.y,
-    state: panState,
-  });
 
   const scaleOffset = new Value(1);
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
