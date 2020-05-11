@@ -3,8 +3,10 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   add,
   and,
+  clockRunning,
   cond,
   debug,
+  diff,
   divide,
   eq,
   floor,
@@ -13,6 +15,7 @@ import Animated, {
   max,
   min,
   multiply,
+  neq,
   not,
   round,
   set,
@@ -21,9 +24,14 @@ import Animated, {
 } from "react-native-reanimated";
 import {
   addTo,
+  dec,
+  inc,
   minus,
+  snapPoint,
   subTo,
   timing,
+  useClock,
+  usePanGestureHandler,
   useValue,
   useValues,
   useVector,
@@ -31,7 +39,7 @@ import {
   vec,
   withTransition,
 } from "react-native-redash";
-import { State } from "react-native-gesture-handler";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 import ImageViewer, { CANVAS } from "./ImageViewer";
 
 const { x: width, y: height } = CANVAS;
@@ -44,9 +52,14 @@ export const assets = [
 ];
 
 const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "black",
+  },
   picture: {
     width,
     height,
+    overflow: "hidden",
   },
   image: {
     ...StyleSheet.absoluteFillObject,
@@ -56,64 +69,53 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
-  const currentIndex = useValue(0);
-  const currentIndexCont = withTransition(currentIndex);
-  const snapped = useValue(1);
-  const scale = useValue(1);
-  const panState = useValue(State.END);
-  const translate = useVector(0);
-  const minX = min(multiply(-0.5, width, sub(scale, 1)), 0);
-  const maxX = max(minus(minX), 0);
-  const left = sub(translate.x, maxX);
-  const right = sub(translate.x, minX);
-  const translateX = add(
-    multiply(currentIndexCont, -width),
-    cond(greaterThan(left, 0), left, cond(lessThan(right, 0), right, 0))
+  const offsetX = useValue(0);
+  const translateX = useValue(0);
+  const {
+    gestureHandler,
+    translation,
+    velocity,
+    state,
+  } = usePanGestureHandler();
+  const snapTo = snapPoint(
+    translateX,
+    velocity.x,
+    assets.map((_, i) => -width * i)
   );
   useCode(
     () => [
-      cond(eq(panState, State.ACTIVE), [set(snapped, 0)]),
-      cond(and(eq(panState, State.END), not(snapped)), [
-        cond(greaterThan(left, 0), [subTo(currentIndex, 1), set(scale, 1)]),
-        cond(lessThan(right, 0), [addTo(currentIndex, 1), set(scale, 1)]),
-        set(snapped, 1),
-        debug("currentIndex", currentIndex),
+      cond(eq(state, State.ACTIVE), [
+        set(translateX, add(offsetX, translation.x)),
+      ]),
+      cond(eq(state, State.END), [
+        set(translateX, timing({ from: translateX, to: snapTo })),
+        set(offsetX, translateX),
       ]),
     ],
-    [currentIndex, left, panState, right, scale, snapped]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
   return (
-    <ImageViewer {...{ scale, translate, panState }}>
-      <Animated.View
-        style={{
-          height,
-          width: width * assets.length,
-          flexDirection: "row",
-          transform: [{ translateX }],
-        }}
-      >
-        {assets.map((asset, index) => {
-          const isActive = eq(currentIndex, index);
-          return (
-            <View key={asset} style={styles.picture}>
-              <Animated.Image
-                source={asset}
-                style={[
-                  styles.image,
-                  {
-                    transform: [
-                      { translateX: cond(isActive, translate.x, 0) },
-                      { translateY: cond(isActive, translate.y, 0) },
-                      { scale: cond(isActive, scale, 1) },
-                    ],
-                  },
-                ]}
-              />
-            </View>
-          );
-        })}
+    <PanGestureHandler {...gestureHandler}>
+      <Animated.View style={styles.container}>
+        <Animated.View
+          style={{
+            height,
+            width: width * assets.length,
+            flexDirection: "row",
+            transform: [{ translateX }],
+          }}
+        >
+          {assets.map((asset, index) => {
+            return (
+              <View key={asset} style={styles.picture}>
+                <Animated.Image source={asset} style={styles.image} />
+              </View>
+            );
+          })}
+        </Animated.View>
       </Animated.View>
-    </ImageViewer>
+    </PanGestureHandler>
   );
 };
 

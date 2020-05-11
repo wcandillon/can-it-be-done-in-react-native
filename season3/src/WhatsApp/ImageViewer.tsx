@@ -41,6 +41,7 @@ interface PinchGestureProps {
   panState: Animated.Value<number>;
   scale: Animated.Value<number>;
   translate: Vector<Animated.Value<number>>;
+  velocity: Vector<Animated.Value<number>>;
   children: ReactNode;
 }
 
@@ -48,6 +49,7 @@ const PinchGesture = ({
   children,
   scale,
   translate,
+  velocity,
   panState,
 }: PinchGestureProps) => {
   const origin = vec.createValue(0);
@@ -67,6 +69,8 @@ const PinchGesture = ({
   const panGestureHandler = onGestureEvent({
     translationX: pan.x,
     translationY: pan.y,
+    velocityX: velocity.x,
+    velocityY: velocity.y,
     state: panState,
   });
 
@@ -97,47 +101,12 @@ const PinchGesture = ({
           set(gestureScale, 1),
           vec.set(translation, 0),
           vec.set(focal, 0),
-          set(
-            offset.x,
-            timing({
-              from: offset.x,
-              to: clamp(offset.x, minVec.x, maxVec.x),
-            })
-          ),
-          set(
-            offset.y,
-            timing({
-              from: offset.y,
-              to: clamp(offset.y, minVec.y, maxVec.y),
-            })
-          ),
-          set(
-            scaleOffset,
-            timing({ from: scaleOffset, to: max(scaleOffset, 1) })
-          ),
         ]),
         set(scale, multiply(gestureScale, scaleOffset)),
         vec.set(translate, vec.add(offset, translation)),
       ]),
-    [
-      adjustedFocal,
-      focal,
-      gestureScale,
-      maxVec.x,
-      maxVec.y,
-      minVec.x,
-      minVec.y,
-      numberOfPointers,
-      offset,
-      origin,
-      pan,
-      panState,
-      pinchState,
-      scale,
-      scaleOffset,
-      translate,
-      translation,
-    ]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
   return (
     <View style={styles.container}>
