@@ -5,6 +5,7 @@ import Animated, {
   block,
   cond,
   eq,
+  max,
   multiply,
   set,
   useCode,
@@ -14,6 +15,7 @@ import {
   onGestureEvent,
   pinchActive,
   pinchBegan,
+  timing,
   translate,
   vec,
 } from "react-native-redash";
