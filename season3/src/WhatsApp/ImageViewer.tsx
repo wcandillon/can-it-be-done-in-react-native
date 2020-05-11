@@ -10,7 +10,10 @@ import Animated, {
   event,
   max,
   multiply,
+  neq,
+  not,
   onChange,
+  or,
   set,
   sub,
   useCode,
@@ -104,13 +107,19 @@ const PinchGesture = ({
             )
           ),
         ]),
-        cond(and(eq(pinchState, State.END), eq(panState, State.END)), [
-          vec.set(offset, vec.add(offset, translation)),
-          set(scaleOffset, scale),
-          set(gestureScale, 1),
-          vec.set(translation, 0),
-          vec.set(focal, 0),
-        ]),
+        cond(
+          and(
+            or(eq(pinchState, State.END), eq(panState, State.END)),
+            or(neq(pinchState, State.ACTIVE), neq(panState, State.ACTIVE))
+          ),
+          [
+            vec.set(offset, vec.add(offset, translation)),
+            set(scaleOffset, scale),
+            set(gestureScale, 1),
+            vec.set(translation, 0),
+            vec.set(focal, 0),
+          ]
+        ),
         set(scale, multiply(gestureScale, scaleOffset)),
         vec.set(translate, vec.add(offset, translation)),
       ]),

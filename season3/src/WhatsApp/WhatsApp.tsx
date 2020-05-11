@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
 const WhatsApp = () => {
   const clock = useClock();
   const index = useValue(0);
-  const offsetX = useValue(0);
   const translateX = useValue(0);
   const scale = useValue(1);
   const translate = useVector(0);
@@ -83,7 +82,7 @@ const WhatsApp = () => {
     velocity,
     state,
   } = usePanGestureHandler();
-  const offset = multiply(index, -width);
+  const offset1 = multiply(index, -width);
   const minX = min(multiply(-0.5, width, sub(scale, 1)), 0);
   const maxX = max(minus(minX), 0);
   const { x } = translation;
@@ -96,12 +95,10 @@ const WhatsApp = () => {
   const newIndex = floor(divide(translateX, -width));
   useCode(
     () => [
-      cond(eq(state, State.ACTIVE), [set(translateX, add(offset, left))]),
+      cond(eq(state, State.ACTIVE), [set(translateX, add(offset1, left))]),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to: snapTo })),
         cond(and(not(clockRunning(clock)), neq(index, newIndex)), [
-          // set(scale, 1),
-          // vec.set(translation, 0),
           set(index, newIndex),
           set(state, State.UNDETERMINED),
         ]),
