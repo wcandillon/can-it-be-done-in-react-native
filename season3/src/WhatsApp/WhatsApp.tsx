@@ -17,6 +17,7 @@ import Animated, {
   multiply,
   neq,
   not,
+  onChange,
   round,
   set,
   sub,
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
+  const clock = useClock();
   const index = useValue(0);
   const offsetX = useValue(0);
   const translateX = useValue(0);
@@ -90,16 +92,23 @@ const WhatsApp = () => {
     velocity.x,
     assets.map((_, i) => -width * i)
   );
-
+  const newIndex = floor(divide(offsetX, -width));
   useCode(
     () => [
+      debug("currentIndex", index),
       debug("scale", scale),
       debug("x", x),
       debug("left", left),
+      onChange(index, [set(scale, 1)]),
       cond(eq(state, State.ACTIVE), [set(translateX, left)]),
       cond(eq(state, State.END), [
-        set(translateX, timing({ from: translateX, to: snapTo })),
+        set(translateX, timing({ clock, from: translateX, to: snapTo })),
         set(offsetX, translateX),
+        cond(and(not(clockRunning(clock)), neq(index, newIndex)), [
+          // set(scale, 1),
+          // vec.set(translation, 0),
+          set(index, newIndex),
+        ]),
       ]),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
