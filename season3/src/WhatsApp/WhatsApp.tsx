@@ -24,6 +24,7 @@ import Animated, {
 } from "react-native-reanimated";
 import {
   addTo,
+  clamp,
   dec,
   inc,
   minus,
@@ -79,15 +80,19 @@ const WhatsApp = () => {
     velocity,
     state,
   } = usePanGestureHandler();
+  const minX = min(multiply(-0.5, width, sub(scale, 1)), 0);
+  const maxX = max(minus(minX), 0);
+  const x = add(offsetX, translation.x);
   const snapTo = snapPoint(
     translateX,
     velocity.x,
     assets.map((_, i) => -width * i)
   );
+
   useCode(
     () => [
       cond(eq(state, State.ACTIVE), [
-        set(translateX, add(offsetX, translation.x)),
+        set(translateX, sub(x, clamp(x, minX, maxX))),
       ]),
       cond(eq(state, State.END), [
         set(translateX, timing({ from: translateX, to: snapTo })),
