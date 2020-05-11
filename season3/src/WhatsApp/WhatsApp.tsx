@@ -84,6 +84,7 @@ const WhatsApp = () => {
   const minX = min(multiply(-0.5, width, sub(scale, 1)), 0);
   const maxX = max(minus(minX), 0);
   const x = add(offsetX, translation.x);
+  const left = sub(x, clamp(x, minX, maxX));
   const snapTo = snapPoint(
     translateX,
     velocity.x,
@@ -92,9 +93,10 @@ const WhatsApp = () => {
 
   useCode(
     () => [
-      cond(eq(state, State.ACTIVE), [
-        set(translateX, sub(x, clamp(x, minX, maxX))),
-      ]),
+      debug("scale", scale),
+      debug("x", x),
+      debug("left", left),
+      cond(eq(state, State.ACTIVE), [set(translateX, left)]),
       cond(eq(state, State.END), [
         set(translateX, timing({ from: translateX, to: snapTo })),
         set(offsetX, translateX),
@@ -131,7 +133,7 @@ const WhatsApp = () => {
                       transform: [
                         { translateX: cond(active, translate.x, 0) },
                         { translateY: cond(active, translate.y, 0) },
-                        { scale },
+                        { scale: cond(active, scale, 1) },
                       ],
                     },
                   ]}
