@@ -2,15 +2,35 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   add,
+  and,
   cond,
+  debug,
+  divide,
   eq,
+  floor,
+  greaterThan,
   lessThan,
+  max,
   min,
   multiply,
+  not,
+  round,
+  set,
   sub,
   useCode,
 } from "react-native-reanimated";
-import { useValues, useVector, useVectors, vec } from "react-native-redash";
+import {
+  addTo,
+  minus,
+  subTo,
+  timing,
+  useValue,
+  useValues,
+  useVector,
+  useVectors,
+  vec,
+  withTransition,
+} from "react-native-redash";
 import { State } from "react-native-gesture-handler";
 import ImageViewer, { CANVAS } from "./ImageViewer";
 
@@ -36,15 +56,32 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
-  const [currentIndex, scale, panState] = useValues(0, 1, 0, State.END);
-  const [translate] = useVectors([0]);
+  const currentIndex = useValue(0);
+  const currentIndexCont = withTransition(currentIndex);
+  const snapped = useValue(1);
+  const scale = useValue(1);
+  const panState = useValue(State.END);
+  const translate = useVector(0);
   const minX = min(multiply(-0.5, width, sub(scale, 1)), 0);
+  const maxX = max(minus(minX), 0);
+  const left = sub(translate.x, maxX);
   const right = sub(translate.x, minX);
   const translateX = add(
-    multiply(currentIndex, width),
-    cond(lessThan(right, 0), right, 0)
+    multiply(currentIndexCont, -width),
+    cond(greaterThan(left, 0), left, cond(lessThan(right, 0), right, 0))
   );
-
+  useCode(
+    () => [
+      cond(eq(panState, State.ACTIVE), [set(snapped, 0)]),
+      cond(and(eq(panState, State.END), not(snapped)), [
+        cond(greaterThan(left, 0), [subTo(currentIndex, 1), set(scale, 1)]),
+        cond(lessThan(right, 0), [addTo(currentIndex, 1), set(scale, 1)]),
+        set(snapped, 1),
+        debug("currentIndex", currentIndex),
+      ]),
+    ],
+    [currentIndex, left, panState, right, scale, snapped]
+  );
   return (
     <ImageViewer {...{ scale, translate, panState }}>
       <Animated.View
