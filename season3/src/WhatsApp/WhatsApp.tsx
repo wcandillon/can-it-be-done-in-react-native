@@ -41,7 +41,7 @@ import {
   vec,
   withTransition,
 } from "react-native-redash";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import { State } from "react-native-gesture-handler";
 import ImageViewer, { CANVAS } from "./ImageViewer";
 
 const { x: width, y: height } = CANVAS;
@@ -83,31 +83,27 @@ const WhatsApp = () => {
     velocity,
     state,
   } = usePanGestureHandler();
+  const offset = multiply(index, -width);
   const minX = min(multiply(-0.5, width, sub(scale, 1)), 0);
   const maxX = max(minus(minX), 0);
-  const x = add(offsetX, translation.x);
+  const { x } = translation;
   const left = sub(x, clamp(x, minX, maxX));
   const snapTo = snapPoint(
     translateX,
     velocity.x,
     assets.map((_, i) => -width * i)
   );
-  const newIndex = floor(divide(offsetX, -width));
+  const newIndex = floor(divide(translateX, -width));
   useCode(
     () => [
-      // debug("currentIndex", index),
-      // debug("scale", scale),
-      // debug("x", x),
-      // debug("left", left),
-      cond(eq(state, State.ACTIVE), [set(translateX, left)]),
+      cond(eq(state, State.ACTIVE), [set(translateX, add(offset, left))]),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to: snapTo })),
-        set(offsetX, translateX),
         cond(and(not(clockRunning(clock)), neq(index, newIndex)), [
           // set(scale, 1),
           // vec.set(translation, 0),
-          debug("set(index)", newIndex),
           set(index, newIndex),
+          set(state, State.UNDETERMINED),
         ]),
       ]),
     ],
@@ -140,7 +136,9 @@ const WhatsApp = () => {
                     styles.image,
                     {
                       transform: [
-                        { translateX: cond(active, translate.x, 0) },
+                        {
+                          translateX: cond(active, translate.x),
+                        },
                         { translateY: cond(active, translate.y, 0) },
                         { scale: cond(active, scale, 1) },
                       ],
