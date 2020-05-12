@@ -20,11 +20,13 @@ import PinchGesture from "./src/PinchGesture";
 import RotationGesture from "./src/RotationGesture";
 import Skew from "./src/Skew";
 import Transformation3D from "./src/Transformation3D";
+import Swiper, { assets as swiperAssets } from "./src/Swiper";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
   ...sliderAssets,
   ...transformAssets,
+  ...swiperAssets,
 ];
 const fonts = {
   "SFProText-Bold": require("./assets/fonts/SF-Pro-Text-Bold.otf"),
@@ -35,6 +37,12 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Swiper: {
+        screen: Swiper,
+        navigationOptions: {
+          title: "Swiper",
+        },
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {
