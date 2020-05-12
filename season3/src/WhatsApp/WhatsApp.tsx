@@ -49,6 +49,7 @@ const WhatsApp = () => {
   const clock = useClock();
   const index = useValue(0);
   const offsetX = useValue(0);
+  const translationX = useValue(0);
   const translateX = useValue(0);
   const {
     gestureHandler,
@@ -59,6 +60,9 @@ const WhatsApp = () => {
   const snapTo = snapPoint(translateX, velocity.x, snapPoints);
   useCode(
     () => [
+      cond(eq(state, State.ACTIVE), [
+        set(translateX, add(offsetX, translationX)),
+      ]),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to: snapTo })),
         set(offsetX, translateX),
@@ -79,8 +83,9 @@ const WhatsApp = () => {
             <ImageViewer
               key={source}
               isActive={and(eq(index, i), eq(state, State.ACTIVE))}
-              translationX={add(offsetX, translation.x)}
-              {...{ source, translateX }}
+              translationX={translation.x}
+              swipeX={translationX}
+              {...{ source }}
             />
           ))}
         </Animated.View>

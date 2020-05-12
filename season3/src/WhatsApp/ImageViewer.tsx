@@ -41,16 +41,16 @@ const styles = StyleSheet.create({
 
 interface ImageViewerProps {
   source: number;
-  translateX: Animated.Value<number>;
-  translationX: Animated.Node<number>;
   isActive: Animated.Node<number>;
+  translationX: Animated.Node<number>;
+  swipeX: Animated.Value<number>;
 }
 
 const ImageViewer = ({
   source,
-  translateX,
-  translationX,
   isActive,
+  translationX,
+  swipeX,
 }: ImageViewerProps) => {
   const origin = vec.createValue(0);
   const pinch = vec.createValue(0);
@@ -77,9 +77,10 @@ const ImageViewer = ({
     () =>
       block([
         cond(isActive, [
-          set(translateX, translationX),
+          // set(translateX, translationX),
+
+          set(translation.x, clamp(translationX, minVec.x, maxVec.x)),
           /*
-          set(translation.x, clamp(translation.x, minVec.x, maxVec.x)),
           set(
             translateX,
             sub(translateX, clamp(translation.x, minVec.x, maxVec.x))
