@@ -79,6 +79,7 @@ const ImageViewer = ({
   const translation = vec.createValue(0);
   const adjustedFocal = vec.sub(focal, vec.add(CENTER, offset));
 
+  const panEnd = and(isActive, eq(panState, State.END));
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
   const clamped = clamp(
@@ -114,6 +115,17 @@ const ImageViewer = ({
             vec.set(translation, 0),
             vec.set(focal, 0),
             vec.set(pinch, 0),
+            set(
+              offset.y,
+              timing({
+                from: offset.y,
+                to: clamp(offset.y, minVec.y, maxVec.y),
+              })
+            ),
+            set(
+              scaleOffset,
+              timing({ from: scaleOffset, to: max(scaleOffset, 1) })
+            ),
           ]
         ),
         set(scale, multiply(gestureScale, scaleOffset)),
