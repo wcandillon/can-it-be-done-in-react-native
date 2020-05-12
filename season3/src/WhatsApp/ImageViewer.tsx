@@ -18,6 +18,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
 import {
+  Vector,
   clamp,
   onGestureEvent,
   pinchActive,
@@ -48,8 +49,7 @@ interface ImageViewerProps {
   source: number;
   isActive: Animated.Node<0 | 1>;
   panState: Animated.Node<State>;
-  translationX: Animated.Node<number>;
-  translationY: Animated.Node<number>;
+  panTranslation: Vector<Animated.Node<number>>;
   swipeX: Animated.Value<number>;
 }
 
@@ -57,8 +57,7 @@ const ImageViewer = ({
   source,
   isActive,
   panState,
-  translationX,
-  translationY,
+  panTranslation,
   swipeX,
 }: ImageViewerProps) => {
   const origin = vec.createValue(0);
@@ -81,22 +80,16 @@ const ImageViewer = ({
   const translation = vec.createValue(0);
   const adjustedFocal = vec.sub(focal, vec.add(CENTER, offset));
 
-  const panEnd = and(isActive, eq(panState, State.END));
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
-  const clamped = clamp(
-    translationX,
-    sub(minVec.x, offset.x),
-    sub(maxVec.x, offset.x)
-  );
-
+  const clamped = vec.clamp(panTranslation, minVec, maxVec);
   useCode(
     () =>
       block([
         cond(and(isActive, eq(panState, State.ACTIVE)), [
-          set(swipeX, sub(translationX, clamped)),
-          set(translation.x, clamped),
-          set(translation.y, translationY),
+          set(swipeX, sub(panTranslation.x, clamped.x)),
+          set(translation.x, clamped.x),
+          set(translation.y, clamped.y),
         ]),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
