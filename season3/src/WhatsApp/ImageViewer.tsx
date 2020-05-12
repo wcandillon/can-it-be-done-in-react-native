@@ -49,6 +49,7 @@ interface ImageViewerProps {
   isActive: Animated.Node<0 | 1>;
   panState: Animated.Node<State>;
   translationX: Animated.Node<number>;
+  translationY: Animated.Node<number>;
   swipeX: Animated.Value<number>;
 }
 
@@ -57,6 +58,7 @@ const ImageViewer = ({
   isActive,
   panState,
   translationX,
+  translationY,
   swipeX,
 }: ImageViewerProps) => {
   const origin = vec.createValue(0);
@@ -94,6 +96,7 @@ const ImageViewer = ({
         cond(and(isActive, eq(panState, State.ACTIVE)), [
           set(swipeX, sub(translationX, clamped)),
           set(translation.x, clamped),
+          set(translation.y, translationY),
         ]),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
@@ -115,6 +118,13 @@ const ImageViewer = ({
             vec.set(translation, 0),
             vec.set(focal, 0),
             vec.set(pinch, 0),
+            set(
+              offset.x,
+              timing({
+                from: offset.x,
+                to: clamp(offset.x, minVec.x, maxVec.x),
+              })
+            ),
             set(
               offset.y,
               timing({

@@ -85,6 +85,7 @@ const WhatsApp = () => {
               isActive={eq(index, i)}
               panState={state}
               translationX={translation.x}
+              translationY={translation.y}
               swipeX={translationX}
               {...{ source }}
             />
