@@ -2,8 +2,11 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   Value,
+  and,
   block,
   cond,
+  debug,
+  divide,
   eq,
   max,
   multiply,
@@ -41,7 +44,8 @@ const styles = StyleSheet.create({
 
 interface ImageViewerProps {
   source: number;
-  isActive: Animated.Node<number>;
+  isActive: Animated.Node<0 | 1>;
+  panState: Animated.Node<State>;
   translationX: Animated.Node<number>;
   swipeX: Animated.Value<number>;
 }
@@ -49,6 +53,7 @@ interface ImageViewerProps {
 const ImageViewer = ({
   source,
   isActive,
+  panState,
   translationX,
   swipeX,
 }: ImageViewerProps) => {
@@ -76,16 +81,9 @@ const ImageViewer = ({
   useCode(
     () =>
       block([
-        cond(isActive, [
-          // set(translateX, translationX),
-
-          set(translation.x, clamp(translationX, minVec.x, maxVec.x)),
-          /*
-          set(
-            translateX,
-            sub(translateX, clamp(translation.x, minVec.x, maxVec.x))
-          ),
-          */
+        cond(and(isActive, eq(panState, State.ACTIVE)), [
+          // set(swipeX, translationX),
+          set(translation.x, translationX),
         ]),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
@@ -94,6 +92,11 @@ const ImageViewer = ({
             translation,
             vec.add(pinch, origin, vec.multiply(-1, gestureScale, origin))
           ),
+        ]),
+        cond(and(isActive, eq(panState, State.END)), [
+          vec.set(offset, vec.add(offset, translation)),
+          vec.set(translation, 0),
+          debug("offset.x", offset.x),
         ]),
         cond(eq(state, State.END), [
           vec.set(offset, vec.add(offset, translation)),

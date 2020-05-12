@@ -82,7 +82,8 @@ const WhatsApp = () => {
           {assets.map((source, i) => (
             <ImageViewer
               key={source}
-              isActive={and(eq(index, i), eq(state, State.ACTIVE))}
+              isActive={eq(index, i)}
+              panState={state}
               translationX={translation.x}
               swipeX={translationX}
               {...{ source }}
