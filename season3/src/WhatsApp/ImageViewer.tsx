@@ -10,6 +10,7 @@ import Animated, {
   eq,
   max,
   multiply,
+  neq,
   not,
   or,
   set,
@@ -101,8 +102,9 @@ const ImageViewer = ({
         ]),
         cond(
           and(
-            eq(state, State.END),
-            or(not(isActive), and(isActive, eq(panState, State.END)))
+            isActive,
+            or(eq(state, State.UNDETERMINED), eq(state, State.END)),
+            or(eq(panState, State.UNDETERMINED), eq(panState, State.END))
           ),
           [
             vec.set(offset, vec.add(offset, translation)),
