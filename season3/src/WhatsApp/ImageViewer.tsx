@@ -75,17 +75,24 @@ const ImageViewer = ({
 
   const scaleOffset = new Value(1);
   const scale = new Value(1);
-  const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
-  const maxVec = vec.max(vec.minus(minVec), 0);
   const offset = vec.createValue(0);
   const translation = vec.createValue(0);
   const adjustedFocal = vec.sub(focal, vec.add(CENTER, offset));
+
+  const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
+  const maxVec = vec.max(vec.minus(minVec), 0);
+  const clamped = clamp(
+    translationX,
+    sub(minVec.x, offset.x),
+    sub(maxVec.x, offset.x)
+  );
+
   useCode(
     () =>
       block([
         cond(and(isActive, eq(panState, State.ACTIVE)), [
-          // set(swipeX, translationX),
-          set(translation.x, translationX),
+          set(swipeX, sub(translationX, clamped)),
+          set(translation.x, clamped),
         ]),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
