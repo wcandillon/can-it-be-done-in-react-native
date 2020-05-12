@@ -10,6 +10,8 @@ import Animated, {
   eq,
   max,
   multiply,
+  not,
+  or,
   set,
   sub,
   useCode,
@@ -93,19 +95,20 @@ const ImageViewer = ({
             vec.add(pinch, origin, vec.multiply(-1, gestureScale, origin))
           ),
         ]),
-        cond(and(isActive, eq(panState, State.END)), [
-          vec.set(offset, vec.add(offset, translation)),
-          vec.set(translation, 0),
-          debug("offset.x", offset.x),
-        ]),
-        cond(eq(state, State.END), [
-          vec.set(offset, vec.add(offset, translation)),
-          set(scaleOffset, scale),
-          set(gestureScale, 1),
-          vec.set(translation, 0),
-          vec.set(focal, 0),
-          vec.set(pinch, 0),
-        ]),
+        cond(
+          and(
+            eq(state, State.END),
+            or(not(isActive), and(isActive, eq(panState, State.END)))
+          ),
+          [
+            vec.set(offset, vec.add(offset, translation)),
+            set(scaleOffset, scale),
+            set(gestureScale, 1),
+            vec.set(translation, 0),
+            vec.set(focal, 0),
+            vec.set(pinch, 0),
+          ]
+        ),
         set(scale, multiply(gestureScale, scaleOffset)),
       ]),
     []
