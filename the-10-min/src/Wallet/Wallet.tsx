@@ -29,13 +29,13 @@ const cards = [
     type: Cards.Card3,
   },
   {
-    type: Cards.Card1,
+    type: Cards.Card4,
   },
   {
-    type: Cards.Card2,
+    type: Cards.Card5,
   },
   {
-    type: Cards.Card3,
+    type: Cards.Card6,
   },
 ];
 const styles = StyleSheet.create({

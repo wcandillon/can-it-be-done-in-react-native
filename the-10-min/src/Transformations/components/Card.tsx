@@ -16,6 +16,9 @@ export enum Cards {
   Card1,
   Card2,
   Card3,
+  Card4,
+  Card5,
+  Card6,
 }
 
 interface CardProps {
@@ -33,6 +36,15 @@ export default ({ type }: CardProps) => {
       break;
     case Cards.Card3:
       source = require("../assets/card3.png");
+      break;
+    case Cards.Card4:
+      source = require("../assets/card4.png");
+      break;
+    case Cards.Card5:
+      source = require("../assets/card5.png");
+      break;
+    case Cards.Card6:
+      source = require("../assets/card6.png");
       break;
     default:
       throw Error("Invalid card style");
