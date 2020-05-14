@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
 
 const Wallet = () => {
   const [containerHeight, setContainerHeight] = useState(0);
+  const visibleCards = Math.floor(containerHeight / HEIGHT);
   const {
     gestureHandler,
     translation,
@@ -57,7 +58,7 @@ const Wallet = () => {
       velocity: velocity.y,
       state,
     }),
-    -HEIGHT * cards.length + containerHeight,
+    -HEIGHT * cards.length + visibleCards * HEIGHT,
     0
   );
   return (
