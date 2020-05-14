@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
@@ -6,6 +6,7 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import {
   diffClamp,
   usePanGestureHandler,
+  withDecay,
   withOffset,
 } from "react-native-redash";
 import Card, { CARD_HEIGHT, Cards } from "../Transformations/components/Card";
@@ -43,15 +44,32 @@ const styles = StyleSheet.create({
 });
 
 const Wallet = () => {
-  const { gestureHandler, translation, state } = usePanGestureHandler();
+  const [containerHeight, setContainerHeight] = useState(0);
+  const {
+    gestureHandler,
+    translation,
+    state,
+    velocity,
+  } = usePanGestureHandler();
   const y = diffClamp(
-    withOffset(translation.y, state),
-    -HEIGHT * cards.length,
+    withDecay({
+      value: translation.y,
+      velocity: velocity.y,
+      state,
+    }),
+    -HEIGHT * cards.length + containerHeight,
     0
   );
   return (
     <PanGestureHandler {...gestureHandler}>
-      <Animated.View style={styles.container}>
+      <Animated.View
+        style={styles.container}
+        onLayout={({
+          nativeEvent: {
+            layout: { height },
+          },
+        }) => setContainerHeight(height)}
+      >
         {cards.map(({ type }, index) => {
           const translateY = interpolate(y, {
             inputRange: [-HEIGHT * index, 0],
