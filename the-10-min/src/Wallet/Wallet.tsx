@@ -93,6 +93,11 @@ const Wallet = () => {
             outputRange: [0.8, 1, 1, 0.5],
             extrapolate: Extrapolate.CLAMP,
           });
+          const translateYWithScale = interpolate(positionY, {
+            inputRange: [(visibleCards - 1) * HEIGHT, visibleCards * HEIGHT],
+            outputRange: [0, -HEIGHT / 4],
+            extrapolate: Extrapolate.CLAMP,
+          });
           const opacity = interpolate(positionY, {
             inputRange: [
               -HEIGHT,
@@ -107,7 +112,14 @@ const Wallet = () => {
             <Animated.View
               style={[
                 styles.card,
-                { opacity, transform: [{ translateY }, { scale }] },
+                {
+                  opacity,
+                  transform: [
+                    { translateY },
+                    { translateY: translateYWithScale },
+                    { scale },
+                  ],
+                },
               ]}
               key={index}
             >
