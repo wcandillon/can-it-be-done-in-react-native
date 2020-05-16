@@ -18,14 +18,13 @@ import Animated, {
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
 import {
   Vector,
-  clamp,
-  decay,
   onGestureEvent,
   pinchActive,
   pinchBegan,
   translate,
   vec,
 } from "react-native-redash";
+import { decayVector } from "./AnimationUtil";
 
 const { width, height } = Dimensions.get("window");
 export const CANVAS = vec.create(width, height);
@@ -127,32 +126,7 @@ const ImageViewer = ({
         ),
         cond(
           and(isActive, eq(panState, State.END), not(eq(state, State.ACTIVE))),
-          [
-            set(
-              offset.x,
-              clamp(
-                decay({
-                  from: offset.x,
-                  velocity: panVelocity.x,
-                  clock: clock.x,
-                }),
-                minVec.x,
-                maxVec.x
-              )
-            ),
-            set(
-              offset.y,
-              clamp(
-                decay({
-                  from: offset.y,
-                  velocity: panVelocity.y,
-                  clock: clock.y,
-                }),
-                minVec.y,
-                maxVec.y
-              )
-            ),
-          ]
+          decayVector(offset, panVelocity, minVec, maxVec, clock)
         ),
         cond(not(isActive), [
           stopClock(clock.x),
