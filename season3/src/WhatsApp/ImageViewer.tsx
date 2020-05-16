@@ -1,10 +1,12 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
+  Clock,
   Value,
   add,
   and,
   block,
+  clockRunning,
   cond,
   debug,
   divide,
@@ -14,7 +16,10 @@ import Animated, {
   neq,
   not,
   or,
+  decay as reDecay,
   set,
+  startClock,
+  stopClock,
   sub,
   useCode,
 } from "react-native-reanimated";
@@ -25,7 +30,6 @@ import {
   onGestureEvent,
   pinchActive,
   pinchBegan,
-  timing,
   translate,
   vec,
 } from "react-native-redash";
@@ -47,11 +51,41 @@ const styles = StyleSheet.create({
   },
 });
 
+const decay = ({
+  from,
+  velocity,
+  clock,
+}: {
+  from: Animated.Node<number>;
+  velocity: Animated.Node<number>;
+  clock: Animated.Clock;
+}) => {
+  const state = {
+    finished: new Value(0),
+    position: new Value(0),
+    time: new Value(0),
+    velocity: new Value(0),
+  };
+  const config = { deceleration: 0.998 };
+  return block([
+    cond(not(clockRunning(clock)), [
+      set(state.position, from),
+      set(state.velocity, velocity),
+      set(state.time, 0),
+      set(state.finished, 0),
+      startClock(clock),
+    ]),
+    reDecay(clock, state, config),
+    state.position,
+  ]);
+};
+
 interface ImageViewerProps {
   source: number;
   isActive: Animated.Node<0 | 1>;
   panState: Animated.Node<State>;
   panTranslation: Vector<Animated.Node<number>>;
+  panVelocity: Vector<Animated.Node<number>>;
   swipeX: Animated.Value<number>;
 }
 
@@ -60,8 +94,11 @@ const ImageViewer = ({
   isActive,
   panState,
   panTranslation,
+  panVelocity,
   swipeX,
 }: ImageViewerProps) => {
+  const clock1 = new Clock();
+  const clock2 = new Clock();
   const origin = vec.createValue(0);
   const pinch = vec.createValue(0);
   const focal = vec.createValue(0);
@@ -116,23 +153,41 @@ const ImageViewer = ({
             vec.set(translation, 0),
             vec.set(focal, 0),
             vec.set(pinch, 0),
+          ]
+        ),
+        cond(
+          and(
+            isActive,
+            or(eq(panState, State.ACTIVE), eq(state, State.ACTIVE))
+          ),
+          [stopClock(clock1), stopClock(clock2)]
+        ),
+        cond(
+          and(isActive, eq(panState, State.END), not(eq(state, State.ACTIVE))),
+          [
             set(
               offset.x,
-              timing({
-                from: offset.x,
-                to: clamp(offset.x, minVec.x, maxVec.x),
-              })
+              clamp(
+                decay({
+                  from: offset.x,
+                  velocity: panVelocity.x,
+                  clock: clock1,
+                }),
+                minVec.x,
+                maxVec.x
+              )
             ),
             set(
               offset.y,
-              timing({
-                from: offset.y,
-                to: clamp(offset.y, minVec.y, maxVec.y),
-              })
-            ),
-            set(
-              scaleOffset,
-              timing({ from: scaleOffset, to: max(scaleOffset, 1) })
+              clamp(
+                decay({
+                  from: offset.y,
+                  velocity: panVelocity.y,
+                  clock: clock2,
+                }),
+                minVec.y,
+                maxVec.y
+              )
             ),
           ]
         ),

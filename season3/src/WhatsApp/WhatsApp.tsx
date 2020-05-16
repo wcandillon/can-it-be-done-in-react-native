@@ -5,16 +5,17 @@ import Animated, {
   and,
   clockRunning,
   cond,
-  debug,
   divide,
   eq,
   floor,
+  neq,
   not,
   onChange,
   set,
   useCode,
 } from "react-native-reanimated";
 import {
+  decay,
   snapPoint,
   timing,
   useClock,
@@ -67,7 +68,7 @@ const WhatsApp = () => {
           set(translateX, add(offsetX, translationX)),
         ])
       ),
-      cond(eq(state, State.END), [
+      cond(and(eq(state, State.END), neq(translationX, 0)), [
         set(translateX, timing({ clock, from: translateX, to: snapTo })),
         set(offsetX, translateX),
         cond(not(clockRunning(clock)), [
@@ -89,6 +90,7 @@ const WhatsApp = () => {
               isActive={eq(index, i)}
               panState={state}
               panTranslation={translation}
+              panVelocity={velocity}
               swipeX={translationX}
               {...{ source }}
             />
