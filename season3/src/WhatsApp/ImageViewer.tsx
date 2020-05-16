@@ -191,6 +191,14 @@ const ImageViewer = ({
             ),
           ]
         ),
+        cond(not(isActive), [
+          vec.set(offset, 0),
+          set(scaleOffset, 1),
+          set(gestureScale, 1),
+          vec.set(translation, 0),
+          vec.set(focal, 0),
+          vec.set(pinch, 0),
+        ]),
         set(scale, multiply(gestureScale, scaleOffset)),
       ]),
     []

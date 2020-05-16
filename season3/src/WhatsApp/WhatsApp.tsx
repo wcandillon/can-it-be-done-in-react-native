@@ -8,13 +8,16 @@ import Animated, {
   divide,
   eq,
   floor,
+  multiply,
   neq,
   not,
   onChange,
   set,
+  sub,
   useCode,
 } from "react-native-reanimated";
 import {
+  clamp,
   decay,
   snapPoint,
   timing,
@@ -59,7 +62,11 @@ const WhatsApp = () => {
     velocity,
     state,
   } = usePanGestureHandler();
-  const snapTo = snapPoint(translateX, velocity.x, snapPoints);
+  const snapTo = clamp(
+    snapPoint(translateX, velocity.x, snapPoints),
+    multiply(add(index, 1), -width),
+    multiply(sub(index, 1), -width)
+  );
   useCode(
     () => [
       onChange(
