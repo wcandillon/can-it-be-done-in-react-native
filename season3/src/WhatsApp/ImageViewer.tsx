@@ -192,6 +192,8 @@ const ImageViewer = ({
           ]
         ),
         cond(not(isActive), [
+          stopClock(clock1),
+          stopClock(clock2),
           vec.set(offset, 0),
           set(scaleOffset, 1),
           set(gestureScale, 1),
