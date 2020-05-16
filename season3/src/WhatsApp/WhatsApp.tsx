@@ -10,6 +10,7 @@ import Animated, {
   eq,
   floor,
   not,
+  onChange,
   set,
   useCode,
 } from "react-native-reanimated";
@@ -60,9 +61,12 @@ const WhatsApp = () => {
   const snapTo = snapPoint(translateX, velocity.x, snapPoints);
   useCode(
     () => [
-      cond(eq(state, State.ACTIVE), [
-        set(translateX, add(offsetX, translationX)),
-      ]),
+      onChange(
+        translationX,
+        cond(eq(state, State.ACTIVE), [
+          set(translateX, add(offsetX, translationX)),
+        ])
+      ),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to: snapTo })),
         set(offsetX, translateX),
