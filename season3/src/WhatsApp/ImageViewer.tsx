@@ -6,8 +6,10 @@ import Animated, {
   and,
   block,
   cond,
+  diff,
   eq,
   multiply,
+  neq,
   not,
   or,
   set,
@@ -125,8 +127,16 @@ const ImageViewer = ({
           [stopClock(clock.x), stopClock(clock.y)]
         ),
         cond(
-          and(isActive, eq(panState, State.END), not(eq(state, State.ACTIVE))),
-          decayVector(offset, panVelocity, minVec, maxVec, clock)
+          and(
+            isActive,
+            eq(panState, State.END),
+            neq(diff(panState), 0),
+            neq(state, State.ACTIVE)
+          ),
+          vec.set(
+            offset,
+            vec.clamp(decayVector(offset, panVelocity, clock), minVec, maxVec)
+          )
         ),
         cond(not(isActive), [
           stopClock(clock.x),

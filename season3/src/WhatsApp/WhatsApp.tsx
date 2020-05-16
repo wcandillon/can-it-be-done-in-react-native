@@ -18,7 +18,6 @@ import Animated, {
 } from "react-native-reanimated";
 import {
   clamp,
-  decay,
   snapPoint,
   timing,
   useClock,
