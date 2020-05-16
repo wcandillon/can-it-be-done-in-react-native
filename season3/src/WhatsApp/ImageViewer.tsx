@@ -2,6 +2,7 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   Value,
+  add,
   and,
   block,
   cond,
@@ -83,14 +84,16 @@ const ImageViewer = ({
 
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
-  const clamped = vec.clamp(panTranslation, minVec, maxVec);
+  const clamped = vec.sub(
+    vec.clamp(vec.add(offset, panTranslation), minVec, maxVec),
+    offset
+  );
   useCode(
     () =>
       block([
         cond(and(isActive, eq(panState, State.ACTIVE)), [
           set(swipeX, sub(panTranslation.x, clamped.x)),
-          set(translation.x, clamped.x),
-          set(translation.y, clamped.y),
+          vec.set(translation, clamped),
         ]),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
