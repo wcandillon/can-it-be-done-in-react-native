@@ -3,22 +3,14 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   Clock,
   Value,
-  add,
   and,
   block,
-  clockRunning,
   cond,
-  debug,
-  divide,
   eq,
-  max,
   multiply,
-  neq,
   not,
   or,
-  decay as reDecay,
   set,
-  startClock,
   stopClock,
   sub,
   useCode,
@@ -27,6 +19,7 @@ import { PinchGestureHandler, State } from "react-native-gesture-handler";
 import {
   Vector,
   clamp,
+  decay,
   onGestureEvent,
   pinchActive,
   pinchBegan,
@@ -51,35 +44,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const decay = ({
-  from,
-  velocity,
-  clock,
-}: {
-  from: Animated.Node<number>;
-  velocity: Animated.Node<number>;
-  clock: Animated.Clock;
-}) => {
-  const state = {
-    finished: new Value(0),
-    position: new Value(0),
-    time: new Value(0),
-    velocity: new Value(0),
-  };
-  const config = { deceleration: 0.998 };
-  return block([
-    cond(not(clockRunning(clock)), [
-      set(state.position, from),
-      set(state.velocity, velocity),
-      set(state.time, 0),
-      set(state.finished, 0),
-      startClock(clock),
-    ]),
-    reDecay(clock, state, config),
-    state.position,
-  ]);
-};
-
 interface ImageViewerProps {
   source: number;
   isActive: Animated.Node<0 | 1>;
@@ -97,8 +61,7 @@ const ImageViewer = ({
   panVelocity,
   swipeX,
 }: ImageViewerProps) => {
-  const clock1 = new Clock();
-  const clock2 = new Clock();
+  const clock = vec.create(new Clock(), new Clock());
   const origin = vec.createValue(0);
   const pinch = vec.createValue(0);
   const focal = vec.createValue(0);
@@ -160,7 +123,7 @@ const ImageViewer = ({
             isActive,
             or(eq(panState, State.ACTIVE), eq(state, State.ACTIVE))
           ),
-          [stopClock(clock1), stopClock(clock2)]
+          [stopClock(clock.x), stopClock(clock.y)]
         ),
         cond(
           and(isActive, eq(panState, State.END), not(eq(state, State.ACTIVE))),
@@ -171,7 +134,7 @@ const ImageViewer = ({
                 decay({
                   from: offset.x,
                   velocity: panVelocity.x,
-                  clock: clock1,
+                  clock: clock.x,
                 }),
                 minVec.x,
                 maxVec.x
@@ -183,7 +146,7 @@ const ImageViewer = ({
                 decay({
                   from: offset.y,
                   velocity: panVelocity.y,
-                  clock: clock2,
+                  clock: clock.y,
                 }),
                 minVec.y,
                 maxVec.y
@@ -192,8 +155,8 @@ const ImageViewer = ({
           ]
         ),
         cond(not(isActive), [
-          stopClock(clock1),
-          stopClock(clock2),
+          stopClock(clock.x),
+          stopClock(clock.y),
           vec.set(offset, 0),
           set(scaleOffset, 1),
           set(gestureScale, 1),
