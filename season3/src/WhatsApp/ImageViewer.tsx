@@ -93,11 +93,14 @@ const ImageViewer = ({
   useCode(
     () =>
       block([
+        // Calculate the extra value left to send to the swiper
         cond(and(isActive, eq(panState, State.ACTIVE)), [
           set(swipeX, sub(panTranslation.x, clamped.x)),
           vec.set(translation, clamped),
         ]),
+        // PinchBegan: the focal value is the transformation of origin
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
+        // PinchActive, the focal value (minus its value at began) is the translation
         cond(pinchActive(state, numberOfPointers), [
           vec.set(
             translation,
