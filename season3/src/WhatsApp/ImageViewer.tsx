@@ -6,6 +6,7 @@ import Animated, {
   and,
   block,
   cond,
+  debug,
   diff,
   eq,
   multiply,
@@ -62,6 +63,7 @@ const ImageViewer = ({
   panVelocity,
   swipeX,
 }: ImageViewerProps) => {
+  const shouldDecay = new Value(0);
   const clock = vec.create(new Clock(), new Clock());
   const origin = vec.createValue(0);
   const pinch = vec.createValue(0);
@@ -124,20 +126,23 @@ const ImageViewer = ({
             isActive,
             or(eq(panState, State.ACTIVE), eq(state, State.ACTIVE))
           ),
-          [stopClock(clock.x), stopClock(clock.y)]
+          [stopClock(clock.x), stopClock(clock.y), set(shouldDecay, 0)]
         ),
         cond(
           and(
             isActive,
-            eq(panState, State.END),
             neq(diff(panState), 0),
+            eq(panState, State.END),
             neq(state, State.ACTIVE)
           ),
+          set(shouldDecay, 1)
+        ),
+        cond(shouldDecay, [
           vec.set(
             offset,
             vec.clamp(decayVector(offset, panVelocity, clock), minVec, maxVec)
-          )
-        ),
+          ),
+        ]),
         cond(not(isActive), [
           stopClock(clock.x),
           stopClock(clock.y),
