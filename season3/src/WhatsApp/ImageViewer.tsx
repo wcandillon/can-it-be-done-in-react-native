@@ -6,7 +6,6 @@ import Animated, {
   and,
   block,
   cond,
-  debug,
   diff,
   eq,
   multiply,
@@ -66,7 +65,7 @@ const ImageViewer = ({
   const shouldDecay = new Value(0);
   const clock = vec.create(new Clock(), new Clock());
   const origin = vec.createValue(0);
-  const pinch = vec.createValue(0);
+  // const pinch = vec.createValue(0);
   const focal = vec.createValue(0);
   const gestureScale = new Value(1);
   const numberOfPointers = new Value(0);
@@ -100,12 +99,16 @@ const ImageViewer = ({
         ]),
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(pinchActive(state, numberOfPointers), [
-          vec.set(pinch, vec.sub(adjustedFocal, origin)),
           vec.set(
             translation,
-            vec.add(pinch, origin, vec.multiply(-1, gestureScale, origin))
+            vec.add(
+              vec.sub(adjustedFocal, origin),
+              origin,
+              vec.multiply(-1, gestureScale, origin)
+            )
           ),
         ]),
+        // Gesture ended, keep offset, reset values,
         cond(
           and(
             isActive,
@@ -118,9 +121,9 @@ const ImageViewer = ({
             set(gestureScale, 1),
             vec.set(translation, 0),
             vec.set(focal, 0),
-            vec.set(pinch, 0),
           ]
         ),
+        // Decay animation (when releasing the pan gesture within the active image)
         cond(
           and(
             isActive,
@@ -143,6 +146,7 @@ const ImageViewer = ({
             vec.clamp(decayVector(offset, panVelocity, clock), minVec, maxVec)
           ),
         ]),
+        // Reset states when the image is not active anymore
         cond(not(isActive), [
           stopClock(clock.x),
           stopClock(clock.y),
@@ -151,8 +155,8 @@ const ImageViewer = ({
           set(gestureScale, 1),
           vec.set(translation, 0),
           vec.set(focal, 0),
-          vec.set(pinch, 0),
         ]),
+        // Calulate scale
         set(scale, multiply(gestureScale, scaleOffset)),
       ]),
     []
