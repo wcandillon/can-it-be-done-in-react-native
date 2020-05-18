@@ -20,10 +20,12 @@ import Animated, {
 import { PinchGestureHandler, State } from "react-native-gesture-handler";
 import {
   Vector,
-  onGestureEvent,
   pinchActive,
   pinchBegan,
   translate,
+  usePinchGestureHandler,
+  useValue,
+  useVector,
   vec,
 } from "react-native-redash";
 import { decayVector } from "./AnimationUtil";
@@ -62,26 +64,21 @@ const ImageViewer = ({
   panVelocity,
   swipeX,
 }: ImageViewerProps) => {
-  const shouldDecay = new Value(0);
+  const shouldDecay = useValue(0);
   const clock = vec.create(new Clock(), new Clock());
-  const origin = vec.createValue(0);
-  // const pinch = vec.createValue(0);
-  const focal = vec.createValue(0);
-  const gestureScale = new Value(1);
-  const numberOfPointers = new Value(0);
-  const state = new Value(State.UNDETERMINED);
-  const pinchGestureHandler = onGestureEvent({
+  const origin = useVector(0, 0);
+  const {
+    gestureHandler,
+    state,
     numberOfPointers,
     scale: gestureScale,
-    state,
-    focalX: focal.x,
-    focalY: focal.y,
-  });
+    focal,
+  } = usePinchGestureHandler();
 
-  const scaleOffset = new Value(1);
-  const scale = new Value(1);
-  const offset = vec.createValue(0);
-  const translation = vec.createValue(0);
+  const scaleOffset = useValue(1);
+  const scale = useValue(1);
+  const offset = useVector(0, 0);
+  const translation = useVector(0, 0);
   const adjustedFocal = vec.sub(focal, vec.add(CENTER, offset));
 
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
@@ -166,7 +163,7 @@ const ImageViewer = ({
   );
   return (
     <View style={styles.container}>
-      <PinchGestureHandler {...pinchGestureHandler}>
+      <PinchGestureHandler {...gestureHandler}>
         <Animated.View style={StyleSheet.absoluteFill}>
           <Animated.Image
             style={[
