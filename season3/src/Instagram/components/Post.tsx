@@ -88,7 +88,7 @@ export default ({
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
         cond(
           pinchActive(state, numberOfPointers),
-          vec.set(pinch, vec.invert(vec.sub(origin, adjustedFocal)))
+          vec.set(pinch, vec.minus(vec.sub(origin, adjustedFocal)))
         ),
         cond(eq(state, State.END), [
           set(pinch.x, timing({ from: pinch.x, to: 0 })),

@@ -45,30 +45,23 @@ interface SortableCardProps extends TabProps {
 }
 
 export default ({ tab, offsets, index }: SortableCardProps) => {
-  const {
-    gestureHandler,
-    state,
-    translationX,
-    velocityX,
-    translationY,
-    velocityY,
-  } = panGestureHandler();
+  const { gestureHandler, state, translation, velocity } = panGestureHandler();
   const currentOffset = offsets[index];
   const x = withOffset({
-    value: translationX,
+    value: translation.x,
     offset: currentOffset.x,
     state,
   });
   const y = withOffset({
-    value: translationY,
+    value: translation.y,
     offset: currentOffset.y,
     state,
   });
   const zIndex = cond(eq(state, State.ACTIVE), 200, cond(moving(y), 100, 1));
   const offsetX = multiply(round(divide(x, TAB_SIZE)), TAB_SIZE);
   const offsetY = multiply(round(divide(y, TAB_SIZE)), TAB_SIZE);
-  const translateX = withSpringTransition(x, {}, velocityX, state);
-  const translateY = withSpringTransition(y, {}, velocityY, state);
+  const translateX = withSpringTransition(x, {}, velocity.x, state);
+  const translateY = withSpringTransition(y, {}, velocity.y, state);
   useCode(
     () =>
       block(
