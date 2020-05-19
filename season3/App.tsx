@@ -45,12 +45,6 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      WhatsApp: {
-        screen: WhatsApp,
-        navigationOptions: {
-          title: "WhatsApp",
-        },
-      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
@@ -117,6 +111,12 @@ const AppNavigator = createAppContainer(
         navigationOptions: {
           title: "Hue",
           header: () => null,
+        },
+      },
+      WhatsApp: {
+        screen: WhatsApp,
+        navigationOptions: {
+          title: "WhatsApp",
         },
       },
     },

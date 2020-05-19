@@ -60,6 +60,11 @@ export const episodes = [
     name: "Instagram",
     icon: require("../../assets/icons/instagram.png"),
   },
+  {
+    id: "WhatsApp",
+    name: "WhatsApp",
+    icon: require("../../assets/icons/whatsapp.png"),
+  },
 ];
 
 export default () => {
