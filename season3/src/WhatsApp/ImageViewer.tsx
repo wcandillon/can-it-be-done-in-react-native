@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   Clock,
@@ -17,7 +17,11 @@ import Animated, {
   sub,
   useCode,
 } from "react-native-reanimated";
-import { PinchGestureHandler, State } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  PinchGestureHandler,
+  State,
+} from "react-native-gesture-handler";
 import {
   Vector,
   pinchActive,
@@ -54,6 +58,8 @@ interface ImageViewerProps {
   panTranslation: Vector<Animated.Node<number>>;
   panVelocity: Vector<Animated.Node<number>>;
   swipeX: Animated.Value<number>;
+  panRef: RefObject<PanGestureHandler>;
+  pinchRef: RefObject<PinchGestureHandler>;
 }
 
 const ImageViewer = ({
@@ -63,6 +69,8 @@ const ImageViewer = ({
   panTranslation,
   panVelocity,
   swipeX,
+  panRef,
+  pinchRef,
 }: ImageViewerProps) => {
   const shouldDecay = useValue(0);
   const clock = vec.create(new Clock(), new Clock());
@@ -93,7 +101,7 @@ const ImageViewer = ({
         // Calculate the extra value left to send to the swiper
         cond(and(isActive, eq(panState, State.ACTIVE)), [
           set(swipeX, sub(panTranslation.x, clamped.x)),
-          vec.set(translation, clamped),
+          set(translation.x, clamped.x),
         ]),
         // PinchBegan: the focal value is the transformation of origin
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
@@ -163,7 +171,11 @@ const ImageViewer = ({
   );
   return (
     <View style={styles.container}>
-      <PinchGestureHandler {...gestureHandler}>
+      <PinchGestureHandler
+        simultaneousHandlers={panRef}
+        ref={pinchRef}
+        {...gestureHandler}
+      >
         <Animated.View style={StyleSheet.absoluteFill}>
           <Animated.Image
             style={[

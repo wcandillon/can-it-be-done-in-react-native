@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { StyleSheet } from "react-native";
 import Animated, {
   add,
@@ -24,7 +24,11 @@ import {
   usePanGestureHandler,
   useValue,
 } from "react-native-redash";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  PinchGestureHandler,
+  State,
+} from "react-native-gesture-handler";
 import ImageViewer, { CANVAS } from "./ImageViewer";
 
 export const assets = [
@@ -50,6 +54,9 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
+  const ref = useRef<PanGestureHandler>(null);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const refs = assets.map(() => useRef<PinchGestureHandler>(null));
   const clock = useClock();
   const index = useValue(0);
   const offsetX = useValue(0);
@@ -85,7 +92,11 @@ const WhatsApp = () => {
     []
   );
   return (
-    <PanGestureHandler {...gestureHandler}>
+    <PanGestureHandler
+      simultaneousHandlers={refs}
+      {...{ ref }}
+      {...gestureHandler}
+    >
       <Animated.View style={styles.container}>
         <Animated.View
           style={[styles.pictures, { transform: [{ translateX }] }]}
@@ -98,6 +109,8 @@ const WhatsApp = () => {
               panTranslation={translation}
               panVelocity={velocity}
               swipeX={translationX}
+              panRef={ref}
+              pinchRef={refs[i]}
               {...{ source }}
             />
           ))}
