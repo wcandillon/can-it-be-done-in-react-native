@@ -6,6 +6,7 @@ import Animated, {
   and,
   block,
   cond,
+  debug,
   diff,
   eq,
   multiply,
@@ -102,8 +103,8 @@ const ImageViewer = ({
       block([
         // Calculate the extra value left to send to the swiper
         cond(and(isActive, eq(panState, State.ACTIVE)), [
+          vec.set(translation, clamped),
           set(swipeX, sub(panTranslation.x, clamped.x)),
-          set(translation.x, clamped.x),
         ]),
         // PinchBegan: the focal value is the transformation of origin
         cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
