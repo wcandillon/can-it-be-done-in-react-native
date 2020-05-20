@@ -39,10 +39,11 @@ const decay = (
 export const decayVector = (
   position: Vector,
   velocity: Vector,
-  clock: Vector<Clock>
+  clockX: Clock,
+  clockY: Clock
 ) => {
-  const x = decay(position.x, velocity.x, clock.x);
-  const y = decay(position.y, velocity.y, clock.y);
+  const x = decay(position.x, velocity.x, clockX);
+  const y = decay(position.y, velocity.y, clockY);
   return {
     x,
     y,

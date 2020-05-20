@@ -27,6 +27,7 @@ import {
   pinchActive,
   pinchBegan,
   translate,
+  useClock,
   usePinchGestureHandler,
   useValue,
   useVector,
@@ -73,7 +74,8 @@ const ImageViewer = ({
   pinchRef,
 }: ImageViewerProps) => {
   const shouldDecay = useValue(0);
-  const clock = vec.create(new Clock(), new Clock());
+  const clockX = useClock();
+  const clockY = useClock();
   const origin = useVector(0, 0);
   const {
     gestureHandler,
@@ -137,7 +139,7 @@ const ImageViewer = ({
             isActive,
             or(eq(panState, State.ACTIVE), eq(state, State.ACTIVE))
           ),
-          [stopClock(clock.x), stopClock(clock.y), set(shouldDecay, 0)]
+          [stopClock(clockX), stopClock(clockY), set(shouldDecay, 0)]
         ),
         cond(
           and(
@@ -151,13 +153,17 @@ const ImageViewer = ({
         cond(shouldDecay, [
           vec.set(
             offset,
-            vec.clamp(decayVector(offset, panVelocity, clock), minVec, maxVec)
+            vec.clamp(
+              decayVector(offset, panVelocity, clockX, clockY),
+              minVec,
+              maxVec
+            )
           ),
         ]),
         // Reset states when the image is not active anymore
         cond(not(isActive), [
-          stopClock(clock.x),
-          stopClock(clock.y),
+          stopClock(clockX),
+          stopClock(clockY),
           vec.set(offset, 0),
           set(scaleOffset, 1),
           set(gestureScale, 1),
