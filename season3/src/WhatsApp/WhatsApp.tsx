@@ -72,10 +72,8 @@ const WhatsApp = () => {
   const panRef = useRef<PanGestureHandler>(null);
 
   const index = useValue(0);
-  const translationX = useValue(0);
   const translateX = useValue(0);
   const pan = usePanGestureHandler();
-  useSwiper({ pan, snapPoints, index, translationX, translateX });
 
   const shouldDecay = useValue(0);
   const clockX = useClock();
@@ -95,14 +93,10 @@ const WhatsApp = () => {
     vec.clamp(vec.add(offset, pan.translation), minVec, maxVec),
     offset
   );
+  useSwiper({ pan, snapPoints, index, translateX, clamped, translation });
   useCode(
     () =>
       block([
-        // Calculate the extra value left to send to the swiper
-        cond(eq(pan.state, State.ACTIVE), [
-          vec.set(translation, clamped),
-          set(translationX, sub(pan.translation.x, clamped.x)),
-        ]),
         // PinchBegan: the focal value is the transformation of origin
         cond(pinchBegan(pinch.state), vec.set(origin, adjustedFocal)),
         // PinchActive, the focal value (minus its value at began) is the translation

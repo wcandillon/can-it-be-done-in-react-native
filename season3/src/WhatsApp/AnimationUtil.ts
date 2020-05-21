@@ -27,6 +27,7 @@ import {
   timing,
   useClock,
   useValue,
+  vec,
 } from "react-native-redash";
 import { Dimensions } from "react-native";
 import { State } from "react-native-gesture-handler";
@@ -76,16 +77,18 @@ interface UseSwiperParams {
   pan: ReturnType<typeof panGestureHandler>;
   snapPoints: number[];
   index: Animated.Value<number>;
-  translationX: Animated.Node<number>;
   translateX: Animated.Value<number>;
+  translation: Vector<Animated.Value<number>>;
+  clamped: Vector;
 }
 
 export const useSwiper = ({
   pan,
   snapPoints,
   index,
-  translationX,
   translateX,
+  translation,
+  clamped,
 }: UseSwiperParams) => {
   const offsetX = useValue(0);
   const clock = useClock();
@@ -94,14 +97,15 @@ export const useSwiper = ({
     multiply(add(index, 1), -width),
     multiply(sub(index, 1), -width)
   );
+  const translationX = useValue(0);
   useCode(
     () => [
-      onChange(
-        translationX,
-        cond(eq(pan.state, State.ACTIVE), [
-          set(translateX, add(offsetX, translationX)),
-        ])
-      ),
+      // Calculate the extra value left to send to the swiper
+      cond(eq(pan.state, State.ACTIVE), [
+        vec.set(translation, clamped),
+        set(translationX, sub(pan.translation.x, clamped.x)),
+        set(translateX, add(offsetX, translationX)),
+      ]),
       cond(and(eq(pan.state, State.END), neq(translationX, 0)), [
         set(translateX, timing({ clock, from: translateX, to: snapTo })),
         set(offsetX, translateX),
