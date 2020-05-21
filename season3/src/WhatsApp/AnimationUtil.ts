@@ -43,19 +43,34 @@ export const CANVAS = vec.create(width, height);
 const CENTER = vec.divide(CANVAS, 2);
 
 interface UsePinchParams {
+  pan: ReturnType<typeof panGestureHandler>;
   pinch: ReturnType<typeof pinchGestureHandler>;
   translate: Vector<Animated.Value<number>>;
   scale: Animated.Value<number>;
+  minVec: Vector;
+  maxVec: Vector;
 }
 
-export const usePinch = ({ pinch, translate, scale }: UsePinchParams) => {
+export const usePinch = ({
+  pinch,
+  pan,
+  translate,
+  scale,
+  minVec,
+  maxVec,
+}: UsePinchParams) => {
   const offset = vec.createValue(0, 0);
   const scaleOffset = new Value(1);
   const origin = vec.createValue(0, 0);
   const translation = vec.createValue(0, 0);
   const adjustedFocal = vec.sub(pinch.focal, vec.add(CENTER, offset));
+  const clamped = vec.sub(
+    vec.clamp(vec.add(offset, pan.translation), minVec, maxVec),
+    offset
+  );
   useCode(
     () => [
+      cond(eq(pan.state, State.ACTIVE), [vec.set(translation, clamped)]),
       cond(pinchBegan(pinch.state), vec.set(origin, adjustedFocal)),
       cond(pinchActive(pinch.state, pinch.numberOfPointers), [
         vec.set(
@@ -67,13 +82,19 @@ export const usePinch = ({ pinch, translate, scale }: UsePinchParams) => {
           )
         ),
       ]),
-      cond(eq(pinch.state, State.END), [
-        vec.set(offset, vec.add(offset, translation)),
-        set(scaleOffset, scale),
-        set(pinch.scale, 1),
-        vec.set(translation, 0),
-        vec.set(pinch.focal, 0),
-      ]),
+      cond(
+        and(
+          or(eq(pinch.state, State.UNDETERMINED), eq(pinch.state, State.END)),
+          or(eq(pan.state, State.UNDETERMINED), eq(pan.state, State.END))
+        ),
+        [
+          vec.set(offset, vec.add(offset, translation)),
+          set(scaleOffset, scale),
+          set(pinch.scale, 1),
+          vec.set(translation, 0),
+          vec.set(pinch.focal, 0),
+        ]
+      ),
       set(scale, multiply(pinch.scale, scaleOffset)),
       vec.set(translate, vec.add(translation, offset)),
     ],

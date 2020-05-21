@@ -12,7 +12,7 @@ import {
   PanGestureHandler,
   PinchGestureHandler,
 } from "react-native-gesture-handler";
-import { CANVAS, usePinch } from "./AnimationUtil";
+import { CANVAS, usePinch, useSwipe } from "./AnimationUtil";
 
 const { width, height } = Dimensions.get("window");
 export const assets = [
@@ -65,8 +65,7 @@ const WhatsApp = () => {
 
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
-
-  usePinch({ pinch, translate, scale });
+  usePinch({ pan, pinch, translate, scale, minVec, maxVec });
   return (
     <PinchGestureHandler
       ref={pinchRef}
