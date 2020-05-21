@@ -107,11 +107,14 @@ export const usePinch = ({
     vec.clamp(vec.add(offset, pan.translation), minVec, maxVec),
     offset
   );
+  const isPinchBegan = pinchBegan(pinch.state);
+  const isPinchActive = pinchActive(pinch.state, pinch.numberOfPointers);
+  const isPinchEnd = pinchEnd(pinch.state, pinch.numberOfPointers);
   useCode(
     () => [
       cond(eq(pan.state, State.ACTIVE), [vec.set(translation, clamped)]),
-      cond(pinchBegan(pinch.state), vec.set(origin, adjustedFocal)),
-      cond(pinchActive(pinch.state, pinch.numberOfPointers), [
+      cond(isPinchBegan, vec.set(origin, adjustedFocal)),
+      cond(isPinchActive, [
         vec.set(
           translation,
           vec.add(
@@ -123,10 +126,7 @@ export const usePinch = ({
       ]),
       cond(
         and(
-          or(
-            eq(pinch.state, State.UNDETERMINED),
-            pinchEnd(pinch.state, pinch.numberOfPointers)
-          ),
+          or(eq(pinch.state, State.UNDETERMINED), isPinchEnd),
           or(eq(pan.state, State.UNDETERMINED), eq(pan.state, State.END))
         ),
         [
@@ -137,7 +137,7 @@ export const usePinch = ({
           vec.set(pinch.focal, 0),
         ]
       ),
-      cond(or(eq(pan.state, State.ACTIVE), eq(pinch.state, State.ACTIVE)), [
+      cond(or(eq(pan.state, State.ACTIVE), isPinchActive), [
         stopClock(clock.x),
         stopClock(clock.y),
         set(shouldDecay, 0),
@@ -146,7 +146,7 @@ export const usePinch = ({
         and(
           neq(diff(pan.state), 0),
           eq(pan.state, State.END),
-          neq(pinch.state, State.ACTIVE)
+          not(isPinchActive)
         ),
         set(shouldDecay, 1)
       ),
