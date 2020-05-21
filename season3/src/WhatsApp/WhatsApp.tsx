@@ -16,9 +16,6 @@ import Animated, {
   useCode,
 } from "react-native-reanimated";
 import {
-  pinchActive,
-  pinchBegan,
-  useClock,
   usePanGestureHandler,
   usePinchGestureHandler,
   useValue,
@@ -28,21 +25,20 @@ import {
 import {
   PanGestureHandler,
   PinchGestureHandler,
-  State,
 } from "react-native-gesture-handler";
-import { decayVector, useSwiper } from "./AnimationUtil";
+import { useDecay, usePinch, useSwiper } from "./AnimationUtil";
 
 const { width, height } = Dimensions.get("window");
 export const CANVAS = vec.create(width, height);
 const CENTER = vec.divide(CANVAS, 2);
-export const assets = [
-  require("./assets/3.jpg"),
+export const assets = [require("./assets/3.jpg")];
+
+/*
+
   require("./assets/2.jpg"),
   require("./assets/4.jpg"),
   require("./assets/5.jpg"),
-  require("./assets/1.jpg"),
-];
-
+  require("./assets/1.jpg"), */
 const snapPoints = assets.map((_, i) => -width * i);
 const styles = StyleSheet.create({
   container: {
@@ -75,83 +71,41 @@ const WhatsApp = () => {
   const translateX = useValue(0);
   const pan = usePanGestureHandler();
 
-  const shouldDecay = useValue(0);
-  const clockX = useClock();
-  const clockY = useClock();
-  const origin = useVector(0, 0);
   const pinch = usePinchGestureHandler();
 
   const scaleOffset = useValue(1);
   const scale = useValue(1);
   const offset = useVector(0, 0);
   const translation = useVector(0, 0);
-  const adjustedFocal = vec.sub(pinch.focal, vec.add(CENTER, offset));
 
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
-  const clamped = vec.sub(
-    vec.clamp(vec.add(offset, pan.translation), minVec, maxVec),
-    offset
-  );
-  useSwiper({ pan, snapPoints, index, translateX, clamped, translation });
+
+  useSwiper({
+    pan,
+    snapPoints,
+    index,
+    translateX,
+    minVec,
+    maxVec,
+    translation,
+    offset,
+  });
+  usePinch({
+    pinch,
+    pan,
+    offset,
+    translation,
+    scale,
+    scaleOffset,
+    center: CENTER,
+  });
+  useDecay({ pinch, pan, offset, minVec, maxVec });
   useCode(
     () =>
       block([
-        // PinchBegan: the focal value is the transformation of origin
-        cond(pinchBegan(pinch.state), vec.set(origin, adjustedFocal)),
-        // PinchActive, the focal value (minus its value at began) is the translation
-        cond(pinchActive(pinch.state, pinch.numberOfPointers), [
-          vec.set(
-            translation,
-            vec.add(
-              vec.sub(adjustedFocal, origin),
-              origin,
-              vec.multiply(-1, pinch.scale, origin)
-            )
-          ),
-        ]),
-        // Gesture ended, keep offset, reset values,
-        cond(
-          and(
-            or(eq(pinch.state, State.UNDETERMINED), eq(pinch.state, State.END)),
-            or(eq(pan.state, State.UNDETERMINED), eq(pan.state, State.END))
-          ),
-          [
-            vec.set(offset, vec.add(offset, translation)),
-            set(scaleOffset, scale),
-            set(pinch.scale, 1),
-            vec.set(translation, 0),
-            vec.set(pinch.focal, 0),
-          ]
-        ),
-        // Decay animation (when releasing the pan gesture within the active image)
-        cond(or(eq(pan.state, State.ACTIVE), eq(pinch.state, State.ACTIVE)), [
-          stopClock(clockX),
-          stopClock(clockY),
-          set(shouldDecay, 0),
-        ]),
-        cond(
-          and(
-            neq(diff(pan.state), 0),
-            eq(pan.state, State.END),
-            neq(pinch.state, State.ACTIVE)
-          ),
-          set(shouldDecay, 1)
-        ),
-        cond(shouldDecay, [
-          vec.set(
-            offset,
-            vec.clamp(
-              decayVector(offset, pan.velocity, clockX, clockY),
-              minVec,
-              maxVec
-            )
-          ),
-        ]),
         // Reset states when the image is not active anymore
         onChange(index, [
-          stopClock(clockX),
-          stopClock(clockY),
           vec.set(offset, 0),
           set(scaleOffset, 1),
           set(pinch.scale, 1),

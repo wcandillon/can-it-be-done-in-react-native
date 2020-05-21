@@ -6,16 +6,18 @@ import Animated, {
   block,
   clockRunning,
   cond,
+  diff,
   divide,
   eq,
   floor,
   multiply,
   neq,
   not,
-  onChange,
+  or,
   decay as reDecay,
   set,
   startClock,
+  stopClock,
   sub,
   useCode,
 } from "react-native-reanimated";
@@ -23,10 +25,14 @@ import {
   Vector,
   clamp,
   panGestureHandler,
+  pinchActive,
+  pinchBegan,
+  pinchGestureHandler,
   snapPoint,
   timing,
   useClock,
   useValue,
+  useVector,
   vec,
 } from "react-native-redash";
 import { Dimensions } from "react-native";
@@ -59,7 +65,7 @@ const decay = (
   ]);
 };
 
-export const decayVector = (
+const decayVector = (
   position: Vector,
   velocity: Vector,
   clockX: Clock,
@@ -79,7 +85,9 @@ interface UseSwiperParams {
   index: Animated.Value<number>;
   translateX: Animated.Value<number>;
   translation: Vector<Animated.Value<number>>;
-  clamped: Vector;
+  minVec: Vector;
+  maxVec: Vector;
+  offset: Vector;
 }
 
 export const useSwiper = ({
@@ -88,7 +96,9 @@ export const useSwiper = ({
   index,
   translateX,
   translation,
-  clamped,
+  offset,
+  minVec,
+  maxVec,
 }: UseSwiperParams) => {
   const offsetX = useValue(0);
   const clock = useClock();
@@ -96,6 +106,10 @@ export const useSwiper = ({
     snapPoint(translateX, pan.velocity.x, snapPoints),
     multiply(add(index, 1), -width),
     multiply(sub(index, 1), -width)
+  );
+  const clamped = vec.sub(
+    vec.clamp(vec.add(offset, pan.translation), minVec, maxVec),
+    offset
   );
   const translationX = useValue(0);
   useCode(
@@ -112,6 +126,110 @@ export const useSwiper = ({
         cond(not(clockRunning(clock)), [
           set(index, floor(divide(translateX, -width))),
         ]),
+      ]),
+    ],
+    []
+  );
+};
+
+interface UsePinchParams {
+  pan: ReturnType<typeof panGestureHandler>;
+  pinch: ReturnType<typeof pinchGestureHandler>;
+  offset: Vector<Animated.Value<number>>;
+  translation: Vector<Animated.Value<number>>;
+  scaleOffset: Animated.Value<number>;
+  scale: Animated.Value<number>;
+  center: Vector;
+}
+
+export const usePinch = ({
+  pan,
+  pinch,
+  offset,
+  translation,
+  scale,
+  scaleOffset,
+  center,
+}: UsePinchParams) => {
+  const origin = useVector(0, 0);
+  const adjustedFocal = vec.sub(pinch.focal, vec.add(center, offset));
+  useCode(
+    () => [
+      // PinchBegan: the focal value is the transformation of origin
+      cond(pinchBegan(pinch.state), vec.set(origin, adjustedFocal)),
+      // PinchActive, the focal value (minus its value at began) is the translation
+      cond(pinchActive(pinch.state, pinch.numberOfPointers), [
+        vec.set(
+          translation,
+          vec.add(
+            vec.sub(adjustedFocal, origin),
+            origin,
+            vec.multiply(-1, pinch.scale, origin)
+          )
+        ),
+      ]),
+      // Gesture ended, keep offset, reset values,
+      cond(
+        and(
+          or(eq(pinch.state, State.UNDETERMINED), eq(pinch.state, State.END)),
+          or(eq(pan.state, State.UNDETERMINED), eq(pan.state, State.END))
+        ),
+        [
+          vec.set(offset, vec.add(offset, translation)),
+          set(scaleOffset, scale),
+          set(pinch.scale, 1),
+          vec.set(translation, 0),
+          vec.set(pinch.focal, 0),
+        ]
+      ),
+    ],
+    []
+  );
+};
+
+interface UseDecayParams {
+  pan: ReturnType<typeof panGestureHandler>;
+  pinch: ReturnType<typeof pinchGestureHandler>;
+  offset: Vector<Animated.Value<number>>;
+  minVec: Vector;
+  maxVec: Vector;
+}
+
+export const useDecay = ({
+  pinch,
+  pan,
+  offset,
+  minVec,
+  maxVec,
+}: UseDecayParams) => {
+  const shouldDecay = useValue(0);
+  const clockX = useClock();
+  const clockY = useClock();
+  useCode(
+    () => [
+      // Decay animation (when releasing the pan gesture within the active image)
+      cond(or(eq(pan.state, State.ACTIVE), eq(pinch.state, State.ACTIVE)), [
+        stopClock(clockX),
+        stopClock(clockY),
+        set(shouldDecay, 0),
+      ]),
+      cond(
+        and(
+          neq(diff(pan.state), 0),
+          eq(pan.state, State.END),
+          neq(pinch.state, State.ACTIVE)
+        ),
+        set(shouldDecay, 1)
+      ),
+      cond(shouldDecay, [
+        vec.set(
+          offset,
+          vec.clamp(
+            decayVector(offset, pan.velocity, clockX, clockY),
+            minVec,
+            maxVec
+          )
+        ),
       ]),
     ],
     []
