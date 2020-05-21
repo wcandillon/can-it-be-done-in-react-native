@@ -1,12 +1,9 @@
 import React, { RefObject } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
-  Clock,
-  Value,
   and,
   block,
   cond,
-  debug,
   diff,
   eq,
   multiply,
@@ -71,16 +68,14 @@ const ImageViewer = ({
   panTranslation,
   panVelocity,
   swipeX,
-  panRef,
-  pinchRef,
 }: ImageViewerProps) => {
   const shouldDecay = useValue(0);
   const clockX = useClock();
   const clockY = useClock();
   const origin = useVector(0, 0);
   const {
-    gestureHandler,
-    state,
+    gestureHandler: pinchGestureHandler,
+    state: pinchState,
     numberOfPointers,
     scale: gestureScale,
     focal,
@@ -107,9 +102,9 @@ const ImageViewer = ({
           set(swipeX, sub(panTranslation.x, clamped.x)),
         ]),
         // PinchBegan: the focal value is the transformation of origin
-        cond(pinchBegan(state), vec.set(origin, adjustedFocal)),
+        cond(pinchBegan(pinchState), vec.set(origin, adjustedFocal)),
         // PinchActive, the focal value (minus its value at began) is the translation
-        cond(pinchActive(state, numberOfPointers), [
+        cond(pinchActive(pinchState, numberOfPointers), [
           vec.set(
             translation,
             vec.add(
@@ -123,7 +118,7 @@ const ImageViewer = ({
         cond(
           and(
             isActive,
-            or(eq(state, State.UNDETERMINED), eq(state, State.END)),
+            or(eq(pinchState, State.UNDETERMINED), eq(pinchState, State.END)),
             or(eq(panState, State.UNDETERMINED), eq(panState, State.END))
           ),
           [
@@ -138,7 +133,7 @@ const ImageViewer = ({
         cond(
           and(
             isActive,
-            or(eq(panState, State.ACTIVE), eq(state, State.ACTIVE))
+            or(eq(panState, State.ACTIVE), eq(pinchState, State.ACTIVE))
           ),
           [stopClock(clockX), stopClock(clockY), set(shouldDecay, 0)]
         ),
@@ -147,7 +142,7 @@ const ImageViewer = ({
             isActive,
             neq(diff(panState), 0),
             eq(panState, State.END),
-            neq(state, State.ACTIVE)
+            neq(pinchState, State.ACTIVE)
           ),
           set(shouldDecay, 1)
         ),
@@ -178,11 +173,7 @@ const ImageViewer = ({
   );
   return (
     <View style={styles.container}>
-      <PinchGestureHandler
-        simultaneousHandlers={panRef}
-        ref={pinchRef}
-        {...gestureHandler}
-      >
+      <PinchGestureHandler {...pinchGestureHandler}>
         <Animated.View style={StyleSheet.absoluteFill}>
           <Animated.Image
             style={[
