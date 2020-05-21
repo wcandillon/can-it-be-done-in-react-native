@@ -44,23 +44,16 @@ const CENTER = vec.divide(CANVAS, 2);
 
 interface UsePinchParams {
   pinch: ReturnType<typeof pinchGestureHandler>;
-  translateX: Animated.Value<number>;
-  translateY: Animated.Value<number>;
+  translate: Vector<Animated.Value<number>>;
   scale: Animated.Value<number>;
 }
 
-export const usePinch = ({
-  pinch,
-  translateX: x,
-  translateY: y,
-  scale,
-}: UsePinchParams) => {
-  const translate = { x, y };
-  const translateOffset = vec.createValue(0, 0);
+export const usePinch = ({ pinch, translate, scale }: UsePinchParams) => {
+  const offset = vec.createValue(0, 0);
   const scaleOffset = new Value(1);
   const origin = vec.createValue(0, 0);
   const translation = vec.createValue(0, 0);
-  const adjustedFocal = vec.sub(pinch.focal, vec.add(CENTER, translateOffset));
+  const adjustedFocal = vec.sub(pinch.focal, vec.add(CENTER, offset));
   useCode(
     () => [
       cond(pinchBegan(pinch.state), vec.set(origin, adjustedFocal)),
@@ -75,14 +68,14 @@ export const usePinch = ({
         ),
       ]),
       cond(eq(pinch.state, State.END), [
-        vec.set(translateOffset, vec.add(translateOffset, translation)),
+        vec.set(offset, vec.add(offset, translation)),
         set(scaleOffset, scale),
         set(pinch.scale, 1),
         vec.set(translation, 0),
         vec.set(pinch.focal, 0),
       ]),
       set(scale, multiply(pinch.scale, scaleOffset)),
-      vec.set(translate, vec.add(translation, translateOffset)),
+      vec.set(translate, vec.add(translation, offset)),
     ],
     []
   );

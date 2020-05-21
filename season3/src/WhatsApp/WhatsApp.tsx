@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import Animated, { Value, sub } from "react-native-reanimated";
+import Animated, { Value, cond, eq, sub } from "react-native-reanimated";
 import {
+  translate as translateVector,
   usePanGestureHandler,
   usePinchGestureHandler,
   useValue,
@@ -22,9 +23,10 @@ export const assets = [
   require("./assets/1.jpg"),
 ];
 
-const translationsX = assets.map(() => new Value(0));
-const translationsY = assets.map(() => new Value(0));
-const scales = assets.map(() => new Value(1));
+const values = assets.map(() => ({
+  scale: new Value(1),
+  translate: vec.createValue(0, 0),
+}));
 const snapPoints = assets.map((_, i) => -width * i);
 
 const styles = StyleSheet.create({
@@ -51,21 +53,20 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
+  const [index, setIndex] = useState(0);
+
   const pinchRef = useRef<PinchGestureHandler>(null);
   const panRef = useRef<PanGestureHandler>(null);
 
   const pan = usePanGestureHandler();
   const pinch = usePinchGestureHandler();
 
-  const index = useValue(0);
-  const translateX = new Value(0); // get(translationsX, index) as Animated.Value<number>;
-  const translateY = new Value(0); // get(translationsX, index) as Animated.Value<number>;
-  const scale = new Value(1); // get(scales, index) as Animated.Value<number>;
+  const { scale, translate } = values[index];
 
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
 
-  usePinch({ pinch, translateX, translateY, scale });
+  usePinch({ pinch, translate, scale });
   return (
     <PinchGestureHandler
       ref={pinchRef}
@@ -90,7 +91,7 @@ const WhatsApp = () => {
                     style={[
                       styles.image,
                       {
-                        transform: [{ translateX }, { translateY }, { scale }],
+                        transform: [...translateVector(translate), { scale }],
                       },
                     ]}
                     {...{ source }}
