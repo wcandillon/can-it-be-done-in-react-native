@@ -1,8 +1,29 @@
 import React, { useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import Animated, { Value, cond, eq, sub } from "react-native-reanimated";
+import Animated, {
+  Value,
+  add,
+  and,
+  call,
+  clockRunning,
+  cond,
+  divide,
+  eq,
+  floor,
+  multiply,
+  neq,
+  not,
+  onChange,
+  set,
+  sub,
+  useCode,
+} from "react-native-reanimated";
 import {
+  clamp,
+  snapPoint,
+  timing,
   translate as translateVector,
+  useClock,
   usePanGestureHandler,
   usePinchGestureHandler,
   useValue,
@@ -11,8 +32,9 @@ import {
 import {
   PanGestureHandler,
   PinchGestureHandler,
+  State,
 } from "react-native-gesture-handler";
-import { CANVAS, usePinch, useSwipe } from "./AnimationUtil";
+import { CANVAS, usePinch } from "./AnimationUtil";
 
 const { width, height } = Dimensions.get("window");
 export const assets = [
@@ -53,7 +75,7 @@ const styles = StyleSheet.create({
 });
 
 const WhatsApp = () => {
-  const [index, setIndex] = useState(0);
+  const index = useValue(0);
 
   const pinchRef = useRef<PinchGestureHandler>(null);
   const panRef = useRef<PanGestureHandler>(null);
@@ -61,11 +83,39 @@ const WhatsApp = () => {
   const pan = usePanGestureHandler();
   const pinch = usePinchGestureHandler();
 
-  const { scale, translate } = values[index];
+  const { scale, translate } = values[0];
+
+  const clock = useClock();
+  const offsetX = useValue(0);
+  const translationX = useValue(0);
+  const translateX = useValue(0);
 
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
-  usePinch({ pan, pinch, translate, scale, minVec, maxVec });
+  usePinch({ pan, pinch, translate, scale, minVec, maxVec, translationX });
+  const snapTo = clamp(
+    snapPoint(translateX, pan.velocity.x, snapPoints),
+    multiply(add(index, 1), -width),
+    multiply(sub(index, 1), -width)
+  );
+  useCode(
+    () => [
+      onChange(
+        translationX,
+        cond(eq(pan.state, State.ACTIVE), [
+          set(translateX, add(offsetX, translationX)),
+        ])
+      ),
+      cond(and(eq(pan.state, State.END), neq(translationX, 0)), [
+        set(translateX, timing({ clock, from: translateX, to: snapTo })),
+        set(offsetX, translateX),
+        cond(not(clockRunning(clock)), [
+          set(index, floor(divide(translateX, -width))),
+        ]),
+      ]),
+    ],
+    [index]
+  );
   return (
     <PinchGestureHandler
       ref={pinchRef}
@@ -82,7 +132,7 @@ const WhatsApp = () => {
         >
           <Animated.View style={styles.container}>
             <Animated.View
-              style={[styles.pictures, { transform: [{ translateX: 0 }] }]}
+              style={[styles.pictures, { transform: [{ translateX }] }]}
             >
               {assets.map((source, i) => (
                 <View key={i} style={styles.picture}>

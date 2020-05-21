@@ -17,6 +17,7 @@ import Animated, {
   set,
   startClock,
   stopClock,
+  sub,
   useCode,
 } from "react-native-reanimated";
 import {
@@ -84,6 +85,7 @@ interface UsePinchParams {
   pinch: ReturnType<typeof pinchGestureHandler>;
   translate: Vector<Animated.Value<number>>;
   scale: Animated.Value<number>;
+  translationX: Animated.Value<number>;
   minVec: Vector;
   maxVec: Vector;
 }
@@ -92,6 +94,7 @@ export const usePinch = ({
   pinch,
   pan,
   translate,
+  translationX,
   scale,
   minVec,
   maxVec,
@@ -112,7 +115,10 @@ export const usePinch = ({
   const isPinchEnd = pinchEnd(pinch.state, pinch.numberOfPointers);
   useCode(
     () => [
-      cond(eq(pan.state, State.ACTIVE), [vec.set(translation, clamped)]),
+      cond(eq(pan.state, State.ACTIVE), [
+        set(translationX, sub(pan.translation.x, clamped.x)),
+        vec.set(translation, clamped),
+      ]),
       cond(isPinchBegan, vec.set(origin, adjustedFocal)),
       cond(isPinchActive, [
         vec.set(
