@@ -1,17 +1,12 @@
 import React, { useRef } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
-  and,
   block,
   cond,
-  diff,
   eq,
   multiply,
-  neq,
   onChange,
-  or,
   set,
-  stopClock,
   sub,
   useCode,
 } from "react-native-reanimated";
@@ -31,14 +26,14 @@ import { useDecay, usePinch, useSwiper } from "./AnimationUtil";
 const { width, height } = Dimensions.get("window");
 export const CANVAS = vec.create(width, height);
 const CENTER = vec.divide(CANVAS, 2);
-export const assets = [require("./assets/3.jpg")];
-
-/*
-
+export const assets = [
+  require("./assets/3.jpg"),
   require("./assets/2.jpg"),
   require("./assets/4.jpg"),
   require("./assets/5.jpg"),
-  require("./assets/1.jpg"), */
+  require("./assets/1.jpg"),
+];
+
 const snapPoints = assets.map((_, i) => -width * i);
 const styles = StyleSheet.create({
   container: {
