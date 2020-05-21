@@ -1,15 +1,37 @@
 import Animated, {
   Clock,
   Value,
+  add,
+  and,
   block,
   clockRunning,
   cond,
+  divide,
+  eq,
+  floor,
+  multiply,
+  neq,
   not,
+  onChange,
   decay as reDecay,
   set,
   startClock,
+  sub,
+  useCode,
 } from "react-native-reanimated";
-import { Vector } from "react-native-redash";
+import {
+  Vector,
+  clamp,
+  panGestureHandler,
+  snapPoint,
+  timing,
+  useClock,
+  useValue,
+} from "react-native-redash";
+import { Dimensions } from "react-native";
+import { State } from "react-native-gesture-handler";
+
+const { width } = Dimensions.get("window");
 
 const decay = (
   position: Animated.Adaptable<number>,
@@ -48,4 +70,46 @@ export const decayVector = (
     x,
     y,
   };
+};
+
+interface UseSwiperParams {
+  pan: ReturnType<typeof panGestureHandler>;
+  snapPoints: number[];
+  index: Animated.Value<number>;
+  translationX: Animated.Node<number>;
+  translateX: Animated.Value<number>;
+}
+
+export const useSwiper = ({
+  pan,
+  snapPoints,
+  index,
+  translationX,
+  translateX,
+}: UseSwiperParams) => {
+  const offsetX = useValue(0);
+  const clock = useClock();
+  const snapTo = clamp(
+    snapPoint(translateX, pan.velocity.x, snapPoints),
+    multiply(add(index, 1), -width),
+    multiply(sub(index, 1), -width)
+  );
+  useCode(
+    () => [
+      onChange(
+        translationX,
+        cond(eq(pan.state, State.ACTIVE), [
+          set(translateX, add(offsetX, translationX)),
+        ])
+      ),
+      cond(and(eq(pan.state, State.END), neq(translationX, 0)), [
+        set(translateX, timing({ clock, from: translateX, to: snapTo })),
+        set(offsetX, translateX),
+        cond(not(clockRunning(clock)), [
+          set(index, floor(divide(translateX, -width))),
+        ]),
+      ]),
+    ],
+    []
+  );
 };

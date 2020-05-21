@@ -1,18 +1,13 @@
 import React, { useRef } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
-  add,
   and,
   block,
-  clockRunning,
   cond,
   diff,
-  divide,
   eq,
-  floor,
   multiply,
   neq,
-  not,
   onChange,
   or,
   set,
@@ -21,12 +16,8 @@ import Animated, {
   useCode,
 } from "react-native-reanimated";
 import {
-  clamp,
   pinchActive,
   pinchBegan,
-  snapPoint,
-  timing,
-  translate,
   useClock,
   usePanGestureHandler,
   usePinchGestureHandler,
@@ -39,7 +30,7 @@ import {
   PinchGestureHandler,
   State,
 } from "react-native-gesture-handler";
-import { decayVector } from "./AnimationUtil";
+import { decayVector, useSwiper } from "./AnimationUtil";
 
 const { width, height } = Dimensions.get("window");
 export const CANVAS = vec.create(width, height);
@@ -79,52 +70,24 @@ const styles = StyleSheet.create({
 const WhatsApp = () => {
   const pinchRef = useRef<PinchGestureHandler>(null);
   const panRef = useRef<PanGestureHandler>(null);
-  const clock = useClock();
+
   const index = useValue(0);
-  const offsetX = useValue(0);
   const translationX = useValue(0);
   const translateX = useValue(0);
   const pan = usePanGestureHandler();
-  const snapTo = clamp(
-    snapPoint(translateX, pan.velocity.x, snapPoints),
-    multiply(add(index, 1), -width),
-    multiply(sub(index, 1), -width)
-  );
-  useCode(
-    () => [
-      onChange(
-        translationX,
-        cond(eq(pan.state, State.ACTIVE), [
-          set(translateX, add(offsetX, translationX)),
-        ])
-      ),
-      cond(and(eq(pan.state, State.END), neq(translationX, 0)), [
-        set(translateX, timing({ clock, from: translateX, to: snapTo })),
-        set(offsetX, translateX),
-        cond(not(clockRunning(clock)), [
-          set(index, floor(divide(translateX, -width))),
-        ]),
-      ]),
-    ],
-    []
-  );
+  useSwiper({ pan, snapPoints, index, translationX, translateX });
+
   const shouldDecay = useValue(0);
   const clockX = useClock();
   const clockY = useClock();
   const origin = useVector(0, 0);
-  const {
-    gestureHandler: pinchGestureHandler,
-    state: pinchState,
-    numberOfPointers,
-    scale: gestureScale,
-    focal,
-  } = usePinchGestureHandler();
+  const pinch = usePinchGestureHandler();
 
   const scaleOffset = useValue(1);
   const scale = useValue(1);
   const offset = useVector(0, 0);
   const translation = useVector(0, 0);
-  const adjustedFocal = vec.sub(focal, vec.add(CENTER, offset));
+  const adjustedFocal = vec.sub(pinch.focal, vec.add(CENTER, offset));
 
   const minVec = vec.min(vec.multiply(-0.5, CANVAS, sub(scale, 1)), 0);
   const maxVec = vec.max(vec.minus(minVec), 0);
@@ -141,34 +104,34 @@ const WhatsApp = () => {
           set(translationX, sub(pan.translation.x, clamped.x)),
         ]),
         // PinchBegan: the focal value is the transformation of origin
-        cond(pinchBegan(pinchState), vec.set(origin, adjustedFocal)),
+        cond(pinchBegan(pinch.state), vec.set(origin, adjustedFocal)),
         // PinchActive, the focal value (minus its value at began) is the translation
-        cond(pinchActive(pinchState, numberOfPointers), [
+        cond(pinchActive(pinch.state, pinch.numberOfPointers), [
           vec.set(
             translation,
             vec.add(
               vec.sub(adjustedFocal, origin),
               origin,
-              vec.multiply(-1, gestureScale, origin)
+              vec.multiply(-1, pinch.scale, origin)
             )
           ),
         ]),
         // Gesture ended, keep offset, reset values,
         cond(
           and(
-            or(eq(pinchState, State.UNDETERMINED), eq(pinchState, State.END)),
+            or(eq(pinch.state, State.UNDETERMINED), eq(pinch.state, State.END)),
             or(eq(pan.state, State.UNDETERMINED), eq(pan.state, State.END))
           ),
           [
             vec.set(offset, vec.add(offset, translation)),
             set(scaleOffset, scale),
-            set(gestureScale, 1),
+            set(pinch.scale, 1),
             vec.set(translation, 0),
-            vec.set(focal, 0),
+            vec.set(pinch.focal, 0),
           ]
         ),
         // Decay animation (when releasing the pan gesture within the active image)
-        cond(or(eq(pan.state, State.ACTIVE), eq(pinchState, State.ACTIVE)), [
+        cond(or(eq(pan.state, State.ACTIVE), eq(pinch.state, State.ACTIVE)), [
           stopClock(clockX),
           stopClock(clockY),
           set(shouldDecay, 0),
@@ -177,7 +140,7 @@ const WhatsApp = () => {
           and(
             neq(diff(pan.state), 0),
             eq(pan.state, State.END),
-            neq(pinchState, State.ACTIVE)
+            neq(pinch.state, State.ACTIVE)
           ),
           set(shouldDecay, 1)
         ),
@@ -192,17 +155,17 @@ const WhatsApp = () => {
           ),
         ]),
         // Reset states when the image is not active anymore
-        cond(0, [
+        onChange(index, [
           stopClock(clockX),
           stopClock(clockY),
           vec.set(offset, 0),
           set(scaleOffset, 1),
-          set(gestureScale, 1),
+          set(pinch.scale, 1),
           vec.set(translation, 0),
-          vec.set(focal, 0),
+          vec.set(pinch.focal, 0),
         ]),
         // Calulate scale
-        set(scale, multiply(gestureScale, scaleOffset)),
+        set(scale, multiply(pinch.scale, scaleOffset)),
       ]),
     []
   );
@@ -210,7 +173,7 @@ const WhatsApp = () => {
     <PinchGestureHandler
       ref={pinchRef}
       simultaneousHandlers={panRef}
-      {...pinchGestureHandler}
+      {...pinch.gestureHandler}
     >
       <Animated.View style={StyleSheet.absoluteFill}>
         <PanGestureHandler
@@ -224,22 +187,27 @@ const WhatsApp = () => {
             <Animated.View
               style={[styles.pictures, { transform: [{ translateX }] }]}
             >
-              {assets.map((source, i) => (
-                <View key={i} style={styles.picture}>
-                  <Animated.Image
-                    style={[
-                      styles.image,
-                      {
-                        transform: [
-                          ...translate(vec.add(offset, translation)),
-                          { scale },
-                        ],
-                      },
-                    ]}
-                    {...{ source }}
-                  />
-                </View>
-              ))}
+              {assets.map((source, i) => {
+                const tr = vec.add(offset, translation);
+                const isActive = eq(index, i);
+                return (
+                  <View key={i} style={styles.picture}>
+                    <Animated.Image
+                      style={[
+                        styles.image,
+                        {
+                          transform: [
+                            { translateX: cond(isActive, tr.x, 0) },
+                            { translateY: cond(isActive, tr.y, 0) },
+                            { scale: cond(isActive, scale, 1) },
+                          ],
+                        },
+                      ]}
+                      {...{ source }}
+                    />
+                  </View>
+                );
+              })}
             </Animated.View>
           </Animated.View>
         </PanGestureHandler>
