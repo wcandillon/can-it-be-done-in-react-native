@@ -45,10 +45,6 @@ export const assets = [
   require("./assets/1.jpg"),
 ];
 
-const values = assets.map(() => ({
-  scale: new Value(1),
-  translate: vec.createValue(0, 0),
-}));
 const snapPoints = assets.map((_, i) => -width * i);
 
 const styles = StyleSheet.create({
@@ -83,7 +79,8 @@ const WhatsApp = () => {
   const pan = usePanGestureHandler();
   const pinch = usePinchGestureHandler();
 
-  const { scale, translate } = values[0];
+  const scale = useValue(1);
+  const translate = vec.createValue(0, 0);
 
   const clock = useClock();
   const offsetX = useValue(0);
@@ -110,6 +107,8 @@ const WhatsApp = () => {
         set(translateX, timing({ clock, from: translateX, to: snapTo })),
         set(offsetX, translateX),
         cond(not(clockRunning(clock)), [
+          vec.set(translate, 0),
+          set(scale, 1),
           set(index, floor(divide(translateX, -width))),
         ]),
       ]),
@@ -134,19 +133,26 @@ const WhatsApp = () => {
             <Animated.View
               style={[styles.pictures, { transform: [{ translateX }] }]}
             >
-              {assets.map((source, i) => (
-                <View key={i} style={styles.picture}>
-                  <Animated.Image
-                    style={[
-                      styles.image,
-                      {
-                        transform: [...translateVector(translate), { scale }],
-                      },
-                    ]}
-                    {...{ source }}
-                  />
-                </View>
-              ))}
+              {assets.map((source, i) => {
+                const isActive = eq(index, i);
+                return (
+                  <View key={i} style={styles.picture}>
+                    <Animated.Image
+                      style={[
+                        styles.image,
+                        {
+                          transform: [
+                            { translateX: cond(isActive, translate.x, 0) },
+                            { translateY: cond(isActive, translate.y, 0) },
+                            { scale: cond(isActive, scale, 1) },
+                          ],
+                        },
+                      ]}
+                      {...{ source }}
+                    />
+                  </View>
+                );
+              })}
             </Animated.View>
           </Animated.View>
         </PanGestureHandler>
