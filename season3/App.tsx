@@ -28,6 +28,7 @@ import Airbnb, {
 } from "./src/Airbnb";
 import WhatsApp, { assets as whatsAppAssets } from "./src/WhatsApp";
 import Hue from "./src/Hue";
+import OverCast from "./src/Overcast";
 
 enableScreens();
 
@@ -45,6 +46,12 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      OverCast: {
+        screen: OverCast,
+        navigationOptions: {
+          title: "WhatsApp",
+        },
+      },
       WhatsApp: {
         screen: WhatsApp,
         navigationOptions: {
