@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import Animated, {
+  Extrapolate,
   abs,
   add,
   call,
@@ -9,6 +10,7 @@ import Animated, {
   divide,
   eq,
   floor,
+  interpolate,
   lessThan,
   not,
   set,
@@ -79,14 +81,21 @@ const SwipeableRow = ({ children, onPress, onSwipe }: SwipeableRowProps) => {
     ],
     []
   );
+  const buttonX = interpolate(translateX, {
+    inputRange: [-width, -100, 0, 0, 100, width],
+    outputRange: [0, width - 100, width - 100, 0, 0, width - 100],
+    extrapolate: Extrapolate.CLAMP,
+  });
   return (
     <View>
       <View style={styles.background}>
-        <RectButton {...{ onPress }}>
-          <View style={styles.remove}>
-            <Text>Remove</Text>
-          </View>
-        </RectButton>
+        <Animated.View style={{ transform: [{ translateX: buttonX }] }}>
+          <RectButton {...{ onPress }}>
+            <View style={styles.remove}>
+              <Text>Remove</Text>
+            </View>
+          </RectButton>
+        </Animated.View>
       </View>
       <PanGestureHandler failOffsetY={5} {...gestureHandler}>
         <Animated.View style={{ transform: [{ translateX }] }}>
