@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import { Dimensions, StyleSheet } from "react-native";
-
-import Animated from "react-native-reanimated";
+import React, { useRef, useState } from "react";
+import { Animated, Dimensions, StyleSheet } from "react-native";
 
 import { PanGestureHandler } from "react-native-gesture-handler";
 import {
   diffClamp,
+  onScrollEvent,
   usePanGestureHandler,
   withDecay,
 } from "react-native-redash";
 import { CARD_HEIGHT, Cards } from "../Transformations/components/Card";
 import WalletCard from "./WalletCard";
 
+const useLazyRef = <T extends object>(initializer: () => T) => {
+  const ref = useRef<T>();
+  if (ref.current === undefined) {
+    ref.current = initializer();
+  }
+  return ref.current;
+};
 const { height } = Dimensions.get("window");
 const MARGIN = 16;
 const HEIGHT = CARD_HEIGHT + MARGIN * 2;
@@ -35,46 +41,31 @@ const cards = [
     type: Cards.Card6,
   },
 ];
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
-  },
-});
 
 const Wallet = () => {
-  const [containerHeight, setContainerHeight] = useState(height);
-  const visibleCards = Math.floor(containerHeight / HEIGHT);
-  const {
-    gestureHandler,
-    translation,
-    velocity,
-    state,
-  } = usePanGestureHandler();
-  const y = diffClamp(
-    withDecay({
-      value: translation.y,
-      velocity: velocity.y,
-      state,
-    }),
-    -HEIGHT * cards.length + visibleCards * HEIGHT,
-    0
+  const y = useLazyRef(() => new Animated.Value(0));
+  const onScroll = useLazyRef(() =>
+    Animated.event(
+      [
+        {
+          nativeEvent: {
+            contentOffset: { y },
+          },
+        },
+      ],
+      { useNativeDriver: true }
+    )
   );
   return (
-    <PanGestureHandler {...gestureHandler}>
-      <Animated.View
-        style={styles.container}
-        onLayout={({
-          nativeEvent: {
-            layout: { height: h },
-          },
-        }) => setContainerHeight(h)}
-      >
-        {cards.map(({ type }, index) => (
-          <WalletCard key={index} {...{ index, type, y, visibleCards }} />
-        ))}
-      </Animated.View>
-    </PanGestureHandler>
+    <Animated.ScrollView
+      scrollEventThrottle={16}
+      bounces={false}
+      {...{ onScroll }}
+    >
+      {cards.map(({ type }, index) => (
+        <WalletCard key={index} {...{ index, y, type }} />
+      ))}
+    </Animated.ScrollView>
   );
 };
 
