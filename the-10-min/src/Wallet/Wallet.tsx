@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Animated, Dimensions, StyleSheet } from "react-native";
+import { Animated, Dimensions, FlatList } from "react-native";
 
 import { PanGestureHandler } from "react-native-gesture-handler";
 import {
@@ -11,6 +11,7 @@ import {
 import { CARD_HEIGHT, Cards } from "../Transformations/components/Card";
 import WalletCard from "./WalletCard";
 
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const useLazyRef = <T extends object>(initializer: () => T) => {
   const ref = useRef<T>();
   if (ref.current === undefined) {
@@ -57,15 +58,16 @@ const Wallet = () => {
     )
   );
   return (
-    <Animated.ScrollView
+    <AnimatedFlatList
       scrollEventThrottle={16}
       bounces={false}
       {...{ onScroll }}
-    >
-      {cards.map(({ type }, index) => (
-        <WalletCard key={index} {...{ index, y, type }} />
-      ))}
-    </Animated.ScrollView>
+      data={cards}
+      renderItem={({ index, item: { type } }) => (
+        <WalletCard {...{ index, y, type }} />
+      )}
+      keyExtractor={(item) => item.index}
+    />
   );
 };
 
