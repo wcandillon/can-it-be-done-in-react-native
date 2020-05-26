@@ -1,10 +1,6 @@
 import React from "react";
 import { Dimensions, Image, StyleSheet, View } from "react-native";
-import {
-  PanGestureHandler,
-  ScrollView,
-  State,
-} from "react-native-gesture-handler";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Animated, {
   add,
   clockRunning,
@@ -23,7 +19,6 @@ import {
   useClock,
   usePanGestureHandler,
   useValue,
-  withOffset,
 } from "react-native-redash";
 
 const { width, height } = Dimensions.get("window");

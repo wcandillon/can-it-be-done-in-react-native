@@ -1,18 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Animated, {
-  add,
-  interpolate,
-  multiply,
-  sub,
-} from "react-native-reanimated";
-import {
-  Matrix3,
-  Transforms2d,
-  decompose2d,
-  tween2d,
-  useLoop,
-} from "react-native-redash";
+import Animated from "react-native-reanimated";
+import { decompose2d, tween2d, useLoop } from "react-native-redash";
 
 import Card, { Cards } from "../Transformations/components/Card";
 import { StyleGuide } from "../components";

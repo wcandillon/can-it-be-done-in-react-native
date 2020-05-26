@@ -1,16 +1,12 @@
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions } from "react-native";
 
 import {
   Vector,
-  avg,
   matrixVecMul4,
-  mix,
   processTransform3d,
   string,
-  useLoop,
   useValues,
-  vec,
 } from "react-native-redash";
 import Svg, { Circle, Polygon } from "react-native-svg";
 import Animated, { divide } from "react-native-reanimated";

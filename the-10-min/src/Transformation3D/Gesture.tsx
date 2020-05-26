@@ -7,11 +7,7 @@ import Animated, {
   set,
   useCode,
 } from "react-native-reanimated";
-import {
-  usePanGestureHandler,
-  withDecay,
-  withOffset,
-} from "react-native-redash";
+import { usePanGestureHandler, withDecay } from "react-native-redash";
 
 const { width, height } = Dimensions.get("window");
 

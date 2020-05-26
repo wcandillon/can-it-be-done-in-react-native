@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 import Animated, {
   Extrapolate,
@@ -12,7 +12,6 @@ import {
   diffClamp,
   usePanGestureHandler,
   withDecay,
-  withOffset,
 } from "react-native-redash";
 import Card, { CARD_HEIGHT, Cards } from "../Transformations/components/Card";
 

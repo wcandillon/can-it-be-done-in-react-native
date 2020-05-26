@@ -1,23 +1,14 @@
 import React from "react";
-import { Dimensions, View } from "react-native";
 
 import {
-  Vector,
-  avg,
   matrixVecMul4,
-  mix,
   processTransform3d,
-  string,
-  useLoop,
   useValues,
-  vec,
 } from "react-native-redash";
-import Animated, { divide } from "react-native-reanimated";
+import { divide } from "react-native-reanimated";
 import { SIZE } from "./Constants";
 import Gesture from "./Gesture";
 import Face from "./Face";
-
-const { width, height } = Dimensions.get("window");
 
 const backface = [
   { x: -0.5, y: -0.5, z: -0.5 },
@@ -34,10 +25,10 @@ const frontface = [
 ] as const;
 
 const points3D = [...frontface, ...backface];
-
+/*
 const serialize = (p1: Vector, p2: Vector, p3: Vector, p4: Vector) =>
   string`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`;
-
+*/
 const Transformations3D = () => {
   const [rotateX, rotateY] = useValues([0, 0]);
   const transform = processTransform3d([{ rotateY }, { rotateX }]);
