@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 
-import Animated, {
-  Extrapolate,
-  add,
-  interpolate,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 import { PanGestureHandler } from "react-native-gesture-handler";
 import {
@@ -13,7 +9,8 @@ import {
   usePanGestureHandler,
   withDecay,
 } from "react-native-redash";
-import Card, { CARD_HEIGHT, Cards } from "../Transformations/components/Card";
+import { CARD_HEIGHT, Cards } from "../Transformations/components/Card";
+import WalletCard from "./WalletCard";
 
 const { height } = Dimensions.get("window");
 const MARGIN = 16;
@@ -42,9 +39,6 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
-  },
-  card: {
-    marginVertical: MARGIN,
   },
 });
 
@@ -76,47 +70,9 @@ const Wallet = () => {
           },
         }) => setContainerHeight(h)}
       >
-        {cards.map(({ type }, index) => {
-          const positionY = add(y, index * HEIGHT);
-          const isDisappearing = -HEIGHT;
-          const isTop = 0;
-          const isBottom = HEIGHT * (visibleCards - 1);
-          const isAppearing = HEIGHT * visibleCards;
-          const translateYWithScale = interpolate(positionY, {
-            inputRange: [isBottom, isAppearing],
-            outputRange: [0, -HEIGHT / 4],
-            extrapolate: Extrapolate.CLAMP,
-          });
-          const translateY = add(
-            interpolate(y, {
-              inputRange: [-HEIGHT * index, 0],
-              outputRange: [-HEIGHT * index, 0],
-              extrapolate: Extrapolate.CLAMP,
-            }),
-            translateYWithScale
-          );
-          const scale = interpolate(positionY, {
-            inputRange: [isDisappearing, isTop, isBottom, isAppearing],
-            outputRange: [0.5, 1, 1, 0.5],
-            extrapolate: Extrapolate.CLAMP,
-          });
-          const opacity = interpolate(positionY, {
-            inputRange: [isDisappearing, isTop, isBottom, isAppearing],
-            outputRange: [0, 1, 1, 0],
-            extrapolate: Extrapolate.CLAMP,
-          });
-          return (
-            <Animated.View
-              style={[
-                styles.card,
-                { opacity, transform: [{ translateY }, { scale }] },
-              ]}
-              key={index}
-            >
-              <Card {...{ type }} />
-            </Animated.View>
-          );
-        })}
+        {cards.map(({ type }, index) => (
+          <WalletCard key={index} {...{ index, type, y, visibleCards }} />
+        ))}
       </Animated.View>
     </PanGestureHandler>
   );
