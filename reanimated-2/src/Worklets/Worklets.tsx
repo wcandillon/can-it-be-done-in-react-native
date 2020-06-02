@@ -9,23 +9,11 @@ import {
 } from "react-native";
 import Animated, {
   useSharedValue,
-  useAnimatedProps,
+  useAnimatedStyle,
   runOnUI,
 } from "react-native-reanimated";
 
-import { Button } from "../components";
-
-const sayHelloOnJSThread = () => {
-  Alert.alert(
-    "We said hello on the UI thread and asynchronously called back on the JS thread"
-  );
-};
-
-const sayHello = (name) => {
-  "worklet";
-  console.log(`hello ${name} from ${Platform.OS}`);
-  sayHelloOnJSThread();
-};
+import { Button, StyleGuide } from "../components";
 
 const styles = StyleSheet.create({
   container: {
@@ -36,12 +24,36 @@ const styles = StyleSheet.create({
 });
 
 const Worklets = () => {
+  const translateX = useSharedValue(0);
+  const style = useAnimatedStyle(() => {
+    return {
+      width: 100,
+      height: 100,
+      backgroundColor: StyleGuide.palette.primary,
+      transform: [{ translateX: translateX.value }],
+    };
+  });
+
+  const sayHelloOnJSThread = () => {
+    console.log("This runs on the UI thread");
+    translateX.value += 50;
+  };
+
+  const sayHello = (name) => {
+    "worklet";
+    console.log(`hello ${name} from ${Platform.OS}`);
+    sayHelloOnJSThread();
+  };
+
   return (
     <View style={styles.container}>
+      <Animated.View style={style} />
       <Button
-        label="Say Hello on the UI thread"
+        label="Run on the UI thread"
         primary
-        onPress={() => runOnUI(sayHello)("World")}
+        onPress={() => {
+          runOnUI(sayHello)("World");
+        }}
       />
     </View>
   );
