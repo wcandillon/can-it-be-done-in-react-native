@@ -23,37 +23,29 @@ const styles = StyleSheet.create({
   },
 });
 
+const sayHelloFromTheJSThread = () => "Hello from the JS thread!";
+
+const formatDatetime = (datetime) => {
+  "worklet";
+  return `${datetime.getFullYear()}-${
+    datetime.getMonth() + 1
+  }-${datetime.getDate()} ${datetime.getHours()}:${datetime.getMinutes()}:${datetime.getSeconds()}`;
+};
+
+const sayHello = (from) => {
+  "worklet";
+  console.log(`Hello from ${Platform.OS} at ${formatDatetime(new Date())}`);
+  const result = sayHelloFromTheJSThread();
+  console.log(result);
+};
+
 const Worklets = () => {
-  const translateX = useSharedValue(0);
-  const style = useAnimatedStyle(() => {
-    return {
-      width: 100,
-      height: 100,
-      backgroundColor: StyleGuide.palette.primary,
-      transform: [{ translateX: translateX.value }],
-    };
-  });
-
-  const sayHelloOnJSThread = () => {
-    console.log("This runs on the UI thread");
-    translateX.value += 50;
-  };
-
-  const sayHello = (name) => {
-    "worklet";
-    console.log(`hello ${name} from ${Platform.OS}`);
-    sayHelloOnJSThread();
-  };
-
   return (
     <View style={styles.container}>
-      <Animated.View style={style} />
       <Button
-        label="Run on the UI thread"
+        onPress={() => runOnUI(sayHello)("Beautiful Zuerich Switzerland")}
+        label="Say Hello"
         primary
-        onPress={() => {
-          runOnUI(sayHello)("World");
-        }}
       />
     </View>
   );
