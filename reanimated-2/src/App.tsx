@@ -5,6 +5,7 @@ import { Routes } from "./Routes";
 import Examples from "./Examples";
 import PanGesture from "./PanGesture";
 import CircularSlider from "./CircularSlider";
+import Worklets from "./Worklets";
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -15,6 +16,13 @@ const AppNavigator = () => (
         component={Examples}
         options={{
           title: "Reanimated 2 Examples",
+        }}
+      />
+      <Stack.Screen
+        name="Worklets"
+        component={Worklets}
+        options={{
+          title: "Worklets",
         }}
       />
       <Stack.Screen

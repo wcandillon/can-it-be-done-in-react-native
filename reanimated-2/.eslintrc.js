@@ -9,5 +9,6 @@ module.exports = {
         avoidEscape: true,
       },
     ],
+    "react-native/no-inline-styles": 0,
   },
 };

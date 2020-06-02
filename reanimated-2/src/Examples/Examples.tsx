@@ -5,9 +5,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { Routes } from "../Routes";
 import { RectButton } from "react-native-gesture-handler";
-import StyleGuide from "../components";
+import { StyleGuide } from "../components";
 
 export const examples = [
+  {
+    screen: "Worklets",
+    title: "👩‍🏭 Worklets",
+  },
   {
     screen: "PanGesture",
     title: "💳 PanGesture",
