@@ -14,6 +14,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Button, StyleGuide } from "../components";
+import ReText from "../components/ReText";
 
 const styles = StyleSheet.create({
   container: {
@@ -23,8 +24,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const sayHelloFromTheJSThread = () => "Hello from the JS thread!";
-
 const formatDatetime = (datetime) => {
   "worklet";
   return `${datetime.getFullYear()}-${
@@ -32,18 +31,31 @@ const formatDatetime = (datetime) => {
   }-${datetime.getDate()} ${datetime.getHours()}:${datetime.getMinutes()}:${datetime.getSeconds()}`;
 };
 
-const sayHello = (from) => {
+const sayHello = (text, from, cb) => {
   "worklet";
-  console.log(`Hello from ${Platform.OS} at ${formatDatetime(new Date())}`);
-  const result = sayHelloFromTheJSThread();
-  console.log(result);
+  text.value = `Hello from ${Platform.OS} at ${formatDatetime(new Date())}`;
+  cb();
 };
 
 const Worklets = () => {
+  const [jsText, setJsText] = useState("");
+  const text = useSharedValue("");
+  const sayHelloOnTheJSThread = () =>
+    setJsText(`Hello world at ${formatDatetime(new Date())}`);
   return (
     <View style={styles.container}>
+      <Text>JS thread says:</Text>
+      <Text>{jsText}</Text>
+      <Text>UI thread says:</Text>
+      <ReText {...{ text }} />
       <Button
-        onPress={() => runOnUI(sayHello)("Beautiful Zuerich Switzerland")}
+        onPress={() =>
+          runOnUI(sayHello)(
+            text,
+            "Beautiful Zuerich Switzerland",
+            sayHelloOnTheJSThread
+          )
+        }
         label="Say Hello"
         primary
       />
