@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    transform: [{ rotate: "-90deg" }],
   },
   content: {
     width: r * 2,

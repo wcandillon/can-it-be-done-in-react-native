@@ -7,8 +7,14 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import { canvas2Polar, polar2Canvas } from "../components/AnimatedHelpers";
+import {
+  canvas2Polar,
+  polar2Canvas,
+  clamp,
+} from "../components/AnimatedHelpers";
 import { StyleGuide } from "../components";
+
+const THRESHOLD = 0.001;
 
 interface CursorProps {
   r: number;
@@ -27,7 +33,15 @@ const Cursor = ({ r, theta, strokeWidth }: CursorProps) => {
     },
     onActive: (event, ctx) => {
       x.value = event.translationX + ctx.offsetX;
-      y.value = event.translationY + ctx.offsetY;
+      const acc = event.translationY + ctx.offsetY;
+      if (x.value > r) {
+        y.value =
+          theta.value < Math.PI
+            ? clamp(acc, 0, r - THRESHOLD)
+            : clamp(acc, r + THRESHOLD, 2 * r);
+      } else {
+        y.value = acc;
+      }
     },
   });
   const polar = useDerivedValue(() => {
