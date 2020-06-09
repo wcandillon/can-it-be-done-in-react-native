@@ -17,8 +17,8 @@ export const examples = [
     title: "💳 PanGesture",
   },
   {
-    screen: "CircularSlider",
-    title: "⭕️ Circular Slider",
+    screen: "Transitions",
+    title: "🔁 Transitions",
   },
 ] as const;
 

@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Routes } from "./Routes";
 import Examples from "./Examples";
 import PanGesture from "./PanGesture";
-import CircularSlider from "./CircularSlider";
+import Transitions from "./Transitions";
 import Worklets from "./Worklets";
 
 const Stack = createStackNavigator<Routes>();
@@ -33,10 +33,10 @@ const AppNavigator = () => (
         }}
       />
       <Stack.Screen
-        name="CircularSlider"
-        component={CircularSlider}
+        name="Transitions"
+        component={Transitions}
         options={{
-          title: "Circular Slider",
+          title: "Transitions",
         }}
       />
     </Stack.Navigator>

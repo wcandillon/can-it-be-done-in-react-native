@@ -38,12 +38,6 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      Wallet: {
-        screen: Wallet,
-        navigationOptions: {
-          title: "Wallet",
-        },
-      },
       Examples: {
         screen: Examples,
         navigationOptions: {
@@ -135,6 +129,12 @@ const AppNavigator = createAppContainer(
         screen: Swiper,
         navigationOptions: {
           title: "Swiper",
+        },
+      },
+      Wallet: {
+        screen: Wallet,
+        navigationOptions: {
+          title: "Wallet",
         },
       },
     },
