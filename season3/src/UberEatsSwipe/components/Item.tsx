@@ -69,7 +69,7 @@ const Item = ({ item, onSwipe }: ItemProps) => {
   return (
     <Animated.View>
       <View style={styles.background}>
-        <Action x={translateX} />
+        <Action x={abs(translateX)} />
       </View>
       <PanGestureHandler activeOffsetX={[-10, 10]} {...gestureHandler}>
         <Animated.View style={{ transform: [{ translateX }] }}>
