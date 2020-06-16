@@ -9,10 +9,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  map: {
-    width: 111,
-    height: 111,
-  },
   title: {
     fontFamily: "UberMoveMedium",
     fontSize: 16,
@@ -34,6 +30,47 @@ const styles = StyleSheet.create({
   content: {
     marginHorizontal: 16,
   },
+  address: {
+    flexDirection: "row",
+    marginBottom: 16,
+  },
+  map: {
+    width: 111,
+    height: 111,
+    marginRight: 16,
+  },
+  headline: {
+    fontFamily: "UberMoveRegular",
+    fontSize: 18,
+    marginBottom: 8,
+  },
+  body: {
+    fontFamily: "UberMoveRegular",
+    fontSize: 16,
+    color: "#545556",
+    lineHeight: 22,
+  },
+  subtitle: {
+    marginTop: 16,
+    fontFamily: "UberMoveMedium",
+    fontSize: 16,
+  },
+  deliveryOptions: {
+    flexDirection: "row",
+    marginVertical: 8,
+  },
+  orderTitle: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  primary: {
+    marginTop: 16,
+
+    color: "#20A454",
+    fontFamily: "UberMoveMedium",
+    fontSize: 16,
+  },
 });
 
 const UberEatsSwipe = () => {
@@ -46,26 +83,26 @@ const UberEatsSwipe = () => {
       <Text style={styles.restaurant}>Joe & the Juice</Text>
       <View style={styles.divider} />
       <View style={styles.content}>
-        <View>
+        <View style={styles.address}>
           <Image source={require("./assets/map.png")} style={styles.map} />
           <View>
-            <Text>Nordstrasse</Text>
-            <Text>Beautiful Zürich Switzerland</Text>
-            <Text>Ring at William</Text>
+            <Text style={styles.headline}>Nordstrasse</Text>
+            <Text style={styles.body}>Beautiful Zürich Switzerland</Text>
+            <Text style={styles.body}>Ring at William</Text>
           </View>
         </View>
         <Row icon="truck" label="Delivery" first />
         <Row icon="clock" label="Delivery Time: 30-50min" />
-        <View>
-          <Text>Delivery Option</Text>
-          <View>
-            <Option icon="home" label="Leave at door" />
-            <Option icon="user" label="Meet at door" />
-          </View>
+        <Text style={styles.subtitle}>Delivery Option</Text>
+        <View style={styles.deliveryOptions}>
+          <Option icon="home" label="Leave at door" />
+          <Option icon="user" label="Meet at door" selected />
         </View>
         <View>
-          <Text>Your order</Text>
-          <Text>Add items</Text>
+          <View style={styles.orderTitle}>
+            <Text style={styles.subtitle}>Your order</Text>
+            <Text style={styles.primary}>Add items</Text>
+          </View>
         </View>
       </View>
     </View>
