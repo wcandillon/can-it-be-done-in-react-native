@@ -10,6 +10,7 @@ import Animated, {
   lessThan,
   multiply,
 } from "react-native-reanimated";
+import { HEIGHT } from "./ItemLayout";
 
 const styles = StyleSheet.create({
   remove: {
@@ -21,55 +22,50 @@ const styles = StyleSheet.create({
 
 interface ActionProps {
   x: Animated.Node<number>;
-  opacity: Animated.Node<number>;
+  deleteOpacity: Animated.Node<number>;
 }
 
-const Action = ({ x, opacity }: ActionProps) => {
-  const size = cond(lessThan(x, 60), x, add(x, sub(x, 60)));
-  const translateX = divide(sub(size, x), 2);
+const Action = ({ x, deleteOpacity }: ActionProps) => {
+  const size = cond(lessThan(x, HEIGHT), x, add(x, sub(x, HEIGHT)));
+  const translateX = cond(lessThan(x, HEIGHT), 0, divide(sub(x, HEIGHT), 2));
   const borderRadius = divide(size, 2);
   const scale = interpolate(size, {
-    inputRange: [10, 40],
-    outputRange: [0.01, 1],
+    inputRange: [20, 30],
+    outputRange: [0.001, 1],
     extrapolate: Extrapolate.CLAMP,
   });
-  const opacity1 = interpolate(size, {
-    inputRange: [50, 70],
+  const iconOpacity = interpolate(size, {
+    inputRange: [HEIGHT - 10, HEIGHT + 10],
     outputRange: [1, 0],
-    extrapolate: Extrapolate.CLAMP,
   });
-  const opacity2 = interpolate(size, {
-    inputRange: [50, 70],
-    outputRange: [0, 1],
-    extrapolate: Extrapolate.CLAMP,
-  });
+  const textOpacity = sub(1, iconOpacity);
   return (
     <Animated.View
       style={{
         backgroundColor: "#D93F12",
-        width: size,
-        height: size,
         borderRadius,
         justifyContent: "center",
         alignItems: "center",
+        height: size,
+        width: size,
         transform: [{ translateX }],
       }}
     >
       <Animated.View
         style={{
-          transform: [{ scale }],
           height: 5,
           width: 20,
           backgroundColor: "white",
-          opacity: opacity1,
+          opacity: iconOpacity,
+          transform: [{ scale }],
         }}
       />
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
-          opacity: multiply(opacity, opacity2),
           justifyContent: "center",
           alignItems: "center",
+          opacity: multiply(textOpacity, deleteOpacity),
         }}
       >
         <Text style={styles.remove}>Remove</Text>

@@ -47,13 +47,6 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
-      UberEatsSwipe: {
-        screen: UberEatsSwipe,
-        navigationOptions: {
-          title: "Uber Eats Swipe-to-Delete",
-          header: () => null,
-        },
-      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
@@ -126,6 +119,13 @@ const AppNavigator = createAppContainer(
         screen: WhatsApp,
         navigationOptions: {
           title: "WhatsApp",
+        },
+      },
+      UberEatsSwipe: {
+        screen: UberEatsSwipe,
+        navigationOptions: {
+          title: "Uber Eats Swipe-to-Delete",
+          header: () => null,
         },
       },
     },

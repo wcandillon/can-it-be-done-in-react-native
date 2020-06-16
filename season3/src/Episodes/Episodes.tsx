@@ -60,6 +60,11 @@ export const episodes = [
     name: "Instagram",
     icon: require("../../assets/icons/instagram.png"),
   },
+  {
+    id: "UberEatsSwipe",
+    name: "UberEatsSwipe",
+    icon: require("../../assets/icons/uber-eats.png"),
+  },
 ];
 
 export default () => {

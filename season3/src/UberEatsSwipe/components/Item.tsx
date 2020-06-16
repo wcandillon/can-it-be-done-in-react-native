@@ -10,6 +10,7 @@ import Animated, {
   not,
   set,
   useCode,
+  max,
 } from "react-native-reanimated";
 import {
   PanGestureHandler,
@@ -23,6 +24,7 @@ import {
   useClock,
   usePanGestureHandler,
   useValue,
+  min,
 } from "react-native-redash";
 import ItemLayout, { ItemModel, HEIGHT } from "./ItemLayout";
 import Action from "./Action";
@@ -52,30 +54,28 @@ const Item = ({ item, onSwipe }: ItemProps) => {
     velocity,
     state,
   } = usePanGestureHandler();
-  const clock = useClock();
-  const height = useValue(HEIGHT);
-  const offsetX = useValue(0);
   const translateX = useValue(0);
-  const opacity = useValue(1);
-  const shouldDelete = useValue(0);
+  const offsetX = useValue(0);
+  const height = useValue(HEIGHT);
+  const deleteOpacity = useValue(1);
+  const clock = useClock();
   const to = snapPoint(translateX, velocity.x, snapPoints);
+  const shouldRemove = useValue(0);
   useCode(
     () => [
-      cond(eq(state, State.ACTIVE), [
-        set(translateX, clamp(add(offsetX, translation.x), -width, 0)),
-      ]),
+      cond(
+        eq(state, State.ACTIVE),
+        set(translateX, add(offsetX, min(translation.x, 0)))
+      ),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to })),
-        cond(eq(to, -width), [set(shouldDelete, 1)]),
         set(offsetX, translateX),
+        cond(eq(to, -width), set(shouldRemove, 1)),
       ]),
-      cond(shouldDelete, [
+      cond(shouldRemove, [
         set(height, timing({ from: HEIGHT, to: 0 })),
-        set(opacity, 0),
-        cond(not(clockRunning(clock)), [
-          call([], onSwipe),
-          set(shouldDelete, 0),
-        ]),
+        set(deleteOpacity, 0),
+        cond(not(clockRunning(clock)), call([], onSwipe)),
       ]),
     ],
     [onSwipe]
@@ -83,18 +83,12 @@ const Item = ({ item, onSwipe }: ItemProps) => {
   return (
     <Animated.View>
       <View style={styles.background}>
-        <TouchableWithoutFeedback onPress={() => shouldDelete.setValue(1)}>
-          <Action x={abs(translateX)} {...{ opacity }} />
+        <TouchableWithoutFeedback onPress={() => shouldRemove.setValue(1)}>
+          <Action x={abs(translateX)} {...{ deleteOpacity }} />
         </TouchableWithoutFeedback>
       </View>
-      <PanGestureHandler activeOffsetX={[-10, 10]} {...gestureHandler}>
-        <Animated.View
-          style={{
-            height,
-            transform: [{ translateX }],
-            justifyContent: "center",
-          }}
-        >
+      <PanGestureHandler {...gestureHandler}>
+        <Animated.View style={{ height, transform: [{ translateX }] }}>
           <ItemLayout {...{ item }} />
         </Animated.View>
       </PanGestureHandler>
