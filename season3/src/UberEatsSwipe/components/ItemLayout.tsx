@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 });
 
 export interface ItemModel {
-  id: number;
+  key: string;
   title: string;
   price: number;
   quantity: number;

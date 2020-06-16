@@ -61,7 +61,7 @@ const Item = ({ item, onSwipe }: ItemProps) => {
         ]),
       ]),
     ],
-    []
+    [onSwipe]
   );
   return (
     <Animated.View>

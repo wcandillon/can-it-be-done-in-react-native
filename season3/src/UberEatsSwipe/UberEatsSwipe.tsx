@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Image, StatusBar, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import Row from "./components/Row";
 import Option from "./components/Option";
 import Item from "./components/Item";
+import { ItemModel } from "./components/ItemLayout";
 
 const styles = StyleSheet.create({
   container: {
@@ -77,25 +78,25 @@ const styles = StyleSheet.create({
 
 const defaultItems = [
   {
-    id: 0,
+    key: "0",
     title: "Herb Tonic",
     price: 10.0,
     quantity: 1,
   },
   {
-    id: 1,
+    key: "1",
     title: "Spicy Tuna",
     price: 12.8,
     quantity: 1,
   },
   {
-    id: 2,
+    key: "2",
     title: "Tunacado",
     price: 10.2,
     quantity: 1,
   },
   {
-    id: 3,
+    key: "3",
     title: "Power Shake",
     price: 10,
     quantity: 1,
@@ -104,6 +105,14 @@ const defaultItems = [
 
 const UberEatsSwipe = () => {
   const [items, setItems] = useState(defaultItems);
+  const onSwipe = useCallback(
+    (item: ItemModel) => {
+      const newItems = [...items];
+      newItems.splice(newItems.indexOf(item), 1);
+      setItems(newItems);
+    },
+    [items]
+  );
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -136,10 +145,10 @@ const UberEatsSwipe = () => {
         </View>
       </View>
       <View style={{ paddingRight: 16 }}>
-        <ScrollView>
-          {items.map((item, index) => (
+        <FlatList
+          data={items}
+          renderItem={({ item }) => (
             <Item
-              key={item.id}
               onSwipe={() => {
                 const newItems = [...items];
                 newItems.splice(newItems.indexOf(item), 1);
@@ -147,8 +156,8 @@ const UberEatsSwipe = () => {
               }}
               {...{ item }}
             />
-          ))}
-        </ScrollView>
+          )}
+        />
       </View>
     </View>
   );
