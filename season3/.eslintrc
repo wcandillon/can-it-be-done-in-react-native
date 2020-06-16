@@ -4,7 +4,6 @@
       "react/no-array-index-key": "off",
       "react/jsx-no-bind": "off",
       "import/prefer-default-export": "off",
-      "import/no-anonymous-default-export": 0,
-      "react-hooks/exhaustive-deps": 2 
+      "import/no-anonymous-default-export": 0
    }
 }
