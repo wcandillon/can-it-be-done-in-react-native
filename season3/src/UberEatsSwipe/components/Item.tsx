@@ -57,7 +57,7 @@ const Item = ({ item, onSwipe }: ItemProps) => {
   const offsetX = useValue(0);
   const translateX = useValue(0);
   const opacity = useValue(1);
-  // const shouldDelete 
+  const shouldDelete = useValue(0);
   const to = snapPoint(translateX, velocity.x, snapPoints);
   useCode(
     () => [
@@ -66,13 +66,15 @@ const Item = ({ item, onSwipe }: ItemProps) => {
       ]),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to })),
-        cond(eq(to, -width), [
-          set(height, timing({ from: HEIGHT, to: 0 })),
-          set(opacity, 0),
-        ]),
+        cond(eq(to, -width), [set(shouldDelete, 1)]),
         set(offsetX, translateX),
+      ]),
+      cond(shouldDelete, [
+        set(height, timing({ from: HEIGHT, to: 0 })),
+        set(opacity, 0),
         cond(not(clockRunning(clock)), [
-          cond(eq(abs(translateX), width), call([], onSwipe)),
+          call([], onSwipe),
+          set(shouldDelete, 0),
         ]),
       ]),
     ],
@@ -81,7 +83,7 @@ const Item = ({ item, onSwipe }: ItemProps) => {
   return (
     <Animated.View>
       <View style={styles.background}>
-        <TouchableWithoutFeedback onPress={() => }>
+        <TouchableWithoutFeedback onPress={() => shouldDelete.setValue(1)}>
           <Action x={abs(translateX)} {...{ opacity }} />
         </TouchableWithoutFeedback>
       </View>
