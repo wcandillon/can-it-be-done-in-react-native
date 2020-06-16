@@ -28,6 +28,7 @@ import Airbnb, {
 } from "./src/Airbnb";
 import WhatsApp, { assets as whatsAppAssets } from "./src/WhatsApp";
 import Hue from "./src/Hue";
+import UberEatsSwipe from "./src/UberEatsSwipe";
 
 enableScreens();
 
@@ -45,6 +46,13 @@ const assets: number[] = [
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      UberEatsSwipe: {
+        screen: UberEatsSwipe,
+        navigationOptions: {
+          title: "Uber Eats Swipe-to-Delete",
+          header: () => null,
+        },
+      },
       Episodes: {
         screen: Episodes,
         navigationOptions: {
