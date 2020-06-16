@@ -11,7 +11,11 @@ import Animated, {
   set,
   useCode,
 } from "react-native-reanimated";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  State,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import {
   clamp,
   snapPoint,
@@ -20,7 +24,7 @@ import {
   usePanGestureHandler,
   useValue,
 } from "react-native-redash";
-import ItemLayout, { ItemModel } from "./ItemLayout";
+import ItemLayout, { ItemModel, HEIGHT } from "./ItemLayout";
 import Action from "./Action";
 
 const { width } = Dimensions.get("window");
@@ -32,6 +36,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
+    overflow: "hidden",
   },
 });
 
@@ -48,8 +53,11 @@ const Item = ({ item, onSwipe }: ItemProps) => {
     state,
   } = usePanGestureHandler();
   const clock = useClock();
+  const height = useValue(HEIGHT);
   const offsetX = useValue(0);
   const translateX = useValue(0);
+  const opacity = useValue(1);
+  // const shouldDelete 
   const to = snapPoint(translateX, velocity.x, snapPoints);
   useCode(
     () => [
@@ -58,6 +66,10 @@ const Item = ({ item, onSwipe }: ItemProps) => {
       ]),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to })),
+        cond(eq(to, -width), [
+          set(height, timing({ from: HEIGHT, to: 0 })),
+          set(opacity, 0),
+        ]),
         set(offsetX, translateX),
         cond(not(clockRunning(clock)), [
           cond(eq(abs(translateX), width), call([], onSwipe)),
@@ -69,10 +81,18 @@ const Item = ({ item, onSwipe }: ItemProps) => {
   return (
     <Animated.View>
       <View style={styles.background}>
-        <Action x={abs(translateX)} />
+        <TouchableWithoutFeedback onPress={() => }>
+          <Action x={abs(translateX)} {...{ opacity }} />
+        </TouchableWithoutFeedback>
       </View>
       <PanGestureHandler activeOffsetX={[-10, 10]} {...gestureHandler}>
-        <Animated.View style={{ transform: [{ translateX }] }}>
+        <Animated.View
+          style={{
+            height,
+            transform: [{ translateX }],
+            justifyContent: "center",
+          }}
+        >
           <ItemLayout {...{ item }} />
         </Animated.View>
       </PanGestureHandler>

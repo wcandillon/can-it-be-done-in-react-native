@@ -8,6 +8,7 @@ import Animated, {
   cond,
   add,
   lessThan,
+  multiply,
 } from "react-native-reanimated";
 
 const styles = StyleSheet.create({
@@ -20,9 +21,10 @@ const styles = StyleSheet.create({
 
 interface ActionProps {
   x: Animated.Node<number>;
+  opacity: Animated.Node<number>;
 }
 
-const Action = ({ x }: ActionProps) => {
+const Action = ({ x, opacity }: ActionProps) => {
   const size = cond(lessThan(x, 60), x, add(x, sub(x, 60)));
   const translateX = divide(sub(size, x), 2);
   const borderRadius = divide(size, 2);
@@ -65,7 +67,7 @@ const Action = ({ x }: ActionProps) => {
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
-          opacity: opacity2,
+          opacity: multiply(opacity, opacity2),
           justifyContent: "center",
           alignItems: "center",
         }}

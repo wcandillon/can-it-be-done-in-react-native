@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
   address: {
     flexDirection: "row",
     marginBottom: 16,
+    alignItems: "center",
   },
   map: {
     width: 111,

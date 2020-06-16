@@ -6,16 +6,17 @@ const currency = new Intl.NumberFormat("ch", {
   currency: "CHF",
 });
 
+export const HEIGHT = 64;
 const styles = StyleSheet.create({
   content: {
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 8,
     alignItems: "center",
+    paddingLeft: 16,
+    height: HEIGHT,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: "#e2e3e4",
-    paddingLeft: 16,
   },
   info: {
     flexDirection: "row",
@@ -23,13 +24,13 @@ const styles = StyleSheet.create({
   },
   quantity: {
     backgroundColor: "#e2e3e4",
-    width: 40,
-    height: 40,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
     fontFamily: "UberMoveMedium",
     fontSize: 16,
+    width: 30,
+    height: 30,
   },
   title: {
     fontFamily: "UberMoveMedium",
