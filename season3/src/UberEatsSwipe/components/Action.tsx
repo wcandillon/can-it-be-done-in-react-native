@@ -1,17 +1,22 @@
 import React from "react";
+import { StyleSheet, Text } from "react-native";
 import Animated, {
-  abs,
   divide,
   interpolate,
   Extrapolate,
-  multiply,
   sub,
-  greaterThan,
   cond,
   add,
   lessThan,
 } from "react-native-reanimated";
-import { useDebug } from "react-native-redash";
+
+const styles = StyleSheet.create({
+  remove: {
+    color: "white",
+    fontFamily: "UberMoveMedium",
+    fontSize: 14,
+  },
+});
 
 interface ActionProps {
   x: Animated.Node<number>;
@@ -24,6 +29,16 @@ const Action = ({ x }: ActionProps) => {
   const scale = interpolate(size, {
     inputRange: [10, 40],
     outputRange: [0.01, 1],
+    extrapolate: Extrapolate.CLAMP,
+  });
+  const opacity1 = interpolate(size, {
+    inputRange: [50, 70],
+    outputRange: [1, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
+  const opacity2 = interpolate(size, {
+    inputRange: [50, 70],
+    outputRange: [0, 1],
     extrapolate: Extrapolate.CLAMP,
   });
   return (
@@ -44,8 +59,19 @@ const Action = ({ x }: ActionProps) => {
           height: 5,
           width: 20,
           backgroundColor: "white",
+          opacity: opacity1,
         }}
       />
+      <Animated.View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          opacity: opacity2,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={styles.remove}>Remove</Text>
+      </Animated.View>
     </Animated.View>
   );
 };

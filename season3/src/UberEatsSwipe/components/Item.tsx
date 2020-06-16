@@ -24,7 +24,7 @@ import ItemLayout, { ItemModel } from "./ItemLayout";
 import Action from "./Action";
 
 const { width } = Dimensions.get("window");
-const snapPoints = [-width, 0];
+const snapPoints = [-width, -100, 0];
 const styles = StyleSheet.create({
   background: {
     ...StyleSheet.absoluteFillObject,
