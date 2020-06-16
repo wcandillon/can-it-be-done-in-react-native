@@ -133,12 +133,14 @@ const UberEatsSwipe = () => {
             <Text style={styles.subtitle}>Your order</Text>
             <Text style={styles.primary}>Add items</Text>
           </View>
-          <ScrollView>
-            {items.map((item) => (
-              <Item key={item.id} {...{ item }} />
-            ))}
-          </ScrollView>
         </View>
+      </View>
+      <View style={{ paddingRight: 16 }}>
+        <ScrollView>
+          {items.map((item) => (
+            <Item key={item.id} {...{ item }} />
+          ))}
+        </ScrollView>
       </View>
     </View>
   );

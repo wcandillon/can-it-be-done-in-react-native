@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: "#e2e3e4",
+    paddingLeft: 16,
   },
   info: {
     flexDirection: "row",
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
   price: {
     fontFamily: "UberMoveRegular",
     fontSize: 16,
+    marginRight: 8,
   },
 });
 
