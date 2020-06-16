@@ -34,9 +34,10 @@ const styles = StyleSheet.create({
 
 interface ItemProps {
   item: ItemModel;
+  onSwipe: () => void;
 }
 
-const Item = ({ item }: ItemProps) => {
+const Item = ({ item, onSwipe }: ItemProps) => {
   const {
     gestureHandler,
     translation,
@@ -50,16 +51,13 @@ const Item = ({ item }: ItemProps) => {
   useCode(
     () => [
       cond(eq(state, State.ACTIVE), [
-        set(translateX, add(offsetX, translation.x)),
+        set(translateX, clamp(add(offsetX, translation.x), -width, 0)),
       ]),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to })),
         set(offsetX, translateX),
         cond(not(clockRunning(clock)), [
-          cond(
-            eq(abs(translateX), width),
-            call([], () => alert("bruh!"))
-          ),
+          cond(eq(abs(translateX), width), call([], onSwipe)),
         ]),
       ]),
     ],

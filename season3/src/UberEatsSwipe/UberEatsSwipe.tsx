@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Image, StatusBar, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 import Row from "./components/Row";
 import Option from "./components/Option";
 import Item from "./components/Item";
@@ -137,8 +137,16 @@ const UberEatsSwipe = () => {
       </View>
       <View style={{ paddingRight: 16 }}>
         <ScrollView>
-          {items.map((item) => (
-            <Item key={item.id} {...{ item }} />
+          {items.map((item, index) => (
+            <Item
+              key={item.id}
+              onSwipe={() => {
+                const newItems = [...items];
+                newItems.splice(newItems.indexOf(item), 1);
+                setItems(newItems);
+              }}
+              {...{ item }}
+            />
           ))}
         </ScrollView>
       </View>
