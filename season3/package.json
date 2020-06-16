@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint --ext .js,.ts,.tsx .",
+    "lint": "eslint --ext .js,.ts,.tsx . --max-warnings 1",
     "tsc": "tsc"
   },
   "dependencies": {
@@ -57,7 +57,7 @@
     "@types/react-native": "^0.60.22",
     "babel-preset-expo": "^8.1.0",
     "eslint": "^6.8.0",
-    "eslint-config-react-native-wcandillon": "2.10.0",
+    "eslint-config-react-native-wcandillon": "3.0.1",
     "typescript": "^3.8.3"
   },
   "private": true

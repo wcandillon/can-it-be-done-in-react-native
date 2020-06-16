@@ -105,14 +105,6 @@ const defaultItems = [
 
 const UberEatsSwipe = () => {
   const [items, setItems] = useState(defaultItems);
-  const onSwipe = useCallback(
-    (item: ItemModel) => {
-      const newItems = [...items];
-      newItems.splice(newItems.indexOf(item), 1);
-      setItems(newItems);
-    },
-    [items]
-  );
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />

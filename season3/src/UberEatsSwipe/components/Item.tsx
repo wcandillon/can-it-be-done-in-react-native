@@ -7,7 +7,6 @@ import Animated, {
   clockRunning,
   cond,
   eq,
-  lessThan,
   not,
   set,
   useCode,
@@ -22,6 +21,7 @@ import {
   useValue,
 } from "react-native-redash";
 import ItemLayout, { ItemModel } from "./ItemLayout";
+import Action from "./Action";
 
 const { width } = Dimensions.get("window");
 const snapPoints = [-width, 0];
@@ -29,6 +29,9 @@ const styles = StyleSheet.create({
   background: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "#E1E2E3",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
 });
 
@@ -66,7 +69,7 @@ const Item = ({ item, onSwipe }: ItemProps) => {
   return (
     <Animated.View>
       <View style={styles.background}>
-        <View />
+        <Action x={translateX} />
       </View>
       <PanGestureHandler activeOffsetX={[-10, 10]} {...gestureHandler}>
         <Animated.View style={{ transform: [{ translateX }] }}>
