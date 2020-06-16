@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, StatusBar, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { ScrollView } from "react-native-gesture-handler";
 import Row from "./components/Row";
 import Option from "./components/Option";
+import Item from "./components/Item";
 
 const styles = StyleSheet.create({
   container: {
@@ -65,15 +67,42 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   primary: {
-    marginTop: 16,
-
+    marginVertical: 16,
     color: "#20A454",
     fontFamily: "UberMoveMedium",
     fontSize: 16,
   },
 });
 
+const defaultItems = [
+  {
+    id: 0,
+    title: "Herb Tonic",
+    price: 10.0,
+    quantity: 1,
+  },
+  {
+    id: 1,
+    title: "Spicy Tuna",
+    price: 12.8,
+    quantity: 1,
+  },
+  {
+    id: 2,
+    title: "Tunacado",
+    price: 10.2,
+    quantity: 1,
+  },
+  {
+    id: 3,
+    title: "Power Shake",
+    price: 10,
+    quantity: 1,
+  },
+];
+
 const UberEatsSwipe = () => {
+  const [items, setItems] = useState(defaultItems);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -103,6 +132,11 @@ const UberEatsSwipe = () => {
             <Text style={styles.subtitle}>Your order</Text>
             <Text style={styles.primary}>Add items</Text>
           </View>
+          <ScrollView>
+            {items.map((item) => (
+              <Item key={item.id} {...{ item }} />
+            ))}
+          </ScrollView>
         </View>
       </View>
     </View>
