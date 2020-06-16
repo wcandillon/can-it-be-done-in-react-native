@@ -10,6 +10,7 @@ import Item from "./components/Item";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   title: {
     fontFamily: "UberMoveMedium",
