@@ -22,6 +22,7 @@ import Skew from "./src/Skew";
 import Transformation3D from "./src/Transformation3D";
 import Swiper, { assets as swiperAssets } from "./src/Swiper";
 import Wallet from "./src/Wallet";
+import Trigonometry from "./src/Trigonometry";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
@@ -38,6 +39,12 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      Trigonometry: {
+        screen: Trigonometry,
+        navigationOptions: {
+          title: "Trigonometry",
+        },
+      },
       Examples: {
         screen: Examples,
         navigationOptions: {
