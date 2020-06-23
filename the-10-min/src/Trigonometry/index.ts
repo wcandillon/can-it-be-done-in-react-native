@@ -1,1 +1,1 @@
-export { default } from "./TrigonometrySVG";
+export { default } from "./Trigonometry";
