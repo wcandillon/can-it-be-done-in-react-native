@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { sub } from "react-native-reanimated";
+import Animated, { add, sub } from "react-native-reanimated";
 import { polar2Canvas } from "react-native-redash";
 
+const lRadius = 10;
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -14,9 +15,9 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   circle: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: lRadius * 2,
+    height: lRadius * 2,
+    borderRadius: lRadius,
     backgroundColor: "yellow",
     borderColor: "black",
     borderWidth: 3,
@@ -26,25 +27,31 @@ const styles = StyleSheet.create({
 interface LineProps {
   theta: Animated.Node<number>;
   radius: number;
+  rotate: number;
 }
 
-const Line = ({ theta, radius }: LineProps) => {
-  const { x } = polar2Canvas({ theta, radius }, { x: radius, y: radius });
+const Line = ({ theta, radius, rotate }: LineProps) => {
+  const { x } = polar2Canvas(
+    { theta: add(theta, rotate), radius },
+    { x: radius, y: radius }
+  );
   return (
     <>
-      <View style={styles.overlay}>
+      <Animated.View style={[styles.overlay, { transform: [{ rotate }] }]}>
         <View style={styles.line} />
-      </View>
-      <View style={styles.overlay}>
+      </Animated.View>
+      <Animated.View
+        style={[styles.overlay, { transform: [{ rotate }], zIndex: 100 }]}
+      >
         <Animated.View
           style={[
             styles.circle,
             {
-              transform: [{ translateX: sub(x, 25) }],
+              transform: [{ translateX: sub(x, lRadius) }],
             },
           ]}
         />
-      </View>
+      </Animated.View>
     </>
   );
 };

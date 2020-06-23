@@ -22,7 +22,7 @@ interface DriverProps {
 const Driver = ({ theta, radius }: DriverProps) => {
   const { x, y } = polar2Canvas({ theta, radius }, { x: radius, y: radius });
   return (
-    <View style={StyleSheet.absoluteFill}>
+    <View style={[StyleSheet.absoluteFill, { zIndex: 200 }]}>
       <Animated.View
         style={[
           styles.circle,

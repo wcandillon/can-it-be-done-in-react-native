@@ -7,6 +7,11 @@ import Driver from "./Driver";
 
 const { width } = Dimensions.get("window");
 const radius = PixelRatio.roundToNearestPixel(width / 2);
+const circles = new Array(30)
+  .fill(0)
+  .map((_, i) => i)
+  .filter((i) => i % 2);
+const delta = (2 * Math.PI) / circles.length;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -28,7 +33,9 @@ const Trigonometry = () => {
   return (
     <View style={styles.container}>
       <View style={styles.circle}>
-        <Line {...{ theta, radius }} />
+        {circles.map((i) => (
+          <Line key={i} rotate={i * delta} {...{ theta, radius }} />
+        ))}
         <Driver {...{ theta, radius }} />
       </View>
     </View>
