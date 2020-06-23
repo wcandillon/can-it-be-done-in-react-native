@@ -18,6 +18,7 @@
     "expo": "^37.0.0",
     "expo-asset": "~8.1.4",
     "expo-camera": "~8.2.0",
+    "expo-constants": "~9.0.0",
     "expo-font": "~8.1.0",
     "expo-gl": "~8.1.0",
     "expo-linear-gradient": "~8.1.0",
