@@ -19,19 +19,17 @@ const styles = StyleSheet.create({
     borderRadius: radius,
     borderWidth: 3,
     borderColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
 
 const Trigonometry = () => {
   const progress = useLoop(2000, false);
-  const angle = mix(progress, 0, 2 * Math.PI);
+  const theta = mix(progress, 0, 2 * Math.PI);
   return (
     <View style={styles.container}>
       <View style={styles.circle}>
-        <Line {...{ angle }} />
-        <Driver {...{ angle, radius }} />
+        <Line {...{ theta, radius }} />
+        <Driver {...{ theta, radius }} />
       </View>
     </View>
   );

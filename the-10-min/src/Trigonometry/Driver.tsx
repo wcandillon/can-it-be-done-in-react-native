@@ -16,14 +16,11 @@ const styles = StyleSheet.create({
 
 interface DriverProps {
   radius: number;
-  angle: Animated.Node<number>;
+  theta: Animated.Node<number>;
 }
 
-const Driver = ({ angle, radius }: DriverProps) => {
-  const { x, y } = polar2Canvas(
-    { theta: angle, radius },
-    { x: radius, y: radius }
-  );
+const Driver = ({ theta, radius }: DriverProps) => {
+  const { x, y } = polar2Canvas({ theta, radius }, { x: radius, y: radius });
   return (
     <View style={StyleSheet.absoluteFill}>
       <Animated.View
