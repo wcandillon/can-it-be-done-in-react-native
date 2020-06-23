@@ -1,8 +1,9 @@
 import React from "react";
 import { Dimensions, PixelRatio, StyleSheet, View } from "react-native";
-import { useLoop } from "react-native-redash";
+import { mix, useLoop } from "react-native-redash";
 
 import Line from "./Line";
+import Driver from "./Driver";
 
 const { width } = Dimensions.get("window");
 const radius = PixelRatio.roundToNearestPixel(width / 2);
@@ -24,11 +25,13 @@ const styles = StyleSheet.create({
 });
 
 const Trigonometry = () => {
-  const progress = useLoop(2000);
+  const progress = useLoop(2000, false);
+  const angle = mix(progress, 0, 2 * Math.PI);
   return (
     <View style={styles.container}>
       <View style={styles.circle}>
-        <Line {...{ progress }} />
+        <Line {...{ angle }} />
+        <Driver {...{ angle, radius }} />
       </View>
     </View>
   );

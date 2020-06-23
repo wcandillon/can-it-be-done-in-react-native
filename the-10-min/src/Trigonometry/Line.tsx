@@ -11,11 +11,15 @@ const styles = StyleSheet.create({
 });
 
 interface LineProps {
-  progress: Animated.Node<number>;
+  angle: Animated.Node<number>;
 }
 
-const Line = ({ progress }: LineProps) => {
-  return <View style={styles.line} />;
+const Line = ({ angle }: LineProps) => {
+  return (
+    <>
+      <View style={styles.line} />
+    </>
+  );
 };
 
 export default Line;
