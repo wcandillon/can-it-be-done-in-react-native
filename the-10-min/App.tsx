@@ -153,6 +153,7 @@ const AppNavigator = createAppContainer(
         },
         headerTintColor: "white",
       },
+      initialRouteName: "Examples",
     }
   )
 );
