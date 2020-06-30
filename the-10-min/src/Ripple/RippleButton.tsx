@@ -1,8 +1,15 @@
 import React, { Children, ReactNode, useState } from "react";
-import { TapGestureHandler } from "react-native-gesture-handler";
-import Animated from "react-native-reanimated";
+import { State, TapGestureHandler } from "react-native-gesture-handler";
+import Animated, { cond, eq, neq } from "react-native-reanimated";
 import { StyleSheet, View } from "react-native";
-import { useTapGestureHandler } from "react-native-redash";
+import {
+  mix,
+  translate,
+  useDebug,
+  useTapGestureHandler,
+  vec,
+  withTransition,
+} from "react-native-redash";
 
 interface RippleButtonProps {
   children: ReactNode;
@@ -11,14 +18,17 @@ interface RippleButtonProps {
 
 const RippleButton = ({ children, color }: RippleButtonProps) => {
   const [radius, setRadius] = useState(-1);
-  const { gestureHandler, position } = useTapGestureHandler();
+  const { gestureHandler, position, state } = useTapGestureHandler();
   const child = Children.only(children);
-  // const isActive = eq(state)
+  const progress = withTransition(eq(state, State.BEGAN));
+  //  cond(eq(state, State.END), 0, withTransition(eq(state, State.BEGAN)));
+  const scale = mix(progress, 0.001, 1);
+  useDebug({ progress });
   return (
     <TapGestureHandler {...gestureHandler}>
       <Animated.View {...child.props} style={[child.props.style]}>
         <View
-          style={StyleSheet.absoluteFill}
+          style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}
           onLayout={({
             nativeEvent: {
               layout: { height, width },
@@ -32,6 +42,11 @@ const RippleButton = ({ children, color }: RippleButtonProps) => {
                 borderRadius: radius,
                 width: radius * 2,
                 height: radius * 2,
+                transform: [
+                  ...translate(vec.create(-radius)),
+                  ...translate(position),
+                  { scale },
+                ],
               }}
             />
           )}
