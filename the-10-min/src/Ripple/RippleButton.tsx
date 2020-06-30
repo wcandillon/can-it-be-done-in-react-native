@@ -35,7 +35,7 @@ const RippleButton = ({ children, color, onPress }: RippleButtonProps) => {
   const child = Children.only(children);
   const progress = withTransition(eq(state, State.BEGAN));
   const isGoingUp = or(greaterThan(diff(progress), 0), eq(progress, 1));
-  const scale = cond(isGoingUp, mix(progress, 0.001, 1), 1);
+  const scale = mix(progress, 0.001, 1);
   const opacity = isGoingUp;
   useCode(
     () => [onChange(state, cond(eq(state, State.END), [call([], onPress)]))],
