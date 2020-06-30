@@ -24,7 +24,7 @@ import {
 } from "react-native-redash";
 
 interface RippleButtonProps {
-  children: ReactNode;
+  children: View;
   color: string;
   onPress: () => void;
 }

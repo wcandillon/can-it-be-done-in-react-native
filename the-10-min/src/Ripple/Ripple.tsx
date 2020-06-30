@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 
 import RippleButton from "./RippleButton";
 
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 const App = () => {
   return (
     <View style={styles.container}>
-      <RippleButton color="cyan" onPress={() => alert("OK")}>
+      <RippleButton color="cyan" onPress={() => Alert.alert("OK")}>
         <View style={styles.touchable}>
           <Text style={styles.text}>TouchableNativeFeedback</Text>
         </View>
