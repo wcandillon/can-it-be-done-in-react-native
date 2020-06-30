@@ -29,7 +29,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-reanimated": "~1.7.0",
-    "react-native-redash": "14.0.3",
+    "react-native-redash": "14.1.1",
     "react-native-svg": "11.0.1",
     "react-native-web": "^0.11.7",
     "react-navigation": "^4.0.6",
