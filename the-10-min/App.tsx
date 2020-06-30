@@ -160,7 +160,7 @@ const AppNavigator = createAppContainer(
         },
         headerTintColor: "white",
       },
-      initialRouteName: "Examples",
+      initialRouteName: "Ripple",
     }
   )
 );

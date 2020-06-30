@@ -1,4 +1,4 @@
-import React, { Children, ReactNode, useState } from "react";
+import React, { Children, ReactElement, ReactNode, useState } from "react";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   and,
@@ -13,7 +13,7 @@ import Animated, {
   or,
   useCode,
 } from "react-native-reanimated";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewProps } from "react-native";
 import {
   mix,
   translate,
@@ -22,11 +22,12 @@ import {
   vec,
   withTransition,
 } from "react-native-redash";
+import Color from "color";
 
 interface RippleButtonProps {
-  children: View;
+  children: ReactElement<ViewProps>;
   color: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const RippleButton = ({ children, color, onPress }: RippleButtonProps) => {
@@ -37,15 +38,26 @@ const RippleButton = ({ children, color, onPress }: RippleButtonProps) => {
   const isGoingUp = or(greaterThan(diff(progress), 0), eq(progress, 1));
   const scale = mix(progress, 0.001, 1);
   const opacity = isGoingUp;
+  const backgroundColor = Color(color).lighten(0.1);
   useCode(
-    () => [onChange(state, cond(eq(state, State.END), [call([], onPress)]))],
+    () => [
+      onChange(
+        state,
+        cond(eq(state, State.END), [call([], onPress || (() => null))])
+      ),
+    ],
     []
   );
   return (
     <TapGestureHandler {...gestureHandler}>
       <Animated.View {...child.props} style={[child.props.style]}>
         <View
-          style={{ ...StyleSheet.absoluteFillObject, overflow: "hidden" }}
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            borderRadius: 14,
+            backgroundColor: color,
+            overflow: "hidden",
+          }}
           onLayout={({
             nativeEvent: {
               layout: { height, width },
@@ -56,7 +68,7 @@ const RippleButton = ({ children, color, onPress }: RippleButtonProps) => {
             <Animated.View
               style={{
                 opacity,
-                backgroundColor: color,
+                backgroundColor,
                 borderRadius: radius,
                 width: radius * 2,
                 height: radius * 2,
