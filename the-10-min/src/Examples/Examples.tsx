@@ -68,6 +68,11 @@ export const examples = [
     title: "3D Transformations",
     source: require("../../assets/examples/3d.png"),
   },
+  {
+    screen: "Ripple",
+    title: "Ripple Effect",
+    source: require("../../assets/examples/accordion.png"),
+  },
 ];
 
 const styles = StyleSheet.create({

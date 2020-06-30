@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 const App = () => {
   return (
     <View style={styles.container}>
-      <RippleButton color="cyan">
+      <RippleButton color="cyan" onPress={() => alert("OK")}>
         <View style={styles.touchable}>
           <Text style={styles.text}>TouchableNativeFeedback</Text>
         </View>

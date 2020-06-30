@@ -1,6 +1,18 @@
 import React, { Children, ReactNode, useState } from "react";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
-import Animated, { cond, eq, neq } from "react-native-reanimated";
+import Animated, {
+  and,
+  call,
+  cond,
+  diff,
+  eq,
+  greaterOrEq,
+  greaterThan,
+  neq,
+  onChange,
+  or,
+  useCode,
+} from "react-native-reanimated";
 import { StyleSheet, View } from "react-native";
 import {
   mix,
@@ -14,15 +26,21 @@ import {
 interface RippleButtonProps {
   children: ReactNode;
   color: string;
+  onPress: () => void;
 }
 
-const RippleButton = ({ children, color }: RippleButtonProps) => {
+const RippleButton = ({ children, color, onPress }: RippleButtonProps) => {
   const [radius, setRadius] = useState(-1);
   const { gestureHandler, position, state } = useTapGestureHandler();
   const child = Children.only(children);
   const progress = withTransition(eq(state, State.BEGAN));
-  const scale = mix(progress, 0.001, 1);
-  console.log({ radius });
+  const isGoingUp = or(greaterThan(diff(progress), 0), eq(progress, 1));
+  const scale = cond(isGoingUp, mix(progress, 0.001, 1), 1);
+  const opacity = isGoingUp;
+  useCode(
+    () => [onChange(state, cond(eq(state, State.END), [call([], onPress)]))],
+    []
+  );
   return (
     <TapGestureHandler {...gestureHandler}>
       <Animated.View {...child.props} style={[child.props.style]}>
@@ -37,6 +55,7 @@ const RippleButton = ({ children, color }: RippleButtonProps) => {
           {radius !== -1 && (
             <Animated.View
               style={{
+                opacity,
                 backgroundColor: color,
                 borderRadius: radius,
                 width: radius * 2,
