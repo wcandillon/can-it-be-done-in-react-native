@@ -21,9 +21,8 @@ const RippleButton = ({ children, color }: RippleButtonProps) => {
   const { gestureHandler, position, state } = useTapGestureHandler();
   const child = Children.only(children);
   const progress = withTransition(eq(state, State.BEGAN));
-  //  cond(eq(state, State.END), 0, withTransition(eq(state, State.BEGAN)));
   const scale = mix(progress, 0.001, 1);
-  useDebug({ progress });
+  console.log({ radius });
   return (
     <TapGestureHandler {...gestureHandler}>
       <Animated.View {...child.props} style={[child.props.style]}>
@@ -33,7 +32,7 @@ const RippleButton = ({ children, color }: RippleButtonProps) => {
             nativeEvent: {
               layout: { height, width },
             },
-          }) => setRadius(Math.max(width, height))}
+          }) => setRadius(Math.sqrt(width ** 2 + height ** 2))}
         >
           {radius !== -1 && (
             <Animated.View
