@@ -1,4 +1,4 @@
-import React, { Children, ReactNode, cloneElement, useState } from "react";
+import React, { Children, ReactNode, useState } from "react";
 import { TapGestureHandler } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { StyleSheet, View } from "react-native";
@@ -10,39 +10,34 @@ interface RippleButtonProps {
 }
 
 const RippleButton = ({ children, color }: RippleButtonProps) => {
-  const [radius, setRadius] = useState(100);
+  const [radius, setRadius] = useState(-1);
   const { gestureHandler, position } = useTapGestureHandler();
-  const topChild = Children.only(children);
-  const newChildren = Children.map(topChild.children, (child, index) => {
-    if (index === 0) {
-      return (
-        <>
-          {child}
-          <View
-            style={StyleSheet.absoluteFill}
-            onLayout={({
-              nativeEvent: {
-                layout: { width, height },
-              },
-            }) => setRadius(Math.min(width, height))}
-          >
+  const child = Children.only(children);
+  // const isActive = eq(state)
+  return (
+    <TapGestureHandler {...gestureHandler}>
+      <Animated.View {...child.props} style={[child.props.style]}>
+        <View
+          style={StyleSheet.absoluteFill}
+          onLayout={({
+            nativeEvent: {
+              layout: { height, width },
+            },
+          }) => setRadius(Math.max(width, height))}
+        >
+          {radius !== -1 && (
             <Animated.View
               style={{
                 backgroundColor: color,
+                borderRadius: radius,
                 width: radius * 2,
                 height: radius * 2,
-                borderRadius: radius,
               }}
             />
-          </View>
-        </>
-      );
-    }
-    return child;
-  });
-  return (
-    <TapGestureHandler {...gestureHandler}>
-      {cloneElement(topChild, topChild.props, topChild.children)}
+          )}
+        </View>
+        {child.props.children}
+      </Animated.View>
     </TapGestureHandler>
   );
 };
