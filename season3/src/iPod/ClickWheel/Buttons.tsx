@@ -82,7 +82,7 @@ interface ButtonsProps {
 }
 
 export default ({ command, children }: ButtonsProps) => {
-  const [state, x, y] = useValues([State.UNDETERMINED, 0, 0]);
+  const [state, x, y] = useValues(State.UNDETERMINED, 0, 0);
   const tapGestureHandler = onGestureEvent({ state, x, y });
   useCode(
     () =>
