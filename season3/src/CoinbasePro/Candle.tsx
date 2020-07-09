@@ -1,6 +1,5 @@
 import React from "react";
 import { ScaleLinear } from "d3-scale";
-
 import { Line, Rect } from "react-native-svg";
 
 const MARGIN = 2;

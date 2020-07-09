@@ -1,7 +1,7 @@
 import * as React from "react";
-
 import { Alert } from "react-native";
 import { useNavigation } from "react-navigation-hooks";
+
 import createIPodNavigator, { InjectedIPodProps } from "./IPodNavigator";
 import List from "./List";
 import Player from "./Player";
@@ -84,7 +84,6 @@ const Songs = ({ y, command }: InjectedIPodProps) => {
         }))
         .flat()
         .map((item, index) => {
-          // eslint-disable-next-line no-param-reassign
           item.params.selected = index;
           return item;
         })}

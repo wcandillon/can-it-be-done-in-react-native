@@ -1,14 +1,5 @@
 import React from "react";
-import Animated from "react-native-reanimated";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
-import {
-  moving,
-  panGestureHandler,
-  withSpringTransition,
-} from "react-native-redash";
-import Tab, { TAB_SIZE, TabProps } from "./Tab";
-
-const {
+import Animated, {
   Value,
   add,
   cond,
@@ -20,7 +11,15 @@ const {
   divide,
   and,
   round,
-} = Animated;
+} from "react-native-reanimated";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
+import {
+  moving,
+  panGestureHandler,
+  withSpringTransition,
+} from "react-native-redash";
+
+import Tab, { TAB_SIZE, TabProps } from "./Tab";
 
 export const withOffset = ({
   offset,

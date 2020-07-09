@@ -1,10 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
-  Value,
   add,
   and,
-  call,
   clockRunning,
   cond,
   divide,
@@ -22,7 +20,6 @@ import {
   clamp,
   snapPoint,
   timing,
-  translate as translateVector,
   useClock,
   usePanGestureHandler,
   usePinchGestureHandler,
@@ -34,6 +31,7 @@ import {
   PinchGestureHandler,
   State,
 } from "react-native-gesture-handler";
+
 import { CANVAS, usePinch } from "./AnimationUtil";
 
 const { width, height } = Dimensions.get("window");

@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import { Value } from "react-native-reanimated";
+
 import { TAB_COLUMNS, TAB_SIZE, tabs } from "./Tab";
 import SortableTab from "./SortableTab";
 
-const { Value } = Animated;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

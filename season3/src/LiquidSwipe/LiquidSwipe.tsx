@@ -1,9 +1,15 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
-
+import Animated, {
+  Value,
+  cond,
+  multiply,
+  divide,
+  interpolate,
+} from "react-native-reanimated";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { onGestureEvent, snapPoint } from "react-native-redash";
+
 import Weave from "./Weave";
 import { followPointer, snapProgress } from "./AnimationHelpers";
 import {
@@ -23,7 +29,6 @@ export const assets = [
 ];
 
 const { width } = Dimensions.get("window");
-const { Value, cond, multiply, divide, interpolate } = Animated;
 
 const styles = StyleSheet.create({
   container: {

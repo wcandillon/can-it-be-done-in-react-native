@@ -10,7 +10,6 @@ import Animated, {
   not,
   set,
   useCode,
-  max,
 } from "react-native-reanimated";
 import {
   PanGestureHandler,
@@ -18,7 +17,6 @@ import {
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import {
-  clamp,
   snapPoint,
   timing,
   useClock,
@@ -26,6 +24,7 @@ import {
   useValue,
   min,
 } from "react-native-redash";
+
 import ItemLayout, { ItemModel, HEIGHT } from "./ItemLayout";
 import Action from "./Action";
 

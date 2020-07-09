@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/interface-name-prefix */
 import React, { FC } from "react";
 import {
   Dimensions,
@@ -24,8 +23,8 @@ import {
   NavigationStackOptions,
   NavigationStackProp,
 } from "react-navigation-stack";
-
 import { useNavigation } from "react-navigation-hooks";
+
 import ClickWheel, { Command } from "./ClickWheel";
 import StatusBar, { STATUS_BAR_HEIGHT } from "./StatusBar";
 

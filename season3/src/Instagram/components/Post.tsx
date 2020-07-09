@@ -22,6 +22,7 @@ import {
   translate,
   vec,
 } from "react-native-redash";
+
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 

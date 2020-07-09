@@ -3,6 +3,7 @@ import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { AntDesign as Icon } from "@expo/vector-icons";
 import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
+
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import { MIN_HEADER_HEIGHT } from "./Header";
 

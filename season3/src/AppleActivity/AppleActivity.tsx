@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Value, multiply, set, useCode } from "react-native-reanimated";
-
 import { timing } from "react-native-redash";
+
 import { R1, R2, R3, STROKE_WIDTH } from "./Constants";
 import Ring from "./Ring";
 import Stickers from "./Stickers";

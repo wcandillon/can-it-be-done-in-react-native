@@ -4,11 +4,12 @@ import Animated from "react-native-reanimated";
 import { Audio } from "expo-av";
 import { Sound } from "expo-av/build/Audio";
 
-import ProgressBar from "./ProgressBar";
 import { Command, useOnPress } from "../ClickWheel";
 import { PlayerParams } from "../data";
 import { SCREEN_SIZE, useParams } from "../IPodNavigator";
 import Image from "../Image";
+
+import ProgressBar from "./ProgressBar";
 
 interface PlayerProps {
   command: Animated.Value<Command>;

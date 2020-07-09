@@ -12,8 +12,8 @@ import Animated, {
   useCode,
 } from "react-native-reanimated";
 import MaskedView from "@react-native-community/masked-view";
-
 import { withTransition } from "react-native-redash";
+
 import Tabs from "./Tabs";
 import { TabModel } from "./Content";
 

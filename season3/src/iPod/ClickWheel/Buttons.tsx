@@ -12,6 +12,7 @@ import Animated, {
 import { State, TapGestureHandler } from "react-native-gesture-handler";
 import { between, onGestureEvent, useValues } from "react-native-redash";
 import { useNavigation } from "react-navigation-hooks";
+
 import { Navigation } from "../IPodNavigator";
 
 export enum Command {

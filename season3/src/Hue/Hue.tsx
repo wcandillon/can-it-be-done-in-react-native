@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from "react";
 import { StyleSheet, View } from "react-native";
 // @ts-ignore
@@ -7,6 +7,7 @@ import { Surface } from "gl-react-expo";
 import { GLSL, Node, Shaders } from "gl-react";
 import { Value } from "react-native-reanimated";
 import { hsv2color } from "react-native-redash";
+
 import Picker, { CANVAS_SIZE } from "./Picker";
 import Header from "./Header";
 import Footer from "./Footer";

@@ -1,8 +1,6 @@
-import Animated from "react-native-reanimated";
+import Animated, { Value, multiply, pow, sub } from "react-native-reanimated";
 import { State } from "react-native-gesture-handler";
 import { onGestureEvent } from "react-native-redash";
-
-const { Value, multiply, pow, sub } = Animated;
 
 // Thanks Flutter 🙋🏼‍♂️
 // https://bit.ly/2mgDDLF

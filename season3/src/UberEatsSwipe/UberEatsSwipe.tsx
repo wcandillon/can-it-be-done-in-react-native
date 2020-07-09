@@ -1,12 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Image, StatusBar, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { FlatList } from "react-native-gesture-handler";
+
 import Row from "./components/Row";
 import Option from "./components/Option";
 import Item from "./components/Item";
-import { ItemModel } from "./components/ItemLayout";
 
 const styles = StyleSheet.create({
   container: {

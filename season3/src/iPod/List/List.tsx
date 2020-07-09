@@ -18,6 +18,7 @@ import { between } from "react-native-redash";
 
 import { Command, useOnPress } from "../ClickWheel";
 import { CONTENT_HEIGHT } from "../IPodNavigator";
+
 import Item, { Item as ItemModel } from "./Item";
 
 const ITEM_HEIGHT = 45;

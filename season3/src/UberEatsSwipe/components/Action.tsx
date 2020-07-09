@@ -10,6 +10,7 @@ import Animated, {
   lessThan,
   multiply,
 } from "react-native-reanimated";
+
 import { HEIGHT } from "./ItemLayout";
 
 const styles = StyleSheet.create({

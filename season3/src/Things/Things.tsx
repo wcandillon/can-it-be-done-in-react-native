@@ -1,18 +1,18 @@
 import React, { useRef, useState } from "react";
-import Animated, {
+import {
+  Value,
   Transition,
   Transitioning,
   TransitioningView,
 } from "react-native-reanimated";
 import { StyleSheet } from "react-native";
-
 import { useMemoOne } from "use-memo-one";
+
 import Content from "./Content";
 import ScrollView from "./ScrollView";
 import Search from "./Search";
 import SearchBox from "./SearchBox";
 
-const { Value } = Animated;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

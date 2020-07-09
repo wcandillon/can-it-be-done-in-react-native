@@ -1,12 +1,7 @@
 import React, { ReactNode, memo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import Animated from "react-native-reanimated";
-import { useMemoOne } from "use-memo-one";
-import { snapPoint, verticalPanGestureHandler } from "react-native-redash";
-import { THRESHOLD } from "./Search";
-
-const {
+import Animated, {
   SpringUtils,
   Value,
   Clock,
@@ -32,7 +27,10 @@ const {
   diff,
   pow,
   min,
-} = Animated;
+} from "react-native-reanimated";
+import { snapPoint, usePanGestureHandler } from "react-native-redash";
+
+import { THRESHOLD } from "./Search";
 
 const friction = (ratio: Animated.Node<number>) =>
   multiply(0.52, pow(sub(1, ratio), 2));
@@ -136,18 +134,20 @@ interface ScrollViewProps {
 export default memo(({ children, translateY, onPull }: ScrollViewProps) => {
   const [containerHeight, setContainerHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
-  const { gestureHandler, translationY, velocityY, state } = useMemoOne(
-    () => verticalPanGestureHandler(),
-    []
-  );
+  const {
+    gestureHandler,
+    translation,
+    velocity,
+    state,
+  } = usePanGestureHandler();
   useCode(
     () =>
       block([
         set(
           translateY,
           withScroll({
-            translationY,
-            velocityY,
+            translationY: translation.y,
+            velocityY: velocity.y,
             state,
             containerHeight,
             contentHeight,
@@ -158,15 +158,7 @@ export default memo(({ children, translateY, onPull }: ScrollViewProps) => {
           call([], onPull)
         ),
       ]),
-    [
-      containerHeight,
-      contentHeight,
-      onPull,
-      state,
-      translateY,
-      translationY,
-      velocityY,
-    ]
+    [containerHeight, contentHeight, onPull, state, translateY]
   );
   return (
     <View

@@ -89,9 +89,6 @@ const Listing = () => {
           )
         ),
       ]),
-    // we disable the deps because we don't want the identity change on
-    // snapPoint to trigger a side effect
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   return (

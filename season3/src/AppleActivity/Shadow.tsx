@@ -1,5 +1,6 @@
 import React from "react";
 import Svg, { Circle, Defs, RadialGradient, Stop } from "react-native-svg";
+
 import { STROKE_WIDTH } from "./Constants";
 
 export default () => {

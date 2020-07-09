@@ -4,9 +4,9 @@ import Animated from "react-native-reanimated";
 import { useValue, withTimingTransition } from "react-native-redash";
 import { Feather as Icon } from "@expo/vector-icons";
 import { useSafeArea } from "react-native-safe-area-context";
-
 import { useNavigation } from "react-navigation-hooks";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+
 import { HEADER_IMAGE_HEIGHT } from "./HeaderImage";
 import TabHeader from "./TabHeader";
 import { TabModel } from "./Content";

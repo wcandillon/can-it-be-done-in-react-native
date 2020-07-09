@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { Feather as Icon } from "@expo/vector-icons";
 import { clamp, interpolateColor } from "react-native-redash";
+
 import { StyleGuide } from "../components";
 
 const { Extrapolate, interpolate, sub } = Animated;

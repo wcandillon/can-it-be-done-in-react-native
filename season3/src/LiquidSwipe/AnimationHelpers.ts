@@ -1,7 +1,4 @@
-import Animated from "react-native-reanimated";
-import { State } from "react-native-gesture-handler";
-
-const {
+import Animated, {
   Clock,
   Value,
   eq,
@@ -17,7 +14,8 @@ const {
   SpringUtils,
   and,
   diffClamp,
-} = Animated;
+} from "react-native-reanimated";
+import { State } from "react-native-gesture-handler";
 
 export const followPointer = (value: Animated.Node<number>) => {
   const clock = new Clock();

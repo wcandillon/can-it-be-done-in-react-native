@@ -9,8 +9,8 @@ import Animated, {
 } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
 import moment from "moment";
-
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import { Candle } from "./Candle";
 import Row from "./Row";
 
@@ -44,7 +44,6 @@ const formatInt = (value: number) => {
 const formatValue = (value: number) => {
   const int = Math.floor(value);
   const dec = Math.floor((value - int) * 100);
-  // eslint-disable-next-line no-nested-ternary
   const formattedDec = dec === 0 ? "00" : dec < 10 ? `0${dec}` : `${dec}`;
   return `$ ${formatInt(int)}.${formattedDec}`;
 };

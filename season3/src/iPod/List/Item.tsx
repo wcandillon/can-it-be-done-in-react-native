@@ -5,9 +5,10 @@ import Animated, { cond } from "react-native-reanimated";
 
 import { Command, useOnPress } from "../ClickWheel";
 import Image from "../Image";
-import Active from "./Active";
 import { PlayerParams } from "../data";
 import { Navigation } from "../IPodNavigator";
+
+import Active from "./Active";
 
 const blue = processColor("#2980b9");
 const white = processColor("white");

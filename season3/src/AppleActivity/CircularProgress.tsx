@@ -5,8 +5,8 @@ import Animated, {
   interpolate,
   lessThan,
 } from "react-native-reanimated";
-
 import { transformOrigin } from "react-native-redash";
+
 import HalfCircle from "./HalfCircle";
 import { PI } from "./Constants";
 
