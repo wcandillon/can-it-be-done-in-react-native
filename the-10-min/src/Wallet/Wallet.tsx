@@ -72,7 +72,7 @@ const Wallet = () => {
       renderItem={({ index, item: { type } }) => (
         <WalletCard {...{ index, y, type }} />
       )}
-      keyExtractor={(item) => item.index}
+      keyExtractor={(item) => `${item.index}`}
     />
   );
 };
