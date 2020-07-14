@@ -22,7 +22,8 @@ import {
   useClock,
   usePanGestureHandler,
   useValue,
-  min,
+  minus,
+  clamp,
 } from "react-native-redash";
 
 import ItemLayout, { ItemModel, HEIGHT } from "./ItemLayout";
@@ -64,7 +65,7 @@ const Item = ({ item, onSwipe }: ItemProps) => {
     () => [
       cond(
         eq(state, State.ACTIVE),
-        set(translateX, add(offsetX, min(translation.x, 0)))
+        set(translateX, add(offsetX, clamp(translation.x,  -9999, minus(offsetX) )))
       ),
       cond(eq(state, State.END), [
         set(translateX, timing({ clock, from: translateX, to })),
