@@ -1,6 +1,7 @@
 // @flow
 import React from "react";
-import { Asset, AppLoading } from "expo";
+import { AppLoading } from "expo";
+import { Asset } from "expo-asset";
 
 import { Profiles, type Profile } from "./components";
 
