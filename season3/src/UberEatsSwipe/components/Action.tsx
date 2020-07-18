@@ -32,7 +32,7 @@ const Action = ({ x, deleteOpacity }: ActionProps) => {
   const borderRadius = divide(size, 2);
   const scale = interpolate(size, {
     inputRange: [20, 30],
-    outputRange: [0.001, 1],
+    outputRange: [0.01, 1],
     extrapolate: Extrapolate.CLAMP,
   });
   const iconOpacity = interpolate(size, {
