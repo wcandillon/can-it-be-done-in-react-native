@@ -24,21 +24,27 @@ const MARGIN = 16;
 const HEIGHT = CARD_HEIGHT + MARGIN * 2;
 const cards = [
   {
+    index: 1,
     type: Cards.Card1,
   },
   {
+    index: 2,
     type: Cards.Card2,
   },
   {
+    index: 3,
     type: Cards.Card3,
   },
   {
+    index: 4,
     type: Cards.Card4,
   },
   {
+    index: 5,
     type: Cards.Card5,
   },
   {
+    index: 7,
     type: Cards.Card6,
   },
 ];
@@ -66,7 +72,7 @@ const Wallet = () => {
       renderItem={({ index, item: { type } }) => (
         <WalletCard {...{ index, y, type }} />
       )}
-      keyExtractor={(item) => item.index}
+      keyExtractor={(item) => `${item.index}`}
     />
   );
 };

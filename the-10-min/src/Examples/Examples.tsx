@@ -73,6 +73,16 @@ export const examples = [
     title: "Ripple Effect",
     source: require("../../assets/examples/accordion.png"),
   },
+  {
+    screen: "Trigonometry",
+    title: "Trigonometry",
+    source: require("../../assets/examples/circular-progress.png"),
+  },
+  {
+    screen: "Wallet",
+    title: "Wallet",
+    source: require("../../assets/examples/accordion.png"),
+  },
 ];
 
 const styles = StyleSheet.create({
