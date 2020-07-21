@@ -1,10 +1,10 @@
 import * as React from "react";
 import { ScrollView, StyleSheet } from "react-native";
-
 import {
   NavigationScreenConfigProps,
   NavigationScreenProp,
 } from "react-navigation";
+
 import { StyleGuide, Thumbnail } from "../components";
 
 export const examples = [
@@ -81,6 +81,11 @@ export const examples = [
   {
     screen: "Wallet",
     title: "Wallet",
+    source: require("../../assets/examples/accordion.png"),
+  },
+  {
+    screen: "Picker",
+    title: "Picker",
     source: require("../../assets/examples/accordion.png"),
   },
 ];

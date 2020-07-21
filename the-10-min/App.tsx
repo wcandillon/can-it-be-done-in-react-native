@@ -167,7 +167,7 @@ const AppNavigator = createAppContainer(
         },
         headerTintColor: "white",
       },
-      initialRouteName: "Picker",
+      initialRouteName: "Examples",
     }
   )
 );
