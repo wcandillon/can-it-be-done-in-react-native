@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import Animated, { useCode, set, divide } from "react-native-reanimated";
+import Animated, { useCode, set, divide, debug } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { usePanGestureHandler, diffClamp } from "react-native-redash";
 
@@ -22,7 +22,7 @@ const GestureHandler = ({ value, max, defaultValue }: GestureHandlerProps) => {
     state,
     snapPoints,
   });
-  useCode(() => set(value, divide(translateY, -ITEM_HEIGHT)), []);
+  useCode(() => [set(value, divide(translateY, -ITEM_HEIGHT))], []);
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View style={StyleSheet.absoluteFill} />

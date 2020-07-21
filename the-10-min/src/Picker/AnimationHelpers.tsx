@@ -54,7 +54,7 @@ export const withDecay = (params: WithDecayParams) => {
   };
   return block([
     startClock(clock),
-    cond(eq(gestureState, State.BEGAN), [set(offset, state.position)]),
+    cond(eq(gestureState, State.BEGAN), set(offset, state.position)),
     cond(eq(gestureState, State.ACTIVE), [
       set(state.position, add(offset, value)),
       set(state.time, 0),
@@ -62,7 +62,9 @@ export const withDecay = (params: WithDecayParams) => {
       set(state.finished, 0),
       set(config.toValue, snapPoint(state.position, velocity, snapPoints)),
     ]),
-    cond(eq(gestureState, State.END), [timing(clock, state, config)]),
+    cond(and(not(state.finished), eq(gestureState, State.END)), [
+      timing(clock, state, config),
+    ]),
     state.position,
   ]);
 };
