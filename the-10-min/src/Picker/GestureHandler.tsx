@@ -14,10 +14,15 @@ interface GestureHandlerProps {
 }
 
 const GestureHandler = ({ value, max, defaultValue }: GestureHandlerProps) => {
-  const { gestureHandler, position, velocity, state } = usePanGestureHandler();
+  const {
+    gestureHandler,
+    translation,
+    velocity,
+    state,
+  } = usePanGestureHandler();
   const snapPoints = new Array(max).fill(0).map((_, i) => i * -ITEM_HEIGHT);
   const translateY = withDecay({
-    value: position.y,
+    value: translation.y,
     velocity: velocity.y,
     state,
     snapPoints,
