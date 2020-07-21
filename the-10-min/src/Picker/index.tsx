@@ -23,7 +23,8 @@ const values = new Array(new Date().getFullYear() - start + 1)
   .map((_, i) => {
     const value = start + i;
     return { value, label: `${value}` };
-  });
+  })
+  .reverse();
 
 const PickerDemo = () => {
   const defaultValue = 1990 - start;

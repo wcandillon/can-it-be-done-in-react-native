@@ -8,7 +8,7 @@ import Animated, {
   sin,
   sub,
 } from "react-native-reanimated";
-import { useValue, translateZ } from "react-native-redash";
+import { useValue, translateZ, useDebug } from "react-native-redash";
 import MaskedView from "@react-native-community/masked-view";
 
 import GestureHandler from "./GestureHandler";
@@ -23,7 +23,9 @@ const styles = StyleSheet.create({
   },
   item: {
     ...StyleSheet.absoluteFillObject,
+    top: ITEM_HEIGHT * 2,
     height: ITEM_HEIGHT,
+    justifyContent: "center",
   },
   label: {
     color: "white",
@@ -54,6 +56,9 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
         });
         const translateY = multiply(RADIUS, sin(rotateX));
         const z = sub(multiply(RADIUS, cos(rotateX)), RADIUS);
+        if (i === 119) {
+          useDebug({ rotateX, translateY, z });
+        }
         return (
           <Animated.View
             key={v.value}

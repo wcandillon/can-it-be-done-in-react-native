@@ -10,6 +10,7 @@ import Animated, {
   not,
   cond,
   Value,
+  sub,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import {
@@ -35,9 +36,10 @@ const GestureHandler = ({ value, max, defaultValue }: GestureHandlerProps) => {
     <Animated.ScrollView
       style={StyleSheet.absoluteFillObject}
       snapToInterval={ITEM_HEIGHT}
+      showsVerticalScrollIndicator={false}
       {...scrollHandler}
     >
-      <View style={{ height: ITEM_HEIGHT * max }} />
+      <View style={{ height: ITEM_HEIGHT * (max + 4) }} />
     </Animated.ScrollView>
   );
 };
