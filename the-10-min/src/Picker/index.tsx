@@ -1,9 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import MaskedView from "@react-native-community/masked-view";
 
 import Picker from "./Picker";
-import { ITEM_HEIGHT } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -11,6 +9,12 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    color: "white",
+    fontFamily: "SFProText-Semibold",
+    fontSize: 24,
+    marginBottom: 31,
   },
 });
 const start = 1900;
@@ -25,10 +29,8 @@ const PickerDemo = () => {
   const defaultValue = 1990 - start;
   return (
     <View style={styles.container}>
-      <View>
-        <Text>What year were you born?</Text>
-        <Picker {...{ values, defaultValue }} />
-      </View>
+      <Text style={styles.title}>What year were you born?</Text>
+      <Picker {...{ values, defaultValue }} />
     </View>
   );
 };

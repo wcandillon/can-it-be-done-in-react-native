@@ -1,21 +1,23 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Dimensions } from "react-native";
 import Animated, {
   interpolate,
   Extrapolate,
   multiply,
   cos,
-  useCode,
   sin,
   sub,
 } from "react-native-reanimated";
-import { useValue, translateZ, useDebug } from "react-native-redash";
+import { useValue, translateZ } from "react-native-redash";
+import MaskedView from "@react-native-community/masked-view";
 
 import GestureHandler from "./GestureHandler";
 import { VISIBLE_ITEMS, ITEM_HEIGHT } from "./Constants";
 
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
+    width: 0.61 * width,
     height: ITEM_HEIGHT * VISIBLE_ITEMS,
     overflow: "hidden",
   },
@@ -42,8 +44,8 @@ interface PickerProps {
 
 const Picker = ({ values, defaultValue }: PickerProps) => {
   const value = useValue(defaultValue);
-  return (
-    <View style={styles.container}>
+  const maskElement = (
+    <>
       {values.map((v, i) => {
         const rotateX = interpolate(value, {
           inputRange: [i - RADIUS_RELATIVE, i, i + RADIUS_RELATIVE],
@@ -71,6 +73,26 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
           </Animated.View>
         );
       })}
+    </>
+  );
+  return (
+    <View style={styles.container}>
+      <MaskedView {...{ maskElement }}>
+        <View style={{ height: ITEM_HEIGHT * 2, backgroundColor: "white" }} />
+        <View style={{ height: ITEM_HEIGHT, backgroundColor: "#6001d0" }} />
+        <View style={{ height: ITEM_HEIGHT * 2, backgroundColor: "white" }} />
+      </MaskedView>
+      <View style={StyleSheet.absoluteFill}>
+        <View
+          style={{
+            borderColor: "grey",
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+            top: ITEM_HEIGHT * 2,
+            height: ITEM_HEIGHT,
+          }}
+        />
+      </View>
       <GestureHandler max={values.length} {...{ value, defaultValue }} />
     </View>
   );
