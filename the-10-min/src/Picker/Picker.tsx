@@ -1,10 +1,17 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-import Animated, { interpolate, Extrapolate } from "react-native-reanimated";
+import Animated, {
+  interpolate,
+  Extrapolate,
+  multiply,
+  cos,
+  useCode,
+  sin,
+} from "react-native-reanimated";
 import { useValue, translateZ } from "react-native-redash";
 
 import GestureHandler from "./GestureHandler";
-import { ITEM_HEIGHT, VISIBLE_ITEMS } from "./Constants";
+import { VISIBLE_ITEMS, ITEM_HEIGHT } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -24,7 +31,7 @@ const styles = StyleSheet.create({
   },
 });
 const perspective = 600;
-const RADIUS = 3;
+const RADIUS = 5;
 
 interface PickerProps {
   defaultValue: number;
@@ -36,20 +43,13 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
   return (
     <View style={styles.container}>
       {values.map((v, i) => {
-        const translateY = interpolate(value, {
-          inputRange: [i - 2, i, i + 2],
-          outputRange: [0, ITEM_HEIGHT * 2, ITEM_HEIGHT * 4],
-        });
         const rotateX = interpolate(value, {
           inputRange: [i - RADIUS, i, i + RADIUS],
           outputRange: [Math.PI / 2, 0, -Math.PI / 2],
           extrapolate: Extrapolate.CLAMP,
         });
-        const z = interpolate(value, {
-          inputRange: [i - RADIUS, i, i + RADIUS],
-          outputRange: [-RADIUS * ITEM_HEIGHT, 0, -RADIUS * ITEM_HEIGHT],
-        });
-
+        const translateY = multiply(ITEM_HEIGHT, RADIUS, sin(rotateX));
+        const z = multiply(ITEM_HEIGHT, RADIUS, cos(rotateX));
         return (
           <Animated.View
             key={v.value}

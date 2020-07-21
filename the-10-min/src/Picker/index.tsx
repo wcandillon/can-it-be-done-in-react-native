@@ -1,8 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useValue } from "react-native-redash";
+import MaskedView from "@react-native-community/masked-view";
 
 import Picker from "./Picker";
+import { ITEM_HEIGHT } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -26,9 +27,7 @@ const PickerDemo = () => {
     <View style={styles.container}>
       <View>
         <Text>What year were you born?</Text>
-        <View>
-          <Picker {...{ values, defaultValue }} />
-        </View>
+        <Picker {...{ values, defaultValue }} />
       </View>
     </View>
   );
