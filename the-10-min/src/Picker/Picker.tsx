@@ -56,11 +56,11 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
           divide(sub(translateY, ITEM_HEIGHT * 2), -ITEM_HEIGHT),
           {
             inputRange: [i - RADIUS_REL, i, i + RADIUS_REL],
-            outputRange: [Math.PI / 2, 0, -Math.PI / 2],
+            outputRange: [-Math.PI / 2, 0, Math.PI / 2],
             extrapolate: Extrapolate.CLAMP,
           }
         );
-        const z = sub(multiply(RADIUS, cos(rotateX)), RADIUS);
+        const z = sub(multiply(RADIUS, cos(abs(rotateX))), RADIUS);
         return (
           <Animated.View
             key={v.value}
