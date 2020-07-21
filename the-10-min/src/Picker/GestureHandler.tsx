@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, {
   useCode,
@@ -17,7 +17,6 @@ import {
   usePanGestureHandler,
   withDecay,
   diffClamp,
-  useValue,
   useScrollHandler,
 } from "react-native-redash";
 
@@ -30,10 +29,18 @@ interface GestureHandlerProps {
 }
 
 const GestureHandler = ({ value, max, defaultValue }: GestureHandlerProps) => {
+  const scrollView = useRef<Animated.ScrollView>(null);
   const { scrollHandler, y } = useScrollHandler();
   useCode(() => [set(value, divide(y, ITEM_HEIGHT))], []);
+  useEffect(() => {
+    scrollView.current
+      ?.getNode()
+      .scrollTo({ y: defaultValue * ITEM_HEIGHT, animated: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scrollView.current]);
   return (
     <Animated.ScrollView
+      ref={scrollView}
       style={StyleSheet.absoluteFillObject}
       snapToInterval={ITEM_HEIGHT}
       showsVerticalScrollIndicator={false}

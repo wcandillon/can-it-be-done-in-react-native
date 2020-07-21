@@ -8,7 +8,7 @@ import Animated, {
   sin,
   sub,
 } from "react-native-reanimated";
-import { useValue, translateZ, useDebug } from "react-native-redash";
+import { useValue, translateZ } from "react-native-redash";
 import MaskedView from "@react-native-community/masked-view";
 
 import GestureHandler from "./GestureHandler";
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 const perspective = 600;
-const RADIUS_RELATIVE = 5;
+const RADIUS_RELATIVE = 3;
 const RADIUS = RADIUS_RELATIVE * ITEM_HEIGHT;
 
 interface PickerProps {
