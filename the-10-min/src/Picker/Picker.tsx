@@ -46,7 +46,7 @@ interface PickerProps {
 }
 
 const Picker = ({ values, defaultValue }: PickerProps) => {
-  const value = useValue(defaultValue);
+  const value = useValue(0);
   const maskElement = (
     <>
       {values.map((v, i) => {
