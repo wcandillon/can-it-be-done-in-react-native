@@ -8,8 +8,10 @@ import Animated, {
   sin,
   sub,
   asin,
+  divide,
+  abs,
 } from "react-native-reanimated";
-import { useValue, translateZ } from "react-native-redash";
+import { useValue, translateZ, clamp } from "react-native-redash";
 import MaskedView from "@react-native-community/masked-view";
 
 import GestureHandler from "./GestureHandler";
@@ -23,7 +25,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   item: {
-    top: ITEM_HEIGHT * 2,
     height: ITEM_HEIGHT,
     justifyContent: "center",
   },
@@ -37,8 +38,7 @@ const styles = StyleSheet.create({
   },
 });
 const perspective = 600;
-const RADIUS_RELATIVE = 3;
-const RADIUS = RADIUS_RELATIVE * ITEM_HEIGHT;
+const RADIUS = VISIBLE_ITEMS * ITEM_HEIGHT * 0.5;
 
 interface PickerProps {
   defaultValue: number;
@@ -46,13 +46,11 @@ interface PickerProps {
 }
 
 const Picker = ({ values, defaultValue }: PickerProps) => {
-  const value = useValue(0);
+  const translateY = useValue(0);
   const maskElement = (
-    <>
+    <Animated.View style={{ transform: [{ translateY }] }}>
       {values.map((v, i) => {
-        const translateY = value;
-        const rotateX = asin(translateY);
-        const z = sub(multiply(RADIUS, cos(rotateX)), RADIUS);
+        const rotateX = 0;
         return (
           <Animated.View
             key={v.value}
@@ -60,9 +58,8 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
               styles.item,
               {
                 transform: [
-                  { perspective },
-                  { translateY },
-                  // { rotateX },
+                  //{ perspective },
+                  { rotateX },
                   //translateZ(perspective, z),
                 ],
               },
@@ -72,7 +69,7 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
           </Animated.View>
         );
       })}
-    </>
+    </Animated.View>
   );
   return (
     <View style={styles.container}>
@@ -92,7 +89,11 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
           }}
         />
       </View>
-      <GestureHandler max={values.length} {...{ value, defaultValue }} />
+      <GestureHandler
+        max={values.length}
+        value={translateY}
+        {...{ defaultValue }}
+      />
     </View>
   );
 };
