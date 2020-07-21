@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
   },
 });
 const perspective = 600;
-const RADIUS = 5;
+const RADIUS_RELATIVE = 5;
+const RADIUS = RADIUS_RELATIVE * ITEM_HEIGHT;
 
 interface PickerProps {
   defaultValue: number;
@@ -44,12 +45,12 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
     <View style={styles.container}>
       {values.map((v, i) => {
         const rotateX = interpolate(value, {
-          inputRange: [i - RADIUS, i, i + RADIUS],
-          outputRange: [Math.PI / 2, 0, -Math.PI / 2],
+          inputRange: [i - RADIUS_RELATIVE, i, i + RADIUS_RELATIVE],
+          outputRange: [-Math.PI / 2, 0, Math.PI / 2],
           extrapolate: Extrapolate.CLAMP,
         });
-        const translateY = multiply(ITEM_HEIGHT, RADIUS, sin(rotateX));
-        const z = multiply(ITEM_HEIGHT, RADIUS, cos(rotateX));
+        const translateY = multiply(RADIUS, sin(rotateX));
+        const z = multiply(RADIUS, cos(rotateX));
         return (
           <Animated.View
             key={v.value}
