@@ -1,28 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import Animated, {
-  useCode,
-  set,
-  divide,
-  debug,
-  multiply,
-  defined,
-  not,
-  cond,
-  Value,
-  sub,
-} from "react-native-reanimated";
+import Animated, { useCode, set, divide } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import {
-  usePanGestureHandler,
-  withDecay,
-  diffClamp,
-  useScrollHandler,
-  withSpring,
-  clamp,
-} from "react-native-redash";
+import { usePanGestureHandler, diffClamp } from "react-native-redash";
 
 import { ITEM_HEIGHT } from "./Constants";
+import { withDecay } from "./AnimationHelpers";
 
 interface GestureHandlerProps {
   value: Animated.Value<number>;
