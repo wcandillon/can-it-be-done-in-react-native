@@ -7,6 +7,7 @@ import Animated, {
   cos,
   sin,
   sub,
+  asin,
 } from "react-native-reanimated";
 import { useValue, translateZ } from "react-native-redash";
 import MaskedView from "@react-native-community/masked-view";
@@ -22,7 +23,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   item: {
-    ...StyleSheet.absoluteFillObject,
     top: ITEM_HEIGHT * 2,
     height: ITEM_HEIGHT,
     justifyContent: "center",
@@ -50,12 +50,8 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
   const maskElement = (
     <>
       {values.map((v, i) => {
-        const rotateX = interpolate(value, {
-          inputRange: [i - RADIUS_RELATIVE, i, i + RADIUS_RELATIVE],
-          outputRange: [Math.PI / 2, 0, -Math.PI / 2],
-          extrapolate: Extrapolate.CLAMP,
-        });
-        const translateY = multiply(RADIUS, sin(rotateX));
+        const translateY = value;
+        const rotateX = asin(translateY);
         const z = sub(multiply(RADIUS, cos(rotateX)), RADIUS);
         return (
           <Animated.View
@@ -66,8 +62,8 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
                 transform: [
                   { perspective },
                   { translateY },
-                  { rotateX },
-                  translateZ(perspective, z),
+                  // { rotateX },
+                  //translateZ(perspective, z),
                 ],
               },
             ]}

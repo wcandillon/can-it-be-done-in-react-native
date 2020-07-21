@@ -22,7 +22,7 @@ const GestureHandler = ({ value, max, defaultValue }: GestureHandlerProps) => {
     state,
     snapPoints,
   });
-  useCode(() => [set(value, divide(translateY, -ITEM_HEIGHT))], []);
+  useCode(() => [set(value, translateY)], []);
   return (
     <PanGestureHandler {...gestureHandler}>
       <Animated.View style={StyleSheet.absoluteFill} />
