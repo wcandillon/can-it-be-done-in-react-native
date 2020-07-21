@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "SFProText-Semibold",
     fontSize: 24,
-    lineHeight: 24,
-    padding: 4,
+    lineHeight: ITEM_HEIGHT,
     textAlign: "center",
+    textAlignVertical: "center",
   },
 });
 const perspective = 600;
