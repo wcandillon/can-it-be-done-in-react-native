@@ -5,14 +5,11 @@ import Animated, {
   Extrapolate,
   multiply,
   cos,
-  sin,
   sub,
   asin,
   divide,
-  abs,
-  add,
 } from "react-native-reanimated";
-import { useValue, translateZ, clamp } from "react-native-redash";
+import { useValue, translateZ } from "react-native-redash";
 import MaskedView from "@react-native-community/masked-view";
 
 import GestureHandler from "./GestureHandler";
