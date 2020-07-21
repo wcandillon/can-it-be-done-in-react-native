@@ -38,10 +38,24 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
           inputRange: [i - 2, i, i + 2],
           outputRange: [0, ITEM_HEIGHT * 2, ITEM_HEIGHT * 4],
         });
+        const rotateX = interpolate(value, {
+          inputRange: [i - 2, i, i + 2],
+          outputRange: [Math.PI / 2, 0, Math.PI / 2],
+        });
+        const scale = interpolate(value, {
+          inputRange: [i - 2, i, i + 2],
+          outputRange: [0.8, 1, 0.8],
+        });
+
         return (
           <Animated.View
             key={v.value}
-            style={[styles.item, { transform: [{ translateY }] }]}
+            style={[
+              styles.item,
+              {
+                transform: [{ translateY }, { rotateX }, { scale }],
+              },
+            ]}
           >
             <Text style={styles.label}>{v.label}</Text>
           </Animated.View>
