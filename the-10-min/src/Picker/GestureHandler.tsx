@@ -15,15 +15,13 @@ interface GestureHandlerProps {
 
 const GestureHandler = ({ value, max, defaultValue }: GestureHandlerProps) => {
   const { gestureHandler, position, velocity, state } = usePanGestureHandler();
-  const translateY = diffClamp(
-    withDecay({
-      value: position.y,
-      velocity: velocity.y,
-      state,
-    }),
-    -ITEM_HEIGHT * (max - 1),
-    0
-  );
+  const snapPoints = new Array(max).fill(0).map((_, i) => i * -ITEM_HEIGHT);
+  const translateY = withDecay({
+    value: position.y,
+    velocity: velocity.y,
+    state,
+    snapPoints,
+  });
   useCode(() => set(value, divide(translateY, -ITEM_HEIGHT)), []);
   return (
     <PanGestureHandler {...gestureHandler}>
