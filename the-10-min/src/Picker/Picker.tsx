@@ -10,6 +10,7 @@ import Animated, {
   asin,
   divide,
   abs,
+  add,
 } from "react-native-reanimated";
 import { useValue, translateZ, clamp } from "react-native-redash";
 import MaskedView from "@react-native-community/masked-view";
@@ -38,7 +39,8 @@ const styles = StyleSheet.create({
   },
 });
 const perspective = 600;
-const RADIUS = VISIBLE_ITEMS * ITEM_HEIGHT * 0.5;
+const RADIUS_REL = VISIBLE_ITEMS * 0.5;
+const RADIUS = RADIUS_REL * ITEM_HEIGHT;
 
 interface PickerProps {
   defaultValue: number;
@@ -50,7 +52,15 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
   const maskElement = (
     <Animated.View style={{ transform: [{ translateY }] }}>
       {values.map((v, i) => {
-        const rotateX = 0;
+        const rotateX = interpolate(
+          divide(sub(translateY, ITEM_HEIGHT * 2), -ITEM_HEIGHT),
+          {
+            inputRange: [i - RADIUS_REL, i, i + RADIUS_REL],
+            outputRange: [Math.PI / 2, 0, -Math.PI / 2],
+            extrapolate: Extrapolate.CLAMP,
+          }
+        );
+        const z = sub(multiply(RADIUS, cos(rotateX)), RADIUS);
         return (
           <Animated.View
             key={v.value}
@@ -58,9 +68,9 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
               styles.item,
               {
                 transform: [
-                  //{ perspective },
+                  { perspective },
                   { rotateX },
-                  //translateZ(perspective, z),
+                  translateZ(perspective, z),
                 ],
               },
             ]}
