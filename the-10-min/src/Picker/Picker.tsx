@@ -1,14 +1,14 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-import Animated, { interpolate, useCode, debug } from "react-native-reanimated";
-import { useValue } from "react-native-redash";
+import Animated, { interpolate, Extrapolate } from "react-native-reanimated";
+import { useValue, translateZ } from "react-native-redash";
 
 import GestureHandler from "./GestureHandler";
-import { ITEM_HEIGHT } from "./Constants";
+import { ITEM_HEIGHT, VISIBLE_ITEMS } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
-    height: ITEM_HEIGHT * 5,
+    height: ITEM_HEIGHT * VISIBLE_ITEMS,
     overflow: "hidden",
   },
   item: {
@@ -23,6 +23,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+const perspective = 600;
+const RADIUS = 3;
 
 interface PickerProps {
   defaultValue: number;
@@ -39,12 +41,13 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
           outputRange: [0, ITEM_HEIGHT * 2, ITEM_HEIGHT * 4],
         });
         const rotateX = interpolate(value, {
-          inputRange: [i - 2, i, i + 2],
-          outputRange: [Math.PI / 2, 0, Math.PI / 2],
+          inputRange: [i - RADIUS, i, i + RADIUS],
+          outputRange: [Math.PI / 2, 0, -Math.PI / 2],
+          extrapolate: Extrapolate.CLAMP,
         });
-        const scale = interpolate(value, {
-          inputRange: [i - 2, i, i + 2],
-          outputRange: [0.8, 1, 0.8],
+        const z = interpolate(value, {
+          inputRange: [i - RADIUS, i, i + RADIUS],
+          outputRange: [-RADIUS * ITEM_HEIGHT, 0, -RADIUS * ITEM_HEIGHT],
         });
 
         return (
@@ -53,7 +56,12 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
             style={[
               styles.item,
               {
-                transform: [{ translateY }, { rotateX }, { scale }],
+                transform: [
+                  { perspective },
+                  { translateY },
+                  { rotateX },
+                  translateZ(perspective, z),
+                ],
               },
             ]}
           >
