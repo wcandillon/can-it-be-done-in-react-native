@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "SFProText-Semibold",
     fontSize: 24,
+    lineHeight: 24,
     padding: 4,
     textAlign: "center",
   },
@@ -56,9 +57,6 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
         });
         const translateY = multiply(RADIUS, sin(rotateX));
         const z = sub(multiply(RADIUS, cos(rotateX)), RADIUS);
-        if (i === 119) {
-          useDebug({ rotateX, translateY, z });
-        }
         return (
           <Animated.View
             key={v.value}
