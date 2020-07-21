@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Animated, {
   useCode,
   set,
@@ -17,6 +17,7 @@ import {
   withDecay,
   diffClamp,
   useValue,
+  useScrollHandler,
 } from "react-native-redash";
 
 import { ITEM_HEIGHT } from "./Constants";
@@ -28,28 +29,16 @@ interface GestureHandlerProps {
 }
 
 const GestureHandler = ({ value, max, defaultValue }: GestureHandlerProps) => {
-  const {
-    gestureHandler,
-    translation,
-    velocity,
-    state,
-  } = usePanGestureHandler();
-  const offset = useValue(defaultValue * ITEM_HEIGHT);
-  const translateY = diffClamp(
-    withDecay({
-      value: translation.y,
-      velocity: velocity.y,
-      state,
-      offset,
-    }),
-    0,
-    max * ITEM_HEIGHT
-  );
-  useCode(() => [set(value, divide(translateY, ITEM_HEIGHT))], []);
+  const { scrollHandler, y } = useScrollHandler();
+  useCode(() => [set(value, divide(y, ITEM_HEIGHT))], []);
   return (
-    <PanGestureHandler {...gestureHandler}>
-      <Animated.View style={StyleSheet.absoluteFill} />
-    </PanGestureHandler>
+    <Animated.ScrollView
+      style={StyleSheet.absoluteFillObject}
+      snapToInterval={ITEM_HEIGHT}
+      {...scrollHandler}
+    >
+      <View style={{ height: ITEM_HEIGHT * max }} />
+    </Animated.ScrollView>
   );
 };
 

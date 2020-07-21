@@ -49,7 +49,7 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
       {values.map((v, i) => {
         const rotateX = interpolate(value, {
           inputRange: [i - RADIUS_RELATIVE, i, i + RADIUS_RELATIVE],
-          outputRange: [-Math.PI / 2, 0, Math.PI / 2],
+          outputRange: [Math.PI / 2, 0, -Math.PI / 2],
           extrapolate: Extrapolate.CLAMP,
         });
         const translateY = multiply(RADIUS, sin(rotateX));
@@ -78,9 +78,9 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
   return (
     <View style={styles.container}>
       <MaskedView {...{ maskElement }}>
-        <View style={{ height: ITEM_HEIGHT * 2, backgroundColor: "white" }} />
-        <View style={{ height: ITEM_HEIGHT, backgroundColor: "#6001d0" }} />
-        <View style={{ height: ITEM_HEIGHT * 2, backgroundColor: "white" }} />
+        <View style={{ height: ITEM_HEIGHT * 2, backgroundColor: "grey" }} />
+        <View style={{ height: ITEM_HEIGHT, backgroundColor: "white" }} />
+        <View style={{ height: ITEM_HEIGHT * 2, backgroundColor: "grey" }} />
       </MaskedView>
       <View style={StyleSheet.absoluteFill}>
         <View
