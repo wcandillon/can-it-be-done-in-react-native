@@ -24,6 +24,7 @@ import Swiper, { assets as swiperAssets } from "./src/Swiper";
 import Wallet from "./src/Wallet";
 import Trigonometry from "./src/Trigonometry";
 import Ripple from "./src/Ripple";
+import Picker from "./src/Picker";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
@@ -151,6 +152,12 @@ const AppNavigator = createAppContainer(
           title: "Trigonometry",
         },
       },
+      Picker: {
+        screen: Picker,
+        navigationOptions: {
+          title: "Picker",
+        },
+      },
     },
     {
       defaultNavigationOptions: {
@@ -160,7 +167,7 @@ const AppNavigator = createAppContainer(
         },
         headerTintColor: "white",
       },
-      initialRouteName: "Examples",
+      initialRouteName: "Picker",
     }
   )
 );
