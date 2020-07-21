@@ -7,8 +7,9 @@ import Animated, {
   cos,
   useCode,
   sin,
+  sub,
 } from "react-native-reanimated";
-import { useValue, translateZ } from "react-native-redash";
+import { useValue, translateZ, useDebug } from "react-native-redash";
 
 import GestureHandler from "./GestureHandler";
 import { VISIBLE_ITEMS, ITEM_HEIGHT } from "./Constants";
@@ -50,7 +51,7 @@ const Picker = ({ values, defaultValue }: PickerProps) => {
           extrapolate: Extrapolate.CLAMP,
         });
         const translateY = multiply(RADIUS, sin(rotateX));
-        const z = multiply(RADIUS, cos(rotateX));
+        const z = sub(multiply(RADIUS, cos(rotateX)), RADIUS);
         return (
           <Animated.View
             key={v.value}
