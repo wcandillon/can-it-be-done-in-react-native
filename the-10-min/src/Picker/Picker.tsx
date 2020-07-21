@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import Animated, { interpolate, useCode, debug } from "react-native-reanimated";
+import { useValue } from "react-native-redash";
 
 import GestureHandler from "./GestureHandler";
 import { ITEM_HEIGHT } from "./Constants";
@@ -24,11 +25,12 @@ const styles = StyleSheet.create({
 });
 
 interface PickerProps {
-  value: Animated.Value<number>;
+  defaultValue: number;
   values: { value: number; label: string }[];
 }
 
-const Picker = ({ values, value }: PickerProps) => {
+const Picker = ({ values, defaultValue }: PickerProps) => {
+  const value = useValue(defaultValue);
   return (
     <View style={styles.container}>
       {values.map((v, i) => {
@@ -45,7 +47,7 @@ const Picker = ({ values, value }: PickerProps) => {
           </Animated.View>
         );
       })}
-      <GestureHandler {...{ value }} />
+      <GestureHandler max={values.length} {...{ value, defaultValue }} />
     </View>
   );
 };

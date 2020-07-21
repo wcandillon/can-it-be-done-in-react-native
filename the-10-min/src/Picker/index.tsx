@@ -21,13 +21,13 @@ const values = new Array(new Date().getFullYear() - start + 1)
   });
 
 const PickerDemo = () => {
-  const value = useValue(1990 - start);
+  const defaultValue = 1990 - start;
   return (
     <View style={styles.container}>
       <View>
         <Text>What year were you born?</Text>
         <View>
-          <Picker {...{ value, values }} />
+          <Picker {...{ values, defaultValue }} />
         </View>
       </View>
     </View>
