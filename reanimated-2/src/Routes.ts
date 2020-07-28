@@ -3,4 +3,5 @@ export type Routes = {
   Worklets: undefined;
   PanGesture: undefined;
   Transitions: undefined;
+  Chart: undefined;
 };

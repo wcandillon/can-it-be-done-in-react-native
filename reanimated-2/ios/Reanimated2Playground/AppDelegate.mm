@@ -3,8 +3,11 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+
 #import <React/RCTCxxBridgeDelegate.h>
 #import <ReactCommon/RCTTurboModuleManager.h>
+
+// add headers (start)
 #import <React/RCTDataRequestHandler.h>
 #import <React/RCTFileRequestHandler.h>
 #import <React/RCTHTTPRequestHandler.h>
@@ -14,8 +17,10 @@
 #import <React/RCTImageLoader.h>
 #import <React/JSCExecutorFactory.h>
 #import <RNReanimated/RETurboModuleProvider.h>
+#import <RNReanimated/REAModule.h>
+// add headers (end)
 
-#if DEBUG
+#ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
 #import <FlipperKitUserDefaultsPlugin/FKUserDefaultsPlugin.h>
@@ -43,12 +48,13 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#if DEBUG
+  RCTEnableTurboModule(YES); // <- add
+#ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
-  RCTEnableTurboModule(YES);
-  _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:_bridge
+
+  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"Reanimated2Playground"
                                             initialProperties:nil];
 
@@ -73,57 +79,61 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:(RCTBridge *)bridge
 {
-  _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge delegate:self];
-  __weak __typeof(self) weakSelf = self;
-  return std::make_unique<facebook::react::JSCExecutorFactory>([weakSelf, bridge](facebook::jsi::Runtime &runtime) {
-    if (!bridge) {
-      return;
-    }
-    __typeof(self) strongSelf = weakSelf;
-    if (strongSelf) {
-      [strongSelf->_turboModuleManager installJSBindingWithRuntime:&runtime];
-    }
-  });
+  _bridge_reanimated = bridge;
+  _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge
+                                                              delegate:self
+                                                             jsInvoker:bridge.jsCallInvoker];
+ #if RCT_DEV
+  [_turboModuleManager moduleForName:"RCTDevMenu"]; // <- add
+ #endif
+ __weak __typeof(self) weakSelf = self;
+ return std::make_unique<facebook::react::JSCExecutorFactory>([weakSelf, bridge](facebook::jsi::Runtime &runtime) {
+   if (!bridge) {
+     return;
+   }
+   __typeof(self) strongSelf = weakSelf;
+   if (strongSelf) {
+     [strongSelf->_turboModuleManager installJSBindingWithRuntime:&runtime];
+   }
+ });
 }
 
 - (Class)getModuleClassFromName:(const char *)name
 {
-  return facebook::react::RETurboModuleClassProvider(name);
+ return facebook::react::RETurboModuleClassProvider(name);
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const std::string &)name
-                                                      jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
+                                                     jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
 {
-  return facebook::react::RETurboModuleProvider(name, jsInvoker);
+ return facebook::react::RETurboModuleProvider(name, jsInvoker);
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const std::string &)name
-                                                       instance:(id<RCTTurboModule>)instance
-                                                      jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
+                                                      instance:(id<RCTTurboModule>)instance
+                                                     jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
 {
-  return facebook::react::RETurboModuleProvider(name, instance, jsInvoker);
+ return facebook::react::RETurboModuleProvider(name, instance, jsInvoker);
 }
 
 - (id<RCTTurboModule>)getModuleInstanceFromClass:(Class)moduleClass
 {
-  if (moduleClass == RCTImageLoader.class) {
-    return [[moduleClass alloc] initWithRedirectDelegate:nil loadersProvider:^NSArray<id<RCTImageURLLoader>> *{
-      return @[[RCTLocalAssetImageLoader new]];
-    } decodersProvider:^NSArray<id<RCTImageDataDecoder>> *{
-      return @[[RCTGIFImageDecoder new]];
-    }];
-  } else if (moduleClass == RCTNetworking.class) {
-    return [[moduleClass alloc] initWithHandlersProvider:^NSArray<id<RCTURLRequestHandler>> *{
-      return @[
-        [RCTHTTPRequestHandler new],
-        [RCTDataRequestHandler new],
-        [RCTFileRequestHandler new],
-      ];
-    }];
-  }
-  return [moduleClass new];
+ if (moduleClass == RCTImageLoader.class) {
+   return [[moduleClass alloc] initWithRedirectDelegate:nil loadersProvider:^NSArray<id<RCTImageURLLoader>> *{
+     return @[[RCTLocalAssetImageLoader new]];
+   } decodersProvider:^NSArray<id<RCTImageDataDecoder>> *{
+     return @[[RCTGIFImageDecoder new]];
+   }];
+ } else if (moduleClass == RCTNetworking.class) {
+   return [[moduleClass alloc] initWithHandlersProvider:^NSArray<id<RCTURLRequestHandler>> *{
+     return @[
+       [RCTHTTPRequestHandler new],
+       [RCTDataRequestHandler new],
+       [RCTFileRequestHandler new],
+     ];
+   }];
+ }
+ return [moduleClass new];
 }
-
-
 
 @end

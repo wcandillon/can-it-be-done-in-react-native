@@ -1,51 +1,12 @@
-export const canvas2Cartesian = ({ x, y }, center) => {
-  "worklet";
-  return {
-    x: x - center.x,
-    y: -1 * (y - center.y),
-  };
-};
-
-export const cartesian2Canvas = ({ x, y }, center) => {
-  "worklet";
-  return {
-    x: x + center.x,
-    y: -1 * y + center.y,
-  };
-};
-
-export const cartesian2Polar = ({ x, y }) => {
-  "worklet";
-  return {
-    theta: Math.atan2(y, x),
-    radius: Math.sqrt(x ** 2 + y ** 2),
-  };
-};
-
-export const polar2Cartesian = ({ theta, radius }) => {
-  "worklet";
-  return {
-    x: radius * Math.cos(theta),
-    y: radius * Math.sin(theta),
-  };
-};
-
-export const polar2Canvas = ({ theta, radius }, center) => {
-  "worklet";
-  return cartesian2Canvas(polar2Cartesian({ theta, radius }), center);
-};
-
-export const canvas2Polar = ({ x, y }, center) => {
-  "worklet";
-  return cartesian2Polar(canvas2Cartesian({ x, y }, center));
-};
-
-export const clamp = (value, lowerBound, upperBound) => {
-  "worklet";
-  return Math.min(Math.max(lowerBound, value), upperBound);
-};
-
-export function withDecay(userConfig, callback) {
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+export function withDecay(
+  userConfig: {
+    clamp: [number, number];
+    velocity: number;
+    deceleration?: number;
+  },
+  callback?: () => void
+): number {
   "worklet";
 
   // TODO: not sure what should I return here
@@ -57,19 +18,15 @@ export function withDecay(userConfig, callback) {
     deceleration: 0.998,
   };
   if (userConfig) {
+    // @ts-ignore
     Object.keys(userConfig).forEach((key) => (config[key] = userConfig[key]));
   }
 
   const VELOCITY_EPS = 5;
 
+  // @ts-ignore
   function decay(animation, now) {
-    const {
-      toValue,
-      lastTimestamp,
-      initialVelocity,
-      current,
-      velocity,
-    } = animation;
+    const { lastTimestamp, initialVelocity, current, velocity } = animation;
 
     const deltaTime = Math.min(now - lastTimestamp, 64);
     animation.lastTimestamp = now;
@@ -86,17 +43,21 @@ export function withDecay(userConfig, callback) {
 
     let toValueIsReached = null;
 
+    // @ts-ignore
     if (Array.isArray(config.clamp)) {
+      // @ts-ignore
       if (initialVelocity < 0 && animation.current <= config.clamp[0]) {
+        // @ts-ignore
         toValueIsReached = config.clamp[0];
+        // @ts-ignore
       } else if (initialVelocity > 0 && animation.current >= config.clamp[1]) {
+        // @ts-ignore
         toValueIsReached = config.clamp[1];
       }
     }
 
     if (Math.abs(v) < VELOCITY_EPS || toValueIsReached !== null) {
       if (toValueIsReached !== null) {
-        console.log(toValueIsReached);
         animation.current = toValueIsReached;
       }
 
@@ -104,15 +65,19 @@ export function withDecay(userConfig, callback) {
     }
   }
 
-  function start(animation, value, now, previousAnimation) {
+  // @ts-ignore
+  function start(animation, value, now, _previousAnimation) {
     animation.current = value;
     animation.lastTimestamp = now;
+    // @ts-ignore
     animation.initialVelocity = config.velocity;
   }
 
+  // @ts-ignore
   return {
     animation: decay,
     start,
+    // @ts-ignore
     velocity: config.velocity || 0,
     callback,
   };

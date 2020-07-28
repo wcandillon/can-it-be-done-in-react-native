@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default () => {
+const Pan = () => {
   const [container, setContainer] = useState<null | LayoutRectangle>(null);
   return (
     <View
@@ -20,3 +20,5 @@ export default () => {
     </View>
   );
 };
+
+export default Pan;

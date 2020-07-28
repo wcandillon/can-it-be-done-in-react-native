@@ -1,6 +1,7 @@
 import * as React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
+
 import StyleGuide from "./StyleGuide";
 import Text from "./Text";
 
