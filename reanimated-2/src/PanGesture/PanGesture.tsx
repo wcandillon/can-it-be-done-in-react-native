@@ -1,14 +1,15 @@
-import React, { createContext, useState } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
-
-import Card, { Cards, CARD_WIDTH, CARD_HEIGHT } from "./Card";
+import React from "react";
+import { View, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
+
 import { withDecay, clamp } from "../components/AnimatedHelpers";
+
+import Card, { Cards, CARD_WIDTH, CARD_HEIGHT } from "./Card";
 
 const styles = StyleSheet.create({
   container: {
@@ -35,7 +36,7 @@ const Gesture = ({ width, height }: GestureProps) => {
       translateX.value = clamp(ctx.offsetX + event.translationX, 0, boundX);
       translateY.value = clamp(ctx.offsetY + event.translationY, 0, boundY);
     },
-    onEnd: ({ velocityX, velocityY }, ctx) => {
+    onEnd: ({ velocityX, velocityY }) => {
       translateX.value = withDecay({
         velocity: velocityX,
         clamp: [0, boundX],

@@ -8,6 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Button, Card, StyleGuide, cards } from "../components";
+import { mix } from "../components/AnimatedHelpers";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -25,14 +26,10 @@ const styles = StyleSheet.create({
 });
 const origin = { x: -(width / 2 - StyleGuide.spacing * 2), y: 0 };
 
-export const mix = (value, x, y) => {
-  "worklet";
-  return x + value * (y - x);
-};
-
 export const useSpringTransition = (state: boolean | number) => {
   const value = useSharedValue(0);
   useEffect(() => {
+    // eslint-disable-next-line no-nested-ternary
     value.value = typeof state === "boolean" ? (state ? 1 : 0) : state;
   }, [state, value]);
   const transition = useDerivedValue(() => {
