@@ -11,12 +11,16 @@ import Animated, {
   eq,
   multiply,
   greaterThan,
+  interpolate,
+  Extrapolate,
+  debug,
 } from "react-native-reanimated";
 import {
   diff,
   useValue,
   useClock,
   withSpringTransition,
+  useDiff,
 } from "react-native-redash";
 
 import Card, { Cards } from "../Transformations/components/Card";
@@ -63,24 +67,22 @@ const JellyScroll = () => {
       },
     ])
   );
-  useCode(
-    () => [startClock(clock), set(velocity, divide(diff(y), 1 / 60))],
-    []
-  );
-  const rotation = cond(
-    eq(velocity, 0),
-    0,
-    multiply(cond(greaterThan(velocity, 0), 1, -1), Math.PI / 18)
-  );
-  const skewY = withSpringTransition(rotation);
+  const dy = useDiff(y);
+  const dt = useDiff(clock);
+  useCode(() => [startClock(clock), set(velocity, divide(dy, dt))], []);
+
+  const skewY = interpolate(velocity, {
+    inputRange: [-5, 0, 5],
+    outputRange: [-Math.PI / 9, 0, Math.PI / 9],
+    extrapolate: Extrapolate.CLAMP,
+  });
   return (
     <Animated.ScrollView
       scrollEventThrottle={1}
       {...{ onScroll }}
       showsVerticalScrollIndicator={false}
-      decelerationRate="fast"
     >
-      {cards.map(({ type }, index) => {
+      {[...cards, ...cards, ...cards].map(({ type }, index) => {
         return (
           <Animated.View
             key={index}
