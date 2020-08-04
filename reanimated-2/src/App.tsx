@@ -8,6 +8,7 @@ import PanGesture from "./PanGesture";
 import Transitions from "./Transitions";
 import Worklets from "./Worklets";
 import Coinbase from "./Coinbase";
+import JellyScroll from "./JellyScroll";
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -16,7 +17,7 @@ const AppNavigator = () => (
       name="Examples"
       component={Examples}
       options={{
-        title: "Learn Reanimated 2",
+        title: "Reanimated 2 Examples",
       }}
     />
     <Stack.Screen
@@ -46,6 +47,13 @@ const AppNavigator = () => (
       options={{
         title: "Coinbase",
         header: () => null,
+      }}
+    />
+    <Stack.Screen
+      name="JellyScroll"
+      component={JellyScroll}
+      options={{
+        title: "Jelly Scroll",
       }}
     />
   </Stack.Navigator>

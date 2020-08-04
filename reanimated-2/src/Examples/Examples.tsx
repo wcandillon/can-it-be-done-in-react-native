@@ -24,6 +24,10 @@ export const examples = [
     screen: "Chart",
     title: "📈 Chart",
   },
+  {
+    screen: "JellyScroll",
+    title: "🍩 Jelly Scroll",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

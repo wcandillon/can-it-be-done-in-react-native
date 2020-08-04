@@ -4,4 +4,5 @@ export type Routes = {
   PanGesture: undefined;
   Transitions: undefined;
   Chart: undefined;
+  JellyScroll: undefined;
 };

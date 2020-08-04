@@ -25,6 +25,7 @@ import Wallet from "./src/Wallet";
 import Trigonometry from "./src/Trigonometry";
 import Ripple from "./src/Ripple";
 import Picker from "./src/Picker";
+import JellyScroll from "./src/JellyScroll";
 
 const assets: number[] = [
   ...examples.map((example) => example.source),
@@ -41,6 +42,12 @@ const fonts = {
 const AppNavigator = createAppContainer(
   createStackNavigator(
     {
+      JellyScroll: {
+        screen: JellyScroll,
+        navigationOptions: {
+          title: "Jelly Scroll",
+        },
+      },
       Ripple: {
         screen: Ripple,
         navigationOptions: {
