@@ -2,6 +2,7 @@ import { Dimensions } from "react-native";
 
 export const { width: SIZE } = Dimensions.get("window");
 
+export type PhoneModel = typeof phones[0];
 export const phones = [
   {
     id: "red",
