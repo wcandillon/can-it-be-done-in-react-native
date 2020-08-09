@@ -28,6 +28,10 @@ export const examples = [
     screen: "JellyScroll",
     title: "🍩 Jelly Scroll",
   },
+  {
+    screen: "MaskedView",
+    title: "📱 Masked View",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
