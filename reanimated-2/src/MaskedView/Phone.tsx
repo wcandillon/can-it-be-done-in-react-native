@@ -14,7 +14,7 @@ interface PhoneProps {
 const Phone = ({ phone }: PhoneProps) => {
   const [ready, setReady] = useState(false);
   const transition = useTiming(ready, {
-    duration: 2000,
+    duration: 1000,
     easing: Easing.elastic(1.5),
   });
   const style = useAnimatedStyle(() => ({

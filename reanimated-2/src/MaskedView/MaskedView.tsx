@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, Dimensions } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 
 import { phones, SIZE } from "./Phones";
-import { RectButton } from "react-native-gesture-handler";
 import Phone from "./Phone";
 import Button from "./Button";
 
-const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
