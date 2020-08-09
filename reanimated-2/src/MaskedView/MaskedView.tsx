@@ -4,6 +4,7 @@ import { View, StyleSheet, Text, Dimensions } from "react-native";
 import { phones, SIZE } from "./Phones";
 import { RectButton } from "react-native-gesture-handler";
 import Phone from "./Phone";
+import Button from "./Button";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -20,6 +21,9 @@ const styles = StyleSheet.create({
     height: undefined,
   },
   title: {
+    padding: 16,
+    fontSize: 24,
+    lineHeight: 30,
     textAlign: "center",
   },
   colors: {
@@ -27,13 +31,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
   },
-  button: {
-    width: width / 4,
-    height: width / 4,
-    alignSelf: "center",
-    justifyContent: "center",
-  },
-  dot: { width: 20, height: 20, borderRadius: 10 },
 });
 
 const MaskedView = () => {
@@ -42,24 +39,22 @@ const MaskedView = () => {
   return (
     <View style={styles.container}>
       <View style={styles.picture}>
-        {stack.map((p) => (
-          <Phone key={p.id} phone={p} />
+        {stack.map((p, index) => (
+          <Phone key={index} phone={p} />
         ))}
       </View>
       <Text style={styles.title}>{phone.name}</Text>
       <View style={styles.colors}>
         {phones.map((p) => (
-          <RectButton
+          <Button
             key={p.id}
+            backgroundColor={p.color}
             onPress={() => {
               if (p.id !== phone.id) {
-                setStack([phone, p]);
+                setStack([...stack, p]);
               }
             }}
-            style={styles.button}
-          >
-            <View style={[styles.dot, { backgroundColor: p.color }]} />
-          </RectButton>
+          />
         ))}
       </View>
     </View>
