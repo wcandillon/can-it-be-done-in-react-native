@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="SVG.d.ts"/>
 
 import parseSVG from "parse-svg-path";

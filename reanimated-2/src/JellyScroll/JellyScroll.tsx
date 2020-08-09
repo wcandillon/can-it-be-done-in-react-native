@@ -4,7 +4,6 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
   useAnimatedScrollHandler,
-  Extrapolate,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
