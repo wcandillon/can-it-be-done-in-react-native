@@ -50,14 +50,14 @@ export const phones = [
     id: "pink",
     name: "Off Pink",
     picture: require("./assets/pink.png"),
-    translate: { x: 0, y: 0 },
+    translate: { x: SIZE / 2, y: SIZE / 2 },
     color: "#EBB9D2",
   },
   {
     id: "black",
     name: "Pastel Black",
     picture: require("./assets/black.png"),
-    translate: { x: 0, y: 0 },
+    translate: { x: -SIZE / 2, y: -SIZE / 2 },
     color: "#D6D9D2",
   },
 ];
