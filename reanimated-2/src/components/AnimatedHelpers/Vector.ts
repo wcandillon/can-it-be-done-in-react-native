@@ -13,3 +13,8 @@ export const useVector = (
   const y = useSharedValue(y1 ?? x1);
   return { x, y };
 };
+
+export const distance = (a: Vector<number>, b: Vector<number>) => {
+  "worklet";
+  return Math.hypot(a.x - b.x, a.y - b.y);
+};
