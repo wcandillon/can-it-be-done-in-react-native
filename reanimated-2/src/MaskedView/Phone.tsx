@@ -13,35 +13,23 @@ import {
 
 interface PhoneProps {
   phone: PhoneModel;
+  selected: boolean;
 }
 
-const r = SIZE / 2;
-const center = { x: r, y: r };
-const scale = (tr: Vector<number>) => {
-  "worklet";
-  const pos = cartesian2Canvas(
-    {
-      x: Math.abs(tr.x),
-      y: -Math.abs(tr.y),
-    },
-    center
-  );
-  const radius = Math.hypot(pos.x, pos.y);
-  return radius / r;
-};
-
-const Phone = ({ phone }: PhoneProps) => {
-  const [ready, setReady] = useState(false);
-  const transition = useTiming(ready, {
+const Phone = ({ phone, selected }: PhoneProps) => {
+  const transition = useTiming(selected, {
     duration: 600,
     easing: Easing.inOut(Easing.ease),
   });
   const style = useAnimatedStyle(() => ({
     transform: [
-      { translateX: phone.translate.x },
-      { translateY: phone.translate.y },
       {
-        scale: mix(transition.value, 0, scale(phone.translate)),
+        translateY:
+          SIZE / 2 -
+          (SIZE / 2) * Math.min(mix(transition.value, 0, Math.SQRT2), 1),
+      },
+      {
+        scale: mix(transition.value, 0, Math.SQRT2),
       },
     ],
   }));
@@ -70,7 +58,6 @@ const Phone = ({ phone }: PhoneProps) => {
           width: undefined,
           height: undefined,
         }}
-        onLoadEnd={() => setReady(true)}
       />
     </MaskedView>
   );

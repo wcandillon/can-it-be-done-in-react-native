@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 
 import { phones, SIZE } from "./Phones";
 import Phone from "./Phone";
@@ -32,24 +32,46 @@ const styles = StyleSheet.create({
 });
 
 const MaskedView = () => {
-  const [stack, setStack] = useState([phones[0]]);
-  const phone = stack[stack.length - 1];
+  const [selection, setSelection] = useState({
+    back: phones[0],
+    front: phones[1],
+  });
   return (
     <View style={styles.container}>
       <View style={styles.picture}>
-        {stack.map((p, index) => (
-          <Phone key={index} phone={p} />
+        {phones.map((p) => (
+          <Image
+            source={p.picture}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              width: undefined,
+              height: undefined,
+              opacity: p.id === selection.back.id ? 1 : 0,
+            }}
+            key={p.id}
+          />
+        ))}
+        {phones.map((p) => (
+          <View
+            key={p.id}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              opacity: p.id === selection.front.id ? 1 : 0,
+            }}
+          >
+            <Phone phone={p} selected={p.id === selection.front.id} />
+          </View>
         ))}
       </View>
-      <Text style={styles.title}>{phone.name}</Text>
+      <Text style={styles.title}>{selection.front.name}</Text>
       <View style={styles.colors}>
         {phones.map((p) => (
           <Button
             key={p.id}
             backgroundColor={p.color}
             onPress={() => {
-              if (p.id !== phone.id) {
-                setStack([...stack, p]);
+              if (p.id !== selection.front.id) {
+                setSelection({ back: selection.front, front: p });
               }
             }}
           />
