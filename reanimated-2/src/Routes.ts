@@ -5,4 +5,5 @@ export type Routes = {
   Transitions: undefined;
   Chart: undefined;
   JellyScroll: undefined;
+  MaskedView: undefined;
 };

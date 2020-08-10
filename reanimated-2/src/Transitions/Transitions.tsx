@@ -29,7 +29,6 @@ const origin = { x: -(width / 2 - StyleGuide.spacing * 2), y: 0 };
 export const useSpringTransition = (state: boolean | number) => {
   const value = useSharedValue(0);
   useEffect(() => {
-    // eslint-disable-next-line no-nested-ternary
     value.value = typeof state === "boolean" ? (state ? 1 : 0) : state;
   }, [state, value]);
   const transition = useDerivedValue(() => {
@@ -44,6 +43,7 @@ const UseTransition = () => {
   return (
     <View style={styles.container}>
       {cards.slice(0, 3).map((card, index) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         const style = useAnimatedStyle(() => {
           const rotate = (index - 1) * mix(transition.value, 0, Math.PI / 6);
           return {

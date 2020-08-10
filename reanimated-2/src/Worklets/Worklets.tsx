@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, Platform } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import Animated, { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import { Button } from "../components";
@@ -26,7 +26,7 @@ const sayHello = (
   cb: () => void
 ) => {
   "worklet";
-  text.value = `Hello from ${Platform.OS} at ${formatDatetime(new Date())}`;
+  text.value = `Hello from ${from} at ${formatDatetime(new Date())}`;
   cb();
 };
 
