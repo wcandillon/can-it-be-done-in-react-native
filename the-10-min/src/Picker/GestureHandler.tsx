@@ -6,6 +6,7 @@ import Animated, {
   divide,
   debug,
   sub,
+  Value,
   add,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -33,6 +34,7 @@ const GestureHandler = ({ value, max, defaultValue }: GestureHandlerProps) => {
     velocity: velocity.y,
     state,
     snapPoints,
+    offset: new Value(-ITEM_HEIGHT * 34),
   });
   useCode(() => [set(value, add(translateY, ITEM_HEIGHT * 2))], []);
   return (
