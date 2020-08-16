@@ -24,7 +24,7 @@ export const useSpring = (
 
 export const useTiming = (
   state: boolean | number,
-  config?: Omit<Animated.TimingConfig, "toValue">
+  config?: Animated.WithTimingConfig
 ) => {
   const value = useSharedValue(0);
   useEffect(() => {

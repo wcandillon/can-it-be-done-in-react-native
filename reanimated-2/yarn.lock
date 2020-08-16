@@ -6191,10 +6191,10 @@ react-native-iphone-x-helper@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
 
-react-native-reanimated@2.0.0-alpha.4:
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.0.0-alpha.4.tgz#d6af43fe582eb6e4f0d9612440cdcf091013fa30"
-  integrity sha512-NXD1ymTqxcKFiTw8V94MLXgpw1fhMMlTAVWiIgYcWfvUO2smwRZERwH9ox02ZGM+CtiC4Y+SG2NS+ipLmaL3Eg==
+react-native-reanimated@2.0.0-alpha.5:
+  version "2.0.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.0.0-alpha.5.tgz#ecbb934b9842bd60f74cc28bd5ad181fc34b1ce2"
+  integrity sha512-dSnJESUO/W1Z1lVtJxe6QQuydSIi+KEANBzrCOkD4bdwuEvAz6ulkddiqbJGVEfEgHRkAuE1cpPplswuOb+5eQ==
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.10.4"
     fbjs "^1.0.0"
