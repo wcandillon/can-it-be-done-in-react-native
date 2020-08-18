@@ -32,6 +32,10 @@ export const examples = [
     screen: "MaskedView",
     title: "📱 Masked View",
   },
+  {
+    screen: "Accordion",
+    title: "🗺 Accordion",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
