@@ -11,6 +11,7 @@ import Coinbase from "./Coinbase";
 import JellyScroll from "./JellyScroll";
 import MaskedView from "./MaskedView";
 import Accordion from "./Accordion";
+import Wave from "./Wave";
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -70,6 +71,13 @@ const AppNavigator = () => (
       component={Accordion}
       options={{
         title: "Accordion",
+      }}
+    />
+    <Stack.Screen
+      name="Wave"
+      component={Wave}
+      options={{
+        title: "Wave",
       }}
     />
   </Stack.Navigator>
