@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Dimensions } from "react-native";
-import Svg, { Path, Circle, Line } from "react-native-svg";
+import { Dimensions, View } from "react-native";
+import Svg, { Path, Circle } from "react-native-svg";
+import MaskedView from "@react-native-community/masked-view";
 import Animated, {
   repeat,
   useDerivedValue,
@@ -9,10 +10,12 @@ import Animated, {
   useSharedValue,
   Easing,
 } from "react-native-reanimated";
+
 import { StyleGuide } from "../components";
 import { mix } from "../components/AnimatedHelpers";
 
 const { width } = Dimensions.get("window");
+const SIZE = width - 64;
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -33,32 +36,27 @@ const Wave = () => {
       d: `M ${from.x} ${from.y} C ${c1.x} ${c1.y} ${c2.x} ${c2.y} ${to.x} ${to.y} L 1 1 L 0 1 Z`,
     };
   });
-  const c1 = useAnimatedProps(() => {
-    const { x, y } = wave.value.c1;
-    return {
-      cx: x,
-      cy: y,
+  const path1 = useAnimatedProps(() => {
+    const p = {
+      from: {
+        x: mix(1 - progress.value, -0.1, -1),
+        y: mix(1 - progress.value, 0.2, 0.5),
+      },
+      c1: {
+        x: mix(1 - progress.value, 0, 0.5),
+        y: mix(1 - progress.value, 0.7, 1),
+      },
+      c2: {
+        x: mix(1 - progress.value, 1, 0.5),
+        y: mix(1 - progress.value, 0.3, 0),
+      },
+      to: {
+        x: mix(1 - progress.value, 1.1, 2),
+        y: mix(1 - progress.value, 0.8, 0.5),
+      },
     };
-  });
-  const c2 = useAnimatedProps(() => {
-    const { x, y } = wave.value.c2;
     return {
-      cx: x,
-      cy: y,
-    };
-  });
-  const from = useAnimatedProps(() => {
-    const { x, y } = wave.value.from;
-    return {
-      cx: x,
-      cy: y,
-    };
-  });
-  const to = useAnimatedProps(() => {
-    const { x, y } = wave.value.to;
-    return {
-      cx: x,
-      cy: y,
+      d: `M ${p.from.x} ${p.from.y} C ${p.c1.x} ${p.c1.y} ${p.c2.x} ${p.c2.y} ${p.to.x} ${p.to.y} L 1 1 L 0 1 Z`,
     };
   });
   useEffect(() => {
@@ -69,13 +67,40 @@ const Wave = () => {
     );
   }, [progress]);
   return (
-    <Svg width={width} height={width} viewBox="0 0 1 1">
-      <AnimatedPath animatedProps={path} fill={StyleGuide.palette.primary} />
-      <AnimatedCircle r={0.05} fill="red" animatedProps={from} />
-      <AnimatedCircle r={0.05} fill="red" animatedProps={to} />
-      <AnimatedCircle r={0.05} fill="blue" animatedProps={c1} />
-      <AnimatedCircle r={0.05} fill="blue" animatedProps={c2} />
-    </Svg>
+    <View
+      style={{
+        backgroundColor: "black",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <MaskedView
+        maskElement={
+          <View
+            style={{
+              width: SIZE,
+              height: SIZE,
+              borderRadius: SIZE / 2,
+              backgroundColor: "black",
+            }}
+          />
+        }
+      >
+        <Svg
+          width={SIZE}
+          height={SIZE}
+          viewBox="0 0 1 1"
+          style={{ backgroundColor: "#242424" }}
+        >
+          <AnimatedPath animatedProps={path1} fill="#d5e5ff" />
+          <AnimatedPath
+            animatedProps={path}
+            fill={StyleGuide.palette.primary}
+          />
+        </Svg>
+      </MaskedView>
+    </View>
   );
 };
 
