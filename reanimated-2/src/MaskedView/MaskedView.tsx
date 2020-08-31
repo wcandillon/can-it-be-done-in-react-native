@@ -13,11 +13,6 @@ const styles = StyleSheet.create({
     width: SIZE,
     height: SIZE,
   },
-  background: {
-    ...StyleSheet.absoluteFillObject,
-    width: undefined,
-    height: undefined,
-  },
   title: {
     padding: 16,
     fontSize: 24,

@@ -1,10 +1,11 @@
 import React from "react";
 import { StyleSheet, Image } from "react-native";
 import MaskedView from "@react-native-community/masked-view";
+import Animated, { useAnimatedStyle, Easing } from "react-native-reanimated";
+
+import { useTiming, mix } from "../components/AnimatedHelpers";
 
 import { PhoneModel, SIZE } from "./Phones";
-import Animated, { useAnimatedStyle, Easing } from "react-native-reanimated";
-import { useTiming, mix } from "../components/AnimatedHelpers";
 
 interface PhoneProps {
   phone: PhoneModel;
