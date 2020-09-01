@@ -101,6 +101,24 @@ const defaultItems = [
     price: 10,
     quantity: 1,
   },
+  {
+    key: "4",
+    title: "Power Shake",
+    price: 10,
+    quantity: 1,
+  },
+  {
+    key: "5",
+    title: "Power Shake",
+    price: 10,
+    quantity: 1,
+  },
+  {
+    key: "6",
+    title: "Power Shake",
+    price: 10,
+    quantity: 2,
+  },
 ];
 
 const UberEatsSwipe = () => {
