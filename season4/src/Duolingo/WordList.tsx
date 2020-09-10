@@ -6,7 +6,11 @@ interface WordListProps {
 }
 
 const WordList = ({ children }: WordListProps) => {
-  return <View>{children}</View>;
+  return (
+    <View style={{ flexDirection: "row", flexWrap: "wrap", padding: 32 }}>
+      {children}
+    </View>
+  );
 };
 
 export default WordList;
