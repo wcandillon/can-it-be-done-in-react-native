@@ -29,17 +29,15 @@ export interface WordProps {
   word: string;
 }
 
-const Word = ({ word }: WordProps) => {
-  return (
-    <View style={styles.root}>
-      <View>
-        <View style={styles.container}>
-          <Text style={styles.text}>{word}</Text>
-        </View>
-        <View style={styles.shadow} />
+const Word = ({ word }: WordProps) => (
+  <View style={styles.root}>
+    <View>
+      <View style={styles.container}>
+        <Text style={styles.text}>{word}</Text>
       </View>
+      <View style={styles.shadow} />
     </View>
-  );
-};
+  </View>
+);
 
 export default Word;
