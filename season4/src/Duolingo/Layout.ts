@@ -9,19 +9,20 @@ export interface Offset {
 }
 
 export const calculateLayout = (offsets: Offset[], containerWidth: number) => {
+  const height = offsets[0].height.current;
   let vIndex = 0;
   let lastBreak = 0;
   offsets.forEach((offset, index) => {
     const total = offsets
       .slice(lastBreak, index)
       .reduce((acc, o) => acc + o.width.current, 0);
-    if (total > containerWidth) {
+    if (total + offset.width.current > containerWidth) {
       offset.x.value = 0;
       vIndex++;
       lastBreak = index;
     } else {
       offset.x.value = total;
     }
-    offset.y.value = vIndex * offsets[0].height.current;
+    offset.y.value = vIndex * height;
   });
 };
