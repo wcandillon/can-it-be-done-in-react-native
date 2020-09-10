@@ -1,1 +1,1 @@
-export { default } from "./CoinbasePro";
+export { default } from "./Coinbase";

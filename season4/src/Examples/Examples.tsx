@@ -9,36 +9,12 @@ import { StyleGuide } from "../components";
 
 export const examples = [
   {
-    screen: "Worklets",
-    title: "👩‍🏭 Worklets",
+    screen: "Duolingo",
+    title: "🦉 Duolingo",
   },
   {
-    screen: "PanGesture",
-    title: "💳 PanGesture",
-  },
-  {
-    screen: "Transitions",
-    title: "🔁 Transitions",
-  },
-  {
-    screen: "Chart",
-    title: "📈 Chart",
-  },
-  {
-    screen: "JellyScroll",
-    title: "🍩 Jelly Scroll",
-  },
-  {
-    screen: "MaskedView",
-    title: "📱 Masked View",
-  },
-  {
-    screen: "Accordion",
-    title: "🗺 Accordion",
-  },
-  {
-    screen: "Wave",
-    title: "🌊 Wave",
+    screen: "Coinbase",
+    title: "📉 Coinbase",
   },
 ] as const;
 
