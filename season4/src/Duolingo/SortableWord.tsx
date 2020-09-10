@@ -1,12 +1,8 @@
 import React, { ReactElement } from "react";
-import { View } from "react-native";
 import Animated, {
-  useAnimatedRef,
-  measure,
   useAnimatedStyle,
+  useSharedValue,
 } from "react-native-reanimated";
-
-import { useEffectOnUI } from "../components/AnimatedHelpers";
 
 export interface Offset {
   width: number;
@@ -26,26 +22,38 @@ const SortableWord = ({
   children,
   containerWidth,
 }: SortableWordProps) => {
-  const ref = useAnimatedRef<Animated.View>();
-  useEffectOnUI(() => {
-    "worklet";
-    const { width, height } = measure(ref);
-    if (width !== undefined) {
-      offsets.value[index] = { width, height };
-    }
-  }, []);
   const style = useAnimatedStyle(() => {
     const { width, height } = offsets.value[index];
     if (width === 0) {
       return {};
     }
-    const left = offsets.value
+    const total = offsets.value
       .slice(0, index)
       .reduce((acc, offset) => acc + offset.width, 0);
-    return { position: "absolute", top: 0, left, width, height };
+    const vIndex = Math.floor((total + width) / containerWidth);
+    const translateY = height * vIndex;
+    const translateX = total - vIndex * containerWidth;
+    return {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width,
+      height,
+      transform: [{ translateX }, { translateY }],
+    };
   });
   return (
-    <Animated.View style={style} ref={ref}>
+    <Animated.View
+      style={style}
+      onLayout={({
+        nativeEvent: {
+          layout: { width, height },
+        },
+      }) => {
+        offsets.value[index] = { width, height };
+        offsets.value = [...offsets.value];
+      }}
+    >
       {children}
     </Animated.View>
   );
