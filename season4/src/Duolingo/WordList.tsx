@@ -1,10 +1,12 @@
-import React, { ReactElement, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { ReactElement } from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
 
+const margin = 32;
+const containerWidth = Dimensions.get("window").width - margin * 2;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    margin: 32,
+    margin,
   },
 });
 
