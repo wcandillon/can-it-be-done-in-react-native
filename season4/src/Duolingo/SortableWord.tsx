@@ -31,8 +31,25 @@ const SortableWord = ({
       .slice(0, index)
       .reduce((acc, offset) => acc + offset.width, 0);
     const vIndex = Math.floor((total + width) / containerWidth);
+    const lastBreak = offsets.value.slice(0, index + 1).reduce(
+      (acc, offset, i) => {
+        if (acc.done) {
+          return acc;
+        }
+        acc.value += offset.width;
+        if (acc.value > containerWidth) {
+          acc.done = true;
+          acc.index = i;
+          return acc;
+        }
+        return acc;
+      },
+      { done: false, value: 0, index: 0 }
+    ).index;
     const translateY = height * vIndex;
-    const translateX = total - vIndex * containerWidth;
+    const translateX = offsets.value
+      .slice(lastBreak, index)
+      .reduce((acc, offset) => acc + offset.width, 0);
     return {
       position: "absolute",
       top: 0,
