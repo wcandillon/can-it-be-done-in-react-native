@@ -27,25 +27,23 @@ const SortableWord = ({
     if (width === 0) {
       return {};
     }
-    const total = offsets.value
-      .slice(0, index)
-      .reduce((acc, offset) => acc + offset.width, 0);
-    const vIndex = Math.floor((total + width) / containerWidth);
-    const lastBreak = offsets.value.slice(0, index + 1).reduce(
+    const { total, lastBreak } = offsets.value.slice(0, index + 1).reduce(
       (acc, offset, i) => {
         if (acc.done) {
           return acc;
         }
-        acc.value += offset.width;
-        if (acc.value > containerWidth) {
+        acc.total += offset.width;
+        if (acc.total > containerWidth) {
           acc.done = true;
-          acc.index = i;
+          acc.lastBreak = i;
           return acc;
         }
         return acc;
       },
-      { done: false, value: 0, index: 0 }
-    ).index;
+      { done: false, total: 0, lastBreak: 0 }
+    );
+
+    const vIndex = Math.floor(total / containerWidth);
     const translateY = height * vIndex;
     const translateX = offsets.value
       .slice(lastBreak, index)
