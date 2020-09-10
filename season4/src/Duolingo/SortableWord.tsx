@@ -1,78 +1,72 @@
 import React, { ReactElement } from "react";
 import Animated, {
   useAnimatedStyle,
-  useSharedValue,
+  useAnimatedGestureHandler,
+  withSpring,
 } from "react-native-reanimated";
+import { PanGestureHandler } from "react-native-gesture-handler";
+import { useVector } from "react-native-redash";
 
-export interface Offset {
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-}
+import { Offset } from "./Layout";
 
 interface SortableWordProps {
-  offsets: Animated.SharedValue<Offset[]>;
+  offsets: Offset[];
   children: ReactElement<{ id: number }>;
   index: number;
-  containerWidth: number;
 }
 
-const SortableWord = ({
-  offsets,
-  index,
-  children,
-  containerWidth,
-}: SortableWordProps) => {
+const SortableWord = ({ offsets, index, children }: SortableWordProps) => {
+  const offset = offsets[index];
+  const translation = useVector(offset.x.value, offset.y.value);
+  const panOffset = useVector();
+  const onGestureEvent = useAnimatedGestureHandler({
+    onStart: () => {
+      panOffset.x.value = offset.x.value;
+      panOffset.y.value = offset.y.value;
+    },
+    onActive: (event) => {
+      translation.x.value = offset.x.value + event.translationX;
+      translation.y.value = offset.x.value + event.translationY;
+    },
+    onEnd: ({ velocityX, velocityY }) => {
+      translation.x.value = withSpring(offset.x.value, {
+        stiffness: 100,
+        mass: 1,
+        damping: 10,
+        overshootClamping: false,
+        restSpeedThreshold: 0.001,
+        restDisplacementThreshold: 0.001,
+        velocity: velocityX,
+      });
+      translation.y.value = withSpring(offset.y.value, {
+        stiffness: 100,
+        mass: 1,
+        damping: 10,
+        overshootClamping: false,
+        restSpeedThreshold: 0.001,
+        restDisplacementThreshold: 0.001,
+        velocity: velocityY,
+      });
+    },
+  });
   const style = useAnimatedStyle(() => {
-    const { width, height, x, y } = offsets.value[index];
-    if (width === 0) {
-      return {};
-    }
+    const { width, height } = offsets[index];
     return {
       position: "absolute",
       top: 0,
       left: 0,
-      width,
-      height,
-      transform: [{ translateX: x }, { translateY: y }],
+      width: width.current,
+      height: height.current,
+      transform: [
+        { translateX: translation.x.value },
+        { translateY: translation.y.value },
+      ],
     };
   });
   return (
-    <Animated.View
-      style={style}
-      onLayout={({
-        nativeEvent: {
-          layout: { width, height },
-        },
-      }) => {
-        const { total, lastBreak } = offsets.value.slice(0, index + 1).reduce(
-          (acc, offset, i) => {
-            if (acc.done) {
-              return acc;
-            }
-            acc.total += offset.width;
-            if (acc.total > containerWidth) {
-              acc.done = true;
-              acc.lastBreak = i;
-              return acc;
-            }
-            return acc;
-          },
-          { done: false, total: 0, lastBreak: 0 }
-        );
-
-        const vIndex = Math.floor(total / containerWidth);
-        const y = height * vIndex;
-        const x = offsets.value
-          .slice(lastBreak, index)
-          .reduce((acc, offset) => acc + offset.width, 0);
-        offsets.value[index] = { width, height, x, y };
-        offsets.value = [...offsets.value];
-      }}
-    >
-      {children}
-    </Animated.View>
+    <PanGestureHandler onGestureEvent={onGestureEvent}>
+      <Animated.View style={style}>{children}</Animated.View>
+    </PanGestureHandler>
   );
 };
 
