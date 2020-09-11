@@ -7,7 +7,7 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import { useVector } from "react-native-redash";
+import { useVector, between } from "react-native-redash";
 
 import { swap } from "../components/AnimatedHelpers";
 
@@ -40,17 +40,26 @@ const SortableWord = ({
     onActive: (event) => {
       translation.x.value = offset.x.value + event.translationX;
       translation.y.value = offset.x.value + event.translationY;
-      const offsetY = Math.floor(translation.y.value / height) * height;
       offsets.forEach((o, i) => {
         if (
-          o.y.value === offsetY &&
-          o.x.value >= translation.x.value &&
-          translation.x.value <= o.x.value + o.width.value &&
+          between(
+            translation.x.value,
+            o.x.value,
+            o.x.value + o.width.value,
+            true
+          ) &&
+          between(
+            translation.y.value,
+            o.y.value,
+            o.y.value + o.height.value,
+            true
+          ) &&
           i !== index
         ) {
           swap(o.order, offset.order);
-          swap(o.width, offset.width);
-          swap(o.height, offset.height);
+          console.log("Swap " + o.order.value + " with " + offset.order.value);
+          //  swap(o.width, offset.width);
+          //  swap(o.height, offset.height);
           calculateLayout(offsets, containerWidth);
         }
       });
@@ -65,7 +74,13 @@ const SortableWord = ({
       });
     },
   });
-  const translateX = useDerivedValue(() => translation.x.value);
+  const translateX = useDerivedValue(() => {
+    if (gestureActive.value) {
+      return translation.x.value;
+    } else {
+      return withSpring(offset.x.value);
+    }
+  });
   const translateY = useDerivedValue(() => {
     if (gestureActive.value) {
       return translation.y.value;

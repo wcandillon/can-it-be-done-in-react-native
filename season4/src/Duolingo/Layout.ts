@@ -10,9 +10,7 @@ export type Offset = SharedValues<{
 
 export const calculateLayout = (offsets: Offset[], containerWidth: number) => {
   "worklet";
-  console.log({ before: offsets.map((o) => o.order.value) });
   offsets.sort((a, b) => (a.order.value > b.order.value ? 1 : -1));
-  console.log({ after: offsets.map((o) => o.order.value) });
   const height = offsets[0].height.value;
   let vIndex = 0;
   let lastBreak = 0;
