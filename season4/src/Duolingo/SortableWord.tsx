@@ -9,19 +9,26 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { useVector } from "react-native-redash";
 
-import { Offset } from "./Layout";
+import { swap } from "../components/AnimatedHelpers";
+
+import { Offset, calculateLayout } from "./Layout";
 
 interface SortableWordProps {
   offsets: Offset[];
   children: ReactElement<{ id: number }>;
   index: number;
+  containerWidth: number;
 }
 
-const SortableWord = ({ offsets, index, children }: SortableWordProps) => {
+const SortableWord = ({
+  offsets,
+  index,
+  children,
+  containerWidth,
+}: SortableWordProps) => {
   const gestureActive = useSharedValue(false);
   const offset = offsets[index];
-  const height = offset.height.current;
-  const width = offset.width.current;
+  const height = offset.height.value;
   const translation = useVector(offset.x.value, offset.y.value);
   const panOffset = useVector();
   const onGestureEvent = useAnimatedGestureHandler({
@@ -38,22 +45,13 @@ const SortableWord = ({ offsets, index, children }: SortableWordProps) => {
         if (
           o.y.value === offsetY &&
           o.x.value >= translation.x.value &&
-          translation.x.value <= o.x.value + o.width.current &&
+          translation.x.value <= o.x.value + o.width.value &&
           i !== index
         ) {
-          return;
-          const tmpX = o.x.value;
-          const tmpY = o.y.value;
-          const tmpWidth = o.width.current;
-          const tmpHeight = o.height.current;
-          o.y.value = offset.y.value;
-          o.x.value = offset.x.value;
-          o.width.current = offset.width.current;
-          o.height.current = offset.height.current;
-          offset.x.value = tmpX;
-          offset.y.value = tmpY;
-          offset.width.current = tmpWidth;
-          offset.height.current = tmpHeight;
+          swap(o.order, offset.order);
+          swap(o.width, offset.width);
+          swap(o.height, offset.height);
+          calculateLayout(offsets, containerWidth);
         }
       });
     },
@@ -75,21 +73,18 @@ const SortableWord = ({ offsets, index, children }: SortableWordProps) => {
       return withSpring(offset.y.value);
     }
   });
-  const style = useAnimatedStyle(() => {
-    const { width, height } = offsets[index];
-    return {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: width.current,
-      height: height.current,
-      zIndex: gestureActive.value ? 100 : 0,
-      transform: [
-        { translateX: translateX.value },
-        { translateY: translateY.value },
-      ],
-    };
-  });
+  const style = useAnimatedStyle(() => ({
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: offsets[index].width.value,
+    height: offsets[index].height.value,
+    zIndex: gestureActive.value ? 100 : 0,
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+    ],
+  }));
   return (
     <PanGestureHandler onGestureEvent={onGestureEvent}>
       <Animated.View style={style}>{children}</Animated.View>

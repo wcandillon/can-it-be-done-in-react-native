@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { ReactElement, useState, useRef } from "react";
+import React, { ReactElement, useState } from "react";
 import { View, StyleSheet, Dimensions, LayoutChangeEvent } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
+import { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
 import { calculateLayout } from "./Layout";
@@ -22,8 +22,9 @@ interface WordListProps {
 const WordList = ({ children }: WordListProps) => {
   const [ready, setReady] = useState(false);
   const offsets = children.map(() => ({
-    width: useRef(0),
-    height: useRef(0),
+    order: useSharedValue(0),
+    width: useSharedValue(0),
+    height: useSharedValue(0),
     x: useSharedValue(0),
     y: useSharedValue(0),
   }));
@@ -36,15 +37,20 @@ const WordList = ({ children }: WordListProps) => {
               layout: { width, height },
             },
           }: LayoutChangeEvent) => {
-            offsets[index].width.current = width;
-            offsets[index].height.current = height;
-            if (
-              offsets.filter((offset) => offset.width.current === 0).length ===
-              0
-            ) {
-              calculateLayout(offsets, containerWidth);
-              setReady(true);
-            }
+            offsets[index].order.value = index;
+            offsets[index].width.value = width;
+            offsets[index].height.value = height;
+            runOnUI(() => {
+              "worklet";
+
+              if (
+                offsets.filter((offset) => offset.width.value === 0).length ===
+                0
+              ) {
+                calculateLayout(offsets, containerWidth);
+                setReady(true);
+              }
+            })();
           };
           return (
             <View key={index} onLayout={onLayout}>
@@ -58,7 +64,12 @@ const WordList = ({ children }: WordListProps) => {
   return (
     <View style={styles.container}>
       {children.map((child, index) => (
-        <SortableWord key={index} offsets={offsets} index={index}>
+        <SortableWord
+          key={index}
+          offsets={offsets}
+          index={index}
+          containerWidth={containerWidth}
+        >
           {child}
         </SortableWord>
       ))}
