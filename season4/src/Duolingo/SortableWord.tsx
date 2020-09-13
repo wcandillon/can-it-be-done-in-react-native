@@ -7,11 +7,24 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import { useVector, between } from "react-native-redash";
+import { useVector } from "react-native-redash";
 
-import { swap } from "../components/AnimatedHelpers";
+import { swap, useEffectOnUI } from "../components/AnimatedHelpers";
 
 import { Offset, calculateLayout } from "./Layout";
+
+export const between = (
+  value: number,
+  lowerBound: number,
+  upperBound: number,
+  inclusive = true
+) => {
+  "worklet";
+  if (inclusive) {
+    return value >= lowerBound && value <= upperBound;
+  }
+  return value > lowerBound && value < upperBound;
+};
 
 interface SortableWordProps {
   offsets: Offset[];
@@ -34,12 +47,12 @@ const SortableWord = ({
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
       gestureActive.value = true;
-      panOffset.x.value = offset.x.value;
-      panOffset.y.value = offset.y.value;
+      panOffset.x.value = translation.x.value;
+      panOffset.y.value = translation.y.value;
     },
     onActive: (event) => {
-      translation.x.value = offset.x.value + event.translationX;
-      translation.y.value = offset.x.value + event.translationY;
+      translation.x.value = panOffset.x.value + event.translationX;
+      translation.y.value = panOffset.y.value + event.translationY;
       offsets.forEach((o, i) => {
         if (
           between(
@@ -58,14 +71,12 @@ const SortableWord = ({
         ) {
           swap(o.order, offset.order);
           console.log("Swap " + o.order.value + " with " + offset.order.value);
-          //  swap(o.width, offset.width);
-          //  swap(o.height, offset.height);
           calculateLayout(offsets, containerWidth);
         }
       });
     },
     onEnd: ({ velocityX, velocityY }) => {
-      gestureActive.value = false;
+      //   gestureActive.value = false;
       translation.x.value = withSpring(offset.x.value, {
         velocity: velocityX,
       });
@@ -92,9 +103,10 @@ const SortableWord = ({
     position: "absolute",
     top: 0,
     left: 0,
-    width: offsets[index].width.value,
-    height: offsets[index].height.value,
+    width: offset.width.value,
+    height: offset.height.value,
     zIndex: gestureActive.value ? 100 : 0,
+    backgroundColor: "rgba(100, 200, 300, 0.5)",
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },

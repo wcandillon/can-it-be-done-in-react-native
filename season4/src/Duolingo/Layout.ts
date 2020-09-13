@@ -1,5 +1,6 @@
 import { SharedValues } from "../components/AnimatedHelpers";
 
+// TODO: since width/height are stable should they be of type Ref?
 export type Offset = SharedValues<{
   order: number;
   width: number;
