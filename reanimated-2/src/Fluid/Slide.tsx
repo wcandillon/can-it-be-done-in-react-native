@@ -1,12 +1,15 @@
 import React from "react";
 import { Dimensions } from "react-native";
 import Animated, {
+  Extrapolate,
   interpolate,
   useAnimatedProps,
+  useDerivedValue,
+  withSpring,
 } from "react-native-reanimated";
-import Svg, { Path } from "react-native-svg";
+import Svg, { Circle, Path } from "react-native-svg";
 
-import { cartesian2Canvas } from "../components/AnimatedHelpers";
+import { cartesian2Canvas, mix } from "../components/AnimatedHelpers";
 
 import { createSVGPath, moveTo, curveTo, serialize } from "./Path";
 
@@ -28,7 +31,7 @@ const P11 = vec(1, -C);
 const P12 = vec(C, -1);
 const P13 = vec(0, -1);
 
-//const P20 = vec(0, -1);
+const P20 = vec(0, -1);
 const P21 = vec(-C, -1);
 const P22 = vec(-1, -C);
 const P23 = vec(-1, 0);
@@ -41,16 +44,16 @@ const P33 = vec(0, 1);
 interface SlideProps {
   x: Animated.SharedValue<number>;
   index: number;
+  isGestureActive: Animated.SharedValue<boolean>;
 }
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const Slide = ({ x, index }: SlideProps) => {
+const Slide = ({ x, index, isGestureActive }: SlideProps) => {
   const animatedProps = useAnimatedProps(() => {
-    const inputRange = [-1 * RATIO, 0, 1 * RATIO];
     const progress = (x.value - width * index) / width;
     if (index === 1) {
-      console.log({ progress, width });
+      console.log({ progress });
     }
     const path = createSVGPath();
     moveTo(path, P00.x, P00.y);
@@ -65,21 +68,21 @@ const Slide = ({ x, index }: SlideProps) => {
       to: P13,
     });
     curveTo(path, {
-      c1: {
-        x: interpolate(progress, inputRange, [1, 0, 0]),
-        y: P21.y,
-      },
+      c1: P21,
       c2: {
-        x: interpolate(progress, inputRange, [1, 0, 0]),
         y: P22.y,
+        x: interpolate(progress, [-0.3, 0], [1, 0], Extrapolate.CLAMP),
       },
       to: {
-        x: interpolate(progress, inputRange, [1, 0, 0]),
         y: P23.y,
+        x: interpolate(progress, [-0.3, 0], [1, 0], Extrapolate.CLAMP),
       },
     });
     curveTo(path, {
-      c1: P31,
+      c1: {
+        y: P31.y,
+        x: interpolate(progress, [-0.3, 0], [1, 0], Extrapolate.CLAMP),
+      },
       c2: P32,
       to: P33,
     });
