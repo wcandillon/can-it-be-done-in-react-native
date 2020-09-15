@@ -4,13 +4,11 @@ import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedProps,
-  useDerivedValue,
-  withSpring,
 } from "react-native-reanimated";
-import Svg, { Circle, Path } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 import { interpolateColor } from "react-native-redash";
 
-import { cartesian2Canvas, mix, Vector } from "../components/AnimatedHelpers";
+import { cartesian2Canvas, Vector } from "../components/AnimatedHelpers";
 
 import { createSVGPath, moveTo, curveTo, serialize } from "./Path";
 

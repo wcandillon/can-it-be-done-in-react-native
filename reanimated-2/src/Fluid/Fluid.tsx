@@ -1,9 +1,7 @@
 import React from "react";
-import { StyleSheet, View, Dimensions, Image } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import Animated, {
-  interpolate,
   useAnimatedScrollHandler,
-  useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
 
