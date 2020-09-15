@@ -1,6 +1,9 @@
 import React from "react";
 import { Dimensions } from "react-native";
-import Animated, { useAnimatedProps } from "react-native-reanimated";
+import Animated, {
+  interpolate,
+  useAnimatedProps,
+} from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
 import { cartesian2Canvas } from "../components/AnimatedHelpers";
@@ -62,9 +65,18 @@ const Slide = ({ x, index }: SlideProps) => {
       to: P13,
     });
     curveTo(path, {
-      c1: P21,
-      c2: P22,
-      to: P23,
+      c1: {
+        x: interpolate(progress, inputRange, [1, 0, 0]),
+        y: P21.y,
+      },
+      c2: {
+        x: interpolate(progress, inputRange, [1, 0, 0]),
+        y: P22.y,
+      },
+      to: {
+        x: interpolate(progress, inputRange, [1, 0, 0]),
+        y: P23.y,
+      },
     });
     curveTo(path, {
       c1: P31,
