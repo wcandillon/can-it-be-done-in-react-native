@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -49,11 +49,13 @@ interface SlideProps {
   x: Animated.SharedValue<number>;
   index: number;
   colors: [string, string, string];
+  picture: number;
+  aspectRatio: number;
 }
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const Slide = ({ x, index, colors }: SlideProps) => {
+const Slide = ({ x, index, colors, picture, aspectRatio }: SlideProps) => {
   const animatedProps = useAnimatedProps(() => {
     const progress = (x.value - width * index) / width;
     const offset = interpolate(progress, [0, 1], [0, -2], Extrapolate.CLAMP);
@@ -112,9 +114,26 @@ const Slide = ({ x, index, colors }: SlideProps) => {
     };
   });
   return (
-    <Svg width={SIZE} height={SIZE} viewBox="0 0 2 2">
-      <AnimatedPath fill="#D5E4FF" animatedProps={animatedProps} />
-    </Svg>
+    <View>
+      <Svg width={SIZE} height={SIZE} viewBox="0 0 2 2">
+        <AnimatedPath fill="#D5E4FF" animatedProps={animatedProps} />
+      </Svg>
+      <View
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          source={picture}
+          style={{
+            width: width * 0.61,
+            height: width * 0.61 * aspectRatio,
+          }}
+        />
+      </View>
+    </View>
   );
 };
 
