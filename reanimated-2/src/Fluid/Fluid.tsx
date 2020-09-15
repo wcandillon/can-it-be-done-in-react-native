@@ -18,12 +18,12 @@ const slides = [
     aspectRatio: 439.75 / 470.5,
   },
   {
-    color: "#2ACEC3",
+    color: "#39ffb4",
     picture: require("./assets/2.png"),
     aspectRatio: 400.5 / 429.5,
   },
   {
-    color: "#FFAF6B",
+    color: "#ffb439",
     picture: require("./assets/4.png"),
     aspectRatio: 391.25 / 520,
   },
