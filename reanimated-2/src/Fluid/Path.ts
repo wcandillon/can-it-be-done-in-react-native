@@ -25,24 +25,42 @@ interface Close {
 type SVGSegment = Close | Curve | Move;
 
 export const exhaustiveCheck = (command: never): never => {
+  "worklet";
   throw new TypeError(`Unknown SVG Command: ${command}`);
 };
 
-const serializeMove = (c: Move) => `M${c.x},${c.y} `;
-const serializeClose = () => "Z";
-const serializeCurve = (c: Curve) =>
-  `C${c.c1.x},${c.c1.y} ${c.c2.x},${c.c2.y} ${c.to.x},${c.to.y} `;
+const serializeMove = (c: Move) => {
+  "worklet";
+  return `M${c.x},${c.y} `;
+};
 
-const isMove = (command: SVGSegment): command is Move =>
-  command.type === SVGCommand.MOVE;
+const serializeClose = () => {
+  "worklet";
+  return "Z";
+};
 
-const isCurve = (command: SVGSegment): command is Curve =>
-  command.type === SVGCommand.CURVE;
+const serializeCurve = (c: Curve) => {
+  "worklet";
+  return `C${c.c1.x},${c.c1.y} ${c.c2.x},${c.c2.y} ${c.to.x},${c.to.y} `;
+};
 
-const isClose = (command: SVGSegment): command is Close =>
-  command.type === SVGCommand.CLOSE;
+const isMove = (command: SVGSegment): command is Move => {
+  "worklet";
+  return command.type === SVGCommand.MOVE;
+};
+
+const isCurve = (command: SVGSegment): command is Curve => {
+  "worklet";
+  return command.type === SVGCommand.CURVE;
+};
+
+const isClose = (command: SVGSegment): command is Close => {
+  "worklet";
+  return command.type === SVGCommand.CLOSE;
+};
 
 export const serialize = (path: SVGSegment[]) => {
+  "worklet";
   return path
     .map((segment) => {
       if (isMove(segment)) {
@@ -59,23 +77,6 @@ export const serialize = (path: SVGSegment[]) => {
     .reduce((acc, c) => acc + c);
 };
 
-export const serializeString = (path: SVGSegment[]) => {
-  return path
-    .map((segment) => {
-      if (isMove(segment)) {
-        return `M${segment.x},${segment.y} `;
-      }
-      if (isCurve(segment)) {
-        return `C${segment.c1.x},${segment.c1.y} ${segment.c2.x},${segment.c2.y} ${segment.to.x},${segment.to.y} `;
-      }
-      if (isClose(segment)) {
-        return "Z";
-      }
-      return exhaustiveCheck(segment);
-    })
-    .reduce((acc, c) => `${acc}${c}`);
-};
-
 interface PathInterpolation<T extends number[]> {
   inputRange: T;
   outputRange: { [K in keyof T]: SVGSegment[] };
@@ -83,8 +84,10 @@ interface PathInterpolation<T extends number[]> {
 
 export const interpolatePath = <T extends number[]>(
   value: number,
-  { inputRange, outputRange }: PathInterpolation<T>
+  config: PathInterpolation<T>
 ) => {
+  "worklet";
+  const { inputRange, outputRange } = config;
   const path = outputRange[0].map((segment, index) => {
     if (isMove(segment)) {
       const points = outputRange.map((p) => {
@@ -168,16 +171,22 @@ export const interpolatePath = <T extends number[]>(
   return serialize(path);
 };
 
-export const createSVGPath = (): SVGSegment[] => [];
+export const createSVGPath = (): SVGSegment[] => {
+  "worklet";
+  return [];
+};
 
 export const moveTo = (commands: SVGSegment[], x: number, y: number) => {
-  commands.push({ type: SVGCommand.MOVE, x, y } as Move);
+  "worklet";
+  commands.push({ type: SVGCommand.MOVE, x, y });
 };
 
 export const curveTo = (commands: SVGSegment[], c: Omit<Curve, "type">) => {
-  commands.push({ type: SVGCommand.CURVE, ...c });
+  "worklet";
+  commands.push({ type: SVGCommand.CURVE, c1: c.c1, c2: c.c2, to: c.to });
 };
 
 export const close = (commands: SVGSegment[]) => {
+  "worklet";
   commands.push({ type: SVGCommand.CLOSE });
 };
