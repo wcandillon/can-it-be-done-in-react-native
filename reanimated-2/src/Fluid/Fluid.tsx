@@ -3,7 +3,6 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import Animated, {
   useAnimatedProps,
   useAnimatedScrollHandler,
-  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
@@ -17,9 +16,11 @@ const SIZE = width * 0.61;
 const C = 0.551915024494;
 const CENTER = { x: 1, y: 1 };
 const AnimatedPath = Animated.createAnimatedComponent(Path);
+const slides = [{}, {}, {}];
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -64,6 +65,8 @@ const Fluid = () => {
     },
   });
   const animatedProps = useAnimatedProps(() => {
+    const value = (x.value / width) % 1;
+    console.log({ value, width });
     const path = createSVGPath();
     moveTo(path, P00.x, P00.y);
     curveTo(path, {
@@ -89,19 +92,21 @@ const Fluid = () => {
     return { d: serialize(path) };
   });
   return (
-    <View style={styles.container}>
-      <Svg width={SIZE} height={SIZE} viewBox="0 0 2 2">
-        <AnimatedPath fill="#D5E4FF" animatedProps={animatedProps} />
-      </Svg>
-      <Animated.ScrollView
-        style={StyleSheet.absoluteFill}
-        contentContainerStyle={{ width: 2 * width }}
-        onScroll={scrollHandler}
-        scrollEventThrottle={16}
-        snapToInterval={width}
-        decelerationRate="fast"
-      />
-    </View>
+    <Animated.ScrollView
+      onScroll={scrollHandler}
+      scrollEventThrottle={16}
+      snapToInterval={width}
+      decelerationRate="fast"
+      horizontal
+    >
+      {slides.map((_slide, index) => (
+        <View key={index} style={styles.container}>
+          <Svg width={SIZE} height={SIZE} viewBox="0 0 2 2">
+            <AnimatedPath fill="#D5E4FF" animatedProps={animatedProps} />
+          </Svg>
+        </View>
+      ))}
+    </Animated.ScrollView>
   );
 };
 
