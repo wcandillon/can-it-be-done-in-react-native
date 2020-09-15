@@ -1,18 +1,15 @@
 import React from "react";
 import { Dimensions } from "react-native";
-import Animated, {
-  Extrapolate,
-  interpolate,
-  useAnimatedProps,
-} from "react-native-reanimated";
+import Animated, { useAnimatedProps } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
-import { cartesian2Canvas, mix } from "../components/AnimatedHelpers";
+import { cartesian2Canvas } from "../components/AnimatedHelpers";
 
 import { createSVGPath, moveTo, curveTo, serialize } from "./Path";
 
 const { width } = Dimensions.get("window");
-const SIZE = width * 0.75;
+const RATIO = 0.75;
+const SIZE = width * RATIO;
 const C = 0.551915024494;
 const CENTER = { x: 1, y: 1 };
 
@@ -47,7 +44,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const Slide = ({ x, index }: SlideProps) => {
   const animatedProps = useAnimatedProps(() => {
-    const inputRange = [-0.75, 0, 0.75];
+    const inputRange = [-1 * RATIO, 0, 1 * RATIO];
     const progress = (x.value - width * index) / width;
     if (index === 1) {
       console.log({ progress, width });
@@ -65,18 +62,9 @@ const Slide = ({ x, index }: SlideProps) => {
       to: P13,
     });
     curveTo(path, {
-      c1: {
-        x: P21.x,
-        y: P21.y,
-      },
-      c2: {
-        x: P22.x,
-        y: P22.y,
-      },
-      to: {
-        x: interpolate(progress, inputRange, [1, 0, 0], Extrapolate.CLAMP),
-        y: P23.y,
-      },
+      c1: P21,
+      c2: P22,
+      to: P23,
     });
     curveTo(path, {
       c1: P31,
