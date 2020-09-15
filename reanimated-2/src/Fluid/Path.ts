@@ -1,7 +1,7 @@
 import { interpolate } from "react-native-reanimated";
 import { Vector } from "react-native-redash";
 
-enum SVGCommand {
+export enum SVGCommand {
   MOVE,
   CURVE,
   CLOSE,
