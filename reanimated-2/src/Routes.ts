@@ -6,4 +6,7 @@ export type Routes = {
   Chart: undefined;
   JellyScroll: undefined;
   MaskedView: undefined;
+  Accordion: undefined;
+  Wave: undefined;
+  Fluid: undefined;
 };

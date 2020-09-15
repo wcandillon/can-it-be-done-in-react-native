@@ -87,7 +87,7 @@ const Item = ({ item, onSwipe }: ItemProps) => {
           <Action x={abs(translateX)} {...{ deleteOpacity }} />
         </TouchableWithoutFeedback>
       </View>
-      <PanGestureHandler {...gestureHandler}>
+      <PanGestureHandler failOffsetY={[-5, 5]} activeOffsetX={[-5, 5]} {...gestureHandler}>
         <Animated.View style={{ height, transform: [{ translateX }] }}>
           <ItemLayout {...{ item }} />
         </Animated.View>

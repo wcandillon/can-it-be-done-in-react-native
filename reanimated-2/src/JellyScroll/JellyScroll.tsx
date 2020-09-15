@@ -1,5 +1,4 @@
 import React from "react";
-
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -7,6 +6,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+
 import { Cards, Card } from "../components";
 
 const cards = [

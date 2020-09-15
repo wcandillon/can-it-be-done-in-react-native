@@ -29,6 +29,7 @@ const origin = { x: -(width / 2 - StyleGuide.spacing * 2), y: 0 };
 export const useSpringTransition = (state: boolean | number) => {
   const value = useSharedValue(0);
   useEffect(() => {
+    // eslint-disable-next-line no-nested-ternary
     value.value = typeof state === "boolean" ? (state ? 1 : 0) : state;
   }, [state, value]);
   const transition = useDerivedValue(() => {

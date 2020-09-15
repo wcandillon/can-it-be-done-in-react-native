@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import Animated, {
   useAnimatedRef,
@@ -10,8 +10,6 @@ import Animated, {
   withTiming,
   runOnUI,
 } from "react-native-reanimated";
-
-import { mix, useTiming } from "../components/AnimatedHelpers";
 
 import Chevron from "./Chevron";
 import Item, { ListItem } from "./ListItem";
@@ -46,7 +44,7 @@ interface ListProps {
 }
 
 const List = ({ list }: ListProps) => {
-  const aRef = useAnimatedRef();
+  const aRef = useAnimatedRef<View>();
   const open = useSharedValue(false);
   const height = useSharedValue(0);
   const transition = useDerivedValue(() => {

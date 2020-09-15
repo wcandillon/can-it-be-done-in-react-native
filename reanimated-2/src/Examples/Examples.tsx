@@ -36,6 +36,14 @@ export const examples = [
     screen: "Accordion",
     title: "🗺 Accordion",
   },
+  {
+    screen: "Wave",
+    title: "🌊 Wave",
+  },
+  {
+    screen: "Fluid",
+    title: "🍸 Fluid",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
