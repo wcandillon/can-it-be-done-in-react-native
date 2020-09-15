@@ -53,7 +53,8 @@ const SortableWord = ({
     onActive: (event) => {
       translation.x.value = panOffset.x.value + event.translationX;
       translation.y.value = panOffset.y.value + event.translationY;
-      offsets.forEach((o, i) => {
+      for (let i = 0; i < offsets.length; i++) {
+        const o = offsets[i];
         if (
           between(
             translation.x.value,
@@ -69,11 +70,21 @@ const SortableWord = ({
           ) &&
           i !== index
         ) {
-          swap(o.order, offset.order);
-          console.log("Swap " + o.order.value + " with " + offset.order.value);
+          console.log(offset.order.value + " becomes " + o.order.value);
+          const from = offset.order.value;
+          const to = o.order.value;
+          offsets.forEach((p) => {
+            if (p.order.value > to && p.order.value < from) {
+              p.order.value -= 1;
+            }
+          });
+          offset.order.value = to - 1;
+          // TODO: since we sort the array everytime,
+          // maybe we don't need order anymore
           calculateLayout(offsets, containerWidth);
+          break;
         }
-      });
+      }
     },
     onEnd: ({ velocityX, velocityY }) => {
       //   gestureActive.value = false;
