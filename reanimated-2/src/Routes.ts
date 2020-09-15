@@ -8,4 +8,5 @@ export type Routes = {
   MaskedView: undefined;
   Accordion: undefined;
   Wave: undefined;
+  Fluid: undefined;
 };

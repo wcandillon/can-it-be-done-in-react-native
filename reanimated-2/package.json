@@ -26,7 +26,8 @@
     "react": "16.13.1",
     "react-native": "0.63.1",
     "react-native-gesture-handler": "^1.6.1",
-    "react-native-reanimated": "2.0.0-alpha.5",
+    "react-native-reanimated": "2.0.0-alpha.6",
+    "react-native-redash": "^15.1.2",
     "react-native-safe-area-context": "^3.0.2",
     "react-native-screens": "^2.8.0",
     "react-native-svg": "^12.1.0"

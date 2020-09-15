@@ -40,6 +40,10 @@ export const examples = [
     screen: "Wave",
     title: "🌊 Wave",
   },
+  {
+    screen: "Fluid",
+    title: "🍸 Fluid",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
