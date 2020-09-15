@@ -8,19 +8,23 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import Svg, { Circle, Path } from "react-native-svg";
+import { interpolateColor } from "react-native-redash";
 
-import { cartesian2Canvas, mix } from "../components/AnimatedHelpers";
+import { cartesian2Canvas, mix, Vector } from "../components/AnimatedHelpers";
 
 import { createSVGPath, moveTo, curveTo, serialize } from "./Path";
 
 const { width } = Dimensions.get("window");
-const RATIO = 0.75;
+const RATIO = 0.9;
 const SIZE = width * RATIO;
 const C = 0.551915024494;
 const CENTER = { x: 1, y: 1 };
 
 const vec = (x: number, y: number) => cartesian2Canvas({ x, y }, CENTER);
-
+const addX = (v: Vector, x: number) => {
+  "worklet";
+  return { x: v.x + x, y: v.y };
+};
 const P00 = vec(0, 1);
 const P01 = vec(C, 1);
 const P02 = vec(1, C);
@@ -31,7 +35,7 @@ const P11 = vec(1, -C);
 const P12 = vec(C, -1);
 const P13 = vec(0, -1);
 
-const P20 = vec(0, -1);
+// const P20 = vec(0, -1);
 const P21 = vec(-C, -1);
 const P22 = vec(-1, -C);
 const P23 = vec(-1, 0);
@@ -44,49 +48,68 @@ const P33 = vec(0, 1);
 interface SlideProps {
   x: Animated.SharedValue<number>;
   index: number;
-  isGestureActive: Animated.SharedValue<boolean>;
+  colors: [string, string, string];
 }
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const Slide = ({ x, index, isGestureActive }: SlideProps) => {
+const Slide = ({ x, index, colors }: SlideProps) => {
   const animatedProps = useAnimatedProps(() => {
     const progress = (x.value - width * index) / width;
-    if (index === 1) {
-      console.log({ progress });
-    }
+    const offset = interpolate(progress, [0, 1], [0, -2], Extrapolate.CLAMP);
     const path = createSVGPath();
-    moveTo(path, P00.x, P00.y);
+    moveTo(path, P00.x + offset, P00.y);
     curveTo(path, {
-      c1: P01,
+      c1: addX(P01, offset),
       c2: P02,
       to: P03,
     });
     curveTo(path, {
       c1: P11,
-      c2: P12,
-      to: P13,
+      c2: addX(P12, offset),
+      to: addX(P13, offset),
     });
     curveTo(path, {
-      c1: P21,
+      c1: addX(P21, offset),
       c2: {
+        x:
+          interpolate(
+            progress,
+            [(-1 * RATIO) / 2, 0],
+            [1, 0],
+            Extrapolate.CLAMP
+          ) + offset,
         y: P22.y,
-        x: interpolate(progress, [-0.3, 0], [1, 0], Extrapolate.CLAMP),
       },
       to: {
+        x:
+          interpolate(
+            progress,
+            [(-1 * RATIO) / 2, 0],
+            [1, 0],
+            Extrapolate.CLAMP
+          ) + offset,
         y: P23.y,
-        x: interpolate(progress, [-0.3, 0], [1, 0], Extrapolate.CLAMP),
       },
     });
     curveTo(path, {
       c1: {
+        x:
+          interpolate(
+            progress,
+            [(-1 * RATIO) / 2, 0],
+            [1, 0],
+            Extrapolate.CLAMP
+          ) + offset,
         y: P31.y,
-        x: interpolate(progress, [-0.3, 0], [1, 0], Extrapolate.CLAMP),
       },
-      c2: P32,
-      to: P33,
+      c2: addX(P32, offset),
+      to: addX(P33, offset),
     });
-    return { d: serialize(path) };
+    return {
+      d: serialize(path),
+      fill: interpolateColor(progress, [-1, 0, 1], colors),
+    };
   });
   return (
     <Svg width={SIZE} height={SIZE} viewBox="0 0 2 2">
