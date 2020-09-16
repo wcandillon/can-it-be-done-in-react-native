@@ -7,8 +7,7 @@ import Animated, {
   withDecay,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-
-import { clamp } from "../components/AnimatedHelpers";
+import { clamp } from "react-native-redash";
 
 import Card, { Cards, CARD_WIDTH, CARD_HEIGHT } from "./Card";
 

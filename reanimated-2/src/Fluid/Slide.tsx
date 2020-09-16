@@ -6,9 +6,11 @@ import Animated, {
   useAnimatedProps,
 } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
-import { interpolateColor } from "react-native-redash";
-
-import { cartesian2Canvas, Vector } from "../components/AnimatedHelpers";
+import {
+  interpolateColor,
+  cartesian2Canvas,
+  Vector,
+} from "react-native-redash";
 
 import { createSVGPath, moveTo, curveTo, serialize } from "./Path";
 

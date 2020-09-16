@@ -1,7 +1,6 @@
 import { Dimensions } from "react-native";
 import { interpolate, Extrapolate } from "react-native-reanimated";
-
-import { round } from "../components/AnimatedHelpers";
+import { round } from "react-native-redash";
 
 import data from "./data.json";
 import { Candle } from "./Candle";

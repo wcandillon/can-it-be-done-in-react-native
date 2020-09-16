@@ -6,8 +6,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
-
-import { clamp } from "../components/AnimatedHelpers";
+import { clamp } from "react-native-redash";
 
 import Chart from "./Chart";
 import Values from "./Values";

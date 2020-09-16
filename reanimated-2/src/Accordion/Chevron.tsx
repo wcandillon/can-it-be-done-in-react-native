@@ -2,8 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
-
-import { mix } from "../components/AnimatedHelpers";
+import { mix } from "react-native-redash";
 
 const size = 30;
 const styles = StyleSheet.create({
