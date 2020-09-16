@@ -50,7 +50,7 @@ const UseTransition = () => {
           return {
             transform: [
               { translateX: origin.x },
-              { rotate },
+              { rotate: `${rotate}rad` },
               { translateX: -origin.x },
             ],
           };
