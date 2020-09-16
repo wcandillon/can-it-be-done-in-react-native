@@ -10,9 +10,10 @@ import {
   interpolateColor,
   cartesian2Canvas,
   Vector,
+  move,
+  curve,
+  serialize,
 } from "react-native-redash";
-
-import { createSVGPath, moveTo, curveTo, serialize } from "./Path";
 
 const { width } = Dimensions.get("window");
 const RATIO = 0.9;
@@ -59,55 +60,56 @@ const Slide = ({ x, index, colors, picture, aspectRatio }: SlideProps) => {
   const animatedProps = useAnimatedProps(() => {
     const progress = (x.value - width * index) / width;
     const offset = interpolate(progress, [0, 1], [0, -2], Extrapolate.CLAMP);
-    const path = createSVGPath();
-    moveTo(path, P00.x + offset, P00.y);
-    curveTo(path, {
-      c1: addX(P01, offset),
-      c2: P02,
-      to: P03,
-    });
-    curveTo(path, {
-      c1: P11,
-      c2: addX(P12, offset),
-      to: addX(P13, offset),
-    });
-    curveTo(path, {
-      c1: addX(P21, offset),
-      c2: {
-        x:
-          interpolate(
-            progress,
-            [(-1 * RATIO) / 2, 0],
-            [1, 0],
-            Extrapolate.CLAMP
-          ) + offset,
-        y: P22.y,
-      },
-      to: {
-        x:
-          interpolate(
-            progress,
-            [(-1 * RATIO) / 2, 0],
-            [1, 0],
-            Extrapolate.CLAMP
-          ) + offset,
-        y: P23.y,
-      },
-    });
-    curveTo(path, {
-      c1: {
-        x:
-          interpolate(
-            progress,
-            [(-1 * RATIO) / 2, 0],
-            [1, 0],
-            Extrapolate.CLAMP
-          ) + offset,
-        y: P31.y,
-      },
-      c2: addX(P32, offset),
-      to: addX(P33, offset),
-    });
+    const path = [
+      move(P00.x + offset, P00.y),
+      curve({
+        c1: addX(P01, offset),
+        c2: P02,
+        to: P03,
+      }),
+      curve({
+        c1: P11,
+        c2: addX(P12, offset),
+        to: addX(P13, offset),
+      }),
+      curve({
+        c1: addX(P21, offset),
+        c2: {
+          x:
+            interpolate(
+              progress,
+              [(-1 * RATIO) / 2, 0],
+              [1, 0],
+              Extrapolate.CLAMP
+            ) + offset,
+          y: P22.y,
+        },
+        to: {
+          x:
+            interpolate(
+              progress,
+              [(-1 * RATIO) / 2, 0],
+              [1, 0],
+              Extrapolate.CLAMP
+            ) + offset,
+          y: P23.y,
+        },
+      }),
+      curve({
+        c1: {
+          x:
+            interpolate(
+              progress,
+              [(-1 * RATIO) / 2, 0],
+              [1, 0],
+              Extrapolate.CLAMP
+            ) + offset,
+          y: P31.y,
+        },
+        c2: addX(P32, offset),
+        to: addX(P33, offset),
+      }),
+    ];
     return {
       d: serialize(path),
       fill: interpolateColor(progress, [-1, 0, 1], colors),
