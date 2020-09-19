@@ -46,6 +46,8 @@ const SortableWord = ({
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
       gestureActive.value = true;
+      translation.x.value = offset.x.value;
+      translation.y.value = offset.y.value;
       panOffset.x.value = translation.x.value;
       panOffset.y.value = translation.y.value;
     },
@@ -59,17 +61,9 @@ const SortableWord = ({
         }
         if (
           between(translation.x.value, o.x.value, o.x.value + o.width.value)
-          // &&
-          // o.y.value === 0
-          //   ? translation.y.value <= o.height.value
-          //   : translation.y.value > o.height.value
         ) {
           console.log(offset.order.value + " goes to " + o.order.value);
-          console.log("Before: ");
-          print(offsets);
           reorder(offsets, index, i);
-          console.log("After: ");
-          print(offsets);
           calculateLayout(offsets, containerWidth);
           break;
         }
