@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import { StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useAnimatedGestureHandler,
@@ -37,7 +38,6 @@ const SortableWord = ({
   children,
   containerWidth,
 }: SortableWordProps) => {
-  const done = useSharedValue(false);
   const gestureActive = useSharedValue(false);
   const offset = offsets[index];
   // const height = offset.height.value;
@@ -52,9 +52,6 @@ const SortableWord = ({
     onActive: (event) => {
       translation.x.value = panOffset.x.value + event.translationX;
       translation.y.value = panOffset.y.value + event.translationY;
-      if (done.value) {
-        return;
-      }
       for (let i = 0; i < offsets.length; i++) {
         const o = offsets[i];
         if (o.id.value === offset.id.value) {
@@ -80,7 +77,7 @@ const SortableWord = ({
       // done.value = true;
     },
     onEnd: ({ velocityX, velocityY }) => {
-      done.value = false;
+      gestureActive.value = false;
       translation.x.value = withSpring(offset.x.value, {
         velocity: velocityX,
       });
@@ -117,9 +114,13 @@ const SortableWord = ({
     ],
   }));
   return (
-    <PanGestureHandler onGestureEvent={onGestureEvent}>
-      <Animated.View style={style}>{children}</Animated.View>
-    </PanGestureHandler>
+    <Animated.View style={style}>
+      <PanGestureHandler onGestureEvent={onGestureEvent}>
+        <Animated.View style={StyleSheet.absoluteFill}>
+          {children}
+        </Animated.View>
+      </PanGestureHandler>
+    </Animated.View>
   );
 };
 
