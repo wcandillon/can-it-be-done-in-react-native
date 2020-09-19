@@ -64,9 +64,16 @@ const SortableWord = ({
             ? translation.y.value <= o.height.value
             : translation.y.value > o.height.value
         ) {
+          console.log(offset.order.value + " goes to " + o.order.value);
+          /*
           console.log(`${offset.order.value} goes to ${o.order.value}`);
+          console.log("Before:");
+          print(offsets);
           reorder(offsets, offset.order.value, o.order.value);
+          console.log("After:");
+          print(offsets);
           calculateLayout(offsets, containerWidth);
+          */
           break;
         }
       }
