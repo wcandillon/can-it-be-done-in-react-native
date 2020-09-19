@@ -5,21 +5,23 @@ export type Offset = SharedValues<{
   order: number;
   width: number;
   height: number;
+  word: string;
   x: number;
   y: number;
 }>;
 
-export const reorder = (
-  input: { order: number }[],
-  from: number,
-  to: number
-) => {
+export const print = (input: Offset[]) => {
+  input.sort((a, b) => (a.order.value > b.order.value ? 1 : -1));
+  console.log(input.map((i) => i.word.value).join(" "));
+};
+
+export const reorder = (input: Offset[], from: number, to: number) => {
   "worklet";
   input.forEach((p) => {
-    if (p.order === from) {
-      p.order = to;
-    } else if (p.order >= to && p.order < from) {
-      p.order += 1;
+    if (p.order.value === from) {
+      p.order.value = to;
+    } else if (p.order.value >= to && p.order.value < from) {
+      p.order.value += 1;
     }
   });
 };

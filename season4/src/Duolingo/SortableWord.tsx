@@ -11,7 +11,7 @@ import { useVector } from "react-native-redash";
 
 import { swap, useEffectOnUI } from "../components/AnimatedHelpers";
 
-import { Offset, calculateLayout } from "./Layout";
+import { Offset, calculateLayout, reorder, print } from "./Layout";
 
 export const between = (
   value: number,
@@ -70,15 +70,10 @@ const SortableWord = ({
           ) &&
           i !== index
         ) {
-          console.log(offset.order.value + " becomes " + o.order.value);
-          const from = offset.order.value;
-          const to = o.order.value;
-          offsets.forEach((p) => {
-            if (p.order.value > to && p.order.value < from) {
-              p.order.value -= 1;
-            }
-          });
-          offset.order.value = to - 1;
+          console.log(offset.order.value + " goes to " + o.order.value);
+          print(offsets);
+          reorder(offsets, o.order.value, offset.order.value);
+          print(offsets);
           // TODO: since we sort the array everytime,
           // maybe we don't need order anymore
           calculateLayout(offsets, containerWidth);
