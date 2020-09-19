@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { InitialState, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 import { Routes } from "./Routes";
 import Examples from "./Examples";

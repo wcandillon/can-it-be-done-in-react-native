@@ -55,34 +55,23 @@ const SortableWord = ({
       translation.y.value = panOffset.y.value + event.translationY;
       for (let i = 0; i < offsets.length; i++) {
         const o = offsets[i];
+        if (o.order.value === offset.order.value) {
+          continue;
+        }
         if (
-          between(
-            translation.x.value,
-            o.x.value,
-            o.x.value + o.width.value,
-            true
-          ) &&
-          between(
-            translation.y.value,
-            o.y.value,
-            o.y.value + o.height.value,
-            true
-          ) &&
-          i !== index
+          between(translation.x.value, o.x.value, o.x.value + o.width.value) &&
+          o.y.value === 0
+            ? translation.y.value <= o.height.value
+            : translation.y.value > o.height.value
         ) {
-          console.log(offset.order.value + " goes to " + o.order.value);
-          print(offsets);
-          reorder(offsets, o.order.value, offset.order.value);
-          print(offsets);
-          // TODO: since we sort the array everytime,
-          // maybe we don't need order anymore
+          console.log(`${offset.order.value} goes to ${o.order.value}`);
+          reorder(offsets, offset.order.value, o.order.value);
           calculateLayout(offsets, containerWidth);
           break;
         }
       }
     },
     onEnd: ({ velocityX, velocityY }) => {
-      //   gestureActive.value = false;
       translation.x.value = withSpring(offset.x.value, {
         velocity: velocityX,
       });
