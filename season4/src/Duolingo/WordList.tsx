@@ -27,7 +27,7 @@ const WordList = ({ children }: WordListProps) => {
     height: useSharedValue(0),
     x: useSharedValue(0),
     y: useSharedValue(0),
-    word: useSharedValue(""),
+    id: useSharedValue(""),
   }));
   if (!ready) {
     return (
@@ -41,10 +41,9 @@ const WordList = ({ children }: WordListProps) => {
             offsets[index].order.value = index;
             offsets[index].width.value = width;
             offsets[index].height.value = height;
-            offsets[index].word.value = child.props.word;
+            offsets[index].id.value = child.props.word;
             runOnUI(() => {
               "worklet";
-
               if (
                 offsets.filter((offset) => offset.width.value === 0).length ===
                 0

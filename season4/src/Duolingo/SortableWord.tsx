@@ -9,9 +9,7 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { useVector } from "react-native-redash";
 
-import { swap, useEffectOnUI } from "../components/AnimatedHelpers";
-
-import { Offset, calculateLayout, reorder, print } from "./Layout";
+import { calculateLayout, Offset, print } from "./Layout";
 
 export const between = (
   value: number,
@@ -41,7 +39,7 @@ const SortableWord = ({
 }: SortableWordProps) => {
   const gestureActive = useSharedValue(false);
   const offset = offsets[index];
-  const height = offset.height.value;
+  // const height = offset.height.value;
   const translation = useVector(offset.x.value, offset.y.value);
   const panOffset = useVector();
   const onGestureEvent = useAnimatedGestureHandler({
@@ -55,7 +53,7 @@ const SortableWord = ({
       translation.y.value = panOffset.y.value + event.translationY;
       for (let i = 0; i < offsets.length; i++) {
         const o = offsets[i];
-        if (o.order.value === offset.order.value) {
+        if (o.id.value === offset.id.value) {
           continue;
         }
         if (
@@ -64,16 +62,12 @@ const SortableWord = ({
             ? translation.y.value <= o.height.value
             : translation.y.value > o.height.value
         ) {
-          console.log(offset.order.value + " goes to " + o.order.value);
-          /*
-          console.log(`${offset.order.value} goes to ${o.order.value}`);
-          console.log("Before:");
+          console.log(offset.id.value + " goes to " + o.id.value);
           print(offsets);
-          reorder(offsets, offset.order.value, o.order.value);
-          console.log("After:");
-          print(offsets);
-          calculateLayout(offsets, containerWidth);
-          */
+          const newOffsets = reorder(offsets, index, i);
+          print(newOffsets);
+          console.log("===");
+          calculateLayout(newOffsets, containerWidth);
           break;
         }
       }
