@@ -5,6 +5,7 @@ import { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
 import { calculateLayout } from "./Layout";
+import Debug from "./Debug";
 
 const margin = 32;
 const containerWidth = Dimensions.get("window").width - margin * 2;
@@ -63,18 +64,27 @@ const WordList = ({ children }: WordListProps) => {
     );
   }
   return (
-    <View style={styles.container}>
-      {children.map((child, index) => (
-        <SortableWord
-          key={index}
-          offsets={offsets}
-          index={index}
-          containerWidth={containerWidth}
-        >
-          {child}
-        </SortableWord>
-      ))}
-    </View>
+    <>
+      <View style={styles.container}>
+        {children.map((child, index) => (
+          <SortableWord
+            key={index}
+            offsets={offsets}
+            index={index}
+            containerWidth={containerWidth}
+          >
+            {child}
+          </SortableWord>
+        ))}
+      </View>
+      <Debug
+        words={children.map((child) => ({
+          word: child.props.word,
+          id: child.props.id,
+        }))}
+        offsets={offsets}
+      />
+    </>
   );
 };
 
