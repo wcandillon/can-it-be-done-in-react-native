@@ -1,20 +1,19 @@
 import { SharedValues } from "../components/AnimatedHelpers";
-const move = (arr: Offset[], old_index: number, new_index: number) => {
+const move = (offsets: Offset[], from: number, to: number) => {
   "worklet";
-  while (old_index < 0) {
-    old_index += arr.length;
+  while (from < 0) {
+    from += offsets.length;
   }
-  while (new_index < 0) {
-    new_index += arr.length;
+  while (to < 0) {
+    to += offsets.length;
   }
-  if (new_index >= arr.length) {
-    let k = new_index - arr.length;
+  if (to >= offsets.length) {
+    let k = to - offsets.length;
     while (k-- + 1) {
-      arr.push(undefined);
+      offsets.push(undefined);
     }
   }
-  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-  return arr;
+  offsets.splice(to, 0, offsets.splice(from, 1)[0]);
 };
 
 // TODO: since width/height are stable should they be of type Ref?
@@ -46,9 +45,8 @@ export const print = (offsets: Offset[]) => {
 export const reorder = (rawOffsets: Offset[], from: number, to: number) => {
   "worklet";
   const offsets = rawOffsets.slice().sort(sortByOrder);
-  const result = move(offsets, from, to);
-  console.log({ result });
-  result.forEach((offset, index) => (offset.order.value = index));
+  move(offsets, from, to);
+  offsets.forEach((offset, index) => (offset.order.value = index));
 };
 
 export const calculateLayout = (
