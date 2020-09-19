@@ -37,6 +37,7 @@ const SortableWord = ({
   children,
   containerWidth,
 }: SortableWordProps) => {
+  const done = useSharedValue(false);
   const gestureActive = useSharedValue(false);
   const offset = offsets[index];
   // const height = offset.height.value;
@@ -51,26 +52,35 @@ const SortableWord = ({
     onActive: (event) => {
       translation.x.value = panOffset.x.value + event.translationX;
       translation.y.value = panOffset.y.value + event.translationY;
+      if (done.value) {
+        return;
+      }
       for (let i = 0; i < offsets.length; i++) {
         const o = offsets[i];
         if (o.id.value === offset.id.value) {
           continue;
         }
         if (
-          between(translation.x.value, o.x.value, o.x.value + o.width.value) &&
-          o.y.value === 0
-            ? translation.y.value <= o.height.value
-            : translation.y.value > o.height.value
+          between(translation.x.value, o.x.value, o.x.value + o.width.value)
+          // &&
+          // o.y.value === 0
+          //   ? translation.y.value <= o.height.value
+          //   : translation.y.value > o.height.value
         ) {
-          console.log(offset.id.value + " goes to " + o.id.value);
+          console.log(offset.order.value + " goes to " + o.order.value);
+          console.log("Before: ");
           print(offsets);
           reorder(offsets, index, i);
+          console.log("After: ");
+          print(offsets);
           calculateLayout(offsets, containerWidth);
           break;
         }
       }
+      // done.value = true;
     },
     onEnd: ({ velocityX, velocityY }) => {
+      done.value = false;
       translation.x.value = withSpring(offset.x.value, {
         velocity: velocityX,
       });

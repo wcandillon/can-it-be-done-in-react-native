@@ -10,9 +10,20 @@ export type Offset = SharedValues<{
   y: number;
 }>;
 
+const sortByOrder = (a: Offset, b: Offset) => {
+  "worklet";
+  return a.order.value > b.order.value ? 1 : -1;
+};
+
 export const print = (offsets: Offset[]) => {
   "worklet";
-  console.log(offsets.map((o) => o.id.value).join(" "));
+  console.log(
+    offsets
+      .slice()
+      .sort(sortByOrder)
+      .map((o) => `${o.id.value} (${o.order.value})`)
+      .join(" ")
+  );
 };
 
 export const reorder = (offsets: Offset[], from: number, to: number) => {
@@ -22,17 +33,23 @@ export const reorder = (offsets: Offset[], from: number, to: number) => {
   offsets.forEach((offset, i) => {
     if (i === from) {
       return;
-    } else if (i === to) {
-      newOffsets.push(offsetToInsert);
     }
     newOffsets.push(offset);
+    if (i === to) {
+      newOffsets.push(offsetToInsert);
+    }
   });
-  newOffsets.forEach((o, i) => (o.order.value = i));
+  newOffsets.forEach((o, i) => {
+    o.order.value = i;
+  });
 };
 
-export const calculateLayout = (offsets: Offset[], containerWidth: number) => {
+export const calculateLayout = (
+  rawOffsets: Offset[],
+  containerWidth: number
+) => {
   "worklet";
-  offsets.sort((a, b) => (a.order.value > b.order.value ? 1 : -1));
+  const offsets = rawOffsets.slice().sort(sortByOrder);
   const height = offsets[0].height.value;
   let vIndex = 0;
   let lastBreak = 0;
