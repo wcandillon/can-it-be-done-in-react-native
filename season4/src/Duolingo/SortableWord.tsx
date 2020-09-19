@@ -56,19 +56,19 @@ const SortableWord = ({
       translation.y.value = panOffset.y.value + event.translationY;
       for (let i = 0; i < offsets.length; i++) {
         const o = offsets[i];
-        if (o.id.value === offset.id.value) {
-          continue;
-        }
         if (
+          offset.order.value !== o.order.value &&
           between(translation.x.value, o.x.value, o.x.value + o.width.value)
         ) {
           console.log(offset.order.value + " goes to " + o.order.value);
-          reorder(offsets, index, i);
+          // print(offsets);
+          reorder(offsets, offset.order.value, o.order.value);
+          //print(offsets);
+          // console.log("---");
           calculateLayout(offsets, containerWidth);
           break;
         }
       }
-      // done.value = true;
     },
     onEnd: ({ velocityX, velocityY }) => {
       gestureActive.value = false;

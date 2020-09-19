@@ -1,4 +1,21 @@
 import { SharedValues } from "../components/AnimatedHelpers";
+const move = (arr: Offset[], old_index: number, new_index: number) => {
+  "worklet";
+  while (old_index < 0) {
+    old_index += arr.length;
+  }
+  while (new_index < 0) {
+    new_index += arr.length;
+  }
+  if (new_index >= arr.length) {
+    let k = new_index - arr.length;
+    while (k-- + 1) {
+      arr.push(undefined);
+    }
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+  return arr;
+};
 
 // TODO: since width/height are stable should they be of type Ref?
 export type Offset = SharedValues<{
@@ -26,22 +43,12 @@ export const print = (offsets: Offset[]) => {
   );
 };
 
-export const reorder = (offsets: Offset[], from: number, to: number) => {
+export const reorder = (rawOffsets: Offset[], from: number, to: number) => {
   "worklet";
-  const newOffsets: Offset[] = [];
-  const offsetToInsert = offsets[from];
-  offsets.forEach((offset, i) => {
-    if (i === from) {
-      return;
-    }
-    newOffsets.push(offset);
-    if (i === to) {
-      newOffsets.push(offsetToInsert);
-    }
-  });
-  newOffsets.forEach((o, i) => {
-    o.order.value = i;
-  });
+  const offsets = rawOffsets.slice().sort(sortByOrder);
+  const result = move(offsets, from, to);
+  console.log({ result });
+  result.forEach((offset, index) => (offset.order.value = index));
 };
 
 export const calculateLayout = (
