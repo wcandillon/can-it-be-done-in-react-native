@@ -9,7 +9,7 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { useVector } from "react-native-redash";
 
-import { calculateLayout, Offset, print } from "./Layout";
+import { calculateLayout, Offset, print, reorder } from "./Layout";
 
 export const between = (
   value: number,
@@ -64,10 +64,8 @@ const SortableWord = ({
         ) {
           console.log(offset.id.value + " goes to " + o.id.value);
           print(offsets);
-          const newOffsets = reorder(offsets, index, i);
-          print(newOffsets);
-          console.log("===");
-          calculateLayout(newOffsets, containerWidth);
+          reorder(offsets, index, i);
+          calculateLayout(offsets, containerWidth);
           break;
         }
       }

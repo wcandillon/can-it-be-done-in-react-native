@@ -2,6 +2,7 @@ import { SharedValues } from "../components/AnimatedHelpers";
 
 // TODO: since width/height are stable should they be of type Ref?
 export type Offset = SharedValues<{
+  order: number;
   id: string;
   width: number;
   height: number;
@@ -9,8 +10,10 @@ export type Offset = SharedValues<{
   y: number;
 }>;
 
-export const print = (offsets: Offset[]) =>
+export const print = (offsets: Offset[]) => {
+  "worklet";
   console.log(offsets.map((o) => o.id.value).join(" "));
+};
 
 export const reorder = (offsets: Offset[], from: number, to: number) => {
   "worklet";
@@ -24,11 +27,12 @@ export const reorder = (offsets: Offset[], from: number, to: number) => {
     }
     newOffsets.push(offset);
   });
-  return newOffsets;
+  newOffsets.forEach((o, i) => (o.order.value = i));
 };
 
 export const calculateLayout = (offsets: Offset[], containerWidth: number) => {
   "worklet";
+  offsets.sort((a, b) => (a.order.value > b.order.value ? 1 : -1));
   const height = offsets[0].height.value;
   let vIndex = 0;
   let lastBreak = 0;
