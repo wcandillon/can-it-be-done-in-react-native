@@ -9,6 +9,21 @@ export type Offset = SharedValues<{
   y: number;
 }>;
 
+export const reorder = (
+  input: { order: number }[],
+  from: number,
+  to: number
+) => {
+  "worklet";
+  input.forEach((p) => {
+    if (p.order === from) {
+      p.order = to;
+    } else if (p.order >= to && p.order < from) {
+      p.order += 1;
+    }
+  });
+};
+
 export const calculateLayout = (offsets: Offset[], containerWidth: number) => {
   "worklet";
   offsets.sort((a, b) => (a.order.value > b.order.value ? 1 : -1));

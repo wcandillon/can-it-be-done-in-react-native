@@ -3,6 +3,7 @@ import "react-native";
 import "react-native-gesture-handler/jestSetup";
 
 const reorder = (input: { order: number }[], from: number, to: number) => {
+  "worklet";
   input.forEach((p) => {
     if (p.order === from) {
       p.order = to;
