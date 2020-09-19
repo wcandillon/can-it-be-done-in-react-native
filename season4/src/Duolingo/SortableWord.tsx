@@ -58,13 +58,10 @@ const SortableWord = ({
         const o = offsets[i];
         if (
           offset.order.value !== o.order.value &&
-          between(translation.x.value, o.x.value, o.x.value + o.width.value)
+          between(translation.x.value, o.x.value, o.x.value + o.width.value) &&
+          between(translation.y.value, o.y.value, o.y.value + o.height.value)
         ) {
-          console.log(offset.order.value + " goes to " + o.order.value);
-          // print(offsets);
           reorder(offsets, offset.order.value, o.order.value);
-          //print(offsets);
-          // console.log("---");
           calculateLayout(offsets, containerWidth);
           break;
         }
@@ -101,7 +98,6 @@ const SortableWord = ({
     width: offset.width.value,
     height: offset.height.value,
     zIndex: gestureActive.value ? 100 : 0,
-    backgroundColor: "rgba(100, 200, 300, 0.5)",
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },

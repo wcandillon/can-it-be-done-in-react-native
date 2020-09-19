@@ -9,13 +9,11 @@ const words = [
   { id: 2, word: "isst" },
   { id: 3, word: "einen" },
   { id: 4, word: "Apfel" },
-  /*
   { id: 5, word: "," },
   { id: 6, word: "weil" },
   { id: 7, word: "er" },
   { id: 8, word: "hungrig" },
   { id: 9, word: "ist" },
-  */
 ];
 
 const styles = StyleSheet.create({
