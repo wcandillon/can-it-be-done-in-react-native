@@ -10,7 +10,7 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { useVector } from "react-native-redash";
 
-import { calculateLayout, Offset, print, reorder } from "./Layout";
+import { calculateLayout, Offset, reorder } from "./Layout";
 
 export const between = (
   value: number,

@@ -5,7 +5,6 @@ import { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
 import { calculateLayout } from "./Layout";
-import Debug from "./Debug";
 
 const margin = 32;
 const containerWidth = Dimensions.get("window").width - margin * 2;
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
 });
 
 interface WordListProps {
-  children: ReactElement<{ id: number; word: string }>[];
+  children: ReactElement<{ id: number }>[];
 }
 
 const WordList = ({ children }: WordListProps) => {
@@ -42,7 +41,6 @@ const WordList = ({ children }: WordListProps) => {
             offsets[index].order.value = index;
             offsets[index].width.value = width;
             offsets[index].height.value = height;
-            offsets[index].id.value = child.props.word;
             runOnUI(() => {
               "worklet";
               if (
@@ -77,13 +75,6 @@ const WordList = ({ children }: WordListProps) => {
           </SortableWord>
         ))}
       </View>
-      <Debug
-        words={children.map((child) => ({
-          word: child.props.word,
-          id: child.props.id,
-        }))}
-        offsets={offsets}
-      />
     </>
   );
 };

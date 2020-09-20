@@ -1,5 +1,5 @@
 import { SharedValues } from "../components/AnimatedHelpers";
-const move = (offsets: Offset[], from: number, to: number) => {
+const move = (offsets: (Offset | undefined)[], from: number, to: number) => {
   "worklet";
   while (from < 0) {
     from += offsets.length;
@@ -19,7 +19,6 @@ const move = (offsets: Offset[], from: number, to: number) => {
 // TODO: since width/height are stable should they be of type Ref?
 export type Offset = SharedValues<{
   order: number;
-  id: string;
   width: number;
   height: number;
   x: number;
@@ -29,17 +28,6 @@ export type Offset = SharedValues<{
 const sortByOrder = (a: Offset, b: Offset) => {
   "worklet";
   return a.order.value > b.order.value ? 1 : -1;
-};
-
-export const print = (offsets: Offset[]) => {
-  "worklet";
-  console.log(
-    offsets
-      .slice()
-      .sort(sortByOrder)
-      .map((o) => `${o.id.value} (${o.order.value})`)
-      .join(" ")
-  );
 };
 
 export const reorder = (rawOffsets: Offset[], from: number, to: number) => {
