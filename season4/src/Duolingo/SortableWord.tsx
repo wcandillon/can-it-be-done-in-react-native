@@ -8,22 +8,9 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import { useVector } from "react-native-redash";
+import { between, useVector } from "react-native-redash";
 
 import { calculateLayout, Offset, reorder } from "./Layout";
-
-export const between = (
-  value: number,
-  lowerBound: number,
-  upperBound: number,
-  inclusive = true
-) => {
-  "worklet";
-  if (inclusive) {
-    return value >= lowerBound && value <= upperBound;
-  }
-  return value > lowerBound && value < upperBound;
-};
 
 interface SortableWordProps {
   offsets: Offset[];
