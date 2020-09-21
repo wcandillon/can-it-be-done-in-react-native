@@ -3,7 +3,8 @@ import { View, StyleSheet } from "react-native";
 
 import WordList from "./WordList";
 import Word from "./Word";
-import Header from "./Header";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 const words = [
   { id: 1, word: "Ihr" },
@@ -33,6 +34,7 @@ const Duolingo = () => {
           <Word key={word.id} {...word} />
         ))}
       </WordList>
+      <Footer />
     </View>
   );
 };
