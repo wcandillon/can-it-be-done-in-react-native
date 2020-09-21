@@ -7,6 +7,8 @@ export type Offset = SharedValues<{
   height: number;
   x: number;
   y: number;
+  originalX: number;
+  originalY: number;
 }>;
 
 const move = (offsets: (Offset | undefined)[], from: number, to: number) => {
@@ -43,7 +45,12 @@ export const calculateLayout = (
   containerWidth: number
 ) => {
   "worklet";
-  const offsets = rawOffsets.slice().sort(sortByOrder);
+  const offsets = rawOffsets
+    .filter((offset) => offset.order.value !== -1)
+    .sort(sortByOrder);
+  if (offsets.length === 0) {
+    return;
+  }
   const height = offsets[0].height.value;
   let vIndex = 0;
   let lastBreak = 0;

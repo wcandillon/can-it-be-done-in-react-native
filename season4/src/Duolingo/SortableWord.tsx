@@ -30,11 +30,19 @@ const SortableWord = ({
   // const height = offset.height.value;
   const translation = useVector(offset.x.value, offset.y.value);
   const panOffset = useVector();
+  const isInBank = offset.order.value === -1;
+  const bankX = offset.originalX.value - 32;
+  const bankY = offset.originalY.value + 200;
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
       gestureActive.value = true;
-      translation.x.value = offset.x.value;
-      translation.y.value = offset.y.value;
+      if (isInBank) {
+        translation.x.value = bankX;
+        translation.y.value = bankY;
+      } else {
+        translation.x.value = offset.x.value;
+        translation.y.value = offset.y.value;
+      }
       panOffset.x.value = translation.x.value;
       panOffset.y.value = translation.y.value;
     },
@@ -68,28 +76,30 @@ const SortableWord = ({
     if (gestureActive.value) {
       return translation.x.value;
     } else {
-      return withSpring(offset.x.value);
+      return withSpring(isInBank ? bankX : offset.x.value);
     }
   });
   const translateY = useDerivedValue(() => {
     if (gestureActive.value) {
       return translation.y.value;
     } else {
-      return withSpring(offset.y.value);
+      return withSpring(isInBank ? bankY : offset.y.value);
     }
   });
-  const style = useAnimatedStyle(() => ({
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: offset.width.value,
-    height: offset.height.value,
-    zIndex: gestureActive.value ? 100 : 0,
-    transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-    ],
-  }));
+  const style = useAnimatedStyle(() => {
+    return {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: offset.width.value,
+      height: offset.height.value,
+      zIndex: gestureActive.value ? 100 : 0,
+      transform: [
+        { translateX: translateX.value },
+        { translateY: translateY.value },
+      ],
+    };
+  });
   return (
     <Animated.View style={style}>
       <PanGestureHandler onGestureEvent={onGestureEvent}>
