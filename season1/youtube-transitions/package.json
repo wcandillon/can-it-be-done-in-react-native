@@ -14,25 +14,25 @@
     "@expo/vector-icons": "^10.0.0",
     "expo": "^38.0.0",
     "expo-asset": "~8.1.7",
-    "expo-av": "~8.2.1",
+    "expo-av": "~8.4.0",
     "expo-constants": "^9.1.1",
     "moment": "^2.28.0",
     "react": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.0.tar.gz",
-    "react-native-gesture-handler": "~1.6.0",
-    "react-native-reanimated": "~1.9.0"
+    "react-native-gesture-handler": "~1.8.0",
+    "react-native-reanimated": "~1.13.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "babel-preset-expo": "^8.1.0",
     "eslint": "^7.9.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-flowtype": "^2.50.3",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-react-native": "^3.3.0",
-    "flow-bin": "0.75.0",
+    "flow-bin": "0.134.0",
     "flow-result-checker": "^1.1.0"
   }
 }
