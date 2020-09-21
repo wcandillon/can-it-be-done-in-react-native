@@ -12,12 +12,10 @@ export const examples = [
     screen: "Duolingo",
     title: "🦉 Duolingo",
   },
-  /*
   {
     screen: "Coinbase",
     title: "📉 Coinbase",
   },
-  */
 ] as const;
 
 const styles = StyleSheet.create({

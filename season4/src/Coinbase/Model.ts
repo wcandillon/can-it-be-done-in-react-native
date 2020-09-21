@@ -15,40 +15,41 @@ export interface PercentChange {
 
 export interface LatestPrice {
   amount: Amount;
-  timestamp: Date;
+  timestamp: string;
   percent_change: PercentChange;
 }
 
 export type Price = [string, number];
+export type PriceList = [string, number][];
 
 export interface Hour {
   percent_change: number;
-  prices: Price[];
+  prices: PriceList;
 }
 
 export interface Day {
   percent_change: number;
-  prices: Price[];
+  prices: PriceList;
 }
 
 export interface Week {
   percent_change: number;
-  prices: Price[];
+  prices: PriceList;
 }
 
 export interface Month {
   percent_change: number;
-  prices: Price[];
+  prices: PriceList;
 }
 
 export interface Year {
   percent_change: number;
-  prices: Price[];
+  prices: PriceList;
 }
 
 export interface All {
   percent_change: number;
-  prices: Price[];
+  prices: PriceList;
 }
 
 export interface Prices {

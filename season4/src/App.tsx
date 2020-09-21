@@ -8,7 +8,7 @@ import Examples from "./Examples";
 import Coinbase from "./Coinbase";
 import Duolingo from "./Duolingo";
 
-const NAVIGATION_STATE_KEY = "NAVIGATION_STATE_KEY-38";
+const NAVIGATION_STATE_KEY = "NAVIGATION_STATE_KEY";
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
