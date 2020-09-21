@@ -35,9 +35,23 @@ const sortByOrder = (a: Offset, b: Offset) => {
 
 export const reorder = (rawOffsets: Offset[], from: number, to: number) => {
   "worklet";
-  const offsets = rawOffsets.slice().sort(sortByOrder);
+  const offsets = rawOffsets
+    .filter((offset) => offset.order.value !== -1)
+    .sort(sortByOrder);
   move(offsets, from, to);
   offsets.forEach((offset, index) => (offset.order.value = index));
+};
+
+export const lastOrder = (rawOffsets: Offset[]) => {
+  "worklet";
+  return rawOffsets
+    .filter((offset) => offset.order.value !== -1)
+    .reduce((acc, offset) => {
+      if (offset.order.value >= acc) {
+        return offset.order.value + 1;
+      }
+      return acc;
+    }, 0);
 };
 
 export const calculateLayout = (

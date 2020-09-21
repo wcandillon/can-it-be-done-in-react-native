@@ -10,7 +10,7 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
-import { calculateLayout, Offset, reorder } from "./Layout";
+import { calculateLayout, insert, lastOrder, Offset, reorder } from "./Layout";
 
 interface SortableWordProps {
   offsets: Offset[];
@@ -30,11 +30,11 @@ const SortableWord = ({
   // const height = offset.height.value;
   const translation = useVector(offset.x.value, offset.y.value);
   const panOffset = useVector();
-  const isInBank = offset.order.value === -1;
-  const bankX = offset.originalX.value - 32;
-  const bankY = offset.originalY.value + 200;
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
+      const isInBank = offset.order.value === -1;
+      const bankX = offset.originalX.value - 32;
+      const bankY = offset.originalY.value + 200;
       gestureActive.value = true;
       if (isInBank) {
         translation.x.value = bankX;
@@ -47,10 +47,17 @@ const SortableWord = ({
       panOffset.y.value = translation.y.value;
     },
     onActive: (event) => {
+      const isInBank = offset.order.value === -1;
       translation.x.value = panOffset.x.value + event.translationX;
       translation.y.value = panOffset.y.value + event.translationY;
+      if (isInBank && translation.y.value < 100) {
+        offset.order.value = lastOrder(offsets);
+      }
       for (let i = 0; i < offsets.length; i++) {
         const o = offsets[i];
+        if (o.order.value === -1) {
+          continue;
+        }
         if (
           offset.order.value !== o.order.value &&
           between(translation.x.value, o.x.value, o.x.value + o.width.value) &&
@@ -73,6 +80,8 @@ const SortableWord = ({
     },
   });
   const translateX = useDerivedValue(() => {
+    const isInBank = offset.order.value === -1;
+    const bankX = offset.originalX.value - 32;
     if (gestureActive.value) {
       return translation.x.value;
     } else {
@@ -80,6 +89,8 @@ const SortableWord = ({
     }
   });
   const translateY = useDerivedValue(() => {
+    const isInBank = offset.order.value === -1;
+    const bankY = offset.originalY.value + 200;
     if (gestureActive.value) {
       return translation.y.value;
     } else {
