@@ -10,8 +10,11 @@ const margin = 32;
 const containerWidth = Dimensions.get("window").width - margin * 2;
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flex: 1,
     margin,
+  },
+  row: {
+    flexDirection: "row",
   },
 });
 
@@ -27,11 +30,11 @@ const WordList = ({ children }: WordListProps) => {
     height: useSharedValue(0),
     x: useSharedValue(0),
     y: useSharedValue(0),
-    id: useSharedValue(""),
+    used: useSharedValue(false),
   }));
   if (!ready) {
     return (
-      <View style={styles.container}>
+      <View style={styles.row}>
         {children.map((child, index) => {
           const onLayout = ({
             nativeEvent: {
@@ -62,20 +65,18 @@ const WordList = ({ children }: WordListProps) => {
     );
   }
   return (
-    <>
-      <View style={styles.container}>
-        {children.map((child, index) => (
-          <SortableWord
-            key={index}
-            offsets={offsets}
-            index={index}
-            containerWidth={containerWidth}
-          >
-            {child}
-          </SortableWord>
-        ))}
-      </View>
-    </>
+    <View style={styles.container}>
+      {children.map((child, index) => (
+        <SortableWord
+          key={index}
+          offsets={offsets}
+          index={index}
+          containerWidth={containerWidth}
+        >
+          {child}
+        </SortableWord>
+      ))}
+    </View>
   );
 };
 

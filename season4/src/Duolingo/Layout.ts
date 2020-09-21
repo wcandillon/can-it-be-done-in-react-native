@@ -1,4 +1,14 @@
 import { SharedValues } from "../components/AnimatedHelpers";
+
+// TODO: since width/height are stable should they be of type Ref?
+export type Offset = SharedValues<{
+  order: number;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+}>;
+
 const move = (offsets: (Offset | undefined)[], from: number, to: number) => {
   "worklet";
   while (from < 0) {
@@ -15,15 +25,6 @@ const move = (offsets: (Offset | undefined)[], from: number, to: number) => {
   }
   offsets.splice(to, 0, offsets.splice(from, 1)[0]);
 };
-
-// TODO: since width/height are stable should they be of type Ref?
-export type Offset = SharedValues<{
-  order: number;
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-}>;
 
 const sortByOrder = (a: Offset, b: Offset) => {
   "worklet";
