@@ -5,7 +5,7 @@ import { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
 import { calculateLayout } from "./Layout";
-import Placeholder from "./Placeholder";
+import Lines from "./components/Lines";
 
 const margin = 32;
 const containerWidth = Dimensions.get("window").width - margin * 2;
@@ -71,6 +71,7 @@ const WordList = ({ children }: WordListProps) => {
   }
   return (
     <View style={styles.container}>
+      <Lines offsets={offsets} />
       {children.map((child, index) => (
         <SortableWord
           key={index}

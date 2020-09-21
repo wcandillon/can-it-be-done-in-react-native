@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 
-import { Offset } from "./Layout";
+import { Offset } from "../Layout";
 
 interface PlaceholderProps {
   offset: Offset;

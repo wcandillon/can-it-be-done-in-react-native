@@ -11,7 +11,7 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
 import { calculateLayout, lastOrder, Offset, reorder } from "./Layout";
-import Placeholder from "./Placeholder";
+import Placeholder from "./components/Placeholder";
 
 interface SortableWordProps {
   offsets: Offset[];
