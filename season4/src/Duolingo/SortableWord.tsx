@@ -10,7 +10,7 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
-import { calculateLayout, insert, lastOrder, Offset, reorder } from "./Layout";
+import { calculateLayout, lastOrder, Offset, reorder } from "./Layout";
 
 interface SortableWordProps {
   offsets: Offset[];
