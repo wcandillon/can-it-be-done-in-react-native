@@ -11,6 +11,7 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
 import { calculateLayout, lastOrder, Offset, reorder } from "./Layout";
+import Placeholder from "./Placeholder";
 
 interface SortableWordProps {
   offsets: Offset[];
@@ -118,13 +119,16 @@ const SortableWord = ({
     };
   });
   return (
-    <Animated.View style={style}>
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={StyleSheet.absoluteFill}>
-          {children}
-        </Animated.View>
-      </PanGestureHandler>
-    </Animated.View>
+    <>
+      <Placeholder offset={offset} />
+      <Animated.View style={style}>
+        <PanGestureHandler onGestureEvent={onGestureEvent}>
+          <Animated.View style={StyleSheet.absoluteFill}>
+            {children}
+          </Animated.View>
+        </PanGestureHandler>
+      </Animated.View>
+    </>
   );
 };
 

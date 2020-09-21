@@ -5,6 +5,7 @@ import { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
 import { calculateLayout } from "./Layout";
+import Placeholder from "./Placeholder";
 
 const margin = 32;
 const containerWidth = Dimensions.get("window").width - margin * 2;
