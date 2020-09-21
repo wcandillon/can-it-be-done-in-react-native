@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Icon } from 'expo';
+import { Feather } from '@expo/vector-icons';
 
 type FooterIconProps = {
   name: string;
@@ -13,7 +13,7 @@ export default class FooterIcon extends React.PureComponent<FooterIconProps> {
     const { name, label } = this.props;
     return (
       <View style={styles.container}>
-        <Icon.Feather style={styles.icon} {...{ name }} />
+        <Feather style={styles.icon} {...{ name }} />
         <Text style={styles.label}>{label.toUpperCase()}</Text>
       </View>
     );

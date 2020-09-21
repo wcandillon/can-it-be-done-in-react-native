@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Constants } from 'expo';
+import Constants from 'expo-constants';
 
 import VideoThumbnail from './VideoThumbnail';
 import videos from './videos';

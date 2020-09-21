@@ -3,14 +3,12 @@ import * as React from 'react';
 import {
   View, StyleSheet, Dimensions, StatusBar, Platform,
 } from 'react-native';
-import { DangerZone } from 'expo';
-
+import Animated, { Easing } from 'react-native-reanimated';
 import PlayerContext from './PlayerContext';
 import VideoModal from './VideoModal';
 import { type Video } from './videos';
 
 const { height } = Dimensions.get('window');
-const { Animated, Easing } = DangerZone;
 const { Value, timing } = Animated;
 const isOS = Platform.OS === 'ios';
 

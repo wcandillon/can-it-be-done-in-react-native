@@ -1,16 +1,15 @@
 // @flow
 import * as React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
-import {
-  Video, Constants, DangerZone, GestureHandler,
-} from 'expo';
 
+import { Video } from 'expo-av';
+import Animated, { Easing } from 'react-native-reanimated';
+import { State, PanGestureHandler } from 'react-native-gesture-handler';
+import Constants from 'expo-constants';
 import { type Video as VideoModel } from './videos';
 import VideoContent from './VideoContent';
 import PlayerControls, { PLACEHOLDER_WIDTH } from './PlayerControls';
 
-const { Animated, Easing } = DangerZone;
-const { State, PanGestureHandler } = GestureHandler;
 const { width, height } = Dimensions.get('window');
 const { statusBarHeight } = Constants;
 const minHeight = 64;

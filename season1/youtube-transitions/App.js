@@ -1,7 +1,8 @@
 // @flow
 /* eslint-disable global-require */
 import React from 'react';
-import { AppLoading, Asset } from 'expo';
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
 
 import { Home, PlayerProvider, videos } from './components';
 
