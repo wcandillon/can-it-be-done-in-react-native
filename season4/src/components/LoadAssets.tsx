@@ -10,7 +10,10 @@ import Constants from "expo-constants";
 const NAVIGATION_STATE_KEY = `NAVIGATION_STATE_KEY-${Constants.manifest.sdkVersion}`;
 
 export type FontSource = Parameters<typeof Font.loadAsync>[0];
-const usePromiseAll = (promises: Promise<void | void[]>[], cb: () => void) =>
+const usePromiseAll = (
+  promises: Promise<void | void[] | Asset[]>[],
+  cb: () => void
+) =>
   useEffect(() => {
     (async () => {
       await Promise.all(promises);
