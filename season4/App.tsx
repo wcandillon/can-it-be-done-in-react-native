@@ -1,14 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { InitialState, NavigationContainer } from "@react-navigation/native";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import AsyncStorage from "@react-native-community/async-storage";
 
 import { Routes } from "./src/Routes";
 import Examples from "./src/Examples";
 import Coinbase from "./src/Coinbase";
-import Duolingo from "./src/Duolingo";
+import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
+import { LoadAssets } from "./src/components";
 
-const NAVIGATION_STATE_KEY = "NAVIGATION_STATE_KEY-38";
+const fonts = {
+  "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
+  "SFProDisplay-Semibold": require("./assets/fonts/SFPro/SF-Pro-Display-Semibold.otf"),
+  "SFProDisplay-Regular": require("./assets/fonts/SFPro/SF-Pro-Display-Regular.otf"),
+  "SFProDisplay-Medium": require("./assets/fonts/SFPro/SF-Pro-Display-Medium.otf"),
+  "Nunito-Bold": require("./assets/fonts/Nunito/Nunito-Bold.ttf"),
+  "Nunito-Regular": require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
+};
+
+const assets = [...duolingoAssets];
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -38,39 +46,10 @@ const AppNavigator = () => (
 );
 
 const App = () => {
-  const [isNavigationReady, setIsNavigationReady] = useState(!__DEV__);
-  const [initialState, setInitialState] = useState<InitialState | undefined>();
-  useEffect(() => {
-    const restoreState = async () => {
-      try {
-        const savedStateString = await AsyncStorage.getItem(
-          NAVIGATION_STATE_KEY
-        );
-        const state = savedStateString
-          ? JSON.parse(savedStateString)
-          : undefined;
-        setInitialState(state);
-      } finally {
-        setIsNavigationReady(true);
-      }
-    };
-
-    if (!isNavigationReady) {
-      restoreState();
-    }
-  }, [isNavigationReady]);
-  const onStateChange = useCallback(
-    (state) =>
-      AsyncStorage.setItem(NAVIGATION_STATE_KEY, JSON.stringify(state)),
-    []
-  );
-  if (!isNavigationReady) {
-    return null;
-  }
   return (
-    <NavigationContainer {...{ onStateChange, initialState }}>
+    <LoadAssets assets={assets} fonts={fonts}>
       <AppNavigator />
-    </NavigationContainer>
+    </LoadAssets>
   );
 };
 

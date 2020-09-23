@@ -14,7 +14,11 @@ const styles = StyleSheet.create({
 const Character = () => {
   return (
     <Svg style={styles.image}>
-      <Image width="100%" height="100%" href={require("./character.png")} />
+      <Image
+        width="100%"
+        height="100%"
+        href={require("../assets/character.png")}
+      />
     </Svg>
   );
 };
