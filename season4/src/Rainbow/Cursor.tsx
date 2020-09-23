@@ -8,10 +8,9 @@ import Animated, {
   useAnimatedStyle,
   withDecay,
 } from "react-native-reanimated";
-import { clamp, useVector } from "react-native-redash";
+import { clamp, useVector, getYForX, Path } from "react-native-redash";
 
 import { SIZE } from "./Model";
-import { getYForX, Path } from "./Path";
 
 const CURSOR = 100;
 const styles = StyleSheet.create({

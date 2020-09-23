@@ -9,8 +9,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { parse, mixPath } from "react-native-redash";
 
-import { parse, mixPath } from "./Path";
 import { Prices, PriceList, SIZE } from "./Model";
 import Cursor from "./Cursor";
 import data from "./data.json";
@@ -38,7 +38,7 @@ const buildGraph = (priceList: PriceList) => {
     .curve(shape.curveBasis)(formattedValues) as string;
 };
 
-const POINTS = 6;
+const POINTS = 60;
 const graphs = [
   {
     label: "1H",

@@ -32,7 +32,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-reanimated": "2.0.0-alpha.6",
-    "react-native-redash": "15.3.0",
+    "react-native-redash": "15.4.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
     "react-native-svg": "12.1.0",
