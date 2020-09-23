@@ -3,10 +3,10 @@ import { InitialState, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-community/async-storage";
 
-import { Routes } from "./Routes";
-import Examples from "./Examples";
-import Coinbase from "./Coinbase";
-import Duolingo from "./Duolingo";
+import { Routes } from "./src/Routes";
+import Examples from "./src/Examples";
+import Coinbase from "./src/Coinbase";
+import Duolingo from "./src/Duolingo";
 
 const NAVIGATION_STATE_KEY = "NAVIGATION_STATE_KEY-38";
 
