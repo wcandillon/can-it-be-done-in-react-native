@@ -14,8 +14,9 @@ const styles = StyleSheet.create({
   label: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: 18,
     textAlign: "center",
+    fontFamily: "Nunito-Bold",
   },
 });
 

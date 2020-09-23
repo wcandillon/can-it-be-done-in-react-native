@@ -3,6 +3,8 @@ import { View } from "react-native";
 
 import { Offset } from "../Layout";
 
+export const VOFFSET = 150;
+
 interface PlaceholderProps {
   offset: Offset;
 }
@@ -13,7 +15,7 @@ const Placeholder = ({ offset }: PlaceholderProps) => {
       style={{
         backgroundColor: "#E6E5E6",
         position: "absolute",
-        top: offset.originalY.value + 200 + 2,
+        top: offset.originalY.value + VOFFSET + 2,
         left: offset.originalX.value - 32 + 2,
         width: offset.width.value - 4,
         height: offset.height.value - 4,
