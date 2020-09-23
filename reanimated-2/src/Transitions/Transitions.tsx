@@ -6,9 +6,9 @@ import Animated, {
   useDerivedValue,
   withSpring,
 } from "react-native-reanimated";
+import { mix } from "react-native-redash";
 
 import { Button, Card, StyleGuide, cards } from "../components";
-import { mix } from "../components/AnimatedHelpers";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -50,7 +50,7 @@ const UseTransition = () => {
           return {
             transform: [
               { translateX: origin.x },
-              { rotate },
+              { rotate: `${rotate}rad` },
               { translateX: -origin.x },
             ],
           };

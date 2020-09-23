@@ -12,6 +12,7 @@ import JellyScroll from "./JellyScroll";
 import MaskedView from "./MaskedView";
 import Accordion from "./Accordion";
 import Wave from "./Wave";
+import Fluid from "./Fluid";
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -78,6 +79,13 @@ const AppNavigator = () => (
       component={Wave}
       options={{
         title: "Wave",
+      }}
+    />
+    <Stack.Screen
+      name="Fluid"
+      component={Fluid}
+      options={{
+        title: "Soft Body Fluid",
       }}
     />
   </Stack.Navigator>

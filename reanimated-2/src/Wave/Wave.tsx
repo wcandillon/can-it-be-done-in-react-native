@@ -10,9 +10,9 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import MaskedView from "@react-native-community/masked-view";
+import { mix } from "react-native-redash";
 
 import { StyleGuide } from "../components";
-import { mix } from "../components/AnimatedHelpers";
 
 const SIZE = Dimensions.get("window").width - 64;
 const AnimatedPath = Animated.createAnimatedComponent(Path);

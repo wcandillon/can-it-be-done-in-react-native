@@ -2,8 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, { useDerivedValue } from "react-native-reanimated";
-
-import { ReText } from "../components/AnimatedHelpers";
+import { ReText } from "react-native-redash";
 
 import Row from "./Row";
 import { CANDLES, STEP, formatDatetime, formatUSD } from "./ChartHelpers";

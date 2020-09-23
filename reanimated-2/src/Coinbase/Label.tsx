@@ -4,8 +4,7 @@ import Animated, {
   useDerivedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
-
-import { ReText } from "../components/AnimatedHelpers";
+import { ReText } from "react-native-redash";
 
 import { formatUSD, scaleYInvert } from "./ChartHelpers";
 
