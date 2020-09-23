@@ -1,4 +1,8 @@
 /* eslint-disable camelcase */
+import { Dimensions } from "react-native";
+
+export const SIZE = Dimensions.get("window").width;
+
 export interface Amount {
   amount: string;
   currency: string;

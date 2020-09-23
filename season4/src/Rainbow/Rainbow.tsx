@@ -2,8 +2,8 @@ import React from "react";
 
 import Graph from "./Graph";
 
-const Coinbase = () => {
+const Rainbow = () => {
   return <Graph />;
 };
 
-export default Coinbase;
+export default Rainbow;

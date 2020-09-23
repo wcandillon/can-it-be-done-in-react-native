@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { Routes } from "./src/Routes";
 import Examples from "./src/Examples";
-import Coinbase from "./src/Coinbase";
+import Rainbow from "./src/Rainbow";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import { LoadAssets } from "./src/components";
 
@@ -32,14 +32,14 @@ const AppNavigator = () => (
       name="Duolingo"
       component={Duolingo}
       options={{
-        title: "Duolingo",
+        title: "🦉 Duolingo",
       }}
     />
     <Stack.Screen
-      name="Coinbase"
-      component={Coinbase}
+      name="Rainbow"
+      component={Rainbow}
       options={{
-        title: "Coinbase",
+        title: "🌈 Rainbow",
       }}
     />
   </Stack.Navigator>

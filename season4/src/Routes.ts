@@ -1,5 +1,5 @@
 export type Routes = {
   Examples: undefined;
-  Coinbase: undefined;
+  Rainbow: undefined;
   Duolingo: undefined;
 };

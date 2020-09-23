@@ -13,8 +13,8 @@ export const examples = [
     title: "🦉 Duolingo",
   },
   {
-    screen: "Coinbase",
-    title: "📉 Coinbase",
+    screen: "Rainbow",
+    title: "🌈 Rainbow",
   },
 ] as const;
 

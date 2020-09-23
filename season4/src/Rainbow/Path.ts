@@ -2,8 +2,9 @@ import { interpolate } from "react-native-reanimated";
 import parseSVG from "parse-svg-path";
 import absSVG from "abs-svg-path";
 import normalizeSVG from "normalize-svg-path";
-
 import { Vector } from "react-native-redash";
+
+import { cubicBezierYForX } from "./Math";
 
 type SVGCloseCommand = ["Z"];
 type SVGMoveCommand = ["M", number, number];
@@ -24,6 +25,7 @@ interface Move extends Vector {
 
 interface Curve {
   type: SVGCommand.CURVE;
+  from: Vector;
   to: Vector;
   c1: Vector;
   c2: Vector;
@@ -33,7 +35,8 @@ interface Close {
   type: SVGCommand.CLOSE;
 }
 
-type SVGSegment = Close | Curve | Move;
+export type Segment = Close | Curve | Move;
+export type Path = Segment[];
 
 export const exhaustiveCheck = (command: never): never => {
   "worklet";
@@ -55,22 +58,22 @@ const serializeCurve = (c: Curve) => {
   return `C${c.c1.x},${c.c1.y} ${c.c2.x},${c.c2.y} ${c.to.x},${c.to.y} `;
 };
 
-const isMove = (command: SVGSegment): command is Move => {
+const isMove = (command: Segment): command is Move => {
   "worklet";
   return command.type === SVGCommand.MOVE;
 };
 
-const isCurve = (command: SVGSegment): command is Curve => {
+const isCurve = (command: Segment): command is Curve => {
   "worklet";
   return command.type === SVGCommand.CURVE;
 };
 
-const isClose = (command: SVGSegment): command is Close => {
+const isClose = (command: Segment): command is Close => {
   "worklet";
   return command.type === SVGCommand.CLOSE;
 };
 
-export const serialize = (path: SVGSegment[]) => {
+export const serialize = (path: Path) => {
   "worklet";
   return path
     .map((segment) => {
@@ -88,15 +91,16 @@ export const serialize = (path: SVGSegment[]) => {
     .reduce((acc, c) => acc + c);
 };
 
-export const parse = (d: string): SVGSegment[] => {
+export const parse = (d: string): Path => {
   const segments: SVGNormalizedCommands = normalizeSVG(absSVG(parseSVG(d)));
-  return segments.map((segment) => {
+  return segments.map((segment, index) => {
     if (segment[0] === "M") {
       return move(segment[1], segment[2]);
     } else if (segment[0] === "Z") {
       return close();
     } else {
-      return curve({
+      const prev = segments[index - 1];
+      const r = curve({
         c1: {
           x: segment[1],
           y: segment[2],
@@ -109,7 +113,12 @@ export const parse = (d: string): SVGSegment[] => {
           x: segment[5],
           y: segment[6],
         },
+        from: {
+          x: (prev[0] === "M" ? prev[1] : prev[5]) ?? 0,
+          y: (prev[0] === "M" ? prev[2] : prev[6]) ?? 0,
+        },
       });
+      return r;
     }
   });
 };
@@ -117,7 +126,7 @@ export const parse = (d: string): SVGSegment[] => {
 export const interpolatePath = (
   value: number,
   inputRange: number[],
-  outputRange: SVGSegment[][]
+  outputRange: Path[]
 ) => {
   "worklet";
   const path = outputRange[0].map((segment, index) => {
@@ -203,10 +212,10 @@ export const interpolatePath = (
   return serialize(path);
 };
 
-export const mixPath = (value: number, paths: [SVGSegment[], SVGSegment[]]) => {
+export const mixPath = (value: number, p1: Path, p2: Path) => {
   "worklet";
-  return interpolatePath(value, [0, 1], paths);
-}
+  return interpolatePath(value, [0, 1], [p1, p2]);
+};
 
 export const move = (x: number, y: number) => {
   "worklet";
@@ -215,10 +224,35 @@ export const move = (x: number, y: number) => {
 
 export const curve = (c: Omit<Curve, "type">) => {
   "worklet";
-  return { type: SVGCommand.CURVE as const, c1: c.c1, c2: c.c2, to: c.to };
+  return {
+    type: SVGCommand.CURVE as const,
+    c1: c.c1,
+    c2: c.c2,
+    to: c.to,
+    from: c.from,
+  };
 };
 
 export const close = () => {
   "worklet";
   return { type: SVGCommand.CLOSE as const };
+};
+
+export const getYForX = (path: Path, x: number) => {
+  "worklet";
+  try {
+    const p = path.filter((c) => {
+      if (isCurve(c)) {
+        if (c.from.x > c.to.x) {
+          return x >= c.to.x && x <= c.from.x;
+        }
+        return x >= c.from.x && x <= c.to.x;
+      }
+      return false;
+    });
+    return cubicBezierYForX(x, p[0].from, p[0].c1, p[0].c2, p[0].to);
+  } catch (e) {
+    console.log("error");
+  }
+  return 0;
 };
