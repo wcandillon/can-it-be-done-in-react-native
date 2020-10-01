@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
 });
 
 interface CursorProps {
-  path: Animated.SharedValue<Path>;
+  data: Animated.SharedValue<{ path: Path }>;
   translation: Vector<Animated.SharedValue<number>>;
 }
 
-const Cursor = ({ path, translation }: CursorProps) => {
+const Cursor = ({ data, translation }: CursorProps) => {
   const isActive = useSharedValue(false);
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
@@ -40,7 +40,7 @@ const Cursor = ({ path, translation }: CursorProps) => {
     },
     onActive: (event) => {
       translation.x.value = event.x;
-      translation.y.value = getYForX(path.value, translation.x.value);
+      translation.y.value = getYForX(data.value.path, translation.x.value);
     },
     onEnd: () => {
       isActive.value = false;

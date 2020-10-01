@@ -31,14 +31,20 @@ const buildGraph = (priceList: PriceList) => {
   const scaleX = scaleLinear()
     .domain([Math.min(...dates), Math.max(...dates)])
     .range([0, SIZE]);
-  const scaleY = scaleLinear()
-    .domain([Math.min(...prices), Math.max(...prices)])
-    .range([SIZE, 0]);
-  return shape
-    .line()
-    .x(([, x]) => scaleX(x))
-    .y(([y]) => scaleY(y))
-    .curve(shape.curveBasis)(formattedValues) as string;
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  const scaleY = scaleLinear().domain([minPrice, maxPrice]).range([SIZE, 0]);
+  return {
+    minPrice,
+    maxPrice,
+    path: parse(
+      shape
+        .line()
+        .x(([, x]) => scaleX(x))
+        .y(([y]) => scaleY(y))
+        .curve(shape.curveBasis)(formattedValues) as string
+    ),
+  };
 };
 
 const POINTS = 60;
@@ -46,27 +52,27 @@ const graphs = [
   {
     label: "1H",
     value: 0,
-    path: parse(buildGraph(values.hour.prices.slice(0, POINTS))),
+    data: buildGraph(values.hour.prices.slice(0, POINTS)),
   },
   {
     label: "1D",
     value: 1,
-    path: parse(buildGraph(values.day.prices.slice(0, POINTS))),
+    data: buildGraph(values.day.prices.slice(0, POINTS)),
   },
   {
     label: "1M",
     value: 2,
-    path: parse(buildGraph(values.month.prices.slice(0, POINTS))),
+    data: buildGraph(values.month.prices.slice(0, POINTS)),
   },
   {
     label: "1Y",
     value: 3,
-    path: parse(buildGraph(values.year.prices.slice(0, POINTS))),
+    data: buildGraph(values.year.prices.slice(0, POINTS)),
   },
   {
     label: "all",
     value: 4,
-    path: parse(buildGraph(values.all.prices.slice(0, POINTS))),
+    data: buildGraph(values.all.prices.slice(0, POINTS)),
   },
 ];
 
@@ -104,11 +110,11 @@ const Graph = () => {
   const translation = useVector();
   const transition = useSharedValue(0);
   const selected = useSharedValue(0);
-  const previous = useSharedValue(graphs[0].path);
-  const current = useSharedValue(graphs[0].path);
+  const previous = useSharedValue(graphs[0].data);
+  const current = useSharedValue(graphs[0].data);
   const animatedProps = useAnimatedProps(() => {
     return {
-      d: mixPath(transition.value, previous.value, current.value),
+      d: mixPath(transition.value, previous.value.path, current.value.path),
     };
   });
   const style = useAnimatedStyle(() => ({
@@ -116,7 +122,11 @@ const Graph = () => {
   }));
   return (
     <View style={styles.container}>
-      <Header translation={translation} />
+      <Header
+        translation={translation}
+        maxPrice={current.value.maxPrice}
+        minPrice={current.value.minPrice}
+      />
       <View>
         <Svg width={SIZE} height={SIZE}>
           <AnimatedPath
@@ -126,7 +136,7 @@ const Graph = () => {
             strokeWidth={3}
           />
         </Svg>
-        <Cursor translation={translation} path={current} />
+        <Cursor translation={translation} data={current} />
       </View>
       <View style={styles.selection}>
         <View style={StyleSheet.absoluteFill}>
@@ -139,7 +149,7 @@ const Graph = () => {
               onPress={() => {
                 previous.value = current.value;
                 transition.value = 0;
-                current.value = graph.path;
+                current.value = graph.data;
                 transition.value = withTiming(1);
                 selected.value = graph.value;
               }}
