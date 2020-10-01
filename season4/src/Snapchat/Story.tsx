@@ -1,8 +1,21 @@
 import React from "react";
-import { View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
+import { SharedElement } from "react-navigation-shared-element";
 
-const Thumbnail = () => {
-  return <View style={{ flex: 1, backgroundColor: "red" }} />;
+const Story = ({ route }) => {
+  const { story } = route.params;
+  return (
+    <View style={{ flex: 1 }}>
+      <Image
+        source={story.source}
+        style={{
+          ...StyleSheet.absoluteFillObject,
+          width: undefined,
+          height: undefined,
+        }}
+      />
+    </View>
+  );
 };
 
-export default Thumbnail;
+export default Story;

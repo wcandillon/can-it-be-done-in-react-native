@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
-// @flow
 import * as React from "react";
+import { useNavigation } from "@react-navigation/native";
+import { SharedElement } from "react-navigation-shared-element";
 import {
   View,
   Image,
@@ -47,9 +47,11 @@ const StoryThumbnail = ({ story }: StoryThumbnailProps) => {
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate("Story", { story })}
     >
-      <View style={styles.container}>
-        <Image source={story.source} style={styles.image} />
-      </View>
+      <SharedElement id={story.id}>
+        <View style={styles.container}>
+          <Image source={story.source} style={styles.image} />
+        </View>
+      </SharedElement>
     </TouchableWithoutFeedback>
   );
 };
