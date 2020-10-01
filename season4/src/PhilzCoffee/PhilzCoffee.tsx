@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, View } from "react-native";
 import Animated, {
-  interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -10,6 +9,7 @@ import { interpolateColor } from "react-native-redash";
 
 import { products } from "./Model";
 import Card from "./Card";
+import Products from "./Products";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -35,17 +35,21 @@ const PhilzCoffee = () => {
   });
   return (
     <Animated.View style={[styles.container, style]}>
-      <Animated.ScrollView
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        decelerationRate="fast"
-        snapToInterval={width}
-        horizontal
-      >
-        {products.map((product, index) => (
-          <Card product={product} key={index} />
-        ))}
-      </Animated.ScrollView>
+      <View>
+        <Animated.ScrollView
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          decelerationRate="fast"
+          snapToInterval={width}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        >
+          {products.map((product, index) => (
+            <Card product={product} key={index} />
+          ))}
+        </Animated.ScrollView>
+        <Products x={translateX} />
+      </View>
     </Animated.View>
   );
 };

@@ -40,12 +40,14 @@ const Card = ({ product: { color1, title, subtitle } }: CardProps) => {
           flex: 1,
           backgroundColor: color1,
           padding: 16,
+          justifyContent: "space-between",
         }}
       >
-        <CardHeader />
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
-        <View style={{ flex: 1 }} />
+        <View>
+          <CardHeader />
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{subtitle}</Text>
+        </View>
         <Button label="I'll try it" />
       </View>
     </View>
