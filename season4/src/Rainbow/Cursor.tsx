@@ -3,18 +3,12 @@ import { View, StyleSheet } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
-  Extrapolate,
   useSharedValue,
-  interpolate,
   useAnimatedStyle,
-  withDecay,
   useAnimatedReaction,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { clamp, useVector, getYForX, Path } from "react-native-redash";
-
-import { SIZE } from "./Model";
+import { useVector, getYForX, Path } from "react-native-redash";
 
 const CURSOR = 50;
 const styles = StyleSheet.create({
