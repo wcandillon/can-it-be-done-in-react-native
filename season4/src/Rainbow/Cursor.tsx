@@ -4,9 +4,11 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
   Extrapolate,
+  useSharedValue,
   interpolate,
   useAnimatedStyle,
   withDecay,
+  useAnimatedReaction,
 } from "react-native-reanimated";
 import { clamp, useVector, getYForX, Path } from "react-native-redash";
 
@@ -21,10 +23,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cursor: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    borderWidth: 4,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cursorBody: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
     backgroundColor: "black",
   },
 });
@@ -34,12 +43,20 @@ interface CursorProps {
 }
 
 const Cursor = ({ path }: CursorProps) => {
-  const translation = useVector(100, 0);
+  const translation = useVector();
+  const isActive = useSharedValue(false);
+  useAnimatedReaction(
+    () => path.value,
+    () => {
+      translation.y.value = getYForX(path.value, translation.x.value);
+    }
+  );
   const onGestureEvent = useAnimatedGestureHandler<{
     offsetX: number;
     offsetY: number;
   }>({
     onStart: (_event, ctx) => {
+      isActive.value = true;
       ctx.offsetX = translation.x.value;
       ctx.offsetY = translation.y.value;
     },
@@ -47,7 +64,9 @@ const Cursor = ({ path }: CursorProps) => {
       translation.x.value = clamp(ctx.offsetX + event.translationX, 0, SIZE);
       translation.y.value = getYForX(path.value, translation.x.value);
     },
-    onEnd: ({ velocityX }) => {},
+    onEnd: () => {
+      isActive.value = false;
+    },
   });
 
   const style = useAnimatedStyle(() => {
@@ -62,7 +81,9 @@ const Cursor = ({ path }: CursorProps) => {
     <View style={StyleSheet.absoluteFill}>
       <PanGestureHandler {...{ onGestureEvent }}>
         <Animated.View style={[styles.cursorContainer, style]}>
-          <View style={styles.cursor} />
+          <View style={styles.cursor}>
+            <View style={styles.cursorBody} />
+          </View>
         </Animated.View>
       </PanGestureHandler>
     </View>

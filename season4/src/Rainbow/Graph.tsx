@@ -102,7 +102,7 @@ const Graph = () => {
             animatedProps={animatedProps}
             fill="transparent"
             stroke="black"
-            strokeWidth={4}
+            strokeWidth={3}
           />
         </Svg>
         <Cursor path={current} />
