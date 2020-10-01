@@ -20,6 +20,10 @@ export const examples = [
     screen: "Snapchat",
     title: "👻 Snapchat",
   },
+  {
+    screen: "PhilzCoffee",
+    title: "☕️ Philz Coffee",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

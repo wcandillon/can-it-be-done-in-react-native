@@ -6,6 +6,7 @@ import Examples from "./src/Examples";
 import Rainbow from "./src/Rainbow";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
+import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
 import { LoadAssets } from "./src/components";
 
 const fonts = {
@@ -48,6 +49,13 @@ const AppNavigator = () => (
       component={Snapchat}
       options={{
         title: "👻 Snapchat",
+      }}
+    />
+    <Stack.Screen
+      name="PhilzCoffee"
+      component={PhilzCoffee}
+      options={{
+        title: "☕️ Philz Coffee",
       }}
     />
   </Stack.Navigator>
