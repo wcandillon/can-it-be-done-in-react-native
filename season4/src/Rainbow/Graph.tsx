@@ -36,7 +36,6 @@ const buildGraph = (datapoints: DataPoints, label: string) => {
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
   const scaleY = scaleLinear().domain([minPrice, maxPrice]).range([SIZE, 0]);
-  console.log({ priceList });
   return {
     label,
     minPrice,

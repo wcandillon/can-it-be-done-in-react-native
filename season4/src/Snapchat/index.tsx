@@ -11,7 +11,15 @@ export const assets = stories
 
 const Stack = createSharedElementStackNavigator<SnapchatRoutes>();
 const Navigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      gestureEnabled: false,
+      headerShown: false,
+      cardOverlayEnabled: true,
+      cardStyle: { backgroundColor: "transparent" },
+    }}
+    mode="modal"
+  >
     <Stack.Screen name="Snapchat" component={Snapchat} />
     <Stack.Screen
       name="Story"

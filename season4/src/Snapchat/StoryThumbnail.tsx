@@ -1,13 +1,7 @@
 import * as React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { SharedElement } from "react-navigation-shared-element";
-import {
-  View,
-  Image,
-  StyleSheet,
-  Dimensions,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Image, StyleSheet, Dimensions, Pressable } from "react-native";
 
 import { Story } from "./Model";
 
@@ -37,16 +31,27 @@ interface StoryThumbnailProps {
 
 const StoryThumbnail = ({ story }: StoryThumbnailProps) => {
   const navigation = useNavigation();
+  const [opacity, setOpacity] = React.useState(1);
+  useFocusEffect(() => {
+    if (navigation.isFocused()) {
+      setOpacity(1);
+    }
+  });
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("Story", { story })}
+    <Pressable
+      style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
+      onPress={() => {
+        setOpacity(0);
+        navigation.navigate("Story", { story });
+      }}
     >
       <SharedElement id={story.id}>
-        <View style={styles.container}>
+        <View style={[styles.container, { opacity }]}>
           <Image source={story.source} style={styles.image} />
         </View>
       </SharedElement>
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 };
 
