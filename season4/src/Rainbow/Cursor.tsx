@@ -5,8 +5,8 @@ import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
-  useAnimatedReaction,
   withTiming,
+  withSpring,
 } from "react-native-reanimated";
 import { useVector, getYForX, Path } from "react-native-redash";
 
@@ -35,18 +35,12 @@ interface CursorProps {
 const Cursor = ({ path }: CursorProps) => {
   const translation = useVector();
   const isActive = useSharedValue(false);
-  useAnimatedReaction(
-    () => path.value,
-    () => {
-      translation.y.value = getYForX(path.value, translation.x.value);
-    }
-  );
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
       isActive.value = true;
     },
     onActive: (event) => {
-      translation.x.value = event.x - CURSOR / 2;
+      translation.x.value = event.x;
       translation.y.value = getYForX(path.value, translation.x.value);
     },
     onEnd: () => {
@@ -58,8 +52,11 @@ const Cursor = ({ path }: CursorProps) => {
     const translateX = translation.x.value - CURSOR / 2;
     const translateY = translation.y.value - CURSOR / 2;
     return {
-      opacity: withTiming(isActive.value ? 1 : 0),
-      transform: [{ translateX }, { translateY }],
+      transform: [
+        { translateX },
+        { translateY },
+        { scale: withSpring(isActive.value ? 1 : 0) },
+      ],
     };
   });
 

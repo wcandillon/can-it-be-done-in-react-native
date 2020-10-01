@@ -5,6 +5,7 @@ import Svg, { Path } from "react-native-svg";
 import { scaleLinear } from "d3-scale";
 import Animated, {
   useAnimatedProps,
+  useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
@@ -43,27 +44,27 @@ const graphs = [
   {
     label: "1H",
     value: 0,
-    graph: parse(buildGraph(values.hour.prices.slice(0, POINTS))),
+    path: parse(buildGraph(values.hour.prices.slice(0, POINTS))),
   },
   {
     label: "1D",
     value: 1,
-    graph: parse(buildGraph(values.day.prices.slice(0, POINTS))),
+    path: parse(buildGraph(values.day.prices.slice(0, POINTS))),
   },
   {
     label: "1M",
     value: 2,
-    graph: parse(buildGraph(values.month.prices.slice(0, POINTS))),
+    path: parse(buildGraph(values.month.prices.slice(0, POINTS))),
   },
   {
     label: "1Y",
     value: 3,
-    graph: parse(buildGraph(values.year.prices.slice(0, POINTS))),
+    path: parse(buildGraph(values.year.prices.slice(0, POINTS))),
   },
   {
     label: "all",
     value: 4,
-    graph: parse(buildGraph(values.all.prices.slice(0, POINTS))),
+    path: parse(buildGraph(values.all.prices.slice(0, POINTS))),
   },
 ];
 
@@ -78,17 +79,20 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     padding: 16,
+    borderRadius: 8,
   },
   label: {
     fontSize: 16,
     color: "black",
+    fontWeight: "bold",
   },
 });
 
 const Graph = () => {
   const transition = useSharedValue(0);
-  const previous = useSharedValue(graphs[0].graph);
-  const current = useSharedValue(graphs[0].graph);
+  const selected = useSharedValue(0);
+  const previous = useSharedValue(graphs[0].path);
+  const current = useSharedValue(graphs[0].path);
   const animatedProps = useAnimatedProps(() => {
     return {
       d: mixPath(transition.value, previous.value, current.value),
@@ -108,21 +112,28 @@ const Graph = () => {
         <Cursor path={current} />
       </View>
       <View style={styles.selection}>
-        {graphs.map((graph) => (
-          <TouchableWithoutFeedback
-            key={graph.label}
-            onPress={() => {
-              previous.value = current.value;
-              transition.value = 0;
-              current.value = graph.graph;
-              transition.value = withTiming(1);
-            }}
-          >
-            <View style={styles.labelContainer}>
-              <Text style={styles.label}>{graph.label}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        ))}
+        {graphs.map((graph) => {
+          const style = useAnimatedStyle(() => ({
+            backgroundColor:
+              graph.value === selected.value ? "#f3f3f3" : "transparent",
+          }));
+          return (
+            <TouchableWithoutFeedback
+              key={graph.label}
+              onPress={() => {
+                previous.value = current.value;
+                transition.value = 0;
+                current.value = graph.path;
+                transition.value = withTiming(1);
+                selected.value = graph.value;
+              }}
+            >
+              <Animated.View style={[styles.labelContainer, style]}>
+                <Text style={styles.label}>{graph.label}</Text>
+              </Animated.View>
+            </TouchableWithoutFeedback>
+          );
+        })}
       </View>
     </View>
   );
