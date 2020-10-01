@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Dimensions } from "react-native";
 import * as shape from "d3-shape";
 import Svg, { Path } from "react-native-svg";
 import { scaleLinear } from "d3-scale";
@@ -16,6 +16,7 @@ import { Prices, PriceList, SIZE } from "./Model";
 import Cursor from "./Cursor";
 import data from "./data.json";
 
+const { width } = Dimensions.get("window");
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const values = data.data.prices as Prices;
@@ -75,16 +76,19 @@ const styles = StyleSheet.create({
   },
   selection: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    width: width - 32,
+    alignSelf: "center",
   },
   labelContainer: {
     padding: 16,
     borderRadius: 8,
+    width: (width - 32) / graphs.length,
   },
   label: {
     fontSize: 16,
     color: "black",
     fontWeight: "bold",
+    textAlign: "center",
   },
 });
 
