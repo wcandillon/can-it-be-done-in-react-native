@@ -2,19 +2,14 @@ import React from "react";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 import Snapchat, { stories } from "./Snapchat";
-import { Story } from "./StoryThumbnail";
 import StoryComp from "./Story";
+import { SnapchatRoutes } from "./Model";
 
 export const assets = stories
   .map((story) => [story.avatar, story.source])
   .flat();
 
-type Routes = {
-  Snapchat: undefined;
-  Story: { story: Story };
-};
-
-const Stack = createSharedElementStackNavigator<Routes>();
+const Stack = createSharedElementStackNavigator<SnapchatRoutes>();
 const Navigator = () => (
   <Stack.Navigator>
     <Stack.Screen name="Snapchat" component={Snapchat} />

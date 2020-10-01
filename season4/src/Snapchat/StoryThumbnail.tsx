@@ -9,6 +9,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
+import { Story } from "./Model";
+
 const margin = 16;
 const borderRadius = 5;
 const width = Dimensions.get("window").width / 2 - margin * 2;
@@ -28,14 +30,6 @@ const styles = StyleSheet.create({
     borderRadius,
   },
 });
-
-export interface Story {
-  id: string;
-  source: number;
-  user: string;
-  avatar: number;
-  video?: number;
-}
 
 interface StoryThumbnailProps {
   story: Story;

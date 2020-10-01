@@ -1,11 +1,18 @@
+import { RouteProp } from "@react-navigation/native";
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 
-const Story = ({ route }) => {
+import { SnapchatRoutes } from "./Model";
+
+interface StoryProps {
+  route: RouteProp<SnapchatRoutes, "Story">;
+}
+
+const Story = ({ route }: StoryProps) => {
   const { story } = route.params;
   return (
-    <View style={{ flex: 1 }}>
+    <SharedElement id={story.id} style={{ flex: 1 }}>
       <Image
         source={story.source}
         style={{
@@ -14,7 +21,7 @@ const Story = ({ route }) => {
           height: undefined,
         }}
       />
-    </View>
+    </SharedElement>
   );
 };
 
