@@ -30,8 +30,11 @@ const styles = StyleSheet.create({
 });
 
 export interface Story {
+  id: string;
   source: number;
-  thumbnail: number;
+  user: string;
+  avatar: number;
+  video?: number;
 }
 
 interface StoryThumbnailProps {
@@ -41,7 +44,9 @@ interface StoryThumbnailProps {
 const StoryThumbnail = ({ story }: StoryThumbnailProps) => {
   const navigation = useNavigation();
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate("Story")}>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate("Story", { story })}
+    >
       <View style={styles.container}>
         <Image source={story.source} style={styles.image} />
       </View>

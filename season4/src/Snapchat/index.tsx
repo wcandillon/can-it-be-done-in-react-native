@@ -1,8 +1,9 @@
 import React from "react";
-//import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 import Snapchat, { stories } from "./Snapchat";
-import StoryComp, { Story } from "./StoryThumbnail";
+import { Story } from "./StoryThumbnail";
+import StoryComp from "./Story";
 
 export const assets = stories
   .map((story) => [story.avatar, story.source])
@@ -12,7 +13,7 @@ type Routes = {
   Snapchat: undefined;
   Story: { story: Story };
 };
-/*
+
 const Stack = createSharedElementStackNavigator<Routes>();
 const Navigator = () => (
   <Stack.Navigator>
@@ -27,5 +28,5 @@ const Navigator = () => (
     />
   </Stack.Navigator>
 );
-*/
-export default Snapchat;
+
+export default Navigator;

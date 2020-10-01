@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-import StoryThumbnail from "./StoryThumbnail";
+import StoryThumbnail, { Story } from "./StoryThumbnail";
 
-export const stories = [
+export const stories: Story[] = [
   {
     id: "2",
     source: require("./assets/stories/2.jpg"),

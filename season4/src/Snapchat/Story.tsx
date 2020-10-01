@@ -1,10 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 
-interface ThumbnailProps {}
-
 const Thumbnail = () => {
-  return <View />;
+  return <View style={{ flex: 1, backgroundColor: "red" }} />;
 };
 
 export default Thumbnail;
