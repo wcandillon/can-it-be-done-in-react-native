@@ -30,7 +30,7 @@ interface CardProps {
   product: Product;
 }
 
-const Card = ({ product: { color2, title, subtitle } }: CardProps) => {
+const Card = ({ product: { color1, title, subtitle } }: CardProps) => {
   return (
     <View style={styles.container}>
       <View
@@ -38,7 +38,7 @@ const Card = ({ product: { color2, title, subtitle } }: CardProps) => {
           borderRadius: 16,
           margin: 32,
           flex: 1,
-          backgroundColor: color2,
+          backgroundColor: color1,
           padding: 16,
         }}
       >
