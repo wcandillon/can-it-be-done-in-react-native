@@ -26,32 +26,7 @@ export interface LatestPrice {
 export type Price = [string, number];
 export type PriceList = [string, number][];
 
-export interface Hour {
-  percent_change: number;
-  prices: PriceList;
-}
-
-export interface Day {
-  percent_change: number;
-  prices: PriceList;
-}
-
-export interface Week {
-  percent_change: number;
-  prices: PriceList;
-}
-
-export interface Month {
-  percent_change: number;
-  prices: PriceList;
-}
-
-export interface Year {
-  percent_change: number;
-  prices: PriceList;
-}
-
-export interface All {
+export interface DataPoints {
   percent_change: number;
   prices: PriceList;
 }
@@ -59,12 +34,12 @@ export interface All {
 export interface Prices {
   latest: string;
   latest_price: LatestPrice;
-  hour: Hour;
-  day: Day;
-  week: Week;
-  month: Month;
-  year: Year;
-  all: All;
+  hour: DataPoints;
+  day: DataPoints;
+  week: DataPoints;
+  month: DataPoints;
+  year: DataPoints;
+  all: DataPoints;
 }
 
 export interface Data {

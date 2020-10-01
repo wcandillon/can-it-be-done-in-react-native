@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, {
   interpolate,
+  useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated";
 import { ReText, Vector, round } from "react-native-redash";
@@ -29,15 +30,32 @@ const styles = StyleSheet.create({
 
 interface HeaderProps {
   translation: Vector<Animated.SharedValue<number>>;
-  minPrice: number;
-  maxPrice: number;
+  data: Animated.SharedValue<{
+    minPrice: number;
+    maxPrice: number;
+    percentChange: number;
+    label: string;
+  }>;
 }
 
-const Header = ({ translation, minPrice, maxPrice }: HeaderProps) => {
+const Header = ({ translation, data }: HeaderProps) => {
   const price = useDerivedValue(() => {
-    const p = interpolate(translation.y.value, [0, SIZE], [maxPrice, minPrice]);
+    const p = interpolate(
+      translation.y.value,
+      [0, SIZE],
+      [data.value.maxPrice, data.value.minPrice]
+    );
     return `$ ${round(p, 2).toLocaleString("en-US", { currency: "USD" })}`;
   });
+  const percentChange = useDerivedValue(
+    () => `${round(data.value.percentChange, 3)}%`
+  );
+  const label = useDerivedValue(() => data.value.label);
+  const style = useAnimatedStyle(() => ({
+    fontWeight: "500",
+    fontSize: 24,
+    color: data.value.percentChange > 0 ? "green" : "red",
+  }));
   return (
     <View style={styles.container}>
       <ETH />
@@ -47,8 +65,8 @@ const Header = ({ translation, minPrice, maxPrice }: HeaderProps) => {
           <Text style={styles.label}>Etherum</Text>
         </View>
         <View>
-          <Text style={styles.value}>0.32%</Text>
-          <Text style={styles.label}>Today</Text>
+          <ReText style={style} text={percentChange} />
+          <ReText style={styles.label} text={label} />
         </View>
       </View>
     </View>
