@@ -16,9 +16,12 @@ const fonts = {
   "SFProDisplay-Medium": require("./assets/fonts/SFPro/SF-Pro-Display-Medium.otf"),
   "Nunito-Bold": require("./assets/fonts/Nunito/Nunito-Bold.ttf"),
   "Nunito-Regular": require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
+  "GothamRounded-Medium": require("./assets/fonts/GothamRounded/GothamRounded-Medium.otf"),
+  "GothamRounded-Bold": require("./assets/fonts/GothamRounded/GothamRounded-Bold.otf"),
+  "GothamRounded-Light": require("./assets/fonts/GothamRounded/GothamRounded-Light.otf"),
 };
 
-const assets = [...duolingoAssets, ...snapChatAssets];
+const assets = [...duolingoAssets, ...snapChatAssets, ...philzCoffeeAssets];
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (

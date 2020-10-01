@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
   label: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "GothamRounded-Bold",
+    alignSelf: "center",
   },
 });
 

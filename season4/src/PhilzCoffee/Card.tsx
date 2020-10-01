@@ -11,6 +11,19 @@ const styles = StyleSheet.create({
     width,
     height: (width * 1564) / 974,
   },
+  title: {
+    fontFamily: "GothamRounded-Bold",
+    fontSize: 28,
+    textAlign: "center",
+    color: "#432406",
+    marginBottom: 16,
+  },
+  subtitle: {
+    fontFamily: "GothamRounded-Light",
+    fontSize: 16,
+    textAlign: "center",
+    color: "#432406",
+  },
 });
 
 interface CardProps {
@@ -26,12 +39,13 @@ const Card = ({ product: { color2, title, subtitle } }: CardProps) => {
           margin: 32,
           flex: 1,
           backgroundColor: color2,
+          padding: 16,
         }}
       >
         <CardHeader />
-        <Text>{title}</Text>
-        <Text>{subtitle}</Text>
-        <View />
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
+        <View style={{ flex: 1 }} />
         <Button label="I'll try it" />
       </View>
     </View>

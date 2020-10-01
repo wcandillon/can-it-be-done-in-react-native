@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, ScrollView, Dimensions } from "react-native";
+import { StyleSheet, ScrollView, Dimensions } from "react-native";
+import Animated from "react-native-reanimated";
 
 import { products } from "./Model";
 import Card from "./Card";
@@ -13,13 +14,13 @@ const styles = StyleSheet.create({
 
 const PhilzCoffee = () => {
   return (
-    <View style={styles.container}>
+    <Animated.View style={styles.container}>
       <ScrollView decelerationRate="fast" snapToInterval={width} horizontal>
         {products.map((product, index) => (
           <Card product={product} key={index} />
         ))}
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 };
 
