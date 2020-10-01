@@ -16,6 +16,10 @@ export const examples = [
     screen: "Rainbow",
     title: "🌈 Rainbow",
   },
+  {
+    screen: "Snapchat",
+    title: "👻 Snapchat",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

@@ -5,6 +5,7 @@ import { Routes } from "./src/Routes";
 import Examples from "./src/Examples";
 import Rainbow from "./src/Rainbow";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
+import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
 import { LoadAssets } from "./src/components";
 
 const fonts = {
@@ -16,7 +17,7 @@ const fonts = {
   "Nunito-Regular": require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
 };
 
-const assets = [...duolingoAssets];
+const assets = [...duolingoAssets, ...snapChatAssets];
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -40,6 +41,13 @@ const AppNavigator = () => (
       component={Rainbow}
       options={{
         title: "🌈 Rainbow",
+      }}
+    />
+    <Stack.Screen
+      name="Snapchat"
+      component={Snapchat}
+      options={{
+        title: "👻 Snapchat",
       }}
     />
   </Stack.Navigator>
