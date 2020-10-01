@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -69,20 +70,27 @@ const graphs = [
   },
 ];
 
+const SELECTION_WIDTH = width - 32;
+const BUTTON_WIDTH = (width - 32) / graphs.length;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
   },
+  backgroundSelection: {
+    backgroundColor: "#f3f3f3",
+    ...StyleSheet.absoluteFillObject,
+    width: BUTTON_WIDTH,
+    borderRadius: 8,
+  },
   selection: {
     flexDirection: "row",
-    width: width - 32,
+    width: SELECTION_WIDTH,
     alignSelf: "center",
   },
   labelContainer: {
     padding: 16,
-    borderRadius: 8,
-    width: (width - 32) / graphs.length,
+    width: BUTTON_WIDTH,
   },
   label: {
     fontSize: 16,
@@ -102,6 +110,9 @@ const Graph = () => {
       d: mixPath(transition.value, previous.value, current.value),
     };
   });
+  const style = useAnimatedStyle(() => ({
+    transform: [{ translateX: withTiming(BUTTON_WIDTH * selected.value) }],
+  }));
   return (
     <View style={styles.container}>
       <View>
@@ -116,11 +127,10 @@ const Graph = () => {
         <Cursor path={current} />
       </View>
       <View style={styles.selection}>
+        <View style={StyleSheet.absoluteFill}>
+          <Animated.View style={[styles.backgroundSelection, style]} />
+        </View>
         {graphs.map((graph) => {
-          const style = useAnimatedStyle(() => ({
-            backgroundColor:
-              graph.value === selected.value ? "#f3f3f3" : "transparent",
-          }));
           return (
             <TouchableWithoutFeedback
               key={graph.label}
@@ -132,7 +142,7 @@ const Graph = () => {
                 selected.value = graph.value;
               }}
             >
-              <Animated.View style={[styles.labelContainer, style]}>
+              <Animated.View style={[styles.labelContainer]}>
                 <Text style={styles.label}>{graph.label}</Text>
               </Animated.View>
             </TouchableWithoutFeedback>
