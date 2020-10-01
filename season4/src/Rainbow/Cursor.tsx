@@ -5,10 +5,9 @@ import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
-  withTiming,
   withSpring,
 } from "react-native-reanimated";
-import { useVector, getYForX, Path } from "react-native-redash";
+import { getYForX, Path, Vector } from "react-native-redash";
 
 const CURSOR = 50;
 const styles = StyleSheet.create({
@@ -30,10 +29,10 @@ const styles = StyleSheet.create({
 
 interface CursorProps {
   path: Animated.SharedValue<Path>;
+  translation: Vector<Animated.SharedValue<number>>;
 }
 
-const Cursor = ({ path }: CursorProps) => {
-  const translation = useVector();
+const Cursor = ({ path, translation }: CursorProps) => {
   const isActive = useSharedValue(false);
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {

@@ -7,13 +7,13 @@ import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { parse, mixPath } from "react-native-redash";
+import { parse, mixPath, useVector } from "react-native-redash";
 
 import { Prices, PriceList, SIZE } from "./Model";
+import Header from "./Header";
 import Cursor from "./Cursor";
 import data from "./data.json";
 
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
 });
 
 const Graph = () => {
+  const translation = useVector();
   const transition = useSharedValue(0);
   const selected = useSharedValue(0);
   const previous = useSharedValue(graphs[0].path);
@@ -115,6 +116,7 @@ const Graph = () => {
   }));
   return (
     <View style={styles.container}>
+      <Header translation={translation} />
       <View>
         <Svg width={SIZE} height={SIZE}>
           <AnimatedPath
@@ -124,7 +126,7 @@ const Graph = () => {
             strokeWidth={3}
           />
         </Svg>
-        <Cursor path={current} />
+        <Cursor translation={translation} path={current} />
       </View>
       <View style={styles.selection}>
         <View style={StyleSheet.absoluteFill}>
