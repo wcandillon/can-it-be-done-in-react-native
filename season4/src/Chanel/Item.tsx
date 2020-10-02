@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Image, StyleSheet, Dimensions } from "react-native";
+import { Image, StyleSheet, Dimensions } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
-const MIN_HEIGHT = 128;
-const MAX_HEIGHT = height / 2;
+export const MIN_HEIGHT = 128;
+export const MAX_HEIGHT = height / 2;
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -37,7 +37,9 @@ const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
       transform: [
         {
           translateY:
-            index === 0 ? 0 : index * MIN_HEIGHT + (MAX_HEIGHT - MIN_HEIGHT),
+            y.value + index === 0
+              ? 0
+              : index * MIN_HEIGHT + (MAX_HEIGHT - MIN_HEIGHT),
         },
       ],
     };

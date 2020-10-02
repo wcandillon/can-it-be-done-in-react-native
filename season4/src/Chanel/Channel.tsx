@@ -7,9 +7,11 @@ import {
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
+  withSpring,
 } from "react-native-reanimated";
+import { snapPoint } from "react-native-redash";
 
-import Item from "./Item";
+import Item, { MAX_HEIGHT } from "./Item";
 
 const items = [
   {
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
 
 const Channel = () => {
   const y = useSharedValue(0);
-  const onGestureHandler = useAnimatedGestureHandler<
+  const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
     { offsetY: number }
   >({
@@ -65,18 +67,23 @@ const Channel = () => {
     onActive: (event, ctx) => {
       y.value = ctx.offsetY + event.translationY;
     },
-    onEnd: (event, ctx) => {},
+    onEnd: ({ velocityY }, ctx) => {
+      const to = snapPoint(
+        y.value,
+        velocityY,
+        items.map((_, i) => -i * MAX_HEIGHT)
+      );
+      y.value = withSpring(to);
+    },
   });
   return (
     <View style={styles.container}>
       {items.map((item, index) => (
         <Item item={item} key={index} y={y} index={index} />
       ))}
-      <View style={StyleSheet.absoluteFill}>
-        <PanGestureHandler onGestureHandler={onGestureHandler}>
-          <Animated.View style={StyleSheet.absoluteFill} />
-        </PanGestureHandler>
-      </View>
+      <PanGestureHandler onGestureEvent={onGestureEvent}>
+        <Animated.View style={StyleSheet.absoluteFill} />
+      </PanGestureHandler>
     </View>
   );
 };
