@@ -1,1 +1,1 @@
-export { default } from "./Channel";
+export { default } from "./Chanel";

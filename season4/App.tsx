@@ -67,6 +67,7 @@ const AppNavigator = () => (
       component={Chanel}
       options={{
         title: "👗 Chanel",
+        header: () => null,
       }}
     />
   </Stack.Navigator>

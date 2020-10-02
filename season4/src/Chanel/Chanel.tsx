@@ -6,6 +6,7 @@ import {
 } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
+  useAnimatedScrollHandler,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
@@ -51,40 +52,25 @@ const items = [
   },
 ];
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-});
-
 const Channel = () => {
   const y = useSharedValue(0);
-  const onGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    { offsetY: number }
-  >({
-    onStart: (event, ctx) => {
-      ctx.offsetY = y.value;
-    },
-    onActive: (event, ctx) => {
-      y.value = ctx.offsetY + event.translationY;
-    },
-    onEnd: ({ velocityY }, ctx) => {
-      const to = snapPoint(
-        y.value,
-        velocityY,
-        items.map((_, i) => -i * MAX_HEIGHT)
-      );
-      y.value = withSpring(to);
+  const onScroll = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      y.value = event.contentOffset.y;
     },
   });
   return (
-    <View style={styles.container}>
+    <Animated.ScrollView
+      onScroll={onScroll}
+      scrollEventThrottle={16}
+      decelerationRate="fast"
+      snapToInterval={MAX_HEIGHT}
+      showsVerticalScrollIndicator={false}
+    >
       {items.map((item, index) => (
         <Item item={item} key={index} y={y} index={index} />
       ))}
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={StyleSheet.absoluteFill} />
-      </PanGestureHandler>
-    </View>
+    </Animated.ScrollView>
   );
 };
 
