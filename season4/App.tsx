@@ -7,6 +7,7 @@ import Rainbow from "./src/Rainbow";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
 import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
+import Chanel from "./src/Chanel";
 import { LoadAssets } from "./src/components";
 
 const fonts = {
@@ -59,6 +60,13 @@ const AppNavigator = () => (
       component={PhilzCoffee}
       options={{
         title: "☕️ Philz Coffee",
+      }}
+    />
+    <Stack.Screen
+      name="Chanel"
+      component={Chanel}
+      options={{
+        title: "👗 Chanel",
       }}
     />
   </Stack.Navigator>

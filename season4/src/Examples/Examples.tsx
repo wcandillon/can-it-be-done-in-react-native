@@ -24,6 +24,10 @@ export const examples = [
     screen: "PhilzCoffee",
     title: "☕️ Philz Coffee",
   },
+  {
+    screen: "Chanel",
+    title: "👗 Chanel",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
