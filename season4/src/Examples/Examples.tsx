@@ -28,6 +28,10 @@ export const examples = [
     screen: "Chanel",
     title: "👗 Chanel",
   },
+  {
+    screen: "Reflectly",
+    title: "🤖 Reflectly",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

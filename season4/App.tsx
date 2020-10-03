@@ -8,6 +8,7 @@ import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
 import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
 import Chanel, { assets as chanelAssets } from "./src/Chanel";
+import Reflectly from "./src/Reflectly";
 import { LoadAssets } from "./src/components";
 
 const fonts = {
@@ -73,6 +74,13 @@ const AppNavigator = () => (
       options={{
         title: "👗 Chanel",
         header: () => null,
+      }}
+    />
+    <Stack.Screen
+      name="Reflectly"
+      component={Reflectly}
+      options={{
+        title: "🤖 Reflectly",
       }}
     />
   </Stack.Navigator>

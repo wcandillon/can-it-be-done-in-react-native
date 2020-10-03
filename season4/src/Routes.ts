@@ -5,4 +5,5 @@ export type Routes = {
   Snapchat: undefined;
   PhilzCoffee: undefined;
   Chanel: undefined;
+  Reflectly: undefined;
 };
