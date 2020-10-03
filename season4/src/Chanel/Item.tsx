@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     padding: 32,
-    transform: [{ translateY: 128 }],
+    transform: [{ translateY: 64 }],
   },
   subtitle: {
     color: "white",
@@ -82,17 +82,11 @@ const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
       opacity,
     };
   });
-  /*
-   */
   return (
     <TouchableWithoutFeedback onPress={() => Alert.alert("Pressed!")}>
       <Animated.View style={[styles.container, style]}>
         <Image source={picture} style={styles.picture} />
         <View style={styles.titleContainer}>
-          <LinearGradient
-            colors={["transparent", "rgba(0,0,0,0.8)"]}
-            style={StyleSheet.absoluteFill}
-          />
           <Text style={styles.subtitle}>{subtitle.toUpperCase()}</Text>
           <View style={styles.mainTitle}>
             <Animated.View style={titleStyle}>
