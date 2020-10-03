@@ -7,12 +7,12 @@ export const items = [
   {
     title: "In Boutiques",
     subtitle: "FALL-WINTER 2020/21",
-    picture: require("./assets/sonnie-hiles-pU4J5VFnqCQ-unsplash.jpg"),
+    picture: require("./assets/sonnie-hiles-pU4J5VFnqCQ-unsplash-with-gradient.jpg"),
   },
   {
     title: "Deauville Film Festival",
     subtitle: "CHANEL IN CINEMA",
-    picture: require("./assets/laura-chouette-NFrPPyGe5q0-unsplash.jpg"),
+    picture: require("./assets/laura-chouette-NFrPPyGe5q0-unsplash-with-gradient.jpg"),
   },
   {
     title: "IN BOUTIQUES",
