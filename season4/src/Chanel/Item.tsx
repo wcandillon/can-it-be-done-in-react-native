@@ -33,6 +33,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
   },
+  mainTitle: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    padding: 32,
+    transform: [{ translateY: 128 }],
+  },
   subtitle: {
     color: "white",
     textAlign: "center",
@@ -88,13 +94,7 @@ const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
             style={StyleSheet.absoluteFill}
           />
           <Text style={styles.subtitle}>{subtitle.toUpperCase()}</Text>
-          <View
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              justifyContent: "flex-end",
-              padding: 32,
-            }}
-          >
+          <View style={styles.mainTitle}>
             <Animated.View style={titleStyle}>
               <Text style={styles.title}>{title.toUpperCase()}</Text>
             </Animated.View>
