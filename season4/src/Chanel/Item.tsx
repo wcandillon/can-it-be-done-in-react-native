@@ -1,5 +1,6 @@
 import React from "react";
-import { Image, StyleSheet, Dimensions } from "react-native";
+import { Image, StyleSheet, Dimensions, Alert } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -42,12 +43,15 @@ const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
         [MIN_HEIGHT, MAX_HEIGHT],
         Extrapolate.CLAMP
       ),
+      transform: [{ translateY: -y.value }],
     };
   });
   return (
-    <Animated.View style={[styles.container, style]}>
-      <Image source={picture} style={styles.picture} />
-    </Animated.View>
+    <TouchableWithoutFeedback onPress={() => Alert.alert("Pressed!")}>
+      <Animated.View style={[styles.container, style]}>
+        <Image source={picture} style={styles.picture} />
+      </Animated.View>
+    </TouchableWithoutFeedback>
   );
 };
 

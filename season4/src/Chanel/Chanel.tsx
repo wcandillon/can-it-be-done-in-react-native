@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
@@ -13,6 +13,7 @@ import Animated, {
 import { snapPoint } from "react-native-redash";
 
 import Item, { MAX_HEIGHT } from "./Item";
+const { width, height } = Dimensions.get("window");
 
 const items = [
   {
@@ -52,6 +53,14 @@ const items = [
   },
 ];
 
+const styles = StyleSheet.create({
+  container: {
+    height,
+    width,
+    backgroundColor: "black",
+  },
+});
+
 const Channel = () => {
   const y = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler({
@@ -60,20 +69,22 @@ const Channel = () => {
     },
   });
   return (
-    <Animated.ScrollView
-      onScroll={onScroll}
-      scrollEventThrottle={16}
-      decelerationRate="fast"
-      snapToInterval={MAX_HEIGHT}
-      showsVerticalScrollIndicator={false}
-      bounces={false}
-    >
-      <View style={{ height: items.length * MAX_HEIGHT }}>
-        {items.map((item, index) => (
-          <Item item={item} key={index} y={y} index={index} />
-        ))}
-      </View>
-    </Animated.ScrollView>
+    <View style={styles.container}>
+      {items.map((item, index) => (
+        <Item item={item} key={index} y={y} index={index} />
+      ))}
+      <Animated.ScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        decelerationRate="fast"
+        snapToInterval={MAX_HEIGHT}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        style={StyleSheet.absoluteFill}
+      >
+        <View style={{ height: items.length * MAX_HEIGHT }} />
+      </Animated.ScrollView>
+    </View>
   );
 };
 
