@@ -6,6 +6,7 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 
 const { width, height } = Dimensions.get("window");
 export const MIN_HEIGHT = 128;
@@ -15,7 +16,6 @@ const styles = StyleSheet.create({
     width,
     height: MIN_HEIGHT,
     justifyContent: "flex-end",
-    padding: 64,
   },
   picture: {
     ...StyleSheet.absoluteFillObject,
@@ -28,12 +28,16 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "500",
   },
+  titleContainer: {
+    maxHeight: MAX_HEIGHT * 0.61,
+    justifyContent: "center",
+    flex: 1,
+  },
   subtitle: {
     color: "white",
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 16,
   },
 });
 
@@ -72,15 +76,29 @@ const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
       opacity,
     };
   });
+  /*
+   */
   return (
     <TouchableWithoutFeedback onPress={() => Alert.alert("Pressed!")}>
       <Animated.View style={[styles.container, style]}>
         <Image source={picture} style={styles.picture} />
-        <View>
+        <View style={styles.titleContainer}>
+          <LinearGradient
+            colors={["transparent", "rgba(0,0,0,0.8)"]}
+            style={StyleSheet.absoluteFill}
+          />
           <Text style={styles.subtitle}>{subtitle.toUpperCase()}</Text>
-          <Animated.View style={titleStyle}>
-            <Text style={styles.title}>{title.toUpperCase()}</Text>
-          </Animated.View>
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              justifyContent: "flex-end",
+              padding: 32,
+            }}
+          >
+            <Animated.View style={titleStyle}>
+              <Text style={styles.title}>{title.toUpperCase()}</Text>
+            </Animated.View>
+          </View>
         </View>
       </Animated.View>
     </TouchableWithoutFeedback>
