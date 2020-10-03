@@ -13,7 +13,6 @@ import Animated, {
 import { snapPoint } from "react-native-redash";
 
 import Item, { MAX_HEIGHT } from "./Item";
-const { width, height } = Dimensions.get("window");
 
 const items = [
   {
@@ -52,38 +51,41 @@ const items = [
     picture: require("./assets/chase-fade-Pb13EUxzMDw-unsplash.jpg"),
   },
 ];
+const snapPoints = items.map((_, i) => -i * MAX_HEIGHT);
 
 const styles = StyleSheet.create({
   container: {
-    height,
-    width,
+    flex: 1,
     backgroundColor: "black",
   },
 });
 
 const Channel = () => {
   const y = useSharedValue(0);
-  const onScroll = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      y.value = event.contentOffset.y;
+  const onGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    { offsetY: number }
+  >({
+    onStart: (_, ctx) => {
+      ctx.offsetY = y.value;
+    },
+    onActive: ({ translationY }, ctx) => {
+      y.value = ctx.offsetY + translationY;
+    },
+    onEnd: ({ velocityY }) => {
+      const to = snapPoint(y.value, velocityY, snapPoints);
+      y.value = withSpring(to);
     },
   });
   return (
     <View style={styles.container}>
-      {items.map((item, index) => (
-        <Item item={item} key={index} y={y} index={index} />
-      ))}
-      <Animated.ScrollView
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        decelerationRate="fast"
-        snapToInterval={MAX_HEIGHT}
-        showsVerticalScrollIndicator={false}
-        bounces={false}
-        style={StyleSheet.absoluteFill}
-      >
-        <View style={{ height: items.length * MAX_HEIGHT }} />
-      </Animated.ScrollView>
+      <PanGestureHandler onGestureEvent={onGestureEvent}>
+        <Animated.View>
+          {items.map((item, index) => (
+            <Item item={item} key={index} y={y} index={index} />
+          ))}
+        </Animated.View>
+      </PanGestureHandler>
     </View>
   );
 };
