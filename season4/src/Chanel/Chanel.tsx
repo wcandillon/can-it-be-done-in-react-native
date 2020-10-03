@@ -1,24 +1,24 @@
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
-  useAnimatedScrollHandler,
   useSharedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
-import { snapPoint } from "react-native-redash";
+import { clamp, snapPoint } from "react-native-redash";
 
 import Item, { MAX_HEIGHT } from "./Item";
 
-const items = [
+export const items = [
   {
     title: "Upcoming Show Live from Paris",
     subtitle: "SPRING-SUMMER 2021",
-    picture: require("./assets/laura-chouette-NFrPPyGe5q0-unsplash.jpg"),
+    picture: require("./assets/chanel.jpg"),
   },
   {
     title: "In Boutiques",
@@ -28,12 +28,12 @@ const items = [
   {
     title: "46th Edtion of the Deauville American Film Festival",
     subtitle: "CHANEL IN CINEMA",
-    picture: require("./assets/fezbot2000-vScxe3Ue5oE-unsplash.jpg"),
+    picture: require("./assets/laura-chouette-NFrPPyGe5q0-unsplash.jpg"),
   },
   {
     title: "IN BOUTIQUES",
     subtitle: "Métiers d'art 2019/20",
-    picture: require("./assets/judeus-samson-y2ny77b5sU0-unsplash.jpg"),
+    picture: require("./assets/butsarakham-buranaworachot-au6Gddf1pZQ-unsplash.jpg"),
   },
   {
     title: "Haute Couture",
@@ -52,6 +52,8 @@ const items = [
   },
 ];
 const snapPoints = items.map((_, i) => -i * MAX_HEIGHT);
+const minY = Math.min(...snapPoints);
+const maxY = Math.max(...snapPoints);
 
 const styles = StyleSheet.create({
   container: {
@@ -70,23 +72,21 @@ const Channel = () => {
       ctx.offsetY = y.value;
     },
     onActive: ({ translationY }, ctx) => {
-      y.value = ctx.offsetY + translationY;
+      y.value = clamp(ctx.offsetY + translationY, minY, maxY);
     },
     onEnd: ({ velocityY }) => {
       const to = snapPoint(y.value, velocityY, snapPoints);
-      y.value = withSpring(to);
+      y.value = withTiming(to);
     },
   });
   return (
-    <View style={styles.container}>
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View>
-          {items.map((item, index) => (
-            <Item item={item} key={index} y={y} index={index} />
-          ))}
-        </Animated.View>
-      </PanGestureHandler>
-    </View>
+    <PanGestureHandler onGestureEvent={onGestureEvent}>
+      <Animated.View style={styles.container}>
+        {items.map((item, index) => (
+          <Item item={item} key={index} y={y} index={index} />
+        ))}
+      </Animated.View>
+    </PanGestureHandler>
   );
 };
 

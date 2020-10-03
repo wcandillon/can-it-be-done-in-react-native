@@ -7,7 +7,7 @@ import Rainbow from "./src/Rainbow";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
 import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
-import Chanel from "./src/Chanel";
+import Chanel, { assets as chanelAssets } from "./src/Chanel";
 import { LoadAssets } from "./src/components";
 
 const fonts = {
@@ -22,7 +22,12 @@ const fonts = {
   "GothamRounded-Light": require("./assets/fonts/GothamRounded/GothamRounded-Light.otf"),
 };
 
-const assets = [...duolingoAssets, ...snapChatAssets, ...philzCoffeeAssets];
+const assets = [
+  ...duolingoAssets,
+  ...snapChatAssets,
+  ...philzCoffeeAssets,
+  ...chanelAssets,
+];
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
