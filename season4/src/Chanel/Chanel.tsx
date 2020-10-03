@@ -66,10 +66,13 @@ const Channel = () => {
       decelerationRate="fast"
       snapToInterval={MAX_HEIGHT}
       showsVerticalScrollIndicator={false}
+      bounces={false}
     >
-      {items.map((item, index) => (
-        <Item item={item} key={index} y={y} index={index} />
-      ))}
+      <View style={{ height: items.length * MAX_HEIGHT }}>
+        {items.map((item, index) => (
+          <Item item={item} key={index} y={y} index={index} />
+        ))}
+      </View>
     </Animated.ScrollView>
   );
 };
