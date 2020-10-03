@@ -1,9 +1,17 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { curve, move, serialize } from "react-native-redash";
-import Svg, { Circle, parse, Path } from "react-native-svg";
+import { move, serialize, SVGCommand } from "react-native-redash";
+import Svg, { Circle, Path } from "react-native-svg";
 
 import Tabbar from "./Tabbar";
+
+export const curve = (c) => {
+  "worklet";
+  return {
+    type: SVGCommand.CURVE as const,
+    ...c,
+  };
+};
 
 const SIZE = Dimensions.get("window").width / 2;
 const styles = StyleSheet.create({
@@ -20,6 +28,7 @@ const S = 100;
 const d = [
   move(R, 0),
   curve({
+    color: "green",
     c1: {
       x: C,
       y: 0,
@@ -38,6 +47,7 @@ const d = [
     },
   }),
   curve({
+    color: "green",
     c1: {
       x: 0,
       y: R,
@@ -56,6 +66,7 @@ const d = [
     },
   }),
   curve({
+    color: "green",
     c1: {
       x: 0,
       y: 2 * S - C,
@@ -74,6 +85,7 @@ const d = [
     },
   }),
   curve({
+    color: "green",
     c1: {
       x: R,
       y: 2 * S,
@@ -92,6 +104,7 @@ const d = [
     },
   }),
   curve({
+    color: "green",
     c1: {
       x: S - C,
       y: 2 * S,
@@ -110,6 +123,7 @@ const d = [
     },
   }),
   curve({
+    color: "green",
     c1: {
       x: S,
       y: 2 * S + R,
@@ -128,6 +142,7 @@ const d = [
     },
   }),
   curve({
+    color: "red",
     c1: {
       x: S,
       y: 3 * S - C,
@@ -146,6 +161,7 @@ const d = [
     },
   }),
   curve({
+    color: "red",
     c1: {
       x: S + R,
       y: 3 * S,
@@ -164,6 +180,7 @@ const d = [
     },
   }),
   curve({
+    color: "red",
     c1: {
       x: 2 * S - C,
       y: 3 * S,
@@ -182,6 +199,7 @@ const d = [
     },
   }),
   curve({
+    color: "red",
     c1: {
       x: 2 * S,
       y: 3 * S - R,
@@ -200,6 +218,7 @@ const d = [
     },
   }),
   curve({
+    color: "blue",
     c1: {
       x: 2 * S,
       y: 2 * S + C,
@@ -218,6 +237,7 @@ const d = [
     },
   }),
   curve({
+    color: "blue",
     c1: {
       x: 2 * S + R,
       y: 2 * S,
@@ -236,6 +256,7 @@ const d = [
     },
   }),
   curve({
+    color: "blue",
     c1: {
       x: 3 * S - C,
       y: 2 * S,
@@ -254,6 +275,7 @@ const d = [
     },
   }),
   curve({
+    color: "blue",
     c1: {
       x: 3 * S,
       y: 2 * S - R,
@@ -272,6 +294,7 @@ const d = [
     },
   }),
   curve({
+    color: "blue",
     c1: {
       x: 3 * S,
       y: C,
@@ -290,6 +313,7 @@ const d = [
     },
   }),
   curve({
+    color: "blue",
     c1: {
       x: 3 * S - R,
       y: 0,
@@ -308,6 +332,7 @@ const d = [
     },
   }),
   curve({
+    color: "green",
     c1: {
       x: R,
       y: 0,
@@ -334,10 +359,10 @@ const Reflectly = () => {
         <Path d={serialize(d)} fill="#02CBD6" />
         {d.slice(1).map((c) => (
           <>
-            <Circle r={5} fill="red" cx={c.from.x} cy={c.from.y} />
-            <Circle r={5} fill="red" cx={c.to.x} cy={c.to.y} />
-            <Circle r={2.5} fill="green" cx={c.c1.x} cy={c.c1.y} />
-            <Circle r={2.55} fill="green" cx={c.c2.x} cy={c.c2.y} />
+            <Circle r={5} fill={c.color} cx={c.from.x} cy={c.from.y} />
+            <Circle r={5} fill={c.color} cx={c.to.x} cy={c.to.y} />
+            <Circle r={2.5} fill={c.color} cx={c.c1.x} cy={c.c1.y} />
+            <Circle r={2.55} fill={c.color} cx={c.c2.x} cy={c.c2.y} />
           </>
         ))}
       </Svg>
