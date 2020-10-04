@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import PlusSign from "./PlusSign";
-
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
+    width,
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -14,12 +14,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 32,
     paddingTop: 32,
   },
-  plus: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-  },
 });
+export const SIZE = width / 5;
 
 const StaticTabbar = () => {
   const insets = useSafeAreaInsets();
@@ -30,9 +26,6 @@ const StaticTabbar = () => {
       <Icon name="x" color="#B9B9C7" size={24} />
       <Icon name="edit-3" color="#B9B9C7" size={24} />
       <Icon name="user" color="#B9B9C7" size={24} />
-      <View style={styles.plus}>
-        <PlusSign />
-      </View>
     </View>
   );
 };
