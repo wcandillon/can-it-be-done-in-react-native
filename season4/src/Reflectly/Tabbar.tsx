@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated, {
   Extrapolate,
@@ -22,6 +22,7 @@ import Svg, { G, Path, Rect } from "react-native-svg";
 import { Feather as Icon } from "@expo/vector-icons";
 
 import StaticTabbar, { SIZE } from "./StaticTabbar";
+import Row from "./Row";
 
 interface TabbarProps {}
 
@@ -84,6 +85,21 @@ const Tabbar = ({ open }: TabbarProps) => {
   const style = useAnimatedStyle(() => {
     return {
       transform: [{ rotate: mix(open.value, Math.PI / 2, 0) }],
+    };
+  });
+  const style2 = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(open.value, [0.75, 1], [0, 1], Extrapolate.CLAMP),
+      transform: [
+        {
+          translateY: interpolate(
+            open.value,
+            [0.75, 1],
+            [SIZE, 0],
+            Extrapolate.CLAMP
+          ),
+        },
+      ],
     };
   });
   return (
@@ -153,6 +169,23 @@ const Tabbar = ({ open }: TabbarProps) => {
               ]}
             >
               <Icon name="x" color="white" size={32} />
+            </Animated.View>
+            <Animated.View
+              style={[
+                {
+                  ...StyleSheet.absoluteFillObject,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  left: SIZE / 2,
+                  width: SIZE * 2,
+                  top: -SIZE,
+                  height: SIZE * 2,
+                },
+                style2,
+              ]}
+            >
+              <Row icon="edit" label="Mood check-in" />
+              <Row icon="image" label="Add photo" />
             </Animated.View>
           </View>
         </View>
