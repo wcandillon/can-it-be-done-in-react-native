@@ -6,12 +6,20 @@ import Animated, {
   interpolate,
   repeat,
   useAnimatedProps,
+  useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { clamp, interpolatePath, parse, serialize } from "react-native-redash";
+import {
+  clamp,
+  interpolatePath,
+  mix,
+  parse,
+  serialize,
+} from "react-native-redash";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Svg, { Path, Rect } from "react-native-svg";
+import Svg, { G, Path, Rect } from "react-native-svg";
+import { Feather as Icon } from "@expo/vector-icons";
 
 import StaticTabbar, { SIZE } from "./StaticTabbar";
 
@@ -49,8 +57,11 @@ const p32 = parse(
 const K1 = 0.1;
 const K2 = 0.25;
 
-const Tabbar = () => {
-  const open = useSharedValue(0);
+interface TabbarProps {
+  open: Animated.SharedValue<number>;
+}
+
+const Tabbar = ({ open }: TabbarProps) => {
   const k2 = useAnimatedProps(() => {
     return {
       d: interpolatePath(clamp(open.value, K1, K2), [K1, K2], [p1, p2]),
@@ -68,6 +79,11 @@ const Tabbar = () => {
         [0, K1, K2, 1],
         [p30, p12, p31, p32]
       ),
+    };
+  });
+  const style = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotate: mix(open.value, Math.PI / 2, 0) }],
     };
   });
   return (
@@ -109,17 +125,36 @@ const Tabbar = () => {
           }}
           pointerEvents="none"
         >
-          <Svg
-            width={SIZE * 3}
-            height={SIZE * 3}
-            style={{
-              top: -SIZE,
-            }}
-            viewBox="0 0 300 300"
-          >
-            <AnimatedPath animatedProps={k1} fill="#02CBD6" />
-            <AnimatedPath animatedProps={k2} fill="#02CBD6" />
-          </Svg>
+          <View>
+            <Svg
+              width={SIZE * 3}
+              height={SIZE * 3}
+              style={{
+                top: -SIZE,
+              }}
+              viewBox="0 0 300 300"
+            >
+              <AnimatedPath animatedProps={k1} fill="#02CBD6" />
+              <AnimatedPath animatedProps={k2} fill="#02CBD6" />
+            </Svg>
+            <Animated.View
+              style={[
+                {
+                  ...StyleSheet.absoluteFillObject,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  top: SIZE,
+                  left: SIZE,
+                  width: SIZE,
+                  height: SIZE,
+                },
+                style,
+              ]}
+            >
+              <Icon name="x" color="white" size={32} />
+            </Animated.View>
+          </View>
         </View>
       </View>
     </TouchableWithoutFeedback>

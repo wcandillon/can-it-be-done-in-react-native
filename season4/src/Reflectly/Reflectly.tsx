@@ -1,12 +1,18 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import Animated, { useAnimatedProps } from "react-native-reanimated";
+import Animated, {
+  useAnimatedProps,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 import {
   move,
   serialize,
   parse,
   SVGCommand,
   mixPath,
+  mix,
+  mixColor,
 } from "react-native-redash";
 import Svg, { Circle, Path } from "react-native-svg";
 
@@ -24,16 +30,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#C0C6D4",
     paddingTop: 32,
     alignItems: "center",
   },
 });
 const Reflectly = () => {
+  const open = useSharedValue(0);
+  const style = useAnimatedStyle(() => {
+    return {
+      backgroundColor: mixColor(open.value, "#F5F7FE", "#BBC0CE"),
+    };
+  });
   return (
-    <View style={styles.container}>
-      <Tabbar />
-    </View>
+    <Animated.View style={[styles.container, style]}>
+      <Tabbar open={open} />
+    </Animated.View>
   );
 };
 
