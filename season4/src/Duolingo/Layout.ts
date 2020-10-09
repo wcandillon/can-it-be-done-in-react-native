@@ -1,32 +1,15 @@
-import { SharedValues } from "../components/AnimatedHelpers";
+import Animated from "react-native-reanimated";
+import { move } from "react-native-redash";
 
-// TODO: since width/height are stable should they be of type Ref?
-export type Offset = SharedValues<{
-  order: number;
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-  originalX: number;
-  originalY: number;
-}>;
-
-const move = (offsets: Offset[], from: number, to: number) => {
-  "worklet";
-  while (from < 0) {
-    from += offsets.length;
-  }
-  while (to < 0) {
-    to += offsets.length;
-  }
-  if (to >= offsets.length) {
-    let k = to - offsets.length;
-    while (k-- + 1) {
-      offsets.push(undefined);
-    }
-  }
-  offsets.splice(to, 0, offsets.splice(from, 1)[0]);
-};
+export interface Offset {
+  order: Animated.SharedValue<number>;
+  width: Animated.SharedValue<number>;
+  height: Animated.SharedValue<number>;
+  x: Animated.SharedValue<number>;
+  y: Animated.SharedValue<number>;
+  originalX: Animated.SharedValue<number>;
+  originalY: Animated.SharedValue<number>;
+}
 
 const sortByOrder = (a: Offset, b: Offset) => {
   "worklet";
@@ -38,8 +21,8 @@ export const reorder = (rawOffsets: Offset[], from: number, to: number) => {
   const offsets = rawOffsets
     .filter((offset) => offset.order.value !== -1)
     .sort(sortByOrder);
-  move(offsets, from, to);
-  offsets.forEach((offset, index) => (offset.order.value = index));
+  const newOffsets = move(offsets, from, to);
+  newOffsets.map((o, i) => (o.order.value = i));
 };
 
 export const lastOrder = (rawOffsets: Offset[]) => {
