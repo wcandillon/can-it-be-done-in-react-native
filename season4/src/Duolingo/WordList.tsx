@@ -35,7 +35,6 @@ const WordList = ({ children }: WordListProps) => {
     y: useSharedValue(0),
     originalX: useSharedValue(0),
     originalY: useSharedValue(0),
-    used: useSharedValue(false),
   }));
   if (!ready) {
     return (

@@ -52,8 +52,7 @@ const SortableWord = ({
       translation.x.value = panOffset.x.value + event.translationX;
       translation.y.value = panOffset.y.value + event.translationY;
       if (isInBank && translation.y.value < 100) {
-        const l = lastOrder(offsets);
-        offset.order.value = l;
+        offset.order.value = lastOrder(offsets);
         calculateLayout(offsets, containerWidth);
       } else if (!isInBank && translation.y.value > 100) {
         offset.order.value = -1;

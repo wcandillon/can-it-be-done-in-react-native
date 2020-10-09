@@ -11,7 +11,7 @@ export type Offset = SharedValues<{
   originalY: number;
 }>;
 
-const move = (offsets: (Offset | undefined)[], from: number, to: number) => {
+const move = (offsets: Offset[], from: number, to: number) => {
   "worklet";
   while (from < 0) {
     from += offsets.length;
@@ -44,14 +44,7 @@ export const reorder = (rawOffsets: Offset[], from: number, to: number) => {
 
 export const lastOrder = (rawOffsets: Offset[]) => {
   "worklet";
-  return rawOffsets
-    .filter((offset) => offset.order.value !== -1)
-    .reduce((acc, offset) => {
-      if (offset.order.value >= acc) {
-        return offset.order.value + 1;
-      }
-      return acc;
-    }, 0);
+  return rawOffsets.filter((offset) => offset.order.value !== -1).length;
 };
 
 export const calculateLayout = (
