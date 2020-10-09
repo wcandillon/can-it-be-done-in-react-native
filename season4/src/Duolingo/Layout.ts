@@ -1,15 +1,16 @@
-import Animated from "react-native-reanimated";
 import { move } from "react-native-redash";
 
-export interface Offset {
-  order: Animated.SharedValue<number>;
-  width: Animated.SharedValue<number>;
-  height: Animated.SharedValue<number>;
-  x: Animated.SharedValue<number>;
-  y: Animated.SharedValue<number>;
-  originalX: Animated.SharedValue<number>;
-  originalY: Animated.SharedValue<number>;
-}
+import { SharedValues } from "../components/AnimatedHelpers";
+
+export type Offset = SharedValues<{
+  order: number;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  originalX: number;
+  originalY: number;
+}>;
 
 const sortByOrder = (a: Offset, b: Offset) => {
   "worklet";
