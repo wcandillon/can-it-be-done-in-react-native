@@ -5489,10 +5489,10 @@ react-native-reanimated@2.0.0-alpha.6:
     fbjs "^1.0.0"
     string-hash-64 "^1.0.3"
 
-react-native-redash@^15.2.0:
-  version "15.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-15.2.0.tgz#196edb939801f4a56f06c805e357dadf6a86feee"
-  integrity sha512-1MIm82Ck0xUPZQmU8Xw4Nv/YOB01GDLGUfQD2HObTyAGdQW7WJw9sR4rIaa9nHHjvVO8A5dMQWFZuL2hnf43dg==
+react-native-redash@15.6.1:
+  version "15.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-15.6.1.tgz#aeb7d622ab8c48ad821e40c5af36403fc9df6057"
+  integrity sha512-Q8RZNFT2CAFei+dIU/MP5iSrN+G0f8supS4f6fw1fQ31Bv3oUD4B0T0kBMpACi1AzCwUyHBaynJ4Gq6XxAhuZg==
   dependencies:
     abs-svg-path "^0.1.1"
     normalize-svg-path "^1.0.1"
@@ -6442,7 +6442,12 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.9.7, typescript@~3.9.5:
+typescript@4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.3.tgz#153bbd468ef07725c1df9c77e8b453f8d36abba5"
+  integrity sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==
+
+typescript@^3.9.7:
   version "3.9.7"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
   integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
