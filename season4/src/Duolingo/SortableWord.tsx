@@ -11,7 +11,7 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
 import { calculateLayout, lastOrder, Offset, reorder } from "./Layout";
-import Placeholder, { VOFFSET } from "./components/Placeholder";
+import Placeholder, { MARGIN_TOP, MARGIN_LEFT } from "./components/Placeholder";
 
 interface SortableWordProps {
   offsets: Offset[];
@@ -34,8 +34,8 @@ const SortableWord = ({
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
       const isInBank = offset.order.value === -1;
-      const bankX = offset.originalX.value - 32;
-      const bankY = offset.originalY.value + VOFFSET;
+      const bankX = offset.originalX.value - MARGIN_LEFT;
+      const bankY = offset.originalY.value + MARGIN_TOP;
       gestureActive.value = true;
       if (isInBank) {
         translation.x.value = bankX;
@@ -87,7 +87,7 @@ const SortableWord = ({
   });
   const translateX = useDerivedValue(() => {
     const isInBank = offset.order.value === -1;
-    const bankX = offset.originalX.value - 32;
+    const bankX = offset.originalX.value - MARGIN_LEFT;
     if (gestureActive.value) {
       return translation.x.value;
     } else {
@@ -96,7 +96,7 @@ const SortableWord = ({
   });
   const translateY = useDerivedValue(() => {
     const isInBank = offset.order.value === -1;
-    const bankY = offset.originalY.value + VOFFSET;
+    const bankY = offset.originalY.value + MARGIN_TOP;
     if (gestureActive.value) {
       return translation.y.value;
     } else {
