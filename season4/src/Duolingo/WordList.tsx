@@ -4,7 +4,6 @@ import { View, StyleSheet, Dimensions, LayoutChangeEvent } from "react-native";
 import { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
-import { calculateLayout } from "./Layout";
 import Lines from "./components/Lines";
 
 const margin = 32;
@@ -40,37 +39,14 @@ const WordList = ({ children }: WordListProps) => {
     return (
       <View style={styles.row}>
         {children.map((child, index) => {
-          const onLayout = ({
-            nativeEvent: {
-              layout: { width, height, x, y },
-            },
-          }: LayoutChangeEvent) => {
-            const offset = offsets[index];
-            offset.order.value = -1;
-            offset.width.value = width;
-            offset.height.value = height;
-            offset.originalX.value = x;
-            offset.originalY.value = y;
-            runOnUI(() => {
-              "worklet";
-              if (offsets.filter((o) => o.width.value === 0).length === 0) {
-                calculateLayout(offsets, containerWidth);
-                setReady(true);
-              }
-            })();
-          };
-          return (
-            <View key={index} onLayout={onLayout}>
-              {child}
-            </View>
-          );
+          return <View key={index}>{child}</View>;
         })}
       </View>
     );
   }
   return (
     <View style={styles.container}>
-      <Lines offsets={offsets} />
+      <Lines />
       {children.map((child, index) => (
         <SortableWord
           key={index}
