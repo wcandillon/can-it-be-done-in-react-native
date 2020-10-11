@@ -28,6 +28,7 @@ const SortableWord = ({
 }: SortableWordProps) => {
   const offset = offsets[index];
   const isGestureActive = useSharedValue(false);
+  const isAnimating = useSharedValue(false);
   const translation = useVector();
   const isInBank = useDerivedValue(() => offset.order.value === -1);
   const onGestureEvent = useAnimatedGestureHandler<{ x: number; y: number }>({
@@ -69,9 +70,14 @@ const SortableWord = ({
         }
       }
     },
-    onEnd: () => {
-      translation.x.value = withSpring(offset.x.value);
-      translation.y.value = withSpring(offset.y.value);
+    onEnd: ({ velocityX, velocityY }) => {
+      isAnimating.value = true;
+      translation.x.value = withSpring(
+        offset.x.value,
+        { velocity: velocityX },
+        () => (isAnimating.value = false)
+      );
+      translation.y.value = withSpring(offset.y.value, { velocity: velocityY });
       isGestureActive.value = false;
     },
   });
@@ -96,7 +102,7 @@ const SortableWord = ({
       position: "absolute",
       top: 0,
       left: 0,
-      zIndex: isGestureActive.value ? 100 : 0,
+      zIndex: isGestureActive.value || isAnimating.value ? 100 : 0,
       width: offset.width.value,
       height: offset.height.value,
       transform: [
