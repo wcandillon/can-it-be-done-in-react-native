@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
+    opacity: 0,
   },
 });
 
@@ -74,7 +75,7 @@ const WordList = ({ children }: WordListProps) => {
   }
   return (
     <View style={styles.container}>
-      <Lines />
+      <Lines height={offsets[0].height.value} />
       {children.map((child, index) => (
         <SortableWord
           key={index}

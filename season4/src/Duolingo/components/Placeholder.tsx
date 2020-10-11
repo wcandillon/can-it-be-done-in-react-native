@@ -5,6 +5,7 @@ import { Offset } from "../Layout";
 
 export const MARGIN_TOP = 150;
 export const MARGIN_LEFT = 32;
+export const NUMBER_OF_LINES = 3;
 
 interface PlaceholderProps {
   offset: Offset;

@@ -11,7 +11,11 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
 import { calculateLayout, lastOrder, Offset, remove, reorder } from "./Layout";
-import Placeholder, { MARGIN_TOP, MARGIN_LEFT } from "./components/Placeholder";
+import Placeholder, {
+  MARGIN_TOP,
+  MARGIN_LEFT,
+  NUMBER_OF_LINES,
+} from "./components/Placeholder";
 
 interface SortableWordProps {
   offsets: Offset[];
@@ -27,6 +31,7 @@ const SortableWord = ({
   containerWidth,
 }: SortableWordProps) => {
   const offset = offsets[index];
+  const setenceHeight = (NUMBER_OF_LINES - 1) * offset.height.value;
   const isGestureActive = useSharedValue(false);
   const isAnimating = useSharedValue(false);
   const translation = useVector();
@@ -47,10 +52,10 @@ const SortableWord = ({
     onActive: ({ translationX, translationY }, ctx) => {
       translation.x.value = ctx.x + translationX;
       translation.y.value = ctx.y + translationY;
-      if (isInBank.value && translation.y.value < 100) {
+      if (isInBank.value && translation.y.value < setenceHeight) {
         offset.order.value = lastOrder(offsets);
         calculateLayout(offsets, containerWidth);
-      } else if (!isInBank.value && translation.y.value > 100) {
+      } else if (!isInBank.value && translation.y.value > setenceHeight) {
         offset.order.value = -1;
         remove(offsets, index);
         calculateLayout(offsets, containerWidth);
