@@ -5,16 +5,16 @@ import { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
 import Lines from "./components/Lines";
-import { calculateLayout } from "./Layout";
+import { MARGIN_LEFT } from "./Layout";
 
-const margin = 32;
-const containerWidth = Dimensions.get("window").width - margin * 2;
+const containerWidth = Dimensions.get("window").width - MARGIN_LEFT * 2;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin,
+    margin: MARGIN_LEFT,
   },
   row: {
+    flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
@@ -60,7 +60,6 @@ const WordList = ({ children }: WordListProps) => {
                   if (
                     offsets.filter((o) => o.order.value !== -1).length === 0
                   ) {
-                    calculateLayout(offsets, containerWidth);
                     setReady(true);
                   }
                 })();
@@ -75,7 +74,7 @@ const WordList = ({ children }: WordListProps) => {
   }
   return (
     <View style={styles.container}>
-      <Lines height={offsets[0].height.value} />
+      <Lines />
       {children.map((child, index) => (
         <SortableWord
           key={index}

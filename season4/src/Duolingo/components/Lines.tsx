@@ -1,20 +1,16 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { NUMBER_OF_LINES } from "./Placeholder";
+import { WORD_HEIGHT, NUMBER_OF_LINES } from "../Layout";
 
-interface LinesProps {
-  height: number;
-}
-
-const Lines = ({ height }: LinesProps) => {
+const Lines = () => {
   return (
     <View style={StyleSheet.absoluteFill}>
       {new Array(NUMBER_OF_LINES).fill(0).map((_, index) => (
         <View
-          key={index * height}
+          key={index * WORD_HEIGHT}
           style={{
-            top: index * height - 2,
+            top: index * WORD_HEIGHT - 2,
             width: "100%",
             height: 2,
             backgroundColor: "#E6E5E6",

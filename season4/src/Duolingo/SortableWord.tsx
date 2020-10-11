@@ -10,12 +10,18 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
-import { calculateLayout, lastOrder, Offset, remove, reorder } from "./Layout";
-import Placeholder, {
-  MARGIN_TOP,
+import {
+  calculateLayout,
+  lastOrder,
+  Offset,
+  remove,
+  reorder,
+  WORD_HEIGHT,
+  SENTENCE_HEIGHT,
   MARGIN_LEFT,
-  NUMBER_OF_LINES,
-} from "./components/Placeholder";
+  MARGIN_TOP,
+} from "./Layout";
+import Placeholder from "./components/Placeholder";
 
 interface SortableWordProps {
   offsets: Offset[];
@@ -31,7 +37,6 @@ const SortableWord = ({
   containerWidth,
 }: SortableWordProps) => {
   const offset = offsets[index];
-  const setenceHeight = (NUMBER_OF_LINES - 1) * offset.height.value;
   const isGestureActive = useSharedValue(false);
   const isAnimating = useSharedValue(false);
   const translation = useVector();
@@ -52,10 +57,10 @@ const SortableWord = ({
     onActive: ({ translationX, translationY }, ctx) => {
       translation.x.value = ctx.x + translationX;
       translation.y.value = ctx.y + translationY;
-      if (isInBank.value && translation.y.value < setenceHeight) {
+      if (isInBank.value && translation.y.value < SENTENCE_HEIGHT) {
         offset.order.value = lastOrder(offsets);
         calculateLayout(offsets, containerWidth);
-      } else if (!isInBank.value && translation.y.value > setenceHeight) {
+      } else if (!isInBank.value && translation.y.value > SENTENCE_HEIGHT) {
         offset.order.value = -1;
         remove(offsets, index);
         calculateLayout(offsets, containerWidth);
@@ -67,7 +72,7 @@ const SortableWord = ({
         }
         if (
           between(translation.x.value, o.x.value, o.x.value + o.width.value) &&
-          between(translation.y.value, o.y.value, o.y.value + o.height.value)
+          between(translation.y.value, o.y.value, o.y.value + WORD_HEIGHT)
         ) {
           reorder(offsets, offset.order.value, o.order.value);
           calculateLayout(offsets, containerWidth);
@@ -109,7 +114,7 @@ const SortableWord = ({
       left: 0,
       zIndex: isGestureActive.value || isAnimating.value ? 100 : 0,
       width: offset.width.value,
-      height: offset.height.value,
+      height: WORD_HEIGHT,
       transform: [
         { translateX: translateX.value },
         { translateY: translateY.value },

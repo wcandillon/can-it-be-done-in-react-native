@@ -2,10 +2,15 @@ import { move } from "react-native-redash";
 
 import { SharedValues } from "../components/AnimatedHelpers";
 
+export const MARGIN_TOP = 150;
+export const MARGIN_LEFT = 32;
+export const NUMBER_OF_LINES = 3;
+export const WORD_HEIGHT = 55;
+export const SENTENCE_HEIGHT = (NUMBER_OF_LINES - 1) * WORD_HEIGHT;
+
 export type Offset = SharedValues<{
   order: number;
   width: number;
-  height: number;
   x: number;
   y: number;
   originalX: number;
@@ -49,7 +54,6 @@ export const calculateLayout = (input: Offset[], containerWidth: number) => {
   if (offsets.length === 0) {
     return;
   }
-  const height = offsets[0].height.value;
   let lineNumber = 0;
   let lineBreak = 0;
   offsets.forEach((offset, index) => {
@@ -63,6 +67,6 @@ export const calculateLayout = (input: Offset[], containerWidth: number) => {
     } else {
       offset.x.value = total;
     }
-    offset.y.value = height * lineNumber;
+    offset.y.value = WORD_HEIGHT * lineNumber;
   });
 };

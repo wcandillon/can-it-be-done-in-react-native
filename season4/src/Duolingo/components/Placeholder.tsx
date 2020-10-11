@@ -1,11 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 
-import { Offset } from "../Layout";
-
-export const MARGIN_TOP = 150;
-export const MARGIN_LEFT = 32;
-export const NUMBER_OF_LINES = 3;
+import { MARGIN_LEFT, MARGIN_TOP, Offset, WORD_HEIGHT } from "../Layout";
 
 interface PlaceholderProps {
   offset: Offset;
@@ -20,7 +16,7 @@ const Placeholder = ({ offset }: PlaceholderProps) => {
         top: offset.originalY.value + MARGIN_TOP + 2,
         left: offset.originalX.value - MARGIN_LEFT + 2,
         width: offset.width.value - 4,
-        height: offset.height.value - 4,
+        height: WORD_HEIGHT - 4,
         borderRadius: 8,
       }}
     />
