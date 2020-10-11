@@ -5,6 +5,7 @@ import { useSharedValue, runOnUI } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
 import Lines from "./components/Lines";
+import { calculateLayout } from "./Layout";
 
 const margin = 32;
 const containerWidth = Dimensions.get("window").width - margin * 2;
@@ -39,7 +40,34 @@ const WordList = ({ children }: WordListProps) => {
     return (
       <View style={styles.row}>
         {children.map((child, index) => {
-          return <View key={index}>{child}</View>;
+          return (
+            <View
+              key={index}
+              onLayout={({
+                nativeEvent: {
+                  layout: { x, y, width, height },
+                },
+              }) => {
+                const offset = offsets[index];
+                offset.order.value = -1;
+                offset.width.value = width;
+                offset.height.value = height;
+                offset.originalX.value = x;
+                offset.originalY.value = y;
+                runOnUI(() => {
+                  "worklet";
+                  if (
+                    offsets.filter((o) => o.order.value !== -1).length === 0
+                  ) {
+                    calculateLayout(offsets, containerWidth);
+                    setReady(true);
+                  }
+                })();
+              }}
+            >
+              {child}
+            </View>
+          );
         })}
       </View>
     );
