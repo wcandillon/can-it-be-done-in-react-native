@@ -1,7 +1,7 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import { LoadAssets } from "./src/components";
 import { Routes } from "./src/Routes";
 import Examples from "./src/Examples";
 import PanGesture from "./src/PanGesture";
@@ -100,9 +100,9 @@ const AppNavigator = () => (
 );
 
 const App = () => (
-  <NavigationContainer>
+  <LoadAssets assets={[]} fonts={{}}>
     <AppNavigator />
-  </NavigationContainer>
+  </LoadAssets>
 );
 
 export default App;

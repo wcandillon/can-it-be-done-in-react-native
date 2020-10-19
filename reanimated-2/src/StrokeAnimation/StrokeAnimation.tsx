@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Dimensions, PixelRatio } from "react-native";
+import { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 import Svg from "react-native-svg";
 
 import AnimatedStroke from "./AnimatedStroke";
@@ -40,6 +41,13 @@ const styles = StyleSheet.create({
 });
 
 const StrokeAnimation = () => {
+  const progress = useSharedValue(0);
+  useEffect(() => {
+    progress.value = withTiming(1, {
+      duration: 5000,
+      easing: Easing.inOut(Easing.ease),
+    });
+  }, [progress]);
   return (
     <View style={styles.container}>
       <Svg
@@ -48,7 +56,7 @@ const StrokeAnimation = () => {
         viewBox={[0, 0, vWidth + MARGIN, vHeight + MARGIN].join(" ")}
       >
         {paths.map((d, key) => (
-          <AnimatedStroke key={key} d={d} />
+          <AnimatedStroke key={key} d={d} progress={progress} />
         ))}
       </Svg>
     </View>
