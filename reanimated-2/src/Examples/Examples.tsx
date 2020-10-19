@@ -44,6 +44,10 @@ export const examples = [
     screen: "Fluid",
     title: "🍸 Fluid",
   },
+  {
+    screen: "StrokeAnimation",
+    title: "🔠 Stroke Animations",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

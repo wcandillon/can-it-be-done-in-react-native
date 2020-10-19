@@ -9,4 +9,5 @@ export type Routes = {
   Accordion: undefined;
   Wave: undefined;
   Fluid: undefined;
+  StrokeAnimation: undefined;
 };

@@ -13,6 +13,7 @@ import MaskedView from "./src/MaskedView";
 import Accordion from "./src/Accordion";
 import Wave from "./src/Wave";
 import Fluid from "./src/Fluid";
+import StrokeAnimation from "./src/StrokeAnimation";
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -86,6 +87,13 @@ const AppNavigator = () => (
       component={Fluid}
       options={{
         title: "Soft Body Fluid",
+      }}
+    />
+    <Stack.Screen
+      name="StrokeAnimation"
+      component={StrokeAnimation}
+      options={{
+        title: "Stroke Animation",
       }}
     />
   </Stack.Navigator>
