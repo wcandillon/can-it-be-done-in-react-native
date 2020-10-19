@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect } from "react";
-import { View, StyleSheet, Dimensions, PixelRatio } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 import Svg from "react-native-svg";
 

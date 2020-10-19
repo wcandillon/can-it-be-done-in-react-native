@@ -13,7 +13,9 @@ import MaskedView from "./src/MaskedView";
 import Accordion from "./src/Accordion";
 import Wave from "./src/Wave";
 import Fluid from "./src/Fluid";
-import StrokeAnimation, {assets as strokeAnimationAssets} from "./src/StrokeAnimation";
+import StrokeAnimation, {
+  assets as strokeAnimationAssets,
+} from "./src/StrokeAnimation";
 
 const assets = [...strokeAnimationAssets];
 const Stack = createStackNavigator<Routes>();

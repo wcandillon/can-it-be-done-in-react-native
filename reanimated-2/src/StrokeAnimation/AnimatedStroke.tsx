@@ -1,6 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import Animated, { useAnimatedProps, Easing, useDerivedValue } from "react-native-reanimated";
-import { parse, serialize, clamp, mix } from "react-native-redash";
+import React, { useRef, useState } from "react";
+import Animated, {
+  useAnimatedProps,
+  Easing,
+  useDerivedValue,
+} from "react-native-reanimated";
+import { mix } from "react-native-redash";
 import { Path } from "react-native-svg";
 
 const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
@@ -12,18 +16,22 @@ interface AnimatedStrokeProps {
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const AnimatedStroke = ({ d, progress: rawProgress}: AnimatedStrokeProps) => {
+const AnimatedStroke = ({ d, progress: rawProgress }: AnimatedStrokeProps) => {
   const color = colors[Math.round(Math.random() * colors.length)];
   const offset = Math.random();
   const sign = Math.round(Math.random()) ? -1 : 1;
-  const progress = useDerivedValue(() => Math.max(mix(rawProgress.value, sign * offset, 1), 0));
+  const progress = useDerivedValue(() =>
+    Math.max(mix(rawProgress.value, sign * offset, 1), 0)
+  );
   const ref = useRef<typeof AnimatedPath>(null);
   const [length, setLength] = useState(0);
   const animatedProps1 = useAnimatedProps(() => ({
-    strokeDashoffset: length - length * Easing.bezier(0.61, 1, 0.88, 1)(progress.value),
+    strokeDashoffset:
+      length - length * Easing.bezier(0.61, 1, 0.88, 1)(progress.value),
   }));
   const animatedProps2 = useAnimatedProps(() => ({
-    strokeDashoffset: length - length * Easing.bezier(0.37, 0, 0.63, 1)(progress.value),
+    strokeDashoffset:
+      length - length * Easing.bezier(0.37, 0, 0.63, 1)(progress.value),
   }));
   return (
     <>
