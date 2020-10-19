@@ -13,8 +13,9 @@ import MaskedView from "./src/MaskedView";
 import Accordion from "./src/Accordion";
 import Wave from "./src/Wave";
 import Fluid from "./src/Fluid";
-import StrokeAnimation from "./src/StrokeAnimation";
+import StrokeAnimation, {assets as strokeAnimationAssets} from "./src/StrokeAnimation";
 
+const assets = [...strokeAnimationAssets];
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
   <Stack.Navigator>
@@ -100,7 +101,7 @@ const AppNavigator = () => (
 );
 
 const App = () => (
-  <LoadAssets assets={[]} fonts={{}}>
+  <LoadAssets assets={assets} fonts={{}}>
     <AppNavigator />
   </LoadAssets>
 );

@@ -5,6 +5,7 @@ import { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 import Svg from "react-native-svg";
 
 import AnimatedStroke from "./AnimatedStroke";
+import Background from "./Background";
 
 const paths = [
   "M55.285 218C53.286 218 51.585 217.3 50.185 215.9 48.785 214.5 48.085 212.8 48.085 210.8V15.5C48.085 13.3 48.785 11.5 50.185 10.1 51.585 8.7 53.286 8 55.285 8H132.985C157.185 8 176.285 13.6 190.285 24.8 204.285 36 211.285 52.3 211.285 73.7 211.285 88.5 207.585 100.8 200.185 110.6 192.985 120.4 183.285 127.5 171.085 131.9L214.885 208.4C215.485 209.6 215.785 210.7 215.785 211.7 215.785 213.5 215.085 215 213.685 216.2 212.485 217.4 211.085 218 209.485 218H182.185C178.785 218 176.185 217.1 174.385 215.3 172.585 213.5 171.185 211.7 170.185 209.9L131.485 138.8H89.786V210.8C89.786 212.8 89.085 214.5 87.685 215.9 86.485 217.3 84.786 218 82.585 218H55.285Z",
@@ -28,13 +29,12 @@ const paths = [
 
 const vWidth = 894.15;
 const vHeight = 572;
-const width = Dimensions.get("window").width - 32;
+const width = Dimensions.get("window").width - 64;
 const MARGIN = (5 * vWidth) / width;
 const height = (width * vHeight) / vWidth;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -44,12 +44,13 @@ const StrokeAnimation = () => {
   const progress = useSharedValue(0);
   useEffect(() => {
     progress.value = withTiming(1, {
-      duration: 5000,
-      easing: Easing.inOut(Easing.ease),
+      duration: 2000,
+      easing: Easing.linear,
     });
   }, [progress]);
   return (
     <View style={styles.container}>
+      <Background />
       <Svg
         width={width}
         height={height}
