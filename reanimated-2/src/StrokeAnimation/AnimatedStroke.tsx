@@ -18,7 +18,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const AnimatedStroke = ({ d, progress: rawProgress }: AnimatedStrokeProps) => {
   const color = colors[Math.round(Math.random() * colors.length)];
-  const offset = Math.random();
+  const offset = Math.random() * 0.5;
   const sign = Math.round(Math.random()) ? -1 : 1;
   const progress = useDerivedValue(() =>
     Math.max(mix(rawProgress.value, sign * offset, 1), 0)

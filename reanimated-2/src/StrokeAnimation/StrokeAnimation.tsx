@@ -42,12 +42,14 @@ const styles = StyleSheet.create({
 
 const StrokeAnimation = () => {
   const progress = useSharedValue(0);
+
   useEffect(() => {
     progress.value = withTiming(1, {
-      duration: 3000,
+      duration: 5000,
       easing: Easing.inOut(Easing.ease),
     });
   }, [progress]);
+
   return (
     <View style={styles.container}>
       <Background />
