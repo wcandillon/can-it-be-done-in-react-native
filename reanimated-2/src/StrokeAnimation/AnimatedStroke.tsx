@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Animated, { useAnimatedProps, Easing } from "react-native-reanimated";
-import { parse, serialize } from "react-native-redash";
+import Animated, { useAnimatedProps, Easing, useDerivedValue } from "react-native-reanimated";
+import { parse, serialize, clamp, mix } from "react-native-redash";
 import { Path } from "react-native-svg";
 
 const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
@@ -12,8 +12,11 @@ interface AnimatedStrokeProps {
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const AnimatedStroke = ({ d, progress }: AnimatedStrokeProps) => {
+const AnimatedStroke = ({ d, progress: rawProgress}: AnimatedStrokeProps) => {
   const color = colors[Math.round(Math.random() * colors.length)];
+  const offset = Math.random();
+  const sign = Math.round(Math.random()) ? -1 : 1;
+  const progress = useDerivedValue(() => Math.max(mix(rawProgress.value, sign * offset, 1), 0));
   const ref = useRef<typeof AnimatedPath>(null);
   const [length, setLength] = useState(0);
   const animatedProps1 = useAnimatedProps(() => ({
@@ -34,7 +37,7 @@ const AnimatedStroke = ({ d, progress }: AnimatedStrokeProps) => {
       />
       <AnimatedPath
         ref={ref}
-        onLayout={() => setLength(ref.current.getTotalLength)}
+        onLayout={() => setLength(ref.current.getTotalLength())}
         animatedProps={animatedProps2}
         d={d}
         stroke="black"

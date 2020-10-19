@@ -44,8 +44,8 @@ const StrokeAnimation = () => {
   const progress = useSharedValue(0);
   useEffect(() => {
     progress.value = withTiming(1, {
-      duration: 2000,
-      easing: Easing.linear,
+      duration: 3000,
+      easing: Easing.inOut(Easing.ease),
     });
   }, [progress]);
   return (
