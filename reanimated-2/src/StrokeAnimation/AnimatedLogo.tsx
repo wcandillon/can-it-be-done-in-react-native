@@ -27,44 +27,33 @@ const AnimatedLogo = ({ progress }: AnimatedLogoProps) => {
     r: progress.value * 35,
     fillOpacity: progress.value,
   }));
-  const rotate = useDerivedValue(() =>
-    interpolate(progress.value, [0.75, 1], [0, 1], Extrapolate.CLAMP)
-  );
-  const strokeDashoffset = useDerivedValue(
-    () =>
-      length -
-      length * interpolate(progress.value, [0, 0.75], [0, 1], Extrapolate.CLAMP)
-  );
-  const ellipse1 = useAnimatedProps(() => ({
-    strokeDashoffset: strokeDashoffset.value,
-  }));
-  const ellipse2 = useAnimatedProps(() => ({
-    strokeDashoffset: strokeDashoffset.value,
-  }));
-  const ellipse3 = useAnimatedProps(() => ({
-    strokeDashoffset: strokeDashoffset.value,
-  }));
-  const style1 = useAnimatedProps(() => ({
-    transform: [
-      {
-        rotate: (Math.PI / 6) * rotate.value,
-      },
-    ],
-  }));
-  const style2 = useAnimatedProps(() => ({
-    transform: [
-      {
-        rotate: (-Math.PI / 6) * rotate.value,
-      },
-    ],
-  }));
-  const style3 = useAnimatedProps(() => ({
-    transform: [
-      {
-        rotate: (Math.PI / 2) * rotate.value,
-      },
-    ],
-  }));
+  const stroke = () => {
+    "worklet";
+    return {
+      strokeDashoffset:
+        length -
+        length *
+          interpolate(progress.value, [0, 0.75], [0, 1], Extrapolate.CLAMP),
+    };
+  };
+  const rotate = (target: number) => () => {
+    "worklet";
+    return {
+      transform: [
+        {
+          rotate:
+            target *
+            interpolate(progress.value, [0.75, 1], [0, 1], Extrapolate.CLAMP),
+        },
+      ],
+    };
+  };
+  const ellipse1 = useAnimatedProps(stroke);
+  const ellipse2 = useAnimatedProps(stroke);
+  const ellipse3 = useAnimatedProps(stroke);
+  const style1 = useAnimatedProps(rotate(Math.PI / 6));
+  const style2 = useAnimatedProps(rotate(-Math.PI / 6));
+  const style3 = useAnimatedProps(rotate(Math.PI / 2));
   return (
     <View>
       <Svg
