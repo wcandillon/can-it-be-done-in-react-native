@@ -1,12 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, View, StyleSheet } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedProps,
   useDerivedValue,
 } from "react-native-reanimated";
-import { mix } from "react-native-redash";
 import Svg, { Circle, Ellipse } from "react-native-svg";
 
 const vWidth = 499;
@@ -28,70 +27,115 @@ const AnimatedLogo = ({ progress }: AnimatedLogoProps) => {
     r: progress.value * 35,
     fillOpacity: progress.value,
   }));
-  const part1 = useDerivedValue(() =>
-    interpolate(progress.value, [0, 0.5], [0, 1], Extrapolate.CLAMP)
+  const rotate = useDerivedValue(() =>
+    interpolate(progress.value, [0.75, 1], [0, 1], Extrapolate.CLAMP)
   );
-  const part2 = useDerivedValue(() =>
-    interpolate(progress.value, [0.5, 1], [0, 1], Extrapolate.CLAMP)
+  const strokeDashoffset = useDerivedValue(
+    () =>
+      length -
+      length * interpolate(progress.value, [0, 0.75], [0, 1], Extrapolate.CLAMP)
   );
-  const ellipse = useDerivedValue(() => length - length * part1.value);
   const ellipse1 = useAnimatedProps(() => ({
-    strokeDashoffset: ellipse.value,
-    transform: `rotate(${30 * part2.value} 249.5 266.663)`,
+    strokeDashoffset: strokeDashoffset.value,
   }));
   const ellipse2 = useAnimatedProps(() => ({
-    strokeDashoffset: ellipse.value,
-    transform: `rotate(${-30 * part2.value} 249.5 266.663)`,
+    strokeDashoffset: strokeDashoffset.value,
   }));
   const ellipse3 = useAnimatedProps(() => ({
-    strokeDashoffset: ellipse.value,
-    transform: `rotate(${90 * part2.value} 249.5 266.663)`,
+    strokeDashoffset: strokeDashoffset.value,
+  }));
+  const style1 = useAnimatedProps(() => ({
+    transform: [
+      {
+        rotate: (Math.PI / 6) * rotate.value,
+      },
+    ],
+  }));
+  const style2 = useAnimatedProps(() => ({
+    transform: [
+      {
+        rotate: (-Math.PI / 6) * rotate.value,
+      },
+    ],
+  }));
+  const style3 = useAnimatedProps(() => ({
+    transform: [
+      {
+        rotate: (Math.PI / 2) * rotate.value,
+      },
+    ],
   }));
   return (
-    <Svg
-      width={width}
-      height={height}
-      viewBox={[0, 0, vWidth, vHeight].join(" ")}
-    >
-      <AnimatedCircle
-        animatedProps={circle}
-        fill="#61DAFB"
-        cx={vWidth / 2}
-        cy={vHeight / 2}
-      />
-      <AnimatedEllipse
-        ref={ref}
-        animatedProps={ellipse1}
-        onLayout={() => setLength(ref.current.getTotalLength())}
-        cx={249.5}
-        cy={266.663}
-        rx={90.5}
-        ry={239.5}
-        stroke="#61DAFB"
-        strokeWidth={20}
-        strokeDasharray={length}
-      />
-      <AnimatedEllipse
-        animatedProps={ellipse2}
-        cx={249.5}
-        cy={266.663}
-        rx={90.5}
-        ry={239.5}
-        stroke="#61DAFB"
-        strokeWidth={20}
-        strokeDasharray={length}
-      />
-      <AnimatedEllipse
-        animatedProps={ellipse3}
-        cx={249.5}
-        cy={266.663}
-        rx={90.5}
-        ry={239.5}
-        stroke="#61DAFB"
-        strokeWidth={20}
-        strokeDasharray={length}
-      />
-    </Svg>
+    <View>
+      <Svg
+        width={width}
+        height={height}
+        viewBox={[0, 0, vWidth, vHeight].join(" ")}
+      >
+        <AnimatedCircle
+          animatedProps={circle}
+          fill="#61DAFB"
+          cx={vWidth / 2}
+          cy={vHeight / 2}
+        />
+      </Svg>
+      <Animated.View style={[StyleSheet.absoluteFill, style1]}>
+        <Svg
+          width={width}
+          height={height}
+          viewBox={[0, 0, vWidth, vHeight].join(" ")}
+        >
+          <AnimatedEllipse
+            ref={ref}
+            animatedProps={ellipse1}
+            onLayout={() => setLength(ref.current.getTotalLength())}
+            cx={249.5}
+            cy={266.663}
+            rx={90.5}
+            ry={239.5}
+            stroke="#61DAFB"
+            strokeWidth={20}
+            strokeDasharray={length}
+          />
+        </Svg>
+      </Animated.View>
+      <Animated.View style={[StyleSheet.absoluteFill, style2]}>
+        <Svg
+          width={width}
+          height={height}
+          viewBox={[0, 0, vWidth, vHeight].join(" ")}
+        >
+          <AnimatedEllipse
+            animatedProps={ellipse2}
+            cx={249.5}
+            cy={266.663}
+            rx={90.5}
+            ry={239.5}
+            stroke="#61DAFB"
+            strokeWidth={20}
+            strokeDasharray={length}
+          />
+        </Svg>
+      </Animated.View>
+      <Animated.View style={[StyleSheet.absoluteFill, style3]}>
+        <Svg
+          width={width}
+          height={height}
+          viewBox={[0, 0, vWidth, vHeight].join(" ")}
+        >
+          <AnimatedEllipse
+            animatedProps={ellipse3}
+            cx={249.5}
+            cy={266.663}
+            rx={90.5}
+            ry={239.5}
+            stroke="#61DAFB"
+            strokeWidth={20}
+            strokeDasharray={length}
+          />
+        </Svg>
+      </Animated.View>
+    </View>
   );
 };
 

@@ -41,7 +41,7 @@ const AnimatedStroke = ({ d, progress: rawProgress }: AnimatedStrokeProps) => {
         animatedProps={animatedProps1}
         d={d}
         stroke={color}
-        strokeWidth={10}
+        strokeWidth={8}
         strokeDasharray={length}
       />
       <AnimatedPath
@@ -50,7 +50,7 @@ const AnimatedStroke = ({ d, progress: rawProgress }: AnimatedStrokeProps) => {
         animatedProps={animatedProps2}
         d={d}
         stroke="black"
-        strokeWidth={10}
+        strokeWidth={8}
         strokeDasharray={length}
         fill="white"
       />
