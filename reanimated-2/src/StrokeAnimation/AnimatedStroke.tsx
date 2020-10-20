@@ -30,6 +30,7 @@ const AnimatedStroke = ({ d, progress: rawProgress }: AnimatedStrokeProps) => {
       length - length * Easing.bezier(0.61, 1, 0.88, 1)(progress.value),
   }));
   const animatedProps2 = useAnimatedProps(() => ({
+    fillOpacity: progress.value,
     strokeDashoffset:
       length - length * Easing.bezier(0.37, 0, 0.63, 1)(progress.value),
   }));
@@ -51,6 +52,7 @@ const AnimatedStroke = ({ d, progress: rawProgress }: AnimatedStrokeProps) => {
         stroke="black"
         strokeWidth={10}
         strokeDasharray={length}
+        fill="white"
       />
     </>
   );

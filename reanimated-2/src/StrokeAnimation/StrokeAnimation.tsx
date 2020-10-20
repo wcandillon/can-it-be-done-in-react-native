@@ -5,6 +5,7 @@ import { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 import Svg from "react-native-svg";
 
 import AnimatedStroke from "./AnimatedStroke";
+import AnimatedLogo from "./AnimatedLogo";
 import Background from "./Background";
 
 const paths = [
@@ -33,7 +34,8 @@ const width = Dimensions.get("window").width - 64;
 const MARGIN = (5 * vWidth) / width;
 const height = (width * vHeight) / vWidth;
 const styles = StyleSheet.create({
-  container: {
+  layer: {
+    ...StyleSheet.absoluteFillObject,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -51,8 +53,11 @@ const StrokeAnimation = () => {
   }, [progress]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.layer}>
       <Background />
+      <View style={styles.layer}>
+        <AnimatedLogo progress={progress} />
+      </View>
       <Svg
         width={width}
         height={height}
