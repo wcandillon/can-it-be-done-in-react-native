@@ -5,6 +5,7 @@ import Svg from "react-native-svg";
 
 import Camera from "./components/Camera";
 import ZPath from "./components/ZPath";
+import { createPath3, close, addLine } from "./components/Path3";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -31,12 +32,11 @@ const ZAnimations = () => {
   const camera = useCamera();
   const x = 0.5;
   const y = 0.5;
-  const path = [
-    { x: -x, y: -y, z: 0 },
-    { x: x, y: -y, z: 0 },
-    { x: x, y: y, z: 0 },
-    { x: -x, y: y, z: 0 },
-  ];
+  const path = createPath3({ x: -x, y: -y, z: 0 });
+  addLine(path, { x: x, y: -y, z: 0 });
+  addLine(path, { x: x, y: y, z: 0 });
+  addLine(path, { x: -x, y: y, z: 0 });
+  close(path);
   return (
     <View style={styles.container}>
       <View>

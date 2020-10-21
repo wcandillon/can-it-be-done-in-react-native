@@ -35,7 +35,7 @@ const Camera = ({ camera, canvas }: CameraProps) => {
       camera.x.value = withDecay({
         velocity: toRad(velocityX, canvas.x),
       });
-      camera.x.value = withDecay({
+      camera.y.value = withDecay({
         velocity: toRad(velocityY, canvas.y),
       });
     },
