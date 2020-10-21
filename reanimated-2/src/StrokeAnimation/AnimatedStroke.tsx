@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { View } from "react-native";
 import Animated, { Easing, useAnimatedProps } from "react-native-reanimated";
 import { Path } from "react-native-svg";
 

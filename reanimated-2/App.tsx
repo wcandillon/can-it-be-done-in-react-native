@@ -13,6 +13,7 @@ import MaskedView from "./src/MaskedView";
 import Accordion from "./src/Accordion";
 import Wave from "./src/Wave";
 import Fluid from "./src/Fluid";
+import ZAnimations from "./src/ZAnimations";
 import StrokeAnimation, {
   assets as strokeAnimationAssets,
 } from "./src/StrokeAnimation";
@@ -97,6 +98,13 @@ const AppNavigator = () => (
       component={StrokeAnimation}
       options={{
         title: "Stroke Animation",
+      }}
+    />
+    <Stack.Screen
+      name="ZAnimations"
+      component={ZAnimations}
+      options={{
+        title: "ZAnimations",
       }}
     />
   </Stack.Navigator>

@@ -10,4 +10,5 @@ export type Routes = {
   Wave: undefined;
   Fluid: undefined;
   StrokeAnimation: undefined;
+  ZAnimations: undefined;
 };

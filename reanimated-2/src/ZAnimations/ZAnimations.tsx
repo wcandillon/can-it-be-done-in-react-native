@@ -1,0 +1,52 @@
+import React from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
+import { useSharedValue } from "react-native-reanimated";
+import Svg from "react-native-svg";
+
+import Camera from "./components/Camera";
+import ZPath from "./components/ZPath";
+
+const { width } = Dimensions.get("window");
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
+
+const useCamera = () => {
+  const x = useSharedValue(0);
+  const y = useSharedValue(0);
+  return { x, y };
+};
+
+const canvas = {
+  x: width,
+  y: width,
+  z: width,
+};
+
+const ZAnimations = () => {
+  const camera = useCamera();
+  const x = 0.5;
+  const y = 0.5;
+  const path = [
+    { x: -x, y: -y, z: 0 },
+    { x: x, y: -y, z: 0 },
+    { x: x, y: y, z: 0 },
+    { x: -x, y: y, z: 0 },
+  ];
+  return (
+    <View style={styles.container}>
+      <View>
+        <Svg width={canvas.x} height={canvas.y}>
+          <ZPath path={path} camera={camera} canvas={canvas} closed />
+        </Svg>
+        <Camera camera={camera} canvas={canvas} />
+      </View>
+    </View>
+  );
+};
+
+export default ZAnimations;
