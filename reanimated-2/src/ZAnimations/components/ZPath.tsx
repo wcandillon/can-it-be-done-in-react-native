@@ -22,14 +22,14 @@ interface ZPathProps {
 const ZPath = ({ path, camera, canvas, closed }: ZPathProps) => {
   const points = useDerivedValue(() => {
     const transform = processTransform3d([
-      { rotateY: camera.y.value },
-      { rotateX: camera.x.value },
+      { rotateY: camera.x.value },
+      { rotateX: camera.y.value },
     ]);
     return path.map((p) => {
       const pr = matrixVecMul4(transform, [
-        canvas.x / 2 + (p.x * canvas.x) / 2,
-        canvas.y / 2 + (p.y * canvas.y) / 2,
-        canvas.z / 2 + (p.z * canvas.z) / 2,
+        (p.x * canvas.x) / 2,
+        (p.y * canvas.y) / 2,
+        (p.z * canvas.z) / 2,
         1,
       ]);
       return { x: pr[0] / pr[3], y: pr[1] / pr[3], z: pr[2] / pr[3] };

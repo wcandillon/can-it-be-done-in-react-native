@@ -40,7 +40,11 @@ const ZAnimations = () => {
   return (
     <View style={styles.container}>
       <View>
-        <Svg width={canvas.x} height={canvas.y}>
+        <Svg
+          width={canvas.x}
+          height={canvas.y}
+          viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
+        >
           <ZPath path={path} camera={camera} canvas={canvas} closed />
         </Svg>
         <Camera camera={camera} canvas={canvas} />
