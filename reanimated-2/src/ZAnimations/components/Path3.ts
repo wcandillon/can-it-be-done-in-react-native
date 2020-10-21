@@ -1,5 +1,3 @@
-import Animated, { interpolate } from "react-native-reanimated";
-
 import { Vector3 } from "./Vector";
 
 export interface Curve3 {
@@ -29,7 +27,7 @@ export const createPath3 = (move: Vector3): Path3 => {
 /**
  * @summary Add a cubic Bèzier curve command to a path.
  */
-export const addCurve = (path: Path3, c: Curve3) => {
+export const addCurve3 = (path: Path3, c: Curve3) => {
   "worklet";
   path.curves.push({
     c1: c.c1,
@@ -38,7 +36,7 @@ export const addCurve = (path: Path3, c: Curve3) => {
   });
 };
 
-export const addLine = (path: Path3, to: Vector3) => {
+export const addLine3 = (path: Path3, to: Vector3) => {
   "worklet";
   const last = path.curves[path.curves.length - 1];
   const from = last ? last.to : path.move;
@@ -49,7 +47,7 @@ export const addLine = (path: Path3, to: Vector3) => {
   });
 };
 
-export const addQuadraticCurve = (path: Path3, cp: Vector3, to: Vector3) => {
+export const addQuadraticCurve3 = (path: Path3, cp: Vector3, to: Vector3) => {
   "worklet";
   const last = path.curves[path.curves.length - 1];
   const from = last ? last.to : path.move;
@@ -71,7 +69,7 @@ export const addQuadraticCurve = (path: Path3, cp: Vector3, to: Vector3) => {
 /**
  * @summary Add a close command to a path.
  */
-export const close = (path: Path3) => {
+export const close3 = (path: Path3) => {
   "worklet";
   path.close = true;
 };

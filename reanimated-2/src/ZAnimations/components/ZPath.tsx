@@ -3,14 +3,16 @@ import Animated, {
   useAnimatedProps,
   useDerivedValue,
 } from "react-native-reanimated";
-import { Vector, Path as Path2, serialize } from "react-native-redash";
-import { Circle, Line, Path } from "react-native-svg";
+import { Vector, serialize } from "react-native-redash";
+import { Circle, Path } from "react-native-svg";
 
-import { Matrix4, matrixVecMul4, processTransform3d } from "./Matrix4";
+import { matrixVecMul4, processTransform3d } from "./Matrix4";
 import { Vector3 } from "./Vector";
 import { Path3 } from "./Path3";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
 const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
 
 interface ZPathProps {
@@ -39,26 +41,43 @@ const project = (
 };
 
 const ZPath = ({ path, camera, canvas }: ZPathProps) => {
+  const path2 = useDerivedValue(() => ({
+    move: project(path.move, camera, canvas),
+    curves: path.curves.map((curve) => ({
+      c1: project(curve.c1, camera, canvas),
+      c2: project(curve.c2, camera, canvas),
+      to: project(curve.to, camera, canvas),
+    })),
+    close: path.close,
+  }));
   const animatedProps = useAnimatedProps(() => {
-    const path2 = {
-      move: project(path.move, camera, canvas),
-      curves: path.curves.map((curve) => ({
-        c1: project(curve.c1, camera, canvas),
-        c2: project(curve.c2, camera, canvas),
-        to: project(curve.to, camera, canvas),
-      })),
-      close: path.close,
-    };
     return {
-      d: serialize(path2),
+      d: serialize(path2.value),
     };
   });
+  const start = useAnimatedProps(() => ({
+    cx: path2.value.move.x,
+    cy: path2.value.move.y,
+  }));
   return (
-    <AnimatedPath
-      animatedProps={animatedProps}
-      stroke={colors[0]}
-      strokeWidth={10}
-    />
+    <>
+      <AnimatedPath
+        animatedProps={animatedProps}
+        stroke={colors[1]}
+        strokeWidth={20}
+      />
+      <AnimatedCircle animatedProps={start} r={10} fill={colors[1]} />
+      {path.curves.map((_, i) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const to = useAnimatedProps(() => ({
+          cx: path2.value.curves[i].to.x,
+          cy: path2.value.curves[i].to.y,
+        }));
+        return (
+          <AnimatedCircle key={i} animatedProps={to} r={10} fill={colors[1]} />
+        );
+      })}
+    </>
   );
 };
 
