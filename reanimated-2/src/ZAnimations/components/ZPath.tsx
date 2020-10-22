@@ -27,7 +27,7 @@ const project = (
   p: Vector3,
   camera: Vector<Animated.SharedValue<number>>,
   canvas: Vector3
-): Vector => {
+): Vector3 => {
   "worklet";
   const m = processTransform3d([
     { rotateY: camera.x.value },
@@ -39,7 +39,7 @@ const project = (
     (p.z * canvas.z) / 2,
     1,
   ]);
-  return { x: pr[0] / pr[3], y: pr[1] / pr[3] };
+  return { x: pr[0] / pr[3], y: pr[1] / pr[3], z: pr[2] / pr[3] };
 };
 
 const ZPath = ({
@@ -73,7 +73,6 @@ const ZPath = ({
         stroke={stroke}
         fill={fill ? stroke : "transparent"}
         strokeWidth={scaledStrokeWidth}
-        strokeLinecap="round"
       />
       {debug &&
         path2.value.curves.map((_, i) => (

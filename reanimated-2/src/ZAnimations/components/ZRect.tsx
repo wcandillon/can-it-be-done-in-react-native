@@ -3,7 +3,7 @@ import Animated from "react-native-reanimated";
 import { Vector } from "react-native-redash";
 
 import { Vector3 } from "./Vector";
-import { addArc3, addLine3, close3, createPath3 } from "./Path3";
+import { addArc3, addLine3, createPath3 } from "./Path3";
 import ZPath from "./ZPath";
 
 interface ZRectProps {
@@ -15,6 +15,7 @@ interface ZRectProps {
   strokeWidth: number;
   fill?: boolean;
   debug?: boolean;
+  z: number;
 }
 const ZRect = ({
   width,
@@ -25,6 +26,7 @@ const ZRect = ({
   strokeWidth,
   debug,
   fill,
+  z,
 }: ZRectProps) => {
   const borderRadius = strokeWidth / 2;
   const xA = width / 2;
@@ -34,22 +36,22 @@ const ZRect = ({
   const xB = xA - cornerRadius;
   const yB = yA - cornerRadius;
 
-  const path = createPath3({ x: xB, y: -yA, z: 0 });
-  addArc3(path, { x: xA, y: -yA, z: 0 }, { x: xA, y: -yB, z: 0 });
+  const path = createPath3({ x: xB, y: -yA, z });
+  addArc3(path, { x: xA, y: -yA, z }, { x: xA, y: -yB, z });
   if (yB) {
-    addLine3(path, { x: xA, y: yB, z: 0 });
+    addLine3(path, { x: xA, y: yB, z });
   }
-  addArc3(path, { x: xA, y: yA, z: 0 }, { x: xB, y: yA, z: 0 });
+  addArc3(path, { x: xA, y: yA, z }, { x: xB, y: yA, z });
   if (xB) {
-    addLine3(path, { x: -xB, y: yA, z: 0 });
+    addLine3(path, { x: -xB, y: yA, z });
   }
-  addArc3(path, { x: -xA, y: yA, z: 0 }, { x: -xA, y: yB, z: 0 });
+  addArc3(path, { x: -xA, y: yA, z }, { x: -xA, y: yB, z });
   if (yB) {
-    addLine3(path, { x: -xA, y: -yB, z: 0 });
+    addLine3(path, { x: -xA, y: -yB, z });
   }
-  addArc3(path, { x: -xA, y: -yA, z: 0 }, { x: -xB, y: -yA, z: 0 });
+  addArc3(path, { x: -xA, y: -yA, z }, { x: -xB, y: -yA, z });
   if (yB) {
-    addLine3(path, { x: xB, y: -yA, z: 0 });
+    addLine3(path, { x: xB, y: -yA, z });
   }
   return (
     <ZPath

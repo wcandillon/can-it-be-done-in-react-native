@@ -44,6 +44,7 @@ const Arc = () => {
           <ZEllipse
             rx={0.5}
             ry={0.5}
+            z={0.25}
             strokeWidth={strokeWidth}
             stroke={colors[2]}
             canvas={canvas}
@@ -52,6 +53,7 @@ const Arc = () => {
           <ZRect
             width={1}
             height={1}
+            z={-0.25}
             strokeWidth={strokeWidth}
             stroke={colors[1]}
             canvas={canvas}

@@ -14,22 +14,24 @@ interface ZEllipseProps {
   stroke: string;
   strokeWidth: number;
   debug?: boolean;
+  z: number;
 }
 
 const ZEllipse = ({
   rx: x,
   ry: y,
+  z,
   camera,
   canvas,
   stroke,
   strokeWidth,
   debug,
 }: ZEllipseProps) => {
-  const path = createPath3({ x: 0, y: -y, z: 0 });
-  addArc3(path, { x: x, y: -y, z: 0 }, { x: x, y: 0, z: 0 });
-  addArc3(path, { x: x, y: y, z: 0 }, { x: 0, y: y, z: 0 });
-  addArc3(path, { x: -x, y: y, z: 0 }, { x: -x, y: 0, z: 0 });
-  addArc3(path, { x: -x, y: -y, z: 0 }, { x: 0, y: -y, z: 0 });
+  const path = createPath3({ x: 0, y: -y, z });
+  addArc3(path, { x: x, y: -y, z }, { x: x, y: 0, z });
+  addArc3(path, { x: x, y: y, z }, { x: 0, y: y, z });
+  addArc3(path, { x: -x, y: y, z }, { x: -x, y: 0, z });
+  addArc3(path, { x: -x, y: -y, z }, { x: 0, y: -y, z });
   return (
     <ZPath
       path={path}
