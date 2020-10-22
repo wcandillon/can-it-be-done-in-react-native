@@ -5,6 +5,7 @@ import Svg from "react-native-svg";
 
 import Camera from "./components/Camera";
 import ZEllipse from "./components/ZEllipse";
+import ZRect from "./components/ZRect";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -32,6 +33,17 @@ const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
 
 const Arc = () => {
   const camera = useCamera();
+  /*
+
+          <ZEllipse
+            rx={0.5}
+            ry={0.5}
+            strokeWidth={strokeWidth}
+            stroke={colors[2]}
+            canvas={canvas}
+            camera={camera}
+          />
+          */
   return (
     <View style={styles.container}>
       <View>
@@ -40,13 +52,14 @@ const Arc = () => {
           height={canvas.y}
           viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
         >
-          <ZEllipse
-            rx={0.5}
-            ry={0.5}
+          <ZRect
+            width={1}
+            height={1}
             strokeWidth={strokeWidth}
-            stroke={colors[2]}
+            stroke={colors[1]}
             canvas={canvas}
             camera={camera}
+            fill
           />
         </Svg>
         <Camera camera={camera} canvas={canvas} />

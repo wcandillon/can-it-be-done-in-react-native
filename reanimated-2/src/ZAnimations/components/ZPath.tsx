@@ -4,7 +4,7 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 import { Vector, serialize } from "react-native-redash";
-import { Circle, Path } from "react-native-svg";
+import { Path } from "react-native-svg";
 
 import { matrixVecMul4, processTransform3d } from "./Matrix4";
 import { Vector3 } from "./Vector";
@@ -19,6 +19,7 @@ interface ZPathProps {
   canvas: Vector3;
   stroke: string;
   strokeWidth: number;
+  fill?: boolean;
   debug?: boolean;
 }
 
@@ -47,6 +48,7 @@ const ZPath = ({
   canvas,
   stroke,
   strokeWidth,
+  fill,
   debug,
 }: ZPathProps) => {
   const path2 = useDerivedValue(() => ({
@@ -63,12 +65,14 @@ const ZPath = ({
       d: serialize(path2.value),
     };
   });
+  const scaledStrokeWidth = strokeWidth * canvas.x;
   return (
     <>
       <AnimatedPath
         animatedProps={animatedProps}
         stroke={stroke}
-        strokeWidth={strokeWidth * canvas.x}
+        fill={fill ? stroke : "transparent"}
+        strokeWidth={scaledStrokeWidth}
         strokeLinecap="round"
       />
       {debug &&
@@ -76,7 +80,7 @@ const ZPath = ({
           <DebugPath
             key={i}
             stroke={stroke}
-            strokeWidth={strokeWidth * canvas.x}
+            strokeWidth={scaledStrokeWidth}
             path={path2}
             index={i}
           />
@@ -86,13 +90,7 @@ const ZPath = ({
 };
 
 /*
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-  const start = useAnimatedProps(() => ({
-    cx: path2.value.move.x,
-    cy: path2.value.move.y,
-  }));
-<AnimatedCircle animatedProps={start} r={10} fill={stroke} />
       {path.curves.map((_, i) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const to = useAnimatedProps(() => ({
