@@ -33,17 +33,6 @@ const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
 
 const Arc = () => {
   const camera = useCamera();
-  /*
-
-          <ZEllipse
-            rx={0.5}
-            ry={0.5}
-            strokeWidth={strokeWidth}
-            stroke={colors[2]}
-            canvas={canvas}
-            camera={camera}
-          />
-          */
   return (
     <View style={styles.container}>
       <View>
@@ -52,6 +41,14 @@ const Arc = () => {
           height={canvas.y}
           viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
         >
+          <ZEllipse
+            rx={0.5}
+            ry={0.5}
+            strokeWidth={strokeWidth}
+            stroke={colors[2]}
+            canvas={canvas}
+            camera={camera}
+          />
           <ZRect
             width={1}
             height={1}
