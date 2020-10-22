@@ -1,16 +1,11 @@
 import React from "react";
-import Animated from "react-native-reanimated";
-import { Vector } from "react-native-redash";
 
-import { Vector3 } from "./Vector";
 import { addArc3, addLine3, createPath3 } from "./Path3";
 import ZPath from "./ZPath";
 
 interface ZRectProps {
   width: number;
   height: number;
-  camera: Vector<Animated.SharedValue<number>>;
-  canvas: Vector3;
   stroke: string;
   strokeWidth: number;
   fill?: boolean;
@@ -20,8 +15,6 @@ interface ZRectProps {
 const ZRect = ({
   width,
   height,
-  camera,
-  canvas,
   stroke,
   strokeWidth,
   debug,
@@ -56,8 +49,6 @@ const ZRect = ({
   return (
     <ZPath
       path={path}
-      camera={camera}
-      canvas={canvas}
       stroke={stroke}
       strokeWidth={strokeWidth}
       fill={fill}

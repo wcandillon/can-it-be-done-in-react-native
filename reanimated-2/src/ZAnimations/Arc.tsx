@@ -1,11 +1,9 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
-import Svg from "react-native-svg";
 
-import Camera from "./components/Camera";
 import ZPath from "./components/ZPath";
 import { createPath3, addArc3 } from "./components/Path3";
+import ZSvg from "./components/ZSvg";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -15,12 +13,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-const useCamera = () => {
-  const x = useSharedValue(0);
-  const y = useSharedValue(0);
-  return { x, y };
-};
 
 const canvas = {
   x: width,
@@ -38,28 +30,18 @@ const paths = new Array(colors.length).fill(0).map((_, i) => {
   return path;
 });
 const Arc = () => {
-  const camera = useCamera();
   return (
     <View style={styles.container}>
-      <View>
-        <Svg
-          width={canvas.x}
-          height={canvas.y}
-          viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
-        >
-          {paths.map((path, index) => (
-            <ZPath
-              key={index}
-              stroke={colors[index]}
-              strokeWidth={strokeWidth}
-              path={path}
-              camera={camera}
-              canvas={canvas}
-            />
-          ))}
-        </Svg>
-        <Camera camera={camera} canvas={canvas} />
-      </View>
+      <ZSvg canvas={canvas}>
+        {paths.map((path, index) => (
+          <ZPath
+            key={index}
+            stroke={colors[index]}
+            strokeWidth={strokeWidth}
+            path={path}
+          />
+        ))}
+      </ZSvg>
     </View>
   );
 };

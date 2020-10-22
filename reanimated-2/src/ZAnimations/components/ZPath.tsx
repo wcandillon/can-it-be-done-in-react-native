@@ -10,13 +10,12 @@ import { matrixVecMul4, processTransform3d } from "./Matrix4";
 import { Vector3 } from "./Vector";
 import { Path3 } from "./Path3";
 import DebugPath from "./DebugPath";
+import { useZSvg } from "./ZSvg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 interface ZPathProps {
   path: Path3;
-  camera: Vector<Animated.SharedValue<number>>;
-  canvas: Vector3;
   stroke: string;
   strokeWidth: number;
   fill?: boolean;
@@ -42,15 +41,8 @@ const project = (
   return { x: pr[0] / pr[3], y: pr[1] / pr[3], z: pr[2] / pr[3] };
 };
 
-const ZPath = ({
-  path,
-  camera,
-  canvas,
-  stroke,
-  strokeWidth,
-  fill,
-  debug,
-}: ZPathProps) => {
+const ZPath = ({ path, stroke, strokeWidth, fill, debug }: ZPathProps) => {
+  const { camera, canvas } = useZSvg();
   const path2 = useDerivedValue(() => ({
     move: project(path.move, camera, canvas),
     curves: path.curves.map((curve) => ({
@@ -88,17 +80,4 @@ const ZPath = ({
   );
 };
 
-/*
-
-      {path.curves.map((_, i) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const to = useAnimatedProps(() => ({
-          cx: path2.value.curves[i].to.x,
-          cy: path2.value.curves[i].to.y,
-        }));
-        return (
-          <AnimatedCircle key={i} animatedProps={to} r={10} fill={stroke} />
-        );
-      })}
-      */
 export default ZPath;
