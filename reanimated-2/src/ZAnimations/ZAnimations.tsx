@@ -5,13 +5,7 @@ import Svg from "react-native-svg";
 
 import Camera from "./components/Camera";
 import ZPath from "./components/ZPath";
-import {
-  createPath3,
-  close3,
-  addLine3,
-  addCurve3,
-  addArc3,
-} from "./components/Path3";
+import { createPath3, addArc3 } from "./components/Path3";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -36,24 +30,9 @@ const canvas = {
 
 const ZAnimations = () => {
   const camera = useCamera();
-  const x = 0.5;
-  const y = 0.5;
   const path = createPath3({ x: -0.6, y: -0.6, z: 0 });
   addArc3(path, { x: 0.2, y: -0.6, z: 0 }, { x: 0.2, y: 0.2, z: 0 });
   addArc3(path, { x: 0.2, y: 0.6, z: 0 }, { x: 0.6, y: 0.6, z: 0 });
-
-  /*
-  addCurve3(path, {
-    c1: { x: 0.2, y: -0.6, z: 0 },
-    c2: { x: 0.2, y: 0.6, z: 0 },
-    to: { x: 0.6, y: 0.6, z: 0 },
-  });
-  addCurve3(path, {
-    c1: { x: 0.8, y: -0.12, z: 0 },
-    c2: { x: 1, y: -0.12, z: 0 },
-    to: { x: 1.2, y: 0.6, z: 0 },
-  });
-  */
   return (
     <View style={styles.container}>
       <View>

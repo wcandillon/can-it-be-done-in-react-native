@@ -1,5 +1,3 @@
-import { lerp } from "react-native-redash";
-
 import { Vector3 } from "./Vector";
 
 export interface Curve3 {
@@ -39,27 +37,6 @@ export const addCurve3 = (path: Path3, c: Curve3) => {
 };
 
 /**
- * PathCommand.prototype.arc = function( ctx, elem, renderer ) {
-  var prev = this.previousPoint;
-  var corner = this.renderPoints[0];
-  var end = this.renderPoints[1];
-  var cp0 = this.controlPoints[0];
-  var cp1 = this.controlPoints[1];
-  cp0.set( prev ).lerp( corner, arcHandleLength );
-  cp1.set( end ).lerp( corner, arcHandleLength );
-  return renderer.bezier( ctx, elem, cp0, cp1, end );
-};*/
-
-const lerp3 = (a: Vector3, b: Vector3, c: number) => {
-  "worklet";
-  return {
-    x: (b.x - a.x) * c + a.x,
-    y: (b.y - a.y) * c + a.y,
-    z: (b.z - a.z) * c + a.z,
-  };
-};
-
-/**
  * @summary Add an arc command to a path
  */
 export const addArc3 = (path: Path3, corner: Vector3, to: Vector3) => {
@@ -67,8 +44,16 @@ export const addArc3 = (path: Path3, corner: Vector3, to: Vector3) => {
   const last = path.curves[path.curves.length - 1];
   const from = last ? last.to : path.move;
   path.curves.push({
-    c1: lerp3(from, corner, 9 / 16),
-    c2: lerp3(to, corner, 9 / 16),
+    c1: {
+      x: ((corner.x - from.x) * 9) / 16 + from.x,
+      y: ((corner.y - from.y) * 9) / 16 + from.y,
+      z: ((corner.z - from.z) * 9) / 16 + from.z,
+    },
+    c2: {
+      x: ((corner.x - to.x) * 9) / 16 + to.x,
+      y: ((corner.y - to.y) * 9) / 16 + to.y,
+      z: ((corner.z - to.z) * 9) / 16 + to.z,
+    },
     to,
   });
 };
