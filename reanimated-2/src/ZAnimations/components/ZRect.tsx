@@ -22,6 +22,7 @@ const ZRect = ({
   debug,
   fill,
   z,
+  transform,
 }: ZRectProps) => {
   const borderRadius = strokeWidth / 2;
   const xA = width / 2;
@@ -56,6 +57,7 @@ const ZRect = ({
       fill={fill}
       debug={debug}
       z={z}
+      transform={transform}
     />
   );
 };

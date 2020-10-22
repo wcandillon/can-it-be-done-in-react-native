@@ -9,6 +9,7 @@ interface ZEllipseProps {
   ry: number;
   stroke: string;
   strokeWidth: number;
+  fill?: boolean;
   debug?: boolean;
   z: Animated.SharedValue<number>;
 }
@@ -20,6 +21,7 @@ const ZEllipse = ({
   stroke,
   strokeWidth,
   debug,
+  fill,
 }: ZEllipseProps) => {
   const path = createPath3({ x: 0, y: -y, z: z.value });
   addArc3(path, { x: x, y: -y, z: z.value }, { x: x, y: 0, z: z.value });
@@ -32,6 +34,7 @@ const ZEllipse = ({
       stroke={stroke}
       strokeWidth={strokeWidth}
       debug={debug}
+      fill={fill}
       z={z}
     />
   );

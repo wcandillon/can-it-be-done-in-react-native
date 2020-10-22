@@ -4,13 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Examples as ExamplesRoutes } from "../Routes";
 
 import Examples from "./Examples";
-import Arc from "./Arc";
+import Burger from "./Burger";
 import Donut from "./Donut";
-
-export type Routes = {
-  Examples: undefined;
-  Arc: undefined;
-};
 
 const Stack = createStackNavigator<ExamplesRoutes>();
 
@@ -31,10 +26,10 @@ const ExampleNavigator = () => (
       }}
     />
     <Stack.Screen
-      name="Arc"
-      component={Arc}
+      name="Burger"
+      component={Burger}
       options={{
-        title: "🌈 Rainbow",
+        title: "🍔 Burger",
       }}
     />
   </Stack.Navigator>

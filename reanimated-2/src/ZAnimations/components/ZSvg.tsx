@@ -1,7 +1,6 @@
-import React, { Children, ReactElement, ReactNode, useContext } from "react";
+import React, { Children, ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
-  useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
@@ -28,7 +27,7 @@ interface ZSvgContext {
 
 interface ZSvgProps {
   canvas: Vector3;
-  children: ReactElement[];
+  children: ReactElement[] | ReactElement;
 }
 
 const ZSvg = ({ canvas, children }: ZSvgProps) => {
