@@ -4,6 +4,7 @@ import { useSharedValue } from "react-native-reanimated";
 import Svg from "react-native-svg";
 
 import Camera from "./components/Camera";
+import ZSvg from "./components/ZSvg";
 import ZEllipse from "./components/ZEllipse";
 import ZRect from "./components/ZRect";
 
@@ -36,11 +37,7 @@ const Arc = () => {
   return (
     <View style={styles.container}>
       <View>
-        <Svg
-          width={canvas.x}
-          height={canvas.y}
-          viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
-        >
+        <ZSvg canvas={canvas}>
           <ZEllipse
             rx={0.5}
             ry={0.5}
@@ -60,7 +57,7 @@ const Arc = () => {
             camera={camera}
             fill
           />
-        </Svg>
+        </ZSvg>
         <Camera camera={camera} canvas={canvas} />
       </View>
     </View>
