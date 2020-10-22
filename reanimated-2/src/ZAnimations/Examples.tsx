@@ -9,7 +9,7 @@ import { Examples as ExamplesRoutes } from "../Routes";
 export const examples = [
   {
     screen: "Arc",
-    title: "🌈 Arc",
+    title: "🌈 Rainbow",
   },
 ] as const;
 

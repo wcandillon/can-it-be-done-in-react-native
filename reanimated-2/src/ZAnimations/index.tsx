@@ -26,7 +26,7 @@ const ExampleNavigator = () => (
       name="Arc"
       component={Arc}
       options={{
-        title: "Arc",
+        title: "🌈 Rainbow",
       }}
     />
   </Stack.Navigator>

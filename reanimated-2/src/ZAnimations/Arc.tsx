@@ -28,11 +28,18 @@ const canvas = {
   z: width,
 };
 
+const strokeWidth = 0.05;
+const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
+const paths = new Array(colors.length).fill(0).map((_, i) => {
+  const o = (i * strokeWidth) / 2;
+  const path = createPath3({ x: -0.6, y: -0.6 + o, z: 0 });
+  addArc3(path, { x: 0.2, y: -0.6 + o, z: 0 }, { x: 0.2, y: 0.2 + o, z: 0 });
+  addArc3(path, { x: 0.2, y: 0.6 + o, z: 0 }, { x: 0.6, y: 0.6 + o, z: 0 });
+  return path;
+});
+
 const ZAnimations = () => {
   const camera = useCamera();
-  const path = createPath3({ x: -0.6, y: -0.6, z: 0 });
-  addArc3(path, { x: 0.2, y: -0.6, z: 0 }, { x: 0.2, y: 0.2, z: 0 });
-  addArc3(path, { x: 0.2, y: 0.6, z: 0 }, { x: 0.6, y: 0.6, z: 0 });
   return (
     <View style={styles.container}>
       <View>
@@ -41,7 +48,17 @@ const ZAnimations = () => {
           height={canvas.y}
           viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
         >
-          <ZPath path={path} camera={camera} canvas={canvas} />
+          {paths.map((path, index) => (
+            <ZPath
+              key={index}
+              stroke={colors[index]}
+              strokeWidth={strokeWidth}
+              path={path}
+              camera={camera}
+              canvas={canvas}
+              debug
+            />
+          ))}
         </Svg>
         <Camera camera={camera} canvas={canvas} />
       </View>

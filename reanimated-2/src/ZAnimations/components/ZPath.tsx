@@ -13,12 +13,12 @@ import { Path3 } from "./Path3";
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
-
 interface ZPathProps {
   path: Path3;
   camera: Vector<Animated.SharedValue<number>>;
   canvas: Vector3;
+  stroke: string;
+  strokeWidth: number;
 }
 
 const project = (
@@ -40,7 +40,14 @@ const project = (
   return { x: pr[0] / pr[3], y: pr[1] / pr[3] };
 };
 
-const ZPath = ({ path, camera, canvas }: ZPathProps) => {
+const ZPath = ({
+  path,
+  camera,
+  canvas,
+  stroke,
+  strokeWidth,
+  debug,
+}: ZPathProps) => {
   const path2 = useDerivedValue(() => ({
     move: project(path.move, camera, canvas),
     curves: path.curves.map((curve) => ({
@@ -63,10 +70,16 @@ const ZPath = ({ path, camera, canvas }: ZPathProps) => {
     <>
       <AnimatedPath
         animatedProps={animatedProps}
-        stroke={colors[1]}
-        strokeWidth={20}
+        stroke={stroke}
+        strokeWidth={strokeWidth * canvas.x}
+        strokeLinecap="round"
       />
-      <AnimatedCircle animatedProps={start} r={10} fill={colors[1]} />
+    </>
+  );
+};
+
+/*
+<AnimatedCircle animatedProps={start} r={10} fill={stroke} />
       {path.curves.map((_, i) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const to = useAnimatedProps(() => ({
@@ -74,11 +87,8 @@ const ZPath = ({ path, camera, canvas }: ZPathProps) => {
           cy: path2.value.curves[i].to.y,
         }));
         return (
-          <AnimatedCircle key={i} animatedProps={to} r={10} fill={colors[1]} />
+          <AnimatedCircle key={i} animatedProps={to} r={10} fill={stroke} />
         );
       })}
-    </>
-  );
-};
-
+      */
 export default ZPath;
