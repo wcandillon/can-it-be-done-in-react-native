@@ -16,4 +16,5 @@ export type Routes = {
 export type Examples = {
   Examples: undefined;
   Arc: undefined;
+  Donut: undefined;
 };

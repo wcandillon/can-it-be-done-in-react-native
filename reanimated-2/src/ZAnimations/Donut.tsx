@@ -4,8 +4,7 @@ import { useSharedValue } from "react-native-reanimated";
 import Svg from "react-native-svg";
 
 import Camera from "./components/Camera";
-import ZPath from "./components/ZPath";
-import { createPath3, addArc3 } from "./components/Path3";
+import ZEllipse from "./components/ZEllipse";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -28,15 +27,9 @@ const canvas = {
   z: width,
 };
 
-const strokeWidth = 0.05;
+const strokeWidth = 0.1;
 const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
-const paths = new Array(colors.length).fill(0).map((_, i) => {
-  const o = i * (strokeWidth + strokeWidth / 2);
-  const path = createPath3({ x: -0.6, y: -0.6 + o, z: 0 });
-  addArc3(path, { x: 0.2, y: -0.6 + o, z: 0 }, { x: 0.2, y: 0.2 + o, z: 0 });
-  addArc3(path, { x: 0.2, y: 0.6 + o, z: 0 }, { x: 0.6, y: 0.6 + o, z: 0 });
-  return path;
-});
+
 const Arc = () => {
   const camera = useCamera();
   return (
@@ -47,16 +40,14 @@ const Arc = () => {
           height={canvas.y}
           viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
         >
-          {paths.map((path, index) => (
-            <ZPath
-              key={index}
-              stroke={colors[index]}
-              strokeWidth={strokeWidth}
-              path={path}
-              camera={camera}
-              canvas={canvas}
-            />
-          ))}
+          <ZEllipse
+            rx={0.5}
+            ry={0.5}
+            strokeWidth={strokeWidth}
+            stroke={colors[2]}
+            canvas={canvas}
+            camera={camera}
+          />
         </Svg>
         <Camera camera={camera} canvas={canvas} />
       </View>

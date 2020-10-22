@@ -5,6 +5,7 @@ import { Examples as ExamplesRoutes } from "../Routes";
 
 import Examples from "./Examples";
 import Arc from "./Arc";
+import Donut from "./Donut";
 
 export type Routes = {
   Examples: undefined;
@@ -20,6 +21,13 @@ const ExampleNavigator = () => (
       component={Examples}
       options={{
         title: "3D Examples",
+      }}
+    />
+    <Stack.Screen
+      name="Donut"
+      component={Donut}
+      options={{
+        title: "🍩 Domut",
       }}
     />
     <Stack.Screen

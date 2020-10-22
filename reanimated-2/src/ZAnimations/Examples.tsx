@@ -8,6 +8,10 @@ import { StyleGuide } from "../components";
 import { Examples as ExamplesRoutes } from "../Routes";
 export const examples = [
   {
+    screen: "Donut",
+    title: "🍩 Donut",
+  },
+  {
     screen: "Arc",
     title: "🌈 Rainbow",
   },
