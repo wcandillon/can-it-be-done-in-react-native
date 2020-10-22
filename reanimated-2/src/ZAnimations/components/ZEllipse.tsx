@@ -1,4 +1,5 @@
 import React from "react";
+import Animated from "react-native-reanimated";
 
 import { addArc3, createPath3 } from "./Path3";
 import ZPath from "./ZPath";
@@ -9,7 +10,7 @@ interface ZEllipseProps {
   stroke: string;
   strokeWidth: number;
   debug?: boolean;
-  z: number;
+  z: Animated.SharedValue<number>;
 }
 
 const ZEllipse = ({
@@ -20,17 +21,18 @@ const ZEllipse = ({
   strokeWidth,
   debug,
 }: ZEllipseProps) => {
-  const path = createPath3({ x: 0, y: -y, z });
-  addArc3(path, { x: x, y: -y, z }, { x: x, y: 0, z });
-  addArc3(path, { x: x, y: y, z }, { x: 0, y: y, z });
-  addArc3(path, { x: -x, y: y, z }, { x: -x, y: 0, z });
-  addArc3(path, { x: -x, y: -y, z }, { x: 0, y: -y, z });
+  const path = createPath3({ x: 0, y: -y, z: z.value });
+  addArc3(path, { x: x, y: -y, z: z.value }, { x: x, y: 0, z: z.value });
+  addArc3(path, { x: x, y: y, z: z.value }, { x: 0, y: y, z: z.value });
+  addArc3(path, { x: -x, y: y, z: z.value }, { x: -x, y: 0, z: z.value });
+  addArc3(path, { x: -x, y: -y, z: z.value }, { x: 0, y: -y, z: z.value });
   return (
     <ZPath
       path={path}
       stroke={stroke}
       strokeWidth={strokeWidth}
       debug={debug}
+      z={z}
     />
   );
 };

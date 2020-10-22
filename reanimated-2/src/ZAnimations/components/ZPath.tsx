@@ -2,6 +2,7 @@ import React from "react";
 import Animated, {
   useAnimatedProps,
   useDerivedValue,
+  useAnimatedReaction,
 } from "react-native-reanimated";
 import { Vector, serialize } from "react-native-redash";
 import { Path } from "react-native-svg";
@@ -20,6 +21,7 @@ interface ZPathProps {
   strokeWidth: number;
   fill?: boolean;
   debug?: boolean;
+  z: Animated.SharedValue<number>;
 }
 
 const project = (
@@ -41,8 +43,9 @@ const project = (
   return { x: pr[0] / pr[3], y: pr[1] / pr[3], z: pr[2] / pr[3] };
 };
 
-const ZPath = ({ path, stroke, strokeWidth, fill, debug }: ZPathProps) => {
+const ZPath = ({ path, stroke, strokeWidth, fill, debug, z }: ZPathProps) => {
   const { camera, canvas } = useZSvg();
+
   const path2 = useDerivedValue(() => ({
     move: project(path.move, camera, canvas),
     curves: path.curves.map((curve) => ({
@@ -58,6 +61,21 @@ const ZPath = ({ path, stroke, strokeWidth, fill, debug }: ZPathProps) => {
     };
   });
   const scaledStrokeWidth = strokeWidth * canvas.x;
+  useAnimatedReaction(
+    () => {
+      return path2.value.move.z;
+      return (
+        (path2.value.move.z +
+          path2.value.curves.reduce((acc, curve) => {
+            return (curve.c1.z + curve.c2.z + curve.to.z) / 3;
+          }, 0)) /
+        path2.value.curves.length
+      );
+    },
+    (v: number) => {
+      z.value = 1000 + v;
+    }
+  );
   return (
     <>
       <AnimatedPath

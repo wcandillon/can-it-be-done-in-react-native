@@ -1,23 +1,17 @@
-import React, { Children, ReactNode, useContext } from "react";
-import { View } from "react-native";
+import React, { Children, ReactElement, ReactNode, useContext } from "react";
+import { StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedProps,
+  useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
 import { Vector } from "react-native-redash";
-import Svg, { Symbol, Use } from "react-native-svg";
+import Svg from "react-native-svg";
 
 import Camera from "./Camera";
 import { Vector3 } from "./Vector";
 
-const AnimatedUse = Animated.createAnimatedComponent(Use);
 const Context = React.createContext<ZSvgContext | null>(null);
-
-const useCamera = () => {
-  const x = useSharedValue(0);
-  const y = useSharedValue(0);
-  return { x, y };
-};
 
 export const useZSvg = () => {
   const ctx = useContext(Context);
@@ -34,32 +28,41 @@ interface ZSvgContext {
 
 interface ZSvgProps {
   canvas: Vector3;
-  children: ReactNode;
+  children: ReactElement[];
 }
 
 const ZSvg = ({ canvas, children }: ZSvgProps) => {
-  const camera = useCamera();
+  const camera = { x: useSharedValue(0), y: useSharedValue(0) };
   return (
     <Context.Provider value={{ canvas, camera }}>
-      <View>
-        <Svg
-          width={canvas.x}
-          height={canvas.y}
-          viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
-        >
-          {Children.map(children, (child, index) => {
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const useProps = useAnimatedProps(() => ({
-              href: `#${index}`,
-            }));
-            return (
-              <React.Fragment key={index}>
-                <Symbol id={`${index}`}>{child}</Symbol>
-                <AnimatedUse animatedProps={useProps} />
-              </React.Fragment>
-            );
-          })}
-        </Svg>
+      <View style={{ width: canvas.x, height: canvas.y }}>
+        {Children.map(children, (child, index) => {
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          const style = useAnimatedStyle(() => ({
+            zIndex: child.props.z.value,
+          }));
+          return (
+            <Animated.View
+              key={index}
+              style={[StyleSheet.absoluteFill, style]}
+              pointerEvents="none"
+            >
+              <Svg
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                }}
+                viewBox={[
+                  -canvas.x / 2,
+                  -canvas.y / 2,
+                  canvas.x,
+                  canvas.y,
+                ].join(" ")}
+              >
+                {child}
+              </Svg>
+            </Animated.View>
+          );
+        })}
         <Camera camera={camera} canvas={canvas} />
       </View>
     </Context.Provider>
