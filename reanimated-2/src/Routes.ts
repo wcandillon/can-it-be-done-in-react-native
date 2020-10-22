@@ -12,3 +12,8 @@ export type Routes = {
   StrokeAnimation: undefined;
   ZAnimations: undefined;
 };
+
+export type Examples = {
+  Examples: undefined;
+  Arc: undefined;
+};
