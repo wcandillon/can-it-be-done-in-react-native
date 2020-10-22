@@ -31,13 +31,12 @@ const canvas = {
 const strokeWidth = 0.05;
 const colors = ["#FFC27A", "#7EDAB9", "#45A6E5", "#FE8777"];
 const paths = new Array(colors.length).fill(0).map((_, i) => {
-  const o = (i * strokeWidth) / 2;
+  const o = i * (strokeWidth + strokeWidth / 2);
   const path = createPath3({ x: -0.6, y: -0.6 + o, z: 0 });
   addArc3(path, { x: 0.2, y: -0.6 + o, z: 0 }, { x: 0.2, y: 0.2 + o, z: 0 });
   addArc3(path, { x: 0.2, y: 0.6 + o, z: 0 }, { x: 0.6, y: 0.6 + o, z: 0 });
   return path;
 });
-
 const ZAnimations = () => {
   const camera = useCamera();
   return (
@@ -56,7 +55,6 @@ const ZAnimations = () => {
               path={path}
               camera={camera}
               canvas={canvas}
-              debug
             />
           ))}
         </Svg>

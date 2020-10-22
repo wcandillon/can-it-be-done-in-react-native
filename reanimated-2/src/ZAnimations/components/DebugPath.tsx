@@ -58,8 +58,16 @@ const DebugPath = ({ path, index, stroke, strokeWidth }: DebugPathProps) => {
       <AnimatedLine animatedProps={line1} stroke={stroke} strokeWidth={1} />
       <AnimatedLine animatedProps={line2} stroke={stroke} strokeWidth={1} />
       <AnimatedLine animatedProps={line3} stroke={stroke} strokeWidth={1} />
-      <AnimatedCircle animatedProps={circle1} r={5} fill={stroke} />
-      <AnimatedCircle animatedProps={circle2} r={5} fill={stroke} />
+      <AnimatedCircle
+        animatedProps={circle1}
+        r={strokeWidth / 2}
+        fill={stroke}
+      />
+      <AnimatedCircle
+        animatedProps={circle2}
+        r={strokeWidth / 2}
+        fill={stroke}
+      />
     </>
   );
 };
