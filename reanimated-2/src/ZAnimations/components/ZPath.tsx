@@ -11,6 +11,7 @@ import {
   Transforms3d,
   matrixVecMul4,
   processTransform3d,
+  Matrix4,
 } from "react-native-redash";
 import { Path } from "react-native-svg";
 
@@ -34,15 +35,10 @@ const project = (
   p: Vector3,
   camera: Vector<Animated.SharedValue<number>>,
   canvas: Vector3,
-  transform: Transforms3d
+  m: Animated.SharedValue<Matrix4>
 ): Vector3 => {
   "worklet";
-  const cameraTransform: Transforms3d = [
-    { rotateY: camera.x.value },
-    { rotateX: camera.y.value },
-  ];
-  const m = processTransform3d(cameraTransform.concat(transform));
-  const pr = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
+  const pr = matrixVecMul4(m.value, [p.x, p.y, p.z, 1]);
   return {
     x: ((pr[0] / pr[3]) * canvas.x) / 2,
     y: ((pr[1] / pr[3]) * canvas.y) / 2,
@@ -60,12 +56,20 @@ const ZPath = ({
 }: ZPathProps) => {
   const { camera, canvas } = useZSvg();
   const zIndex = useZIndex();
+  const transformMatrix = useDerivedValue(() => {
+    const cameraTransform: Transforms3d = [
+      { rotateY: camera.x.value },
+      { rotateX: camera.y.value },
+    ];
+    const m = processTransform3d(cameraTransform.concat(transform));
+    return m;
+  });
   const path2 = useDerivedValue(() => ({
-    move: project(path.move, camera, canvas, transform),
+    move: project(path.move, camera, canvas, transformMatrix),
     curves: path.curves.map((curve) => ({
-      c1: project(curve.c1, camera, canvas, transform),
-      c2: project(curve.c2, camera, canvas, transform),
-      to: project(curve.to, camera, canvas, transform),
+      c1: project(curve.c1, camera, canvas, transformMatrix),
+      c2: project(curve.c2, camera, canvas, transformMatrix),
+      to: project(curve.to, camera, canvas, transformMatrix),
     })),
     close: path.close,
   }));
