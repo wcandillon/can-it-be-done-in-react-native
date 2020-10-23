@@ -32,12 +32,7 @@ interface ZPathProps {
   transform: Transforms3d;
 }
 
-const project = (
-  p: Vector3,
-  camera: Vector<Animated.SharedValue<number>>,
-  canvas: Vector3,
-  m: Matrix4
-): Vector3 => {
+const project = (p: Vector3, canvas: Vector3, m: Matrix4): Vector3 => {
   "worklet";
   const pr = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
   return {
@@ -56,25 +51,27 @@ const ZPath = ({
   transform,
 }: ZPathProps) => {
   const { camera, canvas } = useZSvg();
-  const path2 = useDerivedValue(() => {
-    const cameraTransform: Transforms3d = [
-      { perspective: 5 },
-      { rotateY: camera.x.value },
-      { rotateX: camera.y.value },
-    ];
-    const transformMatrix = processTransform3d(
-      cameraTransform.concat(transform)
-    );
-    return {
-      move: project(path.move, camera, canvas, transformMatrix),
-      curves: path.curves.map((curve) => ({
-        c1: project(curve.c1, camera, canvas, transformMatrix),
-        c2: project(curve.c2, camera, canvas, transformMatrix),
-        to: project(curve.to, camera, canvas, transformMatrix),
-      })),
-      close: path.close,
-    };
-  });
+  const path2 = useDerivedValue(
+    (): Path3 => {
+      const cameraTransform: Transforms3d = [
+        { perspective: 5 },
+        { rotateY: camera.x.value },
+        { rotateX: camera.y.value },
+      ];
+      const transformMatrix = processTransform3d(
+        cameraTransform.concat(transform)
+      );
+      return {
+        move: project(path.move, canvas, transformMatrix),
+        curves: path.curves.map((curve) => ({
+          c1: project(curve.c1, canvas, transformMatrix),
+          c2: project(curve.c2, canvas, transformMatrix),
+          to: project(curve.to, canvas, transformMatrix),
+        })),
+        close: path.close,
+      };
+    }
+  );
   const animatedProps = useAnimatedProps(() => {
     return {
       d: serialize(path2.value),
