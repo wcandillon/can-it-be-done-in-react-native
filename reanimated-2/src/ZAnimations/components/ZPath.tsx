@@ -27,25 +27,22 @@ interface ZPathProps {
   strokeWidth: number;
   fill?: boolean;
   debug?: boolean;
-  transform?: Transforms3d;
+  transform: Transforms3d;
 }
 
 const project = (
   p: Vector3,
   camera: Vector<Animated.SharedValue<number>>,
   canvas: Vector3,
-  transform?: Transforms3d
+  transform: Transforms3d
 ): Vector3 => {
   "worklet";
-  const m = processTransform3d(
-    (transform || []).concat([
-      { perspective: 1000 },
-      { rotateY: camera.x.value },
-      { rotateX: camera.y.value },
-    ])
-  );
+  const cameraTransform: Transforms3d = [
+    { rotateY: camera.x.value },
+    { rotateX: camera.y.value },
+  ];
+  const m = processTransform3d(cameraTransform.concat(transform));
   const pr = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
-  console.log(((pr[2] / pr[3]) * canvas.z) / 2);
   return {
     x: ((pr[0] / pr[3]) * canvas.x) / 2,
     y: ((pr[1] / pr[3]) * canvas.y) / 2,
@@ -110,6 +107,10 @@ const ZPath = ({
         ))}
     </>
   );
+};
+
+ZPath.defaultProps = {
+  transform: [],
 };
 
 export default ZPath;
