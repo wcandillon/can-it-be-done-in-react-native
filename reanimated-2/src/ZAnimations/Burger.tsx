@@ -25,9 +25,9 @@ const Arc = () => {
     <View style={styles.container}>
       <ZSvg canvas={canvas}>
         <ZBox
-          width={0.6}
-          height={0.5}
-          depth={0.4}
+          width={1}
+          height={1}
+          depth={1}
           front="#FFC27A"
           back="#7EDAB9"
           left="#45A6E5"
