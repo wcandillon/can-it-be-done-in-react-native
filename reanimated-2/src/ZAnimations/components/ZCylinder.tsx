@@ -62,11 +62,46 @@ const ZCylinder = ({ r, length, left, front, body }: ZBoxProps) => {
     };
     const head = project({ x: 0, y: 0, z: -z }, canvas, cameraTransform);
     const center = project({ x: 0, y: 0, z }, canvas, cameraTransform);
-
+    const p1 = project(
+      { x: r * Math.cos(Math.PI / 4), y: r * Math.sin(Math.PI / 4), z },
+      canvas,
+      cameraTransform
+    );
+    const p2 = project(
+      {
+        x: r * Math.cos(Math.PI / 2 + Math.PI / 4),
+        y: r * Math.sin(Math.PI / 2 + Math.PI / 4),
+        z,
+      },
+      canvas,
+      cameraTransform
+    );
+    const p3 = project(
+      {
+        x: r * Math.cos(Math.PI + Math.PI / 4),
+        y: r * Math.sin(Math.PI + Math.PI / 4),
+        z,
+      },
+      canvas,
+      cameraTransform
+    );
+    const p4 = project(
+      {
+        x: r * Math.cos(Math.PI + Math.PI / 2 + Math.PI / 4),
+        y: r * Math.sin(Math.PI + Math.PI / 2 + Math.PI / 4),
+        z,
+      },
+      canvas,
+      cameraTransform
+    );
     return {
       e: ep,
       head,
       center,
+      p1,
+      p2,
+      p3,
+      p4,
     };
   });
 
@@ -119,16 +154,45 @@ const ZCylinder = ({ r, length, left, front, body }: ZBoxProps) => {
       cy: shapes.value.center.y,
     };
   });
+
+  const animatedProps7 = useAnimatedProps(() => {
+    return {
+      cx: shapes.value.p1.x,
+      cy: shapes.value.p1.y,
+    };
+  });
+  const animatedProps8 = useAnimatedProps(() => {
+    return {
+      cx: shapes.value.p2.x,
+      cy: shapes.value.p2.y,
+    };
+  });
+  const animatedProps9 = useAnimatedProps(() => {
+    return {
+      cx: shapes.value.p3.x,
+      cy: shapes.value.p3.y,
+    };
+  });
+  const animatedProps10 = useAnimatedProps(() => {
+    return {
+      cx: shapes.value.p4.x,
+      cy: shapes.value.p4.y,
+    };
+  });
   return (
     <>
       <Layer zIndexStyle={zIndex}>
         <AnimatedPath animatedProps={animatedProps} fill={body} />
         <AnimatedCircle r={5} fill="red" animatedProps={animatedProps1} />
-        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps2} />
-        <AnimatedCircle r={5} fill="green" animatedProps={animatedProps3} />
-        <AnimatedCircle r={5} fill="violet" animatedProps={animatedProps4} />
-        <AnimatedCircle r={5} fill="black" animatedProps={animatedProps5} />
-        <AnimatedCircle r={5} fill="yellow" animatedProps={animatedProps6} />
+        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps2} />
+        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps3} />
+        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps4} />
+        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps5} />
+        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps6} />
+        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps7} />
+        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps8} />
+        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps9} />
+        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps10} />
       </Layer>
     </>
   );
