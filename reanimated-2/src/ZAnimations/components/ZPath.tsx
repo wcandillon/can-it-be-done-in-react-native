@@ -16,10 +16,10 @@ import {
 } from "react-native-redash";
 import Svg, { Path } from "react-native-svg";
 
-import { Vector3 } from "./Vector";
+import { project } from "./Vector";
 import { Path3 } from "./Path3";
-import DebugPath from "./DebugPath";
 import { useZSvg } from "./ZSvg";
+import Layer from "./Layer";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -32,24 +32,7 @@ interface ZPathProps {
   transform: Transforms3d;
 }
 
-const project = (p: Vector3, canvas: Vector3, m: Matrix4): Vector3 => {
-  "worklet";
-  const pr = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
-  return {
-    x: ((pr[0] / pr[3]) * canvas.x) / 2,
-    y: ((pr[1] / pr[3]) * canvas.y) / 2,
-    z: ((pr[2] / pr[3]) * canvas.z) / 2,
-  };
-};
-
-const ZPath = ({
-  path,
-  stroke,
-  strokeWidth,
-  fill,
-  debug,
-  transform,
-}: ZPathProps) => {
+const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
   const { camera, canvas } = useZSvg();
   const path2 = useDerivedValue(
     (): Path3 => {
@@ -86,32 +69,14 @@ const ZPath = ({
     ),
   }));
   return (
-    <Animated.View
-      style={[StyleSheet.absoluteFill, style]}
-      pointerEvents="none"
-    >
-      <Svg
-        style={StyleSheet.absoluteFill}
-        viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
-      >
-        <AnimatedPath
-          animatedProps={animatedProps}
-          stroke={stroke}
-          fill={fill ? stroke : "transparent"}
-          strokeWidth={scaledStrokeWidth}
-        />
-        {debug &&
-          path2.value.curves.map((_, i) => (
-            <DebugPath
-              key={i}
-              stroke={stroke}
-              strokeWidth={scaledStrokeWidth}
-              path={path2}
-              index={i}
-            />
-          ))}
-      </Svg>
-    </Animated.View>
+    <Layer zIndexStyle={style}>
+      <AnimatedPath
+        animatedProps={animatedProps}
+        stroke={stroke}
+        fill={fill ? stroke : "transparent"}
+        strokeWidth={scaledStrokeWidth}
+      />
+    </Layer>
   );
 };
 
