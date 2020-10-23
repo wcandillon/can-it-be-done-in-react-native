@@ -1,5 +1,5 @@
 import React from "react";
-import Animated, { useSharedValue } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 import { addArc3, addLine3, createPath3 } from "./Path3";
 import ZPath from "./ZPath";
@@ -22,7 +22,6 @@ const ZRect = ({
   debug,
   fill,
   z,
-  transform,
 }: ZRectProps) => {
   const borderRadius = strokeWidth / 2;
   const xA = width / 2;
@@ -57,7 +56,6 @@ const ZRect = ({
       fill={fill}
       debug={debug}
       z={z}
-      transform={transform}
     />
   );
 };

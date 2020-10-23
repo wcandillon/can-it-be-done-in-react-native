@@ -1,5 +1,4 @@
 import React from "react";
-import { View } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
 
 import { createPath3 } from "./Path3";

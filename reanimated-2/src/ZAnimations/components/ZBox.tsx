@@ -1,9 +1,7 @@
 import React from "react";
-import { View } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
 
 import ZRect from "./ZRect";
-import { useZSvg } from "./ZSvg";
 
 interface ZBoxProps {
   z: Animated.SharedValue<number>;
@@ -28,7 +26,6 @@ const ZBox = ({
   top,
   bottom,
 }: ZBoxProps) => {
-  const { canvas } = useZSvg();
   const frontZ = useSharedValue(depth / 2);
   const backZ = useSharedValue(-depth / 2);
   const topZ = useSharedValue(0);
@@ -56,10 +53,6 @@ const ZBox = ({
         height={depth}
         stroke={top}
         strokeWidth={0}
-        transform={[
-          { translateY: -(height * canvas.y) / 2 },
-          { rotateX: Math.PI / 2 },
-        ]}
         fill
       />
     </>
