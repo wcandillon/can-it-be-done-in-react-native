@@ -27,13 +27,14 @@ interface ZPathProps {
 const project = (
   p: Vector3,
   camera: Vector<Animated.SharedValue<number>>,
-  canvas: Vector3,
-  transform
+  canvas: Vector3
 ): Vector3 => {
   "worklet";
-  const m = processTransform3d(
-    transform.concat([{ rotateY: camera.x.value }, { rotateX: camera.y.value }])
-  );
+  const m = processTransform3d([
+    { perspective: 1000 },
+    { rotateY: camera.x.value },
+    { rotateX: camera.y.value },
+  ]);
   const pr = matrixVecMul4(m, [
     (p.x * canvas.x) / 2,
     (p.y * canvas.y) / 2,
@@ -43,23 +44,14 @@ const project = (
   return { x: pr[0] / pr[3], y: pr[1] / pr[3], z: pr[2] / pr[3] };
 };
 
-const ZPath = ({
-  path,
-  stroke,
-  strokeWidth,
-  fill,
-  debug,
-  z,
-  transform,
-}: ZPathProps) => {
+const ZPath = ({ path, stroke, strokeWidth, fill, debug, z }: ZPathProps) => {
   const { camera, canvas } = useZSvg();
-  const t = transform || [];
   const path2 = useDerivedValue(() => ({
-    move: project(path.move, camera, canvas, t),
+    move: project(path.move, camera, canvas),
     curves: path.curves.map((curve) => ({
-      c1: project(curve.c1, camera, canvas, t),
-      c2: project(curve.c2, camera, canvas, t),
-      to: project(curve.to, camera, canvas, t),
+      c1: project(curve.c1, camera, canvas),
+      c2: project(curve.c2, camera, canvas),
+      to: project(curve.to, camera, canvas),
     })),
     close: path.close,
   }));
