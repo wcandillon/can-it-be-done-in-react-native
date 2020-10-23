@@ -1,5 +1,5 @@
 import React from "react";
-import Animated from "react-native-reanimated";
+import { Transforms3d } from "react-native-redash";
 
 import { addArc3, addLine3, createPath3 } from "./Path3";
 import ZPath from "./ZPath";
@@ -11,7 +11,7 @@ interface ZRectProps {
   strokeWidth: number;
   fill?: boolean;
   debug?: boolean;
-  z: Animated.SharedValue<number>;
+  transform: Transforms3d;
 }
 
 const ZRect = ({
@@ -21,7 +21,7 @@ const ZRect = ({
   strokeWidth,
   debug,
   fill,
-  z,
+  transform,
 }: ZRectProps) => {
   const borderRadius = strokeWidth / 2;
   const xA = width / 2;
@@ -31,22 +31,22 @@ const ZRect = ({
   const xB = xA - cornerRadius;
   const yB = yA - cornerRadius;
 
-  const path = createPath3({ x: xB, y: -yA, z: z.value });
-  addArc3(path, { x: xA, y: -yA, z: z.value }, { x: xA, y: -yB, z: z.value });
+  const path = createPath3({ x: xB, y: -yA, z: 0 });
+  addArc3(path, { x: xA, y: -yA, z: 0 }, { x: xA, y: -yB, z: 0 });
   if (yB) {
-    addLine3(path, { x: xA, y: yB, z: z.value });
+    addLine3(path, { x: xA, y: yB, z: 0 });
   }
-  addArc3(path, { x: xA, y: yA, z: z.value }, { x: xB, y: yA, z: z.value });
+  addArc3(path, { x: xA, y: yA, z: 0 }, { x: xB, y: yA, z: 0 });
   if (xB) {
-    addLine3(path, { x: -xB, y: yA, z: z.value });
+    addLine3(path, { x: -xB, y: yA, z: 0 });
   }
-  addArc3(path, { x: -xA, y: yA, z: z.value }, { x: -xA, y: yB, z: z.value });
+  addArc3(path, { x: -xA, y: yA, z: 0 }, { x: -xA, y: yB, z: 0 });
   if (yB) {
-    addLine3(path, { x: -xA, y: -yB, z: z.value });
+    addLine3(path, { x: -xA, y: -yB, z: 0 });
   }
-  addArc3(path, { x: -xA, y: -yA, z: z.value }, { x: -xB, y: -yA, z: z.value });
+  addArc3(path, { x: -xA, y: -yA, z: 0 }, { x: -xB, y: -yA, z: 0 });
   if (yB) {
-    addLine3(path, { x: xB, y: -yA, z: z.value });
+    addLine3(path, { x: xB, y: -yA, z: 0 });
   }
   return (
     <ZPath
@@ -55,7 +55,7 @@ const ZRect = ({
       strokeWidth={strokeWidth}
       fill={fill}
       debug={debug}
-      z={z}
+      transform={transform}
     />
   );
 };

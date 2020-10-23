@@ -21,12 +21,10 @@ const canvas = {
 };
 
 const Arc = () => {
-  const z = useSharedValue(0);
   return (
     <View style={styles.container}>
       <ZSvg canvas={canvas}>
         <ZBox
-          z={z}
           width={0.6}
           height={0.5}
           depth={0.4}

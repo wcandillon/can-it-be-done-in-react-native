@@ -1,10 +1,8 @@
 import React from "react";
-import Animated, { useSharedValue } from "react-native-reanimated";
 
 import ZRect from "./ZRect";
 
 interface ZBoxProps {
-  z: Animated.SharedValue<number>;
   width: number;
   height: number;
   depth: number;
@@ -17,7 +15,6 @@ interface ZBoxProps {
 }
 
 const ZBox = ({
-  z,
   width,
   height,
   depth,
@@ -26,35 +23,17 @@ const ZBox = ({
   top,
   bottom,
 }: ZBoxProps) => {
-  const frontZ = useSharedValue(depth / 2);
-  const backZ = useSharedValue(-depth / 2);
-  const topZ = useSharedValue(0);
   return (
     <>
       <ZRect
-        z={frontZ}
         width={width}
         height={height}
         stroke={front}
         strokeWidth={0}
         fill
       />
-      <ZRect
-        z={backZ}
-        width={width}
-        height={height}
-        stroke={back}
-        strokeWidth={0}
-        fill
-      />
-      <ZRect
-        z={topZ}
-        width={width}
-        height={depth}
-        stroke={top}
-        strokeWidth={0}
-        fill
-      />
+      <ZRect width={width} height={height} stroke={back} strokeWidth={0} fill />
+      <ZRect width={width} height={depth} stroke={top} strokeWidth={0} fill />
     </>
   );
 };

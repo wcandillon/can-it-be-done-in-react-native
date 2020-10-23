@@ -1,6 +1,6 @@
 import React from "react";
-import Animated from "react-native-reanimated";
 
+import { Transforms3d } from "./Matrix4";
 import { addArc3, createPath3 } from "./Path3";
 import ZPath from "./ZPath";
 
@@ -11,23 +11,23 @@ interface ZEllipseProps {
   strokeWidth: number;
   fill?: boolean;
   debug?: boolean;
-  z: Animated.SharedValue<number>;
+  transform: Transforms3d;
 }
 
 const ZEllipse = ({
   rx: x,
   ry: y,
-  z,
   stroke,
   strokeWidth,
   debug,
   fill,
+  transform,
 }: ZEllipseProps) => {
-  const path = createPath3({ x: 0, y: -y, z: z.value });
-  addArc3(path, { x: x, y: -y, z: z.value }, { x: x, y: 0, z: z.value });
-  addArc3(path, { x: x, y: y, z: z.value }, { x: 0, y: y, z: z.value });
-  addArc3(path, { x: -x, y: y, z: z.value }, { x: -x, y: 0, z: z.value });
-  addArc3(path, { x: -x, y: -y, z: z.value }, { x: 0, y: -y, z: z.value });
+  const path = createPath3({ x: 0, y: -y, z: 0 });
+  addArc3(path, { x: x, y: -y, z: 0 }, { x: x, y: 0, z: 0 });
+  addArc3(path, { x: x, y: y, z: 0 }, { x: 0, y: y, z: 0 });
+  addArc3(path, { x: -x, y: y, z: 0 }, { x: -x, y: 0, z: 0 });
+  addArc3(path, { x: -x, y: -y, z: 0 }, { x: 0, y: -y, z: 0 });
   return (
     <ZPath
       path={path}
@@ -35,7 +35,7 @@ const ZEllipse = ({
       strokeWidth={strokeWidth}
       debug={debug}
       fill={fill}
-      z={z}
+      transform={transform}
     />
   );
 };
