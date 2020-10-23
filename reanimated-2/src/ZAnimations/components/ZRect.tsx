@@ -11,7 +11,7 @@ interface ZRectProps {
   strokeWidth: number;
   fill?: boolean;
   debug?: boolean;
-  transform: Transforms3d;
+  transform?: Transforms3d;
 }
 
 const ZRect = ({

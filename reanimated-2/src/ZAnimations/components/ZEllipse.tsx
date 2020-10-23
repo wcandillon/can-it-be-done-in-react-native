@@ -1,6 +1,6 @@
 import React from "react";
+import { Transforms3d } from "react-native-redash";
 
-import { Transforms3d } from "./Matrix4";
 import { addArc3, createPath3 } from "./Path3";
 import ZPath from "./ZPath";
 
@@ -11,7 +11,7 @@ interface ZEllipseProps {
   strokeWidth: number;
   fill?: boolean;
   debug?: boolean;
-  transform: Transforms3d;
+  transform?: Transforms3d;
 }
 
 const ZEllipse = ({

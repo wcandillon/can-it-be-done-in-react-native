@@ -4,10 +4,16 @@ import Animated, {
   useDerivedValue,
   useAnimatedReaction,
 } from "react-native-reanimated";
-import { Vector, serialize, avg, Transforms3d } from "react-native-redash";
+import {
+  Vector,
+  serialize,
+  avg,
+  Transforms3d,
+  matrixVecMul4,
+  processTransform3d,
+} from "react-native-redash";
 import { Path } from "react-native-svg";
 
-import { matrixVecMul4, processTransform3d } from "./Matrix4";
 import { Vector3 } from "./Vector";
 import { Path3 } from "./Path3";
 import DebugPath from "./DebugPath";
@@ -21,17 +27,16 @@ interface ZPathProps {
   strokeWidth: number;
   fill?: boolean;
   debug?: boolean;
-  transform: Transforms3d;
+  transform?: Transforms3d;
 }
 
 const project = (
   p: Vector3,
   camera: Vector<Animated.SharedValue<number>>,
   canvas: Vector3,
-  transform: Transforms3d
+  transform?: Transforms3d
 ): Vector3 => {
   "worklet";
-  console.log(JSON.stringify(transform, null, 2));
   const m = processTransform3d(
     (transform || []).concat([
       { perspective: 1000 },
@@ -39,13 +44,13 @@ const project = (
       { rotateX: camera.y.value },
     ])
   );
-  const pr = matrixVecMul4(m, [
-    (p.x * canvas.x) / 2,
-    (p.y * canvas.y) / 2,
-    (p.z * canvas.z) / 2,
-    1,
-  ]);
-  return { x: pr[0] / pr[3], y: pr[1] / pr[3], z: pr[2] / pr[3] };
+  const pr = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
+  console.log(((pr[2] / pr[3]) * canvas.z) / 2);
+  return {
+    x: ((pr[0] / pr[3]) * canvas.x) / 2,
+    y: ((pr[1] / pr[3]) * canvas.y) / 2,
+    z: ((pr[2] / pr[3]) * canvas.z) / 2,
+  };
 };
 
 const ZPath = ({
