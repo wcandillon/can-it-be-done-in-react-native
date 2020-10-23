@@ -58,11 +58,11 @@ const ZPath = ({
   const zIndex = useZIndex();
   const transformMatrix = useDerivedValue(() => {
     const cameraTransform: Transforms3d = [
+      { perspective: 5 },
       { rotateY: camera.x.value },
       { rotateX: camera.y.value },
     ];
-    const m = processTransform3d(cameraTransform.concat(transform));
-    return m;
+    return processTransform3d(cameraTransform.concat(transform));
   });
   const path2 = useDerivedValue(() => ({
     move: project(path.move, camera, canvas, transformMatrix),
@@ -88,7 +88,7 @@ const ZPath = ({
       );
     },
     (v: number) => {
-      zIndex.value = 1000 + v;
+      zIndex.value = v;
     }
   );
   return (
