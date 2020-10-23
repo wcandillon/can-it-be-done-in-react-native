@@ -1,8 +1,9 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import Animated, {
   useAnimatedProps,
   useDerivedValue,
-  useAnimatedReaction,
+  useAnimatedStyle,
 } from "react-native-reanimated";
 import {
   Vector,
@@ -13,12 +14,12 @@ import {
   processTransform3d,
   Matrix4,
 } from "react-native-redash";
-import { Path } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 
 import { Vector3 } from "./Vector";
 import { Path3 } from "./Path3";
 import DebugPath from "./DebugPath";
-import { useZIndex, useZSvg } from "./ZSvg";
+import { useZSvg } from "./ZSvg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -55,7 +56,6 @@ const ZPath = ({
   transform,
 }: ZPathProps) => {
   const { camera, canvas } = useZSvg();
-  const zIndex = useZIndex();
   const path2 = useDerivedValue(() => {
     const cameraTransform: Transforms3d = [
       { perspective: 5 },
@@ -81,37 +81,40 @@ const ZPath = ({
     };
   });
   const scaledStrokeWidth = strokeWidth * canvas.x;
-  useAnimatedReaction(
-    () => {
-      return avg(
-        [path2.value.move.z].concat(
-          path2.value.curves.map(({ c1, c2, to }) => avg([c1.z, c2.z, to.z]))
-        )
-      );
-    },
-    (v: number) => {
-      zIndex.value = v;
-    }
-  );
+  const style = useAnimatedStyle(() => ({
+    zIndex: avg(
+      [path2.value.move.z].concat(
+        path2.value.curves.map(({ c1, c2, to }) => avg([c1.z, c2.z, to.z]))
+      )
+    ),
+  }));
   return (
-    <>
-      <AnimatedPath
-        animatedProps={animatedProps}
-        stroke={stroke}
-        fill={fill ? stroke : "transparent"}
-        strokeWidth={scaledStrokeWidth}
-      />
-      {debug &&
-        path2.value.curves.map((_, i) => (
-          <DebugPath
-            key={i}
-            stroke={stroke}
-            strokeWidth={scaledStrokeWidth}
-            path={path2}
-            index={i}
-          />
-        ))}
-    </>
+    <Animated.View
+      style={[StyleSheet.absoluteFill, style]}
+      pointerEvents="none"
+    >
+      <Svg
+        style={StyleSheet.absoluteFill}
+        viewBox={[-canvas.x / 2, -canvas.y / 2, canvas.x, canvas.y].join(" ")}
+      >
+        <AnimatedPath
+          animatedProps={animatedProps}
+          stroke={stroke}
+          fill={fill ? stroke : "transparent"}
+          strokeWidth={scaledStrokeWidth}
+        />
+        {debug &&
+          path2.value.curves.map((_, i) => (
+            <DebugPath
+              key={i}
+              stroke={stroke}
+              strokeWidth={scaledStrokeWidth}
+              path={path2}
+              index={i}
+            />
+          ))}
+      </Svg>
+    </Animated.View>
   );
 };
 
