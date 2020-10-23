@@ -37,7 +37,7 @@ const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
   const path2 = useDerivedValue(
     (): Path3 => {
       const cameraTransform: Transforms3d = [
-        { perspective: 5 },
+        //   { perspective: 5 },
         { rotateY: camera.x.value },
         { rotateX: camera.y.value },
       ];

@@ -1,8 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
 
-import ZBox from "./components/ZBox";
+import ZCylinder from "./components/ZCylinder";
 import ZSvg from "./components/ZSvg";
 
 const { width } = Dimensions.get("window");
@@ -24,16 +23,12 @@ const Arc = () => {
   return (
     <View style={styles.container}>
       <ZSvg canvas={canvas}>
-        <ZBox
-          width={1}
-          height={1}
-          depth={1}
+        <ZCylinder
+          r={-0.5}
+          length={1}
           front="#FFC27A"
           back="#7EDAB9"
-          left="#45A6E5"
-          right="#FE8777"
-          top="#B97EDA"
-          bottom="#DA7E9F"
+          body="#45A6E5"
         />
       </ZSvg>
     </View>
