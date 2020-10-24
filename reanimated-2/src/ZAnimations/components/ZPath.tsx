@@ -1,20 +1,16 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 import Animated, {
   useAnimatedProps,
   useDerivedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
 import {
-  Vector,
   serialize,
   avg,
   Transforms3d,
-  matrixVecMul4,
   processTransform3d,
-  Matrix4,
 } from "react-native-redash";
-import Svg, { Path } from "react-native-svg";
+import { Path } from "react-native-svg";
 
 import { project } from "./Vector";
 import { Path3 } from "./Path3";
