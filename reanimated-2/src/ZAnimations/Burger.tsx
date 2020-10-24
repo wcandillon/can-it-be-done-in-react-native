@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 
-import ZCylinder from "./components/ZCylinder";
+import ZCone from "./components/ZCone";
 import ZSvg from "./components/ZSvg";
 
 const { width } = Dimensions.get("window");
@@ -23,13 +23,7 @@ const Arc = () => {
   return (
     <View style={styles.container}>
       <ZSvg canvas={canvas}>
-        <ZCylinder
-          r={-0.5}
-          length={1}
-          front="#FFC27A"
-          back="#7EDAB9"
-          body="#45A6E5"
-        />
+        <ZCone r={-0.5} length={1} base="#FFC27A" body="#45A6E5" />
       </ZSvg>
     </View>
   );

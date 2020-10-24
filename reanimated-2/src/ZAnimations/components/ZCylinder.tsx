@@ -11,7 +11,7 @@ import {
   serialize,
   Transforms3d,
 } from "react-native-redash";
-import { Circle, Path } from "react-native-svg";
+import { Circle, Path, Polygon } from "react-native-svg";
 
 import {
   createPath3,
@@ -25,6 +25,7 @@ import { project } from "./Vector";
 import { useZSvg } from "./ZSvg";
 import ZPath from "./ZPath";
 import Layer from "./Layer";
+import Vertex from "./Vertex";
 
 interface ZBoxProps {
   r: number;
@@ -36,6 +37,7 @@ interface ZBoxProps {
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const AnimatedPolygon = Animated.createAnimatedComponent(Polygon);
 
 const ZCylinder = ({ r, length, left, front, body }: ZBoxProps) => {
   const { camera, canvas } = useZSvg();
@@ -60,12 +62,22 @@ const ZCylinder = ({ r, length, left, front, body }: ZBoxProps) => {
       })),
       close: false,
     };
-    const head = project({ x: 0, y: 0, z: -z }, canvas, cameraTransform);
     const center = project({ x: 0, y: 0, z }, canvas, cameraTransform);
+    const alpha = Math.PI + Math.atan2(center.y, center.x);
+    const p1 = {
+      x: center.x + ((r * canvas.x) / 2) * Math.cos(alpha - Math.PI / 2),
+      y: center.y + ((r * canvas.x) / 2) * Math.sin(alpha - Math.PI / 2),
+      z: 0,
+    };
+    const p2 = {
+      x: center.x + ((r * canvas.x) / 2) * Math.cos(alpha + Math.PI / 2),
+      y: center.y + ((r * canvas.x) / 2) * Math.sin(alpha + Math.PI / 2),
+      z: 0,
+    };
     return {
       e: ep,
-      head,
-      center,
+      points: [p1, p2],
+      head: project({ x: 0, y: 0, z: -z }, canvas, cameraTransform),
     };
   });
 
@@ -82,100 +94,15 @@ const ZCylinder = ({ r, length, left, front, body }: ZBoxProps) => {
     ),
   }));
 
-  const animatedProps1 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.e.move.x,
-      cy: shapes.value.e.move.y,
-    };
-  });
-  const animatedProps2 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.e.curves[0].to.x,
-      cy: shapes.value.e.curves[0].to.y,
-    };
-  });
-  const animatedProps3 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.e.curves[1].to.x,
-      cy: shapes.value.e.curves[1].to.y,
-    };
-  });
-  const animatedProps4 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.e.curves[2].to.x,
-      cy: shapes.value.e.curves[2].to.y,
-    };
-  });
-  const animatedProps5 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.head.x,
-      cy: shapes.value.head.y,
-    };
-  });
-  const animatedProps6 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.center.x,
-      cy: shapes.value.center.y,
-    };
-  });
-  const circle = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.center.x,
-      cy: shapes.value.center.y,
-      r: (r * canvas.x) / 2,
-    };
-  });
-  const s1 = useAnimatedProps(() => {
-    const alpha =
-      Math.PI + Math.atan2(shapes.value.center.y, shapes.value.center.x);
-    return {
-      cx:
-        shapes.value.center.x +
-        ((r * canvas.x) / 2) * Math.cos(alpha - Math.PI / 2),
-      cy:
-        shapes.value.center.y +
-        ((r * canvas.x) / 2) * Math.sin(alpha - Math.PI / 2),
-      r: 5,
-    };
-  });
-
-  const s2 = useAnimatedProps(() => {
-    const alpha =
-      Math.PI + Math.atan2(shapes.value.center.y, shapes.value.center.x);
-    return {
-      cx:
-        shapes.value.center.x +
-        ((r * canvas.x) / 2) * Math.cos(alpha + Math.PI / 2),
-      cy:
-        shapes.value.center.y +
-        ((r * canvas.x) / 2) * Math.sin(alpha + Math.PI / 2),
-      r: 5,
-    };
+  const points = useDerivedValue(() => {
+    return [shapes.value.head].concat(shapes.value.points);
   });
   return (
     <>
       <Layer zIndexStyle={zIndex}>
         <AnimatedPath animatedProps={animatedProps} fill={body} />
-        <Circle fill="blue" r={5} cx={0} cy={0} />
-        <Circle fill="blue" r={5} cx={0} cy={(r * canvas.x) / 2} />
-        <Circle
-          stroke="blue"
-          strokeWidth={1}
-          r={(r * canvas.x) / 2}
-          cx={0}
-          cy={0}
-        />
-
-        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps1} />
-        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps2} />
-        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps3} />
-        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps4} />
-        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps5} />
-        <AnimatedCircle r={5} fill="pink" animatedProps={animatedProps6} />
-        <AnimatedCircle stroke="blue" strokeWidth={1} animatedProps={circle} />
-        <AnimatedCircle fill="green" animatedProps={s1} />
-        <AnimatedCircle fill="green" animatedProps={s2} />
       </Layer>
+      <Vertex points={points} fill={front} />
     </>
   );
 };
