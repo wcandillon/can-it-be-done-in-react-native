@@ -62,46 +62,10 @@ const ZCylinder = ({ r, length, left, front, body }: ZBoxProps) => {
     };
     const head = project({ x: 0, y: 0, z: -z }, canvas, cameraTransform);
     const center = project({ x: 0, y: 0, z }, canvas, cameraTransform);
-    const p1 = project(
-      { x: r * Math.cos(Math.PI / 4), y: r * Math.sin(Math.PI / 4), z },
-      canvas,
-      cameraTransform
-    );
-    const p2 = project(
-      {
-        x: r * Math.cos(Math.PI / 2 + Math.PI / 4),
-        y: r * Math.sin(Math.PI / 2 + Math.PI / 4),
-        z,
-      },
-      canvas,
-      cameraTransform
-    );
-    const p3 = project(
-      {
-        x: r * Math.cos(Math.PI + Math.PI / 4),
-        y: r * Math.sin(Math.PI + Math.PI / 4),
-        z,
-      },
-      canvas,
-      cameraTransform
-    );
-    const p4 = project(
-      {
-        x: r * Math.cos(Math.PI + Math.PI / 2 + Math.PI / 4),
-        y: r * Math.sin(Math.PI + Math.PI / 2 + Math.PI / 4),
-        z,
-      },
-      canvas,
-      cameraTransform
-    );
     return {
       e: ep,
       head,
       center,
-      p1,
-      p2,
-      p3,
-      p4,
     };
   });
 
@@ -154,45 +118,63 @@ const ZCylinder = ({ r, length, left, front, body }: ZBoxProps) => {
       cy: shapes.value.center.y,
     };
   });
+  const circle = useAnimatedProps(() => {
+    return {
+      cx: shapes.value.center.x,
+      cy: shapes.value.center.y,
+      r: (r * canvas.x) / 2,
+    };
+  });
+  const s1 = useAnimatedProps(() => {
+    const alpha =
+      Math.PI + Math.atan2(shapes.value.center.y, shapes.value.center.x);
+    return {
+      cx:
+        shapes.value.center.x +
+        ((r * canvas.x) / 2) * Math.cos(alpha - Math.PI / 2),
+      cy:
+        shapes.value.center.y +
+        ((r * canvas.x) / 2) * Math.sin(alpha - Math.PI / 2),
+      r: 5,
+    };
+  });
 
-  const animatedProps7 = useAnimatedProps(() => {
+  const s2 = useAnimatedProps(() => {
+    const alpha =
+      Math.PI + Math.atan2(shapes.value.center.y, shapes.value.center.x);
     return {
-      cx: shapes.value.p1.x,
-      cy: shapes.value.p1.y,
-    };
-  });
-  const animatedProps8 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.p2.x,
-      cy: shapes.value.p2.y,
-    };
-  });
-  const animatedProps9 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.p3.x,
-      cy: shapes.value.p3.y,
-    };
-  });
-  const animatedProps10 = useAnimatedProps(() => {
-    return {
-      cx: shapes.value.p4.x,
-      cy: shapes.value.p4.y,
+      cx:
+        shapes.value.center.x +
+        ((r * canvas.x) / 2) * Math.cos(alpha + Math.PI / 2),
+      cy:
+        shapes.value.center.y +
+        ((r * canvas.x) / 2) * Math.sin(alpha + Math.PI / 2),
+      r: 5,
     };
   });
   return (
     <>
       <Layer zIndexStyle={zIndex}>
         <AnimatedPath animatedProps={animatedProps} fill={body} />
+        <Circle fill="blue" r={5} cx={0} cy={0} />
+        <Circle fill="blue" r={5} cx={0} cy={(r * canvas.x) / 2} />
+        <Circle
+          stroke="blue"
+          strokeWidth={1}
+          r={(r * canvas.x) / 2}
+          cx={0}
+          cy={0}
+        />
+
         <AnimatedCircle r={5} fill="red" animatedProps={animatedProps1} />
         <AnimatedCircle r={5} fill="red" animatedProps={animatedProps2} />
         <AnimatedCircle r={5} fill="red" animatedProps={animatedProps3} />
         <AnimatedCircle r={5} fill="red" animatedProps={animatedProps4} />
         <AnimatedCircle r={5} fill="red" animatedProps={animatedProps5} />
-        <AnimatedCircle r={5} fill="red" animatedProps={animatedProps6} />
-        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps7} />
-        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps8} />
-        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps9} />
-        <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps10} />
+        <AnimatedCircle r={5} fill="pink" animatedProps={animatedProps6} />
+        <AnimatedCircle stroke="blue" strokeWidth={1} animatedProps={circle} />
+        <AnimatedCircle fill="green" animatedProps={s1} />
+        <AnimatedCircle fill="green" animatedProps={s2} />
       </Layer>
     </>
   );

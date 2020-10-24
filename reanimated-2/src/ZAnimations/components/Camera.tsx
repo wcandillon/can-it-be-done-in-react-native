@@ -29,7 +29,7 @@ const Camera = ({ camera, canvas }: CameraProps) => {
     },
     onActive: ({ translationX, translationY }, ctx) => {
       camera.x.value = ctx.x + toRad(translationX, canvas.x);
-      camera.y.value = ctx.y - toRad(translationY, canvas.y);
+      camera.y.value = ctx.y + toRad(translationY, canvas.y);
     },
     onEnd: ({ velocityX, velocityY }) => {
       camera.x.value = withDecay({
