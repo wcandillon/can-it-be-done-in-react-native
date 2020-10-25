@@ -5,13 +5,12 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated";
-import { avg, processTransform3d, serialize } from "react-native-redash";
+import { processTransform3d, serialize } from "react-native-redash";
 import { Path } from "react-native-svg";
 
 import Layer from "./Layer";
-import { addArc3, addArcTo3, createPath3 } from "./Path3";
+import { addArc3, createPath3 } from "./Path3";
 import { project } from "./Vector";
-import ZPoints from "./ZPoints";
 import { useZSvg } from "./ZSvg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
