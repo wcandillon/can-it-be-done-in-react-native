@@ -9,7 +9,7 @@ import { avg, processTransform3d, serialize } from "react-native-redash";
 import { Path } from "react-native-svg";
 
 import Layer from "./Layer";
-import { addArc3, close3, createPath3 } from "./Path3";
+import { addArc3, addArcTo3, createPath3 } from "./Path3";
 import { project } from "./Vector";
 import ZPoints from "./ZPoints";
 import { useZSvg } from "./ZSvg";
@@ -56,21 +56,15 @@ const Hemisphere = ({
     };
     const a = Math.PI + Math.atan2(apex.y, apex.x) - Math.PI / 4;
     const b = Math.PI + Math.atan2(apex.y, apex.x) + Math.PI / 4;
-    const c = Math.PI + Math.atan2(apex.y, apex.x);
-    const d = Math.sign(r) * Math.sqrt(r ** 2 + r ** 2);
+    const d = -Math.SQRT2 * Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const c1 = {
-      x: ((d * canvas.x) / 2) * Math.cos(a),
-      y: ((d * canvas.x) / 2) * Math.sin(a),
+      x: d * Math.cos(a),
+      y: d * Math.sin(a),
       z: 0,
     };
     const c2 = {
-      x: ((d * canvas.x) / 2) * Math.cos(b),
-      y: ((d * canvas.x) / 2) * Math.sin(b),
-      z: 0,
-    };
-    const c3 = {
-      x: ((d * canvas.x) / 2) * Math.cos(c),
-      y: ((d * canvas.x) / 2) * Math.sin(c),
+      x: d * Math.cos(b),
+      y: d * Math.sin(b),
       z: 0,
     };
     const bPath = {
@@ -83,21 +77,19 @@ const Hemisphere = ({
       close: path.close,
     };
     const body = createPath3(p1);
-    addArc3(body, c1, c3);
+    addArc3(body, c1, apex);
     addArc3(body, c2, p2);
-    close3(body);
 
     return {
       base: serialize(bPath),
       body: serialize(body),
-      points: [apex, p1, p2],
-      c: [c1, c2, c3],
+      apex,
     };
   });
 
   const face = useAnimatedProps(() => ({
     d: data.value.base,
-    fill: data.value.points[0].z < 0 ? co1 : co2,
+    fill: data.value.apex.z < 0 ? co1 : co2,
   }));
 
   const body = useAnimatedProps(() => ({
@@ -105,10 +97,9 @@ const Hemisphere = ({
   }));
 
   const bodyZIndex = useAnimatedStyle(() => ({
-    zIndex: avg(data.value.points.map(({ z }) => z)),
+    zIndex: data.value.apex.z,
   }));
 
-  const points = useDerivedValue(() => data.value.c);
   return (
     <>
       <Layer zIndexStyle={{ zIndex: 0 }}>
@@ -118,7 +109,6 @@ const Hemisphere = ({
       <Layer zIndexStyle={bodyZIndex}>
         <AnimatedPath animatedProps={body} fill={bodyColor} />
       </Layer>
-      <ZPoints points={points} fill="red" />
     </>
   );
 };

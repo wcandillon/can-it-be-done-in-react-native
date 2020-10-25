@@ -36,6 +36,12 @@ export const addCurve3 = (path: Path3, c: Curve3) => {
   });
 };
 
+export const addArcTo3 = (path: Path3, to: Vector3) => {
+  "worklet";
+  const corner = { x: 0, y: 0, z: 0 };
+  addArc3(path, corner, to);
+};
+
 /**
  * @summary Add an arc command to a path
  */
