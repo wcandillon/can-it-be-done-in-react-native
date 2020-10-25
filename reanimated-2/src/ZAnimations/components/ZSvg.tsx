@@ -1,7 +1,7 @@
 import React, { ReactElement, useContext } from "react";
 import { View } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
-import { Vector } from "react-native-redash";
+import { identityMatrix4, Matrix4 } from "react-native-redash";
 
 import Camera from "./Camera";
 import { Vector3 } from "./Vector";
@@ -17,7 +17,7 @@ export const useZSvg = () => {
 };
 
 interface ZSvgContext {
-  camera: Vector<Animated.SharedValue<number>>;
+  camera: Animated.SharedValue<Matrix4>;
   canvas: Vector3;
 }
 
@@ -27,7 +27,7 @@ interface ZSvgProps {
 }
 
 const ZSvg = ({ canvas, children }: ZSvgProps) => {
-  const camera = { x: useSharedValue(0), y: useSharedValue(0) };
+  const camera = useSharedValue(identityMatrix4);
   return (
     <Context.Provider value={{ canvas, camera }}>
       <View style={{ width: canvas.x, height: canvas.y }}>

@@ -1,6 +1,5 @@
 import React from "react";
 import { useDerivedValue } from "react-native-reanimated";
-import { processTransform3d } from "react-native-redash";
 
 import { project } from "./Vector";
 import Vertex from "./Vertex";
@@ -46,20 +45,15 @@ const ZBox = ({
   const p7 = { x: width / 2, y: -height / 2, z: -depth / 2 };
   const p8 = { x: -width / 2, y: -height / 2, z: -depth / 2 };
   const points = useDerivedValue(() => {
-    const cameraTransform = processTransform3d([
-      { perspective: 5 },
-      { rotateY: camera.x.value },
-      { rotateX: camera.y.value },
-    ]);
     return [
-      project(p1, canvas, cameraTransform),
-      project(p2, canvas, cameraTransform),
-      project(p3, canvas, cameraTransform),
-      project(p4, canvas, cameraTransform),
-      project(p5, canvas, cameraTransform),
-      project(p6, canvas, cameraTransform),
-      project(p7, canvas, cameraTransform),
-      project(p8, canvas, cameraTransform),
+      project(p1, canvas, camera.value),
+      project(p2, canvas, camera.value),
+      project(p3, canvas, camera.value),
+      project(p4, canvas, camera.value),
+      project(p5, canvas, camera.value),
+      project(p6, canvas, camera.value),
+      project(p7, canvas, camera.value),
+      project(p8, canvas, camera.value),
     ];
   });
   const v1 = useDerivedValue(() => [

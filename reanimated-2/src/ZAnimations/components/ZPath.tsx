@@ -9,6 +9,7 @@ import {
   avg,
   Transforms3d,
   processTransform3d,
+  multiply4,
 } from "react-native-redash";
 import { Path } from "react-native-svg";
 
@@ -32,13 +33,9 @@ const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
   const { camera, canvas } = useZSvg();
   const path2 = useDerivedValue(
     (): Path3 => {
-      const cameraTransform: Transforms3d = [
-        //   { perspective: 5 },
-        { rotateY: camera.x.value },
-        { rotateX: camera.y.value },
-      ];
-      const transformMatrix = processTransform3d(
-        cameraTransform.concat(transform)
+      const transformMatrix = multiply4(
+        camera.value,
+        processTransform3d(transform)
       );
       return {
         move: project(path.move, canvas, transformMatrix),

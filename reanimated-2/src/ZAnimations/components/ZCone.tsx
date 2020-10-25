@@ -4,7 +4,7 @@ import Animated, {
   useAnimatedProps,
   useDerivedValue,
 } from "react-native-reanimated";
-import { processTransform3d, serialize } from "react-native-redash";
+import { serialize } from "react-native-redash";
 import { Path } from "react-native-svg";
 
 import Layer from "./Layer";
@@ -33,12 +33,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   addArc3(path, { x: -r, y: -r, z: 0 }, { x: -r, y: 0, z: 0 });
 
   const data = useDerivedValue(() => {
-    const cameraTransform = processTransform3d([
-      //   { perspective: 5 },
-      { rotateY: camera.x.value },
-      { rotateX: camera.y.value },
-    ]);
-    const apex = project({ x: 0, y: 0, z: -length }, canvas, cameraTransform);
+    const apex = project({ x: 0, y: 0, z: -length }, canvas, camera.value);
     const alpha = Math.PI + Math.atan2(apex.y, apex.x);
     const p1 = {
       x: ((r * canvas.x) / 2) * Math.cos(alpha - Math.PI / 2),
@@ -51,11 +46,11 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       z: 0,
     };
     const bPath = {
-      move: project(path.move, canvas, cameraTransform),
+      move: project(path.move, canvas, camera.value),
       curves: path.curves.map((curve) => ({
-        c1: project(curve.c1, canvas, cameraTransform),
-        c2: project(curve.c2, canvas, cameraTransform),
-        to: project(curve.to, canvas, cameraTransform),
+        c1: project(curve.c1, canvas, camera.value),
+        c2: project(curve.c2, canvas, camera.value),
+        to: project(curve.to, canvas, camera.value),
       })),
       close: path.close,
     };
