@@ -23,7 +23,7 @@ const Arc = () => {
   return (
     <View style={styles.container}>
       <ZSvg canvas={canvas}>
-        <ZCone r={-0.5} length={1} base="#FFC27A" body="#45A6E5" />
+        <ZCone r={-0.35} length={0.9} base="#FFC27A" body="#45A6E5" />
       </ZSvg>
     </View>
   );

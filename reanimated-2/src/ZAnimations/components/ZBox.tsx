@@ -1,6 +1,6 @@
 import React from "react";
 import { useDerivedValue } from "react-native-reanimated";
-import { processTransform3d, Transforms3d } from "react-native-redash";
+import { processTransform3d } from "react-native-redash";
 
 import { project } from "./Vector";
 import Vertex from "./Vertex";

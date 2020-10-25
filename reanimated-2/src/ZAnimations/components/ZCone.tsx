@@ -2,11 +2,10 @@ import React from "react";
 import { processColor } from "react-native";
 import Animated, {
   useAnimatedProps,
-  useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated";
 import { processTransform3d, serialize } from "react-native-redash";
-import { Circle, Path } from "react-native-svg";
+import { Path } from "react-native-svg";
 
 import Layer from "./Layer";
 import { addArc3, createPath3 } from "./Path3";
@@ -15,7 +14,6 @@ import Vertex from "./Vertex";
 import { useZSvg } from "./ZSvg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 interface ZConeProps {
   r: number;
@@ -52,17 +50,26 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       y: ((r * canvas.x) / 2) * Math.sin(alpha + Math.PI / 2),
       z: 0,
     };
+    const bPath = {
+      move: project(path.move, canvas, cameraTransform),
+      curves: path.curves.map((curve) => ({
+        c1: project(curve.c1, canvas, cameraTransform),
+        c2: project(curve.c2, canvas, cameraTransform),
+        to: project(curve.to, canvas, cameraTransform),
+      })),
+      close: path.close,
+    };
     return {
-      body: serialize({
-        move: project(path.move, canvas, cameraTransform),
-        curves: path.curves.map((curve) => ({
-          c1: project(curve.c1, canvas, cameraTransform),
-          c2: project(curve.c2, canvas, cameraTransform),
-          to: project(curve.to, canvas, cameraTransform),
-        })),
-        close: path.close,
-      }),
+      body: serialize(bPath),
       base: [apex, p1, p2],
+      points: [
+        p1,
+        p2,
+        bPath.curves[0].to,
+        bPath.curves[1].to,
+        bPath.curves[2].to,
+        bPath.curves[3].to,
+      ],
     };
   });
 
@@ -71,15 +78,11 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     fill: data.value.base[0].z < 0 ? c1 : c2,
   }));
 
-  const faceZ = useAnimatedStyle(() => ({
-    zIndex: 0,
-  }));
-
   const points = useDerivedValue(() => data.value.base);
 
   return (
     <>
-      <Layer zIndexStyle={faceZ}>
+      <Layer zIndexStyle={{ zIndex: 0 }}>
         <AnimatedPath animatedProps={face} />
       </Layer>
       <Vertex points={points} fill={bodyColor} />
@@ -88,10 +91,3 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
 };
 
 export default ZCone;
-
-/**
-
-      <Layer zIndexStyle={backfaceZ}>
-        <AnimatedPath animatedProps={backface} fill={bodyColor} />
-      </Layer>
-      */
