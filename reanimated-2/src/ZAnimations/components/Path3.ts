@@ -45,20 +45,21 @@ export const addArcTo3 = (path: Path3, to: Vector3) => {
 /**
  * @summary Add an arc command to a path
  */
+const C = 0.551915024494;
 export const addArc3 = (path: Path3, corner: Vector3, to: Vector3) => {
   "worklet";
   const last = path.curves[path.curves.length - 1];
   const from = last ? last.to : path.move;
   path.curves.push({
     c1: {
-      x: ((corner.x - from.x) * 9) / 16 + from.x,
-      y: ((corner.y - from.y) * 9) / 16 + from.y,
-      z: ((corner.z - from.z) * 9) / 16 + from.z,
+      x: (corner.x - from.x) * C + from.x,
+      y: (corner.y - from.y) * C + from.y,
+      z: (corner.z - from.z) * C + from.z,
     },
     c2: {
-      x: ((corner.x - to.x) * 9) / 16 + to.x,
-      y: ((corner.y - to.y) * 9) / 16 + to.y,
-      z: ((corner.z - to.z) * 9) / 16 + to.z,
+      x: (corner.x - to.x) * C + to.x,
+      y: (corner.y - to.y) * C + to.y,
+      z: (corner.z - to.z) * C + to.z,
     },
     to,
   });

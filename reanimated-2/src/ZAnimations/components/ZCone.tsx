@@ -56,11 +56,11 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     };
     const rs = (r * canvas.x) / 2;
 
-    const dist = Math.sqrt(apex.x ** 2 + apex.y ** 2);
+    //     const max = (length * canvas.x) / 2;
+    const dist = Math.sqrt(apex.x ** 2 + apex.y ** 2 + apex.z ** 2);
+    const dist2d = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const alpha = Math.atan2(apex.y, apex.x);
-    const max = (length * canvas.x) / 2;
-    const beta = Math.acos((dist - max) / max);
-
+    const beta = Math.acos((dist2d - dist) / dist);
     const p1 = {
       x: rs * Math.cos(alpha - beta),
       y: rs * Math.sin(alpha - beta),
