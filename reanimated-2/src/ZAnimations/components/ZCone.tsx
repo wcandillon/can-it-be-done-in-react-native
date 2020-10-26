@@ -1,24 +1,16 @@
 import React from "react";
 import { processColor } from "react-native";
 import Animated, {
-  Extrapolate,
-  interpolate,
   useAnimatedProps,
   useDerivedValue,
 } from "react-native-reanimated";
-import {
-  identityMatrix4,
-  multiply4,
-  processTransform3d,
-  serialize,
-} from "react-native-redash";
+import { serialize } from "react-native-redash";
 import { Circle, Path } from "react-native-svg";
 
 import Layer from "./Layer";
 import { addArc3, createPath3 } from "./Path3";
 import { project } from "./Vector";
 import Vertex from "./Vertex";
-import Points from "./ZPoints";
 import { useZSvg } from "./ZSvg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -57,7 +49,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const rs = (r * canvas.x) / 2;
 
     //     const max = (length * canvas.x) / 2;
-    const dist = Math.sqrt(apex.x ** 2 + apex.y ** 2 + apex.z ** 2);
+    const dist = (length * canvas.x) / 2; // = Math.sqrt(apex.x ** 2 + apex.y ** 2 + apex.z ** 2);
     const dist2d = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const alpha = Math.atan2(apex.y, apex.x);
     const beta = Math.acos((dist2d - dist) / dist);
