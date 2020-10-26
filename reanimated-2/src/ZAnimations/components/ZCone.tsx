@@ -1,10 +1,17 @@
 import React from "react";
 import { processColor } from "react-native";
 import Animated, {
+  Extrapolate,
+  interpolate,
   useAnimatedProps,
   useDerivedValue,
 } from "react-native-reanimated";
-import { multiply4, processTransform3d, serialize } from "react-native-redash";
+import {
+  identityMatrix4,
+  multiply4,
+  processTransform3d,
+  serialize,
+} from "react-native-redash";
 import { Circle, Path } from "react-native-svg";
 
 import Layer from "./Layer";
@@ -47,16 +54,21 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       })),
       close: path.close,
     };
-    const alpha = Math.atan2(apex.y, apex.x);
     const rs = (r * canvas.x) / 2;
+
+    const dist = Math.sqrt(apex.x ** 2 + apex.y ** 2);
+    const alpha = Math.atan2(apex.y, apex.x);
+    const max = (length * canvas.x) / 2;
+    const beta = Math.acos((dist - max) / max);
+
     const p1 = {
-      x: rs * Math.cos(alpha - Math.PI / 2),
-      y: rs * Math.sin(alpha - Math.PI / 2),
+      x: rs * Math.cos(alpha - beta),
+      y: rs * Math.sin(alpha - beta),
       z: 0,
     };
     const p2 = {
-      x: rs * Math.cos(alpha + Math.PI / 2),
-      y: rs * Math.sin(alpha + Math.PI / 2),
+      x: rs * Math.cos(alpha + beta),
+      y: rs * Math.sin(alpha + beta),
       z: 0,
     };
     return {
@@ -73,27 +85,12 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
 
   const points = useDerivedValue(() => data.value.points);
 
-  const animatedProps = useAnimatedProps(() => ({
-    cx: data.value.apex.x,
-    cy: data.value.apex.y,
-  }));
   return (
     <>
       <Layer zIndexStyle={{ zIndex: 0 }}>
         <AnimatedPath animatedProps={face} />
       </Layer>
       <Vertex points={points} fill={bodyColor} />
-      <Layer zIndexStyle={{ zIndex: 10 }}>
-        <AnimatedCircle animatedProps={animatedProps} r={5} fill="blue" />
-        <Circle
-          r={(r * canvas.x) / 2}
-          cx={0}
-          cy={0}
-          stroke="blue"
-          strokeWidth={1}
-        />
-      </Layer>
-      <Points points={points} fill="green" />
     </>
   );
 };
