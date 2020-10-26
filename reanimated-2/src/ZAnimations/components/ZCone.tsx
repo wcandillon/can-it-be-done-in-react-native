@@ -4,7 +4,7 @@ import Animated, {
   useAnimatedProps,
   useDerivedValue,
 } from "react-native-reanimated";
-import { serialize } from "react-native-redash";
+import { multiply4, processTransform3d, serialize } from "react-native-redash";
 import { Circle, Path } from "react-native-svg";
 
 import Layer from "./Layer";
@@ -35,14 +35,15 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   addArc3(path, { x: -r, y: -r, z: 0 }, { x: -r, y: 0, z: 0 });
 
   const data = useDerivedValue(() => {
-    const apex = project({ x: 0, y: 0, z: -length }, canvas, camera.value);
+    const transformMatrix = camera.value;
+    const apex = project({ x: 0, y: 0, z: -length }, canvas, transformMatrix);
 
     const bPath = {
-      move: project(path.move, canvas, camera.value),
+      move: project(path.move, canvas, transformMatrix),
       curves: path.curves.map((curve) => ({
-        c1: project(curve.c1, canvas, camera.value),
-        c2: project(curve.c2, canvas, camera.value),
-        to: project(curve.to, canvas, camera.value),
+        c1: project(curve.c1, canvas, transformMatrix),
+        c2: project(curve.c2, canvas, transformMatrix),
+        to: project(curve.to, canvas, transformMatrix),
       })),
       close: path.close,
     };
