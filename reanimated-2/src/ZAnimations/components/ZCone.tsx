@@ -71,6 +71,8 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   const face = useAnimatedProps(() => ({
     d: data.value.body,
     fill: data.value.apex.z < 0 ? c1 : c2,
+    stroke: data.value.apex.z < 0 ? c1 : c2,
+    strokeWidth: 1,
   }));
 
   const points = useDerivedValue(() => data.value.points);
