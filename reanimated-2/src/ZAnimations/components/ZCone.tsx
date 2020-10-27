@@ -1,6 +1,7 @@
 import React from "react";
 import { processColor } from "react-native";
 import Animated, {
+  interpolate,
   useAnimatedProps,
   useDerivedValue,
 } from "react-native-reanimated";
@@ -47,10 +48,10 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       close: path.close,
     };
     const rs = (r * canvas.x) / 2;
-    const dist = (length * canvas.x) / 2 - rs; // = Math.sqrt(apex.x ** 2 + apex.y ** 2 + apex.z ** 2);
-    const dist2d = Math.sqrt(apex.x ** 2 + apex.y ** 2) - rs;
+    const dist = (length * canvas.x) / 2; // = Math.sqrt(apex.x ** 2 + apex.y ** 2 + apex.z ** 2);
+    const dist2d = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const alpha = Math.atan2(apex.y, apex.x);
-    const beta = Math.acos((dist2d - dist) / dist);
+    const beta = Math.acos((dist - dist2d) / dist);
     const p1 = {
       x: rs * Math.cos(alpha - beta),
       y: rs * Math.sin(alpha - beta),
@@ -72,7 +73,8 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     d: data.value.body,
     fill: data.value.apex.z < 0 ? c1 : c2,
     stroke: data.value.apex.z < 0 ? c1 : c2,
-    strokeWidth: 1,
+    strokeWidth: 4,
+    //fillOpacity: 0.8,
   }));
 
   const points = useDerivedValue(() => data.value.points);
