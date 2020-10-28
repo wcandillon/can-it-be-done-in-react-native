@@ -12,7 +12,7 @@ import { Circle, Path } from "react-native-svg";
 
 import Layer from "./Layer";
 import { addArc3, createPath3 } from "./Path3";
-import { project, projectDirectly } from "./Vector";
+import { project, rotateZ } from "./Vector";
 import Vertex from "./Vertex";
 import Points from "./ZPoints";
 import { useZSvg } from "./ZSvg";
@@ -54,15 +54,15 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       close: path.close,
     };
     const rs = (r * canvas.x) / 2;
-    const a1 = project(path.move, canvas, m);
-    const b1 = project(path.curves[0].to, canvas, m);
+    const a1 = bPath.move;
+    const b1 = bPath.curves[0].to;
     const a2 = Math.sqrt(a1.x ** 2 + a1.y ** 2);
     const b2 = Math.sqrt(b1.x ** 2 + b1.y ** 2);
     const b = Math.min(a2, b2);
     const a = Math.max(a2, b2);
     // https://www.desmos.com/calculator/ocnckn71um
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
-    const y = (Math.sign(apex.y) * b ** 2) / y0;
+    const y = b ** 2 / y0;
     if (y0 < rs) {
       return {
         body: serialize(bPath),
@@ -71,16 +71,24 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       };
     }
     const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
-    const p1 = {
-      x: x,
-      y: y,
-      z: 0,
-    };
-    const p2 = {
-      x: -x,
-      y: y,
-      z: 0,
-    };
+    const rz = Math.atan2(apex.y, apex.x) - Math.PI / 2;
+    console.log(rz);
+    const p1 = rotateZ(
+      {
+        x: x,
+        y: y,
+        z: 0,
+      },
+      rz
+    );
+    const p2 = rotateZ(
+      {
+        x: -x,
+        y: y,
+        z: 0,
+      },
+      rz
+    );
     return {
       body: serialize(bPath),
       apex: apex,
