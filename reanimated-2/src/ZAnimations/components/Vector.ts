@@ -25,3 +25,12 @@ export const projectDirectly = (p: Vector3, m: Matrix4): Vector3 => {
     z: pr[2] / pr[3],
   };
 };
+
+export const rotateZ = (v: Vector3, a: number): Vector3 => {
+  "worklet";
+  return {
+    x: v.x * Math.cos(a) - v.y * Math.sin(a),
+    y: v.x * Math.sin(a) + v.y * Math.cos(a),
+    z: 0,
+  };
+};
