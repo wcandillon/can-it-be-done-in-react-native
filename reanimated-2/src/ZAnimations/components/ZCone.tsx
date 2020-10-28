@@ -42,7 +42,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   const data = useDerivedValue(() => {
     const m = processTransform3d([
       { rotateX: camera.y.value },
-      { rotateY: camera.x.value },
+      //{ rotateY: camera.x.value },
     ]);
 
     const bPath = {
@@ -116,7 +116,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     fill: data.value.apex.z < 0 ? c1 : c2,
     //stroke: data.value.apex.z < 0 ? c1 : c2,
     //strokeWidth: 4,
-    //fillOpacity: 0.8,
+    fillOpacity: 0.5,
   }));
   return (
     <>
