@@ -40,7 +40,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   const data = useDerivedValue(() => {
     const m = processTransform3d([
       { rotateX: camera.y.value },
-      //{ rotateY: camera.x.value },
+      // { rotateY: camera.x.value },
     ]);
     const apex = project({ x: 0, y: 0, z: -length }, canvas, m);
 
@@ -74,12 +74,12 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const rz = Math.atan2(apex.y, apex.x) - Math.PI / 2;
     const p1 = {
       x: x,
-      y: y,
+      y: y, //Math.sign(apex.y) * y,
       z: 0,
     };
     const p2 = {
       x: -x,
-      y: y,
+      y: y, //Math.sign(apex.y) * y,
       z: 0,
     };
     return {
