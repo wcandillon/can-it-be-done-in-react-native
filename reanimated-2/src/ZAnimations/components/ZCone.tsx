@@ -72,23 +72,16 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     }
     const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
     const rz = Math.atan2(apex.y, apex.x) - Math.PI / 2;
-    console.log(rz);
-    const p1 = rotateZ(
-      {
-        x: x,
-        y: y,
-        z: 0,
-      },
-      rz
-    );
-    const p2 = rotateZ(
-      {
-        x: -x,
-        y: y,
-        z: 0,
-      },
-      rz
-    );
+    const p1 = {
+      x: x,
+      y: y,
+      z: 0,
+    };
+    const p2 = {
+      x: -x,
+      y: y,
+      z: 0,
+    };
     return {
       body: serialize(bPath),
       apex: apex,
