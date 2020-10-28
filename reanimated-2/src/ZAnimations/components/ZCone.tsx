@@ -43,6 +43,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       // { rotateY: camera.x.value },
     ]);
     const apex = project({ x: 0, y: 0, z: -length }, canvas, m);
+    const rotation = Math.atan2(apex.y, apex.x) - Math.PI / 2;
 
     const bPath = {
       move: project(path.move, canvas, m),
@@ -54,12 +55,9 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       close: path.close,
     };
     const rs = (r * canvas.x) / 2;
-    const a1 = bPath.move;
     const b1 = bPath.curves[0].to;
-    const a2 = Math.sqrt(a1.x ** 2 + a1.y ** 2);
-    const b2 = Math.sqrt(b1.x ** 2 + b1.y ** 2);
-    const b = Math.min(a2, b2);
-    const a = rs; //Math.max(a2, b2);
+    const b = Math.sqrt(b1.x ** 2 + b1.y ** 2);
+    const a = rs;
     // https://www.desmos.com/calculator/ocnckn71um
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const y = b ** 2 / y0;
@@ -71,7 +69,6 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       };
     }
     const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
-    const rz = Math.atan2(apex.y, apex.x) - Math.PI / 2;
     const p1 = {
       x: x,
       y: Math.sign(apex.y) * y,
