@@ -12,7 +12,10 @@ import { Matrix4, processTransform3d } from "react-native-redash";
 import { Vector3 } from "./Vector";
 
 interface CameraProps {
-  camera: Animated.SharedValue<Matrix4>;
+  camera: {
+    x: Animated.SharedValue<number>;
+    y: Animated.SharedValue<number>;
+  };
   canvas: Vector3;
 }
 
@@ -24,35 +27,24 @@ const toRad = (v: number, size: number) => {
 };
 
 const Camera = ({ camera, canvas }: CameraProps) => {
-  const x = useSharedValue(0);
-  const y = useSharedValue(0);
   const onGestureEvent = useAnimatedGestureHandler<{ x: number; y: number }>({
     onStart: (e, ctx) => {
-      ctx.x = x.value;
-      ctx.y = y.value;
+      ctx.x = camera.x.value;
+      ctx.y = camera.y.value;
     },
     onActive: ({ translationX, translationY }, ctx) => {
-      //x.value = ctx.x + toRad(translationX, canvas.x);
-      y.value = ctx.y + toRad(translationY, canvas.y);
+      camera.x.value = ctx.x + toRad(translationX, canvas.x);
+      camera.y.value = ctx.y + toRad(translationY, canvas.y);
     },
     onEnd: ({ velocityX, velocityY }) => {
-      //x.value = withDecay({
-      //  velocity: toRad(velocityX, canvas.x),
-      //});
-      y.value = withDecay({
+      camera.x.value = withDecay({
+        velocity: toRad(velocityX, canvas.x),
+      });
+      camera.y.value = withDecay({
         velocity: toRad(velocityY, canvas.y),
       });
     },
   });
-  useAnimatedReaction(
-    () => x.value + y.value,
-    () => {
-      camera.value = processTransform3d([
-        { rotateY: x.value },
-        { rotateX: y.value },
-      ]);
-    }
-  );
   return (
     <PanGestureHandler onGestureEvent={onGestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill} />

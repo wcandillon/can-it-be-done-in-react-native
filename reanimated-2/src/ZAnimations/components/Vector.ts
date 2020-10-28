@@ -15,3 +15,13 @@ export const project = (p: Vector3, canvas: Vector3, m: Matrix4): Vector3 => {
     z: ((pr[2] / pr[3]) * canvas.z) / 2,
   };
 };
+
+export const projectDirectly = (p: Vector3, m: Matrix4): Vector3 => {
+  "worklet";
+  const pr = matrixVecMul4(m, [p.x, p.y, p.z, 1]);
+  return {
+    x: pr[0] / pr[3],
+    y: pr[1] / pr[3],
+    z: pr[2] / pr[3],
+  };
+};

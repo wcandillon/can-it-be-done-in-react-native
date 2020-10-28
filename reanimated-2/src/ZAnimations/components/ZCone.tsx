@@ -1,17 +1,18 @@
 import React from "react";
-import { processColor } from "react-native";
+import { processColor, StyleSheet } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedProps,
+  useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated";
-import { serialize } from "react-native-redash";
+import { processTransform3d, serialize } from "react-native-redash";
 import { Circle, Path } from "react-native-svg";
 
 import Layer from "./Layer";
 import { addArc3, createPath3 } from "./Path3";
-import { project } from "./Vector";
+import { project, projectDirectly } from "./Vector";
 import Vertex from "./Vertex";
 import Points from "./ZPoints";
 import { useZSvg } from "./ZSvg";
@@ -37,21 +38,24 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   addArc3(path, { x: -r, y: -r, z: 0 }, { x: -r, y: 0, z: 0 });
 
   const data = useDerivedValue(() => {
-    const transformMatrix = camera.value;
-    const apex = project({ x: 0, y: 0, z: -length }, canvas, transformMatrix);
+    const m = processTransform3d([
+      { rotateX: camera.y.value },
+      //{ rotateY: camera.x.value },
+    ]);
+    const apex = project({ x: 0, y: 0, z: -length }, canvas, m);
 
     const bPath = {
-      move: project(path.move, canvas, transformMatrix),
+      move: project(path.move, canvas, m),
       curves: path.curves.map((curve) => ({
-        c1: project(curve.c1, canvas, transformMatrix),
-        c2: project(curve.c2, canvas, transformMatrix),
-        to: project(curve.to, canvas, transformMatrix),
+        c1: project(curve.c1, canvas, m),
+        c2: project(curve.c2, canvas, m),
+        to: project(curve.to, canvas, m),
       })),
       close: path.close,
     };
     const rs = (r * canvas.x) / 2;
-    const a1 = bPath.move;
-    const b1 = bPath.curves[0].to;
+    const a1 = project(path.move, canvas, m);
+    const b1 = project(path.curves[0].to, canvas, m);
     const a2 = Math.sqrt(a1.x ** 2 + a1.y ** 2);
     const b2 = Math.sqrt(b1.x ** 2 + b1.y ** 2);
     const b = Math.min(a2, b2);
