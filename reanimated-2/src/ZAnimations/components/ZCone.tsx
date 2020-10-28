@@ -43,10 +43,10 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const a = (r * canvas.x) / 2;
     const L = (length * canvas.x) / 2;
-    const b = interpolate(y0, [0, L], [a, 0]); //;
+    const b = interpolate(y0, [0, L], [a, 0], Extrapolate.CLAMP); //;
     const y = b ** 2 / y0;
     const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
-    if (y0 < a) {
+    if (y0 < b) {
       return {
         b,
         rz,
@@ -79,10 +79,13 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       points: [p1, p2, apex],
     };
   });
-  const ellipseStyle = useAnimatedStyle(() => ({
-    transform: [{ rotateZ: data.value.rz }],
-    zIndex: 0,
-  }));
+  const ellipseStyle = useAnimatedStyle(() => {
+    console.log(data.value.rz);
+    return {
+      transform: [{ rotateZ: data.value.rz }],
+      zIndex: 0,
+    };
+  });
   const ellipse = useAnimatedProps(() => ({
     rx: data.value.a,
     ry: data.value.b,
