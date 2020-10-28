@@ -33,14 +33,29 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   const c1 = processColor(baseColor);
   const c2 = processColor(bodyColor);
   const { camera, canvas } = useZSvg();
+  const path = createPath3({ x: -r, y: 0, z: 0 });
+  addArc3(path, { x: -r, y: r, z: 0 }, { x: 0, y: r, z: 0 });
+  addArc3(path, { x: r, y: r, z: 0 }, { x: r, y: 0, z: 0 });
+  addArc3(path, { x: r, y: -r, z: 0 }, { x: 0, y: -r, z: 0 });
+  addArc3(path, { x: -r, y: -r, z: 0 }, { x: -r, y: 0, z: 0 });
   const data = useDerivedValue(() => {
     const m = processTransform3d([
       { rotateX: camera.y.value },
       { rotateY: camera.x.value },
     ]);
+
+    const bPath = {
+      move: project(path.move, canvas, m),
+      curves: path.curves.map((curve) => ({
+        c1: project(curve.c1, canvas, m),
+        c2: project(curve.c2, canvas, m),
+        to: project(curve.to, canvas, m),
+      })),
+      close: path.close,
+    };
+
     const apex = project({ x: 0, y: 0, z: -length }, canvas, m);
     const rz = -Math.PI / 2 + Math.atan2(apex.y, apex.x);
-    console.log(rz);
 
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const a = (r * canvas.x) / 2;
@@ -50,6 +65,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
     if (y0 < b) {
       return {
+        d: serialize(bPath),
         b,
         rz,
         apex,
@@ -74,6 +90,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       rz
     );
     return {
+      d: serialize(bPath),
       b,
       rz,
       apex,
@@ -93,10 +110,17 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     fill: data.value.apex.z < 0 ? c1 : c2,
   }));
   const points = useDerivedValue(() => data.value.points);
+  const face = useAnimatedProps(() => ({
+    d: data.value.d,
+    fill: data.value.apex.z < 0 ? c1 : c2,
+    //stroke: data.value.apex.z < 0 ? c1 : c2,
+    //strokeWidth: 4,
+    //fillOpacity: 0.8,
+  }));
   return (
     <>
-      <Layer zIndexStyle={ellipseStyle}>
-        <AnimatedEllipse animatedProps={ellipse} />
+      <Layer zIndexStyle={{ zIndex: 0 }}>
+        <AnimatedPath animatedProps={face} />
       </Layer>
       <Vertex points={points} fill={bodyColor} />
     </>
