@@ -1,6 +1,7 @@
 import React from "react";
 import { processColor } from "react-native";
 import Animated, {
+  Extrapolate,
   interpolate,
   useAnimatedProps,
   useDerivedValue,
@@ -12,6 +13,7 @@ import Layer from "./Layer";
 import { addArc3, createPath3 } from "./Path3";
 import { project } from "./Vector";
 import Vertex from "./Vertex";
+import Points from "./ZPoints";
 import { useZSvg } from "./ZSvg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -47,44 +49,66 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       })),
       close: path.close,
     };
+    const a1 = bPath.move;
+    const b1 = bPath.curves[0].to;
+    const a2 = Math.sqrt(a1.x ** 2 + a1.y ** 2);
+    const b2 = Math.sqrt(b1.x ** 2 + b1.y ** 2);
+    const minor = Math.min(a2, b2);
+    const major = Math.max(a2, b2);
+    // https://www.mathopenref.com/ellipsefoci.html#:~:text=Foci%20(focus%20points)%20of%20an,used%20in%20its%20formal%20definition.&text=The%20foci%20always%20lie%20on,foci%20are%20at%20the%20center.
+    const F = Math.sqrt(major ** 2 - minor ** 2);
+    const l = minor ** 2 / major;
+    const L = (length * canvas.x) / 2;
+    const apexDist = Math.sqrt(apex.x ** 2 + apex.y ** 2);
+    const dist = apexDist - minor;
     const rs = (r * canvas.x) / 2;
-    const dist = (length * canvas.x) / 2; // = Math.sqrt(apex.x ** 2 + apex.y ** 2 + apex.z ** 2);
-    const dist2d = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const alpha = Math.atan2(apex.y, apex.x);
-    const beta = Math.acos((dist - dist2d) / dist);
-    const p1 = {
-      x: rs * Math.cos(alpha - beta),
-      y: rs * Math.sin(alpha - beta),
-      z: 0,
-    };
-    const p2 = {
-      x: rs * Math.cos(alpha + beta),
-      y: rs * Math.sin(alpha + beta),
-      z: 0,
-    };
+    const visible = apexDist > minor;
+    const beta = Math.PI / 2; //Math.atan2(F, rs);
+    const p1 = { x: l, y: F, z: 0 };
+    const p2 = { x: l, y: -F, z: 0 };
     return {
       body: serialize(bPath),
       apex: apex,
       points: [p1, p2, apex],
+      foci: [
+        { x: 0, y: F, z: 0 },
+        { x: 0, y: -F, z: 0 },
+        { x: l, y: F, z: 0 },
+        { x: l, y: -F, z: 0 },
+      ],
     };
   });
 
   const face = useAnimatedProps(() => ({
     d: data.value.body,
     fill: data.value.apex.z < 0 ? c1 : c2,
-    stroke: data.value.apex.z < 0 ? c1 : c2,
-    strokeWidth: 4,
+    //stroke: data.value.apex.z < 0 ? c1 : c2,
+    //strokeWidth: 4,
     //fillOpacity: 0.8,
   }));
 
   const points = useDerivedValue(() => data.value.points);
-
+  const foci = useDerivedValue(() => data.value.foci);
+  const animatedProps = useAnimatedProps(() => ({
+    r: data.value.foci[0].y,
+    stroke: "blue",
+    strokeWidth: 1,
+  }));
   return (
     <>
       <Layer zIndexStyle={{ zIndex: 0 }}>
         <AnimatedPath animatedProps={face} />
       </Layer>
       <Vertex points={points} fill={bodyColor} />
+      <Points points={foci} fill={bodyColor} />
+      <Layer zIndexStyle={{ zIndex: 0 }}>
+        <Circle stroke="blue" strokeWidth={1} r={(r * canvas.x) / 2} />
+        <AnimatedCircle animatedProps={animatedProps} />
+      </Layer>
+      <Layer zIndexStyle={{ zIndex: 0 }}>
+        <Circle stroke="blue" strokeWidth={1} r={(r * canvas.x) / 2} />
+      </Layer>
     </>
   );
 };

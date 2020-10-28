@@ -33,15 +33,15 @@ const Camera = ({ camera, canvas }: CameraProps) => {
     },
     onActive: ({ translationX, translationY }, ctx) => {
       x.value = ctx.x + toRad(translationX, canvas.x);
-      y.value = ctx.y + toRad(translationY, canvas.y);
+      // y.value = ctx.y + toRad(translationY, canvas.y);
     },
     onEnd: ({ velocityX, velocityY }) => {
       x.value = withDecay({
         velocity: toRad(velocityX, canvas.x),
       });
-      y.value = withDecay({
-        velocity: toRad(velocityY, canvas.y),
-      });
+      //y.value = withDecay({
+      //  velocity: toRad(velocityY, canvas.y),
+      //});
     },
   });
   useAnimatedReaction(
