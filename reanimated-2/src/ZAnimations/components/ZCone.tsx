@@ -38,6 +38,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   addArc3(path, { x: r, y: r, z: 0 }, { x: r, y: 0, z: 0 });
   addArc3(path, { x: r, y: -r, z: 0 }, { x: 0, y: -r, z: 0 });
   addArc3(path, { x: -r, y: -r, z: 0 }, { x: -r, y: 0, z: 0 });
+
   const data = useDerivedValue(() => {
     const m = processTransform3d([
       { rotateX: camera.y.value },
@@ -119,6 +120,9 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   }));
   return (
     <>
+      <Layer zIndexStyle={ellipseStyle}>
+        <AnimatedEllipse animatedProps={ellipse} />
+      </Layer>
       <Layer zIndexStyle={{ zIndex: 0 }}>
         <AnimatedPath animatedProps={face} />
       </Layer>
