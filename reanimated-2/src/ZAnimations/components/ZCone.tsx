@@ -56,33 +56,31 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const b2 = Math.sqrt(b1.x ** 2 + b1.y ** 2);
     const b = Math.min(a2, b2);
     const a = Math.max(a2, b2);
-    // https://www.mathopenref.com/ellipsefoci.html#:~:text=Foci%20(focus%20points)%20of%20an,used%20in%20its%20formal%20definition.&text=The%20foci%20always%20lie%20on,foci%20are%20at%20the%20center.
-    const F = Math.sqrt(a ** 2 - b ** 2);
-    const l = b ** 2 / a;
-    const e = F / a;
-    console.log(e);
-    const alpha = Math.atan2(apex.y, apex.x);
-    const beta = Math.PI / 2;
+    // https://www.desmos.com/calculator/ocnckn71um
+    const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
+    const y = b ** 2 / y0;
+    if (y0 < rs) {
+      return {
+        body: serialize(bPath),
+        apex: apex,
+        points: [{ x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, apex],
+      };
+    }
+    const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
     const p1 = {
-      x: rs * Math.cos(alpha + beta),
-      y: rs * Math.sin(alpha + beta),
+      x: x,
+      y: y,
       z: 0,
     };
     const p2 = {
-      x: rs * Math.cos(alpha - beta),
-      y: rs * Math.sin(alpha - beta),
+      x: -x,
+      y: y,
       z: 0,
     };
     return {
       body: serialize(bPath),
       apex: apex,
       points: [p1, p2, apex],
-      foci: [
-        { x: 0, y: F, z: 0 },
-        { x: 0, y: -F, z: 0 },
-        { x: l, y: F, z: 0 },
-        { x: l, y: -F, z: 0 },
-      ],
     };
   });
 
@@ -95,26 +93,13 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   }));
 
   const points = useDerivedValue(() => data.value.points);
-  const foci = useDerivedValue(() => data.value.foci);
-  const animatedProps = useAnimatedProps(() => ({
-    r: data.value.foci[0].y,
-    stroke: "blue",
-    strokeWidth: 1,
-  }));
+
   return (
     <>
       <Layer zIndexStyle={{ zIndex: 0 }}>
         <AnimatedPath animatedProps={face} />
       </Layer>
       <Vertex points={points} fill={bodyColor} />
-      <Points points={foci} fill={bodyColor} />
-      <Layer zIndexStyle={{ zIndex: 0 }}>
-        <Circle stroke="blue" strokeWidth={1} r={(r * canvas.x) / 2} />
-        <AnimatedCircle animatedProps={animatedProps} />
-      </Layer>
-      <Layer zIndexStyle={{ zIndex: 0 }}>
-        <Circle stroke="blue" strokeWidth={1} r={(r * canvas.x) / 2} />
-      </Layer>
     </>
   );
 };
