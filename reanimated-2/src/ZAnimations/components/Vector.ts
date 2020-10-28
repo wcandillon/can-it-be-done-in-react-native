@@ -31,6 +31,6 @@ export const rotateZ = (v: Vector3, a: number): Vector3 => {
   return {
     x: v.x * Math.cos(a) - v.y * Math.sin(a),
     y: v.x * Math.sin(a) + v.y * Math.cos(a),
-    z: 0,
+    z: v.z,
   };
 };
