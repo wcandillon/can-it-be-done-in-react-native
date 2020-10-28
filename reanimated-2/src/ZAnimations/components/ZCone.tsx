@@ -58,7 +58,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const a = Math.max(a2, b2);
     // https://www.desmos.com/calculator/ocnckn71um
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
-    const y = b ** 2 / y0;
+    const y = (Math.sign(apex.y) * b ** 2) / y0;
     if (y0 < rs) {
       return {
         body: serialize(bPath),
