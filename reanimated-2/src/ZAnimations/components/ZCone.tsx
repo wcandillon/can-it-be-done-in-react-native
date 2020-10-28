@@ -7,7 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated";
-import { processTransform3d, serialize } from "react-native-redash";
+import { processTransform3d, serialize, toDeg } from "react-native-redash";
 import { Circle, Ellipse, Line, Path } from "react-native-svg";
 
 import Layer from "./Layer";
@@ -39,7 +39,9 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       { rotateY: camera.x.value },
     ]);
     const apex = project({ x: 0, y: 0, z: -length }, canvas, m);
-    const rz = Math.atan2(apex.y, apex.x) - Math.PI / 2;
+    const rz = -Math.PI / 2 + Math.atan2(apex.y, apex.x);
+    console.log(rz);
+
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const a = (r * canvas.x) / 2;
     const L = (length * canvas.x) / 2;
@@ -80,7 +82,6 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     };
   });
   const ellipseStyle = useAnimatedStyle(() => {
-    console.log(data.value.rz);
     return {
       transform: [{ rotateZ: data.value.rz }],
       zIndex: 0,
