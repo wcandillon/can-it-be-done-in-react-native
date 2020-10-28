@@ -59,7 +59,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const a2 = Math.sqrt(a1.x ** 2 + a1.y ** 2);
     const b2 = Math.sqrt(b1.x ** 2 + b1.y ** 2);
     const b = Math.min(a2, b2);
-    const a = Math.max(a2, b2);
+    const a = rs; //Math.max(a2, b2);
     // https://www.desmos.com/calculator/ocnckn71um
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const y = b ** 2 / y0;
@@ -74,12 +74,12 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const rz = Math.atan2(apex.y, apex.x) - Math.PI / 2;
     const p1 = {
       x: x,
-      y: y, //Math.sign(apex.y) * y,
+      y: Math.sign(apex.y) * y,
       z: 0,
     };
     const p2 = {
       x: -x,
-      y: y, //Math.sign(apex.y) * y,
+      y: Math.sign(apex.y) * y,
       z: 0,
     };
     return {
