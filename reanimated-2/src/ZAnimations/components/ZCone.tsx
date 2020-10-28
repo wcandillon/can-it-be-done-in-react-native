@@ -49,24 +49,30 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       })),
       close: path.close,
     };
+    const rs = (r * canvas.x) / 2;
     const a1 = bPath.move;
     const b1 = bPath.curves[0].to;
     const a2 = Math.sqrt(a1.x ** 2 + a1.y ** 2);
     const b2 = Math.sqrt(b1.x ** 2 + b1.y ** 2);
-    const minor = Math.min(a2, b2);
-    const major = Math.max(a2, b2);
+    const b = Math.min(a2, b2);
+    const a = Math.max(a2, b2);
     // https://www.mathopenref.com/ellipsefoci.html#:~:text=Foci%20(focus%20points)%20of%20an,used%20in%20its%20formal%20definition.&text=The%20foci%20always%20lie%20on,foci%20are%20at%20the%20center.
-    const F = Math.sqrt(major ** 2 - minor ** 2);
-    const l = minor ** 2 / major;
-    const L = (length * canvas.x) / 2;
-    const apexDist = Math.sqrt(apex.x ** 2 + apex.y ** 2);
-    const dist = apexDist - minor;
-    const rs = (r * canvas.x) / 2;
+    const F = Math.sqrt(a ** 2 - b ** 2);
+    const l = b ** 2 / a;
+    const e = F / a;
+    console.log(e);
     const alpha = Math.atan2(apex.y, apex.x);
-    const visible = apexDist > minor;
-    const beta = Math.PI / 2; //Math.atan2(F, rs);
-    const p1 = { x: l, y: F, z: 0 };
-    const p2 = { x: l, y: -F, z: 0 };
+    const beta = Math.PI / 2;
+    const p1 = {
+      x: rs * Math.cos(alpha + beta),
+      y: rs * Math.sin(alpha + beta),
+      z: 0,
+    };
+    const p2 = {
+      x: rs * Math.cos(alpha - beta),
+      y: rs * Math.sin(alpha - beta),
+      z: 0,
+    };
     return {
       body: serialize(bPath),
       apex: apex,
