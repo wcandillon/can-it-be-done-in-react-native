@@ -41,8 +41,8 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
 
   const data = useDerivedValue(() => {
     const m = processTransform3d([
-      { rotateX: camera.y.value },
-      // { rotateY: camera.x.value },
+      //{ rotateX: camera.y.value },
+      { rotateY: camera.x.value },
     ]);
 
     const bPath = {
@@ -63,7 +63,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const e = Math.abs(Math.sin(Math.atan2(n.y, n.z)));
 
     console.log(e);
-    const rz = -Math.PI / 2 + Math.atan2(apex.y, apex.x);
+    const rz = Math.atan2(apex.y, apex.x) - Math.PI / 2;
 
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
 
@@ -80,24 +80,22 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
         points: [{ x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, apex],
       };
     }
-    const p1 =
-      //rotateZ(
+    const p1 = rotateZ(
       {
         x: x,
         y: y,
         z: 0,
-      };
-    //     rz
-    //  );
-    const p2 =
-      ///rotateZ(
+      },
+      rz
+    );
+    const p2 = rotateZ(
       {
         x: -x,
         y: y,
         z: 0,
-      };
-    // rz
-    //  );
+      },
+      rz
+    );
     return {
       d: serialize(bPath),
       apex,
