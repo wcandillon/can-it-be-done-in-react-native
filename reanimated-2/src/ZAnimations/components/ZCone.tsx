@@ -42,7 +42,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   const data = useDerivedValue(() => {
     const m = processTransform3d([
       { rotateX: camera.y.value },
-      { rotateY: camera.x.value },
+      // { rotateY: camera.x.value },
     ]);
 
     const bPath = {
@@ -56,77 +56,64 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     };
 
     const apex = project({ x: 0, y: 0, z: -length }, canvas, m);
-    const normal = project({ x: 0, y: length, z: 0 }, canvas, m);
-    console.log(normal.z);
+    const n = project({ x: 0, y: length, z: 0 }, canvas, m);
+    const scale = Math.sqrt(n.x ** 2 + n.y ** 2 + n.y ** 2);
+    const nDist = Math.sqrt(n.x ** 2 + n.y ** 2);
+    //const eccenAngle = Math.acos(nDist / scale);
+    const e = Math.abs(Math.sin(Math.atan2(n.y, n.z)));
+
+    console.log(e);
     const rz = -Math.PI / 2 + Math.atan2(apex.y, apex.x);
 
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
+
     const a = (r * canvas.x) / 2;
     const L = (length * canvas.x) / 2;
-    const b =
-      a *
-      Math.sin(interpolate(y0, [0, L], [Math.PI / 2, 0], Extrapolate.CLAMP)); //;
+    const b = a * e; //;
     const y = b ** 2 / y0;
     const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
     if (y0 < b) {
+      console.log("Invisible");
       return {
         d: serialize(bPath),
-        b,
-        rz,
         apex,
-        a,
         points: [{ x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, apex],
       };
     }
-    const p1 = rotateZ(
+    const p1 =
+      //rotateZ(
       {
         x: x,
         y: y,
         z: 0,
-      },
-      rz
-    );
-    const p2 = rotateZ(
+      };
+    //     rz
+    //  );
+    const p2 =
+      ///rotateZ(
       {
         x: -x,
         y: y,
         z: 0,
-      },
-      rz
-    );
+      };
+    // rz
+    //  );
     return {
       d: serialize(bPath),
-      b,
-      rz,
       apex,
-      a,
       points: [p1, p2, apex],
     };
   });
-  const ellipseStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ rotateZ: data.value.rz }],
-      zIndex: 0,
-    };
-  });
-  const ellipse = useAnimatedProps(() => ({
-    rx: data.value.a,
-    ry: data.value.b,
-    fill: data.value.apex.z < 0 ? c1 : c2,
-  }));
   const points = useDerivedValue(() => data.value.points);
   const face = useAnimatedProps(() => ({
     d: data.value.d,
     fill: data.value.apex.z < 0 ? c1 : c2,
     //stroke: data.value.apex.z < 0 ? c1 : c2,
     //strokeWidth: 4,
-    fillOpacity: 0.5,
+    //fillOpacity: 0.5,
   }));
   return (
     <>
-      <Layer zIndexStyle={ellipseStyle}>
-        <AnimatedEllipse animatedProps={ellipse} />
-      </Layer>
       <Layer zIndexStyle={{ zIndex: 0 }}>
         <AnimatedPath animatedProps={face} />
       </Layer>
