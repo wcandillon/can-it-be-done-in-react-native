@@ -42,7 +42,7 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
   const data = useDerivedValue(() => {
     const m = processTransform3d([
       { rotateX: camera.y.value },
-      //{ rotateY: camera.x.value },
+      { rotateY: camera.x.value },
     ]);
 
     const bPath = {
@@ -56,12 +56,16 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     };
 
     const apex = project({ x: 0, y: 0, z: -length }, canvas, m);
+    const normal = project({ x: 0, y: length, z: 0 }, canvas, m);
+    console.log(normal.z);
     const rz = -Math.PI / 2 + Math.atan2(apex.y, apex.x);
 
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const a = (r * canvas.x) / 2;
     const L = (length * canvas.x) / 2;
-    const b = interpolate(y0, [0, L], [a, 0], Extrapolate.CLAMP); //;
+    const b =
+      a *
+      Math.sin(interpolate(y0, [0, L], [Math.PI / 2, 0], Extrapolate.CLAMP)); //;
     const y = b ** 2 / y0;
     const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
     if (y0 < b) {
