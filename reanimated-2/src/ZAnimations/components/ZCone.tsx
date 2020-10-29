@@ -70,25 +70,49 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
     const a = (r * canvas.x) / 2;
     // const L = (length * canvas.x) / 2;
-    const p = createPath3({ x: -r, y: 0, z: 0 });
-    addArc3(p, { x: -r, y: r, z: 0 }, { x: 0, y: r, z: 0 });
-    const pr2 = {
-      move: rotateZ(project(p.move, canvas, m), -rz),
-      curves: p.curves.map((curve) => ({
-        c1: rotateZ(project(curve.c1, canvas, m), -rz),
-        c2: rotateZ(project(curve.c2, canvas, m), -rz),
-        to: rotateZ(project(curve.to, canvas, m), -rz),
-      })),
-      close: p.close,
+    const pr1 = {
+      move: project(path.move, canvas, m),
+      curves: [
+        {
+          c1: project(path.curves[0].c1, canvas, m),
+          c2: project(path.curves[0].c2, canvas, m),
+          to: project(path.curves[0].to, canvas, m),
+        },
+      ],
+      close: false,
     };
-    const pr = {
-      move: project(p.move, canvas, m),
-      curves: p.curves.map((curve) => ({
-        c1: project(curve.c1, canvas, m),
-        c2: project(curve.c2, canvas, m),
-        to: project(curve.to, canvas, m),
-      })),
-      close: p.close,
+    const pr2 = {
+      move: project(path.curves[0].to, canvas, m),
+      curves: [
+        {
+          c1: project(path.curves[1].c1, canvas, m),
+          c2: project(path.curves[1].c2, canvas, m),
+          to: project(path.curves[1].to, canvas, m),
+        },
+      ],
+      close: false,
+    };
+    const pr3 = {
+      move: project(path.curves[1].to, canvas, m),
+      curves: [
+        {
+          c1: project(path.curves[2].c1, canvas, m),
+          c2: project(path.curves[2].c2, canvas, m),
+          to: project(path.curves[2].to, canvas, m),
+        },
+      ],
+      close: false,
+    };
+    const pr4 = {
+      move: project(path.curves[2].to, canvas, m),
+      curves: [
+        {
+          c1: project(path.curves[3].c1, canvas, m),
+          c2: project(path.curves[3].c2, canvas, m),
+          to: project(path.curves[3].to, canvas, m),
+        },
+      ],
+      close: false,
     };
     const n = project({ x: 0, y: r, z: 0 }, canvas, m);
     const s = project({ x: 0, y: r, z: 0 }, canvas, identityMatrix4);
@@ -105,7 +129,10 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
         apex: apex3d,
         points: [{ x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, apex3d],
         n,
-        pr,
+        pr1,
+        pr2,
+        pr3,
+        pr4,
       };
     }
     const p1 = rotateZ(
@@ -128,8 +155,11 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       d: serialize(bPath),
       apex: apex3d,
       points: [p1, p2, apex3d],
-      pr,
       n,
+      pr1,
+      pr2,
+      pr3,
+      pr4,
     };
   });
   const points = useDerivedValue(() => data.value.points);
@@ -144,12 +174,21 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
     cx: data.value.n.x,
     cy: data.value.n.y,
   }));
-  const pr = useAnimatedProps(() => ({
-    d: serialize(data.value.pr),
+  const pr1 = useAnimatedProps(() => ({
+    d: serialize(data.value.pr1),
     fill: "red",
-    //stroke: data.value.apex.z < 0 ? c1 : c2,
-    //strokeWidth: 4,
-    //fillOpacity: 0.5,
+  }));
+  const pr2 = useAnimatedProps(() => ({
+    d: serialize(data.value.pr2),
+    fill: "green",
+  }));
+  const pr3 = useAnimatedProps(() => ({
+    d: serialize(data.value.pr3),
+    fill: "blue",
+  }));
+  const pr4 = useAnimatedProps(() => ({
+    d: serialize(data.value.pr4),
+    fill: "yellow",
   }));
   return (
     <>
@@ -161,7 +200,16 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
         <AnimatedCircle r={5} fill="blue" animatedProps={animatedProps} />
       </Layer>
       <Layer zIndexStyle={{ zIndex: 0 }}>
-        <AnimatedPath animatedProps={pr} />
+        <AnimatedPath animatedProps={pr1} />
+      </Layer>
+      <Layer zIndexStyle={{ zIndex: 0 }}>
+        <AnimatedPath animatedProps={pr2} />
+      </Layer>
+      <Layer zIndexStyle={{ zIndex: 0 }}>
+        <AnimatedPath animatedProps={pr3} />
+      </Layer>
+      <Layer zIndexStyle={{ zIndex: 0 }}>
+        <AnimatedPath animatedProps={pr4} />
       </Layer>
     </>
   );
