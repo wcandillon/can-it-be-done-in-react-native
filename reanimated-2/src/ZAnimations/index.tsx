@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Examples as ExamplesRoutes } from "../Routes";
 
 import Examples from "./Examples";
-import Burger from "./Burger";
+import Cone from "./Cone";
 import Donut from "./Donut";
 
 const Stack = createStackNavigator<ExamplesRoutes>();
@@ -22,14 +22,14 @@ const ExampleNavigator = () => (
       name="Donut"
       component={Donut}
       options={{
-        title: "🍩 Domut",
+        title: "🍩 Donut",
       }}
     />
     <Stack.Screen
-      name="Burger"
-      component={Burger}
+      name="Cone"
+      component={Cone}
       options={{
-        title: "🍔 Burger",
+        title: "📐 Cone",
       }}
     />
   </Stack.Navigator>

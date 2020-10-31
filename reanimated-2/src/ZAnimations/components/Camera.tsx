@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
-  useAnimatedReaction,
   useSharedValue,
   withDecay,
 } from "react-native-reanimated";
@@ -12,37 +11,47 @@ import { Matrix4, processTransform3d } from "react-native-redash";
 import { Vector3 } from "./Vector";
 
 interface CameraProps {
-  camera: {
-    x: Animated.SharedValue<number>;
-    y: Animated.SharedValue<number>;
-  };
+  camera: Animated.SharedValue<Matrix4>;
   canvas: Vector3;
 }
 
-const TAU = 2 * Math.PI;
-
 const toRad = (v: number, size: number) => {
   "worklet";
-  return (v / size) * TAU;
+  return (v / size) * 2 * Math.PI;
 };
 
 const Camera = ({ camera, canvas }: CameraProps) => {
-  const onGestureEvent = useAnimatedGestureHandler<{ x: number; y: number }>({
+  const x = useSharedValue(0);
+  const y = useSharedValue(0);
+  const onGestureEvent = useAnimatedGestureHandler<{
+    x: number;
+    y: number;
+    offsetX: number;
+    offsetY: number;
+  }>({
     onStart: (e, ctx) => {
-      ctx.x = camera.x.value;
-      ctx.y = camera.y.value;
+      ctx.x = x.value;
+      ctx.y = y.value;
     },
     onActive: ({ translationX, translationY }, ctx) => {
-      camera.x.value = ctx.x + toRad(translationX, canvas.x);
-      camera.y.value = ctx.y + toRad(translationY, canvas.y);
+      x.value = ctx.x + toRad(translationX, canvas.x);
+      y.value = ctx.y + toRad(translationY, canvas.y);
+      camera.value = processTransform3d([
+        { rotateX: ctx.x },
+        { rotateY: ctx.y },
+      ]);
     },
     onEnd: ({ velocityX, velocityY }) => {
-      camera.x.value = withDecay({
+      x.value = withDecay({
         velocity: toRad(velocityX, canvas.x),
       });
-      camera.y.value = withDecay({
+      y.value = withDecay({
         velocity: toRad(velocityY, canvas.y),
       });
+      camera.value = processTransform3d([
+        { rotateX: x.value },
+        { rotateY: y.value },
+      ]);
     },
   });
   return (

@@ -5,7 +5,7 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated";
-import { processTransform3d, serialize } from "react-native-redash";
+import { serialize } from "react-native-redash";
 import { Path } from "react-native-svg";
 
 import Layer from "./Layer";

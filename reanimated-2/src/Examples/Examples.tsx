@@ -50,7 +50,7 @@ export const examples = [
   },
   {
     screen: "ZAnimations",
-    title: "🧊 3D Animations",
+    title: "⚛️ 3D Animations",
   },
 ] as const;
 

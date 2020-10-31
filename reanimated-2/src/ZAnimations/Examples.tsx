@@ -12,8 +12,8 @@ export const examples = [
     title: "🍩 Donut",
   },
   {
-    screen: "Burger",
-    title: "🍔 Burger",
+    screen: "Cone",
+    title: "📐 Cone",
   },
 ] as const;
 
