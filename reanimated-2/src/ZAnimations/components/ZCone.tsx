@@ -9,7 +9,7 @@ import { Path } from "react-native-svg";
 
 import Layer from "./Layer";
 import { addArc3, createPath3 } from "./Path3";
-import { project, rotateZ } from "./Vector";
+import { dist2d, project, rotateZ } from "./Vector";
 import Vertex from "./Vertex";
 import { useZSvg } from "./ZSvg";
 
@@ -48,21 +48,13 @@ const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
       })),
       close: path.close,
     };
-
-    //const n = project({ x: 0, y: length, z: 0 }, canvas, m);
-    //const eccenAngle = Math.acos(nDist / scale);
-    // const e = Math.abs(Math.sin(Math.atan2(n.y, n.z)));
-    // console.log(e);
-    const y0 = Math.sqrt(apex.x ** 2 + apex.y ** 2);
-    // const L = (length * canvas.x) / 2;
-
+    const y0 = dist2d(apex);
     const c1v = project({ x: 0, y: r, z: 0 }, canvas, camera.value);
-    const c1 = Math.sqrt(c1v.x ** 2 + c1v.y ** 2);
+    const c1 = dist2d(c1v);
     const c2v = project({ x: -r, y: 0, z: 0 }, canvas, camera.value);
-    const c2 = Math.sqrt(c2v.x ** 2 + c2v.y ** 2);
+    const c2 = dist2d(c2v);
     const a = (r * canvas.x) / 2;
     const b = Math.sqrt(c1 ** 2 + c2 ** 2 - a ** 2);
-
     const y = b ** 2 / y0;
     const x = a * Math.sqrt(1 - y ** 2 / b ** 2);
     if (y0 < b) {
