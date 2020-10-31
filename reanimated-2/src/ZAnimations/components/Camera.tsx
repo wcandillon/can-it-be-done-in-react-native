@@ -26,8 +26,6 @@ const Camera = ({ camera, canvas }: CameraProps) => {
   const onGestureEvent = useAnimatedGestureHandler<{
     x: number;
     y: number;
-    offsetX: number;
-    offsetY: number;
   }>({
     onStart: (e, ctx) => {
       ctx.x = x.value;
@@ -36,10 +34,10 @@ const Camera = ({ camera, canvas }: CameraProps) => {
     onActive: ({ translationX, translationY }, ctx) => {
       x.value = ctx.x + toRad(translationX, canvas.x);
       y.value = ctx.y + toRad(translationY, canvas.y);
-      camera.value = processTransform3d([
-        { rotateX: ctx.x },
-        { rotateY: ctx.y },
-      ]);
+      // camera.value = processTransform3d([
+      //   { rotateX: ctx.x },
+      //   { rotateY: ctx.y },
+      //  ]);
     },
     onEnd: ({ velocityX, velocityY }) => {
       x.value = withDecay({
