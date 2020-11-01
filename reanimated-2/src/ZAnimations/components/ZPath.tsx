@@ -35,7 +35,6 @@ const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
     (): Path3 => {
       const transformMatrix = multiply4(
         processTransform3d(transform),
-
         camera.value
       );
       return {
@@ -54,7 +53,7 @@ const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
       d: serialize(path2.value),
     };
   });
-  const scaledStrokeWidth = strokeWidth * canvas.x;
+  const scaledStrokeWidth = (strokeWidth * canvas.x) / 2;
   const style = useAnimatedStyle(() => ({
     zIndex: avg(
       [path2.value.move.z].concat(
