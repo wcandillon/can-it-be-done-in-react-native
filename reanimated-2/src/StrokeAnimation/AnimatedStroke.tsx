@@ -17,6 +17,7 @@ const AnimatedStroke = ({ d, progress }: AnimatedStrokeProps) => {
   const animatedBGProps = useAnimatedProps(() => ({
     strokeDashoffset:
       length - length * Easing.bezier(0.61, 1, 0.88, 1)(progress.value),
+    fillOpacity: progress.value,
   }));
   const animatedProps = useAnimatedProps(() => ({
     strokeDashoffset:
@@ -29,6 +30,7 @@ const AnimatedStroke = ({ d, progress }: AnimatedStrokeProps) => {
         d={d}
         stroke={stroke}
         strokeWidth={10}
+        fill="white"
         strokeDasharray={length}
       />
       <AnimatedPath
