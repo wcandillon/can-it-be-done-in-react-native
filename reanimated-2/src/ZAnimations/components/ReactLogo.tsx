@@ -8,6 +8,7 @@ import { useZSvg } from "./ZSvg";
 const r = 0.9;
 const stroke = "#61DAFB";
 const strokeWidth = 0.05;
+const delta = (Math.PI * 2) / 3;
 const ReactLogo = () => {
   const { canvas } = useZSvg();
   return (
@@ -27,14 +28,14 @@ const ReactLogo = () => {
         ry={r}
         strokeWidth={strokeWidth}
         stroke={stroke}
-        transform={[{ rotateY: Math.PI / 2 }, { rotateZ: -Math.PI / 2 }]}
+        transform={[{ rotateY: delta }]}
       />
       <ZEllipse
         rx={r}
         ry={r}
         strokeWidth={strokeWidth}
         stroke={stroke}
-        transform={[{ rotateY: Math.PI / 2 }, { rotateZ: Math.PI / 2 }]}
+        transform={[{ rotateY: delta * 2 }]}
       />
     </>
   );
