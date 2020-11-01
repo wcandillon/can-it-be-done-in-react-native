@@ -28,14 +28,14 @@ const ReactLogo = () => {
         ry={r}
         strokeWidth={strokeWidth}
         stroke={stroke}
-        transform={[{ rotateY: TAU / 3 }]}
+        transform={[{ rotateY: Math.PI / 2 }]}
       />
       <ZEllipse
         rx={r}
         ry={r}
         strokeWidth={strokeWidth}
         stroke={stroke}
-        transform={[{ rotateY: TAU / 1.5 }]}
+        transform={[{ rotateZ: Math.PI / 2 }]}
       />
     </>
   );
