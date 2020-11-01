@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import Animated, {
   useAnimatedProps,
   useDerivedValue,
   useAnimatedStyle,
+  useSharedValue,
 } from "react-native-reanimated";
 import {
   serialize,
@@ -27,9 +28,19 @@ interface ZPathProps {
   fill?: boolean;
   debug?: boolean;
   transform: Transforms3d;
+  progress: Animated.SharedValue<number>;
 }
 
-const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
+const ZPath = ({
+  path,
+  stroke,
+  strokeWidth,
+  fill,
+  transform,
+  progress,
+}: ZPathProps) => {
+  const ref = useRef<typeof AnimatedPath>(null);
+  const length = useSharedValue(0);
   const { camera, canvas } = useZSvg();
   const path2 = useDerivedValue(
     (): Path3 => {
@@ -51,6 +62,9 @@ const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
   const animatedProps = useAnimatedProps(() => {
     return {
       d: serialize(path2.value),
+      strokeDashoffset:
+        progress.value === 1 ? 0 : length.value - length.value * progress.value,
+      strokeDasharray: progress.value === 1 ? 0 : length.value,
     };
   });
   const scaledStrokeWidth = (strokeWidth * canvas.x) / 2;
@@ -64,10 +78,16 @@ const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
   return (
     <Layer zIndexStyle={style}>
       <AnimatedPath
+        ref={ref}
         animatedProps={animatedProps}
         stroke={stroke}
         fill={fill ? stroke : "transparent"}
         strokeWidth={scaledStrokeWidth}
+        onLayout={() => {
+          if (progress.value < 1) {
+            length.value = ref.current.getTotalLength();
+          }
+        }}
       />
     </Layer>
   );
