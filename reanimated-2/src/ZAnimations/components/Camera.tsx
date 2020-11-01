@@ -27,6 +27,9 @@ const Camera = ({ camera, canvas }: CameraProps) => {
   useAnimatedReaction(
     () => processTransform3d([{ rotateX: y.value }, { rotateY: x.value }]),
     (transform) => {
+      console.log(
+        JSON.stringify([{ rotateX: y.value }, { rotateY: x.value }], null, 2)
+      );
       camera.value = transform;
     }
   );
