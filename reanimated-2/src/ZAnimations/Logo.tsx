@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 
-import ZCone from "./components/ZCone";
+import ReactLogo from "./components/ReactLogo";
 import ZSvg from "./components/ZSvg";
 
 const { width } = Dimensions.get("window");
@@ -19,14 +19,14 @@ const canvas = {
   z: width,
 };
 
-const Cone = () => {
+const Logo = () => {
   return (
     <View style={styles.container}>
       <ZSvg canvas={canvas}>
-        <ZCone r={0.35} length={0.9} base="#FFC27A" body="#45A6E5" />
+        <ReactLogo />
       </ZSvg>
     </View>
   );
 };
 
-export default Cone;
+export default Logo;

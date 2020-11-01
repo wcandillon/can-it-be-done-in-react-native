@@ -15,6 +15,7 @@ export type Routes = {
 
 export type Examples = {
   Examples: undefined;
+  Logo: undefined;
   Cone: undefined;
   Donut: undefined;
 };

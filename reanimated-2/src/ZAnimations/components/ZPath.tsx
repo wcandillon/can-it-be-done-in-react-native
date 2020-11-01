@@ -34,8 +34,9 @@ const ZPath = ({ path, stroke, strokeWidth, fill, transform }: ZPathProps) => {
   const path2 = useDerivedValue(
     (): Path3 => {
       const transformMatrix = multiply4(
-        camera.value,
-        processTransform3d(transform)
+        processTransform3d(transform),
+
+        camera.value
       );
       return {
         move: project(path.move, canvas, transformMatrix),

@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   withDecay,
+  useAnimatedReaction,
 } from "react-native-reanimated";
 import { Matrix4, processTransform3d } from "react-native-redash";
 
@@ -23,6 +24,12 @@ const toRad = (v: number, size: number) => {
 const Camera = ({ camera, canvas }: CameraProps) => {
   const x = useSharedValue(0);
   const y = useSharedValue(0);
+  useAnimatedReaction(
+    () => processTransform3d([{ rotateX: y.value }, { rotateY: x.value }]),
+    (transform) => {
+      camera.value = transform;
+    }
+  );
   const onGestureEvent = useAnimatedGestureHandler<{
     x: number;
     y: number;
@@ -34,10 +41,6 @@ const Camera = ({ camera, canvas }: CameraProps) => {
     onActive: ({ translationX, translationY }, ctx) => {
       x.value = ctx.x + toRad(translationX, canvas.x);
       y.value = ctx.y + toRad(translationY, canvas.y);
-      // camera.value = processTransform3d([
-      //   { rotateX: ctx.x },
-      //   { rotateY: ctx.y },
-      //  ]);
     },
     onEnd: ({ velocityX, velocityY }) => {
       x.value = withDecay({
@@ -46,10 +49,6 @@ const Camera = ({ camera, canvas }: CameraProps) => {
       y.value = withDecay({
         velocity: toRad(velocityY, canvas.y),
       });
-      camera.value = processTransform3d([
-        { rotateX: x.value },
-        { rotateY: y.value },
-      ]);
     },
   });
   return (

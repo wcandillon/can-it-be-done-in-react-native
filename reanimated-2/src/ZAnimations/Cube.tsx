@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 
+import ZBox from "./components/ZBox";
 import ZCone from "./components/ZCone";
 import ZSvg from "./components/ZSvg";
 
@@ -19,14 +20,24 @@ const canvas = {
   z: width,
 };
 
-const Cone = () => {
+const Cube = () => {
   return (
     <View style={styles.container}>
       <ZSvg canvas={canvas}>
-        <ZCone r={0.35} length={0.9} base="#FFC27A" body="#45A6E5" />
+        <ZBox
+          width={1.3}
+          height={0.5}
+          depth={0.5}
+          front={"#FFC27A"}
+          back={"#7EDAB9"}
+          left={"#45A6E5"}
+          right={"#FE8777"}
+          top={"#B97EDA"}
+          bottom={"#77EEFE"}
+        />
       </ZSvg>
     </View>
   );
 };
 
-export default Cone;
+export default Cube;
