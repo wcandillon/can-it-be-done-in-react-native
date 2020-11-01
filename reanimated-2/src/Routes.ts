@@ -18,4 +18,5 @@ export type Examples = {
   Logo: undefined;
   Cone: undefined;
   Donut: undefined;
+  Cube: undefined;
 };

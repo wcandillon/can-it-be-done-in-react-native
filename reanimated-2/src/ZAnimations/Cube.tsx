@@ -2,7 +2,6 @@ import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 
 import ZBox from "./components/ZBox";
-import ZCone from "./components/ZCone";
 import ZSvg from "./components/ZSvg";
 
 const { width } = Dimensions.get("window");
