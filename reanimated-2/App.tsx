@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { LoadAssets } from "./src/components";
+import { LoadAssets, assets } from "./src/components";
 import { Routes } from "./src/Routes";
 import Examples from "./src/Examples";
 import PanGesture from "./src/PanGesture";
@@ -14,11 +14,8 @@ import Accordion from "./src/Accordion";
 import Wave from "./src/Wave";
 import Fluid from "./src/Fluid";
 import ZAnimations from "./src/ZAnimations";
-import StrokeAnimation, {
-  assets as strokeAnimationAssets,
-} from "./src/StrokeAnimation";
+import StrokeAnimation from "./src/StrokeAnimation";
 
-const assets = [...strokeAnimationAssets];
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
   <Stack.Navigator>

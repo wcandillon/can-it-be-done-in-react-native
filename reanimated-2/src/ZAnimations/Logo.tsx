@@ -1,6 +1,8 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 
+import Background from "../components/Background";
+
 import ReactLogo from "./components/ReactLogo";
 import ZSvg from "./components/ZSvg";
 
@@ -22,6 +24,7 @@ const canvas = {
 const Logo = () => {
   return (
     <View style={styles.container}>
+      <Background />
       <ZSvg canvas={canvas}>
         <ReactLogo />
       </ZSvg>

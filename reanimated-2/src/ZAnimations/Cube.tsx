@@ -1,6 +1,8 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 
+import Background from "../components/Background";
+
 import ZBox from "./components/ZBox";
 import ZSvg from "./components/ZSvg";
 
@@ -22,6 +24,7 @@ const canvas = {
 const Cube = () => {
   return (
     <View style={styles.container}>
+      <Background />
       <ZSvg canvas={canvas}>
         <ZBox
           width={1.3}

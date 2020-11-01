@@ -4,8 +4,9 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 import Svg from "react-native-svg";
 
+import Background from "../components/Background";
+
 import AnimatedStroke from "./AnimatedStroke";
-import Background from "./Background";
 import AnimatedLogo from "./AnimatedLogo";
 
 const MARGIN = 10;

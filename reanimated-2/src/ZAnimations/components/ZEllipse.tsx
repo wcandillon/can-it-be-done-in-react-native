@@ -44,4 +44,8 @@ const ZEllipse = ({
   );
 };
 
+ZEllipse.defaultProps = {
+  progress: { value: 0 },
+};
+
 export default ZEllipse;
