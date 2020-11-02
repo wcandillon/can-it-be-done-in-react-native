@@ -13,7 +13,7 @@ interface ZEllipseProps {
   fill?: boolean;
   debug?: boolean;
   transform?: Transforms3d;
-  progress: Animated.SharedValue<number>;
+  progress?: Animated.SharedValue<number>;
 }
 
 const ZEllipse = ({
@@ -42,10 +42,6 @@ const ZEllipse = ({
       progress={progress}
     />
   );
-};
-
-ZEllipse.defaultProps = {
-  progress: { value: 0 },
 };
 
 export default ZEllipse;

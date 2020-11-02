@@ -45,8 +45,8 @@ const ZPath = ({
   const path2 = useDerivedValue(
     (): Path3 => {
       const transformMatrix = multiply4(
-        processTransform3d(transform),
-        camera.value
+        camera.value,
+        processTransform3d(transform)
       );
       return {
         move: project(path.move, canvas, transformMatrix),
@@ -95,6 +95,7 @@ const ZPath = ({
 
 ZPath.defaultProps = {
   transform: [],
+  progress: { value: 1 },
 };
 
 export default ZPath;
