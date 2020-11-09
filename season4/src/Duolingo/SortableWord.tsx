@@ -7,7 +7,10 @@ import Animated, {
   useSharedValue,
   useDerivedValue,
 } from "react-native-reanimated";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+} from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
 import {
@@ -41,7 +44,10 @@ const SortableWord = ({
   const isAnimating = useSharedValue(false);
   const translation = useVector();
   const isInBank = useDerivedValue(() => offset.order.value === -1);
-  const onGestureEvent = useAnimatedGestureHandler<{ x: number; y: number }>({
+  const onGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    { x: number; y: number }
+  >({
     onStart: (event, ctx) => {
       if (isInBank.value) {
         translation.x.value = offset.originalX.value - MARGIN_LEFT;
