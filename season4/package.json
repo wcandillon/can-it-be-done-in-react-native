@@ -9,8 +9,7 @@
     "test": "jest",
     "lint": "eslint --ext .ts,.tsx . --max-warnings 0",
     "tsc": "tsc",
-    "ci": "yarn lint && yarn tsc",
-    "postinstall": "patch-package"
+    "ci": "yarn lint && yarn tsc"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
@@ -32,8 +31,8 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
     "react-native-gesture-handler": "~1.7.0",
-    "react-native-reanimated": "2.0.0-alpha.6",
-    "react-native-redash": "15.7.2",
+    "react-native-reanimated": "2.0.0-alpha.6.1",
+    "react-native-redash": "15.11.1",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
     "react-native-svg": "12.1.0",
@@ -46,7 +45,7 @@
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
     "eslint": "^7.9.0",
-    "eslint-config-react-native-wcandillon": "3.3.3",
+    "eslint-config-react-native-wcandillon": "3.3.4",
     "patch-package": "^6.2.2",
     "typescript": "4.0.3"
   },
