@@ -9,7 +9,10 @@ import Animated, {
   Easing,
   withTiming,
 } from "react-native-reanimated";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+} from "react-native-gesture-handler";
 
 import { Positions } from "./Config";
 import { useSharedValue } from "./Animations";
@@ -97,7 +100,10 @@ const Item = ({
       }
     }
   );
-  const onGestureEvent = useAnimatedGestureHandler<{ x: number; y: number }>({
+  const onGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    { x: number; y: number }
+  >({
     onStart: (_, ctx) => {
       // dont allow drag start if we're done editing
       if (editingSharedValue.value) {

@@ -1,3 +1,3 @@
 export interface Positions {
-  [id: number]: number;
+  [id: string]: number;
 }
