@@ -9,6 +9,7 @@ const tiles = [
     id: "google",
     uri: "https://google.com",
   },
+
   {
     id: "expo",
     uri: "https://expo.io",
@@ -39,7 +40,7 @@ const tiles = [
   },
 ];
 
-const App = () => {
+const Chrome = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "black" }}>
       <SortableList
@@ -62,4 +63,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Chrome;

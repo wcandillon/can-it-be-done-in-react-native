@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Dimensions,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import Animated from "react-native-reanimated";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { WebView } from "react-native-webview";
 
 const { width } = Dimensions.get("window");
@@ -22,7 +16,7 @@ interface TileProps {
   onLongPress: () => void;
 }
 
-const Tile = ({ uri, onLongPress }: TileProps) => {
+const Tile = ({ uri }: TileProps) => {
   return (
     <View style={styles.container} pointerEvents="none">
       <WebView source={{ uri }} style={{ flex: 1, margin: 8 }} />

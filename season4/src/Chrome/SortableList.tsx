@@ -2,9 +2,9 @@ import React, { ReactElement, useLayoutEffect } from "react";
 import Animated, {
   useAnimatedRef,
   useAnimatedScrollHandler,
-  useSharedValue,
 } from "react-native-reanimated";
 
+import { useSharedValue } from "./Animations";
 import { Positions } from "./Config";
 import Item from "./Item";
 
@@ -12,7 +12,7 @@ interface ListProps {
   numberOfColumns: number;
   width: number;
   height: number;
-  children: ReactElement<{ id: number; position: number }>[];
+  children: ReactElement<{ id: string }>[];
   editing: boolean;
   onDragEnd: (diff: Positions) => void;
 }
@@ -46,6 +46,7 @@ const List = ({
   }, [children, positions]);
   return (
     <Animated.ScrollView
+      scrollEventThrottle={16}
       onScroll={onScroll}
       ref={scrollView}
       contentContainerStyle={{

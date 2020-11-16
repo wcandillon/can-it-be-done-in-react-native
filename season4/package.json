@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint --ext .ts,.tsx . --max-warnings 0",
     "tsc": "tsc",
-    "ci": "yarn lint && yarn tsc"
+    "ci": "yarn lint && yarn tsc",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
