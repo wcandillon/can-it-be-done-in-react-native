@@ -13,14 +13,14 @@ import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useSharedValue } from "./Animations";
 import { Positions } from "./Config";
 
 const config = { easing: Easing.inOut(Easing.ease), duration: 350 };
-const { height: containerHeight } = Dimensions.get("window");
 
-export const getPosition = (
+const getPosition = (
   position: number,
   numberOfColumns: number,
   width: number,
@@ -34,7 +34,7 @@ export const getPosition = (
   };
 };
 
-export const getOrder = (
+const getOrder = (
   tx: number,
   ty: number,
   numberOfColumns: number,
@@ -76,6 +76,9 @@ const Item = ({
   scrollY,
   editing,
 }: ItemProps) => {
+  const inset = useSafeAreaInsets();
+  const containerHeight =
+    Dimensions.get("window").height - inset.top - inset.bottom;
   const contentHeight =
     (Object.keys(positions.value).length / numberOfColumns) * height;
   const isGestureActive = useSharedValue(false);
@@ -150,7 +153,6 @@ const Item = ({
         const leftToScrollDown = maxScroll - scrollY.value;
         if (translateY.value < lowerBound) {
           const diff = Math.min(lowerBound - translateY.value, lowerBound);
-          console.log("scroll scroll");
           scrollTo(scrollView, 0, scrollY.value - diff, false);
           ctx.y -= diff;
           translateY.value = ctx.y + translationY;
@@ -160,6 +162,7 @@ const Item = ({
             translateY.value - upperBound,
             leftToScrollDown
           );
+          console.log("diff(" + diff + ")");
           scrollTo(scrollView, 0, scrollY.value + diff, false);
           ctx.y += diff;
           translateY.value = ctx.y + translationY;

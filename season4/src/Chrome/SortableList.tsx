@@ -1,16 +1,10 @@
-import React, {
-  ReactElement,
-  useLayoutEffect,
-  useCallback,
-  useMemo,
-} from "react";
-import { LayoutChangeEvent } from "react-native";
+import React, { ReactElement, useLayoutEffect } from "react";
 import Animated, {
   useAnimatedRef,
   useAnimatedScrollHandler,
 } from "react-native-reanimated";
 
-import Item, { getPosition } from "./Item";
+import Item from "./Item";
 import { useSharedValue } from "./Animations";
 import { Positions } from "./Config";
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Tile, { SIZE } from "./Tile";
 import SortableList from "./SortableList";
@@ -38,19 +39,11 @@ const tiles = [
     id: "twitter",
     uri: "https://twitter.com",
   },
-  {
-    id: "youtube2",
-    uri: "https://youtube.com",
-  },
-  {
-    id: "twitter2",
-    uri: "https://twitter.com",
-  },
 ];
 
 const Chrome = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: "black" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       <SortableList
         numberOfColumns={2}
         height={SIZE}
@@ -60,16 +53,16 @@ const Chrome = () => {
           console.log(JSON.stringify(positions, null, 2))
         }
       >
-        {tiles.map((tile) => (
+        {[...tiles, ...tiles].map((tile, index) => (
           <Tile
             onLongPress={() => true}
-            key={tile.id}
-            id={tile.id}
+            key={tile.id + "-" + index}
+            id={tile.id + "-" + index}
             uri={tile.uri}
           />
         ))}
       </SortableList>
-    </View>
+    </SafeAreaView>
   );
 };
 
