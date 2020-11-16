@@ -27,11 +27,11 @@ const List = ({
 }: ListProps) => {
   const scrollY = useSharedValue(0);
   const scrollView = useAnimatedRef<Animated.ScrollView>();
-  const positions = useSharedValue(
+  const positions = useSharedValue<Positions>(
     Object.assign(
       {},
       ...children.map((child, index) => ({ [child.props.id]: index }))
-    ) as { [id: number]: number }
+    )
   );
   const onScroll = useAnimatedScrollHandler({
     onScroll: ({ contentOffset: { y } }) => {
@@ -39,19 +39,12 @@ const List = ({
     },
   });
 
-  useLayoutEffect(() => {
-    positions.value = Object.assign(
-      {},
-      ...children.map((child, index) => ({ [child.props.id]: index }))
-    );
-  }, [children, positions]);
-
   return (
     <Animated.ScrollView
       onScroll={onScroll}
       ref={scrollView}
       contentContainerStyle={{
-        height: (Math.ceil(children.length / numberOfColumns) + 1) * height,
+        height: Math.ceil(children.length / numberOfColumns) * height,
         justifyContent: "flex-end",
       }}
       showsVerticalScrollIndicator={false}

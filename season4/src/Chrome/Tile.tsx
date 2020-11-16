@@ -15,11 +15,12 @@ interface TileProps {
   uri: string;
   onLongPress: () => void;
 }
+//       <WebView source={{ uri }} style={{ flex: 1, margin: 8 }} />
 
 const Tile = ({ uri }: TileProps) => {
   return (
     <View style={styles.container} pointerEvents="none">
-      <WebView source={{ uri }} style={{ flex: 1, margin: 8 }} />
+      <View style={{ flex: 1, margin: 8, backgroundColor: "#00a0ff" }} />
     </View>
   );
 };
