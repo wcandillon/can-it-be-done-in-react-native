@@ -1,12 +1,18 @@
-import React, { ReactElement, useLayoutEffect } from "react";
+import React, {
+  ReactElement,
+  useLayoutEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import { LayoutChangeEvent } from "react-native";
 import Animated, {
   useAnimatedRef,
   useAnimatedScrollHandler,
 } from "react-native-reanimated";
 
+import Item, { getPosition } from "./Item";
 import { useSharedValue } from "./Animations";
 import { Positions } from "./Config";
-import Item from "./Item";
 
 interface ListProps {
   numberOfColumns: number;
@@ -38,15 +44,16 @@ const List = ({
       scrollY.value = y;
     },
   });
+
   useLayoutEffect(() => {
     positions.value = Object.assign(
       {},
       ...children.map((child, index) => ({ [child.props.id]: index }))
     );
   }, [children, positions]);
+
   return (
     <Animated.ScrollView
-      scrollEventThrottle={16}
       onScroll={onScroll}
       ref={scrollView}
       contentContainerStyle={{

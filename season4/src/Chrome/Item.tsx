@@ -1,5 +1,5 @@
 import React, { ReactNode, RefObject } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedGestureHandler,
   useAnimatedStyle,
@@ -14,26 +14,27 @@ import {
   PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 
-import { Positions } from "./Config";
 import { useSharedValue } from "./Animations";
-const config = { easing: Easing.inOut(Easing.ease), duration: 350 };
+import { Positions } from "./Config";
 
+const config = { easing: Easing.inOut(Easing.ease), duration: 350 };
 const { height: containerHeight } = Dimensions.get("window");
 
-const getPosition = (
+export const getPosition = (
   position: number,
   numberOfColumns: number,
   width: number,
   height: number
 ) => {
   "worklet";
+
   return {
     x: position % numberOfColumns === 0 ? 0 : width,
     y: Math.floor(position / numberOfColumns) * height,
   };
 };
 
-const getOrder = (
+export const getOrder = (
   tx: number,
   ty: number,
   numberOfColumns: number,
@@ -77,8 +78,9 @@ const Item = ({
 }: ItemProps) => {
   const contentHeight =
     (Object.keys(positions.value).length / numberOfColumns + 1) * height;
-  const isGestureActive = useSharedValue(false);
   const editingSharedValue = useSharedValue(true);
+  const isGestureActive = useSharedValue(false);
+
   const position = getPosition(
     positions.value[id],
     numberOfColumns,
@@ -87,12 +89,10 @@ const Item = ({
   );
   const translateX = useSharedValue(position.x);
   const translateY = useSharedValue(position.y);
+
   useAnimatedReaction(
-    () => {
-      console.log(id);
-      return positions.value[id];
-    },
-    (newOrder: number) => {
+    () => positions.value[id],
+    (newOrder) => {
       if (!isGestureActive.value) {
         const pos = getPosition(newOrder, numberOfColumns, width, height);
         translateX.value = withTiming(pos.x, config);
@@ -100,6 +100,7 @@ const Item = ({
       }
     }
   );
+
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
     { x: number; y: number }
@@ -134,10 +135,9 @@ const Item = ({
             (key) => positions.value[key] === newOrder
           );
           if (idToSwap) {
-            console.log(
-              JSON.stringify({ id, idToSwap, newOrder, oldOlder }, null, 2)
-            );
-            const newPositions = Object.assign({}, positions.value);
+            // Spread operator is not supported in worklets
+            // And Object.assign doesn't seem to be working on alpha.6
+            const newPositions = JSON.parse(JSON.stringify(positions.value));
             newPositions[id] = newOrder;
             newPositions[idToSwap] = oldOlder;
             positions.value = newPositions;
@@ -167,17 +167,17 @@ const Item = ({
       }
     },
     onEnd: () => {
-      const destination = getPosition(
+      const newPosition = getPosition(
         positions.value[id],
         numberOfColumns,
         width,
         height
       );
-      translateX.value = withTiming(destination.x, config, () => {
+      translateX.value = withTiming(newPosition.x, config, () => {
         isGestureActive.value = false;
-        //onDragEnd(positions.value);
+        onDragEnd(positions.value);
       });
-      translateY.value = withTiming(destination.y, config);
+      translateY.value = withTiming(newPosition.y, config);
     },
   });
   const style = useAnimatedStyle(() => {
@@ -201,9 +201,7 @@ const Item = ({
     <Animated.View style={style}>
       <PanGestureHandler enabled={editing} onGestureEvent={onGestureEvent}>
         <Animated.View style={StyleSheet.absoluteFill}>
-          <View
-            style={{ backgroundColor: "red", ...StyleSheet.absoluteFillObject }}
-          />
+          {children}
         </Animated.View>
       </PanGestureHandler>
     </Animated.View>
