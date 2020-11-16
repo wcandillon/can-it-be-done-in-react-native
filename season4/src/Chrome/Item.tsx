@@ -16,21 +16,16 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useSharedValue } from "./Animations";
-import { Positions } from "./Config";
+import { Positions, SIZE } from "./Config";
 
 const config = { easing: Easing.inOut(Easing.ease), duration: 350 };
 
-const getPosition = (
-  position: number,
-  numberOfColumns: number,
-  width: number,
-  height: number
-) => {
+const getPosition = (position: number, numberOfColumns: number) => {
   "worklet";
 
   return {
-    x: position % numberOfColumns === 0 ? 0 : width,
-    y: Math.floor(position / numberOfColumns) * height,
+    x: position % numberOfColumns === 0 ? 0 : SIZE,
+    y: Math.floor(position / numberOfColumns) * SIZE,
   };
 };
 
@@ -38,16 +33,14 @@ const getOrder = (
   tx: number,
   ty: number,
   numberOfColumns: number,
-  width: number,
-  height: number,
   max: number
 ) => {
   "worklet";
 
-  const x = Math.round(tx / width) * width;
-  const y = Math.round(ty / height) * height;
-  const row = Math.max(y, 0) / height;
-  const col = Math.max(x, 0) / width;
+  const x = Math.round(tx / SIZE) * SIZE;
+  const y = Math.round(ty / SIZE) * SIZE;
+  const row = Math.max(y, 0) / SIZE;
+  const col = Math.max(x, 0) / SIZE;
   return Math.min(row * numberOfColumns + col, max);
 };
 
@@ -55,8 +48,6 @@ interface ItemProps {
   children: ReactNode;
   positions: Animated.SharedValue<Positions>;
   id: string;
-  width: number;
-  height: number;
   editing: boolean;
   onDragEnd: (diffs: Positions) => void;
   numberOfColumns: number;
@@ -68,9 +59,7 @@ const Item = ({
   children,
   positions,
   id,
-  width,
   numberOfColumns,
-  height,
   onDragEnd,
   scrollView,
   scrollY,
@@ -80,15 +69,10 @@ const Item = ({
   const containerHeight =
     Dimensions.get("window").height - inset.top - inset.bottom;
   const contentHeight =
-    (Object.keys(positions.value).length / numberOfColumns) * height;
+    (Object.keys(positions.value).length / numberOfColumns) * SIZE;
   const isGestureActive = useSharedValue(false);
 
-  const position = getPosition(
-    positions.value[id],
-    numberOfColumns,
-    width,
-    height
-  );
+  const position = getPosition(positions.value[id], numberOfColumns);
   const translateX = useSharedValue(position.x);
   const translateY = useSharedValue(position.y);
 
@@ -96,7 +80,7 @@ const Item = ({
     () => positions.value[id],
     (newOrder) => {
       if (!isGestureActive.value) {
-        const pos = getPosition(newOrder, numberOfColumns, width, height);
+        const pos = getPosition(newOrder, numberOfColumns);
         translateX.value = withTiming(pos.x, config);
         translateY.value = withTiming(pos.y, config);
       }
@@ -125,8 +109,6 @@ const Item = ({
           translateX.value,
           translateY.value,
           numberOfColumns,
-          width,
-          height,
           Object.keys(positions.value).length - 1
         );
 
@@ -148,7 +130,7 @@ const Item = ({
 
         // 3. Scroll up and down if necessary
         const lowerBound = scrollY.value;
-        const upperBound = lowerBound + containerHeight - height;
+        const upperBound = lowerBound + containerHeight - SIZE;
         const maxScroll = contentHeight - containerHeight;
         const leftToScrollDown = maxScroll - scrollY.value;
         if (translateY.value < lowerBound) {
@@ -171,12 +153,7 @@ const Item = ({
       }
     },
     onEnd: () => {
-      const newPosition = getPosition(
-        positions.value[id],
-        numberOfColumns,
-        width,
-        height
-      );
+      const newPosition = getPosition(positions.value[id], numberOfColumns);
       translateX.value = withTiming(newPosition.x, config, () => {
         isGestureActive.value = false;
         onDragEnd(positions.value);
@@ -191,8 +168,8 @@ const Item = ({
       position: "absolute",
       top: 0,
       left: 0,
-      width,
-      height,
+      width: SIZE,
+      height: SIZE,
       zIndex,
       transform: [
         { translateX: translateX.value },

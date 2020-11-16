@@ -6,25 +6,16 @@ import Animated, {
 
 import Item from "./Item";
 import { useSharedValue } from "./Animations";
-import { Positions } from "./Config";
+import { Positions, SIZE } from "./Config";
 
 interface ListProps {
   numberOfColumns: number;
-  width: number;
-  height: number;
   children: ReactElement<{ id: string }>[];
   editing: boolean;
   onDragEnd: (diff: Positions) => void;
 }
 
-const List = ({
-  numberOfColumns,
-  width,
-  height,
-  children,
-  editing,
-  onDragEnd,
-}: ListProps) => {
+const List = ({ numberOfColumns, children, editing, onDragEnd }: ListProps) => {
   const scrollY = useSharedValue(0);
   const scrollView = useAnimatedRef<Animated.ScrollView>();
   const positions = useSharedValue<Positions>(
@@ -44,7 +35,7 @@ const List = ({
       onScroll={onScroll}
       ref={scrollView}
       contentContainerStyle={{
-        height: Math.ceil(children.length / numberOfColumns) * height,
+        height: Math.ceil(children.length / numberOfColumns) * SIZE,
       }}
       showsVerticalScrollIndicator={false}
       bounces={false}
@@ -56,8 +47,6 @@ const List = ({
             key={child.props.id}
             positions={positions}
             id={child.props.id}
-            width={width}
-            height={height}
             editing={editing}
             onDragEnd={onDragEnd}
             numberOfColumns={numberOfColumns}

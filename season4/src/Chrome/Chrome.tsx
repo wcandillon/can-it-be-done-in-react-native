@@ -48,8 +48,6 @@ const Chrome = () => {
     >
       <SortableList
         numberOfColumns={2}
-        height={SIZE}
-        width={SIZE}
         editing={true}
         onDragEnd={(positions) =>
           console.log(JSON.stringify(positions, null, 2))
