@@ -16,6 +16,10 @@ export const examples = [
     screen: "Rainbow",
     title: "🌈 Rainbow",
   },
+  {
+    screen: "Chrome",
+    title: "🧭 Google Chrome",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
