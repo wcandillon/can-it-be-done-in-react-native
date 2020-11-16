@@ -1,5 +1,10 @@
 import React from "react";
-import { Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import Animated from "react-native-reanimated";
 import { WebView } from "react-native-webview";
 
@@ -19,11 +24,9 @@ interface TileProps {
 
 const Tile = ({ uri, onLongPress }: TileProps) => {
   return (
-    <TouchableWithoutFeedback onLongPress={onLongPress}>
-      <Animated.View style={[styles.container]} pointerEvents="none">
-        <WebView source={{ uri }} style={{ flex: 1, margin: 8 }} />
-      </Animated.View>
-    </TouchableWithoutFeedback>
+    <View style={styles.container} pointerEvents="none">
+      <WebView source={{ uri }} style={{ flex: 1, margin: 8 }} />
+    </View>
   );
 };
 

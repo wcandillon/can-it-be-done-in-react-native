@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import React from "react";
+import { View } from "react-native";
 
 import Tile, { SIZE } from "./Tile";
+import SortableList from "./SortableList";
 
 const tiles = [
   {
@@ -40,23 +41,23 @@ const tiles = [
 
 const App = () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "flex-row",
-        flexWrap: "wrap",
-        backgroundColor: "black",
-        padding: 8,
-      }}
-    >
-      {tiles.map((tile) => (
-        <Tile
-          onLongPress={() => true}
-          key={tile.id}
-          id={tile.id}
-          uri={tile.uri}
-        />
-      ))}
+    <View style={{ flex: 1, backgroundColor: "black" }}>
+      <SortableList
+        numberOfColumns={2}
+        height={SIZE}
+        width={SIZE}
+        editing={true}
+        onDragEnd={(positions) => console.log(positions)}
+      >
+        {tiles.map((tile) => (
+          <Tile
+            onLongPress={() => true}
+            key={tile.id}
+            id={tile.id}
+            uri={tile.uri}
+          />
+        ))}
+      </SortableList>
     </View>
   );
 };
