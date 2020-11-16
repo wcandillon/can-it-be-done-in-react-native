@@ -1,4 +1,4 @@
-import React, { ReactElement, useLayoutEffect } from "react";
+import React, { ReactElement } from "react";
 import Animated, {
   useAnimatedRef,
   useAnimatedScrollHandler,
@@ -45,10 +45,10 @@ const List = ({
       ref={scrollView}
       contentContainerStyle={{
         height: Math.ceil(children.length / numberOfColumns) * height,
-        justifyContent: "flex-end",
       }}
       showsVerticalScrollIndicator={false}
       bounces={false}
+      scrollEventThrottle={16}
     >
       {children.map((child) => {
         return (

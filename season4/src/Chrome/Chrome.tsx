@@ -1,8 +1,8 @@
 import React from "react";
-import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Tile, { SIZE } from "./Tile";
+import { MARGIN, SIZE } from "./Config";
+import Tile from "./Tile";
 import SortableList from "./SortableList";
 
 const tiles = [
@@ -43,7 +43,9 @@ const tiles = [
 
 const Chrome = () => {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "black", paddingHorizontal: MARGIN }}
+    >
       <SortableList
         numberOfColumns={2}
         height={SIZE}

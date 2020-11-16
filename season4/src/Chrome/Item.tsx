@@ -153,7 +153,8 @@ const Item = ({
         const leftToScrollDown = maxScroll - scrollY.value;
         if (translateY.value < lowerBound) {
           const diff = Math.min(lowerBound - translateY.value, lowerBound);
-          scrollTo(scrollView, 0, scrollY.value - diff, false);
+          scrollY.value -= diff;
+          scrollTo(scrollView, 0, scrollY.value, false);
           ctx.y -= diff;
           translateY.value = ctx.y + translationY;
         }
@@ -162,8 +163,8 @@ const Item = ({
             translateY.value - upperBound,
             leftToScrollDown
           );
-          console.log("diff(" + diff + ")");
-          scrollTo(scrollView, 0, scrollY.value + diff, false);
+          scrollY.value += diff;
+          scrollTo(scrollView, 0, scrollY.value, false);
           ctx.y += diff;
           translateY.value = ctx.y + translationY;
         }

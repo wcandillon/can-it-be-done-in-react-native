@@ -1,9 +1,9 @@
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { WebView } from "react-native-webview";
 
-const { width } = Dimensions.get("window");
-export const SIZE = width / 2;
+import { MARGIN, SIZE } from "./Config";
+
 const styles = StyleSheet.create({
   container: {
     width: SIZE,
@@ -15,12 +15,14 @@ interface TileProps {
   uri: string;
   onLongPress: () => void;
 }
-//       <WebView source={{ uri }} style={{ flex: 1, margin: 8 }} />
 
 const Tile = ({ uri }: TileProps) => {
   return (
     <View style={styles.container} pointerEvents="none">
-      <View style={{ flex: 1, margin: 8, backgroundColor: "#00a0ff" }} />
+      <WebView
+        source={{ uri }}
+        style={{ flex: 1, margin: MARGIN * 2, borderRadius: MARGIN }}
+      />
     </View>
   );
 };
