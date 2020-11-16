@@ -38,6 +38,14 @@ const tiles = [
     id: "twitter",
     uri: "https://twitter.com",
   },
+  {
+    id: "youtube2",
+    uri: "https://youtube.com",
+  },
+  {
+    id: "twitter2",
+    uri: "https://twitter.com",
+  },
 ];
 
 const Chrome = () => {
@@ -48,7 +56,9 @@ const Chrome = () => {
         height={SIZE}
         width={SIZE}
         editing={true}
-        onDragEnd={(positions) => console.log(positions)}
+        onDragEnd={(positions) =>
+          console.log(JSON.stringify(positions, null, 2))
+        }
       >
         {tiles.map((tile) => (
           <Tile

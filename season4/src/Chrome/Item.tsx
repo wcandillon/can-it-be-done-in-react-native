@@ -71,14 +71,13 @@ const Item = ({
   width,
   numberOfColumns,
   height,
-  editing,
   onDragEnd,
   scrollView,
   scrollY,
+  editing,
 }: ItemProps) => {
   const contentHeight =
-    (Object.keys(positions.value).length / numberOfColumns + 1) * height;
-  const editingSharedValue = useSharedValue(true);
+    (Object.keys(positions.value).length / numberOfColumns) * height;
   const isGestureActive = useSharedValue(false);
 
   const position = getPosition(
@@ -107,7 +106,7 @@ const Item = ({
   >({
     onStart: (_, ctx) => {
       // dont allow drag start if we're done editing
-      if (editingSharedValue.value) {
+      if (editing) {
         ctx.x = translateX.value;
         ctx.y = translateY.value;
         isGestureActive.value = true;
@@ -115,7 +114,7 @@ const Item = ({
     },
     onActive: ({ translationX, translationY }, ctx) => {
       // dont allow drag if we're done editing
-      if (editingSharedValue.value) {
+      if (editing) {
         translateX.value = ctx.x + translationX;
         translateY.value = ctx.y + translationY;
         // 1. We calculate where the tile should be
@@ -151,6 +150,7 @@ const Item = ({
         const leftToScrollDown = maxScroll - scrollY.value;
         if (translateY.value < lowerBound) {
           const diff = Math.min(lowerBound - translateY.value, lowerBound);
+          console.log("scroll scroll");
           scrollTo(scrollView, 0, scrollY.value - diff, false);
           ctx.y -= diff;
           translateY.value = ctx.y + translationY;
