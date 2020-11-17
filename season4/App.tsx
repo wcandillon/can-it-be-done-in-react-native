@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Routes } from "./src/Routes";
 import Examples from "./src/Examples";
 import Rainbow from "./src/Rainbow";
+import Chrome from "./src/Chrome";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import { LoadAssets } from "./src/components";
 
@@ -40,6 +41,14 @@ const AppNavigator = () => (
       component={Rainbow}
       options={{
         title: "🌈 Rainbow",
+      }}
+    />
+    <Stack.Screen
+      name="Chrome"
+      component={Chrome}
+      options={{
+        title: "🧭 Google Chrome",
+        header: () => null,
       }}
     />
   </Stack.Navigator>
