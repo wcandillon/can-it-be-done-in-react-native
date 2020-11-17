@@ -5,3 +5,4 @@ Unzip the folder into the `src/` folder.
 
 * [Duolingo](./Duolingo.zip)
 * [Rainbow](./Rainbow.zip)
+* [Google Chrome](./Chrome.zip)
