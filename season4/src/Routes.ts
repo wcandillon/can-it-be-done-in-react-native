@@ -4,4 +4,5 @@ export type Routes = {
   Duolingo: undefined;
   Snapchat: undefined;
   PhilzCoffee: undefined;
+  Chrome: undefined;
 };

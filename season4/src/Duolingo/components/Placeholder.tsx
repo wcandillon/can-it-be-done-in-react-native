@@ -1,9 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 
-import { Offset } from "../Layout";
-
-export const VOFFSET = 150;
+import { MARGIN_LEFT, MARGIN_TOP, Offset, WORD_HEIGHT } from "../Layout";
 
 interface PlaceholderProps {
   offset: Offset;
@@ -15,10 +13,10 @@ const Placeholder = ({ offset }: PlaceholderProps) => {
       style={{
         backgroundColor: "#E6E5E6",
         position: "absolute",
-        top: offset.originalY.value + VOFFSET + 2,
-        left: offset.originalX.value - 32 + 2,
+        top: offset.originalY.value + MARGIN_TOP + 2,
+        left: offset.originalX.value - MARGIN_LEFT + 2,
         width: offset.width.value - 4,
-        height: offset.height.value - 4,
+        height: WORD_HEIGHT - 4,
         borderRadius: 8,
       }}
     />

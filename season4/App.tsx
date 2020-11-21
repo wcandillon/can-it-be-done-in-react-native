@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Routes } from "./src/Routes";
 import Examples from "./src/Examples";
 import Rainbow from "./src/Rainbow";
+import Chrome from "./src/Chrome";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
 import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
@@ -48,19 +49,21 @@ const AppNavigator = () => (
       }}
     />
     <Stack.Screen
-      name="Snapchat"
-      component={Snapchat}
+      name="Chrome"
+      component={Chrome}
       options={{
-        title: "👻 Snapchat",
+        title: "🧭 Google Chrome",
+        header: () => null,
       }}
     />
-    <Stack.Screen
+
+<Stack.Screen
       name="PhilzCoffee"
       component={PhilzCoffee}
       options={{
         title: "☕️ Philz Coffee",
       }}
-    />
+      />
   </Stack.Navigator>
 );
 

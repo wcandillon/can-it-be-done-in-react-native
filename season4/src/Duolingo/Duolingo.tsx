@@ -7,7 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 const words = [
-  { id: 1, word: "Ihr" },
+  { id: 1, word: "Er" },
   { id: 8, word: "hungrig" },
   { id: 2, word: "isst" },
   { id: 7, word: "er" },

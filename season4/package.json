@@ -29,14 +29,15 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
     "react-native-gesture-handler": "~1.7.0",
-    "react-native-reanimated": "2.0.0-alpha.6",
-    "react-native-redash": "15.5.2",
+    "react-native-reanimated": "2.0.0-alpha.6.1",
+    "react-native-redash": "15.11.1",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
     "react-native-shared-element": "0.7.0",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
-    "react-navigation-shared-element": "^3.0.0"
+    "react-navigation-shared-element": "^3.0.0",
+    "react-native-webview": "10.7.0"
   },
   "devDependencies": {
     "@types/d3-scale": "^2.2.0",
@@ -45,10 +46,9 @@
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
     "eslint": "^7.9.0",
-    "eslint-config-react-native-wcandillon": "3.3.3",
+    "eslint-config-react-native-wcandillon": "3.3.4",
     "patch-package": "^6.2.2",
-    "react-native-web": "~0.13.7",
-    "typescript": "~3.9.5"
+    "typescript": "4.0.3"
   },
   "private": true
 }

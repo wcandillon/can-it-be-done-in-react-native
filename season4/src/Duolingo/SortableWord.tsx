@@ -7,11 +7,24 @@ import Animated, {
   useSharedValue,
   useDerivedValue,
 } from "react-native-reanimated";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+} from "react-native-gesture-handler";
 import { between, useVector } from "react-native-redash";
 
-import { calculateLayout, lastOrder, Offset, reorder } from "./Layout";
-import Placeholder, { VOFFSET } from "./components/Placeholder";
+import {
+  calculateLayout,
+  lastOrder,
+  Offset,
+  remove,
+  reorder,
+  WORD_HEIGHT,
+  SENTENCE_HEIGHT,
+  MARGIN_LEFT,
+  MARGIN_TOP,
+} from "./Layout";
+import Placeholder from "./components/Placeholder";
 
 interface SortableWordProps {
   offsets: Offset[];
@@ -26,49 +39,46 @@ const SortableWord = ({
   children,
   containerWidth,
 }: SortableWordProps) => {
-  const gestureActive = useSharedValue(false);
   const offset = offsets[index];
-  // const height = offset.height.value;
-  const translation = useVector(offset.x.value, offset.y.value);
-  const panOffset = useVector();
-  const onGestureEvent = useAnimatedGestureHandler({
-    onStart: () => {
-      const isInBank = offset.order.value === -1;
-      const bankX = offset.originalX.value - 32;
-      const bankY = offset.originalY.value + VOFFSET;
-      gestureActive.value = true;
-      if (isInBank) {
-        translation.x.value = bankX;
-        translation.y.value = bankY;
+  const isGestureActive = useSharedValue(false);
+  const isAnimating = useSharedValue(false);
+  const translation = useVector();
+  const isInBank = useDerivedValue(() => offset.order.value === -1);
+  const onGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    { x: number; y: number }
+  >({
+    onStart: (event, ctx) => {
+      if (isInBank.value) {
+        translation.x.value = offset.originalX.value - MARGIN_LEFT;
+        translation.y.value = offset.originalY.value + MARGIN_TOP;
       } else {
         translation.x.value = offset.x.value;
         translation.y.value = offset.y.value;
       }
-      panOffset.x.value = translation.x.value;
-      panOffset.y.value = translation.y.value;
+      ctx.x = translation.x.value;
+      ctx.y = translation.y.value;
+      isGestureActive.value = true;
     },
-    onActive: (event) => {
-      const isInBank = offset.order.value === -1;
-      translation.x.value = panOffset.x.value + event.translationX;
-      translation.y.value = panOffset.y.value + event.translationY;
-      if (isInBank && translation.y.value < 100) {
-        const l = lastOrder(offsets);
-        offset.order.value = l;
+    onActive: ({ translationX, translationY }, ctx) => {
+      translation.x.value = ctx.x + translationX;
+      translation.y.value = ctx.y + translationY;
+      if (isInBank.value && translation.y.value < SENTENCE_HEIGHT) {
+        offset.order.value = lastOrder(offsets);
         calculateLayout(offsets, containerWidth);
-      } else if (!isInBank && translation.y.value > 100) {
+      } else if (!isInBank.value && translation.y.value > SENTENCE_HEIGHT) {
         offset.order.value = -1;
+        remove(offsets, index);
         calculateLayout(offsets, containerWidth);
-        return;
       }
       for (let i = 0; i < offsets.length; i++) {
         const o = offsets[i];
-        if (o.order.value === -1) {
+        if (i === index && o.order.value !== -1) {
           continue;
         }
         if (
-          offset.order.value !== o.order.value &&
           between(translation.x.value, o.x.value, o.x.value + o.width.value) &&
-          between(translation.y.value, o.y.value, o.y.value + o.height.value)
+          between(translation.y.value, o.y.value, o.y.value + WORD_HEIGHT)
         ) {
           reorder(offsets, offset.order.value, o.order.value);
           calculateLayout(offsets, containerWidth);
@@ -77,41 +87,40 @@ const SortableWord = ({
       }
     },
     onEnd: ({ velocityX, velocityY }) => {
-      gestureActive.value = false;
-      translation.x.value = withSpring(offset.x.value, {
-        velocity: velocityX,
-      });
-      translation.y.value = withSpring(offset.y.value, {
-        velocity: velocityY,
-      });
+      isAnimating.value = true;
+      translation.x.value = withSpring(
+        offset.x.value,
+        { velocity: velocityX },
+        () => (isAnimating.value = false)
+      );
+      translation.y.value = withSpring(offset.y.value, { velocity: velocityY });
+      isGestureActive.value = false;
     },
   });
   const translateX = useDerivedValue(() => {
-    const isInBank = offset.order.value === -1;
-    const bankX = offset.originalX.value - 32;
-    if (gestureActive.value) {
+    if (isGestureActive.value) {
       return translation.x.value;
-    } else {
-      return withSpring(isInBank ? bankX : offset.x.value);
     }
+    return withSpring(
+      isInBank.value ? offset.originalX.value - MARGIN_LEFT : offset.x.value
+    );
   });
   const translateY = useDerivedValue(() => {
-    const isInBank = offset.order.value === -1;
-    const bankY = offset.originalY.value + VOFFSET;
-    if (gestureActive.value) {
+    if (isGestureActive.value) {
       return translation.y.value;
-    } else {
-      return withSpring(isInBank ? bankY : offset.y.value);
     }
+    return withSpring(
+      isInBank.value ? offset.originalY.value + MARGIN_TOP : offset.y.value
+    );
   });
   const style = useAnimatedStyle(() => {
     return {
       position: "absolute",
       top: 0,
       left: 0,
+      zIndex: isGestureActive.value || isAnimating.value ? 100 : 0,
       width: offset.width.value,
-      height: offset.height.value,
-      zIndex: gestureActive.value ? 100 : 0,
+      height: WORD_HEIGHT,
       transform: [
         { translateX: translateX.value },
         { translateY: translateY.value },

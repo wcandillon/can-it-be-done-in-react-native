@@ -44,8 +44,8 @@ const buildGraph = (datapoints: DataPoints, label: string) => {
     path: parse(
       shape
         .line()
-        .x(([, x]) => scaleX(x))
-        .y(([y]) => scaleY(y))
+        .x(([, x]) => scaleX(x) as number)
+        .y(([y]) => scaleY(y) as number)
         .curve(shape.curveBasis)(formattedValues) as string
     ),
   };

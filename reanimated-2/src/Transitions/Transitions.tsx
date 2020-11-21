@@ -63,8 +63,8 @@ const UseTransition = () => {
       })}
       <Button
         label={toggled ? "Reset" : "Start"}
-        primary
         onPress={() => setToggle((prev) => !prev)}
+        primary
       />
     </View>
   );
