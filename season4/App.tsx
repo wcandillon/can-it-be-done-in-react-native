@@ -56,14 +56,21 @@ const AppNavigator = () => (
         header: () => null,
       }}
     />
-
-<Stack.Screen
+    <Stack.Screen
       name="PhilzCoffee"
       component={PhilzCoffee}
       options={{
         title: "☕️ Philz Coffee",
       }}
-      />
+    />
+    <Stack.Screen
+      name="Snapchat"
+      component={Snapchat}
+      options={{
+        title: "👻 Snapchat",
+        header: () => null,
+      }}
+    />
   </Stack.Navigator>
 );
 
