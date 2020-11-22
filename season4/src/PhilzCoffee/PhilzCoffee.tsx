@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, View, ScrollView } from "react-native";
+import { Dimensions, View, ScrollView, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -13,6 +13,11 @@ import Products from "./Products";
 import Cards from "./components/Cards";
 
 const { width } = Dimensions.get("window");
+
+const styles = StyleSheet.create({
+  slider: { height: CARD_HEIGHT },
+});
+const snapToOffsets = [0, CARD_HEIGHT];
 
 const PhilzCoffee = () => {
   const translateX = useSharedValue(0);
@@ -34,11 +39,11 @@ const PhilzCoffee = () => {
       <ScrollView
         bounces={false}
         showsHorizontalScrollIndicator={false}
-        snapToOffsets={[0, CARD_HEIGHT]}
+        snapToOffsets={snapToOffsets}
         snapToEnd={false}
         decelerationRate="fast"
       >
-        <View style={[{ height: CARD_HEIGHT }]}>
+        <View style={styles.slider}>
           <Animated.ScrollView
             onScroll={onScroll}
             scrollEventThrottle={16}
