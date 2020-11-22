@@ -10,26 +10,14 @@ import { interpolateColor } from "react-native-redash";
 import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
 
 import { products } from "./Model";
-import Card from "./Card";
+import Card, { CARD_HEIGHT } from "./Card";
 import Products from "./Products";
+import Cards from "./components/Cards";
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const { width, height } = Dimensions.get("window");
-const styles = StyleSheet.create({
-  container: {
-    width,
-    height: height,
-  },
-  page: {
-    width,
-    height,
-  },
-});
 
 const PhilzCoffee = () => {
-  const pan = useRef<PanGestureHandler>(null);
-  const scrollViewH = useRef<Animated.ScrollView>(null);
-  const scrollViewV = useRef<ScrollView>(null);
   const translateX = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -42,36 +30,25 @@ const PhilzCoffee = () => {
       products.map((_, i) => width * i),
       products.map((product) => product.color2)
     );
-    return { backgroundColor };
-  });
-  const onGestureEvent = useAnimatedGestureHandler({
-    onStart: () => {
-      console.log("Start");
-    },
-    onEnd: () => {
-      console.log("End");
-    },
+    return { flex: 1, backgroundColor };
   });
   return (
-    <ScrollView
-      bounces={false}
-      contentContainerStyle={{ backgroundColor: "green" }}
-      showsHorizontalScrollIndicator
-      snapToOffsets={[0, height * 0.61]}
-      snapToEnd={false}
-      decelerationRate="fast"
-    >
-      <Animated.View style={[style]}>
-        <View style={[{ height: height * 0.61 }]}>
+    <Animated.View style={style}>
+      <ScrollView
+        bounces={false}
+        showsHorizontalScrollIndicator={false}
+        snapToOffsets={[0, CARD_HEIGHT]}
+        snapToEnd={false}
+        decelerationRate="fast"
+      >
+        <View style={[{ height: CARD_HEIGHT }]}>
           <AnimatedScrollView
-            waitFor={pan}
             onScroll={onScroll}
             scrollEventThrottle={16}
             decelerationRate="fast"
             snapToInterval={width}
             horizontal
-            showsHorizontalScrollIndicator
-            directionalLockEnabled
+            showsHorizontalScrollIndicator={false}
           >
             {products.map((product, index) => (
               <Card product={product} key={index} />
@@ -79,58 +56,9 @@ const PhilzCoffee = () => {
           </AnimatedScrollView>
           <Products x={translateX} />
         </View>
-      </Animated.View>
-      <View style={[{ backgroundColor: "green" }]}>
-        <View
-          style={{
-            width: 300,
-            height: 300,
-            backgroundColor: "red",
-            margin: 16,
-          }}
-        />
-        <View
-          style={{
-            width: 300,
-            height: 300,
-            backgroundColor: "red",
-            margin: 16,
-          }}
-        />
-        <View
-          style={{
-            width: 300,
-            height: 300,
-            backgroundColor: "red",
-            margin: 16,
-          }}
-        />
-        <View
-          style={{
-            width: 300,
-            height: 300,
-            backgroundColor: "red",
-            margin: 16,
-          }}
-        />
-        <View
-          style={{
-            width: 300,
-            height: 300,
-            backgroundColor: "red",
-            margin: 16,
-          }}
-        />
-        <View
-          style={{
-            width: 300,
-            height: 300,
-            backgroundColor: "red",
-            margin: 16,
-          }}
-        />
-      </View>
-    </ScrollView>
+        <Cards />
+      </ScrollView>
+    </Animated.View>
   );
 };
 

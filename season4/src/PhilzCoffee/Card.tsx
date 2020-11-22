@@ -6,10 +6,11 @@ import Button from "./components/Button";
 import CardHeader from "./components/CardHeader";
 
 const { width } = Dimensions.get("window");
+export const CARD_HEIGHT = (width * 1564) / 974;
 const styles = StyleSheet.create({
   container: {
     width,
-    height: (width * 1564) / 974,
+    height: CARD_HEIGHT,
   },
   title: {
     fontFamily: "GothamRounded-Bold",
