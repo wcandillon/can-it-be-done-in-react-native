@@ -38,7 +38,7 @@ const PhilzCoffee = () => {
     <Animated.View style={style}>
       <ScrollView
         bounces={false}
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         snapToOffsets={snapToOffsets}
         snapToEnd={false}
         decelerationRate="fast"
@@ -50,7 +50,7 @@ const PhilzCoffee = () => {
             decelerationRate="fast"
             snapToInterval={width}
             horizontal
-            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
           >
             {products.map((product, index) => (
               <Card product={product} key={index} />
