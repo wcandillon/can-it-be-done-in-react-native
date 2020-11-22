@@ -45,7 +45,7 @@ const PhilzCoffee = () => {
             decelerationRate="fast"
             snapToInterval={width}
             horizontal
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
           >
             {products.map((product, index) => (
               <Card product={product} key={index} />
