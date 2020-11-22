@@ -1,13 +1,12 @@
-import React, { useRef } from "react";
-import { StyleSheet, Dimensions, View } from "react-native";
+import React from "react";
+import { Dimensions, View } from "react-native";
 import Animated, {
-  useAnimatedGestureHandler,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
 import { interpolateColor } from "react-native-redash";
-import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 
 import { products } from "./Model";
 import Card, { CARD_HEIGHT } from "./Card";
@@ -15,7 +14,7 @@ import Products from "./Products";
 import Cards from "./components/Cards";
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const PhilzCoffee = () => {
   const translateX = useSharedValue(0);
