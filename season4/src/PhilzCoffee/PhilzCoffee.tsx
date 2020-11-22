@@ -1,19 +1,17 @@
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, View, ScrollView } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
 import { interpolateColor } from "react-native-redash";
-import { ScrollView } from "react-native-gesture-handler";
 
 import { products } from "./Model";
 import Card, { CARD_HEIGHT } from "./Card";
 import Products from "./Products";
 import Cards from "./components/Cards";
 
-const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const { width } = Dimensions.get("window");
 
 const PhilzCoffee = () => {
@@ -41,7 +39,7 @@ const PhilzCoffee = () => {
         decelerationRate="fast"
       >
         <View style={[{ height: CARD_HEIGHT }]}>
-          <AnimatedScrollView
+          <Animated.ScrollView
             onScroll={onScroll}
             scrollEventThrottle={16}
             decelerationRate="fast"
@@ -52,7 +50,7 @@ const PhilzCoffee = () => {
             {products.map((product, index) => (
               <Card product={product} key={index} />
             ))}
-          </AnimatedScrollView>
+          </Animated.ScrollView>
           <Products x={translateX} />
         </View>
         <Cards />
