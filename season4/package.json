@@ -22,6 +22,7 @@
     "d3-shape": "^2.0.0",
     "expo": "~39.0.2",
     "expo-asset": "~8.2.0",
+    "expo-av": "~8.6.0",
     "expo-constants": "~9.2.0",
     "expo-font": "~8.3.0",
     "expo-status-bar": "~1.0.2",
@@ -36,8 +37,8 @@
     "react-native-shared-element": "0.7.0",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
-    "react-navigation-shared-element": "^3.0.0",
-    "react-native-webview": "10.7.0"
+    "react-native-webview": "10.7.0",
+    "react-navigation-shared-element": "^3.0.0"
   },
   "devDependencies": {
     "@types/d3-scale": "^2.2.0",

@@ -3,6 +3,8 @@ import React from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
+  Extrapolate,
+  interpolate,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -11,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useVector, snapPoint } from "react-native-redash";
 import { SharedElement } from "react-navigation-shared-element";
+import { Video } from "expo-av";
 
 import { SnapchatRoutes } from "./Model";
 
@@ -20,6 +23,7 @@ interface StoryProps {
 }
 
 const { height } = Dimensions.get("window");
+const AnimatedVideo = Animated.createAnimatedComponent(Video);
 
 const Story = ({ route, navigation }: StoryProps) => {
   const isGestureActive = useSharedValue(false);
@@ -45,15 +49,22 @@ const Story = ({ route, navigation }: StoryProps) => {
     },
   });
   const style = useAnimatedStyle(() => {
+    const scale = interpolate(
+      translation.y.value,
+      [0, height],
+      [1, 0.5],
+      Extrapolate.CLAMP
+    );
     return {
       flex: 1,
       transform: [
-        { translateX: translation.x.value },
-        { translateY: translation.y.value },
+        { translateX: translation.x.value * scale },
+        { translateY: translation.y.value * scale },
+        { scale },
       ],
     };
   });
-  const imageStyle = useAnimatedStyle(() => {
+  const borderStyle = useAnimatedStyle(() => {
     return {
       borderRadius: withTiming(isGestureActive.value ? 24 : 0),
     };
@@ -62,17 +73,30 @@ const Story = ({ route, navigation }: StoryProps) => {
     <PanGestureHandler onGestureEvent={onGestureEvent}>
       <Animated.View style={style}>
         <SharedElement id={story.id} style={{ flex: 1 }}>
-          <Animated.Image
-            source={story.source}
-            style={[
-              {
-                ...StyleSheet.absoluteFillObject,
-                width: undefined,
-                height: undefined,
-              },
-              imageStyle,
-            ]}
-          />
+          {!story.video && (
+            <Animated.Image
+              source={story.source}
+              style={[
+                {
+                  ...StyleSheet.absoluteFillObject,
+                  width: undefined,
+                  height: undefined,
+                },
+                borderStyle,
+              ]}
+            />
+          )}
+          {story.video && (
+            <AnimatedVideo
+              source={story.video}
+              rate={1.0}
+              isMuted={false}
+              resizeMode="cover"
+              shouldPlay
+              isLooping
+              style={[StyleSheet.absoluteFill, borderStyle]}
+            />
+          )}
         </SharedElement>
       </Animated.View>
     </PanGestureHandler>
