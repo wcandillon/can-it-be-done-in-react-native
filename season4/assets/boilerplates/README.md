@@ -7,3 +7,4 @@ Unzip the folder into the `src/` folder.
 * [Rainbow](./Rainbow.zip)
 * [Google Chrome](./Chrome.zip)
 * [Philz Coffee](./PhilzCoffee.zip)
+* [Snapchat](./Snapchat.zip)
