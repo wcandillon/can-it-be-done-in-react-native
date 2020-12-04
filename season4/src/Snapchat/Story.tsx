@@ -81,6 +81,7 @@ const Story = ({ route, navigation }: StoryProps) => {
                   ...StyleSheet.absoluteFillObject,
                   width: undefined,
                   height: undefined,
+                  resizeMode: "cover",
                 },
                 borderStyle,
               ]}
