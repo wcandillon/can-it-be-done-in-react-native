@@ -24,7 +24,7 @@ const { width } = Dimensions.get("window");
 export const COLOR_WIDTH = width / 3;
 const RADIUS = 45;
 
-const Color = ({ color, index, translateX }: ColorProps) => {
+const Color = ({ color, index, translateX, onPress }: ColorProps) => {
   const style = useAnimatedStyle(() => {
     const inputRange = [
       -1 * COLOR_WIDTH * (index + 1),
@@ -51,9 +51,6 @@ const Color = ({ color, index, translateX }: ColorProps) => {
       transform: [{ translateX: translateX.value }, { translateY }, { scale }],
     };
   });
-  const onPress = () => {
-    translateX.value = withSpring(-index * COLOR_WIDTH);
-  };
   return (
     <Animated.View
       style={[

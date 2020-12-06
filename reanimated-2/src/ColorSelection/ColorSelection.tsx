@@ -78,8 +78,9 @@ const ColorSelection = () => {
               key={index + 1}
               translateX={translateX}
               onPress={() => {
-                //setPreviousColor(currentColor);
-                //setCurrentColor(color);
+                translateX.value = withSpring(snapPoints[index]);
+                setPreviousColor(currentColor);
+                setCurrentColor(color);
               }}
             />
           );
