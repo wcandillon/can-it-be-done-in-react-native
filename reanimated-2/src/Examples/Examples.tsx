@@ -52,6 +52,10 @@ export const examples = [
     screen: "ZAnimations",
     title: "⚛️ 3D Animations",
   },
+  {
+    screen: "ColorSelection",
+    title: "🎨 Color Selection",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
