@@ -22,17 +22,27 @@ const RADIUS = 45;
 
 const Color = ({ color, index, translateX }: ColorProps) => {
   const style = useAnimatedStyle(() => {
+    const inputRange = [
+      -1 * COLOR_WIDTH * (index + 1),
+      -1 * COLOR_WIDTH * index,
+      -1 * COLOR_WIDTH * (index - 1),
+    ];
     const scale = interpolate(
       translateX.value,
-      [
-        -1 * COLOR_WIDTH * (index + 1),
-        -1 * COLOR_WIDTH * index,
-        -1 * COLOR_WIDTH * (index - 1),
-      ],
-      [0.5, 1, 0.5],
+      inputRange,
+      [0.8, 1, 0.8],
       Extrapolate.CLAMP
     );
-    const translateY = 0;
+    const translateY =
+      RADIUS *
+      Math.cos(
+        interpolate(
+          translateX.value,
+          inputRange,
+          [0, Math.PI / 2, Math.PI],
+          Extrapolate.CLAMP
+        )
+      );
     return {
       transform: [{ translateX: translateX.value }, { translateY }, { scale }],
     };
