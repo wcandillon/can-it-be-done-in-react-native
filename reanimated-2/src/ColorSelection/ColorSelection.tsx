@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
+  runOnUI,
   useAnimatedGestureHandler,
   useSharedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
@@ -68,14 +70,20 @@ const ColorSelection = () => {
         ]}
       >
         <View style={{ width: COLOR_WIDTH }} />
-        {colors.map((color, index) => (
-          <Color
-            color={color}
-            index={index}
-            key={index + 1}
-            translateX={translateX}
-          />
-        ))}
+        {colors.map((color, index) => {
+          return (
+            <Color
+              color={color}
+              index={index}
+              key={index + 1}
+              translateX={translateX}
+              onPress={() => {
+                //setPreviousColor(currentColor);
+                //setCurrentColor(color);
+              }}
+            />
+          );
+        })}
       </Animated.View>
     </PanGestureHandler>
   );

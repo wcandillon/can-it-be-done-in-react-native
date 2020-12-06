@@ -4,8 +4,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
   Extrapolate,
   interpolate,
+  runOnUI,
   useAnimatedStyle,
+  withSpring,
 } from "react-native-reanimated";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 interface ColorProps {
   color: {
@@ -14,6 +17,7 @@ interface ColorProps {
   };
   index: number;
   translateX: Animated.SharedValue<number>;
+  onPress: () => void;
 }
 
 const { width } = Dimensions.get("window");
@@ -47,6 +51,9 @@ const Color = ({ color, index, translateX }: ColorProps) => {
       transform: [{ translateX: translateX.value }, { translateY }, { scale }],
     };
   });
+  const onPress = () => {
+    translateX.value = withSpring(-index * COLOR_WIDTH);
+  };
   return (
     <Animated.View
       style={[
@@ -58,16 +65,18 @@ const Color = ({ color, index, translateX }: ColorProps) => {
         style,
       ]}
     >
-      <LinearGradient
-        colors={[color.start, color.end]}
-        style={{
-          borderColor: "white",
-          borderWidth: 6,
-          borderRadius: RADIUS,
-          width: RADIUS * 2,
-          height: RADIUS * 2,
-        }}
-      />
+      <TouchableWithoutFeedback onPress={onPress}>
+        <LinearGradient
+          colors={[color.start, color.end]}
+          style={{
+            borderColor: "white",
+            borderWidth: 6,
+            borderRadius: RADIUS,
+            width: RADIUS * 2,
+            height: RADIUS * 2,
+          }}
+        />
+      </TouchableWithoutFeedback>
     </Animated.View>
   );
 };
