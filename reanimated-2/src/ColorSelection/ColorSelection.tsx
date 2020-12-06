@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -14,26 +15,32 @@ import Color, { COLOR_WIDTH } from "./Color";
 
 const colors = [
   {
+    id: 0,
     start: "#00E0D3",
     end: "#00B4D4",
   },
   {
+    id: 1,
     start: "#00B4D4",
     end: "#409CAE",
   },
   {
+    id: 2,
     start: "#66D8A4",
     end: "#409CAE",
   },
   {
+    id: 3,
     start: "#FC727B",
     end: "#F468A0",
   },
   {
+    id: 4,
     start: "#8289EA",
     end: "#7A6FC1",
   },
   {
+    id: 5,
     start: "#FEC7A3",
     end: "#FD9F9C",
   },
@@ -59,32 +66,37 @@ const ColorSelection = () => {
   });
   return (
     <PanGestureHandler onGestureEvent={onGestureEvent}>
-      <Animated.View
-        style={[
-          StyleSheet.absoluteFill,
-          {
-            backgroundColor: currentColor.start,
-            flexDirection: "row",
-            alignItems: "center",
-          },
-        ]}
-      >
-        <View style={{ width: COLOR_WIDTH }} />
-        {colors.map((color, index) => {
-          return (
-            <Color
-              color={color}
-              index={index}
-              key={index + 1}
-              translateX={translateX}
-              onPress={() => {
-                translateX.value = withSpring(snapPoints[index]);
-                setPreviousColor(currentColor);
-                setCurrentColor(color);
-              }}
-            />
-          );
-        })}
+      <Animated.View style={StyleSheet.absoluteFill}>
+        <LinearGradient
+          style={[
+            StyleSheet.absoluteFill,
+            {
+              backgroundColor: previousColor.start,
+              flexDirection: "row",
+              alignItems: "center",
+            },
+          ]}
+          colors={[previousColor.start, previousColor.end]}
+        >
+          <View style={{ width: COLOR_WIDTH }} />
+          {colors.map((color, index) => {
+            return (
+              <Color
+                color={color}
+                index={index}
+                key={index + 1}
+                translateX={translateX}
+                onPress={() => {
+                  if (currentColor.id !== color.id) {
+                    translateX.value = withSpring(snapPoints[index]);
+                    setPreviousColor(currentColor);
+                    setCurrentColor(color);
+                  }
+                }}
+              />
+            );
+          })}
+        </LinearGradient>
       </Animated.View>
     </PanGestureHandler>
   );
