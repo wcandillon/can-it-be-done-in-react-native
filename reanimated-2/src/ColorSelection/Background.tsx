@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 // @ts-ignore
 import { Surface } from "gl-react-expo";
@@ -10,7 +10,6 @@ const { width, height } = Dimensions.get("window");
 
 const vec3 = (color: string): [number, number, number] => {
   const co = Color(color);
-  console.log([co.red() / 255, co.green() / 255, co.blue() / 255]);
   return [co.red() / 255, co.green() / 255, co.blue() / 255];
 };
 
@@ -21,10 +20,14 @@ const shaders = Shaders.create({
 #define HEIGHT  ${height}
 precision highp float;
 uniform vec3 backgroundColorStart;
+uniform vec2 position;
+uniform float progress;
+uniform float radius;
 varying vec2 uv;
 
 void main() {
-  gl_FragColor = vec4(backgroundColorStart, 1.0);
+  float mag = distance(uv, position);
+  gl_FragColor = mag > radius ? vec4(0.0, 0.0, 0.0, 1.0) : vec4(backgroundColorStart, 1.0);
 }
 `,
   },
@@ -47,11 +50,28 @@ interface BackgroundProps {
 }
 
 const Background = ({ colorSelection, position }: BackgroundProps) => {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    setProgress(0);
+  }, [colorSelection]);
+  const animate = () => {
+    if (progress !== 1) {
+      setProgress((p) => p + 0.1);
+    }
+  };
+  if (progress < 1) {
+    requestAnimationFrame(animate);
+  }
   return (
     <Surface style={StyleSheet.absoluteFill}>
       <Node
         shader={shaders.background}
-        uniforms={{ backgroundColorStart: vec3(colorSelection.previous.start) }}
+        uniforms={{
+          backgroundColorStart: vec3(colorSelection.previous.start),
+          position: [position.x / width, position.y / height],
+          radius: 0.1,
+          progress,
+        }}
       />
     </Surface>
   );
