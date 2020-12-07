@@ -8,6 +8,7 @@ import Color from "color";
 
 const { width, height } = Dimensions.get("window");
 const SIZE = height;
+const delta = (height - width) / 2;
 const vec3 = (color: string): [number, number, number] => {
   const co = Color(color);
   return [co.red() / 255, co.green() / 255, co.blue() / 255];
@@ -67,7 +68,7 @@ const Background = ({ colorSelection, position }: BackgroundProps) => {
         position: "absolute",
         top: 0,
         bottom: 0,
-        left: -(height - width) / 2,
+        left: -delta,
         width: height,
       }}
     >
@@ -76,10 +77,7 @@ const Background = ({ colorSelection, position }: BackgroundProps) => {
         uniforms={{
           backgroundColorStart: vec3(colorSelection.previous.start),
           foregroundColorStart: vec3(colorSelection.current.start),
-          position: [
-            (position.x + (height - width) / 2) / height,
-            position.y / height,
-          ],
+          position: [(delta + position.x) / height, position.y / height],
           radius: 1,
           progress,
         }}
