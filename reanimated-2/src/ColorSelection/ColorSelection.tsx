@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
@@ -47,12 +47,14 @@ const colors = [
   },
 ];
 const snapPoints = colors.map((_, i) => -i * COLOR_WIDTH);
-console.log({ snapPoints });
 
 const ColorSelection = () => {
+  const position = useRef({ x: 0, y: 0 });
   const translateX = useSharedValue(0);
-  const [previousColor, setPreviousColor] = useState(colors[0]);
-  const [currentColor, setCurrentColor] = useState(colors[0]);
+  const [colorSelection, setColorSelection] = useState({
+    previous: colors[0],
+    current: colors[0],
+  });
   const onGestureEvent = useAnimatedGestureHandler<{ x: number }>({
     onStart: (_, ctx) => {
       ctx.x = translateX.value;
@@ -71,13 +73,16 @@ const ColorSelection = () => {
         <LinearGradient
           style={{
             ...StyleSheet.absoluteFillObject,
-            backgroundColor: previousColor.start,
+            backgroundColor: colorSelection.previous.start,
             flexDirection: "row",
             alignItems: "center",
           }}
-          colors={[previousColor.start, previousColor.end]}
+          colors={[colorSelection.previous.start, colorSelection.previous.end]}
         >
-          <Foreground color={currentColor} />
+          <Foreground
+            color={colorSelection.current}
+            position={position.current}
+          />
           <View style={{ width: COLOR_WIDTH }} />
           {colors.map((color, index) => {
             return (
@@ -86,11 +91,15 @@ const ColorSelection = () => {
                 index={index}
                 key={index + 1}
                 translateX={translateX}
-                onPress={() => {
-                  if (currentColor.id !== color.id) {
+                onPress={({ x, y }) => {
+                  if (colorSelection.current.id !== color.id) {
                     translateX.value = withSpring(snapPoints[index]);
-                    setCurrentColor(color);
-                    setPreviousColor(currentColor);
+                    position.current = { x, y };
+                    console.log(position.current);
+                    setColorSelection({
+                      previous: colorSelection.current,
+                      current: color,
+                    });
                   }
                 }}
               />

@@ -4,6 +4,7 @@ import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 
@@ -12,33 +13,29 @@ interface ForegroundProps {
     start: string;
     end: string;
   };
+  position: {
+    x: number;
+    y: number;
+  };
 }
 
 const { width, height } = Dimensions.get("window");
 const MIN_RADIUS = 50;
-const MAX_RADIUS = 0.5 * Math.SQRT2 * Math.max(width, height);
-const MAX_SCALE = MAX_RADIUS / MIN_RADIUS;
 
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
-
-const Foreground = ({ color }: ForegroundProps) => {
+const Foreground = ({ color, position }: ForegroundProps) => {
   const progress = useSharedValue(0);
   useEffect(() => {
     progress.value = 0;
-    progress.value = withTiming(1, {
-      duration: 500,
-      easing: Easing.inOut(Easing.ease),
-    });
+    progress.value = withSpring(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [color]);
   const style = useAnimatedStyle(() => {
+    const MAX_RADIUS =
+      0.5 * Math.SQRT2 * Math.max(width + position.x, height + position.y);
+    const MAX_SCALE = MAX_RADIUS / MIN_RADIUS;
     return {
+      top: position.y - MIN_RADIUS * 2,
+      left: position.x - MIN_RADIUS * 2,
       width: MIN_RADIUS * 2,
       height: MIN_RADIUS * 2,
       borderRadius: MIN_RADIUS,
@@ -47,7 +44,7 @@ const Foreground = ({ color }: ForegroundProps) => {
     };
   });
   return (
-    <View style={styles.container}>
+    <View style={StyleSheet.absoluteFill}>
       <Animated.View style={style} />
     </View>
   );
