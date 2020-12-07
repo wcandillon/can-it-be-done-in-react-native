@@ -1,13 +1,10 @@
-import { LinearGradient } from "expo-linear-gradient";
 import React, { useRef, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
-  runOnUI,
   useAnimatedGestureHandler,
   useSharedValue,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
@@ -70,14 +67,13 @@ const ColorSelection = () => {
   return (
     <PanGestureHandler onGestureEvent={onGestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill}>
-        <LinearGradient
+        <View
           style={{
             ...StyleSheet.absoluteFillObject,
             backgroundColor: colorSelection.previous.start,
             flexDirection: "row",
             alignItems: "center",
           }}
-          colors={[colorSelection.previous.start, colorSelection.previous.end]}
         >
           <Foreground
             color={colorSelection.current}
@@ -104,7 +100,7 @@ const ColorSelection = () => {
               />
             );
           })}
-        </LinearGradient>
+        </View>
       </Animated.View>
     </PanGestureHandler>
   );

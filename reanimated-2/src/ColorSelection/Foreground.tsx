@@ -4,7 +4,6 @@ import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 

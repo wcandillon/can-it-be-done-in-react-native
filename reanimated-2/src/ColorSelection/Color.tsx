@@ -19,6 +19,8 @@ interface ColorProps {
   onPress: (pos: { x: number; y: number }) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type GestureEvent = any;
 const { width } = Dimensions.get("window");
 export const COLOR_WIDTH = width / 3;
 const RADIUS = 45;
@@ -66,7 +68,7 @@ const Color = ({ color, index, translateX, onPress }: ColorProps) => {
         style,
       ]}
     >
-      <TapGestureHandler onGestureEvent={onGestureEvent}>
+      <TapGestureHandler onGestureEvent={onGestureEvent as GestureEvent}>
         <Animated.View style={StyleSheet.absoluteFill}>
           <LinearGradient
             colors={[color.start, color.end]}
