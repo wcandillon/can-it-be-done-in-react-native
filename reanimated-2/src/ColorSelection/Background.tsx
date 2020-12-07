@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 // @ts-ignore
 import { Surface } from "gl-react-expo";
@@ -52,32 +52,38 @@ interface BackgroundProps {
 }
 
 const Background = ({ colorSelection, position }: BackgroundProps) => {
+  const node = useRef(null);
   const [progress, setProgress] = useState(0);
   useEffect(() => {
     setProgress(0);
   }, [colorSelection]);
   const animate = () => {
     if (progress !== 1) {
-      setProgress((p) => p + 0.001);
+      setProgress((p) => p + 0.05);
     }
   };
   if (progress < 1) {
     requestAnimationFrame(animate);
   }
+  console.log([(delta + position.x) / height, position.y / height]);
   return (
     <Surface
-      style={[
-        StyleSheet.absoluteFill,
-        { left: -delta, width: SIZE, height: SIZE },
-      ]}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: -delta,
+        height,
+        width: height,
+      }}
     >
       <Blur factor={20} passes={6}>
         <Node
+          ref={node}
           shader={shaders.background}
           uniforms={{
             backgroundColorStart: vec3(colorSelection.previous.start),
             foregroundColorStart: vec3(colorSelection.current.start),
-            position: [(delta + position.x) / height, position.y / height],
+            position: [(delta + position.x) / height, 1 - position.y / height],
             radius: 1,
             progress,
           }}
