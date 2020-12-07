@@ -110,6 +110,7 @@ const AppNavigator = () => (
       component={ColorSelection}
       options={{
         title: "ColorSelection",
+        header: () => null,
       }}
     />
   </Stack.Navigator>

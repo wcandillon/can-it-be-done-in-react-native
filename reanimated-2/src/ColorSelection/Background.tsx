@@ -9,6 +9,7 @@ import Color from "color";
 const { width, height } = Dimensions.get("window");
 const SIZE = height;
 const delta = (height - width) / 2;
+
 const vec3 = (color: string): [number, number, number] => {
   const co = Color(color);
   return [co.red() / 255, co.green() / 255, co.blue() / 255];
@@ -56,7 +57,7 @@ const Background = ({ colorSelection, position }: BackgroundProps) => {
   }, [colorSelection]);
   const animate = () => {
     if (progress !== 1) {
-      setProgress((p) => p + 0.05);
+      setProgress((p) => p + 0.01);
     }
   };
   if (progress < 1) {
@@ -64,13 +65,10 @@ const Background = ({ colorSelection, position }: BackgroundProps) => {
   }
   return (
     <Surface
-      style={{
-        position: "absolute",
-        top: 0,
-        bottom: 0,
-        left: -delta,
-        width: height,
-      }}
+      style={[
+        StyleSheet.absoluteFill,
+        { left: -delta, width: SIZE, height: SIZE },
+      ]}
     >
       <Node
         shader={shaders.background}
