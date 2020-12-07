@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import React, { useEffect, useRef } from "react";
+import { Dimensions } from "react-native";
 // @ts-ignore
 import { Surface } from "gl-react-expo";
 // @ts-ignore
@@ -12,7 +13,7 @@ const { width, height } = Dimensions.get("window");
 const SIZE = height;
 const DELTA = (height - width) / 2;
 
-const vec3 = (color: string): [number, number, number] => {
+const color2vector = (color: string): [number, number, number] => {
   const co = Color(color);
   return [co.red() / 255, co.green() / 255, co.blue() / 255];
 };
@@ -22,14 +23,24 @@ const shaders = Shaders.create({
     frag: GLSL`
 precision highp float;
 uniform vec3 backgroundColorStart;
+uniform vec3 backgroundColorEnd;
 uniform vec3 foregroundColorStart;
+uniform vec3 foregroundColorEnd;
 uniform vec2 position;
 uniform float progress;
 varying vec2 uv;
 
+vec4 gradient(vec3 c1, vec3 c2)
+{
+    return mix(vec4(c2, 1.0), vec4(c1, 1.0), uv.y);
+}
+
 void main() {
   float mag = distance(uv, position);
-  gl_FragColor = mag > progress ? vec4(backgroundColorStart, 1.0) : vec4(foregroundColorStart, 1.0);
+  gl_FragColor = mag > progress ?
+      gradient(backgroundColorStart, backgroundColorEnd)
+    : 
+      gradient(foregroundColorStart, foregroundColorEnd);
 }
 `,
   },
@@ -60,11 +71,14 @@ const Background = ({ colorSelection, position }: BackgroundProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colorSelection]);
   const uniforms = {
-    backgroundColorStart: vec3(colorSelection.previous.start),
-    foregroundColorStart: vec3(colorSelection.current.start),
+    backgroundColorStart: color2vector(colorSelection.previous.start),
+    backgroundColorEnd: color2vector(colorSelection.previous.end),
+    foregroundColorStart: color2vector(colorSelection.current.start),
+    foregroundColorEnd: color2vector(colorSelection.current.end),
     position: [(DELTA + position.x) / SIZE, 1 - position.y / SIZE],
     progress: 0,
   };
+  console.log({ uniforms });
   const animate = () => {
     if (progress.current < 1) {
       progress.current += 0.05;
