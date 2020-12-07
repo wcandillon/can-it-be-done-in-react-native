@@ -8,7 +8,6 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { TapGestureHandler } from "react-native-gesture-handler";
-import { useVector } from "react-native-redash";
 
 interface ColorProps {
   color: {

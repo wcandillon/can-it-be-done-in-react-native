@@ -95,7 +95,6 @@ const ColorSelection = () => {
                   if (colorSelection.current.id !== color.id) {
                     translateX.value = withSpring(snapPoints[index]);
                     position.current = { x, y };
-                    console.log(position.current);
                     setColorSelection({
                       previous: colorSelection.current,
                       current: color,

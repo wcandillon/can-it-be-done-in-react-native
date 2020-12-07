@@ -26,12 +26,15 @@ const Foreground = ({ color, position }: ForegroundProps) => {
   const progress = useSharedValue(0);
   useEffect(() => {
     progress.value = 0;
-    progress.value = withSpring(1);
+    progress.value = withTiming(1, {
+      duration: 650,
+      easing: Easing.inOut(Easing.ease),
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [color]);
   const style = useAnimatedStyle(() => {
     const MAX_RADIUS =
-      0.5 * Math.SQRT2 * Math.max(width + position.x, height + position.y);
+      Math.SQRT2 * Math.max(width / 2 + position.x, height / 2 + position.y);
     const MAX_SCALE = MAX_RADIUS / MIN_RADIUS;
     return {
       top: position.y - MIN_RADIUS * 2,
