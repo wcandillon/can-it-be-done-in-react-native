@@ -27,6 +27,7 @@
     "expo-linear-gradient": "~8.3.0",
     "expo-status-bar": "~1.0.2",
     "gl-react": "^4.0.1",
+    "gl-react-blur": "^2.0.1",
     "gl-react-expo": "^4.0.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",

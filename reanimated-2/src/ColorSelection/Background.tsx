@@ -4,6 +4,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { Surface } from "gl-react-expo";
 // @ts-ignore
 import { GLSL, Node, Shaders } from "gl-react";
+import { Blur } from "gl-react-blur";
 import Color from "color";
 
 const { width, height } = Dimensions.get("window");
@@ -57,7 +58,7 @@ const Background = ({ colorSelection, position }: BackgroundProps) => {
   }, [colorSelection]);
   const animate = () => {
     if (progress !== 1) {
-      setProgress((p) => p + 0.01);
+      setProgress((p) => p + 0.001);
     }
   };
   if (progress < 1) {
@@ -70,16 +71,18 @@ const Background = ({ colorSelection, position }: BackgroundProps) => {
         { left: -delta, width: SIZE, height: SIZE },
       ]}
     >
-      <Node
-        shader={shaders.background}
-        uniforms={{
-          backgroundColorStart: vec3(colorSelection.previous.start),
-          foregroundColorStart: vec3(colorSelection.current.start),
-          position: [(delta + position.x) / height, position.y / height],
-          radius: 1,
-          progress,
-        }}
-      />
+      <Blur factor={20} passes={6}>
+        <Node
+          shader={shaders.background}
+          uniforms={{
+            backgroundColorStart: vec3(colorSelection.previous.start),
+            foregroundColorStart: vec3(colorSelection.current.start),
+            position: [(delta + position.x) / height, position.y / height],
+            radius: 1,
+            progress,
+          }}
+        />
+      </Blur>
     </Surface>
   );
 };
