@@ -9,7 +9,7 @@ import Animated, {
 import { snapPoint } from "react-native-redash";
 
 import Color, { COLOR_WIDTH } from "./Color";
-import Foreground from "./Foreground";
+import Background from "./Background";
 
 const colors = [
   {
@@ -70,13 +70,12 @@ const ColorSelection = () => {
         <View
           style={{
             ...StyleSheet.absoluteFillObject,
-            backgroundColor: colorSelection.previous.start,
             flexDirection: "row",
             alignItems: "center",
           }}
         >
-          <Foreground
-            color={colorSelection.current}
+          <Background
+            colorSelection={colorSelection}
             position={position.current}
           />
           <View style={{ width: COLOR_WIDTH }} />
