@@ -12,6 +12,7 @@ import Animated, {
 import { snapPoint } from "react-native-redash";
 
 import Color, { COLOR_WIDTH } from "./Color";
+import Foreground from "./Foreground";
 
 const colors = [
   {
@@ -68,16 +69,15 @@ const ColorSelection = () => {
     <PanGestureHandler onGestureEvent={onGestureEvent}>
       <Animated.View style={StyleSheet.absoluteFill}>
         <LinearGradient
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              backgroundColor: previousColor.start,
-              flexDirection: "row",
-              alignItems: "center",
-            },
-          ]}
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: previousColor.start,
+            flexDirection: "row",
+            alignItems: "center",
+          }}
           colors={[previousColor.start, previousColor.end]}
         >
+          <Foreground color={currentColor} />
           <View style={{ width: COLOR_WIDTH }} />
           {colors.map((color, index) => {
             return (
@@ -89,8 +89,8 @@ const ColorSelection = () => {
                 onPress={() => {
                   if (currentColor.id !== color.id) {
                     translateX.value = withSpring(snapPoints[index]);
-                    setPreviousColor(currentColor);
                     setCurrentColor(color);
+                    setPreviousColor(currentColor);
                   }
                 }}
               />
