@@ -8,3 +8,4 @@ Unzip the folder into the `src/` folder.
 * [Google Chrome](./Chrome.zip)
 * [Philz Coffee](./PhilzCoffee.zip)
 * [Snapchat](./Snapchat.zip)
+* [Reflectly](./Reflectly.zip)
