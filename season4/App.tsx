@@ -8,6 +8,7 @@ import Chrome from "./src/Chrome";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
 import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
+import Reflectly from "./src/Reflectly";
 import { LoadAssets } from "./src/components";
 
 const fonts = {
@@ -68,6 +69,14 @@ const AppNavigator = () => (
       component={Snapchat}
       options={{
         title: "👻 Snapchat",
+        header: () => null,
+      }}
+    />
+    <Stack.Screen
+      name="Reflectly"
+      component={Reflectly}
+      options={{
+        title: "🧘‍♀️ Reflectly",
         header: () => null,
       }}
     />

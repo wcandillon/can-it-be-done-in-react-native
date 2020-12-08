@@ -28,6 +28,10 @@ export const examples = [
     screen: "Chrome",
     title: "🧭 Google Chrome",
   },
+  {
+    screen: "Reflectly",
+    title: "🧘‍♀️ Reflectly",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
