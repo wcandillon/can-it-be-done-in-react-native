@@ -4,8 +4,8 @@ import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
+  interpolateColor,
 } from "react-native-reanimated";
-import { interpolateColor } from "react-native-redash";
 
 import { products } from "./Model";
 import Card, { CARD_HEIGHT } from "./Card";

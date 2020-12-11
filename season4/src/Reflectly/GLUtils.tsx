@@ -8,7 +8,7 @@ export const color2vector = (color: string): [number, number, number] => {
 };
 
 export const useGLProgress = (
-  node: MutableRefObject<any>,
+  node: MutableRefObject<Node>,
   uniforms: Record<string, unknown>,
   deps: unknown[]
 ) => {
@@ -16,7 +16,9 @@ export const useGLProgress = (
   const animate = () => {
     if (progress.current < 1) {
       progress.current += 0.05;
-      node.current?.setDrawProps({
+      ((node.current as unknown) as
+        | { setDrawProps: (props: Record<string, unknown>) => void }
+        | undefined)?.setDrawProps({
         uniforms: {
           ...uniforms,
           progress: progress.current,
