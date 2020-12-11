@@ -1,6 +1,9 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+} from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
@@ -30,10 +33,13 @@ const Camera = ({ camera, canvas }: CameraProps) => {
       camera.value = transform;
     }
   );
-  const onGestureEvent = useAnimatedGestureHandler<{
-    x: number;
-    y: number;
-  }>({
+  const onGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    {
+      x: number;
+      y: number;
+    }
+  >({
     onStart: (e, ctx) => {
       ctx.x = x.value;
       ctx.y = y.value;

@@ -1,6 +1,6 @@
 import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import { AsyncStorage } from "react-native";
-import { AppLoading } from "expo";
+import AppLoading from "expo-app-loading";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { InitialState, NavigationContainer } from "@react-navigation/native";

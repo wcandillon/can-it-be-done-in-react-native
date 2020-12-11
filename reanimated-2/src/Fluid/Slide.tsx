@@ -4,10 +4,10 @@ import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedProps,
+  interpolateColor,
 } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 import {
-  interpolateColor,
   cartesian2Canvas,
   Vector,
   serialize,
