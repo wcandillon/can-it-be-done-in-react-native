@@ -8,6 +8,7 @@ import Animated, {
   scrollTo,
   withTiming,
   useSharedValue,
+  runOnJS,
 } from "react-native-reanimated";
 import {
   PanGestureHandler,
@@ -132,7 +133,7 @@ const Item = ({
       const newPosition = getPosition(positions.value[id]);
       translateX.value = withTiming(newPosition.x, animationConfig, () => {
         isGestureActive.value = false;
-        onDragEnd(positions.value);
+        runOnJS(onDragEnd)(positions.value);
       });
       translateY.value = withTiming(newPosition.y, animationConfig);
     },

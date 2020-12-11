@@ -77,7 +77,6 @@ const AppNavigator = () => (
       component={Reflectly}
       options={{
         title: "🧘‍♀️ Reflectly",
-        header: () => null,
       }}
     />
   </Stack.Navigator>

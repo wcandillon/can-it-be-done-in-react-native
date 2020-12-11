@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { ReactElement, useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import { useSharedValue, runOnUI } from "react-native-reanimated";
+import { useSharedValue, runOnUI, runOnJS } from "react-native-reanimated";
 
 import SortableWord from "./SortableWord";
 import Lines from "./components/Lines";
@@ -60,7 +60,7 @@ const WordList = ({ children }: WordListProps) => {
                   if (
                     offsets.filter((o) => o.order.value !== -1).length === 0
                   ) {
-                    setReady(true);
+                    runOnJS(setReady)(true);
                   }
                 })();
               }}

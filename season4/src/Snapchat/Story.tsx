@@ -5,6 +5,7 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   Extrapolate,
   interpolate,
+  runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -40,7 +41,7 @@ const Story = ({ route, navigation }: StoryProps) => {
         snapPoint(translationY, velocityY, [0, height]) === height;
 
       if (snapBack) {
-        navigation.goBack();
+        runOnJS(navigation.goBack)();
       } else {
         isGestureActive.value = false;
         translation.x.value = withSpring(0);

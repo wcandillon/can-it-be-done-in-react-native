@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import Color from "color";
 import { Node } from "gl-react";
 
@@ -8,7 +8,7 @@ export const color2vector = (color: string): [number, number, number] => {
 };
 
 export const useGLProgress = (
-  node: MutableRefObject<Node>,
+  node: RefObject<Node>,
   uniforms: Record<string, unknown>,
   deps: unknown[]
 ) => {

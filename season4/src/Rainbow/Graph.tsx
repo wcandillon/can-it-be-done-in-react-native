@@ -6,11 +6,11 @@ import { scaleLinear } from "d3-scale";
 import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
-  useSharedValue,
   withTiming,
+  useSharedValue,
 } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { parse, mixPath, useVector } from "react-native-redash";
+import { parse, mixPath, useVector, serialize } from "react-native-redash";
 
 import { Prices, DataPoints, SIZE } from "./Model";
 import Header from "./Header";
@@ -117,7 +117,7 @@ const Graph = () => {
   const current = useSharedValue(graphs[0].data);
   const animatedProps = useAnimatedProps(() => {
     return {
-      d: mixPath(transition.value, previous.value.path, current.value.path),
+      d: serialize(graphs[0].data),
     };
   });
   const style = useAnimatedStyle(() => ({
@@ -135,7 +135,6 @@ const Graph = () => {
             strokeWidth={3}
           />
         </Svg>
-        <Cursor translation={translation} data={current} />
       </View>
       <View style={styles.selection}>
         <View style={StyleSheet.absoluteFill}>

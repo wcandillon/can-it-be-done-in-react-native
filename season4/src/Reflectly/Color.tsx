@@ -8,6 +8,7 @@ import {
 import Animated, {
   Extrapolate,
   interpolate,
+  runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
 } from "react-native-reanimated";
@@ -49,7 +50,7 @@ const Color = ({ color, translateX, index, onPress }: ColorProps) => {
   const onGestureEvent = useAnimatedGestureHandler<TapGestureHandlerGestureEvent>(
     {
       onActive: ({ absoluteX: x, absoluteY: y }) => {
-        onPress({ x, y });
+        runOnJS(onPress)({ x, y });
       },
     }
   );
