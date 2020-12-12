@@ -11,6 +11,7 @@ export type Routes = {
   Fluid: undefined;
   StrokeAnimation: undefined;
   ZAnimations: undefined;
+  StickyShapes: undefined;
 };
 
 export type Examples = {
