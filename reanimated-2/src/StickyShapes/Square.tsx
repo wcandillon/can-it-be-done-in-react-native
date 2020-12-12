@@ -44,7 +44,11 @@ const Square = () => {
       to: { x: M + progress, y: H },
     });
     addLine(path, { x: M + WIDTH - progress, y: H });
-    addLine(path, { x: M, y: 0 });
+    addCurve(path, {
+      c1: { x: M + WIDTH - progress, y: 0 },
+      c2: { x: M, y: 0 },
+      to: { x: M, y: 0 },
+    });
     return {
       d: serialize(path),
     };
