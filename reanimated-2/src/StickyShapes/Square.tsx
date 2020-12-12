@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
@@ -32,14 +32,19 @@ const Square = () => {
     const progress = interpolate(
       translateY.value,
       [WIDTH, MAX_HEIGHT],
-      [WIDTH, WIDTH / 2],
+      [WIDTH, WIDTH / 2 + 25],
       Extrapolate.CLAMP
     );
     const H = translateY.value;
     const path = createPath({ x: M, y: 0 });
     addLine(path, { x: M + WIDTH, y: 0 });
-    addLine(path, { x: M + progress, y: H });
+    addCurve(path, {
+      c1: { x: M + WIDTH, y: 0 },
+      c2: { x: M + progress, y: 0 },
+      to: { x: M + progress, y: H },
+    });
     addLine(path, { x: M + WIDTH - progress, y: H });
+    addLine(path, { x: M, y: 0 });
     return {
       d: serialize(path),
     };
