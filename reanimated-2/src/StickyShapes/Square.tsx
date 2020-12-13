@@ -13,7 +13,13 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { addLine, createPath, serialize, snapPoint } from "react-native-redash";
+import {
+  addCurve,
+  addLine,
+  createPath,
+  serialize,
+  snapPoint,
+} from "react-native-redash";
 import Svg, { Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -37,8 +43,8 @@ const Square = () => {
   const animatedProps = useAnimatedProps(() => {
     const delta = interpolate(
       translateY.value,
-      [-height, 0, height],
-      [SIZE / 2, 0, SIZE / 2],
+      [-height / 4, 0, height / 4],
+      [SIZE / 2 - 25, 0, SIZE / 2 - 25],
       Extrapolate.CLAMP
     );
     const { c1, c2, c3, c4 } = (() => {
@@ -69,9 +75,26 @@ const Square = () => {
       }
     })();
     const path = createPath(c1);
-    addLine(path, c2);
-    addLine(path, c3);
-    addLine(path, c4);
+    addCurve(path, {
+      c1: c1,
+      c2: { x: c2.x, y: c1.y },
+      to: c2,
+    });
+    addCurve(path, {
+      c1: c2,
+      c2: { x: c3.x, y: c2.y },
+      to: c3,
+    });
+    addCurve(path, {
+      c1: c3,
+      c2: { x: c4.x, y: c3.y },
+      to: c4,
+    });
+    addCurve(path, {
+      c1: c4,
+      c2: { x: c4.x, y: c1.y },
+      to: c1,
+    });
     return {
       d: serialize(path),
     };
