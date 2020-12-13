@@ -110,6 +110,7 @@ const AppNavigator = () => (
       component={StickyShapes}
       options={{
         title: "Sticky Shapes",
+        header: () => null,
       }}
     />
   </Stack.Navigator>

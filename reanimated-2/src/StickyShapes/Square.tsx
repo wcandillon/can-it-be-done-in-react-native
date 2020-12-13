@@ -12,76 +12,62 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import {
-  addCurve,
-  addLine,
-  clamp,
-  createPath,
-  serialize,
-} from "react-native-redash";
+import { addLine, createPath, serialize } from "react-native-redash";
 import Svg, { Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const { height } = Dimensions.get("window");
-const MARGIN = 100;
 const SIZE = 150;
 enum Mode {
   TOP,
   BOTTOM,
   FREE,
 }
+const exhaustiveCheck = (value: never) => {
+  throw new Error(value + " was not handled");
+};
 
 const Square = () => {
-  const mode = useSharedValue(Mode.TOP);
+  const mode = useSharedValue(Mode.BOTTOM);
   const translateY = useSharedValue(0);
 
   const animatedProps = useAnimatedProps(() => {
-    const delta = (() => {
-      if (mode.value === Mode.TOP || mode.value === Mode.BOTTOM) {
-        return interpolate(
+    const { c1, c2, c3, c4 } = (() => {
+      if (mode.value === Mode.TOP) {
+        const delta = interpolate(
           translateY.value,
           [0, height],
-          mode.value === Mode.TOP ? [0, SIZE / 2] : [SIZE / 2, 0],
+          [0, SIZE / 2],
           Extrapolate.CLAMP
         );
-      } else {
-        return 0;
-      }
-    })();
-    const c1 = (() => {
-      if (mode.value === Mode.TOP) {
-        return { x: MARGIN, y: 0 };
+        return {
+          c1: { x: 0, y: 0 },
+          c2: { x: SIZE, y: 0 },
+          c3: { x: SIZE - delta, y: SIZE + translateY.value },
+          c4: { x: delta, y: SIZE + translateY.value },
+        };
       } else if (mode.value === Mode.BOTTOM) {
-        return { x: MARGIN + delta, y: height };
+        const delta = interpolate(
+          translateY.value,
+          [-height, 0],
+          [SIZE / 2, 0],
+          Extrapolate.CLAMP
+        );
+        return {
+          c1: { x: delta, y: height - SIZE + translateY.value },
+          c2: { x: SIZE - delta, y: height - SIZE + translateY.value },
+          c3: { x: SIZE, y: height },
+          c4: { x: 0, y: height },
+        };
+      } else if (mode.value === Mode.FREE) {
+        return {
+          c1: { x: 0, y: translateY.value },
+          c2: { x: SIZE, y: translateY.value },
+          c3: { x: SIZE, y: translateY.value + SIZE },
+          c4: { x: 0, y: translateY.value + SIZE },
+        };
       } else {
-        return { x: MARGIN, y: translateY.value };
-      }
-    })();
-    const c2 = (() => {
-      if (mode.value === Mode.TOP) {
-        return { x: MARGIN + SIZE, y: 0 };
-      } else if (mode.value === Mode.BOTTOM) {
-        return { x: MARGIN + SIZE - delta, y: height };
-      } else {
-        return { x: MARGIN + SIZE, y: translateY.value };
-      }
-    })();
-    const c3 = (() => {
-      if (mode.value === Mode.TOP) {
-        return { x: MARGIN + SIZE - delta, y: SIZE + translateY.value };
-      } else if (mode.value === Mode.BOTTOM) {
-        return { x: MARGIN + SIZE, y: height };
-      } else {
-        return { x: MARGIN + SIZE, y: translateY.value + SIZE };
-      }
-    })();
-    const c4 = (() => {
-      if (mode.value === Mode.TOP) {
-        return { x: MARGIN + delta, y: SIZE + translateY.value };
-      } else if (mode.value === Mode.BOTTOM) {
-        return { x: MARGIN, y: height };
-      } else {
-        return { x: MARGIN, y: translateY.value + SIZE };
+        return exhaustiveCheck(mode);
       }
     })();
     const path = createPath(c1);
