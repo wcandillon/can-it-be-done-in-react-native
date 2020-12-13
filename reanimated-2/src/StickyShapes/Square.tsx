@@ -30,7 +30,7 @@ const exhaustiveCheck = (value: never) => {
 const Square = () => {
   const mode = useSharedValue(Mode.TOP);
   const translateY = useSharedValue(0);
-
+  const transition = useSharedValue(1);
   const animatedProps = useAnimatedProps(() => {
     const delta = interpolate(
       translateY.value,
@@ -97,10 +97,7 @@ const Square = () => {
       } else {
         mode.value = Mode.BOTTOM;
       }
-      translateY.value = withSpring(0, {
-        velocity: velocityY,
-        overshootClamping: true,
-      });
+      translateY.value = 0;
     },
   });
   return (
