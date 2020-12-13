@@ -39,33 +39,34 @@ const Square = () => {
       Extrapolate.CLAMP
     );
     const { c1, c2, c3, c4 } = (() => {
-      if (mode.value === Mode.TOP) {
-        return {
-          c1: { x: 0, y: 0 },
-          c2: { x: SIZE, y: 0 },
-          c3: { x: SIZE - delta, y: SIZE + translateY.value },
-          c4: { x: delta, y: SIZE + translateY.value },
-        };
-      } else if (mode.value === Mode.BOTTOM) {
-        return {
-          c1: { x: delta, y: height - SIZE + translateY.value },
-          c2: { x: SIZE - delta, y: height - SIZE + translateY.value },
-          c3: { x: SIZE, y: height },
-          c4: { x: 0, y: height },
-        };
-      } else if (mode.value === Mode.FREE) {
-        const y =
-          translateY.value < 0
-            ? height + translateY.value - SIZE
-            : translateY.value;
-        return {
-          c1: { x: 0, y },
-          c2: { x: SIZE, y },
-          c3: { x: SIZE, y: y + SIZE },
-          c4: { x: 0, y: y + SIZE },
-        };
-      } else {
-        return exhaustiveCheck(mode);
+      switch (mode.value) {
+        case Mode.TOP:
+          return {
+            c1: { x: 0, y: 0 },
+            c2: { x: SIZE, y: 0 },
+            c3: { x: SIZE - delta, y: SIZE + translateY.value },
+            c4: { x: delta, y: SIZE + translateY.value },
+          };
+        case Mode.BOTTOM:
+          return {
+            c1: { x: delta, y: height - SIZE + translateY.value },
+            c2: { x: SIZE - delta, y: height - SIZE + translateY.value },
+            c3: { x: SIZE, y: height },
+            c4: { x: 0, y: height },
+          };
+        case Mode.FREE:
+          const y =
+            translateY.value < 0
+              ? height + translateY.value - SIZE
+              : translateY.value;
+          return {
+            c1: { x: 0, y },
+            c2: { x: SIZE, y },
+            c3: { x: SIZE, y: y + SIZE },
+            c4: { x: 0, y: y + SIZE },
+          };
+        default:
+          return exhaustiveCheck(mode);
       }
     })();
     const path = createPath(c1);
@@ -85,7 +86,7 @@ const Square = () => {
     },
     onActive: ({ translationY }, ctx) => {
       translateY.value = ctx.y + translationY;
-      if (mode.value !== Mode.FREE && Math.abs(translateY.value) > height / 4) {
+      if (Math.abs(translateY.value) > height / 4) {
         mode.value = Mode.FREE;
       }
     },
