@@ -1,11 +1,16 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 
 import Square from "./Square";
 
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: "absolute",
+    left: (width - 150) / 2,
+    top: 0,
+    bottom: 0,
+    width: 150,
   },
 });
 
