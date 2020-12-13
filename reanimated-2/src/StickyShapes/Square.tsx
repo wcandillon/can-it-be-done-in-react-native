@@ -28,18 +28,18 @@ const exhaustiveCheck = (value: never) => {
 };
 
 const Square = () => {
-  const mode = useSharedValue(Mode.BOTTOM);
+  const mode = useSharedValue(Mode.TOP);
   const translateY = useSharedValue(0);
 
   const animatedProps = useAnimatedProps(() => {
+    const delta = interpolate(
+      translateY.value,
+      [-height, 0, height],
+      [SIZE / 2, 0, SIZE / 2],
+      Extrapolate.CLAMP
+    );
     const { c1, c2, c3, c4 } = (() => {
       if (mode.value === Mode.TOP) {
-        const delta = interpolate(
-          translateY.value,
-          [0, height],
-          [0, SIZE / 2],
-          Extrapolate.CLAMP
-        );
         return {
           c1: { x: 0, y: 0 },
           c2: { x: SIZE, y: 0 },
@@ -47,12 +47,6 @@ const Square = () => {
           c4: { x: delta, y: SIZE + translateY.value },
         };
       } else if (mode.value === Mode.BOTTOM) {
-        const delta = interpolate(
-          translateY.value,
-          [-height, 0],
-          [SIZE / 2, 0],
-          Extrapolate.CLAMP
-        );
         return {
           c1: { x: delta, y: height - SIZE + translateY.value },
           c2: { x: SIZE - delta, y: height - SIZE + translateY.value },
