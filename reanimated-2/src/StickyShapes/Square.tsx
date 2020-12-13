@@ -81,14 +81,38 @@ const Square = () => {
           return exhaustiveCheck(mode);
       }
     })();
-    p1.x.value = withSpring(points.c1.x);
-    p1.y.value = withSpring(points.c1.y);
-    p2.x.value = withSpring(points.c2.x);
-    p2.y.value = withSpring(points.c2.y);
-    p3.x.value = withSpring(points.c3.x);
-    p3.y.value = withSpring(points.c3.y);
-    p4.x.value = withSpring(points.c4.x);
-    p4.y.value = withSpring(points.c4.y);
+    p1.x.value =
+      isGestureActive.value && mode.value === Mode.FREE
+        ? points.c1.x
+        : withSpring(points.c1.x);
+    p1.y.value =
+      isGestureActive.value && mode.value === Mode.FREE
+        ? points.c1.y
+        : withSpring(points.c1.y);
+    p2.x.value =
+      isGestureActive.value && mode.value === Mode.FREE
+        ? points.c2.x
+        : withSpring(points.c2.x);
+    p2.y.value =
+      isGestureActive.value && mode.value === Mode.FREE
+        ? points.c2.y
+        : withSpring(points.c2.y);
+    p3.x.value =
+      isGestureActive.value && mode.value === Mode.FREE
+        ? points.c3.x
+        : withSpring(points.c3.x);
+    p3.y.value =
+      isGestureActive.value && mode.value === Mode.FREE
+        ? points.c3.y
+        : withSpring(points.c3.y);
+    p4.x.value =
+      isGestureActive.value && mode.value === Mode.FREE
+        ? points.c4.x
+        : withSpring(points.c4.x);
+    p4.y.value =
+      isGestureActive.value && mode.value === Mode.FREE
+        ? points.c4.y
+        : withSpring(points.c4.y);
     const c1 = { x: p1.x.value, y: p1.y.value };
     const c2 = { x: p2.x.value, y: p2.y.value };
     const c3 = { x: p3.x.value, y: p3.y.value };
