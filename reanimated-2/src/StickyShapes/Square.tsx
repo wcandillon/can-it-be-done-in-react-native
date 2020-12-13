@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
@@ -22,33 +22,72 @@ import {
 import Svg, { Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-const M = 100;
-const WIDTH = 150;
-const MAX_HEIGHT = 400;
+const { height } = Dimensions.get("window");
+const MARGIN = 100;
+const SIZE = 150;
+enum Mode {
+  TOP,
+  BOTTOM,
+  FREE,
+}
 
 const Square = () => {
-  const translateY = useSharedValue(WIDTH);
+  const mode = useSharedValue(Mode.TOP);
+  const translateY = useSharedValue(0);
+
   const animatedProps = useAnimatedProps(() => {
-    const progress = interpolate(
-      translateY.value,
-      [WIDTH, MAX_HEIGHT],
-      [WIDTH, WIDTH / 2 + 25],
-      Extrapolate.CLAMP
-    );
-    const H = translateY.value;
-    const path = createPath({ x: M, y: 0 });
-    addLine(path, { x: M + WIDTH, y: 0 });
-    addCurve(path, {
-      c1: { x: M + WIDTH, y: 0 },
-      c2: { x: M + progress, y: 0 },
-      to: { x: M + progress, y: H },
-    });
-    addLine(path, { x: M + WIDTH - progress, y: H });
-    addCurve(path, {
-      c1: { x: M + WIDTH - progress, y: 0 },
-      c2: { x: M, y: 0 },
-      to: { x: M, y: 0 },
-    });
+    const delta = (() => {
+      if (mode.value === Mode.TOP || mode.value === Mode.BOTTOM) {
+        return interpolate(
+          translateY.value,
+          [0, height],
+          mode.value === Mode.TOP ? [0, SIZE / 2] : [SIZE / 2, 0],
+          Extrapolate.CLAMP
+        );
+      } else {
+        return 0;
+      }
+    })();
+    const c1 = (() => {
+      if (mode.value === Mode.TOP) {
+        return { x: MARGIN, y: 0 };
+      } else if (mode.value === Mode.BOTTOM) {
+        return { x: MARGIN + delta, y: height };
+      } else {
+        return { x: MARGIN, y: translateY.value };
+      }
+    })();
+    const c2 = (() => {
+      if (mode.value === Mode.TOP) {
+        return { x: MARGIN + SIZE, y: 0 };
+      } else if (mode.value === Mode.BOTTOM) {
+        return { x: MARGIN + SIZE - delta, y: height };
+      } else {
+        return { x: MARGIN + SIZE, y: translateY.value };
+      }
+    })();
+    const c3 = (() => {
+      if (mode.value === Mode.TOP) {
+        return { x: MARGIN + SIZE - delta, y: SIZE + translateY.value };
+      } else if (mode.value === Mode.BOTTOM) {
+        return { x: MARGIN + SIZE, y: height };
+      } else {
+        return { x: MARGIN + SIZE, y: translateY.value + SIZE };
+      }
+    })();
+    const c4 = (() => {
+      if (mode.value === Mode.TOP) {
+        return { x: MARGIN + delta, y: SIZE + translateY.value };
+      } else if (mode.value === Mode.BOTTOM) {
+        return { x: MARGIN, y: height };
+      } else {
+        return { x: MARGIN, y: translateY.value + SIZE };
+      }
+    })();
+    const path = createPath(c1);
+    addLine(path, c2);
+    addLine(path, c3);
+    addLine(path, c4);
     return {
       d: serialize(path),
     };
@@ -61,10 +100,10 @@ const Square = () => {
       ctx.y = translateY.value;
     },
     onActive: ({ translationY }, ctx) => {
-      translateY.value = clamp(ctx.y + translationY, WIDTH, MAX_HEIGHT);
+      translateY.value = ctx.y + translationY;
     },
     onEnd: ({ velocityY }) => {
-      translateY.value = withSpring(WIDTH, {
+      translateY.value = withSpring(0, {
         velocity: velocityY,
         overshootClamping: true,
       });
