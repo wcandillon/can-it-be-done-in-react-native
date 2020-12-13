@@ -5,6 +5,7 @@ import {
   PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import Animated, {
+  add,
   Extrapolate,
   interpolate,
   useAnimatedGestureHandler,
@@ -75,26 +76,33 @@ const Square = () => {
       }
     })();
     const path = createPath(c1);
-    addCurve(path, {
-      c1: c1,
-      c2: { x: c2.x, y: c1.y },
-      to: c2,
-    });
-    addCurve(path, {
-      c1: c2,
-      c2: { x: c3.x, y: c2.y },
-      to: c3,
-    });
-    addCurve(path, {
-      c1: c3,
-      c2: { x: c4.x, y: c3.y },
-      to: c4,
-    });
-    addCurve(path, {
-      c1: c4,
-      c2: { x: c4.x, y: c1.y },
-      to: c1,
-    });
+    if (mode.value === Mode.TOP) {
+      addLine(path, c2);
+      addCurve(path, {
+        c1: c2,
+        c2: { x: c3.x, y: c2.y },
+        to: c3,
+      });
+      addLine(path, c4);
+      addCurve(path, {
+        c1: c4,
+        c2: { x: c4.x, y: c1.y },
+        to: c1,
+      });
+    } else {
+      addLine(path, c2);
+      addCurve(path, {
+        c1: c2,
+        c2: { x: c2.x, y: c3.y },
+        to: c3,
+      });
+      addLine(path, c4);
+      addCurve(path, {
+        c1: c4,
+        c2: { x: c1.x, y: c4.y },
+        to: c1,
+      });
+    }
     return {
       d: serialize(path),
     };
