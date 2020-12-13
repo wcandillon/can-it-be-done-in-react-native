@@ -20,6 +20,7 @@ import {
   createPath,
   serialize,
   snapPoint,
+  useVector,
 } from "react-native-redash";
 import Svg, { Path } from "react-native-svg";
 
@@ -38,6 +39,11 @@ const exhaustiveCheck = (value: never) => {
 const Square = () => {
   const mode = useSharedValue(Mode.TOP);
   const translateY = useSharedValue(0);
+  const isGestureActive = useSharedValue(false);
+  const p1 = useVector();
+  const p2 = useVector();
+  const p3 = useVector();
+  const p4 = useVector();
   const y = useDerivedValue(() =>
     translateY.value < 0 ? height + translateY.value - SIZE : translateY.value
   );
@@ -48,7 +54,7 @@ const Square = () => {
       [SIZE / 2 - 25, 0, SIZE / 2 - 25],
       Extrapolate.CLAMP
     );
-    const { c1, c2, c3, c4 } = (() => {
+    const points = (() => {
       switch (mode.value) {
         case Mode.TOP:
           return {
@@ -75,6 +81,18 @@ const Square = () => {
           return exhaustiveCheck(mode);
       }
     })();
+    p1.x.value = withSpring(points.c1.x);
+    p1.y.value = withSpring(points.c1.y);
+    p2.x.value = withSpring(points.c2.x);
+    p2.y.value = withSpring(points.c2.y);
+    p3.x.value = withSpring(points.c3.x);
+    p3.y.value = withSpring(points.c3.y);
+    p4.x.value = withSpring(points.c4.x);
+    p4.y.value = withSpring(points.c4.y);
+    const c1 = { x: p1.x.value, y: p1.y.value };
+    const c2 = { x: p2.x.value, y: p2.y.value };
+    const c3 = { x: p3.x.value, y: p3.y.value };
+    const c4 = { x: p4.x.value, y: p4.y.value };
     const path = createPath(c1);
     if (mode.value === Mode.TOP) {
       addLine(path, c2);
@@ -113,6 +131,7 @@ const Square = () => {
   >({
     onStart: (_, ctx) => {
       ctx.y = translateY.value;
+      isGestureActive.value = true;
     },
     onActive: ({ translationY }, ctx) => {
       translateY.value = ctx.y + translationY;
@@ -128,6 +147,7 @@ const Square = () => {
         mode.value = Mode.BOTTOM;
       }
       translateY.value = 0;
+      isGestureActive.value = false;
     },
   });
   return (
