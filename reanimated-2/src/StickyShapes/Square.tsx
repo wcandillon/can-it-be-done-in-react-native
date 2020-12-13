@@ -12,7 +12,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { addLine, createPath, serialize } from "react-native-redash";
+import { addLine, createPath, serialize, snapPoint } from "react-native-redash";
 import Svg, { Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -54,11 +54,15 @@ const Square = () => {
           c4: { x: 0, y: height },
         };
       } else if (mode.value === Mode.FREE) {
+        const y =
+          translateY.value < 0
+            ? height + translateY.value - SIZE
+            : translateY.value;
         return {
-          c1: { x: 0, y: translateY.value },
-          c2: { x: SIZE, y: translateY.value },
-          c3: { x: SIZE, y: translateY.value + SIZE },
-          c4: { x: 0, y: translateY.value + SIZE },
+          c1: { x: 0, y },
+          c2: { x: SIZE, y },
+          c3: { x: SIZE, y: y + SIZE },
+          c4: { x: 0, y: y + SIZE },
         };
       } else {
         return exhaustiveCheck(mode);
@@ -81,8 +85,17 @@ const Square = () => {
     },
     onActive: ({ translationY }, ctx) => {
       translateY.value = ctx.y + translationY;
+      if (mode.value !== Mode.FREE && Math.abs(translateY.value) > height / 4) {
+        mode.value = Mode.FREE;
+      }
     },
     onEnd: ({ velocityY }) => {
+      const dest = snapPoint(translateY.value, velocityY, [0, height]);
+      if (dest === 0) {
+        mode.value = Mode.TOP;
+      } else {
+        mode.value = Mode.BOTTOM;
+      }
       translateY.value = withSpring(0, {
         velocity: velocityY,
         overshootClamping: true,
