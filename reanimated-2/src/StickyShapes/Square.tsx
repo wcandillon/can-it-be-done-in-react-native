@@ -9,6 +9,7 @@ import Animated, {
   interpolate,
   useAnimatedGestureHandler,
   useAnimatedProps,
+  useDerivedValue,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
@@ -30,7 +31,9 @@ const exhaustiveCheck = (value: never) => {
 const Square = () => {
   const mode = useSharedValue(Mode.TOP);
   const translateY = useSharedValue(0);
-  const transition = useSharedValue(1);
+  const y = useDerivedValue(() =>
+    translateY.value < 0 ? height + translateY.value - SIZE : translateY.value
+  );
   const animatedProps = useAnimatedProps(() => {
     const delta = interpolate(
       translateY.value,
@@ -55,15 +58,11 @@ const Square = () => {
             c4: { x: 0, y: height },
           };
         case Mode.FREE:
-          const y =
-            translateY.value < 0
-              ? height + translateY.value - SIZE
-              : translateY.value;
           return {
-            c1: { x: 0, y },
-            c2: { x: SIZE, y },
-            c3: { x: SIZE, y: y + SIZE },
-            c4: { x: 0, y: y + SIZE },
+            c1: { x: 0, y: y.value },
+            c2: { x: SIZE, y: y.value },
+            c3: { x: SIZE, y: y.value + SIZE },
+            c4: { x: 0, y: y.value + SIZE },
           };
         default:
           return exhaustiveCheck(mode);
@@ -91,7 +90,7 @@ const Square = () => {
       }
     },
     onEnd: ({ velocityY }) => {
-      const dest = snapPoint(translateY.value, velocityY, [0, height]);
+      const dest = snapPoint(y.value, velocityY, [0, height]);
       if (dest === 0) {
         mode.value = Mode.TOP;
       } else {
