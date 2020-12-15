@@ -21,6 +21,7 @@ import {
   serialize,
   snapPoint,
   useVector,
+  Vector,
 } from "react-native-redash";
 import Svg, { Path } from "react-native-svg";
 
@@ -34,6 +35,16 @@ enum Mode {
 }
 const exhaustiveCheck = (value: never) => {
   throw new Error(value + " was not handled");
+};
+
+const assignVector = (
+  a: Vector<Animated.SharedValue<number>>,
+  b: Vector<number>,
+  withTransition: boolean
+) => {
+  "worklet";
+  a.x.value = withTransition ? withSpring(b.x) : b.x;
+  a.y.value = withTransition ? withSpring(b.y) : b.y;
 };
 
 const Square = () => {
@@ -81,38 +92,11 @@ const Square = () => {
           return exhaustiveCheck(mode);
       }
     })();
-    p1.x.value =
-      isGestureActive.value && mode.value === Mode.FREE
-        ? points.c1.x
-        : withSpring(points.c1.x);
-    p1.y.value =
-      isGestureActive.value && mode.value === Mode.FREE
-        ? points.c1.y
-        : withSpring(points.c1.y);
-    p2.x.value =
-      isGestureActive.value && mode.value === Mode.FREE
-        ? points.c2.x
-        : withSpring(points.c2.x);
-    p2.y.value =
-      isGestureActive.value && mode.value === Mode.FREE
-        ? points.c2.y
-        : withSpring(points.c2.y);
-    p3.x.value =
-      isGestureActive.value && mode.value === Mode.FREE
-        ? points.c3.x
-        : withSpring(points.c3.x);
-    p3.y.value =
-      isGestureActive.value && mode.value === Mode.FREE
-        ? points.c3.y
-        : withSpring(points.c3.y);
-    p4.x.value =
-      isGestureActive.value && mode.value === Mode.FREE
-        ? points.c4.x
-        : withSpring(points.c4.x);
-    p4.y.value =
-      isGestureActive.value && mode.value === Mode.FREE
-        ? points.c4.y
-        : withSpring(points.c4.y);
+    const withTransition = !(isGestureActive.value && mode.value === Mode.FREE);
+    assignVector(p1, points.c1, withTransition);
+    assignVector(p2, points.c2, withTransition);
+    assignVector(p3, points.c3, withTransition);
+    assignVector(p4, points.c4, withTransition);
     const c1 = { x: p1.x.value, y: p1.y.value };
     const c2 = { x: p2.x.value, y: p2.y.value };
     const c3 = { x: p3.x.value, y: p3.y.value };
