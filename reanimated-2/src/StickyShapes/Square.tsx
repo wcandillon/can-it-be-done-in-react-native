@@ -45,6 +45,7 @@ const assignVector = (
   "worklet";
   a.x.value = withTransition ? withSpring(b.x) : b.x;
   a.y.value = withTransition ? withSpring(b.y) : b.y;
+  return { x: a.x.value, y: a.y.value };
 };
 
 const Square = () => {
@@ -93,14 +94,10 @@ const Square = () => {
       }
     })();
     const withTransition = !(isGestureActive.value && mode.value === Mode.FREE);
-    assignVector(p1, points.c1, withTransition);
-    assignVector(p2, points.c2, withTransition);
-    assignVector(p3, points.c3, withTransition);
-    assignVector(p4, points.c4, withTransition);
-    const c1 = { x: p1.x.value, y: p1.y.value };
-    const c2 = { x: p2.x.value, y: p2.y.value };
-    const c3 = { x: p3.x.value, y: p3.y.value };
-    const c4 = { x: p4.x.value, y: p4.y.value };
+    const c1 = assignVector(p1, points.c1, withTransition);
+    const c2 = assignVector(p2, points.c2, withTransition);
+    const c3 = assignVector(p3, points.c3, withTransition);
+    const c4 = assignVector(p4, points.c4, withTransition);
     const path = createPath(c1);
     if (mode.value === Mode.TOP) {
       addLine(path, c2);
