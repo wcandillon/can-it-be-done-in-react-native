@@ -5,10 +5,12 @@ import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedGestureHandler,
+  useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import { useVector } from "react-native-redash";
 
 import Square, { SIZE, MAX_HEIGHT } from "./Square";
 
@@ -24,22 +26,44 @@ const styles = StyleSheet.create({
 });
 
 const StickyShapes = () => {
+  const sticked = useSharedValue(true);
   const translateY = useSharedValue(0);
   const progress = useDerivedValue(() =>
-    interpolate(translateY.value, [0, MAX_HEIGHT], [0, 1], Extrapolate.CLAMP)
+    sticked.value
+      ? interpolate(
+          translateY.value,
+          [0, MAX_HEIGHT],
+          [0, 1],
+          Extrapolate.CLAMP
+        )
+      : 0
   );
   const onGestureEvent = useAnimatedGestureHandler({
     onActive: ({ translationY }) => {
       translateY.value = translationY;
+      if (translateY.value > MAX_HEIGHT) {
+        sticked.value = false;
+      }
     },
     onEnd: ({ velocityY: velocity }) => {
-      translateY.value = withSpring(0, { velocity, overshootClamping: true });
+      translateY.value = withSpring(
+        0,
+        { velocity, overshootClamping: true },
+        () => {
+          sticked.value = true;
+        }
+      );
     },
+  });
+  const style = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: sticked.value ? 0 : translateY.value }],
+    };
   });
   return (
     <View style={styles.container}>
       <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={StyleSheet.absoluteFill}>
+        <Animated.View style={[StyleSheet.absoluteFill, style]}>
           <Square progress={progress} />
         </Animated.View>
       </PanGestureHandler>

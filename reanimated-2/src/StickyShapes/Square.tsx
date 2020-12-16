@@ -32,9 +32,17 @@ const Square = ({ progress }: SquareProps) => {
     const p4 = { x: SIZE * factor.x, y: SIZE * factor.y };
     const path = createPath(p1);
     addLine(path, p2);
-    addCurve(path, { c1: { x: p2.x, y: 0 }, c2: { x: p3.x, y: 0 }, to: p3 });
+    addCurve(path, {
+      c1: { x: p2.x, y: p2.y },
+      c2: { x: p3.x, y: p2.y },
+      to: p3,
+    });
     addLine(path, p4);
-    addCurve(path, { c1: { x: p4.x, y: 0 }, c2: { x: p1.x, y: 0 }, to: p1 });
+    addCurve(path, {
+      c1: { x: p4.x, y: p1.y },
+      c2: { x: p1.x, y: p1.y },
+      to: p1,
+    });
     return {
       d: serialize(path),
       fill: "#45A6E5",
