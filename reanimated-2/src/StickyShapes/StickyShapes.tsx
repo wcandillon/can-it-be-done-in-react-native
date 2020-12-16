@@ -1,6 +1,10 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  PanGestureHandlerEventExtra,
+  PanGestureHandlerGestureEvent,
+} from "react-native-gesture-handler";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -27,37 +31,36 @@ const styles = StyleSheet.create({
 
 const StickyShapes = () => {
   const sticked = useSharedValue(true);
+  const sticking = useDerivedValue(() => withSpring(sticked.value ? 1 : 0));
   const translateY = useSharedValue(0);
-  const progress = useDerivedValue(() =>
-    sticked.value
-      ? interpolate(
-          translateY.value,
-          [0, MAX_HEIGHT],
-          [0, 1],
-          Extrapolate.CLAMP
-        )
-      : 0
+  const progress = useDerivedValue(
+    () =>
+      sticking.value *
+      interpolate(translateY.value, [0, MAX_HEIGHT], [0, 1], Extrapolate.CLAMP)
   );
-  const onGestureEvent = useAnimatedGestureHandler({
-    onActive: ({ translationY }) => {
-      translateY.value = translationY;
+  const onGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    { y: number }
+  >({
+    onStart: (_, ctx) => {
+      sticked.value = true;
+      ctx.y = translateY.value;
+    },
+    onActive: ({ translationY }, ctx) => {
+      translateY.value = ctx.y + translationY;
       if (translateY.value > MAX_HEIGHT) {
         sticked.value = false;
       }
     },
     onEnd: ({ velocityY: velocity }) => {
-      translateY.value = withSpring(
-        0,
-        { velocity, overshootClamping: true },
-        () => {
-          sticked.value = true;
-        }
-      );
+      translateY.value = withSpring(0, { velocity }, () => {
+        sticked.value = true;
+      });
     },
   });
   const style = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: sticked.value ? 0 : translateY.value }],
+      transform: [{ translateY: (1 - sticking.value) * translateY.value }],
     };
   });
   return (
