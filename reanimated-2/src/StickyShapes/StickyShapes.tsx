@@ -14,7 +14,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { useVector } from "react-native-redash";
+import { snapPoint, useVector } from "react-native-redash";
 
 import Square, { SIZE, MAX_HEIGHT } from "./Square";
 
@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
 });
 
 const StickyShapes = () => {
+  const isOnTop = useSharedValue(true);
   const sticked = useSharedValue(true);
   const sticking = useDerivedValue(() => withSpring(sticked.value ? 1 : 0));
   const translateY = useSharedValue(0);
@@ -39,38 +40,45 @@ const StickyShapes = () => {
       interpolate(translateY.value, [0, MAX_HEIGHT], [0, 1], Extrapolate.CLAMP)
   );
   const onGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    { y: number }
+    PanGestureHandlerGestureEvent
   >({
-    onStart: (_, ctx) => {
-      sticked.value = true;
-      ctx.y = translateY.value;
-    },
-    onActive: ({ translationY }, ctx) => {
-      translateY.value = ctx.y + translationY;
+    onActive: ({ translationY }) => {
+      translateY.value = translationY;
       if (translateY.value > MAX_HEIGHT) {
         sticked.value = false;
       }
     },
     onEnd: ({ velocityY: velocity }) => {
-      translateY.value = withSpring(0, { velocity }, () => {
+      const dest = snapPoint(translateY.value, velocity, [0, height - SIZE]);
+      translateY.value = withSpring(dest, { velocity }, () => {
         sticked.value = true;
+        if (dest !== 0) {
+          isOnTop.value = !isOnTop.value;
+          translateY.value = 0;
+        }
       });
     },
   });
+  const container = useAnimatedStyle(() => ({
+    transform: [{ rotate: isOnTop.value ? "0deg" : "180deg" }],
+  }));
   const style = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: (1 - sticking.value) * translateY.value }],
+      transform: [
+        {
+          translateY: (1 - sticking.value) * translateY.value,
+        },
+      ],
     };
   });
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, container]}>
       <PanGestureHandler onGestureEvent={onGestureEvent}>
         <Animated.View style={[StyleSheet.absoluteFill, style]}>
           <Square progress={progress} />
         </Animated.View>
       </PanGestureHandler>
-    </View>
+    </Animated.View>
   );
 };
 
