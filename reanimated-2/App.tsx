@@ -15,6 +15,7 @@ import Wave from "./src/Wave";
 import Fluid from "./src/Fluid";
 import ZAnimations from "./src/ZAnimations";
 import StrokeAnimation from "./src/StrokeAnimation";
+import StickyShapes from "./src/StickyShapes";
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -102,6 +103,14 @@ const AppNavigator = () => (
       component={ZAnimations}
       options={{
         title: "ZAnimations",
+      }}
+    />
+    <Stack.Screen
+      name="StickyShapes"
+      component={StickyShapes}
+      options={{
+        title: "Sticky Shapes",
+        header: () => null,
       }}
     />
   </Stack.Navigator>

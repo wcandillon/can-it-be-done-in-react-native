@@ -52,6 +52,10 @@ export const examples = [
     screen: "ZAnimations",
     title: "⚛️ 3D Animations",
   },
+  {
+    screen: "StickyShapes",
+    title: "🟣 Sticky Shapes",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
