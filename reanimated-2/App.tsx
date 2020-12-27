@@ -16,6 +16,7 @@ import Fluid from "./src/Fluid";
 import ZAnimations from "./src/ZAnimations";
 import StrokeAnimation from "./src/StrokeAnimation";
 import StickyShapes from "./src/StickyShapes";
+import DVDLogo from "./src/DVDLogo";
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -110,6 +111,14 @@ const AppNavigator = () => (
       component={StickyShapes}
       options={{
         title: "Sticky Shapes",
+        header: () => null,
+      }}
+    />
+    <Stack.Screen
+      name="DVDLogo"
+      component={DVDLogo}
+      options={{
+        title: "DVD Logo",
         header: () => null,
       }}
     />

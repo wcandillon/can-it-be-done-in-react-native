@@ -12,6 +12,7 @@ export type Routes = {
   StrokeAnimation: undefined;
   ZAnimations: undefined;
   StickyShapes: undefined;
+  DVDLogo: undefined;
 };
 
 export type Examples = {

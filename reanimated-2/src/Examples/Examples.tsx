@@ -56,6 +56,10 @@ export const examples = [
     screen: "StickyShapes",
     title: "🟣 Sticky Shapes",
   },
+  {
+    screen: "DVDLogo",
+    title: "📀 DVD Logo",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
