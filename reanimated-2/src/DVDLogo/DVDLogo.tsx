@@ -31,8 +31,10 @@ const DVDLogo = () => {
   const color = useSharedValue(colors[0]);
   const onBounce = useCallback(() => {
     "worklet";
-    color.value = colors[Math.round(Math.random() * (colors.length - 1))];
-    console.log(color.value);
+    const colorsLeft = colors.concat();
+    colorsLeft.splice(colorsLeft.indexOf(color.value), 1);
+    color.value =
+      colorsLeft[Math.round(Math.random() * (colorsLeft.length - 1))];
   }, [color]);
   useEffect(() => {
     translateX.value = withBouncing(0, width - LOGO_WIDTH, onBounce);

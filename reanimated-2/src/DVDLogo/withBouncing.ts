@@ -1,6 +1,6 @@
 import { AnimationState, defineAnimation } from "react-native-redash";
 
-const VELOCITY = 250;
+const VELOCITY = 150;
 
 interface BouncingAnimationState extends AnimationState {
   lastTimestamp: number;
