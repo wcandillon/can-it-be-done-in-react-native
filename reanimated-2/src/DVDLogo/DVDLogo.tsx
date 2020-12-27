@@ -8,7 +8,7 @@ import { AnimationState, defineAnimation } from "react-native-redash";
 
 import Logo, { LOGO_WIDTH, LOGO_HEIGHT } from "./Logo";
 
-const VELOCITY = 10;
+const VELOCITY = 250;
 const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
 
 interface BouncingAnimationState extends AnimationState {
   lastTimestamp: number;
+  direction: -1 | 1;
 }
 
 const withBouncing = (upperBound: number): number => {
@@ -26,12 +27,13 @@ const withBouncing = (upperBound: number): number => {
   return defineAnimation<BouncingAnimationState>(() => {
     "worklet";
     const onFrame = (state: BouncingAnimationState, now: number) => {
-      const { lastTimestamp } = state;
+      const { lastTimestamp, direction } = state;
       const dt = now - lastTimestamp;
-      state.current += VELOCITY * (dt / 1000);
-      if (state.current > upperBound) {
-        state.current = upperBound;
+      state.current += VELOCITY * (dt / 1000) * direction;
+      if (state.current >= upperBound || state.current >= 0) {
+        state.direction *= -1;
       }
+      state.lastTimestamp = now;
       return false;
     };
     const onStart = (
@@ -41,6 +43,7 @@ const withBouncing = (upperBound: number): number => {
     ) => {
       state.lastTimestamp = now;
       state.current = 0;
+      state.direction = 1;
     };
     return {
       onFrame,
