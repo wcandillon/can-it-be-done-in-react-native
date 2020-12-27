@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
 import * as React from "react";
-import Animated, { useAnimatedProps } from "react-native-reanimated";
+import Animated, {
+  processColor,
+  useAnimatedProps,
+} from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -13,8 +16,8 @@ interface LogoProps {
 }
 
 const Logo = ({ color }: LogoProps) => {
-  const p1 = useAnimatedProps(() => ({ fill: "red" }));
-  const p2 = useAnimatedProps(() => ({ fill: "red" }));
+  const p1 = useAnimatedProps(() => ({ fill: processColor(color.value) }));
+  const p2 = useAnimatedProps(() => ({ fill: processColor(color.value) }));
   return (
     <Svg width={LOGO_WIDTH} height={LOGO_HEIGHT} viewBox="0 0 187.09 82.68">
       <AnimatedPath
