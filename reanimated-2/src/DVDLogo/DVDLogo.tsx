@@ -4,7 +4,6 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import { AnimationState, defineAnimation } from "react-native-redash";
 
 import Logo, { LOGO_WIDTH, LOGO_HEIGHT } from "./Logo";
 import { withBouncing } from "./withBouncing";

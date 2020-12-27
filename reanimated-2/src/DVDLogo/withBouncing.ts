@@ -19,7 +19,7 @@ export const withBouncing = (
       const { lastTimestamp, direction } = state;
       const dt = now - lastTimestamp;
       state.current += VELOCITY * (dt / 1000) * direction;
-      if (state.current > upperBound || state.current < 0) {
+      if (state.current > upperBound || state.current < lowerBound) {
         state.direction *= -1;
         onBounce?.();
       }

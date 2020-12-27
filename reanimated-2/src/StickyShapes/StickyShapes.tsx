@@ -1,8 +1,7 @@
 import React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import {
   PanGestureHandler,
-  PanGestureHandlerEventExtra,
   PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import Animated, {
@@ -14,7 +13,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { snapPoint, useVector } from "react-native-redash";
+import { snapPoint } from "react-native-redash";
 
 import Square, { SIZE, MAX_HEIGHT } from "./Square";
 
