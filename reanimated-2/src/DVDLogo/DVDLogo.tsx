@@ -1,14 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
+import { AnimationState, defineAnimation } from "react-native-redash";
 
 import Logo, { LOGO_WIDTH, LOGO_HEIGHT } from "./Logo";
 import { withBouncing } from "./withBouncing";
 
 const { width, height } = Dimensions.get("window");
+const colors = [
+  "#ff0000",
+  "#00ff00",
+  "#0000ff",
+  "#ff00ff",
+  "#ffff00",
+  "#00ffff",
+];
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -19,10 +28,16 @@ const styles = StyleSheet.create({
 const DVDLogo = () => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
+  const color = useSharedValue(colors[0]);
+  const onBounce = useCallback(() => {
+    "worklet";
+    color.value = colors[Math.round(Math.random() * (colors.length - 1))];
+    console.log(color.value);
+  }, [color]);
   useEffect(() => {
-    translateX.value = withBouncing(width - LOGO_WIDTH);
-    translateY.value = withBouncing(height - LOGO_HEIGHT);
-  }, [translateX, translateY]);
+    translateX.value = withBouncing(0, width - LOGO_WIDTH, onBounce);
+    translateY.value = withBouncing(0, height - LOGO_HEIGHT, onBounce);
+  }, [onBounce, translateX, translateY]);
   const style = useAnimatedStyle(() => ({
     transform: [
       { translateX: translateX.value },
@@ -32,7 +47,7 @@ const DVDLogo = () => {
   return (
     <View style={styles.container}>
       <Animated.View style={style}>
-        <Logo />
+        <Logo color={color} />
       </Animated.View>
     </View>
   );
