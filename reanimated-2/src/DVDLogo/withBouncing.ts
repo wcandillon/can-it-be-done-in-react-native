@@ -28,7 +28,7 @@ export const withBouncing = (
     };
     const onStart = (state: BouncingAnimationState, _: number, now: number) => {
       state.lastTimestamp = now;
-      state.current = 0;
+      state.current = lowerBound + Math.random() * upperBound;
       state.direction = 1;
     };
     return {
