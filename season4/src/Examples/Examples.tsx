@@ -35,7 +35,7 @@ export const examples = [
   {
     screen: "Chanel",
     title: "👗 Chanel",
-  }
+  },
 ] as const;
 
 const styles = StyleSheet.create({

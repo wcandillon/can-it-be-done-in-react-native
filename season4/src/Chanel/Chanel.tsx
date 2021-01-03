@@ -9,7 +9,6 @@ import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
 import { clamp, snapPoint } from "react-native-redash";
 
