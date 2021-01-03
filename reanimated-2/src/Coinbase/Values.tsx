@@ -36,7 +36,6 @@ interface ValuesProps {
 const Values = ({ translateX }: ValuesProps) => {
   const candle = useDerivedValue(() => {
     const c = CANDLES[Math.floor(translateX.value / STEP)];
-    console.log({ c });
     return c;
   });
   const open = useDerivedValue(() => `${formatUSD(candle.value.open)}`);

@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
+import { WORD_HEIGHT } from "./Layout";
+
 const styles = StyleSheet.create({
   root: {
     padding: 4,
@@ -11,6 +13,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E8E6E8",
     backgroundColor: "white",
+    height: WORD_HEIGHT - 8,
   },
   text: {
     fontFamily: "Nunito-Regular",
