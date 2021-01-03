@@ -68,7 +68,7 @@ const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
         [MIN_HEIGHT, MAX_HEIGHT],
         Extrapolate.CLAMP
       ),
-      transform: [{ translateY: y.value }],
+      top: y.value,
     };
   });
   const titleStyle = useAnimatedStyle(() => {

@@ -8,6 +8,7 @@ import {
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import { clamp, snapPoint } from "react-native-redash";
@@ -40,7 +41,7 @@ const Channel = () => {
     },
     onEnd: ({ velocityY }) => {
       const to = snapPoint(y.value, velocityY, snapPoints);
-      y.value = withTiming(to);
+      y.value = withSpring(to, { overshootClamping: true });
     },
   });
   return (
