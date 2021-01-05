@@ -1,12 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
+  useAnimatedScrollHandler,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
@@ -19,6 +20,7 @@ const snapPoints = items.map((_, i) => -i * MAX_HEIGHT);
 const minY = Math.min(...snapPoints);
 const maxY = Math.max(...snapPoints);
 
+const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -28,31 +30,30 @@ const styles = StyleSheet.create({
 
 const Channel = () => {
   const y = useSharedValue(0);
-  const onGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    { offsetY: number }
-  >({
-    onStart: (_, ctx) => {
-      ctx.offsetY = y.value;
-    },
-    onActive: ({ translationY }, ctx) => {
-      y.value = clamp(ctx.offsetY + translationY, minY, maxY);
-    },
-    onEnd: ({ velocityY }) => {
-      const to = snapPoint(y.value, velocityY, snapPoints);
-      y.value = withSpring(to, { overshootClamping: true });
+  const onScroll = useAnimatedScrollHandler({
+    onScroll: ({ contentOffset: { y: value } }) => {
+      y.value = value;
     },
   });
   return (
     <>
       <StatusBar hidden />
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
+      <Animated.ScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        snapToInterval={MAX_HEIGHT}
+        decelerationRate="fast"
+        bounces={false}
+        contentContainerStyle={{
+          height: (items.length - 1) * MAX_HEIGHT + height,
+        }}
+      >
         <Animated.View style={styles.container}>
           {items.map((item, index) => (
             <Item item={item} key={index} y={y} index={index} />
           ))}
         </Animated.View>
-      </PanGestureHandler>
+      </Animated.ScrollView>
     </>
   );
 };
