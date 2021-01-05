@@ -8,8 +8,9 @@ import Chrome from "./src/Chrome";
 import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
 import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
-import Reflectly from "./src/Reflectly";
+import Chanel, { assets as chanelAssets } from "./src/Chanel";
 import { LoadAssets } from "./src/components";
+import Reflectly from "./src/Reflectly";
 
 const fonts = {
   "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
@@ -23,7 +24,12 @@ const fonts = {
   "GothamRounded-Light": require("./assets/fonts/GothamRounded/GothamRounded-Light.otf"),
 };
 
-const assets = [...duolingoAssets, ...snapChatAssets, ...philzCoffeeAssets];
+const assets = [
+  ...duolingoAssets,
+  ...snapChatAssets,
+  ...philzCoffeeAssets,
+  ...chanelAssets,
+];
 
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
@@ -77,6 +83,15 @@ const AppNavigator = () => (
       component={Reflectly}
       options={{
         title: "🧘‍♀️ Reflectly",
+        header: () => null,
+      }}
+    />
+    <Stack.Screen
+      name="Chanel"
+      component={Chanel}
+      options={{
+        title: "👗 Chanel",
+        header: () => null,
       }}
     />
   </Stack.Navigator>

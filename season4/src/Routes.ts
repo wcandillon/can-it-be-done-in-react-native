@@ -3,6 +3,7 @@ export type Routes = {
   Rainbow: undefined;
   Duolingo: undefined;
   PhilzCoffee: undefined;
+  Chanel: undefined;
   Chrome: undefined;
   Snapchat: undefined;
   Reflectly: undefined;
