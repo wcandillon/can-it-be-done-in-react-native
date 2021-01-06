@@ -50,6 +50,7 @@ export interface Item {
   title: string;
   subtitle: string;
   picture: number;
+  top: number;
 }
 
 interface ItemProps {
@@ -58,7 +59,11 @@ interface ItemProps {
   item: Item;
 }
 
-const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
+const Item = ({
+  y,
+  index,
+  item: { title, subtitle, picture, top },
+}: ItemProps) => {
   const style = useAnimatedStyle(() => {
     return {
       height: interpolate(
@@ -80,10 +85,21 @@ const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
       opacity,
     };
   });
+  const pictureStyle = useAnimatedStyle(() => ({
+    height: MAX_HEIGHT,
+    top: interpolate(
+      y.value,
+      [(index - 1) * MAX_HEIGHT, index * MAX_HEIGHT],
+      [-top, 0]
+    ),
+  }));
   return (
     <TouchableWithoutFeedback onPress={() => Alert.alert("Pressed!")}>
       <Animated.View style={[styles.container, style]}>
-        <Image source={picture} style={styles.picture} />
+        <Animated.Image
+          source={picture}
+          style={[styles.picture, pictureStyle]}
+        />
         <View style={styles.titleContainer}>
           <Text style={styles.subtitle}>{subtitle.toUpperCase()}</Text>
           <View style={styles.mainTitle}>
