@@ -11,7 +11,7 @@ import { items } from "./Model";
 
 const styles = StyleSheet.create({
   container: {
-    height: items.length * MAX_HEIGHT,
+    height: (items.length + 1) * MAX_HEIGHT,
     backgroundColor: "black",
   },
 });
