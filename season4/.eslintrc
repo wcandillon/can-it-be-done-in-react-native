@@ -1,3 +1,10 @@
 { 
-  "extends": "react-native-wcandillon"
+  "extends": "react-native-wcandillon",
+  "plugins": ["reanimated"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "reanimated/js-function-in-worklet": 2
+  }
 } 

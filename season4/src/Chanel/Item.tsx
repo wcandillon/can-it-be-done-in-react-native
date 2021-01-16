@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Dimensions, Alert, View, Text } from "react-native";
+import { StyleSheet, Dimensions, Alert, View, Text } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated, {
   Extrapolate,
