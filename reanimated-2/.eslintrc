@@ -1,6 +1,11 @@
 { 
   "extends": "react-native-wcandillon",
+  "plugins": ["reanimated"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "rules": {
+    "reanimated/js-function-in-worklet": 2,
     "react/jsx-sort-props": [2, {
       "noSortAlphabetically": true,
       "shorthandLast": true
