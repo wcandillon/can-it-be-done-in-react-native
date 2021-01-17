@@ -9,7 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { getYForX, Vector } from "react-native-redash";
 
-import { graphs } from "./Model";
+import { GraphIndex, graphs } from "./Model";
 
 const CURSOR = 50;
 const styles = StyleSheet.create({
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 });
 
 interface CursorProps {
-  index: Animated.SharedValue<number>;
+  index: Animated.SharedValue<GraphIndex>;
   translation: Vector<Animated.SharedValue<number>>;
 }
 

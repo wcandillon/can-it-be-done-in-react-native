@@ -8,7 +8,7 @@ import Animated, {
 import { ReText, Vector, round } from "react-native-redash";
 
 import ETH from "./components/ETH";
-import { graphs, SIZE } from "./Model";
+import { graphs, SIZE, GraphIndex } from "./Model";
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 
 interface HeaderProps {
   translation: Vector<Animated.SharedValue<number>>;
-  index: Animated.SharedValue<number>;
+  index: Animated.SharedValue<GraphIndex>;
 }
 
 const Header = ({ translation, index }: HeaderProps) => {

@@ -5,6 +5,7 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "reanimated/js-function-in-worklet": 2
+    "reanimated/js-function-in-worklet": 2,
+    "@typescript-eslint/no-non-null-assertion": 0
   }
 } 

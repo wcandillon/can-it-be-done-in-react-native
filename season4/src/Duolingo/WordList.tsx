@@ -49,7 +49,7 @@ const WordList = ({ children }: WordListProps) => {
                   layout: { x, y, width, height },
                 },
               }) => {
-                const offset = offsets[index];
+                const offset = offsets[index]!;
                 offset.order.value = -1;
                 offset.width.value = width;
                 offset.height.value = height;

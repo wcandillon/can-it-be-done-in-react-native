@@ -50,12 +50,12 @@ const Item = ({
   const contentHeight = (Object.keys(positions.value).length / COL) * SIZE;
   const isGestureActive = useSharedValue(false);
 
-  const position = getPosition(positions.value[id]);
+  const position = getPosition(positions.value[id]!);
   const translateX = useSharedValue(position.x);
   const translateY = useSharedValue(position.y);
 
   useAnimatedReaction(
-    () => positions.value[id],
+    () => positions.value[id]!,
     (newOrder) => {
       if (!isGestureActive.value) {
         const pos = getPosition(newOrder);
@@ -130,7 +130,7 @@ const Item = ({
       }
     },
     onEnd: () => {
-      const newPosition = getPosition(positions.value[id]);
+      const newPosition = getPosition(positions.value[id]!);
       translateX.value = withTiming(newPosition.x, animationConfig, () => {
         isGestureActive.value = false;
         runOnJS(onDragEnd)(positions.value);

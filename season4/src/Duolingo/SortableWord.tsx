@@ -39,7 +39,7 @@ const SortableWord = ({
   children,
   containerWidth,
 }: SortableWordProps) => {
-  const offset = offsets[index];
+  const offset = offsets[index]!;
   const isGestureActive = useSharedValue(false);
   const isAnimating = useSharedValue(false);
   const translation = useVector();
@@ -72,7 +72,7 @@ const SortableWord = ({
         calculateLayout(offsets, containerWidth);
       }
       for (let i = 0; i < offsets.length; i++) {
-        const o = offsets[i];
+        const o = offsets[i]!;
         if (i === index && o.order.value !== -1) {
           continue;
         }

@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
 
 const ColorSelection = () => {
   const [colorSelection, setColorSelection] = useState({
-    previous: colors[0],
-    current: colors[0],
+    previous: colors[0]!,
+    current: colors[0]!,
     position: { x: 0, y: 0 },
   });
   const translateX = useSharedValue(0);
