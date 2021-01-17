@@ -11,6 +11,7 @@ import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
 import Chanel, { assets as chanelAssets } from "./src/Chanel";
 import { LoadAssets } from "./src/components";
 import Reflectly from "./src/Reflectly";
+import Chess from "./src/Chess";
 
 const fonts = {
   "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
@@ -91,6 +92,15 @@ const AppNavigator = () => (
       component={Chanel}
       options={{
         title: "👗 Chanel",
+        header: () => null,
+      }}
+    />
+
+    <Stack.Screen
+      name="Chess"
+      component={Chess}
+      options={{
+        title: "♟ Chess",
         header: () => null,
       }}
     />
