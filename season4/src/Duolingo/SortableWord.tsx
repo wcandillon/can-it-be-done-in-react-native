@@ -48,7 +48,7 @@ const SortableWord = ({
     PanGestureHandlerGestureEvent,
     { x: number; y: number }
   >({
-    onStart: (event, ctx) => {
+    onStart: (_, ctx) => {
       if (isInBank.value) {
         translation.x.value = offset.originalX.value - MARGIN_LEFT;
         translation.y.value = offset.originalY.value + MARGIN_TOP;
