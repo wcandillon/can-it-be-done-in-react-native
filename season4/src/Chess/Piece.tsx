@@ -1,10 +1,7 @@
 import { Chess } from "chess.js";
 import React, { useCallback } from "react";
 import { StyleSheet, Image } from "react-native";
-import {
-  PanGestureHandler,
-  PanGestureHandlerGestureEvent,
-} from "react-native-gesture-handler";
+import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
@@ -41,9 +38,11 @@ interface PieceProps {
   id: keyof typeof PIECES;
   startPosition: Vector;
   chess: Chess;
+  onTurn: () => void;
 }
 
-const Piece = ({ id, startPosition, chess }: PieceProps) => {
+const Piece = ({ id, startPosition, chess, onTurn }: PieceProps) => {
+  const isGestureActive = useSharedValue(false);
   const offsetX = useSharedValue(0);
   const offsetY = useSharedValue(0);
   const translateX = useSharedValue(startPosition.x * SIZE);
@@ -59,23 +58,22 @@ const Piece = ({ id, startPosition, chess }: PieceProps) => {
         {},
         () => (offsetX.value = translateX.value)
       );
-      translateY.value = withTiming(
-        y,
-        {},
-        () => (offsetY.value = translateY.value)
-      );
+      translateY.value = withTiming(y, {}, () => {
+        offsetY.value = translateY.value;
+        isGestureActive.value = false;
+      });
       if (move) {
         chess.move({ from, to });
-      } else {
-        console.log(moves.map((m) => m.from + "=>" + m.to));
+        onTurn();
       }
     },
-    [chess, offsetX, offsetY, translateX, translateY]
+    [chess, isGestureActive, offsetX, offsetY, onTurn, translateX, translateY]
   );
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
       offsetX.value = translateX.value;
       offsetY.value = translateY.value;
+      isGestureActive.value = true;
     },
     onActive: ({ translationX, translationY }) => {
       translateX.value = offsetX.value + translationX;
@@ -89,6 +87,7 @@ const Piece = ({ id, startPosition, chess }: PieceProps) => {
   });
   const style = useAnimatedStyle(() => ({
     position: "absolute",
+    zIndex: isGestureActive.value ? 100 : 0,
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },
