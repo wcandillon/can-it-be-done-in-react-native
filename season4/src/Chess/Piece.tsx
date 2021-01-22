@@ -1,11 +1,12 @@
 import { Chess } from "chess.js";
-import React from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, Image } from "react-native";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -13,7 +14,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Vector } from "react-native-redash";
 
-import { SIZE } from "./Engine";
+import { fromPosition, SIZE, toPosition } from "./Engine";
 
 const styles = StyleSheet.create({
   piece: {
@@ -43,8 +44,23 @@ interface PieceProps {
 }
 
 const Piece = ({ id, startPosition, client }: PieceProps) => {
+  const from = useSharedValue(
+    fromPosition({ x: startPosition.x * SIZE, y: startPosition.y * SIZE })
+  );
   const translateX = useSharedValue(startPosition.x * SIZE);
   const translateY = useSharedValue(startPosition.y * SIZE);
+  const movePiece = useCallback(
+    (to: string) => {
+      const move = client
+        .moves({ verbose: true })
+        .find((m) => m.from === from.value && m.to === to);
+      console.log({ to: move ? move.to : from.value });
+      const { x, y } = toPosition(move ? move.to : from.value);
+      translateX.value = withTiming(x);
+      translateY.value = withTiming(y);
+    },
+    [client, from.value, translateX, translateY]
+  );
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
     { x: number; y: number }
@@ -57,9 +73,10 @@ const Piece = ({ id, startPosition, client }: PieceProps) => {
       translateX.value = x + translationX;
       translateY.value = y + translationY;
     },
-    onEnd: (_, { x, y }) => {
-      translateX.value = withTiming(x);
-      translateY.value = withTiming(y);
+    onEnd: () => {
+      runOnJS(movePiece)(
+        fromPosition({ x: translateX.value, y: translateY.value })
+      );
     },
   });
   const style = useAnimatedStyle(() => ({

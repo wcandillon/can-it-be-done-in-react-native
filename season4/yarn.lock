@@ -3409,10 +3409,10 @@ eslint-plugin-react@^7.20.0:
     resolve "^1.18.1"
     string.prototype.matchall "^4.0.2"
 
-eslint-plugin-reanimated@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-reanimated/-/eslint-plugin-reanimated-1.0.12.tgz#860e6c94809b1d803e184a51430c99bfb3ab449f"
-  integrity sha512-hkidbMXSWcevCp3EHX9EBKE7R3aDllEz6RXjWMNKYz1nIH9sIKfDp13J40TF7ZFnPe24HnbKR50w7ypa9UUJ0A==
+eslint-plugin-reanimated@1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-reanimated/-/eslint-plugin-reanimated-1.0.14.tgz#fb27aee79528afe4380ac7fa4213e72f8cf348e0"
+  integrity sha512-1TPM1G6axrmtig/qiCaH21vprdc45uqVAIzEvPNQMagfxlEZdclmgsg+4dNx5ptqLJmgCjzlLEbGhrv/SoyzXA==
   dependencies:
     "@typescript-eslint/experimental-utils" "^4.12.0"
     typescript "^4.1.3"

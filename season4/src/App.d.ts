@@ -1,3 +1,10 @@
 module "chess.js" {
-  export class Chess {}
+  interface Move {
+    color: "w" | "b";
+    from: string;
+    to: string;
+  }
+  export class Chess {
+    moves(options: { verbose: true }): Move[];
+  }
 }
