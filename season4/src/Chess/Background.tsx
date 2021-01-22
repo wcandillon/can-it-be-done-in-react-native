@@ -53,7 +53,7 @@ const Row = ({ white, row }: RowProps) => {
   return (
     <View style={styles.container}>
       {new Array(8).fill(0).map((_, i) => (
-        <Square row={row} col={i} key={i} white={(i + offset) % 2 === 0} />
+        <Square row={row} col={i} key={i} white={(i + offset) % 2 === 1} />
       ))}
     </View>
   );

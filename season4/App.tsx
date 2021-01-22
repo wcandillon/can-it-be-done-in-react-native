@@ -11,7 +11,7 @@ import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
 import Chanel, { assets as chanelAssets } from "./src/Chanel";
 import { LoadAssets } from "./src/components";
 import Reflectly from "./src/Reflectly";
-import Chess from "./src/Chess";
+import Chess, { assets as chessAssets} from "./src/Chess";
 
 const fonts = {
   "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
@@ -30,6 +30,7 @@ const assets = [
   ...snapChatAssets,
   ...philzCoffeeAssets,
   ...chanelAssets,
+  ...chessAssets
 ];
 
 const Stack = createStackNavigator<Routes>();
