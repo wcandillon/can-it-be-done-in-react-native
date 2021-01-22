@@ -6,6 +6,6 @@ module "chess.js" {
   }
   export class Chess {
     moves(options: { verbose: true }): Move[];
-    move(to: string);
+    move(move: { from: string; to: string; promotion?: "q" | "r" | "n" | "b" });
   }
 }

@@ -52,7 +52,6 @@ const Piece = ({ id, startPosition, chess }: PieceProps) => {
     (to: string) => {
       const moves = chess.moves({ verbose: true });
       const from = fromPosition({ x: offsetX.value, y: offsetY.value });
-      console.log(moves.map((m) => m.to));
       const move = moves.find((m) => m.from === from && m.to === to);
       const { x, y } = toPosition(move ? move.to : from);
       translateX.value = withTiming(
@@ -66,7 +65,9 @@ const Piece = ({ id, startPosition, chess }: PieceProps) => {
         () => (offsetY.value = translateY.value)
       );
       if (move) {
-        chess.move(to);
+        chess.move({ from, to });
+      } else {
+        console.log(moves.map((m) => m.from + "=>" + m.to));
       }
     },
     [chess, offsetX, offsetY, translateX, translateY]
