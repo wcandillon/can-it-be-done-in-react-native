@@ -40,38 +40,45 @@ export const PIECES = {
 interface PieceProps {
   id: keyof typeof PIECES;
   startPosition: Vector;
-  client: Chess;
+  chess: Chess;
 }
 
-const Piece = ({ id, startPosition, client }: PieceProps) => {
-  const from = useSharedValue(
-    fromPosition({ x: startPosition.x * SIZE, y: startPosition.y * SIZE })
-  );
+const Piece = ({ id, startPosition, chess }: PieceProps) => {
+  const offsetX = useSharedValue(0);
+  const offsetY = useSharedValue(0);
   const translateX = useSharedValue(startPosition.x * SIZE);
   const translateY = useSharedValue(startPosition.y * SIZE);
   const movePiece = useCallback(
     (to: string) => {
-      const move = client
-        .moves({ verbose: true })
-        .find((m) => m.from === from.value && m.to === to);
-      console.log({ to: move ? move.to : from.value });
-      const { x, y } = toPosition(move ? move.to : from.value);
-      translateX.value = withTiming(x);
-      translateY.value = withTiming(y);
+      const moves = chess.moves({ verbose: true });
+      const from = fromPosition({ x: offsetX.value, y: offsetY.value });
+      console.log(moves.map((m) => m.to));
+      const move = moves.find((m) => m.from === from && m.to === to);
+      const { x, y } = toPosition(move ? move.to : from);
+      translateX.value = withTiming(
+        x,
+        {},
+        () => (offsetX.value = translateX.value)
+      );
+      translateY.value = withTiming(
+        y,
+        {},
+        () => (offsetY.value = translateY.value)
+      );
+      if (move) {
+        chess.move(to);
+      }
     },
-    [client, from.value, translateX, translateY]
+    [chess, offsetX, offsetY, translateX, translateY]
   );
-  const onGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    { x: number; y: number }
-  >({
-    onStart: (_, ctx) => {
-      ctx.x = translateX.value;
-      ctx.y = translateY.value;
+  const onGestureEvent = useAnimatedGestureHandler({
+    onStart: () => {
+      offsetX.value = translateX.value;
+      offsetY.value = translateY.value;
     },
-    onActive: ({ translationX, translationY }, { x, y }) => {
-      translateX.value = x + translationX;
-      translateY.value = y + translationY;
+    onActive: ({ translationX, translationY }) => {
+      translateX.value = offsetX.value + translationX;
+      translateY.value = offsetY.value + translationY;
     },
     onEnd: () => {
       runOnJS(movePiece)(

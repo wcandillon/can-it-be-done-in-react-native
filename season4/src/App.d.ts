@@ -6,5 +6,6 @@ module "chess.js" {
   }
   export class Chess {
     moves(options: { verbose: true }): Move[];
+    move(to: string);
   }
 }

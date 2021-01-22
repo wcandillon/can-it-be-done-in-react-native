@@ -13,16 +13,14 @@ export const toPosition = (to: string) => {
   if (!col || !row) {
     throw new Error("Invalid notation: " + to);
   }
-  const result = {
+  const indexes = {
     x: col.charCodeAt(0) - "a".charCodeAt(0),
     y: parseInt(row, 10) - 1,
   };
-  const fin = {
-    x: result.x * SIZE,
-    y: 7 * SIZE - result.y * SIZE,
+  return {
+    x: indexes.x * SIZE,
+    y: 7 * SIZE - indexes.y * SIZE,
   };
-  console.log({ result, fin });
-  return fin;
 };
 
 export const fromPosition = ({ x, y }: Vector) => {
