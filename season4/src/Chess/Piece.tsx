@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
     height: SIZE,
   },
 });
-type Color = "b" | "w";
+export type Player = "b" | "w";
 type Type = "q" | "r" | "n" | "b" | "k" | "p";
-type Piece = `${Color}${Type}`;
+type Piece = `${Player}${Type}`;
 type Pieces = Record<Piece, ReturnType<typeof require>>;
 export const PIECES: Pieces = {
   br: require("./assets/br.png"),
@@ -43,9 +43,10 @@ interface PieceProps {
   startPosition: Vector;
   chess: Chess;
   onTurn: () => void;
+  enabled: boolean;
 }
 
-const Piece = ({ id, startPosition, chess, onTurn }: PieceProps) => {
+const Piece = ({ id, startPosition, chess, onTurn, enabled }: PieceProps) => {
   const isGestureActive = useSharedValue(false);
   const offsetX = useSharedValue(0);
   const offsetY = useSharedValue(0);
@@ -98,7 +99,7 @@ const Piece = ({ id, startPosition, chess, onTurn }: PieceProps) => {
     ],
   }));
   return (
-    <PanGestureHandler onGestureEvent={onGestureEvent}>
+    <PanGestureHandler onGestureEvent={onGestureEvent} enabled={enabled}>
       <Animated.View style={style}>
         <Image source={PIECES[id]} style={styles.piece} />
       </Animated.View>

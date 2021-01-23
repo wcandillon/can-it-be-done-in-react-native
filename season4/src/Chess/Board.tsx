@@ -18,12 +18,20 @@ const styles = StyleSheet.create({
 
 const Board = () => {
   const chess = useConst(() => new Chess());
-  const [board, setBoard] = useState(chess.board());
-  const onTurn = useCallback(() => setBoard(chess.board), [chess]);
+  const [state, setState] = useState({
+    player: "w",
+    board: chess.board(),
+  });
+  const onTurn = useCallback(() => {
+    setState({
+      player: state.player === "w" ? "b" : "w",
+      board: chess.board(),
+    });
+  }, [chess, state.player]);
   return (
     <View style={styles.container}>
       <Background />
-      {board.map((row, y) =>
+      {state.board.map((row, y) =>
         row.map((piece, x) => {
           if (piece !== null) {
             return (
@@ -33,6 +41,7 @@ const Board = () => {
                 startPosition={{ x, y }}
                 chess={chess}
                 onTurn={onTurn}
+                enabled={state.player === piece.color}
               />
             );
           }
