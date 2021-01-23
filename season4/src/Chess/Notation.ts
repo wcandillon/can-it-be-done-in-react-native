@@ -7,7 +7,10 @@ export const SIZE = width / 8;
 
 export const toTranslation = (to: Position) => {
   "worklet";
-  const [col, row] = to.split("");
+  // worklet don't support destructuring yet
+  const tokens = to.split("");
+  const col = tokens[0];
+  const row = tokens[1];
   if (!col || !row) {
     throw new Error("Invalid notation: " + to);
   }

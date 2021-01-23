@@ -11,7 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Vector } from "react-native-redash";
 
-import { toTranslation, SIZE, toPosition } from "./Engine";
+import { toTranslation, SIZE, toPosition } from "./Notation";
 
 const styles = StyleSheet.create({
   piece: {
@@ -92,18 +92,48 @@ const Piece = ({ id, startPosition, chess, onTurn, enabled }: PieceProps) => {
   });
   const style = useAnimatedStyle(() => ({
     position: "absolute",
-    zIndex: isGestureActive.value ? 100 : 0,
+    zIndex: isGestureActive.value ? 100 : 10,
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },
     ],
   }));
+  const original = useAnimatedStyle(() => {
+    return {
+      position: "absolute",
+      width: SIZE,
+      height: SIZE,
+      zIndex: 0,
+      backgroundColor: isGestureActive.value
+        ? "rgba(255, 255, 0, 0.5)"
+        : "transparent",
+      transform: [{ translateX: offsetX.value }, { translateY: offsetY.value }],
+    };
+  });
+  const underlay = useAnimatedStyle(() => {
+    const position = toPosition({ x: translateX.value, y: translateY.value });
+    const translation = toTranslation(position);
+    return {
+      position: "absolute",
+      width: SIZE,
+      height: SIZE,
+      zIndex: 0,
+      backgroundColor: isGestureActive.value
+        ? "rgba(255, 255, 0, 0.5)"
+        : "transparent",
+      transform: [{ translateX: translation.x }, { translateY: translation.y }],
+    };
+  });
   return (
-    <PanGestureHandler onGestureEvent={onGestureEvent} enabled={enabled}>
-      <Animated.View style={style}>
-        <Image source={PIECES[id]} style={styles.piece} />
-      </Animated.View>
-    </PanGestureHandler>
+    <>
+      <Animated.View style={original} />
+      <Animated.View style={underlay} />
+      <PanGestureHandler onGestureEvent={onGestureEvent} enabled={enabled}>
+        <Animated.View style={style}>
+          <Image source={PIECES[id]} style={styles.piece} />
+        </Animated.View>
+      </PanGestureHandler>
+    </>
   );
 };
 
