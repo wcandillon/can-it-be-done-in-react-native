@@ -29,7 +29,7 @@ const Board = () => {
             return (
               <Piece
                 key={`${x}-${y}`}
-                id={`${piece.color}${piece.type}`}
+                id={`${piece.color}${piece.type}` as const}
                 startPosition={{ x, y }}
                 chess={chess}
                 onTurn={onTurn}

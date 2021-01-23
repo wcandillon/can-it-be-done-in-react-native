@@ -1,4 +1,4 @@
-import { Chess } from "chess.js";
+import { Chess, Position } from "chess.js";
 import React, { useCallback } from "react";
 import { StyleSheet, Image } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -11,7 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Vector } from "react-native-redash";
 
-import { fromPosition, SIZE, toPosition } from "./Engine";
+import { toTranslation, SIZE, toPosition } from "./Engine";
 
 const styles = StyleSheet.create({
   piece: {
@@ -19,7 +19,11 @@ const styles = StyleSheet.create({
     height: SIZE,
   },
 });
-export const PIECES = {
+type Color = "b" | "w";
+type Type = "q" | "r" | "n" | "b" | "k" | "p";
+type Piece = `${Color}${Type}`;
+type Pieces = Record<Piece, ReturnType<typeof require>>;
+export const PIECES: Pieces = {
   br: require("./assets/br.png"),
   bp: require("./assets/bp.png"),
   bn: require("./assets/bn.png"),
@@ -35,7 +39,7 @@ export const PIECES = {
 };
 
 interface PieceProps {
-  id: keyof typeof PIECES;
+  id: Piece;
   startPosition: Vector;
   chess: Chess;
   onTurn: () => void;
@@ -48,11 +52,11 @@ const Piece = ({ id, startPosition, chess, onTurn }: PieceProps) => {
   const translateX = useSharedValue(startPosition.x * SIZE);
   const translateY = useSharedValue(startPosition.y * SIZE);
   const movePiece = useCallback(
-    (to: string) => {
+    (to: Position) => {
       const moves = chess.moves({ verbose: true });
-      const from = fromPosition({ x: offsetX.value, y: offsetY.value });
+      const from = toPosition({ x: offsetX.value, y: offsetY.value });
       const move = moves.find((m) => m.from === from && m.to === to);
-      const { x, y } = toPosition(move ? move.to : from);
+      const { x, y } = toTranslation(move ? move.to : from);
       translateX.value = withTiming(
         x,
         {},
@@ -81,7 +85,7 @@ const Piece = ({ id, startPosition, chess, onTurn }: PieceProps) => {
     },
     onEnd: () => {
       runOnJS(movePiece)(
-        fromPosition({ x: translateX.value, y: translateY.value })
+        toPosition({ x: translateX.value, y: translateY.value })
       );
     },
   });
