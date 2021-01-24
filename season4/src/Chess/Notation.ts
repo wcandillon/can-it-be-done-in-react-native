@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import { Position } from "chess.js";
 import { Dimensions } from "react-native";
 import { Vector } from "react-native-redash";
