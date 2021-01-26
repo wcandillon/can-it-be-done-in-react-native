@@ -112,4 +112,6 @@ export const graphs = [
     value: 4,
     data: buildGraph(values.all, "All time"),
   },
-];
+] as const;
+
+export type GraphIndex = 0 | 1 | 2 | 3 | 4;

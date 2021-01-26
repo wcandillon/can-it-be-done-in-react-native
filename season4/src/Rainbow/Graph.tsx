@@ -10,7 +10,7 @@ import Animated, {
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { mixPath, useVector } from "react-native-redash";
 
-import { graphs, SIZE } from "./Model";
+import { GraphIndex, graphs, SIZE } from "./Model";
 import Header from "./Header";
 import Cursor from "./Cursor";
 
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
 const Graph = () => {
   const translation = useVector();
   const transition = useSharedValue(0);
-  const previous = useSharedValue(0);
-  const current = useSharedValue(0);
+  const previous = useSharedValue<GraphIndex>(0);
+  const current = useSharedValue<GraphIndex>(0);
   const animatedProps = useAnimatedProps(() => {
     const previousPath = graphs[previous.value].data.path;
     const currentPath = graphs[current.value].data.path;
@@ -87,7 +87,7 @@ const Graph = () => {
               onPress={() => {
                 previous.value = current.value;
                 transition.value = 0;
-                current.value = index;
+                current.value = index as GraphIndex;
                 transition.value = withTiming(1);
               }}
             >

@@ -71,7 +71,7 @@ const BackgrounGL = ({
   return (
     <Surface style={styles.container}>
       <Blur factor={20} passes={6}>
-        <Node ref={node} shader={shaders.background} uniforms={uniforms} />
+        <Node ref={node} shader={shaders.background!} uniforms={uniforms} />
       </Blur>
     </Surface>
   );

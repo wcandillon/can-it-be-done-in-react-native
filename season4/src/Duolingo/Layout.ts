@@ -35,7 +35,7 @@ export const lastOrder = (input: Offset[]) => {
 export const remove = (input: Offset[], index: number) => {
   "worklet";
   const offsets = input
-    .filter((o, i) => i !== index)
+    .filter((_, i) => i !== index)
     .filter(isNotInBank)
     .sort(byOrder);
   offsets.map((offset, i) => (offset.order.value = i));

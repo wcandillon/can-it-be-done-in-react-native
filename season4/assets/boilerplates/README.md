@@ -10,3 +10,4 @@ Unzip the folder into the `src/` folder.
 * [Snapchat](./Snapchat.zip)
 * [Reflectly](./Reflectly.zip)
 * [Chanel](./Chanel.zip)
+* [Chess](./Chess.zip)

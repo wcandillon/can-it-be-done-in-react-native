@@ -39,7 +39,7 @@ const SortableWord = ({
   children,
   containerWidth,
 }: SortableWordProps) => {
-  const offset = offsets[index];
+  const offset = offsets[index]!;
   const isGestureActive = useSharedValue(false);
   const isAnimating = useSharedValue(false);
   const translation = useVector();
@@ -48,7 +48,7 @@ const SortableWord = ({
     PanGestureHandlerGestureEvent,
     { x: number; y: number }
   >({
-    onStart: (event, ctx) => {
+    onStart: (_, ctx) => {
       if (isInBank.value) {
         translation.x.value = offset.originalX.value - MARGIN_LEFT;
         translation.y.value = offset.originalY.value + MARGIN_TOP;
@@ -72,7 +72,7 @@ const SortableWord = ({
         calculateLayout(offsets, containerWidth);
       }
       for (let i = 0; i < offsets.length; i++) {
-        const o = offsets[i];
+        const o = offsets[i]!;
         if (i === index && o.order.value !== -1) {
           continue;
         }
