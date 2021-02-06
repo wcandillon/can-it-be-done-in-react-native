@@ -46,7 +46,7 @@ const RippleButton = ({ children, color, onPress }: RippleButtonProps) => {
         cond(eq(state, State.END), [call([], onPress || (() => null))])
       ),
     ],
-    []
+    [onPress]
   );
   return (
     <TapGestureHandler {...gestureHandler}>
