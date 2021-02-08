@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { View, Image } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { mix, polar2Canvas } from 'react-native-redash';
@@ -8,14 +8,16 @@ interface IngredientProps {
   asset: ReturnType<typeof require>;
   progress: Animated.SharedValue<number>;
   index: number;
+  total: number;
+  zIndex: number;
 }
 
-const Ingredient = ({ asset, progress, index }: IngredientProps) => {
+const Ingredient = ({ asset, progress, index, total, zIndex }: IngredientProps) => {
   const dimension = Image.resolveAssetSource(asset);
   const width = dimension.width * INGREDIENT_SCALE;
   const height = dimension.height * INGREDIENT_SCALE;
   const radius = mix(Math.round(Math.random()), MIN_RADIUS, MAX_RADIUS);
-  const theta = index * 2 * Math.PI/11;
+  const theta = index * 2 * Math.PI/total;
   const {x, y} = polar2Canvas({ radius, theta }, { x: PIZZA_SIZE/2 - width/2, y: PIZZA_SIZE/2-height/2 });
   const side1 = (Math.round(Math.random()) === 0 ? -1 : 1);
   const side2 = (Math.round(Math.random()) === 0 ? -1 : 1);
@@ -33,6 +35,7 @@ const Ingredient = ({ asset, progress, index }: IngredientProps) => {
       <Animated.Image
         source={asset}
         style={[{
+          zIndex,
           position: "absolute",
           top: 0,
           left: 0,
@@ -43,4 +46,4 @@ const Ingredient = ({ asset, progress, index }: IngredientProps) => {
   );
 }
 
-export default Ingredient;
+export default memo(Ingredient);

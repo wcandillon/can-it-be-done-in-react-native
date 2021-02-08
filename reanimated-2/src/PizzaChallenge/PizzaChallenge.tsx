@@ -1,29 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 import { Button } from '../components';
-import Basil from "./components/Basil"
-import { PIZZA_SIZE, BREAD_PADDING } from './Config';
-
-export const assets = {
-  plate: require("./assets/Plate.png"),
-  bread: [
-    require("./assets/Bread/Bread_1.png")
-  ],  
-  basil: [
-    require("./assets/Basil/Basil_1.png"),
-    require("./assets/Basil/Basil_2.png"),
-    require("./assets/Basil/Basil_3.png"),
-    require("./assets/Basil/Basil_4.png"),
-    require("./assets/Basil/Basil_5.png"),
-    require("./assets/Basil/Basil_6.png"),
-    require("./assets/Basil/Basil_7.png"),
-    require("./assets/Basil/Basil_8.png"),
-    require("./assets/Basil/Basil_9.png"),
-    require("./assets/Basil/Basil_10.png"),
-    require("./assets/Basil/Basil_11.png"),
-  ]
-}
+import Ingredients from "./components/Ingredients"
+import { PIZZA_SIZE, BREAD_PADDING, assets } from './Config';
 
 const styles = StyleSheet.create({
   container: {
@@ -51,15 +31,29 @@ const styles = StyleSheet.create({
   }
 });
 const PizzaChallenge = () => {
-  const basil = useSharedValue(0);
+  const [count, setCount] = useState(0);
+  const [basil, setBasil] = useState<null | number>(null);
+  const [sausage, setSausage] = useState<null | number>(null);
   return (
     <View style={styles.container}>
       <View style={styles.pizza}>
         <Image source={assets.plate} style={styles.plate} />
         <Image source={assets.bread[0]} style={styles.bread} />
-        <Basil progress={basil} assets={assets.basil} />
+        {
+          basil !== null && <Ingredients zIndex={basil} assets={assets.basil} />
+        }
+                {
+          sausage !== null && <Ingredients zIndex={sausage} assets={assets.sausage} />
+        }
       </View>
-      <Button label="Top Me!" onPress={() => basil.value = withTiming(1)}></Button>
+      <Button label="Top Basil" onPress={() => {
+        setCount(prev => prev + 1);
+        setBasil(count + 1);
+      }}></Button>
+      <Button label="Top Sausage" onPress={() => {
+        setCount(prev => prev + 1);
+        setSausage(count + 1);
+      }}></Button>
     </View>
   );
 }
