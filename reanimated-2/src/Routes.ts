@@ -13,6 +13,7 @@ export type Routes = {
   ZAnimations: undefined;
   StickyShapes: undefined;
   DVDLogo: undefined;
+  PizzaChallenge: undefined;
 };
 
 export type Examples = {

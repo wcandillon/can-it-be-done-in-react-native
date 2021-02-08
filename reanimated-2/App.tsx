@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { LoadAssets, assets } from "./src/components";
+import { LoadAssets, assets as globalAssets } from "./src/components";
 import { Routes } from "./src/Routes";
 import Examples from "./src/Examples";
 import PanGesture from "./src/PanGesture";
@@ -17,7 +17,10 @@ import ZAnimations from "./src/ZAnimations";
 import StrokeAnimation from "./src/StrokeAnimation";
 import StickyShapes from "./src/StickyShapes";
 import DVDLogo from "./src/DVDLogo";
+import PizzaChallenge, {assets as pizzaAsset} from "./src/PizzaChallenge";
 
+
+const assets = [...globalAssets, ...pizzaAsset];
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
   <Stack.Navigator>
@@ -120,6 +123,13 @@ const AppNavigator = () => (
       options={{
         title: "DVD Logo",
         header: () => null,
+      }}
+    />
+    <Stack.Screen
+      name="PizzaChallenge"
+      component={PizzaChallenge}
+      options={{
+        title: "🍕 Pizza Challenge",
       }}
     />
   </Stack.Navigator>
