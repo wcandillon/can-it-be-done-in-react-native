@@ -21,7 +21,7 @@ export const assets = {
     require("./assets/Basil/Basil_8.png"),
     require("./assets/Basil/Basil_9.png"),
     require("./assets/Basil/Basil_10.png"),
-    require("./assets/Basil/Basil_11.png")
+    require("./assets/Basil/Basil_11.png"),
   ]
 }
 

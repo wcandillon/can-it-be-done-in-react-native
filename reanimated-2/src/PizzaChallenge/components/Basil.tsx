@@ -12,8 +12,8 @@ const Basil = ({ progress, assets }: BasilProps) => {
   return (
     <View>
       {
-        assets.map((asset, key) => (
-          <Ingredient key={key} asset={asset} progress={progress} />
+        assets.map((asset, index) => (
+          <Ingredient key={index} asset={asset} progress={progress} index={index} />
         ))
       }
     </View>
