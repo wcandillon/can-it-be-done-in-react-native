@@ -60,6 +60,10 @@ export const examples = [
     screen: "DVDLogo",
     title: "📀 DVD Logo",
   },
+  {
+    screen: "PizzaChallenge",
+    title: "🍕 Pizza",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

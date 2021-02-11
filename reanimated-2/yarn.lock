@@ -3659,16 +3659,16 @@ eslint-config-prettier@^6.10.1:
   dependencies:
     get-stdin "^6.0.0"
 
-eslint-config-react-native-wcandillon@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/eslint-config-react-native-wcandillon/-/eslint-config-react-native-wcandillon-3.3.3.tgz#46e020209b57575a94a041401377e28e65fd05a6"
-  integrity sha512-SKxrSr44a6Q/Ch7sCR2BCd53TyvaesmWNg+i7Mx1GDatmlm+tumO/Xab8I0aXU6QTi0ulgOuD+CIuM0Pcp3+YA==
+eslint-config-react-native-wcandillon@3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-react-native-wcandillon/-/eslint-config-react-native-wcandillon-3.4.0.tgz#ecc9ff212b1c310dc15f62c32c211c7bb30b6bbc"
+  integrity sha512-L5DGz71+u51RsqjgVZqFI9dhxflNbDDSfJAfH7Hl+VGSRqpd24vYgXRDKslxRY1b05+kxtpxkSns8MQJWR6Qrw==
   dependencies:
     "@react-native-community/eslint-config" "2.0.0"
-    eslint-plugin-import "^2.22.0"
-    typescript "^3.9.7"
+    eslint-plugin-import "^2.22.1"
+    typescript "^4.1.3"
 
-eslint-import-resolver-node@^0.3.3:
+eslint-import-resolver-node@^0.3.4:
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.4.tgz#85ffa81942c25012d8231096ddf679c03042c717"
   integrity sha512-ogtf+5AB/O+nM6DIeBUNr2fuT7ot9Qg/1harBfBtaP13ekEWFQEEMP94BCB7zaNW3gyY+8SHYF00rnqYwXKWOA==
@@ -3699,17 +3699,17 @@ eslint-plugin-flowtype@2.50.3:
   dependencies:
     lodash "^4.17.10"
 
-eslint-plugin-import@^2.22.0:
-  version "2.22.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.22.0.tgz#92f7736fe1fde3e2de77623c838dd992ff5ffb7e"
-  integrity sha512-66Fpf1Ln6aIS5Gr/55ts19eUuoDhAbZgnr6UxK5hbDx6l/QgQgx61AePq+BV4PP2uXQFClgMVzep5zZ94qqsxg==
+eslint-plugin-import@^2.22.1:
+  version "2.22.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.22.1.tgz#0896c7e6a0cf44109a2d97b95903c2bb689d7702"
+  integrity sha512-8K7JjINHOpH64ozkAhpT3sd+FswIZTfMZTjdx052pnWrgRCVfp8op9tbjpAk3DdUeI/Ba4C8OjdC0r90erHEOw==
   dependencies:
     array-includes "^3.1.1"
     array.prototype.flat "^1.2.3"
     contains-path "^0.1.0"
     debug "^2.6.9"
     doctrine "1.5.0"
-    eslint-import-resolver-node "^0.3.3"
+    eslint-import-resolver-node "^0.3.4"
     eslint-module-utils "^2.6.0"
     has "^1.0.3"
     minimatch "^3.0.4"
@@ -3765,10 +3765,10 @@ eslint-plugin-react@^7.20.0:
     resolve "^1.17.0"
     string.prototype.matchall "^4.0.2"
 
-eslint-plugin-reanimated@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-reanimated/-/eslint-plugin-reanimated-1.0.12.tgz#860e6c94809b1d803e184a51430c99bfb3ab449f"
-  integrity sha512-hkidbMXSWcevCp3EHX9EBKE7R3aDllEz6RXjWMNKYz1nIH9sIKfDp13J40TF7ZFnPe24HnbKR50w7ypa9UUJ0A==
+eslint-plugin-reanimated@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-reanimated/-/eslint-plugin-reanimated-1.1.0.tgz#0a6159b39272a325c21858909d3f799bb8bcc241"
+  integrity sha512-Q9HWn67mKg2WU28Us0Qd0ol2c7ySJJW46pQm5MVlOO1DbB0vLJUQYKUBtE/gekPlVwxg89Jy/dsjO9Nddlxhxw==
   dependencies:
     "@typescript-eslint/experimental-utils" "^4.12.0"
     typescript "^4.1.3"
@@ -7642,6 +7642,14 @@ toidentifier@1.0.0:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
   integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
 
+ts-unused-exports@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/ts-unused-exports/-/ts-unused-exports-7.0.1.tgz#2b5f097eb176255d7bf2f43cc2fe7ca34b5fa524"
+  integrity sha512-oCDlVfUy6V/RPdDSbiSKMnbJt+dewaW50XLCIBD7FKXBvtGll8GeibAHh+kMlW1r1TglAyRGnM3f9sE4qgDrxQ==
+  dependencies:
+    chalk "^4.0.0"
+    tsconfig-paths "^3.9.0"
+
 tsconfig-paths@^3.9.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.9.0.tgz#098547a6c4448807e8fcb8eae081064ee9a3c90b"
@@ -7690,11 +7698,6 @@ typescript@4.1.3, typescript@^4.1.3:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.3.tgz#519d582bd94cba0cf8934c7d8e8467e473f53bb7"
   integrity sha512-B3ZIOf1IKeH2ixgHhj6la6xdwR9QrLC5d1VKeCSY4tvkqhF2eqd9O7txNlS0PO3GrBAFIdr3L1ndNwteUbZLYg==
-
-typescript@^3.9.7:
-  version "3.9.7"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
-  integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
 
 ua-parser-js@^0.7.18:
   version "0.7.22"
