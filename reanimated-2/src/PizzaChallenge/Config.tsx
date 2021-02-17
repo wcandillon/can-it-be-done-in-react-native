@@ -1,5 +1,10 @@
 import { Dimensions } from "react-native";
 
+export type PizzaChallengeRoutes = {
+  Pizzas: undefined;
+  Pizza: { id: string };
+};
+
 export interface State {
   basil: number;
   sausage: number;
@@ -26,7 +31,20 @@ export const MAX_RADIUS = (PIZZA_SIZE / 2) * 0.6;
 
 export const assets = {
   plate: require("./assets/Plate.png"),
-  bread: [require("./assets/Bread/Bread_1.png")],
+  pizza: [
+    require("./assets/Pizzas/Pizza_1.png"),
+    require("./assets/Pizzas/Pizza_2.png"),
+    require("./assets/Pizzas/Pizza_3.png"),
+    require("./assets/Pizzas/Pizza_4.png"),
+    require("./assets/Pizzas/Pizza_5.png"),
+  ],
+  bread: [
+    require("./assets/Bread/Bread_1.png"),
+    require("./assets/Bread/Bread_2.png"),
+    require("./assets/Bread/Bread_3.png"),
+    require("./assets/Bread/Bread_4.png"),
+    require("./assets/Bread/Bread_5.png"),
+  ],
   basil: [
     require("./assets/Basil/Basil_1.png"),
     require("./assets/Basil/Basil_2.png"),
@@ -95,5 +113,9 @@ export const assets = {
     require("./assets/Mushroom/Mushroom_10.png"),
     require("./assets/Mushroom/Mushroom_11.png"),
     require("./assets/Mushroom/Mushroom_12.png"),
+  ],
+  extra: [
+    require("./assets/Extra/GreenSweetPepper.png"),
+    require("./assets/Extra/Pineapple.png"),
   ],
 };
