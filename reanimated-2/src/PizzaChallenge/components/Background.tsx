@@ -66,7 +66,9 @@ interface BackgroundProps {
 
 const Background = ({ x }: BackgroundProps) => {
   const style = useAnimatedStyle(() => ({
-    transform: [{ rotate: interpolate(x.value, [0, width], [0, 2 * Math.PI]) }],
+    transform: [
+      { rotate: `${interpolate(x.value, [0, width], [0, 2 * Math.PI])}rad` },
+    ],
   }));
   return (
     <View style={styles.container}>
