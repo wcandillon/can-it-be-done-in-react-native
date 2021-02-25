@@ -1,8 +1,6 @@
 import React from "react";
 import { Text, View, StyleSheet, Dimensions } from "react-native";
-import * as shape from "d3-shape";
 import Svg, { Path } from "react-native-svg";
-import { scaleLinear } from "d3-scale";
 import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
@@ -10,74 +8,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { parse, mixPath, useVector } from "react-native-redash";
+import { mixPath, useVector } from "react-native-redash";
 
-import { Prices, DataPoints, SIZE } from "./Model";
+import { graphs, SIZE } from "./Model";
 import Header from "./Header";
 import Cursor from "./Cursor";
-import data from "./data.json";
 
 const { width } = Dimensions.get("window");
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-
-const values = data.data.prices as Prices;
-const POINTS = 60;
-
-const buildGraph = (datapoints: DataPoints, label: string) => {
-  const priceList = datapoints.prices.slice(0, POINTS);
-  const formattedValues = priceList.map(
-    (price) => [parseFloat(price[0]), price[1]] as [number, number]
-  );
-  const prices = formattedValues.map((value) => value[0]);
-  const dates = formattedValues.map((value) => value[1]);
-  const scaleX = scaleLinear()
-    .domain([Math.min(...dates), Math.max(...dates)])
-    .range([0, SIZE]);
-  const minPrice = Math.min(...prices);
-  const maxPrice = Math.max(...prices);
-  const scaleY = scaleLinear().domain([minPrice, maxPrice]).range([SIZE, 0]);
-  return {
-    label,
-    minPrice,
-    maxPrice,
-    percentChange: datapoints.percent_change,
-    path: parse(
-      shape
-        .line()
-        .x(([, x]) => scaleX(x))
-        .y(([y]) => scaleY(y))
-        .curve(shape.curveBasis)(formattedValues) as string
-    ),
-  };
-};
-
-const graphs = [
-  {
-    label: "1H",
-    value: 0,
-    data: buildGraph(values.hour, "Last Hour"),
-  },
-  {
-    label: "1D",
-    value: 1,
-    data: buildGraph(values.day, "Today"),
-  },
-  {
-    label: "1M",
-    value: 2,
-    data: buildGraph(values.month, "Last Month"),
-  },
-  {
-    label: "1Y",
-    value: 3,
-    data: buildGraph(values.year, "This Year"),
-  },
-  {
-    label: "all",
-    value: 4,
-    data: buildGraph(values.all, "All time"),
-  },
-];
 
 const SELECTION_WIDTH = width - 32;
 const BUTTON_WIDTH = (width - 32) / graphs.length;
@@ -112,20 +50,21 @@ const styles = StyleSheet.create({
 const Graph = () => {
   const translation = useVector();
   const transition = useSharedValue(0);
-  const selected = useSharedValue(0);
-  const previous = useSharedValue(graphs[0].data);
-  const current = useSharedValue(graphs[0].data);
+  const previous = useSharedValue(0);
+  const current = useSharedValue(0);
   const animatedProps = useAnimatedProps(() => {
+    const previousPath = graphs[previous.value].data.path;
+    const currentPath = graphs[current.value].data.path;
     return {
-      d: mixPath(transition.value, previous.value.path, current.value.path),
+      d: mixPath(transition.value, previousPath, currentPath),
     };
   });
   const style = useAnimatedStyle(() => ({
-    transform: [{ translateX: withTiming(BUTTON_WIDTH * selected.value) }],
+    transform: [{ translateX: withTiming(BUTTON_WIDTH * current.value) }],
   }));
   return (
     <View style={styles.container}>
-      <Header translation={translation} data={current} />
+      <Header translation={translation} index={current} />
       <View>
         <Svg width={SIZE} height={SIZE}>
           <AnimatedPath
@@ -135,22 +74,21 @@ const Graph = () => {
             strokeWidth={3}
           />
         </Svg>
-        <Cursor translation={translation} data={current} />
+        <Cursor translation={translation} index={current} />
       </View>
       <View style={styles.selection}>
         <View style={StyleSheet.absoluteFill}>
           <Animated.View style={[styles.backgroundSelection, style]} />
         </View>
-        {graphs.map((graph) => {
+        {graphs.map((graph, index) => {
           return (
             <TouchableWithoutFeedback
               key={graph.label}
               onPress={() => {
                 previous.value = current.value;
                 transition.value = 0;
-                current.value = graph.data;
+                current.value = index;
                 transition.value = withTiming(1);
-                selected.value = graph.value;
               }}
             >
               <Animated.View style={[styles.labelContainer]}>

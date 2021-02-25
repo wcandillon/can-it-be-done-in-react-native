@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import {
   View,
   TouchableWithoutFeedback,
@@ -9,7 +9,7 @@ import {
 import { Feather as Icon } from "@expo/vector-icons";
 
 interface ButtonProps {
-  icon: string;
+  icon: ComponentProps<typeof Icon>["name"];
   label: string;
 }
 

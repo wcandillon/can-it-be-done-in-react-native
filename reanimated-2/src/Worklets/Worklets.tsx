@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import Animated, { useSharedValue, runOnUI } from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  runOnUI,
+  runOnJS,
+} from "react-native-reanimated";
 import { ReText } from "react-native-redash";
 
 import { Button } from "../components";
@@ -27,7 +31,7 @@ const sayHello = (
 ) => {
   "worklet";
   text.value = `Hello from ${from} at ${formatDatetime(new Date())}`;
-  cb();
+  runOnJS(cb)();
 };
 
 const Worklets = () => {

@@ -6,7 +6,6 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
 
 const { width, height } = Dimensions.get("window");
 export const MIN_HEIGHT = 128;
@@ -68,7 +67,7 @@ const Item = ({ y, index, item: { title, subtitle, picture } }: ItemProps) => {
         [MIN_HEIGHT, MAX_HEIGHT],
         Extrapolate.CLAMP
       ),
-      transform: [{ translateY: y.value }],
+      top: y.value,
     };
   });
   const titleStyle = useAnimatedStyle(() => {

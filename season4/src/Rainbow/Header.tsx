@@ -8,7 +8,7 @@ import Animated, {
 import { ReText, Vector, round } from "react-native-redash";
 
 import ETH from "./components/ETH";
-import { SIZE } from "./Model";
+import { graphs, SIZE } from "./Model";
 
 const styles = StyleSheet.create({
   container: {
@@ -30,15 +30,11 @@ const styles = StyleSheet.create({
 
 interface HeaderProps {
   translation: Vector<Animated.SharedValue<number>>;
-  data: Animated.SharedValue<{
-    minPrice: number;
-    maxPrice: number;
-    percentChange: number;
-    label: string;
-  }>;
+  index: Animated.SharedValue<number>;
 }
 
-const Header = ({ translation, data }: HeaderProps) => {
+const Header = ({ translation, index }: HeaderProps) => {
+  const data = useDerivedValue(() => graphs[index.value].data);
   const price = useDerivedValue(() => {
     const p = interpolate(
       translation.y.value,

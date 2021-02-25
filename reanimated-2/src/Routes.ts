@@ -9,4 +9,16 @@ export type Routes = {
   Accordion: undefined;
   Wave: undefined;
   Fluid: undefined;
+  StrokeAnimation: undefined;
+  ZAnimations: undefined;
+  StickyShapes: undefined;
+  DVDLogo: undefined;
+};
+
+export type Examples = {
+  Examples: undefined;
+  Logo: undefined;
+  Cone: undefined;
+  Donut: undefined;
+  Cube: undefined;
 };

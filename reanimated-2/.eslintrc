@@ -1,0 +1,9 @@
+{ 
+  "extends": "react-native-wcandillon",
+  "rules": {
+    "react/jsx-sort-props": [2, {
+      "noSortAlphabetically": true,
+      "shorthandLast": true
+    }]
+  }
+} 

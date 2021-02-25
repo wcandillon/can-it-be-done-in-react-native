@@ -1,0 +1,68 @@
+diff --git a/node_modules/react-native-reanimated/react-native-reanimated.d.ts b/node_modules/react-native-reanimated/react-native-reanimated.d.ts
+index 29561c5..5fe1241 100644
+--- a/node_modules/react-native-reanimated/react-native-reanimated.d.ts
++++ b/node_modules/react-native-reanimated/react-native-reanimated.d.ts
+@@ -20,6 +20,7 @@ declare module 'react-native-reanimated' {
+     ScrollView as ReactNativeScrollView,
+     NativeScrollEvent,
+     NativeSyntheticEvent,
++    ColorValue
+   } from 'react-native';
+   import {
+     GestureHandlerGestureEvent,
+@@ -68,9 +69,7 @@ declare module 'react-native-reanimated' {
+       interpolate(config: InterpolationConfig): AnimatedNode<number>;
+     }
+ 
+-    type RawSharedValue = number | string | boolean | object;
+-    type SharedValueType = RawSharedValue | RawSharedValue[];
+-    export type SharedValue<T extends SharedValueType> = {
++    export type SharedValue<T> = {
+       value: T;
+     };
+ 
+@@ -199,13 +198,13 @@ declare module 'react-native-reanimated' {
+             ? ReadonlyArray<AnimateStyle<S[K][0]>>
+             : S[K] extends object
+             ? AnimateStyle<S[K]> // allow `number` where `string` normally is to support colors
+-            : S[K] extends (string | undefined)
++            : S[K] extends (ColorValue | undefined)
+             ? S[K] | number
+             :
+                 | S[K]
+                 | AnimatedNode<
+                     // allow `number` where `string` normally is to support colors
+-                    S[K] extends (string | undefined) ? S[K] | number : S[K]
++                    S[K] extends (ColorValue | undefined) ? S[K] | number : S[K]
+                   >);
+     };
+ 
+@@ -418,8 +417,8 @@ declare module 'react-native-reanimated' {
+       userConfig: WithDecayConfig,
+       callback?: (isFinished: boolean) => void
+     ): number;
+-    export function cancelAnimation<T extends SharedValue<SharedValueType>>(
+-      sharedValue: T
++    export function cancelAnimation<T>(
++      sharedValue: SharedValue<T>
+     ): void;
+     export function withDelay(delayMS: number, delayedAnimation: number): number;
+     export function withRepeat(
+@@ -459,7 +458,7 @@ declare module 'react-native-reanimated' {
+       colorSpace?: 'RGB' | 'HSV'
+     ): string | number;
+ 
+-    export function makeMutable<T extends SharedValueType>(
++    export function makeMutable<T>(
+       initialValue: T
+     ): SharedValue<T>;
+ 
+@@ -471,7 +470,7 @@ declare module 'react-native-reanimated' {
+       shouldRebuild?: boolean
+     ): T extends SharedValueType ? SharedValue<T> : never;
+ 
+-    export function useDerivedValue<T extends SharedValueType>(
++    export function useDerivedValue<T>(
+       processor: () => T,
+       deps?: DependencyList
+     ): SharedValue<T>;

@@ -25,6 +25,7 @@ const Products = ({ x }: ProductsProps) => {
   return (
     <View style={styles.container} pointerEvents="none">
       {products.map((product, index) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         const style = useAnimatedStyle(() => {
           const translateX = interpolate(
             x.value,

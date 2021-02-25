@@ -1,2 +1,0 @@
-# Learn Reanimated 2
-

@@ -25,6 +25,14 @@ export const examples = [
     title: "☕️ Philz Coffee",
   },
   {
+    screen: "Chrome",
+    title: "🧭 Google Chrome",
+  },
+  {
+    screen: "Reflectly",
+    title: "🧘‍♀️ Reflectly",
+  },
+  {
     screen: "Chanel",
     title: "👗 Chanel",
   },

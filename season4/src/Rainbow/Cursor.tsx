@@ -7,7 +7,9 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
-import { getYForX, Path, Vector } from "react-native-redash";
+import { getYForX, Vector } from "react-native-redash";
+
+import { graphs } from "./Model";
 
 const CURSOR = 50;
 const styles = StyleSheet.create({
@@ -28,11 +30,11 @@ const styles = StyleSheet.create({
 });
 
 interface CursorProps {
-  data: Animated.SharedValue<{ path: Path }>;
+  index: Animated.SharedValue<number>;
   translation: Vector<Animated.SharedValue<number>>;
 }
 
-const Cursor = ({ data, translation }: CursorProps) => {
+const Cursor = ({ index, translation }: CursorProps) => {
   const isActive = useSharedValue(false);
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
@@ -40,7 +42,10 @@ const Cursor = ({ data, translation }: CursorProps) => {
     },
     onActive: (event) => {
       translation.x.value = event.x;
-      translation.y.value = getYForX(data.value.path, translation.x.value);
+      translation.y.value = getYForX(
+        graphs[index.value].data.path,
+        translation.x.value
+      );
     },
     onEnd: () => {
       isActive.value = false;
