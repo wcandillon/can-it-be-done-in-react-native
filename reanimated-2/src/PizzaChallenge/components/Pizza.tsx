@@ -69,7 +69,7 @@ const Pizza = ({ id, x, index, asset }: PizzaProps) => {
     };
   });
   const plateStyle = useAnimatedStyle(() => ({
-    opacity: x.value === index * width ? 1 : 0,
+    opacity: x.value % width === 0 ? 1 : 0,
   }));
   return (
     <View style={styles.container}>

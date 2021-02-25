@@ -1,5 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { LogBox } from "react-native";
 
 import { LoadAssets, assets as globalAssets } from "./src/components";
 import { Routes } from "./src/Routes";
@@ -26,6 +27,8 @@ const fonts = {
   "SFProDisplay-Medium": require("./assets/fonts/SFPro/SF-Pro-Display-Medium.otf"),
   Antpolt: require("./assets/fonts/antpoltsemicond-bolditalic.ttf"),
 };
+
+LogBox.ignoreLogs(["WARNING: Multiple instances of Three.js being imported."]);
 
 const assets = [...globalAssets, ...pizzaAsset];
 const Stack = createStackNavigator<Routes>();
