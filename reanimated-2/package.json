@@ -54,5 +54,8 @@
     "ts-unused-exports": "^7.0.1",
     "typescript": "4.1.3"
   },
+  "resolutions": {
+    "@babel/runtime": "7.12.0"
+  },
   "private": true
 }
