@@ -20,7 +20,7 @@ const Reflectly = () => {
   const open = useSharedValue(0);
   const style = useAnimatedStyle(() => {
     return {
-      backgroundColor: mixColor(open.value, "#F5F7FE", "#BBC0CE"),
+      backgroundColor: "#F5F7FE", //mixColor(open.value, "#F5F7FE", "#BBC0CE"),
     };
   });
   return (

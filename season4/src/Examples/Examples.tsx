@@ -37,6 +37,10 @@ const examples = [
     title: "👗 Chanel",
   },
   {
+    screen: "ColorSelection",
+    title: "🎨 Color Selection",
+  },
+  {
     screen: "Reflectly",
     title: "🤖 Reflectly",
   },

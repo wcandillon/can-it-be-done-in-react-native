@@ -79,14 +79,6 @@ const AppNavigator = () => (
       }}
     />
     <Stack.Screen
-      name="Reflectly"
-      component={Reflectly}
-      options={{
-        title: "🧘‍♀️ Reflectly",
-        header: () => null,
-      }}
-    />
-    <Stack.Screen
       name="Chanel"
       component={Chanel}
       options={{
@@ -95,7 +87,7 @@ const AppNavigator = () => (
       }}
     />
     <Stack.Screen
-      name="Reflectly"
+      name="ColorSelection"
       component={ColorSelection}
       options={{
         title: "🤖 Color Selection",
