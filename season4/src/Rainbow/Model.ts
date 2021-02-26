@@ -8,13 +8,13 @@ import data from "./data.json";
 
 export const SIZE = Dimensions.get("window").width;
 
-export interface Amount {
+interface Amount {
   amount: string;
   currency: string;
   scale: string;
 }
 
-export interface PercentChange {
+interface PercentChange {
   hour: number;
   day: number;
   week: number;
@@ -22,21 +22,21 @@ export interface PercentChange {
   year: number;
 }
 
-export interface LatestPrice {
+interface LatestPrice {
   amount: Amount;
   timestamp: string;
   percent_change: PercentChange;
 }
 
-export type Price = [string, number];
-export type PriceList = [string, number][];
+type Price = [string, number];
+type PriceList = [string, number][];
 
-export interface DataPoints {
+interface DataPoints {
   percent_change: number;
   prices: PriceList;
 }
 
-export interface Prices {
+interface Prices {
   latest: string;
   latest_price: LatestPrice;
   hour: DataPoints;
@@ -47,7 +47,7 @@ export interface Prices {
   all: DataPoints;
 }
 
-export interface Data {
+interface Data {
   base: string;
   base_id: string;
   unit_price_scale: number;

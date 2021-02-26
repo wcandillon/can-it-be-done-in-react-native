@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const NAVIGATION_STATE_KEY = `NAVIGATION_STATE_KEY-${Constants.manifest.sdkVersion}`;
 
-export type FontSource = Parameters<typeof Font.loadAsync>[0];
+type FontSource = Parameters<typeof Font.loadAsync>[0];
 const usePromiseAll = (
   promises: Promise<void | void[] | Asset[]>[],
   cb: () => void

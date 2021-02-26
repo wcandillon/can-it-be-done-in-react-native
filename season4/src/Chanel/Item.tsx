@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
-export const MIN_HEIGHT = 128;
+const MIN_HEIGHT = 128;
 export const MAX_HEIGHT = height / 2;
 const styles = StyleSheet.create({
   container: {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface Item {
+interface Item {
   title: string;
   subtitle: string;
   picture: number;

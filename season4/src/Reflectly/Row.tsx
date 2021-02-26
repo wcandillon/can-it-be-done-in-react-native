@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 
@@ -6,7 +6,7 @@ import { SIZE } from "./StaticTabbar";
 
 interface RowProps {
   label: string;
-  icon: string;
+  icon: ComponentProps<typeof Icon>["name"];
 }
 
 const styles = StyleSheet.create({

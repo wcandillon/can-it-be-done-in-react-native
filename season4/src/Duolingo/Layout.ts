@@ -1,6 +1,6 @@
 import { move } from "react-native-redash";
 
-import { SharedValues } from "../components/AnimatedHelpers";
+import { SharedValues } from "../components/AnimatedHelpers/Utils";
 
 export const MARGIN_TOP = 150;
 export const MARGIN_LEFT = 32;

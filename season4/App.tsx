@@ -9,9 +9,8 @@ import Duolingo, { assets as duolingoAssets } from "./src/Duolingo";
 import Snapchat, { assets as snapChatAssets } from "./src/Snapchat";
 import PhilzCoffee, { assets as philzCoffeeAssets } from "./src/PhilzCoffee";
 import Chanel, { assets as chanelAssets } from "./src/Chanel";
-import Reflectly from "./src/Reflectly";
+import { Reflectly, ColorSelection } from "./src/Reflectly";
 import { LoadAssets } from "./src/components";
-import Reflectly from "./src/Reflectly";
 
 const fonts = {
   "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
@@ -97,9 +96,16 @@ const AppNavigator = () => (
     />
     <Stack.Screen
       name="Reflectly"
+      component={ColorSelection}
+      options={{
+        title: "🤖 Color Selection",
+      }}
+    />
+    <Stack.Screen
+      name="Reflectly"
       component={Reflectly}
       options={{
-        title: "🤖 Reflectly",
+        title: "🤖 Reflectly Tabbar",
       }}
     />
   </Stack.Navigator>
@@ -113,4 +119,5 @@ const App = () => {
   );
 };
 
+// eslint-disable-next-line ts-exports/unused-exports
 export default App;

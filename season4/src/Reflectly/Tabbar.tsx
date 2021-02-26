@@ -1,33 +1,22 @@
-import React, { useLayoutEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+/* eslint-disable max-len */
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated, {
   Extrapolate,
   interpolate,
-  repeat,
   useAnimatedProps,
   useAnimatedStyle,
-  useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import {
-  clamp,
-  interpolatePath,
-  mix,
-  parse,
-  serialize,
-} from "react-native-redash";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Svg, { G, Path, Rect } from "react-native-svg";
+import { clamp, interpolatePath, mix, parse } from "react-native-redash";
+import Svg, { Path } from "react-native-svg";
 import { Feather as Icon } from "@expo/vector-icons";
 
 import StaticTabbar, { SIZE } from "./StaticTabbar";
 import Row from "./Row";
 
-interface TabbarProps {}
-
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const p1 = parse(
   "M100 225V275C100 288.807 111.193 300 125 300H175C188.807 300 200 288.807 200 275V225C200 211.193 188.81 200 173 200H123C109.19 200 100 211.193 100 225Z"
 );

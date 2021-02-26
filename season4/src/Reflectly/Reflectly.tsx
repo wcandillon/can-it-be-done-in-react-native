@@ -1,30 +1,12 @@
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, {
-  useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import {
-  move,
-  serialize,
-  parse,
-  SVGCommand,
-  mixPath,
-  mix,
-  mixColor,
-} from "react-native-redash";
-import Svg, { Circle, Path } from "react-native-svg";
+import { mixColor } from "react-native-redash";
 
 import Tabbar from "./Tabbar";
-
-export const curve = (c) => {
-  "worklet";
-  return {
-    type: SVGCommand.CURVE as const,
-    ...c,
-  };
-};
 
 const styles = StyleSheet.create({
   container: {
