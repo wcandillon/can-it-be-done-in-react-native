@@ -39,7 +39,7 @@ const Y = Math.sin(A) * C;
 const p1 = { x: 0, y: R };
 const p2 = { x: R, y: 0 };
 const p3 = { x: SIZE - R };
-const d = [
+const d1 = [
   `M 0 ${R}`,
   `C 0 ${R - C} ${R - C} 0 ${R} 0`,
   `H ${SIZE - R}`,
@@ -48,6 +48,20 @@ const d = [
   `C ${SIZE} ${SIZE - R + C} ${SIZE - R + C} ${SIZE} ${SIZE - R} ${SIZE}`,
   `H ${R}`,
   `C ${R - C} ${SIZE} 0 ${SIZE - R + C} 0 ${SIZE - R}`,
+  "Z",
+].join(" ");
+
+const arcTo = (x: number, y: number) => `A ${R} ${R} 0 0 1 ${x} ${y}`;
+
+const d = [
+  `M 0 ${R}`,
+  arcTo(R, 0),
+  `H ${SIZE - R}`,
+  arcTo(SIZE, R),
+  `V ${SIZE - R}`,
+  arcTo(SIZE - R, SIZE),
+  `H ${R}`,
+  arcTo(0, SIZE - R),
   "Z",
 ].join(" ");
 
