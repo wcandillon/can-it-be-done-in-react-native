@@ -53,7 +53,8 @@ const dCubic = [
   "Z",
 ].join(" ");
 
-const arcTo = (x: number, y: number) => `A ${R} ${R} 0 0 1 ${x} ${y}`;
+const arcTo = (x: number, y: number, reverse = false) =>
+  `A ${R} ${R} 0 0 ${reverse ? "0" : "1"} ${x} ${y}`;
 
 const dStart = [
   `M 0 ${R}`,
@@ -75,14 +76,14 @@ const d = [
   arcTo(WIDTH, R),
   `V ${HEIGHT - SIZE - R}`,
   arcTo(WIDTH - R, HEIGHT - SIZE),
-  `H ${WIDTH / 2 + SIZE / 2 - R}`,
-  arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R),
+  `H ${WIDTH / 2 + SIZE / 2 + R}`,
+  arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R, true),
   `V ${HEIGHT - R}`,
   arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
   `H ${WIDTH / 2 - SIZE / 2 + R}`,
   arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
   `V ${HEIGHT - SIZE + R}`,
-  arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE),
+  arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE, true),
   `H ${R}`,
   arcTo(0, HEIGHT - SIZE - R),
   "Z",
