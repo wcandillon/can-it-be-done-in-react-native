@@ -19,7 +19,7 @@ import Row from "./Row";
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
 });
@@ -29,6 +29,8 @@ interface TabbarProps {
 }
 
 const SIZE = 100;
+const WIDTH = 3.14 * SIZE;
+const HEIGHT = 3.5 * SIZE;
 const R = SIZE / 4;
 console.log({ SIZE });
 // 0.5522847498 is taken from https://spencermortensen.com/articles/bezier-circle/
@@ -39,7 +41,7 @@ const Y = Math.sin(A) * C;
 const p1 = { x: 0, y: R };
 const p2 = { x: R, y: 0 };
 const p3 = { x: SIZE - R };
-const d1 = [
+const dCubic = [
   `M 0 ${R}`,
   `C 0 ${R - C} ${R - C} 0 ${R} 0`,
   `H ${SIZE - R}`,
@@ -53,7 +55,7 @@ const d1 = [
 
 const arcTo = (x: number, y: number) => `A ${R} ${R} 0 0 1 ${x} ${y}`;
 
-const d = [
+const dStart = [
   `M 0 ${R}`,
   arcTo(R, 0),
   `H ${SIZE - R}`,
@@ -65,6 +67,18 @@ const d = [
   "Z",
 ].join(" ");
 
+const d = [
+  `M 0 ${R}`,
+  arcTo(R, 0),
+  `H ${WIDTH - R}`,
+  arcTo(WIDTH, R),
+  `V ${HEIGHT - SIZE - R}`,
+  arcTo(WIDTH - R, HEIGHT - SIZE),
+  `H ${R}`,
+  arcTo(0, HEIGHT - SIZE - R),
+  "Z",
+].join("");
+
 const Tabbar = ({ open }: TabbarProps) => {
   return (
     <TouchableWithoutFeedback
@@ -75,7 +89,7 @@ const Tabbar = ({ open }: TabbarProps) => {
       <View>
         <StaticTabbar />
         <View style={styles.overlay}>
-          <Svg width={SIZE} height={SIZE}>
+          <Svg width={WIDTH} height={HEIGHT} style={{ backgroundColor: "red" }}>
             <Path d={d} fill={"#02CBD6"} />
           </Svg>
         </View>
