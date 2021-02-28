@@ -67,6 +67,7 @@ const dStart = [
   "Z",
 ].join(" ");
 
+const SEG = WIDTH / 2 - SIZE / 2 - R;
 const d = [
   `M 0 ${R}`,
   arcTo(R, 0),
@@ -74,6 +75,14 @@ const d = [
   arcTo(WIDTH, R),
   `V ${HEIGHT - SIZE - R}`,
   arcTo(WIDTH - R, HEIGHT - SIZE),
+  `H ${WIDTH / 2 + SIZE / 2 - R}`,
+  arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R),
+  `V ${HEIGHT - R}`,
+  arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
+  `H ${WIDTH / 2 - SIZE / 2 + R}`,
+  arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
+  `V ${HEIGHT - SIZE + R}`,
+  arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE),
   `H ${R}`,
   arcTo(0, HEIGHT - SIZE - R),
   "Z",
