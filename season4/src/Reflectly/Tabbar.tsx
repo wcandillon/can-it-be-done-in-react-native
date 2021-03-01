@@ -43,7 +43,12 @@ const HEIGHT = 3.5 * SIZE;
 
 const d = (progress: number) => {
   "worklet";
-  const height = mix(progress, SIZE, 2 * SIZE);
+  const height = interpolate(
+    progress,
+    [0, 0.33],
+    [SIZE, 2 * SIZE],
+    Extrapolate.CLAMP
+  );
   return [
     `M ${WIDTH / 2 - SIZE / 2 + R} ${HEIGHT}`,
     // Button Bottom Left Corner
