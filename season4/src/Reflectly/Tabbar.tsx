@@ -55,15 +55,30 @@ const d = (progress: number) => {
     [SIZE, SIZE, WIDTH],
     Extrapolate.CLAMP
   );
+  const bottomLeft =
+    progress <= 0.33
+      ? []
+      : [
+          // Bottom Left
+          arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE, true),
+          `H ${(WIDTH - width) / 2 + R}`,
+          arcTo((WIDTH - width) / 2, HEIGHT - SIZE - R),
+        ];
+  const bottomRight =
+    progress <= 0.33
+      ? []
+      : [
+          // Bottom Right
+          arcTo(WIDTH - (WIDTH - width) / 2 - R, HEIGHT - SIZE),
+          `H ${WIDTH / 2 + SIZE / 2 + R}`,
+          arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R, true),
+        ];
   return [
     `M ${WIDTH / 2 - SIZE / 2 + R} ${HEIGHT}`,
     // Button Bottom Left Corner
     arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
     `V ${HEIGHT - SIZE + R}`,
-    // Bottom Left
-    arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE, true),
-    `H ${(WIDTH - width) / 2 + R}`,
-    arcTo((WIDTH - width) / 2, HEIGHT - SIZE - R),
+    ...bottomLeft,
     `V ${HEIGHT - height + R}`,
     // Top Left Corner
     arcTo((WIDTH - width) / 2 + R, HEIGHT - height),
@@ -71,9 +86,7 @@ const d = (progress: number) => {
     //Top Right Corner
     arcTo(WIDTH - (WIDTH - width) / 2, HEIGHT - height + R),
     `V ${HEIGHT - SIZE - R}`,
-    arcTo(WIDTH - (WIDTH - width) / 2 - R, HEIGHT - SIZE),
-    `H ${WIDTH / 2 + SIZE / 2 + R}`,
-    arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R, true),
+    ...bottomRight,
     `V  ${HEIGHT - R}`,
     // Buttom Bottom Right Corner
     arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
@@ -96,36 +109,6 @@ const d = (progress: number) => {
     arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
     "Z",
   ].join(" ");
-  */
-  /*
-  Final:
-  return [
-    `M 0 ${R}`,
-    // Top Left Corner
-    arcTo(R, 0),
-    `H ${width - R}`,
-    // Top Right Corner
-    arcTo(width, R),
-    `V ${height - SIZE - R}`,
-    // Bottom Right Corner
-    arcTo(width - R, height - SIZE),
-    `H ${width / 2 + SIZE / 2 + R}`,
-    // Button Top Right Corner
-    arcTo(width / 2 + SIZE / 2, height - SIZE + R, true),
-    `V ${height - R}`,
-    // Button Bottom Right Corner
-    arcTo(width / 2 + SIZE / 2 - R, height),
-    `H ${width / 2 - SIZE / 2 + R}`,
-    // Button Bottom Left Corner
-    arcTo(width / 2 - SIZE / 2, height - R),
-    `V ${height - SIZE + R}`,
-    // Button Top Left Corner
-    arcTo(width / 2 - SIZE / 2 - R, height - SIZE, true),
-    `H ${R}`,
-    // Bottom Left Corner
-    arcTo(0, height - SIZE - R),
-    "Z",
-  ].join("");
   */
 };
 
