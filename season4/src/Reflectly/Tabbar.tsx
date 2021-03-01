@@ -11,13 +11,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { clamp, interpolatePath, mix, parse } from "react-native-redash";
-import Svg, { Path } from "react-native-svg";
+import Svg, { Mask, Path, Rect } from "react-native-svg";
 import { Feather as Icon } from "@expo/vector-icons";
 
 import StaticTabbar from "./StaticTabbar";
 import Row from "./Row";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
+const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -49,30 +50,14 @@ const d = (progress: number) => {
     [SIZE, 2 * SIZE, HEIGHT],
     [SIZE, SIZE, WIDTH]
   );
-  const bottomLeft =
-    width <= SIZE
-      ? []
-      : [
-          // Bottom Left
-          arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE, true),
-          `H ${(WIDTH - width) / 2 + R}`,
-          arcTo((WIDTH - width) / 2, HEIGHT - SIZE - R),
-        ];
-  const bottomRight =
-    width <= SIZE
-      ? []
-      : [
-          // Bottom Right
-          arcTo(WIDTH - (WIDTH - width) / 2 - R, HEIGHT - SIZE),
-          `H ${WIDTH / 2 + SIZE / 2 + R}`,
-          arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R, true),
-        ];
   return [
     `M ${WIDTH / 2 - SIZE / 2 + R} ${HEIGHT}`,
     // Button Bottom Left Corner
     arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
     `V ${HEIGHT - SIZE + R}`,
-    ...bottomLeft,
+    arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE, true),
+    `H ${(WIDTH - width) / 2 + R}`,
+    arcTo((WIDTH - width) / 2, HEIGHT - SIZE - R),
     `V ${HEIGHT - height + R}`,
     // Top Left Corner
     arcTo((WIDTH - width) / 2 + R, HEIGHT - height),
@@ -80,7 +65,9 @@ const d = (progress: number) => {
     //Top Right Corner
     arcTo(WIDTH - (WIDTH - width) / 2, HEIGHT - height + R),
     `V ${HEIGHT - SIZE - R}`,
-    ...bottomRight,
+    arcTo(WIDTH - (WIDTH - width) / 2 - R, HEIGHT - SIZE),
+    `H ${WIDTH / 2 + SIZE / 2 + R}`,
+    arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R, true),
     `V  ${HEIGHT - R}`,
     // Buttom Bottom Right Corner
     arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
@@ -107,9 +94,25 @@ const d = (progress: number) => {
 };
 
 const Tabbar = ({ open }: TabbarProps) => {
-  const animatedProps = useAnimatedProps(() => ({
-    d: d(open.value),
-  }));
+  const animatedProps = useAnimatedProps(() => {
+    const progress = open.value;
+    const height = mix(progress, SIZE, HEIGHT);
+    const width = interpolate(
+      height,
+      [SIZE, 2 * SIZE, HEIGHT],
+      [SIZE, SIZE, WIDTH]
+    );
+    const x = interpolate(width, [SIZE, WIDTH], [(WIDTH - SIZE) / 2, 0]);
+    const y = interpolate(height, [SIZE, HEIGHT], [HEIGHT - SIZE, 0]);
+    return {
+      rx: R,
+      ry: R,
+      width,
+      height,
+      x,
+      y,
+    };
+  });
   useEffect(() => {
     open.value = withRepeat(withTiming(1, { duration: 5000 }), -1, true);
   }, [open]);
@@ -123,7 +126,10 @@ const Tabbar = ({ open }: TabbarProps) => {
         <StaticTabbar />
         <View style={styles.overlay}>
           <Svg width={WIDTH} height={HEIGHT}>
-            <AnimatedPath animatedProps={animatedProps} fill={"#02CBD6"} />
+            <Mask id="mask">
+              <AnimatedRect animatedProps={animatedProps} fill="white" />
+            </Mask>
+            <Path d={d(1)} fill={"#02CBD6"} mask="url(#mask)" />
           </Svg>
         </View>
       </View>
