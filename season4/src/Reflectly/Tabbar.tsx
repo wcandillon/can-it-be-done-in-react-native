@@ -144,7 +144,6 @@ const Tabbar = ({ open }: TabbarProps) => {
                 <AnimatedRect animatedProps={animatedProps} fill="white" />
               </Mask>
             </Defs>
-
             <Path d={d(1)} fill="url(#gradient)" mask="url(#mask)" />
           </Svg>
         </View>
@@ -152,6 +151,16 @@ const Tabbar = ({ open }: TabbarProps) => {
           style={[styles.overlay, { paddingBottom: insets.bottom }]}
           pointerEvents="none"
         >
+          <View
+            style={{
+              height: HEIGHT - SIZE,
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Row label="Mood check-in" icon="edit" />
+            <Row label="Voice note" icon="mic" />
+            <Row label="Add Photo" icon="image" />
+          </View>
           <Animated.View style={styles.icon}>
             <Animated.View style={icon}>
               <Icon name="x" color="white" size={32} />

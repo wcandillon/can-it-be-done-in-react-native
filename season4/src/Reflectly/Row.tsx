@@ -11,8 +11,6 @@ interface RowProps {
 
 const styles = StyleSheet.create({
   container: {
-    height: SIZE,
-    width: SIZE * 3,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
