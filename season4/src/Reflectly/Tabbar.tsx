@@ -61,15 +61,19 @@ const d = (progress: number) => {
     arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
     `V ${HEIGHT - SIZE + R}`,
     // Bottom Left
-    `L ${(WIDTH - width) / 2} ${HEIGHT - SIZE}`,
+    arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE, true),
+    `H ${(WIDTH - width) / 2 + R}`,
+    arcTo((WIDTH - width) / 2, HEIGHT - SIZE - R),
     `V ${HEIGHT - height + R}`,
     // Top Left Corner
     arcTo((WIDTH - width) / 2 + R, HEIGHT - height),
     `H ${WIDTH - (WIDTH - width) / 2 - R}`,
     //Top Right Corner
     arcTo(WIDTH - (WIDTH - width) / 2, HEIGHT - height + R),
-    `V ${HEIGHT - SIZE}`,
-    `L ${WIDTH / 2 + SIZE / 2} ${HEIGHT - SIZE + R}`,
+    `V ${HEIGHT - SIZE - R}`,
+    arcTo(WIDTH - (WIDTH - width) / 2 - R, HEIGHT - SIZE),
+    `H ${WIDTH / 2 + SIZE / 2 + R}`,
+    arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R, true),
     `V  ${HEIGHT - R}`,
     // Buttom Bottom Right Corner
     arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
@@ -127,7 +131,7 @@ const d = (progress: number) => {
 
 const Tabbar = ({ open }: TabbarProps) => {
   const animatedProps = useAnimatedProps(() => ({
-    d: d(0.6), //d(open.value),
+    d: d(open.value),
   }));
   useEffect(() => {
     open.value = withRepeat(withTiming(1, { duration: 5000 }), -1, true);
