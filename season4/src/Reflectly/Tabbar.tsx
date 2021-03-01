@@ -45,11 +45,39 @@ const d = (progress: number) => {
   "worklet";
   const height = interpolate(
     progress,
-    [0, 0.33],
-    [SIZE, 2 * SIZE],
+    [0, 0.33, 1],
+    [SIZE, 2 * SIZE, HEIGHT],
+    Extrapolate.CLAMP
+  );
+  const width = interpolate(
+    progress,
+    [0, 0.33, 1],
+    [SIZE, SIZE, WIDTH],
     Extrapolate.CLAMP
   );
   return [
+    `M ${WIDTH / 2 - SIZE / 2 + R} ${HEIGHT}`,
+    // Button Bottom Left Corner
+    arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
+    `V ${HEIGHT - SIZE + R}`,
+    // Bottom Left
+    `L ${(WIDTH - width) / 2} ${HEIGHT - SIZE}`,
+    `V ${HEIGHT - height + R}`,
+    // Top Left Corner
+    arcTo((WIDTH - width) / 2 + R, HEIGHT - height),
+    `H ${WIDTH - (WIDTH - width) / 2 - R}`,
+    //Top Right Corner
+    arcTo(WIDTH - (WIDTH - width) / 2, HEIGHT - height + R),
+    `V ${HEIGHT - SIZE}`,
+    `L ${WIDTH / 2 + SIZE / 2} ${HEIGHT - SIZE + R}`,
+    `V  ${HEIGHT - R}`,
+    // Buttom Bottom Right Corner
+    arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
+    "Z",
+  ].join(" ");
+  /*
+  Part 1
+     return [
     `M ${WIDTH / 2 - SIZE / 2 + R} ${HEIGHT}`,
     // Button Bottom Left Corner
     arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
@@ -64,7 +92,9 @@ const d = (progress: number) => {
     arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
     "Z",
   ].join(" ");
+  */
   /*
+  Final:
   return [
     `M 0 ${R}`,
     // Top Left Corner
@@ -97,7 +127,7 @@ const d = (progress: number) => {
 
 const Tabbar = ({ open }: TabbarProps) => {
   const animatedProps = useAnimatedProps(() => ({
-    d: d(open.value),
+    d: d(0.6), //d(open.value),
   }));
   useEffect(() => {
     open.value = withRepeat(withTiming(1, { duration: 5000 }), -1, true);
