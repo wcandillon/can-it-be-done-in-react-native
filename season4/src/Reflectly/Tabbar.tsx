@@ -11,7 +11,15 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { clamp, interpolatePath, mix, parse } from "react-native-redash";
-import Svg, { G, Mask, Path, Rect } from "react-native-svg";
+import Svg, {
+  Defs,
+  G,
+  LinearGradient,
+  Mask,
+  Path,
+  Rect,
+  Stop,
+} from "react-native-svg";
 import { Feather as Icon } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -20,6 +28,7 @@ import Row from "./Row";
 
 const R = SIZE / 4;
 const COLOR = "#02CBD6";
+const END_COLOR = "#00B4D4";
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const styles = StyleSheet.create({
@@ -31,7 +40,6 @@ const styles = StyleSheet.create({
   icon: {
     width: SIZE,
     height: SIZE,
-    backgroundColor: COLOR,
     borderRadius: R,
     justifyContent: "center",
     alignItems: "center",
@@ -115,15 +123,35 @@ const Tabbar = ({ open }: TabbarProps) => {
     >
       <View>
         <StaticTabbar />
-        <View style={[styles.overlay, { paddingBottom: insets.bottom }]}>
+        <View
+          style={[styles.overlay, { paddingBottom: insets.bottom }]}
+          pointerEvents="none"
+        >
           <Svg width={WIDTH} height={HEIGHT}>
-            <Mask id="mask">
-              <AnimatedRect animatedProps={animatedProps} fill="white" />
-            </Mask>
-            <Path d={d(1)} fill={COLOR} mask="url(#mask)" />
+            <Defs>
+              <LinearGradient
+                id="gradient"
+                x1={WIDTH / 2}
+                y1={0}
+                x2={WIDTH / 2}
+                y2={HEIGHT}
+                gradientUnits="userSpaceOnUse"
+              >
+                <Stop offset={0} stopColor={END_COLOR} />
+                <Stop offset={1} stopColor={COLOR} />
+              </LinearGradient>
+              <Mask id="mask">
+                <AnimatedRect animatedProps={animatedProps} fill="white" />
+              </Mask>
+            </Defs>
+
+            <Path d={d(1)} fill="url(#gradient)" mask="url(#mask)" />
           </Svg>
         </View>
-        <View style={[styles.overlay, { paddingBottom: insets.bottom }]}>
+        <View
+          style={[styles.overlay, { paddingBottom: insets.bottom }]}
+          pointerEvents="none"
+        >
           <Animated.View style={styles.icon}>
             <Animated.View style={icon}>
               <Icon name="x" color="white" size={32} />
