@@ -111,5 +111,4 @@ const App = () => {
   );
 };
 
-// eslint-disable-next-line ts-exports/unused-exports
 export default App;

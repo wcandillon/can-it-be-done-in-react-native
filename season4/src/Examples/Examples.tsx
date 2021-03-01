@@ -29,10 +29,6 @@ const examples = [
     title: "🧭 Google Chrome",
   },
   {
-    screen: "Reflectly",
-    title: "🧘‍♀️ Reflectly",
-  },
-  {
     screen: "Chanel",
     title: "👗 Chanel",
   },

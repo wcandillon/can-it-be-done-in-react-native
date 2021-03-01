@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated, {
@@ -7,6 +7,7 @@ import Animated, {
   interpolate,
   useAnimatedProps,
   useAnimatedStyle,
+  withRepeat,
   withTiming,
 } from "react-native-reanimated";
 import { clamp, interpolatePath, mix, parse } from "react-native-redash";
@@ -16,6 +17,7 @@ import { Feather as Icon } from "@expo/vector-icons";
 import StaticTabbar from "./StaticTabbar";
 import Row from "./Row";
 
+const AnimatedPath = Animated.createAnimatedComponent(Path);
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -29,67 +31,72 @@ interface TabbarProps {
 }
 
 const SIZE = 100;
+const R = SIZE / 4;
+
+const arcTo = (x: number, y: number, reverse = false) => {
+  "worklet";
+  return `A ${R} ${R} 0 0 ${reverse ? "0" : "1"} ${x} ${y}`;
+};
+
 const WIDTH = 3.14 * SIZE;
 const HEIGHT = 3.5 * SIZE;
-const R = SIZE / 4;
-console.log({ SIZE });
-// 0.5522847498 is taken from https://spencermortensen.com/articles/bezier-circle/
-const C = R * 0.5522847498;
-const A = Math.PI / 4;
-const X = Math.cos(A) * C;
-const Y = Math.sin(A) * C;
-const p1 = { x: 0, y: R };
-const p2 = { x: R, y: 0 };
-const p3 = { x: SIZE - R };
-const dCubic = [
-  `M 0 ${R}`,
-  `C 0 ${R - C} ${R - C} 0 ${R} 0`,
-  `H ${SIZE - R}`,
-  `C ${SIZE - R + C} 0 ${SIZE} ${R - C} ${SIZE} ${R}`,
-  `V ${SIZE - R}`,
-  `C ${SIZE} ${SIZE - R + C} ${SIZE - R + C} ${SIZE} ${SIZE - R} ${SIZE}`,
-  `H ${R}`,
-  `C ${R - C} ${SIZE} 0 ${SIZE - R + C} 0 ${SIZE - R}`,
-  "Z",
-].join(" ");
 
-const arcTo = (x: number, y: number, reverse = false) =>
-  `A ${R} ${R} 0 0 ${reverse ? "0" : "1"} ${x} ${y}`;
-
-const dStart = [
-  `M 0 ${R}`,
-  arcTo(R, 0),
-  `H ${SIZE - R}`,
-  arcTo(SIZE, R),
-  `V ${SIZE - R}`,
-  arcTo(SIZE - R, SIZE),
-  `H ${R}`,
-  arcTo(0, SIZE - R),
-  "Z",
-].join(" ");
-
-const SEG = WIDTH / 2 - SIZE / 2 - R;
-const d = [
-  `M 0 ${R}`,
-  arcTo(R, 0),
-  `H ${WIDTH - R}`,
-  arcTo(WIDTH, R),
-  `V ${HEIGHT - SIZE - R}`,
-  arcTo(WIDTH - R, HEIGHT - SIZE),
-  `H ${WIDTH / 2 + SIZE / 2 + R}`,
-  arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R, true),
-  `V ${HEIGHT - R}`,
-  arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
-  `H ${WIDTH / 2 - SIZE / 2 + R}`,
-  arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
-  `V ${HEIGHT - SIZE + R}`,
-  arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE, true),
-  `H ${R}`,
-  arcTo(0, HEIGHT - SIZE - R),
-  "Z",
-].join("");
+const d = (progress: number) => {
+  "worklet";
+  const height = mix(progress, SIZE, 2 * SIZE);
+  return [
+    `M ${WIDTH / 2 - SIZE / 2 + R} ${HEIGHT}`,
+    // Button Bottom Left Corner
+    arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
+    `V ${HEIGHT - height + R}`,
+    // Button Top Left Corner
+    arcTo(WIDTH / 2 - SIZE / 2 + R, HEIGHT - height),
+    `H ${WIDTH / 2 + SIZE / 2 - R}`,
+    // Button Top Right Corner
+    arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - height + R),
+    `V ${HEIGHT - R}`,
+    // Buttom Bottom Right Corner
+    arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
+    "Z",
+  ].join(" ");
+  /*
+  return [
+    `M 0 ${R}`,
+    // Top Left Corner
+    arcTo(R, 0),
+    `H ${width - R}`,
+    // Top Right Corner
+    arcTo(width, R),
+    `V ${height - SIZE - R}`,
+    // Bottom Right Corner
+    arcTo(width - R, height - SIZE),
+    `H ${width / 2 + SIZE / 2 + R}`,
+    // Button Top Right Corner
+    arcTo(width / 2 + SIZE / 2, height - SIZE + R, true),
+    `V ${height - R}`,
+    // Button Bottom Right Corner
+    arcTo(width / 2 + SIZE / 2 - R, height),
+    `H ${width / 2 - SIZE / 2 + R}`,
+    // Button Bottom Left Corner
+    arcTo(width / 2 - SIZE / 2, height - R),
+    `V ${height - SIZE + R}`,
+    // Button Top Left Corner
+    arcTo(width / 2 - SIZE / 2 - R, height - SIZE, true),
+    `H ${R}`,
+    // Bottom Left Corner
+    arcTo(0, height - SIZE - R),
+    "Z",
+  ].join("");
+  */
+};
 
 const Tabbar = ({ open }: TabbarProps) => {
+  const animatedProps = useAnimatedProps(() => ({
+    d: d(open.value),
+  }));
+  useEffect(() => {
+    open.value = withRepeat(withTiming(1, { duration: 5000 }), -1, true);
+  }, [open]);
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -100,7 +107,7 @@ const Tabbar = ({ open }: TabbarProps) => {
         <StaticTabbar />
         <View style={styles.overlay}>
           <Svg width={WIDTH} height={HEIGHT} style={{ backgroundColor: "red" }}>
-            <Path d={d} fill={"#02CBD6"} />
+            <AnimatedPath animatedProps={animatedProps} fill={"#02CBD6"} />
           </Svg>
         </View>
       </View>
