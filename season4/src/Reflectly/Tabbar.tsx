@@ -43,20 +43,14 @@ const HEIGHT = 3.5 * SIZE;
 
 const d = (progress: number) => {
   "worklet";
-  const height = interpolate(
-    progress,
-    [0, 0.33, 1],
-    [SIZE, 2 * SIZE, HEIGHT],
-    Extrapolate.CLAMP
-  );
+  const height = mix(progress, SIZE, HEIGHT);
   const width = interpolate(
-    progress,
-    [0, 0.33, 1],
-    [SIZE, SIZE, WIDTH],
-    Extrapolate.CLAMP
+    height,
+    [SIZE, 2 * SIZE, HEIGHT],
+    [SIZE, SIZE, WIDTH]
   );
   const bottomLeft =
-    progress <= 0.33
+    width <= SIZE
       ? []
       : [
           // Bottom Left
@@ -65,7 +59,7 @@ const d = (progress: number) => {
           arcTo((WIDTH - width) / 2, HEIGHT - SIZE - R),
         ];
   const bottomRight =
-    progress <= 0.33
+    width <= SIZE
       ? []
       : [
           // Bottom Right
@@ -128,7 +122,7 @@ const Tabbar = ({ open }: TabbarProps) => {
       <View>
         <StaticTabbar />
         <View style={styles.overlay}>
-          <Svg width={WIDTH} height={HEIGHT} style={{ backgroundColor: "red" }}>
+          <Svg width={WIDTH} height={HEIGHT}>
             <AnimatedPath animatedProps={animatedProps} fill={"#02CBD6"} />
           </Svg>
         </View>
