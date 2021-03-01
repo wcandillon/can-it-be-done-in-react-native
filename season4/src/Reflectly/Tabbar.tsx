@@ -11,13 +11,16 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { clamp, interpolatePath, mix, parse } from "react-native-redash";
-import Svg, { Mask, Path, Rect } from "react-native-svg";
+import Svg, { G, Mask, Path, Rect } from "react-native-svg";
 import { Feather as Icon } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import StaticTabbar from "./StaticTabbar";
+import StaticTabbar, { SIZE } from "./StaticTabbar";
 import Row from "./Row";
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
+const R = SIZE / 4;
+const COLOR = "#02CBD6";
+
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const styles = StyleSheet.create({
   overlay: {
@@ -25,14 +28,19 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
   },
+  icon: {
+    width: SIZE,
+    height: SIZE,
+    backgroundColor: COLOR,
+    borderRadius: R,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 interface TabbarProps {
   open: Animated.SharedValue<number>;
 }
-
-const SIZE = 100;
-const R = SIZE / 4;
 
 const arcTo = (x: number, y: number, reverse = false) => {
   "worklet";
@@ -73,27 +81,10 @@ const d = (progress: number) => {
     arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
     "Z",
   ].join(" ");
-  /*
-  Part 1
-     return [
-    `M ${WIDTH / 2 - SIZE / 2 + R} ${HEIGHT}`,
-    // Button Bottom Left Corner
-    arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
-    `V ${HEIGHT - height + R}`,
-    // Button Top Left Corner
-    arcTo(WIDTH / 2 - SIZE / 2 + R, HEIGHT - height),
-    `H ${WIDTH / 2 + SIZE / 2 - R}`,
-    // Button Top Right Corner
-    arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - height + R),
-    `V ${HEIGHT - R}`,
-    // Buttom Bottom Right Corner
-    arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
-    "Z",
-  ].join(" ");
-  */
 };
 
 const Tabbar = ({ open }: TabbarProps) => {
+  const insets = useSafeAreaInsets();
   const animatedProps = useAnimatedProps(() => {
     const progress = open.value;
     const height = mix(progress, SIZE, HEIGHT);
@@ -113,9 +104,9 @@ const Tabbar = ({ open }: TabbarProps) => {
       y,
     };
   });
-  useEffect(() => {
-    open.value = withRepeat(withTiming(1, { duration: 5000 }), -1, true);
-  }, [open]);
+  const icon = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${mix(open.value, Math.PI / 4, 0)}rad` }],
+  }));
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -124,13 +115,20 @@ const Tabbar = ({ open }: TabbarProps) => {
     >
       <View>
         <StaticTabbar />
-        <View style={styles.overlay}>
+        <View style={[styles.overlay, { paddingBottom: insets.bottom }]}>
           <Svg width={WIDTH} height={HEIGHT}>
             <Mask id="mask">
               <AnimatedRect animatedProps={animatedProps} fill="white" />
             </Mask>
-            <Path d={d(1)} fill={"#02CBD6"} mask="url(#mask)" />
+            <Path d={d(1)} fill={COLOR} mask="url(#mask)" />
           </Svg>
+        </View>
+        <View style={[styles.overlay, { paddingBottom: insets.bottom }]}>
+          <Animated.View style={styles.icon}>
+            <Animated.View style={icon}>
+              <Icon name="x" color="white" size={32} />
+            </Animated.View>
+          </Animated.View>
         </View>
       </View>
     </TouchableWithoutFeedback>
