@@ -113,12 +113,7 @@ const Tabbar = ({ open }: TabbarProps) => {
     transform: [{ rotate: `${mix(open.value, Math.PI / 4, 0)}rad` }],
   }));
   const content = useAnimatedStyle(() => ({
-    opacity: interpolate(
-      open.value,
-      [0, 0.5, 1],
-      [0, 0.5, 1],
-      Extrapolate.CLAMP
-    ),
+    opacity: interpolate(open.value, [0.75, 1], [0, 1], Extrapolate.CLAMP),
     transform: [{ translateY: mix(open.value, HEIGHT + insets.bottom, 0) }],
   }));
   return (
