@@ -1,8 +1,7 @@
 import React, { ComponentProps } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Alert } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-
-import { SIZE } from "./StaticTabbar";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 interface RowProps {
   label: string;
@@ -26,10 +25,12 @@ const styles = StyleSheet.create({
 
 const Row = ({ label, icon }: RowProps) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <Icon name={icon} color="white" size={24} />
-    </View>
+    <TouchableWithoutFeedback onPress={() => Alert.alert(label)}>
+      <View style={styles.container}>
+        <Text style={styles.label}>{label}</Text>
+        <Icon name={icon} color="white" size={24} />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

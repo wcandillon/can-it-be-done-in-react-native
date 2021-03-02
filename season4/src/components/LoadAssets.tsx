@@ -1,11 +1,11 @@
 import React, { ReactElement, useCallback, useEffect, useState } from "react";
-import AppLoading from "expo-app-loading";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { InitialState, NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from "expo-splash-screen";
 
 const NAVIGATION_STATE_KEY = `NAVIGATION_STATE_KEY-${Constants.manifest.sdkVersion}`;
 
@@ -41,6 +41,16 @@ const LoadAssets = ({ assets, fonts, children }: LoadAssetsProps) => {
   const [initialState, setInitialState] = useState<InitialState | undefined>();
   const ready = useLoadAssets(assets || [], fonts || {});
   useEffect(() => {
+    (async () => await SplashScreen.preventAutoHideAsync())();
+  }, []);
+  useEffect(() => {
+    (async () => {
+      if (ready) {
+        await SplashScreen.hideAsync();
+      }
+    })();
+  }, [isNavigationReady, ready]);
+  useEffect(() => {
     const restoreState = async () => {
       try {
         const savedStateString = await AsyncStorage.getItem(
@@ -64,7 +74,7 @@ const LoadAssets = ({ assets, fonts, children }: LoadAssetsProps) => {
     []
   );
   if (!ready || !isNavigationReady) {
-    return <AppLoading />;
+    return null;
   }
   return (
     <NavigationContainer {...{ onStateChange, initialState }}>

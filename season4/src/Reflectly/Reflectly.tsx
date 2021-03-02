@@ -1,12 +1,9 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated";
-import { mixColor } from "react-native-redash";
+import { StyleSheet, View } from "react-native";
+import { useSharedValue } from "react-native-reanimated";
 
-import Tabbar from "./Tabbar";
+import Tabbar from "./Tabbar/Tabbar";
+import Backdrop from "./Tabbar/Backdrop";
 
 const styles = StyleSheet.create({
   container: {
@@ -14,19 +11,17 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingTop: 32,
     alignItems: "center",
+    backgroundColor: "#F5F7FE",
   },
 });
 const Reflectly = () => {
   const open = useSharedValue(0);
-  const style = useAnimatedStyle(() => {
-    return {
-      backgroundColor: "#F5F7FE", //mixColor(open.value, "#F5F7FE", "#BBC0CE"),
-    };
-  });
+
   return (
-    <Animated.View style={[styles.container, style]}>
+    <View style={styles.container}>
+      <Backdrop open={open} />
       <Tabbar open={open} />
-    </Animated.View>
+    </View>
   );
 };
 
