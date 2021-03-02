@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     height: SIZE,
   },
 });
-export type Player = "b" | "w";
+type Player = "b" | "w";
 type Type = "q" | "r" | "n" | "b" | "k" | "p";
 type Piece = `${Player}${Type}`;
 type Pieces = Record<Piece, ReturnType<typeof require>>;

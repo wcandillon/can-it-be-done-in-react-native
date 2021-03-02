@@ -7,7 +7,7 @@ import { RectButton } from "react-native-gesture-handler";
 import { Routes } from "../Routes";
 import { StyleGuide } from "../components";
 
-export const examples = [
+const examples = [
   {
     screen: "Duolingo",
     title: "🦉 Duolingo",
@@ -29,12 +29,16 @@ export const examples = [
     title: "🧭 Google Chrome",
   },
   {
-    screen: "Reflectly",
-    title: "🧘‍♀️ Reflectly",
-  },
-  {
     screen: "Chanel",
     title: "👗 Chanel",
+  },
+  {
+    screen: "ColorSelection",
+    title: "🎨 Color Selection",
+  },
+  {
+    screen: "Reflectly",
+    title: "🤖 Reflectly",
   },
   {
     screen: "Chess",

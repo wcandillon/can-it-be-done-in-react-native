@@ -8,4 +8,5 @@ export type Routes = {
   Snapchat: undefined;
   Reflectly: undefined;
   Chess: undefined;
+  ColorSelection: undefined;
 };

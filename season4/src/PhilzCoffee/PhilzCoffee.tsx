@@ -31,7 +31,7 @@ const PhilzCoffee = () => {
       translateX.value,
       products.map((_, i) => width * i),
       products.map((product) => product.color2)
-    );
+    ) as string;
     return { flex: 1, backgroundColor };
   });
   return (

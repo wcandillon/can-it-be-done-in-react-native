@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface WordProps {
+interface WordProps {
   id: number;
   word: string;
 }
