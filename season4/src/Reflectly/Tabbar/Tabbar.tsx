@@ -61,29 +61,30 @@ interface TabbarProps {
   open: Animated.SharedValue<number>;
 }
 
-const arcTo = (x: number, y: number, reverse = false) => {
-  "worklet";
-  return `A ${R} ${R} 0 0 ${reverse ? "0" : "1"} ${x} ${y}`;
-};
+const arc = (x: number, y: number, reverse = false) =>
+  `a ${R} ${R} 0 0 ${reverse ? "0" : "1"} ${x} ${y}`;
 
+const H = HEIGHT - SIZE - 2 * R;
+const W = WIDTH - 2 * R;
+const W_2 = WIDTH / 2 - 4 * R;
+const S = SIZE - 2 * R;
 const d = [
   `M 0 ${R}`,
-  // Button Bottom Left Corner
-  arcTo(R, 0),
-  `H ${WIDTH - R}`,
-  arcTo(WIDTH, R),
-  `V ${HEIGHT - SIZE - R}`,
-  arcTo(WIDTH - R, HEIGHT - SIZE),
-  `H ${WIDTH / 2 + SIZE / 2 + R}`,
-  arcTo(WIDTH / 2 + SIZE / 2, HEIGHT - SIZE + R, true),
-  `V ${HEIGHT - R}`,
-  arcTo(WIDTH / 2 + SIZE / 2 - R, HEIGHT),
-  `H ${WIDTH / 2 - SIZE / 2 + R}`,
-  arcTo(WIDTH / 2 - SIZE / 2, HEIGHT - R),
-  `V ${HEIGHT - SIZE + R}`,
-  arcTo(WIDTH / 2 - SIZE / 2 - R, HEIGHT - SIZE, true),
-  `H ${R}`,
-  arcTo(0, HEIGHT - SIZE - R),
+  arc(R, -R),
+  `h ${W}`,
+  arc(R, R),
+  `v ${H}`,
+  arc(-R, R),
+  `h ${-W_2}`,
+  arc(-R, R, true),
+  `v ${S}`,
+  arc(-R, R),
+  `h ${-S}`,
+  arc(-R, -R),
+  `v ${-S}`,
+  arc(-R, -R, true),
+  `h ${-W_2}`,
+  arc(-R, -R),
   "Z",
 ].join(" ");
 

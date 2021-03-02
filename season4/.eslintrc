@@ -9,6 +9,6 @@
     "@typescript-eslint/no-non-null-assertion": 0,
     "ts-exports/unused-exports": 2,
     "reanimated/unsupported-syntax": 2,
-    "reanimated/no-multiple-animated-style-usages": 2
+    "reanimated/no-multiple-animated-style-usages": 0
   }
 } 
