@@ -8,6 +8,7 @@ Unzip the folder into the `src/` folder.
 * [Google Chrome](./Chrome.zip)
 * [Philz Coffee](./PhilzCoffee.zip)
 * [Snapchat](./Snapchat.zip)
-* [Reflectly](./Reflectly.zip)
+* [Reflectly Color Selection](./Reflectly.zip)
 * [Chanel](./Chanel.zip)
 * [Chess](./Chess.zip)
+* [Reflectly Tabbar](./Reflectly-Tabbar.zip)
