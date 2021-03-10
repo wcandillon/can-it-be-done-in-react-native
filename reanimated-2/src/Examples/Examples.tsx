@@ -64,6 +64,10 @@ export const examples = [
     screen: "PizzaChallenge",
     title: "🍕 Pizza",
   },
+  {
+    screen: "Breathe",
+    title: "🧘 Breathe",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

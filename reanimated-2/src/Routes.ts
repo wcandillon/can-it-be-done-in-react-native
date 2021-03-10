@@ -14,6 +14,7 @@ export type Routes = {
   StickyShapes: undefined;
   DVDLogo: undefined;
   PizzaChallenge: undefined;
+  Breathe: undefined;
 };
 
 export type Examples = {

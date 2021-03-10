@@ -18,6 +18,7 @@ import ZAnimations from "./src/ZAnimations";
 import StrokeAnimation from "./src/StrokeAnimation";
 import StickyShapes from "./src/StickyShapes";
 import DVDLogo from "./src/DVDLogo";
+import Breathe from "./src/Breathe";
 import PizzaChallenge, { assets as pizzaAsset } from "./src/PizzaChallenge";
 
 const fonts = {
@@ -140,6 +141,13 @@ const AppNavigator = () => (
       component={PizzaChallenge}
       options={{
         title: "🍕 Pizza Challenge",
+      }}
+    />
+    <Stack.Screen
+      name="Breathe"
+      component={Breathe}
+      options={{
+        title: "🧘 Breathe",
       }}
     />
   </Stack.Navigator>
