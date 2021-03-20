@@ -44,6 +44,10 @@ const examples = [
     screen: "Chess",
     title: "♟ Chess",
   },
+  {
+    screen: "Bedtime",
+    title: "⏰ Bedtime",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

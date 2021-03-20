@@ -1,4 +1,3 @@
-/* eslint-disable reanimated/unsupported-syntax */
 /* eslint-disable prefer-destructuring */
 import { Position } from "chess.js";
 import { Dimensions } from "react-native";

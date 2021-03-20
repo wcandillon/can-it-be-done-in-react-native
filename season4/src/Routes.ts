@@ -9,4 +9,5 @@ export type Routes = {
   Reflectly: undefined;
   Chess: undefined;
   ColorSelection: undefined;
+  Bedtime: undefined;
 };
