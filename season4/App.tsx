@@ -13,6 +13,7 @@ import { Reflectly, ColorSelection } from "./src/Reflectly";
 import { LoadAssets } from "./src/components";
 import Chess, { assets as chessAssets } from "./src/Chess";
 import Bedtime from "./src/Bedtime";
+import Darkroom, { assets as darkroomAssets } from "./src/Darkroom";
 
 const fonts = {
   "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
@@ -34,6 +35,7 @@ const assets = [
   ...philzCoffeeAssets,
   ...chanelAssets,
   ...chessAssets,
+  ...darkroomAssets,
 ];
 
 const Stack = createStackNavigator<Routes>();
@@ -118,6 +120,14 @@ const AppNavigator = () => (
       component={Bedtime}
       options={{
         title: "⏰ Bedtime",
+        header: () => null,
+      }}
+    />
+    <Stack.Screen
+      name="Darkroom"
+      component={Darkroom}
+      options={{
+        title: "🏞 Darkroom",
         header: () => null,
       }}
     />
