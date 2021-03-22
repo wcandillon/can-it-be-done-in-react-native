@@ -5,7 +5,6 @@ import { ReText } from "react-native-redash";
 
 import {
   PADDING,
-  TAU,
   formatDuration2,
   radToMinutes,
   absoluteDuration,

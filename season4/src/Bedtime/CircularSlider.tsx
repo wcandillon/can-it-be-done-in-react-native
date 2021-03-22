@@ -28,20 +28,18 @@ interface CircularProps {
 }
 
 const CircularSlider = ({ start, end }: CircularProps) => {
-  const startPos = useDerivedValue(() => {
-    const vec = polar2Canvas({ theta: start.value, radius: R }, CENTER);
-    return { x: vec.x, y: vec.y };
-  });
-  const endPos = useDerivedValue(() => {
-    const vec = polar2Canvas({ theta: end.value, radius: R }, CENTER);
-    return { x: vec.x, y: vec.y };
-  });
+  const startPos = useDerivedValue(() =>
+    polar2Canvas({ theta: start.value, radius: R }, CENTER)
+  );
+  const endPos = useDerivedValue(() =>
+    polar2Canvas({ theta: end.value, radius: R }, CENTER)
+  );
   const animatedProps = useAnimatedProps(() => {
-    const { x: x0, y: y0 } = startPos.value;
-    const { x: x1, y: y1 } = endPos.value;
+    const p1 = startPos.value;
+    const p2 = endPos.value;
     const duration = absoluteDuration(start.value, end.value);
     return {
-      d: `M ${x0} ${y0} ${arc(x1, y1, duration > PI)}`,
+      d: `M ${p1.x} ${p1.y} ${arc(p2.x, p2.y, duration > PI)}`,
     };
   });
   return (
