@@ -31,6 +31,11 @@ export const normalize = (value: number) => {
   return rest > 0 ? rest : TAU + rest;
 };
 
+export const absoluteDuration = (start: number, end: number) => {
+  "worklet";
+  return start > end ? end + (TAU - start) : end - start;
+};
+
 export const radToMinutes = (rad: number) => {
   "worklet";
   return (24 * 60 * rad) / TAU;

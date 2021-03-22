@@ -7,7 +7,15 @@ import Animated, {
 import { polar2Canvas } from "react-native-redash";
 import Svg, { Defs, Mask, Path } from "react-native-svg";
 
-import { SIZE, STROKE, R, TAU, PI, CENTER, arc } from "./Constants";
+import {
+  SIZE,
+  STROKE,
+  R,
+  PI,
+  CENTER,
+  arc,
+  absoluteDuration,
+} from "./Constants";
 import Cursor from "./Cursor";
 import Gesture from "./Gesture";
 import Quadrant from "./components/Quadrant";
@@ -31,10 +39,7 @@ const CircularSlider = ({ start, end }: CircularProps) => {
   const animatedProps = useAnimatedProps(() => {
     const { x: x0, y: y0 } = startPos.value;
     const { x: x1, y: y1 } = endPos.value;
-    const duration =
-      start.value > end.value
-        ? end.value + (TAU - start.value)
-        : end.value - start.value;
+    const duration = absoluteDuration(start.value, end.value);
     return {
       d: `M ${x0} ${y0} ${arc(x1, y1, duration > PI)}`,
     };

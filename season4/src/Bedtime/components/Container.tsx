@@ -3,7 +3,13 @@ import { StyleSheet, View } from "react-native";
 import Animated, { useDerivedValue } from "react-native-reanimated";
 import { ReText } from "react-native-redash";
 
-import { PADDING, TAU, formatDuration2, radToMinutes } from "../Constants";
+import {
+  PADDING,
+  TAU,
+  formatDuration2,
+  radToMinutes,
+  absoluteDuration,
+} from "../Constants";
 
 import Label from "./Label";
 
@@ -34,10 +40,7 @@ const styles = StyleSheet.create({
 
 const Container = ({ start, end, children }: ContainerProps) => {
   const duration = useDerivedValue(() => {
-    const d =
-      start.value > end.value
-        ? end.value + (TAU - start.value)
-        : end.value - start.value;
+    const d = absoluteDuration(start.value, end.value);
     return formatDuration2(radToMinutes(d));
   });
   return (
