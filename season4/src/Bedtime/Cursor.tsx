@@ -9,15 +9,12 @@ const r = STROKE / 2;
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 interface CursorProps {
-  theta?: Animated.SharedValue<number>;
+  theta: Animated.SharedValue<number>;
 }
 
 const Cursor = ({ theta }: CursorProps) => {
   const animatedProps = useAnimatedProps(() => {
-    const { x, y } = polar2Canvas(
-      { theta: theta ? theta.value : 0, radius: R },
-      CENTER
-    );
+    const { x, y } = polar2Canvas({ theta: theta.value, radius: R }, CENTER);
     return {
       cx: x,
       cy: y,
