@@ -57,8 +57,8 @@ const CircularSlider = ({ start, end }: CircularProps) => {
           </Mask>
         </Defs>
         <Quadrant />
-        <Cursor theta={start} />
-        <Cursor theta={end} />
+        <Cursor pos={startPos} />
+        <Cursor pos={endPos} />
       </Svg>
       <Gesture start={start} end={end} startPos={startPos} endPos={endPos} />
     </View>

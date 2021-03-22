@@ -43,11 +43,12 @@ const Gesture = ({ start, end, startPos, endPos }: GestureProps) => {
     },
     onActive: ({ x, y }, ctx) => {
       const { theta } = canvas2Polar({ x, y }, CENTER);
+      const delta = theta - ctx.offset;
       if (ctx.region === Region.START || ctx.region === Region.MAIN) {
-        start.value = normalize(start.value + theta - ctx.offset);
+        start.value = normalize(start.value + delta);
       }
       if (ctx.region === Region.END || ctx.region === Region.MAIN) {
-        end.value = normalize(end.value + theta - ctx.offset);
+        end.value = normalize(end.value + delta);
       }
       ctx.offset = theta;
     },
