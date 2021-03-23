@@ -61,7 +61,7 @@
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
     "eslint": "^7.9.0",
-    "eslint-config-react-native-wcandillon": "3.3.6",
+    "eslint-config-react-native-wcandillon": "3.5.0",
     "eslint-plugin-reanimated": "1.2.1",
     "eslint-plugin-ts-exports": "1.2.3",
     "expo-cli": "^4.0.17",
