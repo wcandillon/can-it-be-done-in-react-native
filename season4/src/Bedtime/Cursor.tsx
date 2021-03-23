@@ -1,6 +1,6 @@
 import React from "react";
 import Animated, { useAnimatedProps } from "react-native-reanimated";
-import { polar2Canvas, Vector } from "react-native-redash";
+import { Vector } from "react-native-redash";
 import { Circle } from "react-native-svg";
 
 import { STROKE } from "./Constants";
