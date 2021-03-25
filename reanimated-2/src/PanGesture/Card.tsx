@@ -5,7 +5,7 @@ const { width } = Dimensions.get("window");
 const ratio = 228 / 362;
 export const CARD_WIDTH = width * 0.8;
 export const CARD_HEIGHT = CARD_WIDTH * ratio;
-export const assets = [
+const assets = [
   require("./assets/card1.png"),
   require("./assets/card2.png"),
   require("./assets/card3.png"),
@@ -31,15 +31,6 @@ export enum Cards {
   Card5 = 4,
   Card6 = 5,
 }
-
-export const cards = [
-  Cards.Card1,
-  Cards.Card2,
-  Cards.Card3,
-  Cards.Card4,
-  Cards.Card5,
-  Cards.Card6,
-];
 
 interface CardProps {
   card: Cards;

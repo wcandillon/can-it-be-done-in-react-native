@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -8,7 +8,7 @@ import Animated, {
 import { clamp, mix, polar2Canvas } from "react-native-redash";
 import { LinearGradient } from "expo-linear-gradient";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 const SIZE = width / 2;
 const styles = StyleSheet.create({
   container: {

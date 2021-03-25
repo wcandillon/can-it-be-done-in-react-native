@@ -20,4 +20,5 @@ const Points = ({ points, fill }: VertexProps) => {
   );
 };
 
+// eslint-disable-next-line ts-exports/unused-exports
 export default Points;

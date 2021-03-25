@@ -3,7 +3,7 @@ import { TextProps as OriginalTextProps, Text as RNText } from "react-native";
 
 import StyleGuide from "./StyleGuide";
 
-export interface TextProps extends OriginalTextProps {
+interface TextProps extends OriginalTextProps {
   dark?: boolean;
   type?: keyof typeof StyleGuide["typography"];
   children: ReactNode;

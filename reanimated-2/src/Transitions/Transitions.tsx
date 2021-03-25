@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 });
 const origin = { x: -(width / 2 - StyleGuide.spacing * 2), y: 0 };
 
-export const useSpringTransition = (state: boolean | number) => {
+const useSpringTransition = (state: boolean | number) => {
   const value = useSharedValue(0);
   useEffect(() => {
     // eslint-disable-next-line no-nested-ternary

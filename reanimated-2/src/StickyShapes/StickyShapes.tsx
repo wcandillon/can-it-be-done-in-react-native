@@ -38,26 +38,26 @@ const StickyShapes = () => {
       sticking.value *
       interpolate(translateY.value, [0, MAX_HEIGHT], [0, 1], Extrapolate.CLAMP)
   );
-  const onGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent
-  >({
-    onActive: ({ translationY }) => {
-      translateY.value = translationY;
-      if (translateY.value > MAX_HEIGHT) {
-        sticked.value = false;
-      }
-    },
-    onEnd: ({ velocityY: velocity }) => {
-      const dest = snapPoint(translateY.value, velocity, [0, height - SIZE]);
-      translateY.value = withSpring(dest, { velocity }, () => {
-        sticked.value = true;
-        if (dest !== 0) {
-          isOnTop.value = !isOnTop.value;
-          translateY.value = 0;
+  const onGestureEvent = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>(
+    {
+      onActive: ({ translationY }) => {
+        translateY.value = translationY;
+        if (translateY.value > MAX_HEIGHT) {
+          sticked.value = false;
         }
-      });
-    },
-  });
+      },
+      onEnd: ({ velocityY: velocity }) => {
+        const dest = snapPoint(translateY.value, velocity, [0, height - SIZE]);
+        translateY.value = withSpring(dest, { velocity }, () => {
+          sticked.value = true;
+          if (dest !== 0) {
+            isOnTop.value = !isOnTop.value;
+            translateY.value = 0;
+          }
+        });
+      },
+    }
+  );
   const container = useAnimatedStyle(() => ({
     transform: [{ rotate: isOnTop.value ? "0deg" : "180deg" }],
   }));

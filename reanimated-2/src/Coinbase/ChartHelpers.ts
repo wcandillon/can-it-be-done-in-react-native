@@ -31,7 +31,7 @@ const getDomain = (rows: Candle[]): [number, number] => {
   return [Math.min(...values), Math.max(...values)];
 };
 
-export const DOMAIN = getDomain(CANDLES);
+const DOMAIN = getDomain(CANDLES);
 
 export const scaleY = (value: number) => {
   "worklet";

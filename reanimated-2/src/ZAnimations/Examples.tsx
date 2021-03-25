@@ -6,7 +6,7 @@ import { RectButton } from "react-native-gesture-handler";
 
 import { StyleGuide } from "../components";
 import { Examples as ExamplesRoutes } from "../Routes";
-export const examples = [
+const examples = [
   {
     screen: "Logo",
     title: "⚛️ Logo",

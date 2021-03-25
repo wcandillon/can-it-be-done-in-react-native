@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export const LIST_ITEM_HEIGHT = 54;
+const LIST_ITEM_HEIGHT = 54;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",

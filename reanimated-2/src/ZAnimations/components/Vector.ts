@@ -48,11 +48,6 @@ export const rotateZ = (v: Vector3, a: number): Vector3 => {
   };
 };
 
-export const dist = (v: Vector3) => {
-  "worklet";
-  return Math.sqrt(v.x ** 2 + v.y ** 2 + v.z ** 2);
-};
-
 export const dist2d = (v: Vector) => {
   "worklet";
   return Math.sqrt(v.x ** 2 + v.y ** 2);

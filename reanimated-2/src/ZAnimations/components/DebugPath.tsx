@@ -72,4 +72,5 @@ const DebugPath = ({ path, index, stroke, strokeWidth }: DebugPathProps) => {
   );
 };
 
+// eslint-disable-next-line ts-exports/unused-exports
 export default DebugPath;
