@@ -68,6 +68,10 @@ const examples = [
     screen: "Breathe",
     title: "🧘 Breathe",
   },
+  {
+    screen: "Nokia",
+    title: "📱 Nokia",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

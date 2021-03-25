@@ -15,6 +15,7 @@ export type Routes = {
   DVDLogo: undefined;
   PizzaChallenge: undefined;
   Breathe: undefined;
+  Nokia: undefined;
 };
 
 export type Examples = {
