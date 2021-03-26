@@ -3,8 +3,11 @@ import { Dimensions, StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
-export const WIDTH = 50; //160 48x84
-export const HEIGHT = 50; //116
+const SIZE = 8;
+export const WIDTH = SIZE; //160 48x84
+export const HEIGHT = SIZE; //116
+const WIDTH0 = WIDTH - 1;
+const HEIGHT0 = HEIGHT - 1;
 const POINT = width / WIDTH;
 const styles = StyleSheet.create({
   pixel: {
@@ -13,14 +16,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const circle = (x: number, y: number): boolean => {
+const circle = (x2: number, y2: number): boolean => {
   "worklet";
-  const x1 = (WIDTH - 1) / 2;
-  const y1 = (HEIGHT - 1) / 2;
-  const x2 = x;
-  const y2 = y;
+  const x1 = WIDTH0 / 2;
+  const y1 = HEIGHT0 / 2;
   const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-  return dist <= (WIDTH - 1) / 2;
+  return dist <= WIDTH0 / 2;
 };
 
 interface PixelProps {
