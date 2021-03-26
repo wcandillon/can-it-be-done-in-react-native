@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
   screen: {
     flexDirection: "row",
     flexWrap: "wrap",
+    justifyContent: "center",
   },
 });
 const Nokia = () => {

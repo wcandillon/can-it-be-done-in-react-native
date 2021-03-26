@@ -2,13 +2,15 @@ import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
-const { width } = Dimensions.get("window");
-const SIZE = 8;
+export const { width } = Dimensions.get("window");
+export const height = width;
+
+const SIZE = 32;
 export const WIDTH = SIZE; //160 48x84
 export const HEIGHT = SIZE; //116
 const WIDTH0 = WIDTH - 1;
 const HEIGHT0 = HEIGHT - 1;
-const POINT = width / WIDTH;
+const POINT = Math.floor(width / SIZE);
 const styles = StyleSheet.create({
   pixel: {
     width: POINT,
