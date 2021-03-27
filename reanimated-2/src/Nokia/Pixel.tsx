@@ -10,12 +10,12 @@ import {
 export const { width } = Dimensions.get("window");
 export const height = width;
 
-const SIZE = 32;
+const SIZE = 5;
 export const WIDTH = SIZE; //160 48x84
 export const HEIGHT = SIZE; //116
 const WIDTH0 = WIDTH - 1;
 const HEIGHT0 = HEIGHT - 1;
-const CENTER = { x: WIDTH0, y: HEIGHT0 };
+const CENTER = { x: WIDTH0 / 2, y: HEIGHT0 / 2 };
 const POINT = Math.floor(width / SIZE);
 const styles = StyleSheet.create({
   pixel: {
@@ -27,9 +27,7 @@ const styles = StyleSheet.create({
 const circle = (x2: number, y2: number): boolean => {
   "worklet";
   const RADIUS = 2;
-  const x1 = WIDTH0 / 2;
-  const y1 = HEIGHT0 / 2;
-  const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+  const dist = Math.sqrt((x2 - CENTER.x) ** 2 + (y2 - CENTER.y) ** 2);
   return dist <= RADIUS;
 };
 
@@ -45,10 +43,8 @@ const ellipse = (
   b: number = WIDTH0 / 2
 ): boolean => {
   "worklet";
-  const h = WIDTH0 / 2;
-  const k = WIDTH0 / 2;
-  const x2 = (x - h) ** 2;
-  const y2 = (y - k) ** 2;
+  const x2 = (x - CENTER.x) ** 2;
+  const y2 = (y - CENTER.y) ** 2;
   const a2 = a ** 2;
   const b2 = b ** 2;
   return approximates(y2 / b2 + x2 / a2, 1, 0.1);
@@ -69,7 +65,12 @@ export const rotate = (tr: Vector, rotation: number) => {
 
 const Pixel = ({ x, y }: PixelProps) => {
   const style = useAnimatedStyle(() => {
-    const on = ellipse(x, y) || circle(x, y);
+    const r = rotate({ x, y }, Math.PI);
+    const on = x === 0 && y === CENTER.y;
+    if (on) {
+      console.log({ x, y, r });
+    }
+    //ellipse(x, y) || circle(x, y);
     return {
       backgroundColor: on ? "#303031" : "#7D8C73",
     };
