@@ -7,10 +7,12 @@ import {
   Vector,
 } from "react-native-redash";
 
+import { approximates, dist, rotate } from "./Math";
+
 export const { width } = Dimensions.get("window");
 export const height = width;
 
-const SIZE = 5;
+const SIZE = 65;
 export const WIDTH = SIZE; //160 48x84
 export const HEIGHT = SIZE; //116
 const WIDTH0 = WIDTH - 1;
@@ -24,16 +26,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const circle = (x2: number, y2: number): boolean => {
+const circle = (x: number, y: number): boolean => {
   "worklet";
-  const RADIUS = 2;
-  const dist = Math.sqrt((x2 - CENTER.x) ** 2 + (y2 - CENTER.y) ** 2);
-  return dist <= RADIUS;
-};
-
-export const approximates = (a: number, b: number, precision = 0.001) => {
-  "worklet";
-  return Math.abs(a - b) < precision;
+  const RADIUS = 5;
+  return dist({ x, y }, CENTER) <= RADIUS;
 };
 
 const ellipse = (
@@ -47,7 +43,7 @@ const ellipse = (
   const y2 = (y - CENTER.y) ** 2;
   const a2 = a ** 2;
   const b2 = b ** 2;
-  return approximates(y2 / b2 + x2 / a2, 1, 0.1);
+  return approximates(y2 / b2 + x2 / a2, 1, 0.2);
 };
 
 interface PixelProps {
@@ -55,24 +51,24 @@ interface PixelProps {
   y: number;
 }
 
-export const rotate = (tr: Vector, rotation: number) => {
-  "worklet";
-  return {
-    x: tr.x * Math.cos(rotation) - tr.y * Math.sin(rotation),
-    y: tr.x * Math.sin(rotation) + tr.y * Math.cos(rotation),
-  };
-};
-
 const Pixel = ({ x, y }: PixelProps) => {
   const style = useAnimatedStyle(() => {
-    const r = rotate({ x, y }, Math.PI);
-    const on = x === 0 && y === CENTER.y;
-    if (on) {
-      console.log({ x, y, r });
-    }
-    //ellipse(x, y) || circle(x, y);
+    const r1 = cartesian2Canvas(
+      rotate(canvas2Cartesian({ x, y }, CENTER), Math.PI / 3),
+      CENTER
+    );
+    const r2 = cartesian2Canvas(
+      rotate(canvas2Cartesian({ x, y }, CENTER), -Math.PI / 3),
+      CENTER
+    );
     return {
-      backgroundColor: on ? "#303031" : "#7D8C73",
+      backgroundColor:
+        ellipse(x, y) ||
+        circle(x, y) ||
+        ellipse(r1.x, r1.y) ||
+        ellipse(r2.x, r2.y)
+          ? "#303031"
+          : "#7D8C73",
     };
   });
   return <Animated.View style={[styles.pixel, style]} />;

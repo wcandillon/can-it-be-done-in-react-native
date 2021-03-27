@@ -51,7 +51,7 @@
     "eslint": "^7.17.0",
     "eslint-config-react-native-wcandillon": "3.5.0",
     "eslint-plugin-reanimated": "1.2.1",
-    "eslint-plugin-ts-exports": "^1.2.4",
+    "eslint-plugin-ts-exports": "^1.2.5",
     "patch-package": "^6.2.2",
     "ts-unused-exports": "^7.0.1",
     "typescript": "4.1.3"
