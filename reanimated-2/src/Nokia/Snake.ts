@@ -20,18 +20,26 @@ export const useSnake = () => {
       { x: 0, y: 0 },
       { x: 1, y: 0 },
       { x: 2, y: 0 },
+      { x: 3, y: 0 },
     ],
     food: { x: 5, y: 5 },
   });
   useEffect(() => {
     setInterval(() => {
-      const { tail, direction } = snake.value;
+      const {
+        tail: [, ...tail],
+        direction,
+      } = snake.value;
+      const last = tail[tail.length - 1];
       snake.value = {
         ...snake.value,
-        tail: tail.map((v) => ({
-          x: v.x + direction.x,
-          y: v.y + direction.y,
-        })),
+        tail: [
+          ...tail,
+          {
+            x: last.x + direction.x,
+            y: last.y + direction.y,
+          },
+        ],
       };
     }, 500);
   }, [snake]);
