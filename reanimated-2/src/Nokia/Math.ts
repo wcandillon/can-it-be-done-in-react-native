@@ -17,3 +17,11 @@ export const rotate = (tr: Vector, rotation: number) => {
     y: Math.round(tr.x * Math.sin(rotation) + tr.y * Math.cos(rotation)),
   };
 };
+
+export const randomVector = (maxX: number, maxY: number) => {
+  "worklet";
+  return {
+    x: Math.round(Math.random() * maxX),
+    y: Math.round(Math.random() * maxY),
+  };
+};
