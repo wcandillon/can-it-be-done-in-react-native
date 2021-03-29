@@ -16,7 +16,11 @@ export interface Snake {
 export const useSnake = () => {
   const snake = useSharedValue<Snake>({
     direction: RIGHT,
-    tail: [{ x: 0, y: 0 }],
+    tail: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+    ],
     food: { x: 5, y: 5 },
   });
   useEffect(() => {
