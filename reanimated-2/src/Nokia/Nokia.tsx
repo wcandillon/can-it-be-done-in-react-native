@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
 });
 const Nokia = () => {
-  const snake = useSnake();
+  const snake = useSnake(WIDTH, HEIGHT);
   return (
     <View style={styles.phone}>
       <View style={styles.screen}>

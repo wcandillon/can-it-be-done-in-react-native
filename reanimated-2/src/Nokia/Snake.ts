@@ -3,7 +3,6 @@ import { useSharedValue } from "react-native-reanimated";
 import { Vector } from "react-native-redash";
 
 import { randomVector } from "./Math";
-import { HEIGHT, WIDTH } from "./Pixel";
 
 export const UP = { x: 0, y: -1 };
 export const DOWN = { x: 0, y: 1 };
@@ -16,7 +15,7 @@ export interface Snake {
   direction: Vector;
 }
 
-export const useSnake = () => {
+export const useSnake = (width: number, height: number) => {
   const snake = useSharedValue<Snake>({
     direction: RIGHT,
     tail: [
@@ -25,7 +24,7 @@ export const useSnake = () => {
       { x: 2, y: 0 },
       { x: 3, y: 0 },
     ],
-    food: randomVector(WIDTH, HEIGHT),
+    food: randomVector(width, height),
   });
   useEffect(() => {
     setInterval(() => {
@@ -55,9 +54,9 @@ export const useSnake = () => {
               },
             ]
           : newTail,
-        food: foodEaten ? randomVector(WIDTH, HEIGHT) : food,
+        food: foodEaten ? randomVector(width, height) : food,
       };
     }, 500);
-  }, [snake]);
+  }, [height, snake, width]);
   return snake;
 };

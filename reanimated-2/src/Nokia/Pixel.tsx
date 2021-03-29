@@ -8,10 +8,9 @@ export const { width } = Dimensions.get("window");
 export const height = width;
 
 const SIZE = 20;
-export const WIDTH = SIZE; //160 48x84
-export const HEIGHT = SIZE; //116
-const WIDTH0 = WIDTH - 1;
-const HEIGHT0 = HEIGHT - 1;
+export const RATIO = 116 / 160;
+export const WIDTH = SIZE;
+export const HEIGHT = Math.round(SIZE * RATIO);
 const POINT = Math.floor(width / SIZE);
 const styles = StyleSheet.create({
   pixel: {
