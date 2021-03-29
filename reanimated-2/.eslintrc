@@ -7,7 +7,7 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "ts-exports/unused-exports": 2,
+    "ts-exports/unused-exports": 0,
     "reanimated/js-function-in-worklet": 2,
     "react/jsx-sort-props": [2, {
       "noSortAlphabetically": true,
