@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { Button } from "../components";
 
 import Pixel, { HEIGHT, WIDTH } from "./Pixel";
-import { UP, DOWN, LEFT, RIGHT, useSnake } from "./Snake";
+import { UP, DOWN, LEFT, RIGHT } from "./Snake";
 
 const styles = StyleSheet.create({
   phone: {
@@ -19,13 +19,12 @@ const styles = StyleSheet.create({
   },
 });
 const Nokia = () => {
-  const snake = useSnake(WIDTH, HEIGHT);
   return (
     <View style={styles.phone}>
       <View style={styles.screen}>
         {new Array(HEIGHT).fill(0).map((_0, y) =>
           new Array(WIDTH).fill(0).map((_1, x) => {
-            return <Pixel key={`${x}-${y}`} x={x} y={y} snake={snake} />;
+            return <Pixel key={`${x}-${y}`} x={x} y={y} />;
           })
         )}
       </View>

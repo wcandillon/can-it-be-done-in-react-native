@@ -25,3 +25,13 @@ export const randomVector = (maxX: number, maxY: number) => {
     y: Math.round(Math.random() * maxY),
   };
 };
+
+export const eq = (a: Vector, b: Vector) => {
+  "worklet";
+  return a.x === b.x && a.y === b.y;
+};
+
+export const contains = (vecs: Vector[], vec: Vector) => {
+  "worklet";
+  return vecs.filter((v) => eq(v, vec)).length > 0;
+};

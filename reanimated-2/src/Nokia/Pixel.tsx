@@ -7,10 +7,14 @@ import { Snake } from "./Snake";
 export const { width } = Dimensions.get("window");
 export const height = width;
 
-const SIZE = 20;
+const SIZE = 40;
 export const RATIO = 116 / 160;
 export const WIDTH = SIZE;
 export const HEIGHT = Math.round(SIZE * RATIO);
+const CENTER = { x: (WIDTH - 1) / 2, y: (HEIGHT - 1) / 2 };
+const ON = "#303031";
+const OFF = "#7D8C73";
+
 const POINT = Math.floor(width / SIZE);
 const styles = StyleSheet.create({
   pixel: {
@@ -22,16 +26,13 @@ const styles = StyleSheet.create({
 interface PixelProps {
   x: number;
   y: number;
-  snake: Animated.SharedValue<Snake>;
 }
 
-const Pixel = ({ x, y, snake }: PixelProps) => {
+const Pixel = ({ x, y }: PixelProps) => {
   const style = useAnimatedStyle(() => {
-    const on =
-      snake.value.tail.filter((v) => v.x === x && v.y === y).length !== 0 ||
-      (snake.value.food.x === x && snake.value.food.y === y);
+    const on = false;
     return {
-      backgroundColor: on ? "#303031" : "#7D8C73",
+      backgroundColor: on ? OFF : ON,
     };
   });
   return <Animated.View style={[styles.pixel, style]} />;
