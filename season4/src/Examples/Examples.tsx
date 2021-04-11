@@ -48,6 +48,10 @@ const examples = [
     screen: "Bedtime",
     title: "⏰ Bedtime",
   },
+  {
+    screen: "Darkroom",
+    title: "🏞 Darkroom",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
