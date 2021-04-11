@@ -13,31 +13,13 @@ const styles = StyleSheet.create({
 
 const shaders = Shaders.create({
   picture: {
-    vert: GLSL`
-attribute vec2 _p;
-varying vec2 uv;
-uniform float tR;
-uniform vec2 res;
-float r;
-void main() {
-  r = res.x / res.y;
-  gl_Position = vec4(_p,0.0,1.0);
-  uv = .5+.5*_p*vec2(max(r/tR,1.),max(tR/r,1.));
-}`,
     frag: GLSL`
-precision mediump float;
-
-// our texture
-uniform sampler2D source;
-  
-// the texCoords passed in from the vertex shader.
+precision highp float;
 varying vec2 uv;
-  
+uniform sampler2D source;
 void main() {
-    // Look up a color from the texture.
-    gl_FragColor = texture2D(source, uv);
-}
-`,
+  gl_FragColor=texture2D(source, uv);
+}`,
   },
 });
 
@@ -54,8 +36,6 @@ const Picture = ({ source }: PictureProps) => {
         shader={shaders.picture!}
         uniforms={{
           source,
-          tR: Uniform.textureSizeRatio(source),
-          res: Uniform.Resolution,
         }}
       />
     </Surface>
