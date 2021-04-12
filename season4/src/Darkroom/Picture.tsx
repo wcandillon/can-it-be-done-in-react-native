@@ -15,6 +15,9 @@ varying vec2 uv;
 uniform sampler2D source;
 
 uniform float v1;
+uniform float v2;
+uniform float v3;
+uniform float v4;
 uniform float v5;
 
 void main() {
@@ -50,8 +53,11 @@ const Picture = ({ source, v1, v2, v3, v4, v5 }: PictureProps) => {
         shader={shaders.picture!}
         uniforms={{
           source,
-          v1: 1,
-          v5: 0,
+          v1: 1 - v1.value,
+          v2: 1 - v2.value,
+          v3: 1 - v3.value,
+          v4: 1 - v4.value,
+          v5: 1 - v5.value,
         }}
       />
     </Surface>

@@ -34,11 +34,11 @@ export const assets = [
 ];
 
 const Darkroom = () => {
-  const v1 = useSharedValue(0);
-  const v2 = useSharedValue(0.25);
+  const v1 = useSharedValue(1);
+  const v2 = useSharedValue(0.75);
   const v3 = useSharedValue(0.5);
-  const v4 = useSharedValue(0.75);
-  const v5 = useSharedValue(1);
+  const v4 = useSharedValue(0.25);
+  const v5 = useSharedValue(0);
   const STEPS = 4;
   const STEP = WIDTH / STEPS;
   const path = useDerivedValue(() =>
