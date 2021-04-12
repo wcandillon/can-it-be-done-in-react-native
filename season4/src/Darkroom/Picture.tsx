@@ -8,6 +8,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { Path } from "react-native-redash";
 
+import { MATH } from "./Constants";
+
 const { width } = Dimensions.get("window");
 
 const shaders = Shaders.create({
@@ -23,9 +25,11 @@ uniform float v3;
 uniform float v4;
 uniform float v5;
 
+${MATH}
+
 float f(float x) {
   if (x <= 0.25) {
-    return mix(v1, v2, x/0.25);
+    return mix(v1, v2, (x)/0.25);
   } else if (x <= 0.5) {
     return mix(v2, v3, (x-v2)/0.25);
   } else if (x <= 0.75) {
@@ -55,7 +59,8 @@ interface PictureProps {
   v5: Animated.SharedValue<number>;
 }
 
-const Picture = ({ source, v1, v2, v3, v4, v5 }: PictureProps) => {
+const Picture = ({ source, v1, v2, v3, v4, v5, path }: PictureProps) => {
+  console.log(path.value);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const node = useRef<any>(null);
   const aspectRatio = useMemo(() => {
