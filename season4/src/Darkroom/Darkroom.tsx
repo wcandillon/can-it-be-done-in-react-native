@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSharedValue } from "react-native-reanimated";
 
 import Picture from "./Picture";
 import Controls, { PADDING } from "./Controls";
@@ -18,7 +19,6 @@ const styles = StyleSheet.create({
     right: PADDING / 2,
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "rgba(50, 100, 150, 0.5)",
   },
 });
 
@@ -32,17 +32,22 @@ export const assets = [
 ];
 
 const Darkroom = () => {
+  const v1 = useSharedValue(1);
+  const v2 = useSharedValue(0.75);
+  const v3 = useSharedValue(0.5);
+  const v4 = useSharedValue(0.25);
+  const v5 = useSharedValue(0);
   return (
     <SafeAreaView style={styles.container}>
       <Picture source={assets[3]} />
       <View>
         <Controls />
         <View style={styles.cursors}>
-          <Cursor />
-          <Cursor />
-          <Cursor />
-          <Cursor />
-          <Cursor />
+          <Cursor value={v1} />
+          <Cursor value={v2} />
+          <Cursor value={v3} />
+          <Cursor value={v4} />
+          <Cursor value={v5} />
         </View>
       </View>
     </SafeAreaView>
