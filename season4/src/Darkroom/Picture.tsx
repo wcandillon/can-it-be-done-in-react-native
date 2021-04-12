@@ -23,11 +23,29 @@ uniform float v3;
 uniform float v4;
 uniform float v5;
 
+float STEP1 = 0.0;
+float STEP2 = 0.25;
+float STEP3 = 0.5;
+float STEP4 = 0.75;
+float STEP5 = 1.0;
+
+float f(float x) {
+  if (x <= STEP2) {
+    return mix(v1, v2, x);
+  } else if (x <= STEP3) {
+    return mix(v2, v3, x);
+  } else if (x <= STEP4) {
+    return mix(v3, v4, x);
+  } else {
+    return mix(v4, v5, x);
+  }
+}
+
 void main() {
   vec4 c = texture2D(source, uv);
-  float r = mix(v1, v5, c.x);
-  float g = mix(v1, v5, c.y);
-  float b = mix(v1, v5, c.z);
+  float r = f(c.x);
+  float g = f(c.y);
+  float b = f(c.z);
   gl_FragColor=vec4(r, g, b, 1.0);
 }`,
   },
@@ -52,7 +70,7 @@ const Picture = ({ source, v1, v2, v3, v4, v5 }: PictureProps) => {
   }, [source]);
   const update = useCallback(
     (val1: number, val2: number, val3: number, val4: number, val5: number) => {
-      node.current.setDrawProps({
+      node.current?.setDrawProps({
         uniforms: {
           source,
           v1: 1 - val1,
@@ -65,6 +83,7 @@ const Picture = ({ source, v1, v2, v3, v4, v5 }: PictureProps) => {
     },
     [source]
   );
+
   useAnimatedReaction(
     () => v1.value + v2.value + v3.value + v4.value + v5.value,
     () => runOnJS(update)(v1.value, v2.value, v3.value, v4.value, v5.value)
