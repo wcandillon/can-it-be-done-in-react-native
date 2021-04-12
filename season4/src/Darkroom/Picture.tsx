@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Path, serialize } from "react-native-redash";
 
-import { MATH, WIDTH, HEIGHT, shaderPath } from "./Constants";
+import { MATH, shaderPath } from "./Constants";
 
 const { width } = Dimensions.get("window");
 
@@ -54,7 +54,6 @@ interface PictureProps {
 }
 
 const Picture = ({ source, path }: PictureProps) => {
-  console.log(path.value);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const node = useRef<any>(null);
   const aspectRatio = useMemo(() => {

@@ -1,5 +1,5 @@
 import { Dimensions } from "react-native";
-import { Path } from "react-native-redash";
+import { Path, Vector } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
 export const PADDING = 24;
@@ -78,29 +78,31 @@ float cubicBezierYForX(float x, vec2 a, vec2 b, vec2 c, vec2 d) {
   return cubicBezier(t, a.y, b.y, c.y, d.y);
 }`;
 
+const shaderVec = (v: Vector) => [v.x / WIDTH, 1 - v.y / HEIGHT];
+
 export const shaderPath = (p: Path) => ({
   c1: [
-    [p.move.x / WIDTH, p.move.y / HEIGHT],
-    [p.curves[0]!.c1.x / WIDTH, p.curves[0]!.c1.y / HEIGHT],
-    [p.curves[0]!.c2.x / WIDTH, p.curves[0]!.c2.y / HEIGHT],
-    [p.curves[0]!.to.x / WIDTH, p.curves[0]!.to.y / HEIGHT],
+    shaderVec(p.move),
+    shaderVec(p.curves[0]!.c1),
+    shaderVec(p.curves[0]!.c2),
+    shaderVec(p.curves[0]!.to),
   ],
   c2: [
-    [p.curves[0]!.to.x / WIDTH, p.curves[0]!.to.y / HEIGHT],
-    [p.curves[1]!.c1.x / WIDTH, p.curves[1]!.c1.y / HEIGHT],
-    [p.curves[1]!.c2.x / WIDTH, p.curves[1]!.c2.y / HEIGHT],
-    [p.curves[1]!.to.x / WIDTH, p.curves[1]!.to.y / HEIGHT],
+    shaderVec(p.curves[0]!.to),
+    shaderVec(p.curves[1]!.c1),
+    shaderVec(p.curves[1]!.c2),
+    shaderVec(p.curves[1]!.to),
   ],
   c3: [
-    [p.curves[1]!.to.x / WIDTH, p.curves[1]!.to.y / HEIGHT],
-    [p.curves[2]!.c1.x / WIDTH, p.curves[2]!.c1.y / HEIGHT],
-    [p.curves[2]!.c2.x / WIDTH, p.curves[2]!.c2.y / HEIGHT],
-    [p.curves[2]!.to.x / WIDTH, p.curves[2]!.to.y / HEIGHT],
+    shaderVec(p.curves[1]!.to),
+    shaderVec(p.curves[2]!.c1),
+    shaderVec(p.curves[2]!.c2),
+    shaderVec(p.curves[2]!.to),
   ],
   c4: [
-    [p.curves[2]!.to.x / WIDTH, p.curves[2]!.to.y / HEIGHT],
-    [p.curves[3]!.c1.x / WIDTH, p.curves[3]!.c1.y / HEIGHT],
-    [p.curves[3]!.c2.x / WIDTH, p.curves[3]!.c2.y / HEIGHT],
-    [p.curves[3]!.to.x / WIDTH, p.curves[3]!.to.y / HEIGHT],
+    shaderVec(p.curves[2]!.to),
+    shaderVec(p.curves[3]!.c1),
+    shaderVec(p.curves[3]!.c2),
+    shaderVec(p.curves[3]!.to),
   ],
 });
