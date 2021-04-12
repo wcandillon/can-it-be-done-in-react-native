@@ -1,4 +1,5 @@
 import { Dimensions } from "react-native";
+import { Path } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
 export const PADDING = 24;
@@ -72,6 +73,34 @@ float cubicBezierYForX(float x, vec2 a, vec2 b, vec2 c, vec2 d) {
   float pb = 3.0 * a.x - 6.0 * b.x + 3.0 * c.x;
   float pc = -3.0 * a.x + 3.0 * b.x;
   float pd = a.x - x;
-  float t = solveCubic(pa, pb, pc, pd)[0];
+  vec4 roots = solveCubic(pa, pb, pc, pd);
+  float t = roots[0];
   return cubicBezier(t, a.y, b.y, c.y, d.y);
 }`;
+
+export const shaderPath = (p: Path) => ({
+  c1: [
+    [p.move.x / WIDTH, p.move.y / HEIGHT],
+    [p.curves[0]!.c1.x / WIDTH, p.curves[0]!.c1.y / HEIGHT],
+    [p.curves[0]!.c2.x / WIDTH, p.curves[0]!.c2.y / HEIGHT],
+    [p.curves[0]!.to.x / WIDTH, p.curves[0]!.to.y / HEIGHT],
+  ],
+  c2: [
+    [p.curves[0]!.to.x / WIDTH, p.curves[0]!.to.y / HEIGHT],
+    [p.curves[1]!.c1.x / WIDTH, p.curves[1]!.c1.y / HEIGHT],
+    [p.curves[1]!.c2.x / WIDTH, p.curves[1]!.c2.y / HEIGHT],
+    [p.curves[1]!.to.x / WIDTH, p.curves[1]!.to.y / HEIGHT],
+  ],
+  c3: [
+    [p.curves[1]!.to.x / WIDTH, p.curves[1]!.to.y / HEIGHT],
+    [p.curves[2]!.c1.x / WIDTH, p.curves[2]!.c1.y / HEIGHT],
+    [p.curves[2]!.c2.x / WIDTH, p.curves[2]!.c2.y / HEIGHT],
+    [p.curves[2]!.to.x / WIDTH, p.curves[2]!.to.y / HEIGHT],
+  ],
+  c4: [
+    [p.curves[2]!.to.x / WIDTH, p.curves[2]!.to.y / HEIGHT],
+    [p.curves[3]!.c1.x / WIDTH, p.curves[3]!.c1.y / HEIGHT],
+    [p.curves[3]!.c2.x / WIDTH, p.curves[3]!.c2.y / HEIGHT],
+    [p.curves[3]!.to.x / WIDTH, p.curves[3]!.to.y / HEIGHT],
+  ],
+});

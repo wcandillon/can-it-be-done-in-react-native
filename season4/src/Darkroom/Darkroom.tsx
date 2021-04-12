@@ -53,15 +53,7 @@ const Darkroom = () => {
   );
   return (
     <SafeAreaView style={styles.container}>
-      <Picture
-        source={assets[3]}
-        v1={v1}
-        v2={v2}
-        v3={v3}
-        v4={v4}
-        v5={v5}
-        path={path}
-      />
+      <Picture source={assets[3]} path={path} />
       <View>
         <Controls path={path} />
         <View style={styles.cursors}>

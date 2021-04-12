@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Path, serialize } from "react-native-redash";
 
-import { MATH } from "./Constants";
+import { MATH, WIDTH, HEIGHT, shaderPath } from "./Constants";
 
 const { width } = Dimensions.get("window");
 
@@ -64,30 +64,7 @@ const Picture = ({ source, path }: PictureProps) => {
   const uniforms = useCallback(
     (p: Path) => ({
       source,
-      c1: [
-        [p.move.x, p.move.y],
-        [p.curves[0]!.c1.x, p.curves[0]!.c1.y],
-        [p.curves[0]!.c2.x, p.curves[0]!.c2.y],
-        [p.curves[0]!.to.x, p.curves[0]!.to.y],
-      ],
-      c2: [
-        [p.curves[0]!.to.x, p.curves[0]!.to.y],
-        [p.curves[1]!.c1.x, p.curves[1]!.c1.y],
-        [p.curves[1]!.c2.x, p.curves[1]!.c2.y],
-        [p.curves[1]!.to.x, p.curves[1]!.to.y],
-      ],
-      c3: [
-        [p.curves[1]!.to.x, p.curves[1]!.to.y],
-        [p.curves[2]!.c1.x, p.curves[2]!.c1.y],
-        [p.curves[2]!.c2.x, p.curves[2]!.c2.y],
-        [p.curves[2]!.to.x, p.curves[2]!.to.y],
-      ],
-      c4: [
-        [p.curves[2]!.to.x, p.curves[2]!.to.y],
-        [p.curves[3]!.c1.x, p.curves[3]!.c1.y],
-        [p.curves[3]!.c2.x, p.curves[3]!.c2.y],
-        [p.curves[3]!.to.x, p.curves[3]!.to.y],
-      ],
+      ...shaderPath(p),
     }),
     [source]
   );
