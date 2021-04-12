@@ -4,12 +4,13 @@ import { clamp } from "react-native-redash";
 import Svg, { Line } from "react-native-svg";
 
 const { width } = Dimensions.get("window");
-const PADDING = 16;
+export const PADDING = 16;
 const WIDTH = width - PADDING * 2;
 const HEIGHT = 200;
 const STEPS = 4;
 const STEP = WIDTH / STEPS;
 const STROKE = 1;
+
 const Controls = () => {
   return (
     <Svg width={width} height={HEIGHT}>
