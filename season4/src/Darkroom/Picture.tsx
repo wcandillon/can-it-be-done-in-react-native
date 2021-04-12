@@ -13,9 +13,16 @@ const shaders = Shaders.create({
 precision highp float;
 varying vec2 uv;
 uniform sampler2D source;
+
+uniform float v1;
+uniform float v5;
+
 void main() {
   vec4 c = texture2D(source, uv);
-  gl_FragColor=vec4(c.x, c.y, c.z, 1.0);
+  float r = mix(v1, v5, c.x);
+  float g = mix(v1, v5, c.y);
+  float b = mix(v1, v5, c.z);
+  gl_FragColor=vec4(r, g, b, 1.0);
 }`,
   },
 });
@@ -23,9 +30,14 @@ void main() {
 interface PictureProps {
   source: ReturnType<typeof require>;
   path: Animated.DerivedValue<Path>;
+  v1: Animated.SharedValue<number>;
+  v2: Animated.SharedValue<number>;
+  v3: Animated.SharedValue<number>;
+  v4: Animated.SharedValue<number>;
+  v5: Animated.SharedValue<number>;
 }
 
-const Picture = ({ source }: PictureProps) => {
+const Picture = ({ source, v1, v2, v3, v4, v5 }: PictureProps) => {
   const node = useRef<Node>(null);
   const aspectRatio = useMemo(() => {
     const dim = Image.resolveAssetSource(source);
@@ -38,6 +50,8 @@ const Picture = ({ source }: PictureProps) => {
         shader={shaders.picture!}
         uniforms={{
           source,
+          v1: 1,
+          v5: 0,
         }}
       />
     </Surface>

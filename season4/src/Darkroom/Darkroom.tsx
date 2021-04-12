@@ -34,11 +34,11 @@ export const assets = [
 ];
 
 const Darkroom = () => {
-  const v1 = useSharedValue(1);
-  const v2 = useSharedValue(0.75);
+  const v1 = useSharedValue(0);
+  const v2 = useSharedValue(0.25);
   const v3 = useSharedValue(0.5);
-  const v4 = useSharedValue(0.25);
-  const v5 = useSharedValue(0);
+  const v4 = useSharedValue(0.75);
+  const v5 = useSharedValue(1);
   const STEPS = 4;
   const STEP = WIDTH / STEPS;
   const path = useDerivedValue(() =>
@@ -53,7 +53,15 @@ const Darkroom = () => {
   );
   return (
     <SafeAreaView style={styles.container}>
-      <Picture source={assets[3]} path={path} />
+      <Picture
+        source={assets[3]}
+        v1={v1}
+        v2={v2}
+        v3={v3}
+        v4={v4}
+        v5={v5}
+        path={path}
+      />
       <View>
         <Controls path={path} />
         <View style={styles.cursors}>
