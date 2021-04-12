@@ -23,21 +23,15 @@ uniform float v3;
 uniform float v4;
 uniform float v5;
 
-float STEP1 = 0.0;
-float STEP2 = 0.25;
-float STEP3 = 0.5;
-float STEP4 = 0.75;
-float STEP5 = 1.0;
-
 float f(float x) {
-  if (x <= STEP2) {
-    return mix(v1, v2, x);
-  } else if (x <= STEP3) {
-    return mix(v2, v3, x);
-  } else if (x <= STEP4) {
-    return mix(v3, v4, x);
+  if (x <= 0.25) {
+    return mix(v1, v2, x/0.25);
+  } else if (x <= 0.5) {
+    return mix(v2, v3, (x-v2)/0.25);
+  } else if (x <= 0.75) {
+    return mix(v3, v4, (x-v3)/0.25);
   } else {
-    return mix(v4, v5, x);
+    return mix(v4, v5, (x-v4)/0.25);
   }
 }
 
