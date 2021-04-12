@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDerivedValue, useSharedValue } from "react-native-reanimated";
-import { clamp, curveLines } from "react-native-redash";
+import { curveLines } from "react-native-redash";
 
 import Picture from "./Picture";
 import Controls from "./Controls";
