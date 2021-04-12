@@ -6,7 +6,7 @@ import Animated, {
   runOnJS,
   useAnimatedReaction,
 } from "react-native-reanimated";
-import { Path } from "react-native-redash";
+import { Path, serialize } from "react-native-redash";
 
 import { MATH } from "./Constants";
 
@@ -19,23 +19,22 @@ precision highp float;
 varying vec2 uv;
 uniform sampler2D source;
 
-uniform float v1;
-uniform float v2;
-uniform float v3;
-uniform float v4;
-uniform float v5;
+uniform vec2 c1[4];
+uniform vec2 c2[8];
+uniform vec2 c3[8];
+uniform vec2 c4[8];
 
 ${MATH}
 
 float f(float x) {
   if (x <= 0.25) {
-    return mix(v1, v2, (x)/0.25);
+    return cubicBezierYForX(x, c1[0], c1[1], c1[2], c1[3]);
   } else if (x <= 0.5) {
-    return mix(v2, v3, (x-v2)/0.25);
+    return cubicBezierYForX(x, c2[0], c2[1], c2[2], c2[3]);
   } else if (x <= 0.75) {
-    return mix(v3, v4, (x-v3)/0.25);
+    return cubicBezierYForX(x, c3[0], c3[1], c3[2], c3[3]);
   } else {
-    return mix(v4, v5, (x-v4)/0.25);
+    return cubicBezierYForX(x, c4[0], c4[1], c4[2], c4[3]);
   }
 }
 
@@ -52,14 +51,9 @@ void main() {
 interface PictureProps {
   source: ReturnType<typeof require>;
   path: Animated.DerivedValue<Path>;
-  v1: Animated.SharedValue<number>;
-  v2: Animated.SharedValue<number>;
-  v3: Animated.SharedValue<number>;
-  v4: Animated.SharedValue<number>;
-  v5: Animated.SharedValue<number>;
 }
 
-const Picture = ({ source, v1, v2, v3, v4, v5, path }: PictureProps) => {
+const Picture = ({ source, path }: PictureProps) => {
   console.log(path.value);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const node = useRef<any>(null);
@@ -68,35 +62,54 @@ const Picture = ({ source, v1, v2, v3, v4, v5, path }: PictureProps) => {
     return dim.height / dim.width;
   }, [source]);
   const uniforms = useCallback(
-    (val1: number, val2: number, val3: number, val4: number, val5: number) => ({
+    (p: Path) => ({
       source,
-      v1: 1 - val1,
-      v2: 1 - val2,
-      v3: 1 - val3,
-      v4: 1 - val4,
-      v5: 1 - val5,
+      c1: [
+        [p.move.x, p.move.y],
+        [p.curves[0]!.c1.x, p.curves[0]!.c1.y],
+        [p.curves[0]!.c2.x, p.curves[0]!.c2.y],
+        [p.curves[0]!.to.x, p.curves[0]!.to.y],
+      ],
+      c2: [
+        [p.curves[0]!.to.x, p.curves[0]!.to.y],
+        [p.curves[1]!.c1.x, p.curves[1]!.c1.y],
+        [p.curves[1]!.c2.x, p.curves[1]!.c2.y],
+        [p.curves[1]!.to.x, p.curves[1]!.to.y],
+      ],
+      c3: [
+        [p.curves[1]!.to.x, p.curves[1]!.to.y],
+        [p.curves[2]!.c1.x, p.curves[2]!.c1.y],
+        [p.curves[2]!.c2.x, p.curves[2]!.c2.y],
+        [p.curves[2]!.to.x, p.curves[2]!.to.y],
+      ],
+      c4: [
+        [p.curves[2]!.to.x, p.curves[2]!.to.y],
+        [p.curves[3]!.c1.x, p.curves[3]!.c1.y],
+        [p.curves[3]!.c2.x, p.curves[3]!.c2.y],
+        [p.curves[3]!.to.x, p.curves[3]!.to.y],
+      ],
     }),
     [source]
   );
   const update = useCallback(
-    (val1: number, val2: number, val3: number, val4: number, val5: number) => {
+    (p: Path) => {
       node.current?.setDrawProps({
-        uniforms: uniforms(val1, val2, val3, val4, val5),
+        uniforms: uniforms(p),
       });
     },
     [uniforms]
   );
 
   useAnimatedReaction(
-    () => v1.value + v2.value + v3.value + v4.value + v5.value,
-    () => runOnJS(update)(v1.value, v2.value, v3.value, v4.value, v5.value)
+    () => serialize(path.value),
+    () => runOnJS(update)(path.value)
   );
   return (
     <Surface style={{ width, height: width * aspectRatio }}>
       <Node
         ref={node}
         shader={shaders.picture!}
-        uniforms={uniforms(v1.value, v2.value, v3.value, v4.value, v5.value)}
+        uniforms={uniforms(path.value)}
       />
     </Surface>
   );
