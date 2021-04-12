@@ -4,12 +4,10 @@ import Animated, { useAnimatedProps } from "react-native-reanimated";
 import { clamp, serialize, Path as RNPath } from "react-native-redash";
 import Svg, { Line, Path } from "react-native-svg";
 
-import { HEIGHT, PADDING, WIDTH } from "./Constants";
+import { HEIGHT, PADDING, STROKE, WIDTH } from "./Constants";
 
 const { width } = Dimensions.get("window");
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-
-const STROKE = 1;
 
 interface CursorProps {
   path: Animated.DerivedValue<RNPath>;
@@ -41,6 +39,15 @@ const Controls = ({ path }: CursorProps) => {
             />
           );
         })}
+      <Line
+        x1={PADDING + clamp(STEP * 0, STROKE / 2, WIDTH - STROKE / 2)}
+        y1={HEIGHT}
+        x2={PADDING + clamp(STEP * 4, STROKE / 2, WIDTH - STROKE / 2)}
+        y2={0}
+        stroke="grey"
+        strokeWidth={STROKE}
+        strokeDasharray="10 10"
+      />
       <AnimatedPath
         animatedProps={animatedProps}
         stroke="white"
