@@ -10,13 +10,13 @@ import Animated, {
 } from "react-native-reanimated";
 import { clamp } from "react-native-redash";
 
-import { HEIGHT } from "./Constants";
+import { HEIGHT, PADDING } from "./Constants";
 
-const SIZE = 16;
+const SIZE = PADDING;
 
 const styles = StyleSheet.create({
   container: {
-    width: SIZE,
+    alignItems: "center",
   },
   cursor: {
     width: SIZE,
