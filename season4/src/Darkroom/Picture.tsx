@@ -67,20 +67,24 @@ const Picture = ({ source, v1, v2, v3, v4, v5, path }: PictureProps) => {
     const dim = Image.resolveAssetSource(source);
     return dim.height / dim.width;
   }, [source]);
+  const uniforms = useCallback(
+    (val1: number, val2: number, val3: number, val4: number, val5: number) => ({
+      source,
+      v1: 1 - val1,
+      v2: 1 - val2,
+      v3: 1 - val3,
+      v4: 1 - val4,
+      v5: 1 - val5,
+    }),
+    [source]
+  );
   const update = useCallback(
     (val1: number, val2: number, val3: number, val4: number, val5: number) => {
       node.current?.setDrawProps({
-        uniforms: {
-          source,
-          v1: 1 - val1,
-          v2: 1 - val2,
-          v3: 1 - val3,
-          v4: 1 - val4,
-          v5: 1 - val5,
-        },
+        uniforms: uniforms(val1, val2, val3, val4, val5),
       });
     },
-    [source]
+    [uniforms]
   );
 
   useAnimatedReaction(
@@ -92,14 +96,7 @@ const Picture = ({ source, v1, v2, v3, v4, v5, path }: PictureProps) => {
       <Node
         ref={node}
         shader={shaders.picture!}
-        uniforms={{
-          source,
-          v1: 1 - v1.value,
-          v2: 1 - v2.value,
-          v3: 1 - v3.value,
-          v4: 1 - v4.value,
-          v5: 1 - v5.value,
-        }}
+        uniforms={uniforms(v1.value, v2.value, v3.value, v4.value, v5.value)}
       />
     </Surface>
   );
