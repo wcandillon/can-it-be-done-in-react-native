@@ -1,11 +1,14 @@
+/* eslint-disable reanimated/js-function-in-worklet */
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSharedValue } from "react-native-reanimated";
+import { useDerivedValue, useSharedValue } from "react-native-reanimated";
+import { clamp, curveLines } from "react-native-redash";
 
 import Picture from "./Picture";
-import Controls, { PADDING } from "./Controls";
+import Controls from "./Controls";
 import Cursor from "./Cursor";
+import { HEIGHT, WIDTH, PADDING } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -37,11 +40,23 @@ const Darkroom = () => {
   const v3 = useSharedValue(0.5);
   const v4 = useSharedValue(0.25);
   const v5 = useSharedValue(0);
+  const STEPS = 4;
+  const STEP = WIDTH / STEPS;
+  const path = useDerivedValue(() =>
+    curveLines(
+      [v1, v2, v3, v4, v5].map((value, i) => ({
+        x: PADDING + clamp(STEP * i, PADDING / 2, WIDTH - PADDING / 2),
+        y: value.value * HEIGHT,
+      })),
+      0.1,
+      "complex"
+    )
+  );
   return (
     <SafeAreaView style={styles.container}>
       <Picture source={assets[3]} />
       <View>
-        <Controls />
+        <Controls path={path} />
         <View style={styles.cursors}>
           <Cursor value={v1} />
           <Cursor value={v2} />

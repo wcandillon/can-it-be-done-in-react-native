@@ -10,6 +10,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { clamp } from "react-native-redash";
 
+import { HEIGHT } from "./Constants";
+
 const SIZE = 16;
 
 const styles = StyleSheet.create({
@@ -39,11 +41,11 @@ const Cursor = ({ value }: CursorProps) => {
       ctx.offset = value.value;
     },
     onActive: ({ translationY }, ctx) => {
-      value.value = clamp(ctx.offset + translationY / 200, 0, 1);
+      value.value = clamp(ctx.offset + translationY / HEIGHT, 0, 1);
     },
   });
   const cursor = useAnimatedStyle(() => ({
-    transform: [{ translateY: value.value * 200 }],
+    transform: [{ translateY: value.value * HEIGHT - SIZE / 2 }],
   }));
   return (
     <View style={styles.container}>
