@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import { Surface } from "gl-react-expo";
-import { Node, Shaders, GLSL, Uniform } from "gl-react";
+import { Node, Shaders, GLSL } from "gl-react";
 
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
@@ -18,7 +18,8 @@ precision highp float;
 varying vec2 uv;
 uniform sampler2D source;
 void main() {
-  gl_FragColor=texture2D(source, uv);
+  vec4 c = texture2D(source, uv);
+  gl_FragColor=vec4(c.x, c.y, c.z, 1.0);
 }`,
   },
 });
