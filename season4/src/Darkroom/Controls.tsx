@@ -1,7 +1,7 @@
 import React from "react";
 import { Dimensions } from "react-native";
 import Animated, { useAnimatedProps } from "react-native-reanimated";
-import { clamp, serialize, Path as RNPath } from "react-native-redash";
+import { serialize, Path as RNPath } from "react-native-redash";
 import Svg, { Line, Path } from "react-native-svg";
 
 import { HEIGHT, PADDING, STROKE, WIDTH } from "./Constants";
@@ -26,7 +26,7 @@ const Controls = ({ path }: CursorProps) => {
       {Array.from({ length: STEPS + 1 })
         .fill(0)
         .map((_, i) => {
-          const x = PADDING + clamp(STEP * i, STROKE / 2, WIDTH - STROKE / 2);
+          const x = PADDING + STEP * i;
           return (
             <Line
               key={i}
@@ -40,9 +40,9 @@ const Controls = ({ path }: CursorProps) => {
           );
         })}
       <Line
-        x1={PADDING + clamp(STEP * 0, STROKE / 2, WIDTH - STROKE / 2)}
+        x1={PADDING}
         y1={HEIGHT}
-        x2={PADDING + clamp(STEP * 4, STROKE / 2, WIDTH - STROKE / 2)}
+        x2={PADDING + WIDTH}
         y2={0}
         stroke="grey"
         strokeWidth={STROKE}

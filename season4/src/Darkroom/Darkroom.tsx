@@ -7,7 +7,7 @@ import { clamp, curveLines } from "react-native-redash";
 import Picture from "./Picture";
 import Controls from "./Controls";
 import Cursor from "./Cursor";
-import { HEIGHT, WIDTH, PADDING, STROKE } from "./Constants";
+import { HEIGHT, WIDTH, PADDING } from "./Constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -44,7 +44,7 @@ const Darkroom = () => {
   const path = useDerivedValue(() =>
     curveLines(
       [v1, v2, v3, v4, v5].map((value, i) => ({
-        x: PADDING + clamp(STEP * i, STROKE / 2, WIDTH - STROKE / 2),
+        x: PADDING + STEP * i,
         y: value.value * HEIGHT,
       })),
       0.1,
