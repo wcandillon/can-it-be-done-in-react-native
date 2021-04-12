@@ -1,15 +1,9 @@
-import React, { useRef } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import React, { useMemo, useRef } from "react";
+import { Dimensions, Image } from "react-native";
 import { Surface } from "gl-react-expo";
 import { Node, Shaders, GLSL } from "gl-react";
 
 const { width } = Dimensions.get("window");
-const styles = StyleSheet.create({
-  container: {
-    height: width,
-    width: width,
-  },
-});
 
 const shaders = Shaders.create({
   picture: {
@@ -30,8 +24,12 @@ interface PictureProps {
 
 const Picture = ({ source }: PictureProps) => {
   const node = useRef<Node>(null);
+  const aspectRatio = useMemo(() => {
+    const dim = Image.resolveAssetSource(source);
+    return dim.height / dim.width;
+  }, [source]);
   return (
-    <Surface style={styles.container}>
+    <Surface style={{ width, height: width * aspectRatio }}>
       <Node
         ref={node}
         shader={shaders.picture!}

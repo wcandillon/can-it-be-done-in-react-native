@@ -1,7 +1,15 @@
 import React from "react";
-import { View } from "react-native";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Picture from "./Picture";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+  },
+});
 
 export const assets = [
   require("./assets/1.jpg"),
@@ -14,9 +22,9 @@ export const assets = [
 
 const Darkroom = () => {
   return (
-    <View>
-      <Picture source={assets[0]} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Picture source={assets[3]} />
+    </SafeAreaView>
   );
 };
 
