@@ -1,8 +1,11 @@
-import React, { useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { Dimensions, Image } from "react-native";
 import { Surface } from "gl-react-expo";
 import { Node, Shaders, GLSL } from "gl-react";
-import Animated from "react-native-reanimated";
+import Animated, {
+  runOnJS,
+  useAnimatedReaction,
+} from "react-native-reanimated";
 import { Path } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
@@ -41,11 +44,31 @@ interface PictureProps {
 }
 
 const Picture = ({ source, v1, v2, v3, v4, v5 }: PictureProps) => {
-  const node = useRef<Node>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const node = useRef<any>(null);
   const aspectRatio = useMemo(() => {
     const dim = Image.resolveAssetSource(source);
     return dim.height / dim.width;
   }, [source]);
+  const update = useCallback(
+    (val1: number, val2: number, val3: number, val4: number, val5: number) => {
+      node.current.setDrawProps({
+        uniforms: {
+          source,
+          v1: 1 - val1,
+          v2: 1 - val2,
+          v3: 1 - val3,
+          v4: 1 - val4,
+          v5: 1 - val5,
+        },
+      });
+    },
+    [source]
+  );
+  useAnimatedReaction(
+    () => v1.value + v2.value + v3.value + v4.value + v5.value,
+    () => runOnJS(update)(v1.value, v2.value, v3.value, v4.value, v5.value)
+  );
   return (
     <Surface style={{ width, height: width * aspectRatio }}>
       <Node
