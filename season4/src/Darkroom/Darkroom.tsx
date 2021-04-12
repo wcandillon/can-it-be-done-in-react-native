@@ -3,11 +3,13 @@ import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Picture from "./Picture";
+import Controls from "./Controls";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+    justifyContent: "space-evenly",
   },
 });
 
@@ -24,6 +26,7 @@ const Darkroom = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Picture source={assets[3]} />
+      <Controls />
     </SafeAreaView>
   );
 };
