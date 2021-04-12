@@ -1,4 +1,3 @@
-/* eslint-disable reanimated/js-function-in-worklet */
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -54,7 +53,7 @@ const Darkroom = () => {
   );
   return (
     <SafeAreaView style={styles.container}>
-      <Picture source={assets[3]} />
+      <Picture source={assets[3]} path={path} />
       <View>
         <Controls path={path} />
         <View style={styles.cursors}>

@@ -2,6 +2,8 @@ import React, { useMemo, useRef } from "react";
 import { Dimensions, Image } from "react-native";
 import { Surface } from "gl-react-expo";
 import { Node, Shaders, GLSL } from "gl-react";
+import Animated from "react-native-reanimated";
+import { Path } from "react-native-redash";
 
 const { width } = Dimensions.get("window");
 
@@ -20,6 +22,7 @@ void main() {
 
 interface PictureProps {
   source: ReturnType<typeof require>;
+  path: Animated.DerivedValue<Path>;
 }
 
 const Picture = ({ source }: PictureProps) => {
