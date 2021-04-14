@@ -9,18 +9,11 @@ import { HEIGHT, PADDING, STROKE, WIDTH } from "./Constants";
 const { width } = Dimensions.get("window");
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-interface CursorProps {
-  path: Animated.DerivedValue<RNPath>;
-}
+interface CursorProps {}
 
-const Controls = ({ path }: CursorProps) => {
-  const STEPS = path.value.curves.length;
+const Controls = ({}: CursorProps) => {
+  const STEPS = 4;
   const STEP = WIDTH / STEPS;
-  const animatedProps = useAnimatedProps(() => {
-    return {
-      d: serialize(path.value),
-    };
-  });
   return (
     <Svg width={width} height={HEIGHT}>
       {Array.from({ length: STEPS + 1 })
@@ -47,11 +40,6 @@ const Controls = ({ path }: CursorProps) => {
         stroke="grey"
         strokeWidth={STROKE}
         strokeDasharray="10 10"
-      />
-      <AnimatedPath
-        animatedProps={animatedProps}
-        stroke="white"
-        strokeWidth={STROKE}
       />
     </Svg>
   );

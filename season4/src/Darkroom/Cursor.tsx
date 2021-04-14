@@ -28,30 +28,12 @@ const styles = StyleSheet.create({
   },
 });
 
-interface CursorProps {
-  value: Animated.SharedValue<number>;
-}
+interface CursorProps {}
 
-const Cursor = ({ value }: CursorProps) => {
-  const onGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    { offset: number }
-  >({
-    onStart: (_, ctx) => {
-      ctx.offset = value.value;
-    },
-    onActive: ({ translationY }, ctx) => {
-      value.value = clamp(ctx.offset + translationY / HEIGHT, 0, 1);
-    },
-  });
-  const cursor = useAnimatedStyle(() => ({
-    transform: [{ translateY: value.value * HEIGHT - SIZE / 2 }],
-  }));
+const Cursor = ({}: CursorProps) => {
   return (
     <View style={styles.container}>
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={[styles.cursor, cursor]} />
-      </PanGestureHandler>
+      <View style={[styles.cursor]} />
     </View>
   );
 };

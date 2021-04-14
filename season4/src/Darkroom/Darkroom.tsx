@@ -34,34 +34,17 @@ export const assets = [
 ];
 
 const Darkroom = () => {
-  const v1 = useSharedValue(1);
-  const v2 = useSharedValue(0.75);
-  const v3 = useSharedValue(0.5);
-  const v4 = useSharedValue(0.25);
-  const v5 = useSharedValue(0);
-  const STEPS = 4;
-  const STEP = WIDTH / STEPS;
-  const path = useDerivedValue(() =>
-    curveLines(
-      [v1, v2, v3, v4, v5].map((value, i) => ({
-        x: PADDING + STEP * i,
-        y: value.value * HEIGHT,
-      })),
-      0.1,
-      "complex"
-    )
-  );
   return (
     <SafeAreaView style={styles.container}>
-      <Picture source={assets[3]} path={path} />
+      <Picture source={assets[3]} />
       <View>
-        <Controls path={path} />
+        <Controls />
         <View style={styles.cursors}>
-          <Cursor value={v1} />
-          <Cursor value={v2} />
-          <Cursor value={v3} />
-          <Cursor value={v4} />
-          <Cursor value={v5} />
+          <Cursor />
+          <Cursor />
+          <Cursor />
+          <Cursor />
+          <Cursor />
         </View>
       </View>
     </SafeAreaView>
