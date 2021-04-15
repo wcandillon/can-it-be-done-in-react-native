@@ -10,4 +10,5 @@ export type Routes = {
   Chess: undefined;
   ColorSelection: undefined;
   Bedtime: undefined;
+  Darkroom: undefined;
 };

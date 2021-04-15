@@ -42,10 +42,8 @@ const Cursor = ({ index, translation }: CursorProps) => {
     },
     onActive: (event) => {
       translation.x.value = event.x;
-      translation.y.value = getYForX(
-        graphs[index.value].data.path,
-        translation.x.value
-      );
+      translation.y.value =
+        getYForX(graphs[index.value].data.path, translation.x.value) || 0;
     },
     onEnd: () => {
       isActive.value = false;
