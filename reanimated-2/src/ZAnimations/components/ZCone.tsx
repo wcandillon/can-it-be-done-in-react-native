@@ -1,5 +1,4 @@
 import React from "react";
-import { processColor } from "react-native";
 import Animated, {
   useAnimatedProps,
   useDerivedValue,
@@ -26,8 +25,8 @@ interface ZConeProps {
 // https://en.wikipedia.org/wiki/Conjugate_diameters
 // https://en.wikipedia.org/wiki/Ellipse#Theorem_of_Apollonios_on_conjugate_diameters
 const ZCone = ({ r, length, base: baseColor, body: bodyColor }: ZConeProps) => {
-  const co1 = processColor(baseColor);
-  const co2 = processColor(bodyColor);
+  const co1 = baseColor;
+  const co2 = bodyColor;
   const { camera, canvas } = useZSvg();
   const path = createPath3({ x: -r, y: 0, z: 0 });
   addArc3(path, { x: -r, y: r, z: 0 }, { x: 0, y: r, z: 0 });

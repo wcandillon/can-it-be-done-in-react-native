@@ -1,4 +1,3 @@
-/* eslint-disable ts-exports/unused-exports */
 import { Vector3 } from "./Vector";
 
 export interface Curve3 {

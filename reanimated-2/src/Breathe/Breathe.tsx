@@ -33,7 +33,7 @@ const Breathe = () => {
   }, [goesDown, progress]);
   const style = useAnimatedStyle(() => ({
     flex: 1,
-    transform: [{ rotate: mix(progress.value, -Math.PI, 0) }],
+    transform: [{ rotate: `${mix(progress.value, -Math.PI, 0)}rad` }],
   }));
   return (
     <View style={styles.container}>

@@ -39,7 +39,7 @@ const ZPath = ({
   transform,
   progress,
 }: ZPathProps) => {
-  const ref = useRef<typeof AnimatedPath>(null);
+  const ref = useRef<Path>(null);
   const length = useSharedValue(0);
   const { camera, canvas } = useZSvg();
   const path2 = useDerivedValue(
@@ -85,7 +85,7 @@ const ZPath = ({
         strokeWidth={scaledStrokeWidth}
         onLayout={() => {
           if (progress.value < 1) {
-            length.value = ref.current.getTotalLength();
+            length.value = ref.current!.getTotalLength();
           }
         }}
       />

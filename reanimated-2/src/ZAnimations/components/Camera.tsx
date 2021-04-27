@@ -40,7 +40,7 @@ const Camera = ({ camera, canvas }: CameraProps) => {
       y: number;
     }
   >({
-    onStart: (e, ctx) => {
+    onStart: (_, ctx) => {
       ctx.x = x.value;
       ctx.y = y.value;
     },

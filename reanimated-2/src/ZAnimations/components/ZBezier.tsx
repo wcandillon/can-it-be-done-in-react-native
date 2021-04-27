@@ -47,5 +47,4 @@ ZPath.defaultProps = {
   transform: [],
 };
 
-// eslint-disable-next-line ts-exports/unused-exports
 export default ZPath;

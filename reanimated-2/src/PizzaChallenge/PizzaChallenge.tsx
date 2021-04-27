@@ -112,5 +112,4 @@ const PizzaChallenge = () => {
   );
 };
 
-// eslint-disable-next-line ts-exports/unused-exports
 export default PizzaChallenge;
