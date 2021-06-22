@@ -1,5 +1,4 @@
 import React from "react";
-import { processColor } from "react-native";
 import Animated, {
   useAnimatedProps,
   useAnimatedStyle,
@@ -26,8 +25,8 @@ const Hemisphere = ({
   base: baseColor,
   body: bodyColor,
 }: HemisphereProps) => {
-  const co1 = processColor(baseColor);
-  const co2 = processColor(bodyColor);
+  const co1 = baseColor;
+  const co2 = bodyColor;
   const { camera, canvas } = useZSvg();
   const path = createPath3({ x: -r, y: 0, z: 0 });
   addArc3(path, { x: -r, y: r, z: 0 }, { x: 0, y: r, z: 0 });
@@ -107,5 +106,4 @@ const Hemisphere = ({
   );
 };
 
-// eslint-disable-next-line ts-exports/unused-exports
 export default Hemisphere;

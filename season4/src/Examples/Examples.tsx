@@ -52,6 +52,10 @@ const examples = [
     screen: "Darkroom",
     title: "🏞 Darkroom",
   },
+  {
+    screen: "LiquidSwipe",
+    title: "💧 Liquid Swipe",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

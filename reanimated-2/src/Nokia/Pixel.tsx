@@ -1,9 +1,8 @@
 import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
-import { canvas2Cartesian, cartesian2Canvas } from "react-native-redash";
 
-import { dist, approximates, rotate, eq, contains } from "./Math";
+import { eq, contains } from "./Math";
 import { Snake } from "./Snake";
 export const { width } = Dimensions.get("window");
 export const height = width;
@@ -12,7 +11,6 @@ const SIZE = 20;
 export const RATIO = 1;
 export const WIDTH = SIZE;
 export const HEIGHT = Math.round(SIZE * RATIO);
-const CENTER = { x: (WIDTH - 1) / 2, y: (HEIGHT - 1) / 2 };
 const ON = "#303031";
 const OFF = "#7D8C73";
 

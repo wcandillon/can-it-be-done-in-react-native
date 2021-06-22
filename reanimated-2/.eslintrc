@@ -2,16 +2,11 @@
   "extends": [
     "react-native-wcandillon"
   ],
-  "plugins": ["reanimated","ts-exports"],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
   "rules": {
-    "ts-exports/unused-exports": 0,
-    "reanimated/js-function-in-worklet": 2,
     "react/jsx-sort-props": [2, {
       "noSortAlphabetically": true,
       "shorthandLast": true
-    }]
+    }],
+    "@typescript-eslint/no-non-null-assertion": 0
   }
 } 

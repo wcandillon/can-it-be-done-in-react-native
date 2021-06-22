@@ -1,14 +1,7 @@
 { 
   "extends": "react-native-wcandillon",
-  "plugins": [ "ts-exports", "reanimated"],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
   "rules": {
-    "reanimated/js-function-in-worklet": 2,
     "@typescript-eslint/no-non-null-assertion": 0,
-    "ts-exports/unused-exports": 2,
-    "reanimated/unsupported-syntax": 2,
     "reanimated/no-multiple-animated-style-usages": 0
   }
 } 

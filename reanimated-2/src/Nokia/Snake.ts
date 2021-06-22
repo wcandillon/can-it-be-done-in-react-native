@@ -4,12 +4,12 @@ import { Vector } from "react-native-redash";
 
 import { contains, randomVector } from "./Math";
 
-const UP = { x: 0, y: -1 };
-const DOWN = { x: 0, y: 1 };
-const LEFT = { x: -1, y: 0 };
-const RIGHT = { x: 1, y: 0 };
+export const UP = { x: 0, y: -1 };
+export const DOWN = { x: 0, y: 1 };
+export const LEFT = { x: -1, y: 0 };
+export const RIGHT = { x: 1, y: 0 };
 
-interface Snake {
+export interface Snake {
   tail: Vector[];
   food: Vector;
   direction: Vector;
@@ -51,7 +51,7 @@ export const useSnake = (width: number, height: number) => {
         food: foodEaten ? randomVector(width, height) : food,
       };
     }, 300);
-  }, []);
+  }, [height, state, width]);
   return state;
 };
 

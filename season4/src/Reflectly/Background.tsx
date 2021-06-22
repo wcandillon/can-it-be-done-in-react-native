@@ -58,5 +58,4 @@ const Background = ({ colorSelection }: BackgroundProps) => {
   );
 };
 
-// eslint-disable-next-line ts-exports/unused-exports
 export default Background;

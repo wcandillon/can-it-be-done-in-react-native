@@ -33,7 +33,7 @@ const AnimatedLogo = ({ progress: progressRaw }: AnimatedLogoProps) => {
     )
   );
   const [length, setLength] = useState(0);
-  const ref = useRef<typeof AnimatedEllipse>(null);
+  const ref = useRef<Ellipse>(null);
   const circle = useAnimatedProps(() => ({
     r: part1.value * 30,
     fillOpacity: part1.value,
@@ -47,7 +47,7 @@ const AnimatedLogo = ({ progress: progressRaw }: AnimatedLogoProps) => {
   const rotateAnimation = (target: number) => () => {
     "worklet";
     return {
-      transform: [{ rotate: target * part2.value }],
+      transform: [{ rotate: `${target * part2.value}rad` }],
     };
   };
   const stroke1 = useAnimatedProps(strokeAnimation);
@@ -72,7 +72,7 @@ const AnimatedLogo = ({ progress: progressRaw }: AnimatedLogoProps) => {
           />
           <AnimatedEllipse
             animatedProps={stroke1}
-            onLayout={() => setLength(ref.current.getTotalLength())}
+            onLayout={() => setLength(ref.current!.getTotalLength())}
             ref={ref}
             strokeWidth={20}
             stroke="#61DAFB"

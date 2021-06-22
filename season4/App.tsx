@@ -14,6 +14,7 @@ import { LoadAssets } from "./src/components";
 import Chess, { assets as chessAssets } from "./src/Chess";
 import Bedtime from "./src/Bedtime";
 import Darkroom, { assets as darkroomAssets } from "./src/Darkroom";
+import LiquidSwipe, { assets as liquidSwipeAssets } from "./src/LiquidSwipe";
 
 const fonts = {
   "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
@@ -36,6 +37,7 @@ const assets = [
   ...chanelAssets,
   ...chessAssets,
   ...darkroomAssets,
+  ...liquidSwipeAssets,
 ];
 
 const Stack = createStackNavigator<Routes>();
@@ -131,6 +133,15 @@ const AppNavigator = () => (
         header: () => null,
       }}
     />
+    <Stack.Screen
+      name="LiquidSwipe"
+      component={LiquidSwipe}
+      options={{
+        title: "💧 LiquidSwipe",
+        header: () => null,
+        gestureEnabled: false,
+      }}
+    />
   </Stack.Navigator>
 );
 
@@ -142,5 +153,4 @@ const App = () => {
   );
 };
 
-// eslint-disable-next-line ts-exports/unused-exports
 export default App;

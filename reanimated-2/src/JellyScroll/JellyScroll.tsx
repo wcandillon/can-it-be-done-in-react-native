@@ -61,7 +61,7 @@ const JellyScroll = () => {
             )
           );
           return {
-            transform: [{ skewY }],
+            transform: [{ skewY: `${skewY}rad` }],
           };
         });
         return (
