@@ -14,3 +14,4 @@ Unzip the folder into the `src/` folder.
 * [Reflectly Tabbar](./Reflectly-Tabbar.zip)
 * [Apple Bedtime](./Bedtime.zip)
 * [Darkroom](./Darkroom.zip)
+* [Liquid Swipe](./LiquidSwipe.zip)
