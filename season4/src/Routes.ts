@@ -11,4 +11,5 @@ export type Routes = {
   ColorSelection: undefined;
   Bedtime: undefined;
   Darkroom: undefined;
+  LiquidSwipe: undefined;
 };
