@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import Animated, {
   runOnJS,
@@ -12,6 +12,7 @@ import { snapPoint, useVector } from "react-native-redash";
 
 import Wave, { HEIGHT, MARGIN_WIDTH, Side, WIDTH } from "./Wave";
 import Button from "./Button";
+import { SlideProps } from "./Slide";
 
 const PREV = WIDTH;
 const NEXT = 0;
@@ -21,9 +22,9 @@ const RIGHT_SNAP_POINTS = [NEXT, WIDTH - MARGIN_WIDTH];
 interface SliderProps {
   index: number;
   setIndex: (value: number) => void;
-  children: JSX.Element;
-  prev?: JSX.Element;
-  next?: JSX.Element;
+  children: ReactElement<SlideProps>;
+  prev?: ReactElement<SlideProps>;
+  next?: ReactElement<SlideProps>;
 }
 
 const Slider = ({
