@@ -1,15 +1,19 @@
-import React, { ReactNode } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import React, { ReactElement, ReactNode } from "react";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedProps,
+  useAnimatedStyle,
   useDerivedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 import MaskedView from "@react-native-community/masked-view";
 import { Vector } from "react-native-redash";
+
+import { SlideProps } from "./Slide";
 
 export const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 export const MIN_LEDGE = 25;
@@ -35,7 +39,7 @@ export enum Side {
 interface WaveProps {
   side: Side;
   position: Vector<Animated.SharedValue<number>>;
-  children: ReactNode;
+  children: ReactElement<SlideProps>;
   isTransitioning: Animated.SharedValue<boolean>;
 }
 
@@ -96,22 +100,48 @@ const Wave = ({
       ].join(" "),
     };
   });
-  return (
-    <MaskedView
-      style={StyleSheet.absoluteFill}
-      maskElement={
-        <Svg
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              transform: [{ rotateY: side === Side.RIGHT ? "180deg" : "0deg" }],
-            },
-          ]}
-        >
-          <AnimatedPath fill="black" animatedProps={animatedProps} />
-        </Svg>
-      }
+  const maskElement = (
+    <Svg
+      style={[
+        StyleSheet.absoluteFill,
+        {
+          transform: [{ rotateY: side === Side.RIGHT ? "180deg" : "0deg" }],
+        },
+      ]}
     >
+      <AnimatedPath
+        fill={Platform.OS === "android" ? children.props.slide.color : "black"}
+        animatedProps={animatedProps}
+      />
+    </Svg>
+  );
+  const androidStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX:
+            // eslint-disable-next-line no-nested-ternary
+            isTransitioning.value
+              ? withTiming(0)
+              : side === Side.RIGHT
+              ? WIDTH - ledge.value
+              : -WIDTH + ledge.value,
+        },
+      ],
+    };
+  });
+  if (Platform.OS === "android") {
+    return (
+      <View style={StyleSheet.absoluteFill}>
+        {maskElement}
+        <Animated.View style={[StyleSheet.absoluteFill, androidStyle]}>
+          {children}
+        </Animated.View>
+      </View>
+    );
+  }
+  return (
+    <MaskedView style={StyleSheet.absoluteFill} maskElement={maskElement}>
       {children}
     </MaskedView>
   );

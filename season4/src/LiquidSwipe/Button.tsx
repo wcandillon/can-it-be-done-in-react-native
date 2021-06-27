@@ -24,8 +24,6 @@ const Button = ({ position, side, activeSide }: ButtonProps) => {
     position: "absolute",
     left: isLeft ? position.x.value - RADIUS * 2 : width - position.x.value,
     top: position.y.value - RADIUS,
-    //borderWidth: 1,
-    //borderColor: "white",
     borderRadius: RADIUS,
     width: RADIUS * 2,
     height: RADIUS * 2,
