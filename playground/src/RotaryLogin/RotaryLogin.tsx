@@ -1,36 +1,46 @@
 import React from "react";
-import { View, Text, Dimensions, StyleSheet } from "react-native";
-import Svg, { Path } from "react-native-svg";
-const { width, height } = Dimensions.get("window");
+import { StyleSheet } from "react-native";
+import { vec } from "react-native-redash";
+import Svg, { Circle, Defs, G, Mask } from "react-native-svg";
 
-const R = 50;
+import Quadrant, { STROKE_WIDTH, RADIUS, center, rotate } from "./Quadrant";
 
 const RotaryLogin = () => {
-  const d = [
-    `M ${0} ${0}`,
-    `h ${200}`,
-    `v ${200}`,
-    `L ${100} ${100}`,
-    `A ${R} ${R} 0 0 0 ${150} ${50}`,
-    `A ${R} ${R} 0 0 0 ${100} ${0}`,
-    `A ${R} ${R} 0 0 0 ${50} ${50}`,
-    `A ${R} ${R} 0 0 0 ${100} ${100}`,
-    `L ${200} ${200}`,
-    `H ${0}`,
-    `V ${0}`,
-  ].join("");
+  const r = RADIUS - STROKE_WIDTH / 2;
+  const circumference = Math.PI * r;
+  const { x, y } = rotate(
+    vec.create(center.x + RADIUS - STROKE_WIDTH / 2, center.y),
+    center,
+    0
+  );
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "red",
-      }}
-    >
-      <Text style={{ fontSize: 256, color: "white" }}>42</Text>
-      <Svg style={StyleSheet.absoluteFill}>
-        <Path d={d} fill="black" />
-      </Svg>
-    </View>
+    <Svg style={StyleSheet.absoluteFill}>
+      <Defs>
+        <Mask id="mask">
+          <Circle cx={x} cy={y} r={STROKE_WIDTH / 2} fill="white" />
+        </Mask>
+      </Defs>
+      <Quadrant />
+      <Circle
+        fill="white"
+        cx={center.x}
+        cy={center.y}
+        r={RADIUS - STROKE_WIDTH}
+      />
+      <Circle
+        cx={center.x}
+        cy={center.y}
+        r={r}
+        strokeWidth={STROKE_WIDTH}
+        stroke="red"
+        strokeDasharray={`${circumference}, ${circumference}`}
+        strokeDashoffset={circumference / 2}
+        strokeLinecap="round"
+      />
+      <G mask="url(#mask)">
+        <Quadrant />
+      </G>
+    </Svg>
   );
 };
 
