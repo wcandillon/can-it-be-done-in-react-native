@@ -1,23 +1,38 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { vec } from "react-native-redash";
 import Svg, { Circle, Defs, G, Mask } from "react-native-svg";
 
-import Quadrant, { STROKE_WIDTH, RADIUS, center, rotate } from "./Quadrant";
+import Quadrant, {
+  STROKE_WIDTH,
+  RADIUS,
+  center,
+  DIGITS,
+  PADDING,
+} from "./Quadrant";
+
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "white",
+  },
+});
 
 const RotaryLogin = () => {
   const r = RADIUS - STROKE_WIDTH / 2;
-  const circumference = Math.PI * r;
-  const { x, y } = rotate(
-    vec.create(center.x + RADIUS - STROKE_WIDTH / 2, center.y),
-    center,
-    0
-  );
+  const circumference = 2 * Math.PI * r;
   return (
-    <Svg style={StyleSheet.absoluteFill}>
+    <Svg style={styles.container}>
       <Defs>
         <Mask id="mask">
-          <Circle cx={x} cy={y} r={STROKE_WIDTH / 2} fill="white" />
+          {DIGITS.map(({ x, y }, i) => (
+            <Circle
+              key={i}
+              cx={x}
+              cy={y}
+              r={STROKE_WIDTH / 2 - PADDING}
+              fill="white"
+            />
+          ))}
         </Mask>
       </Defs>
       <Quadrant />
@@ -31,10 +46,10 @@ const RotaryLogin = () => {
         cx={center.x}
         cy={center.y}
         r={r}
-        strokeWidth={STROKE_WIDTH}
-        stroke="red"
-        strokeDasharray={`${circumference}, ${circumference}`}
-        strokeDashoffset={circumference / 2}
+        strokeWidth={STROKE_WIDTH - PADDING}
+        stroke="white"
+        strokeDasharray={[circumference, circumference]}
+        strokeDashoffset={-0.25 * circumference}
         strokeLinecap="round"
       />
       <G mask="url(#mask)">
