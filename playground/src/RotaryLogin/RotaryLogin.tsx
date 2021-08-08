@@ -26,7 +26,6 @@ import Quadrant, {
 import Gesture from "./Gesture";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const AnimatedG = Animated.createAnimatedComponent(G);
 
 const styles = StyleSheet.create({
   container: {
@@ -61,15 +60,13 @@ export const transformOrigin = (
 
 const RotaryLogin = () => {
   const theta = useSharedValue(0);
-
   const r = RADIUS - STROKE_WIDTH / 2;
   const circumference = 2 * Math.PI * r;
   const animatedProps = useAnimatedProps(
     () => {
-      console.log(theta.value);
       return {
         transform: transformSvg(
-          transformOrigin({ x: RADIUS, y: RADIUS }, [{ rotate: theta.value }])
+          transformOrigin(center, [{ rotate: theta.value }])
         ),
       };
     },
@@ -99,18 +96,17 @@ const RotaryLogin = () => {
           cy={center.y}
           r={RADIUS - STROKE_WIDTH}
         />
-        <AnimatedG animatedProps={animatedProps}>
-          <Circle
-            cx={center.x}
-            cy={center.y}
-            r={r}
-            strokeWidth={STROKE_WIDTH - PADDING}
-            stroke="white"
-            strokeDasharray={[circumference, circumference]}
-            strokeDashoffset={-0.25 * circumference}
-            strokeLinecap="round"
-          />
-        </AnimatedG>
+        <AnimatedCircle
+          cx={center.x}
+          cy={center.y}
+          r={r}
+          strokeWidth={STROKE_WIDTH - PADDING}
+          stroke="white"
+          strokeDasharray={[circumference, circumference]}
+          strokeDashoffset={-0.25 * circumference}
+          strokeLinecap="round"
+          animatedProps={animatedProps}
+        />
         <G mask="url(#mask)">
           <Quadrant />
         </G>
