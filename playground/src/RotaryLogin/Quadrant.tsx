@@ -34,12 +34,13 @@ const Quadrant = () => {
       {DIGITS.map(({ x, y }, i) => (
         <Text
           key={i}
-          fontSize={32}
+          fontSize={24}
           fill="white"
           x={x}
-          y={y}
+          y={y + 2}
           textAnchor="middle"
           alignmentBaseline="middle"
+          fontWeight="bold"
         >
           {i}
         </Text>

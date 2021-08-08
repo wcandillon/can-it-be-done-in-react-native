@@ -28,6 +28,7 @@ const AppNavigator = () => (
       component={RotaryLogin}
       options={{
         title: "Rotary Login",
+        header: () => null,
       }}
     />
   </Stack.Navigator>
