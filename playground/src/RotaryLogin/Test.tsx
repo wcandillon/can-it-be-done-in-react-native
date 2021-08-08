@@ -14,7 +14,7 @@ const Test = () => {
     backgroundColor: "red",
     width: RADIUS * 2,
     height: RADIUS * 2,
-    transform: [{ rotate: `${theta.value}rad` }],
+    transform: [{ rotate: `${-theta.value}rad` }],
   }));
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

@@ -1,1 +1,1 @@
-export { default } from "./Test";
+export { default } from "./RotaryLogin";

@@ -69,7 +69,7 @@ const RotaryLogin = () => {
       console.log(theta.value);
       return {
         transform: transformSvg(
-          transformOrigin(center, [{ rotate: theta.value }])
+          transformOrigin({ x: RADIUS, y: RADIUS }, [{ rotate: theta.value }])
         ),
       };
     },
