@@ -15,6 +15,7 @@ import Quadrant, {
   PADDING,
 } from "./Quadrant";
 import Gesture from "./Gesture";
+import Title from "./Title";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -90,6 +91,7 @@ const RotaryLogin = () => {
         <G mask="url(#mask)">
           <Quadrant />
         </G>
+        <Title />
       </Svg>
       <Gesture theta={theta} />
     </View>
