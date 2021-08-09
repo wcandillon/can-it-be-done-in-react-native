@@ -5,8 +5,8 @@ import Animated, {
   useAnimatedProps,
   useSharedValue,
   withTiming,
-  SVGAdapter,
   useAnimatedStyle,
+  createAnimatedPropAdapter,
 } from "react-native-reanimated";
 import {
   Matrix3,
@@ -26,6 +26,7 @@ import Quadrant, {
 import Gesture from "./Gesture";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const AnimatedG = Animated.createAnimatedComponent(G);
 
 const styles = StyleSheet.create({
   container: {
@@ -33,16 +34,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
-
-export const toSVG = (m: Matrix3) => {
-  "worklet";
-  return [m[0][0], m[1][0], m[0][1], m[1][1], m[0][2], m[1][2]];
-};
-
-export const transformSvg = (transform: Transforms2d) => {
-  "worklet";
-  return toSVG(processTransform2d(transform));
-};
 
 export const transformOrigin = (
   { x, y }: Vector,
@@ -62,31 +53,35 @@ const RotaryLogin = () => {
   const theta = useSharedValue(0);
   const r = RADIUS - STROKE_WIDTH / 2;
   const circumference = 2 * Math.PI * r;
-  const animatedProps = useAnimatedProps(
-    () => {
-      return {
-        transform: transformSvg(
-          transformOrigin(center, [{ rotate: theta.value }])
-        ),
-      };
-    },
-    null,
-    [SVGAdapter]
-  );
+  const animatedProps = useAnimatedProps(() => {
+    return {
+      transform: transformOrigin(center, [{ rotate: -theta.value }]),
+    };
+  });
   return (
     <View style={{ flex: 1 }}>
       <Svg style={styles.container}>
         <Defs>
           <Mask id="mask">
-            {DIGITS.map(({ x, y }, i) => (
-              <Circle
-                key={i}
-                cx={x}
-                cy={y}
-                r={STROKE_WIDTH / 2 - PADDING}
-                fill="white"
-              />
-            ))}
+            {DIGITS.map(({ x, y }, i) => {
+              const props = useAnimatedProps(() => {
+                return {
+                  transform: transformOrigin(center, [
+                    { rotate: -theta.value },
+                  ]),
+                };
+              });
+              return (
+                <AnimatedCircle
+                  key={i}
+                  cx={x}
+                  cy={y}
+                  r={STROKE_WIDTH / 2 - PADDING}
+                  fill="white"
+                  animatedProps={props}
+                />
+              );
+            })}
           </Mask>
         </Defs>
         <Quadrant />
@@ -105,11 +100,18 @@ const RotaryLogin = () => {
           strokeDasharray={[circumference, circumference]}
           strokeDashoffset={-0.25 * circumference}
           strokeLinecap="round"
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           animatedProps={animatedProps}
         />
-        <G mask="url(#mask)">
+        <AnimatedG
+          mask="url(#mask)"
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          // animatedProps={animatedProps2}
+        >
           <Quadrant />
-        </G>
+        </AnimatedG>
       </Svg>
       <Gesture theta={theta} />
     </View>

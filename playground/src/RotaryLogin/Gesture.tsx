@@ -7,19 +7,12 @@ import {
 import Animated, {
   useAnimatedGestureHandler,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
 import { canvas2Polar } from "react-native-redash";
 
-import { center, RADIUS } from "./Quadrant";
+import { denormalize, normalize } from "../components/Animations/Math";
 
-const TAU = Math.PI * 2;
-
-const normalize = (value: number) => {
-  "worklet";
-  const rest = value % TAU;
-  return rest > 0 ? rest : TAU + rest;
-};
+import { RADIUS } from "./Quadrant";
 
 const SIZE = RADIUS * 2;
 const styles = StyleSheet.create({
@@ -53,6 +46,7 @@ const Gesture = ({ theta }: GestureProps) => {
       ctx.offset = alpha;
     },
     onEnd: () => {
+      theta.value = denormalize(theta.value);
       theta.value = withSpring(0);
     },
   });
