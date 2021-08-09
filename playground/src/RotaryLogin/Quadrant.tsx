@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions } from "react-native";
 import { Circle, Text } from "react-native-svg";
 import type { Vector } from "react-native-redash";
-import { canvas2Polar, polar2Canvas } from "react-native-redash";
+import { PI, canvas2Polar, polar2Canvas } from "react-native-redash";
 
 const { width, height } = Dimensions.get("window");
 export const RADIUS = width * 0.4;
@@ -17,13 +17,15 @@ const rotate = (tr: Vector, origin: Vector, rotation: number) => {
   return polar2Canvas({ radius, theta: theta + rotation }, origin);
 };
 
+export const DELTA = PI / 6.5;
+
 export const DIGITS = new Array(11)
   .fill(0)
   .map((_, i) =>
     rotate(
       vec(center.x + RADIUS - STROKE_WIDTH / 2, center.y),
       center,
-      (i * Math.PI) / 6.5
+      i * DELTA
     )
   );
 

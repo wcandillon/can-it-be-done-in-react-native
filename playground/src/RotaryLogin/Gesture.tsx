@@ -6,9 +6,15 @@ import Animated, {
   useAnimatedGestureHandler,
   withSpring,
 } from "react-native-reanimated";
-import { canvas2Polar, PI, TAU, normalizeRad } from "react-native-redash";
+import {
+  canvas2Polar,
+  PI,
+  TAU,
+  normalizeRad,
+  clamp,
+} from "react-native-redash";
 
-import { RADIUS } from "./Quadrant";
+import { RADIUS, DELTA } from "./Quadrant";
 
 const SIZE = RADIUS * 2;
 const styles = StyleSheet.create({
@@ -42,9 +48,10 @@ const add = (a: number, b: number) => {
 
 interface GestureProps {
   theta: Animated.SharedValue<number>;
+  passcode: Animated.SharedValue<string>;
 }
 
-const Gesture = ({ theta }: GestureProps) => {
+const Gesture = ({ theta, passcode }: GestureProps) => {
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
     { offset: number }
@@ -59,6 +66,9 @@ const Gesture = ({ theta }: GestureProps) => {
       ctx.offset = alpha;
     },
     onEnd: () => {
+      const i = clamp(Math.abs(Math.round(theta.value / DELTA)) + 1, 0, 10);
+      const val = i === 10 ? 0 : i;
+      passcode.value += `${val}`;
       theta.value = denormalize(theta.value);
       theta.value = withSpring(0, { velocity: 0 });
     },

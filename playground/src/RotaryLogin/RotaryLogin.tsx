@@ -16,6 +16,7 @@ import Quadrant, {
 } from "./Quadrant";
 import Gesture from "./Gesture";
 import Title from "./Title";
+import Status from "./Status";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -52,6 +53,7 @@ const Digit = ({ cx, cy, i, theta }: DigitProps) => {
 };
 
 const RotaryLogin = () => {
+  const passcode = useSharedValue("");
   const theta = useSharedValue(0);
   const r = RADIUS - STROKE_WIDTH / 2;
   const circumference = 2 * Math.PI * r;
@@ -92,8 +94,9 @@ const RotaryLogin = () => {
           <Quadrant />
         </G>
         <Title />
+        <Status passcode={passcode} />
       </Svg>
-      <Gesture theta={theta} />
+      <Gesture theta={theta} passcode={passcode} />
     </View>
   );
 };
