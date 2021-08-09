@@ -7,16 +7,10 @@ import {
 import Animated, {
   useAnimatedGestureHandler,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
-import { between, canvas2Polar, clamp } from "react-native-redash";
+import { canvas2Polar } from "react-native-redash";
 
-import {
-  approximates,
-  normalize,
-  PI,
-  TAU,
-} from "../components/Animations/Math";
+import { normalize, PI, TAU } from "../components/Animations/Math";
 
 import { RADIUS } from "./Quadrant";
 
@@ -45,7 +39,7 @@ const add = (a: number, b: number) => {
     return TAU;
   }
   if (newVal > 1.5 * PI && a < 0.5 * PI) {
-    return 0.001;
+    return 0.01;
   }
   return newVal;
 };
@@ -69,10 +63,8 @@ const Gesture = ({ theta }: GestureProps) => {
       ctx.offset = alpha;
     },
     onEnd: () => {
-      theta.value = 0;
-      return;
-      //theta.value = denormalize(theta.value);
-      //theta.value = withTiming(0, { duration: 5000 });
+      theta.value = denormalize(theta.value);
+      theta.value = withSpring(0, { velocity: 0 });
     },
   });
   return (

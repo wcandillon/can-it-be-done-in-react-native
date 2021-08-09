@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
 });
 
 const Examples = () => {
-  const { navigate } = useNavigation<StackNavigationProp<Routes, "Examples">>();
+  const { navigate } =
+    useNavigation<StackNavigationProp<Routes, "Playground">>();
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {examples.map((thumbnail) => (

@@ -1,0 +1,21 @@
+diff --git a/node_modules/react-native-svg/src/index.d.ts b/node_modules/react-native-svg/src/index.d.ts
+index e11bd33..d85d305 100644
+--- a/node_modules/react-native-svg/src/index.d.ts
++++ b/node_modules/react-native-svg/src/index.d.ts
+@@ -1,6 +1,6 @@
+ import * as React from 'react';
+ import * as ReactNative from 'react-native';
+-import { GestureResponderEvent } from 'react-native';
++import { GestureResponderEvent, TransformStyle } from 'react-native';
+ 
+ // Common props
+ export type NumberProp = string | number;
+@@ -203,7 +203,7 @@ export type ColumnMajorTransformMatrix = [
+ ];
+ 
+ export interface TransformProps extends TransformObject {
+-  transform?: ColumnMajorTransformMatrix | string | TransformObject;
++  transform?: ColumnMajorTransformMatrix | string | TransformObject | TransformProps["transform"];
+ }
+ 
+ export interface CommonMaskProps {

@@ -1,9 +1,12 @@
-import { Transforms2d, Vector } from "react-native-redash";
+import { TransformsStyle } from "react-native";
+import { Vector } from "react-native-redash";
+
+type RNTransform = Exclude<TransformsStyle["transform"], undefined>;
 
 export const transformOrigin = (
   { x, y }: Vector,
-  transformations: Transforms2d
-): Transforms2d => {
+  transformations: RNTransform
+): RNTransform => {
   "worklet";
   return [
     { translateX: x },

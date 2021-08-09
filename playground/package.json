@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint --ext .ts,.tsx . --max-warnings 0",
     "tsc": "tsc",
-    "ci": "yarn lint && yarn tsc"
+    "ci": "yarn lint && yarn tsc",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.15.0",
@@ -38,6 +39,7 @@
     "@types/react-native": "~0.63.2",
     "eslint": "^7.32.0",
     "eslint-config-react-native-wcandillon": "^3.6.1",
+    "patch-package": "^6.4.7",
     "typescript": "4.3.5"
   },
   "resolutions": {
