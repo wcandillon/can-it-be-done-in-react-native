@@ -1,8 +1,10 @@
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import type { ReactElement } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
-import { InitialState, NavigationContainer } from "@react-navigation/native";
+import type { InitialState } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 

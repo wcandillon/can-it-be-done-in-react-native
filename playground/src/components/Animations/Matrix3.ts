@@ -1,4 +1,5 @@
-import { Matrix3, processTransform2d, Transforms2d } from "react-native-redash";
+import type { Matrix3, Transforms2d } from "react-native-redash";
+import { processTransform2d } from "react-native-redash";
 
 const toSVG = (m: Matrix3) => {
   "worklet";

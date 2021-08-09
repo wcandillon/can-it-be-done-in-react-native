@@ -1,5 +1,5 @@
-import { TransformsStyle } from "react-native";
-import { Vector } from "react-native-redash";
+import type { TransformsStyle } from "react-native";
+import type { Vector } from "react-native-redash";
 
 type RNTransform = Exclude<TransformsStyle["transform"], undefined>;
 

@@ -1,10 +1,10 @@
 import * as React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import type { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
 
-import { Routes } from "../Routes";
+import type { Routes } from "../Routes";
 import StyleGuide from "../components/StyleGuide";
 
 const examples = [

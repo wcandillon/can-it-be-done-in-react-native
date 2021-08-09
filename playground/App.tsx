@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Routes } from "./src/Routes";
+import type { Routes } from "./src/Routes";
 import LoadAssets from "./src/components/LoadAssets";
 import Playground from "./src/Examples";
 import RotaryLogin from "./src/RotaryLogin";
