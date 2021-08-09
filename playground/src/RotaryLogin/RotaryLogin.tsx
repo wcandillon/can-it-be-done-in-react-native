@@ -16,6 +16,8 @@ import {
   Vector,
 } from "react-native-redash";
 
+import { transformOrigin } from "../components/Animations/Transform";
+
 import Quadrant, {
   STROKE_WIDTH,
   RADIUS,
@@ -34,20 +36,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
-
-export const transformOrigin = (
-  { x, y }: Vector,
-  transformations: Transforms2d
-): Transforms2d => {
-  "worklet";
-  return [
-    { translateX: x },
-    { translateY: y },
-    ...transformations,
-    { translateX: -x },
-    { translateY: -y },
-  ];
-};
 
 const RotaryLogin = () => {
   const theta = useSharedValue(0);

@@ -10,7 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { canvas2Polar } from "react-native-redash";
 
-import { denormalize, normalize } from "../components/Animations/Math";
+import { normalize, TAU } from "../components/Animations/Math";
 
 import { RADIUS } from "./Quadrant";
 
@@ -26,6 +26,11 @@ const styles = StyleSheet.create({
     height: SIZE,
   },
 });
+
+const denormalize = (value: number) => {
+  "worklet";
+  return value - TAU;
+};
 
 interface GestureProps {
   theta: Animated.SharedValue<number>;
