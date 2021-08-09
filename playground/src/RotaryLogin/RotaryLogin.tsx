@@ -63,7 +63,7 @@ const RotaryLogin = () => {
       <Svg style={styles.container}>
         <Defs>
           <Mask id="mask">
-            {DIGITS.map(({ x, y }, i) => {
+            {DIGITS.slice(0, 10).map(({ x, y }, i) => {
               const props = useAnimatedProps(() => {
                 return {
                   transform: transformOrigin(center, [
@@ -98,18 +98,13 @@ const RotaryLogin = () => {
           strokeWidth={STROKE_WIDTH - PADDING}
           stroke="white"
           strokeDasharray={[circumference, circumference]}
-          strokeDashoffset={-0.25 * circumference}
+          strokeDashoffset={-0.305 * circumference}
           strokeLinecap="round"
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           animatedProps={animatedProps}
         />
-        <AnimatedG
-          mask="url(#mask)"
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          // animatedProps={animatedProps2}
-        >
+        <AnimatedG mask="url(#mask)">
           <Quadrant />
         </AnimatedG>
       </Svg>

@@ -16,7 +16,7 @@ const rotate = (tr: Vector, origin: Vector, rotation: number) => {
   return polar2Canvas({ radius, theta: theta + rotation }, origin);
 };
 
-export const DIGITS = new Array(10)
+export const DIGITS = new Array(11)
   .fill(0)
   .map((_, i) =>
     rotate(
@@ -30,21 +30,24 @@ const Quadrant = () => {
   return (
     <>
       <Circle fill="black" cx={center.x} cy={center.y} r={RADIUS} />
-      <Circle fill="red" cx={center.x} cy={center.y} r={2} />
-      {DIGITS.map(({ x, y }, i) => (
-        <Text
-          key={i}
-          fontSize={24}
-          fill="white"
-          x={x}
-          y={y + 2}
-          textAnchor="middle"
-          alignmentBaseline="middle"
-          fontWeight="bold"
-        >
-          {i}
-        </Text>
-      ))}
+      {DIGITS.map(({ x, y }, i) =>
+        i === 10 ? (
+          <Circle fill="white" cx={x} cy={y} r={10} key={i} />
+        ) : (
+          <Text
+            key={i}
+            fontSize={24}
+            fill="white"
+            x={x}
+            y={y + 2}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            fontWeight="bold"
+          >
+            {(i + 1) % 10}
+          </Text>
+        )
+      )}
     </>
   );
 };
