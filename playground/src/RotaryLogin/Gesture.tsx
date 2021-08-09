@@ -9,9 +9,14 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { canvas2Polar, clamp } from "react-native-redash";
+import { between, canvas2Polar, clamp } from "react-native-redash";
 
-import { approximates, normalize, TAU } from "../components/Animations/Math";
+import {
+  approximates,
+  normalize,
+  PI,
+  TAU,
+} from "../components/Animations/Math";
 
 import { RADIUS } from "./Quadrant";
 
@@ -33,6 +38,15 @@ const denormalize = (value: number) => {
   return value - TAU;
 };
 
+const add = (a: number, b: number) => {
+  "worklet";
+  const newVal = normalize(a + b);
+  if ((newVal < 0.5 * PI && a > 1.5 * PI) || a === 0) {
+    return TAU;
+  }
+  return newVal;
+};
+
 interface GestureProps {
   theta: Animated.SharedValue<number>;
 }
@@ -48,13 +62,14 @@ const Gesture = ({ theta }: GestureProps) => {
     onActive: ({ x, y }, ctx) => {
       const { theta: alpha } = canvas2Polar({ x, y }, { x: RADIUS, y: RADIUS });
       const delta = alpha - ctx.offset;
-      theta.value = normalize(theta.value + delta);
+      theta.value = add(theta.value, delta);
       ctx.offset = alpha;
     },
     onEnd: () => {
-      theta.value = denormalize(theta.value);
-      theta.value = withTiming(0, { duration: 5000 });
-      //theta.value = withSpring(0, { velocity: 0 });
+      theta.value = 0;
+      return;
+      //theta.value = denormalize(theta.value);
+      //theta.value = withTiming(0, { duration: 5000 });
     },
   });
   return (
