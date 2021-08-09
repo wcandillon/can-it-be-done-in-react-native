@@ -5150,10 +5150,10 @@ eslint-config-prettier@^6.10.1:
   dependencies:
     get-stdin "^6.0.0"
 
-eslint-config-react-native-wcandillon@3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/eslint-config-react-native-wcandillon/-/eslint-config-react-native-wcandillon-3.6.2.tgz#f9de2ab91dc21d835cefd9be06eaab9668998ac7"
-  integrity sha512-Q+60+5PaAeC+MRwhZAwzoKYxK9XOHytAYOzgiTNx2LHEZiw2sIVMbkQh5XnpTn2n8qrQB+xQcaMwhwwi2HKE5Q==
+eslint-config-react-native-wcandillon@3.6.3:
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/eslint-config-react-native-wcandillon/-/eslint-config-react-native-wcandillon-3.6.3.tgz#d5291c8f6b13d5cea4c66b95cf5d44efd70477a2"
+  integrity sha512-ODtlyP1IJE3Tym9OlWNZwzZx2+6eI+fhkm1ceo6YYIdYNHWuvJEt7RuKQCz5HlxOtgpqSFZwSgwiMbsWHs9tVQ==
   dependencies:
     "@react-native-community/eslint-config" "3.0.0"
     eslint-plugin-import "2.24.0"
@@ -10723,10 +10723,10 @@ react-native-reanimated@~2.2.0:
     mockdate "^3.0.2"
     string-hash-64 "^1.0.3"
 
-react-native-redash@^16.1.1:
-  version "16.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-16.1.1.tgz#784cdf55672043aab9f15ae8c965dcbae8b119ba"
-  integrity sha512-pD3GMNqRz/5bUnX0ni4MMOBlVwH2dJnd7u6M80VqYGI87IfcuP6Sn1z171r0nUUeYvJ7blJQs0OKKmTsJIbWew==
+react-native-redash@16.2.0:
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-16.2.0.tgz#72204bdcdc5c48ccd8bd630e3a954ae5174809b3"
+  integrity sha512-4xRWT6sUTjTM7i7Yd6fEiuylzIPmjYl9XlhL7Tz/NJOPBs+ib6ku7ptF5PRgQIshbQ6kIFwXJWoQ9H71zOMwvA==
   dependencies:
     abs-svg-path "^0.1.1"
     normalize-svg-path "^1.0.1"

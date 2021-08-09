@@ -1,6 +1,3 @@
 { 
-  "extends": "react-native-wcandillon",
-  "rules": {
-    "@typescript-eslint/consistent-type-imports": 2
-  } 
+  "extends": "react-native-wcandillon"
 } 

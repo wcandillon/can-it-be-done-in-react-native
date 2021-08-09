@@ -6,9 +6,7 @@ import Animated, {
   useAnimatedGestureHandler,
   withSpring,
 } from "react-native-reanimated";
-import { canvas2Polar } from "react-native-redash";
-
-import { normalize, PI, TAU } from "../components/Animations/Math";
+import { canvas2Polar, PI, TAU, normalizeRad } from "react-native-redash";
 
 import { RADIUS } from "./Quadrant";
 
@@ -32,7 +30,7 @@ const denormalize = (value: number) => {
 
 const add = (a: number, b: number) => {
   "worklet";
-  const newVal = normalize(a + b);
+  const newVal = normalizeRad(a + b);
   if ((newVal < 0.5 * PI && a > 1.5 * PI) || a === 0) {
     return TAU;
   }

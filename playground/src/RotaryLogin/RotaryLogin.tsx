@@ -5,8 +5,7 @@ import Animated, {
   useAnimatedProps,
   useSharedValue,
 } from "react-native-reanimated";
-
-import { transformOrigin } from "../components/Animations/Transform";
+import { transformOrigin } from "react-native-redash";
 
 import Quadrant, {
   STROKE_WIDTH,
