@@ -44,6 +44,9 @@ const add = (a: number, b: number) => {
   if ((newVal < 0.5 * PI && a > 1.5 * PI) || a === 0) {
     return TAU;
   }
+  if (newVal > 1.5 * PI && a < 0.5 * PI) {
+    return 0.001;
+  }
   return newVal;
 };
 
