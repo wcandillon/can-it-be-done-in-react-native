@@ -4,17 +4,7 @@ import Svg, { Circle, Defs, G, Mask } from "react-native-svg";
 import Animated, {
   useAnimatedProps,
   useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-  createAnimatedPropAdapter,
 } from "react-native-reanimated";
-import {
-  Matrix3,
-  processTransform2d,
-  toDeg,
-  Transforms2d,
-  Vector,
-} from "react-native-redash";
 
 import { transformOrigin } from "../components/Animations/Transform";
 

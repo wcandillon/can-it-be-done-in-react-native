@@ -7,10 +7,11 @@ import {
 import Animated, {
   useAnimatedGestureHandler,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
-import { canvas2Polar } from "react-native-redash";
+import { canvas2Polar, clamp } from "react-native-redash";
 
-import { normalize, TAU } from "../components/Animations/Math";
+import { approximates, normalize, TAU } from "../components/Animations/Math";
 
 import { RADIUS } from "./Quadrant";
 
@@ -52,7 +53,8 @@ const Gesture = ({ theta }: GestureProps) => {
     },
     onEnd: () => {
       theta.value = denormalize(theta.value);
-      theta.value = withSpring(0);
+      theta.value = withTiming(0, { duration: 5000 });
+      //theta.value = withSpring(0, { velocity: 0 });
     },
   });
   return (
