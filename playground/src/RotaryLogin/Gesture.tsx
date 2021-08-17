@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 
 const blockValue = (oldVal: number, newVal: number) => {
   "worklet";
-  if ((oldVal > 1.5 * PI && newVal < PI / 2) || newVal === 0) {
+  if ((oldVal > 1.5 * PI && newVal < PI / 2) || oldVal === 0) {
     return 2 * PI;
   }
   if (oldVal < PI / 2 && newVal > 1.5 * PI) {
