@@ -6,13 +6,7 @@ import Animated, {
   useAnimatedGestureHandler,
   withSpring,
 } from "react-native-reanimated";
-import {
-  canvas2Polar,
-  PI,
-  TAU,
-  normalizeRad,
-  clamp,
-} from "react-native-redash";
+import { canvas2Polar, normalizeRad, PI } from "react-native-redash";
 
 import { RADIUS, DELTA } from "./Quadrant";
 
@@ -29,18 +23,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const denormalize = (value: number) => {
+const blockValue = (oldVal: number, newVal: number) => {
   "worklet";
-  return value - TAU;
-};
-
-const add = (a: number, b: number) => {
-  "worklet";
-  const newVal = normalizeRad(a + b);
-  if ((newVal < 0.5 * PI && a > 1.5 * PI) || a === 0) {
-    return TAU;
+  if ((oldVal > 1.5 * PI && newVal < PI / 2) || newVal === 0) {
+    return 2 * PI;
   }
-  if (newVal > 1.5 * PI && a < 0.5 * PI) {
+  if (oldVal < PI / 2 && newVal > 1.5 * PI) {
     return 0.01;
   }
   return newVal;
@@ -60,17 +48,16 @@ const Gesture = ({ theta, passcode }: GestureProps) => {
       ctx.offset = theta.value;
     },
     onActive: ({ x, y }, ctx) => {
-      const { theta: alpha } = canvas2Polar({ x, y }, { x: RADIUS, y: RADIUS });
-      const delta = alpha - ctx.offset;
-      theta.value = add(theta.value, delta);
-      ctx.offset = alpha;
+      const newVal = normalizeRad(
+        canvas2Polar({ x, y }, { x: RADIUS, y: RADIUS }).theta
+      );
+      theta.value = blockValue(ctx.offset, newVal);
+      ctx.offset = theta.value;
     },
     onEnd: () => {
-      const i = clamp(Math.abs(Math.round(theta.value / DELTA)) + 1, 0, 10);
-      const val = i === 10 ? 0 : i;
-      passcode.value += `${val}`;
-      theta.value = denormalize(theta.value);
-      theta.value = withSpring(0, { velocity: 0 });
+      const val = Math.round(theta.value / DELTA) + 1;
+      passcode.value += `${val === 10 ? 0 : val}`;
+      theta.value = withSpring(2 * PI);
     },
   });
   return (
