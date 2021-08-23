@@ -40,6 +40,7 @@ const Card = ({ card: { source, width, height } }: CardProps) => {
       ctx.x = translateX.value;
       ctx.y = translateY.value;
       rotateZ.value = withTiming(0);
+      scale.value = withTiming(1.1);
     },
     onActive: ({ translationX, translationY }, ctx) => {
       translateX.value = ctx.x + translationX;
@@ -49,6 +50,7 @@ const Card = ({ card: { source, width, height } }: CardProps) => {
       const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
       translateX.value = withSpring(dest, { velocity: velocityX });
       translateY.value = withSpring(0, { velocity: velocityY });
+      scale.value = withTiming(1);
     },
   });
   const style = useAnimatedStyle(() => ({
@@ -63,7 +65,7 @@ const Card = ({ card: { source, width, height } }: CardProps) => {
   }));
   return (
     <View style={styles.container} pointerEvents="box-none">
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
+      <PanGestureHandler onGestureEvent={onGestureEvent} minDist={0}>
         <Animated.View style={[styles.card, style]}>
           <Image
             source={source}
