@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
+  withDelay,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
@@ -36,21 +37,27 @@ const Card = ({
   index,
 }: CardProps) => {
   const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
+  const translateY = useSharedValue(-(height + index * CARD_HEIGHT));
   const scale = useSharedValue(1);
   const rotateZ = useSharedValue(-10 + Math.random() * 20);
+  useEffect(() => {
+    translateY.value = withDelay(150 * index, withTiming(0));
+  }, [index, translateY]);
   useAnimatedReaction(
     () => trigger.value,
     (v) => {
-      console.log({ v });
       if (v) {
-        const duration = 150 + 150 * index;
-        translateX.value = withTiming(0, { duration }, () => {
-          trigger.value = false;
-        });
-        rotateZ.value = withTiming(-10 + Math.random() * 20, {
+        const duration = 150 * index;
+        translateX.value = withDelay(
           duration,
-        });
+          withSpring(0, {}, () => {
+            trigger.value = false;
+          })
+        );
+        rotateZ.value = withDelay(
+          duration,
+          withSpring(-10 + Math.random() * 20)
+        );
       }
     }
   );
@@ -71,12 +78,12 @@ const Card = ({
     onEnd: ({ velocityX, velocityY }) => {
       const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
       translateX.value = withSpring(dest, { velocity: velocityX });
-      translateY.value = withSpring(0, { velocity: velocityY }, () => {
-        if (index === 0) {
+      translateY.value = withSpring(0, { velocity: velocityY });
+      scale.value = withTiming(1, {}, () => {
+        if (index === 0 && dest !== 0) {
           trigger.value = true;
         }
       });
-      scale.value = withTiming(1);
     },
   });
   const style = useAnimatedStyle(() => ({
