@@ -29,6 +29,8 @@ interface CardProps {
 const Card = ({ card: { source, width, height } }: CardProps) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
+  const scale = useSharedValue(1);
+  const rotateZ = useSharedValue(-10 + Math.random() * 20);
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
     { x: number; y: number }
@@ -49,12 +51,16 @@ const Card = ({ card: { source, width, height } }: CardProps) => {
   });
   const style = useAnimatedStyle(() => ({
     transform: [
+      { perspective: 1500 },
+      { rotateX: "30deg" },
       { translateX: translateX.value },
       { translateY: translateY.value },
+      { rotateZ: `${rotateZ.value}deg` },
+      { scale: scale.value },
     ],
   }));
   return (
-    <View style={styles.container}>
+    <View style={styles.container} pointerEvents="box-none">
       <PanGestureHandler onGestureEvent={onGestureEvent}>
         <Animated.View style={[styles.card, style]}>
           <Image
@@ -83,6 +89,14 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 
