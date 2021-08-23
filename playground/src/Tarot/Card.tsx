@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
@@ -38,6 +39,7 @@ const Card = ({ card: { source, width, height } }: CardProps) => {
     onStart: (_, ctx) => {
       ctx.x = translateX.value;
       ctx.y = translateY.value;
+      rotateZ.value = withTiming(0);
     },
     onActive: ({ translationX, translationY }, ctx) => {
       translateX.value = ctx.x + translationX;
