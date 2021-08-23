@@ -12,6 +12,10 @@ const examples = [
     screen: "RotaryLogin",
     title: "☎️ Rotary Login",
   },
+  {
+    screen: "Tarot",
+    title: "🧙‍♂️ Tarot",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

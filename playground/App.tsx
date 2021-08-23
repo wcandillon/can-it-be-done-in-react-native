@@ -5,7 +5,9 @@ import type { Routes } from "./src/Routes";
 import LoadAssets from "./src/components/LoadAssets";
 import Playground from "./src/Examples";
 import RotaryLogin from "./src/RotaryLogin";
+import Tarot, { assets as tarotAssets } from "./src/Tarot";
 
+const assets = [...tarotAssets];
 const fonts = {
   "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
   "SFProDisplay-Semibold": require("./assets/fonts/SFPro/SF-Pro-Display-Semibold.otf"),
@@ -31,12 +33,20 @@ const AppNavigator = () => (
         header: () => null,
       }}
     />
+    <Stack.Screen
+      name="Tarot"
+      component={Tarot}
+      options={{
+        title: "Tarot",
+        header: () => null,
+      }}
+    />
   </Stack.Navigator>
 );
 
 const App = () => {
   return (
-    <LoadAssets assets={[]} fonts={fonts}>
+    <LoadAssets assets={assets} fonts={fonts}>
       <AppNavigator />
     </LoadAssets>
   );
