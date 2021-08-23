@@ -4,6 +4,7 @@ import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
+  useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -25,13 +26,34 @@ interface CardProps {
     height: number;
     source: ReturnType<typeof require>;
   };
+  trigger: Animated.SharedValue<boolean>;
+  index: number;
 }
 
-const Card = ({ card: { source, width, height } }: CardProps) => {
+const Card = ({
+  card: { source, width, height },
+  trigger,
+  index,
+}: CardProps) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const scale = useSharedValue(1);
   const rotateZ = useSharedValue(-10 + Math.random() * 20);
+  useAnimatedReaction(
+    () => trigger.value,
+    (v) => {
+      console.log({ v });
+      if (v) {
+        const duration = 150 + 150 * index;
+        translateX.value = withTiming(0, { duration }, () => {
+          trigger.value = false;
+        });
+        rotateZ.value = withTiming(-10 + Math.random() * 20, {
+          duration,
+        });
+      }
+    }
+  );
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
     { x: number; y: number }
@@ -49,7 +71,11 @@ const Card = ({ card: { source, width, height } }: CardProps) => {
     onEnd: ({ velocityX, velocityY }) => {
       const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
       translateX.value = withSpring(dest, { velocity: velocityX });
-      translateY.value = withSpring(0, { velocity: velocityY });
+      translateY.value = withSpring(0, { velocity: velocityY }, () => {
+        if (index === 0) {
+          trigger.value = true;
+        }
+      });
       scale.value = withTiming(1);
     },
   });
@@ -59,6 +85,7 @@ const Card = ({ card: { source, width, height } }: CardProps) => {
       { rotateX: "30deg" },
       { translateX: translateX.value },
       { translateY: translateY.value },
+      { rotateY: `${rotateZ.value / 10}deg` },
       { rotateZ: `${rotateZ.value}deg` },
       { scale: scale.value },
     ],

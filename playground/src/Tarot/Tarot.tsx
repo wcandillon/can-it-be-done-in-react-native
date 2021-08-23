@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { useSharedValue } from "react-native-reanimated";
 
 import Card from "./Card";
 
@@ -38,10 +39,11 @@ const cards = [
 export const assets = cards.map((card) => card.source);
 
 const Tarot = () => {
+  const trigger = useSharedValue(false);
   return (
     <View style={styles.container}>
       {cards.map((card, index) => (
-        <Card card={card} key={index} />
+        <Card card={card} key={index} index={index} trigger={trigger} />
       ))}
     </View>
   );
