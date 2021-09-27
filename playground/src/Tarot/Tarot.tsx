@@ -39,11 +39,11 @@ const cards = [
 export const assets = cards.map((card) => card.source);
 
 const Tarot = () => {
-  const trigger = useSharedValue(false);
+  const shuffleBack = useSharedValue(false);
   return (
     <View style={styles.container}>
       {cards.map((card, index) => (
-        <Card card={card} key={index} index={index} trigger={trigger} />
+        <Card card={card} key={index} index={index} shuffleBack={shuffleBack} />
       ))}
     </View>
   );
