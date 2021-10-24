@@ -6,34 +6,25 @@ import Card from "./Card";
 
 const cards = [
   {
-    source: require("./assets/RWS_Tarot_08_Strength.jpeg"),
-    width: 300,
-    height: 541,
+    source: require("./assets/chariot.png"),
   },
   {
-    source: require("./assets/RWS_Tarot_16_Tower.jpeg"),
-    width: 300,
-    height: 514,
+    source: require("./assets/high-priestess.png"),
   },
   {
-    source: require("./assets/RWS_Tarot_07_Chariot.jpeg"),
-    width: 300,
-    height: 529,
+    source: require("./assets/justice.png"),
   },
   {
-    source: require("./assets/RWS_Tarot_06_Lovers.jpeg"),
-    width: 300,
-    height: 518,
+    source: require("./assets/lover.png"),
   },
   {
-    source: require("./assets/RWS_Tarot_02_High_Priestess.jpeg"),
-    width: 750,
-    height: 1302,
+    source: require("./assets/pendu.png"),
   },
   {
-    source: require("./assets/RWS_Tarot_01_Magician.jpeg"),
-    width: 596,
-    height: 1048,
+    source: require("./assets/strength.png"),
+  },
+  {
+    source: require("./assets/tower.png"),
   },
 ];
 export const assets = cards.map((card) => card.source);

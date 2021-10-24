@@ -14,10 +14,10 @@ import Animated, {
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
-const { width: wWidth } = Dimensions.get("window");
+const { width: wWidth, height } = Dimensions.get("window");
 
 const SNAP_POINTS = [-wWidth, 0, wWidth];
-const aspectRatio = 430.94 / 228.14;
+const aspectRatio = 722 / 368;
 const CARD_WIDTH = wWidth - 128;
 const CARD_HEIGHT = CARD_WIDTH * aspectRatio;
 const IMAGE_WIDTH = CARD_WIDTH * 0.9;
@@ -25,21 +25,15 @@ const DURATION = 250;
 
 interface CardProps {
   card: {
-    width: number;
-    height: number;
     source: ReturnType<typeof require>;
   };
   shuffleBack: Animated.SharedValue<boolean>;
   index: number;
 }
 
-const Card = ({
-  card: { source, width, height },
-  shuffleBack,
-  index,
-}: CardProps) => {
+const Card = ({ card: { source }, shuffleBack, index }: CardProps) => {
   const translateX = useSharedValue(0);
-  const translateY = useSharedValue(-(height + CARD_HEIGHT));
+  const translateY = useSharedValue(-height);
   const scale = useSharedValue(1);
   const rotateZ = useSharedValue(0);
   const delay = index * DURATION;
@@ -112,8 +106,9 @@ const Card = ({
             source={source}
             style={{
               width: IMAGE_WIDTH,
-              height: (IMAGE_WIDTH * height) / width,
+              height: IMAGE_WIDTH * aspectRatio,
             }}
+            resizeMode="contain"
           />
         </Animated.View>
       </PanGestureHandler>
