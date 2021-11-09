@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, Image } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
+  Easing,
   useAnimatedGestureHandler,
   useAnimatedReaction,
   useAnimatedStyle,
@@ -13,46 +14,49 @@ import Animated, {
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
-const { width: wWidth, height: wHeight } = Dimensions.get("window");
+const { width: wWidth, height } = Dimensions.get("window");
 
 const SNAP_POINTS = [-wWidth, 0, wWidth];
-const aspectRatio = 2890 / 1472;
+const aspectRatio = 722 / 368;
 const CARD_WIDTH = wWidth - 128;
 const CARD_HEIGHT = CARD_WIDTH * aspectRatio;
 const IMAGE_WIDTH = CARD_WIDTH * 0.9;
-const IMAGE_HEIGHT = CARD_HEIGHT * 0.9;
+const DURATION = 250;
 
 interface CardProps {
   card: {
     source: ReturnType<typeof require>;
   };
-  trigger: Animated.SharedValue<boolean>;
+  shuffleBack: Animated.SharedValue<boolean>;
   index: number;
 }
 
-export const Card = ({ card: { source }, trigger, index }: CardProps) => {
+export const Card = ({ card: { source }, shuffleBack, index }: CardProps) => {
   const translateX = useSharedValue(0);
-  const translateY = useSharedValue(-(wHeight + index * CARD_HEIGHT));
+  const translateY = useSharedValue(-height);
   const scale = useSharedValue(1);
-  const rotateZ = useSharedValue(-10 + Math.random() * 20);
+  const rotateZ = useSharedValue(0);
+  const delay = index * DURATION;
+  const theta = -10 + Math.random() * 20;
   useEffect(() => {
-    translateY.value = withDelay(1000 + 150 * index, withSpring(0));
-  }, [index, translateY]);
+    translateY.value = withDelay(
+      delay,
+      withTiming(0, { duration: DURATION, easing: Easing.inOut(Easing.ease) })
+    );
+    rotateZ.value = withDelay(delay, withSpring(theta));
+  }, [delay, index, rotateZ, theta, translateY]);
   useAnimatedReaction(
-    () => trigger.value,
+    () => shuffleBack.value,
     (v) => {
       if (v) {
         const duration = 150 * index;
         translateX.value = withDelay(
           duration,
           withSpring(0, {}, () => {
-            trigger.value = false;
+            shuffleBack.value = false;
           })
         );
-        rotateZ.value = withDelay(
-          duration,
-          withSpring(-10 + Math.random() * 20)
-        );
+        rotateZ.value = withDelay(duration, withSpring(theta));
       }
     }
   );
@@ -75,8 +79,10 @@ export const Card = ({ card: { source }, trigger, index }: CardProps) => {
       translateX.value = withSpring(dest, { velocity: velocityX });
       translateY.value = withSpring(0, { velocity: velocityY });
       scale.value = withTiming(1, {}, () => {
-        if (index === 0 && dest !== 0) {
-          trigger.value = true;
+        const isLast = index === 0;
+        const isSwipedLeftOrRight = dest !== 0;
+        if (isLast && isSwipedLeftOrRight) {
+          shuffleBack.value = true;
         }
       });
     },
@@ -100,8 +106,9 @@ export const Card = ({ card: { source }, trigger, index }: CardProps) => {
             source={source}
             style={{
               width: IMAGE_WIDTH,
-              height: IMAGE_HEIGHT,
+              height: IMAGE_WIDTH * aspectRatio,
             }}
+            resizeMode="contain"
           />
         </Animated.View>
       </PanGestureHandler>
