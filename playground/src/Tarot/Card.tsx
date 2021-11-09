@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -31,7 +31,7 @@ interface CardProps {
   index: number;
 }
 
-const Card = ({
+export const Card = ({
   card: { source, width, height },
   trigger,
   index,
@@ -137,5 +137,3 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 });
-
-export default Card;

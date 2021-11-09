@@ -91,7 +91,7 @@ interface StatusProps {
   passcode: Animated.SharedValue<string>;
 }
 
-const Status = ({ passcode }: StatusProps) => {
+export const Status = ({ passcode }: StatusProps) => {
   return (
     <>
       {new Array(4).fill(0).map((_, i) => (
@@ -100,5 +100,3 @@ const Status = ({ passcode }: StatusProps) => {
     </>
   );
 };
-
-export default Status;

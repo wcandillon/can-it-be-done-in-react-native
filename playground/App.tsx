@@ -2,10 +2,10 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import type { Routes } from "./src/Routes";
-import LoadAssets from "./src/components/LoadAssets";
-import Playground from "./src/Examples";
-import RotaryLogin from "./src/RotaryLogin";
-import Tarot, { assets as tarotAssets } from "./src/Tarot";
+import { LoadAssets } from "./src/components/LoadAssets";
+import { Examples } from "./src/Examples";
+import { RotaryLogin } from "./src/RotaryLogin";
+import { Tarot, assets as tarotAssets } from "./src/Tarot";
 
 const assets = [...tarotAssets];
 const fonts = {
@@ -20,7 +20,7 @@ const AppNavigator = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Playground"
-      component={Playground}
+      component={Examples}
       options={{
         title: "Playground",
       }}
@@ -52,4 +52,5 @@ const App = () => {
   );
 };
 
+// eslint-disable-next-line import/no-default-export
 export default App;

@@ -1,1 +1,1 @@
-export { default } from "./RotaryLogin";
+export { RotaryLogin } from "./RotaryLogin";

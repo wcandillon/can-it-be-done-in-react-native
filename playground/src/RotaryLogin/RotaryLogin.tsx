@@ -7,16 +7,17 @@ import Animated, {
 } from "react-native-reanimated";
 import { transformOrigin } from "react-native-redash";
 
-import Quadrant, {
+import {
+  Quadrant,
   STROKE_WIDTH,
   RADIUS,
   center,
   DIGITS,
   PADDING,
 } from "./Quadrant";
-import Gesture from "./Gesture";
-import Title from "./Title";
-import Status from "./Status";
+import { Gesture } from "./Gesture";
+import { Title } from "./Title";
+import { Status } from "./Status";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -52,7 +53,7 @@ const Digit = ({ cx, cy, i, theta }: DigitProps) => {
   );
 };
 
-const RotaryLogin = () => {
+export const RotaryLogin = () => {
   const passcode = useSharedValue("");
   const theta = useSharedValue(0);
   const r = RADIUS - STROKE_WIDTH / 2;
@@ -100,5 +101,3 @@ const RotaryLogin = () => {
     </View>
   );
 };
-
-export default RotaryLogin;

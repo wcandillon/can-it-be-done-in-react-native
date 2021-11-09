@@ -29,7 +29,7 @@ export const DIGITS = new Array(11)
     )
   );
 
-const Quadrant = () => {
+export const Quadrant = () => {
   return (
     <>
       <Circle fill="black" cx={center.x} cy={center.y} r={RADIUS} />
@@ -54,5 +54,3 @@ const Quadrant = () => {
     </>
   );
 };
-
-export default Quadrant;

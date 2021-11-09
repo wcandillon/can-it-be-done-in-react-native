@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
 
 import type { Routes } from "../Routes";
-import StyleGuide from "../components/StyleGuide";
+import { StyleGuide } from "../components/StyleGuide";
 
 const examples = [
   {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Examples = () => {
+export const Examples = () => {
   const { navigate } =
     useNavigation<StackNavigationProp<Routes, "Playground">>();
   return (
@@ -54,5 +54,3 @@ const Examples = () => {
     </ScrollView>
   );
 };
-
-export default Examples;

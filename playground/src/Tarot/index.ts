@@ -1,1 +1,1 @@
-export { default, assets } from "./Tarot";
+export { Tarot, assets } from "./Tarot";

@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 
-import Card from "./Card";
+import { Card } from "./Card";
 
 const cards = [
   {
@@ -38,7 +38,7 @@ const cards = [
 ];
 export const assets = cards.map((card) => card.source);
 
-const Tarot = () => {
+export const Tarot = () => {
   const trigger = useSharedValue(false);
   return (
     <View style={styles.container}>
@@ -55,5 +55,3 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
 });
-
-export default Tarot;

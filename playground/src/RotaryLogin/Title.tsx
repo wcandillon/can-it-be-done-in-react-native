@@ -9,7 +9,7 @@ import { RADIUS, center } from "./Quadrant";
 
 const fontSize = 26;
 
-const Title = () => {
+export const Title = () => {
   return (
     <G
       transform={serializeToSVGMatrixArray(
@@ -37,5 +37,3 @@ const Title = () => {
     </G>
   );
 };
-
-export default Title;

@@ -1,4 +1,4 @@
-const StyleGuide = {
+export const StyleGuide = {
   spacing: 8,
   palette: {
     primary: "#3884ff",
@@ -48,5 +48,3 @@ const StyleGuide = {
     },
   },
 };
-
-export default StyleGuide;

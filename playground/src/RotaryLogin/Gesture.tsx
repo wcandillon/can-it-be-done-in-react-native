@@ -39,7 +39,7 @@ interface GestureProps {
   passcode: Animated.SharedValue<string>;
 }
 
-const Gesture = ({ theta, passcode }: GestureProps) => {
+export const Gesture = ({ theta, passcode }: GestureProps) => {
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
     { offset: number }
@@ -68,5 +68,3 @@ const Gesture = ({ theta, passcode }: GestureProps) => {
     </View>
   );
 };
-
-export default Gesture;
