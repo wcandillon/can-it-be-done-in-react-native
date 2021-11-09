@@ -13,35 +13,30 @@ import Animated, {
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
-const { width: wWidth } = Dimensions.get("window");
+const { width: wWidth, height: wHeight } = Dimensions.get("window");
 
 const SNAP_POINTS = [-wWidth, 0, wWidth];
-const aspectRatio = 430.94 / 228.14;
+const aspectRatio = 2890 / 1472;
 const CARD_WIDTH = wWidth - 128;
 const CARD_HEIGHT = CARD_WIDTH * aspectRatio;
 const IMAGE_WIDTH = CARD_WIDTH * 0.9;
+const IMAGE_HEIGHT = CARD_HEIGHT * 0.9;
 
 interface CardProps {
   card: {
-    width: number;
-    height: number;
     source: ReturnType<typeof require>;
   };
   trigger: Animated.SharedValue<boolean>;
   index: number;
 }
 
-export const Card = ({
-  card: { source, width, height },
-  trigger,
-  index,
-}: CardProps) => {
+export const Card = ({ card: { source }, trigger, index }: CardProps) => {
   const translateX = useSharedValue(0);
-  const translateY = useSharedValue(-(height + index * CARD_HEIGHT));
+  const translateY = useSharedValue(-(wHeight + index * CARD_HEIGHT));
   const scale = useSharedValue(1);
   const rotateZ = useSharedValue(-10 + Math.random() * 20);
   useEffect(() => {
-    translateY.value = withDelay(150 * index, withTiming(0));
+    translateY.value = withDelay(1000 + 150 * index, withSpring(0));
   }, [index, translateY]);
   useAnimatedReaction(
     () => trigger.value,
@@ -105,7 +100,7 @@ export const Card = ({
             source={source}
             style={{
               width: IMAGE_WIDTH,
-              height: (IMAGE_WIDTH * height) / width,
+              height: IMAGE_HEIGHT,
             }}
           />
         </Animated.View>

@@ -1,4 +1,3 @@
-import React from "react";
 import { Dimensions } from "react-native";
 import { Circle, Text } from "react-native-svg";
 import type { Vector } from "react-native-redash";

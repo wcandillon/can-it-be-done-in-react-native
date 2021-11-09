@@ -1,4 +1,3 @@
-import React from "react";
 import { StyleSheet, View } from "react-native";
 import Svg, { Circle, Defs, G, Mask } from "react-native-svg";
 import Animated, {
