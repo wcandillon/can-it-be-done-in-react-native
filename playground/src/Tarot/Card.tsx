@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
-import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Easing,
-  useAnimatedGestureHandler,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
@@ -32,6 +30,7 @@ interface CardProps {
 }
 
 export const Card = ({ card: { source }, shuffleBack, index }: CardProps) => {
+  const offset = useSharedValue({ x: 0, y: 0 });
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(-height);
   const scale = useSharedValue(1);
@@ -60,21 +59,18 @@ export const Card = ({ card: { source }, shuffleBack, index }: CardProps) => {
       }
     }
   );
-  const onGestureEvent = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    { x: number; y: number }
-  >({
-    onStart: (_, ctx) => {
-      ctx.x = translateX.value;
-      ctx.y = translateY.value;
+  const gesture = Gesture.Pan()
+    .onBegin(() => {
+      offset.value.x = translateX.value;
+      offset.value.y = translateY.value;
       rotateZ.value = withTiming(0);
       scale.value = withTiming(1.1);
-    },
-    onActive: ({ translationX, translationY }, ctx) => {
-      translateX.value = ctx.x + translationX;
-      translateY.value = ctx.y + translationY;
-    },
-    onEnd: ({ velocityX, velocityY }) => {
+    })
+    .onUpdate(({ translationX, translationY }) => {
+      translateX.value = offset.value.x + translationX;
+      translateY.value = offset.value.y + translationY;
+    })
+    .onEnd(({ velocityX, velocityY }) => {
       const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
       translateX.value = withSpring(dest, { velocity: velocityX });
       translateY.value = withSpring(0, { velocity: velocityY });
@@ -85,8 +81,8 @@ export const Card = ({ card: { source }, shuffleBack, index }: CardProps) => {
           shuffleBack.value = true;
         }
       });
-    },
-  });
+    });
+
   const style = useAnimatedStyle(() => ({
     transform: [
       { perspective: 1500 },
@@ -100,7 +96,7 @@ export const Card = ({ card: { source }, shuffleBack, index }: CardProps) => {
   }));
   return (
     <View style={styles.container} pointerEvents="box-none">
-      <PanGestureHandler onGestureEvent={onGestureEvent} minDist={0}>
+      <GestureDetector gesture={gesture}>
         <Animated.View style={[styles.card, style]}>
           <Image
             source={source}
@@ -111,7 +107,7 @@ export const Card = ({ card: { source }, shuffleBack, index }: CardProps) => {
             resizeMode="contain"
           />
         </Animated.View>
-      </PanGestureHandler>
+      </GestureDetector>
     </View>
   );
 };
