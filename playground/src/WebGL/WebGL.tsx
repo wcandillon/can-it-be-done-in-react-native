@@ -1,7 +1,13 @@
 import type { ExpoWebGLRenderingContext } from "expo-gl";
 import { GLView } from "expo-gl";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
+import {
+  useAnimatedReaction,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 
 const onContextCreate = (gl: ExpoWebGLRenderingContext) => {
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
@@ -30,9 +36,11 @@ void main()
     `
 precision mediump float;
 varying vec2 uv;
+uniform float blue;
+
 void main()
 {
-    gl_FragColor = vec4(uv.x, uv.y, 0.9, 1.0);
+    gl_FragColor = vec4(uv.x, uv.y, blue, 1.0);
 }
   `
   );
@@ -40,6 +48,7 @@ void main()
 
   // Link together into a program
   const program = gl.createProgram()!;
+
   gl.attachShader(program, vert);
   gl.attachShader(program, frag);
   gl.linkProgram(program);
@@ -57,6 +66,9 @@ void main()
   gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(aPosition);
 
+  const blue = gl.getUniformLocation(program, "blue");
+  gl.uniform1f(blue, 0);
+
   gl.clear(gl.COLOR_BUFFER_BIT);
   gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 
@@ -64,8 +76,41 @@ void main()
   gl.endFrameEXP();
 };
 
+const updateUniform = (contextId: number, progress: number) => {
+  "worklet";
+  const gl = GLView.getWorkletContext(contextId);
+  if (gl) {
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f({ id: 0 }, progress);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+    gl.flush();
+    gl.flushEXP();
+    gl.endFrameEXP();
+  }
+};
+
 export const WebGL = () => {
-  return <GLView style={styles.container} onContextCreate={onContextCreate} />;
+  const contextId = useSharedValue(0);
+  const progress = useSharedValue(0);
+  useEffect(() => {
+    progress.value = withRepeat(withTiming(1, { duration: 3000 }), -1, true);
+  }, [progress]);
+  useAnimatedReaction(
+    () => progress.value,
+    () => {
+      updateUniform(contextId.value, progress.value);
+    }
+  );
+  return (
+    <GLView
+      style={styles.container}
+      onContextCreate={(gl) => {
+        contextId.value = gl.contextId;
+        onContextCreate(gl);
+      }}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
