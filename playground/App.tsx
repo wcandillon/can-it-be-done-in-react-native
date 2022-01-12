@@ -1,10 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import "react-native-gesture-handler";
 
 import type { Routes } from "./src/Routes";
 import { LoadAssets } from "./src/components/LoadAssets";
 import { Examples } from "./src/Examples";
 import { RotaryLogin } from "./src/RotaryLogin";
 import { Tarot, assets as tarotAssets } from "./src/Tarot";
+import { Pinch } from "./src/Pinch";
 
 const assets = [...tarotAssets];
 const fonts = {
@@ -37,6 +39,14 @@ const AppNavigator = () => (
       component={Tarot}
       options={{
         title: "Tarot",
+        header: () => null,
+      }}
+    />
+    <Stack.Screen
+      name="Pinch"
+      component={Pinch}
+      options={{
+        title: "Pinch",
         header: () => null,
       }}
     />

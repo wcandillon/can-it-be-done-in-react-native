@@ -16,6 +16,10 @@ const examples = [
     screen: "Tarot",
     title: "🧙‍♂️ Tarot",
   },
+  {
+    screen: "Pinch",
+    title: "🔎 Pinch to Zoom",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
