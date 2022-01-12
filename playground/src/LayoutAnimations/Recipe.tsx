@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Dimensions, Image, Pressable } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Animated, { Layout } from "react-native-reanimated";
+import Animated, { Layout, ZoomOut } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 const SIZE = width / 2;
@@ -26,7 +26,11 @@ interface RecipeProps {
 
 export const Recipe = ({ recipe, onPress }: RecipeProps) => {
   return (
-    <Animated.View layout={Layout.springify()} style={styles.container}>
+    <Animated.View
+      layout={Layout.delay(200).springify()}
+      exiting={ZoomOut}
+      style={styles.container}
+    >
       <View style={styles.card}>
         <Image source={{ uri: recipe.picture.uri }} style={styles.image} />
         <Pressable onPress={onPress}>
