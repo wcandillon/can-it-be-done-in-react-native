@@ -7,6 +7,7 @@ import { Examples } from "./src/Examples";
 import { RotaryLogin } from "./src/RotaryLogin";
 import { Tarot, assets as tarotAssets } from "./src/Tarot";
 import { Pinch } from "./src/Pinch";
+import { LayoutAnimations } from "./src/LayoutAnimations";
 
 const assets = [...tarotAssets];
 const fonts = {
@@ -48,6 +49,14 @@ const AppNavigator = () => (
       options={{
         title: "Pinch",
         header: () => null,
+      }}
+    />
+
+    <Stack.Screen
+      name="LayoutAnimations"
+      component={LayoutAnimations}
+      options={{
+        title: "Layout Animations",
       }}
     />
   </Stack.Navigator>

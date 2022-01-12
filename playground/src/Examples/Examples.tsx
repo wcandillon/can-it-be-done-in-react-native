@@ -20,6 +20,10 @@ const examples = [
     screen: "Pinch",
     title: "🔎 Pinch to Zoom",
   },
+  {
+    screen: "LayoutAnimations",
+    title: "🔃 Layout Animations",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

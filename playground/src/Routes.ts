@@ -3,4 +3,5 @@ export type Routes = {
   RotaryLogin: undefined;
   Tarot: undefined;
   Pinch: undefined;
+  LayoutAnimations: undefined;
 };
