@@ -4,4 +4,5 @@ export type Routes = {
   Tarot: undefined;
   Pinch: undefined;
   LayoutAnimations: undefined;
+  WebGL: undefined;
 };

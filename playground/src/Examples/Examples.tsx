@@ -24,6 +24,10 @@ const examples = [
     screen: "LayoutAnimations",
     title: "🔃 Layout Animations",
   },
+  {
+    screen: "WebGL",
+    title: "🟢 WebGL",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

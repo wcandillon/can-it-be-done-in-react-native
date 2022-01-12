@@ -8,6 +8,7 @@ import { RotaryLogin } from "./src/RotaryLogin";
 import { Tarot, assets as tarotAssets } from "./src/Tarot";
 import { Pinch } from "./src/Pinch";
 import { LayoutAnimations } from "./src/LayoutAnimations";
+import { WebGL } from "./src/WebGL";
 
 const assets = [...tarotAssets];
 const fonts = {
@@ -51,12 +52,18 @@ const AppNavigator = () => (
         header: () => null,
       }}
     />
-
     <Stack.Screen
       name="LayoutAnimations"
       component={LayoutAnimations}
       options={{
         title: "Layout Animations",
+      }}
+    />
+    <Stack.Screen
+      name="WebGL"
+      component={WebGL}
+      options={{
+        title: "WebGL",
       }}
     />
   </Stack.Navigator>

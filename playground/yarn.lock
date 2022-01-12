@@ -5272,6 +5272,19 @@ expo-font@~10.0.4:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-gl-cpp@~11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/expo-gl-cpp/-/expo-gl-cpp-11.1.0.tgz#84c8f688b7009ca8944523866fd8e16bc195889d"
+  integrity sha512-tIbMex36+pn81cuPatWfLMkOcqUTiBOEQg3NJrp1XGio7xqDQga1OKk1vaYsxrGPhZHNx3Qv5iS83t4EGJ1RTw==
+
+expo-gl@~11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/expo-gl/-/expo-gl-11.1.1.tgz#2d611f3cff7422e591274d8b91334b2973a7132b"
+  integrity sha512-1bpPGmLnn6H4vs9X019zxMAlOdSqIyyWAT/yJC7f/qGzs9lTPM6STN3N+7fVMtPkXaCMyvyJL8vFJQ75+YmGpQ==
+  dependencies:
+    expo-gl-cpp "~11.1.0"
+    invariant "^2.2.4"
+
 expo-keep-awake@~10.0.1:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-10.0.1.tgz#9f1176216c41eee20843c8232acfdca2bc32d334"
