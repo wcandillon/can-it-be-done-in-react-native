@@ -11,7 +11,9 @@ import {
 
 const onContextCreate = (gl: ExpoWebGLRenderingContext) => {
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-  gl.clearColor(1.0, 1.0, 1.0, 1.0);
+
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
 
   // Create vertex shader (shape & position)
   const vert = gl.createShader(gl.VERTEX_SHADER)!;
@@ -76,7 +78,7 @@ void main()
   gl.endFrameEXP();
 };
 
-const updateUniform = (contextId: number, progress: number) => {
+const updateUniform = (progress: number, contextId: number) => {
   "worklet";
   const gl = GLView.getWorkletContext(contextId);
   if (gl) {
@@ -85,7 +87,6 @@ const updateUniform = (contextId: number, progress: number) => {
     gl.uniform1f({ id: 0 }, progress);
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
     gl.flush();
-    gl.flushEXP();
     gl.endFrameEXP();
   }
 };
@@ -94,12 +95,12 @@ export const WebGL = () => {
   const contextId = useSharedValue(0);
   const progress = useSharedValue(0);
   useEffect(() => {
-    progress.value = withRepeat(withTiming(1, { duration: 3000 }), -1, true);
+    progress.value = withRepeat(withTiming(1, { duration: 1000 }), -1, true);
   }, [progress]);
   useAnimatedReaction(
     () => progress.value,
-    () => {
-      updateUniform(contextId.value, progress.value);
+    (value) => {
+      updateUniform(value, contextId.value);
     }
   );
   return (

@@ -12,9 +12,6 @@ const centerX = width / 2;
 const centerY = height / 2;
 
 export const Pinch = () => {
-  const active = useSharedValue(false);
-  const originX = useSharedValue(0);
-  const originY = useSharedValue(0);
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const scale = useSharedValue(1);
@@ -22,36 +19,23 @@ export const Pinch = () => {
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },
-      { translateX: originX.value },
-      { translateY: originY.value },
       { scale: scale.value },
-      { translateX: -originX.value },
-      { translateY: -originY.value },
     ],
   }));
-  const gesture = Gesture.Pinch()
-    .onChange(({ focalX, focalY, ...event }) => {
-      "worklet";
-      if (!active.value) {
-        active.value = true;
-        originX.value = focalX - centerX;
-        originY.value = focalY - centerY;
-      }
-      scale.value = event.scale;
-    })
-    .onEnd(() => {
-      "worklet";
-      translateX.value = withSpring(0);
-      translateY.value = withSpring(0);
-      scale.value = withSpring(1);
-      active.value = false;
-    });
+  const pan = Gesture.Pan().onChange(({ translationX, translationY }) => {
+    translateX.value = translationX;
+    translateY.value = translationY;
+  });
+  const pinch = Gesture.Pinch().onChange((event) => {
+    scale.value = event.scale;
+  });
+  const gesture = Gesture.Race(pan, pinch);
   return (
-    <GestureDetector gesture={gesture}>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <GestureDetector gesture={gesture}>
         <Animated.View style={[styles.ball, style]} />
-      </View>
-    </GestureDetector>
+      </GestureDetector>
+    </View>
   );
 };
 

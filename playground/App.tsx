@@ -7,10 +7,13 @@ import { Examples } from "./src/Examples";
 import { RotaryLogin } from "./src/RotaryLogin";
 import { Tarot, assets as tarotAssets } from "./src/Tarot";
 import { Pinch } from "./src/Pinch";
-import { LayoutAnimations } from "./src/LayoutAnimations";
+import {
+  LayoutAnimations,
+  assets as layoutAnimationsAssets,
+} from "./src/LayoutAnimations";
 import { WebGL } from "./src/WebGL";
 
-const assets = [...tarotAssets];
+const assets = [...tarotAssets, ...layoutAnimationsAssets];
 const fonts = {
   "SFProDisplay-Bold": require("./assets/fonts/SFPro/SF-Pro-Display-Bold.otf"),
   "SFProDisplay-Semibold": require("./assets/fonts/SFPro/SF-Pro-Display-Semibold.otf"),

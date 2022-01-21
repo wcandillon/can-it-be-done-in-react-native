@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, Dimensions, Image, Pressable } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import Animated, {
+  FadeInUp,
   Layout,
   Transition,
   ZoomIn,
