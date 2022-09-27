@@ -25,6 +25,7 @@ const AppNavigator = () => (
       component={YouTube}
       options={{
         title: "📺 YouTube",
+        header: () => null,
       }}
     />
   </Stack.Navigator>
