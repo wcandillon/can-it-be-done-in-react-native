@@ -40,21 +40,15 @@ export const VideoModal = ({
     backgroundColor: "white",
   }));
   const videoStyle = useAnimatedStyle(() => {
-    const videoWidth = interpolate(
+    const videoHeight = interpolate(
       height.value,
       [END, start],
-      [150, width],
+      [100, video.aspectRatio * width],
       "clamp"
     );
     return {
-      width: videoWidth,
-      height:
-        interpolate(
-          height.value,
-          [END, END + 150],
-          [150, videoWidth],
-          "clamp"
-        ) * video.aspectRatio,
+      width: interpolate(height.value, [END, END + 100], [150, width], "clamp"),
+      height: videoHeight,
     };
   });
   return (
@@ -68,7 +62,7 @@ export const VideoModal = ({
       <GestureDetector gesture={gesture}>
         <Animated.View style={style}>
           <AnimatedVideoPlayer
-            resizeMode={ResizeMode.STRETCH}
+            resizeMode={ResizeMode.COVER}
             source={video.video}
             style={videoStyle}
             shouldPlay={true}
