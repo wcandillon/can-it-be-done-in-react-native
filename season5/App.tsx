@@ -1,5 +1,10 @@
 import React from "react";
+import type {
+  StackCardInterpolationProps,
+  StackCardStyleInterpolator,
+} from "@react-navigation/stack";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Dimensions } from "react-native";
 
 import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
@@ -8,9 +13,7 @@ import { LoadAssets } from "./src/components/LoadAssets";
 import { Video } from "./src/YouTube/Video";
 
 const fonts = {};
-
 const assets: number[] = [];
-
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
   <Stack.Navigator>
