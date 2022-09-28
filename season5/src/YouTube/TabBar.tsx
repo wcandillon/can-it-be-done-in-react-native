@@ -1,4 +1,3 @@
-import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -8,7 +7,7 @@ const { width } = Dimensions.get("window");
 const color = "#3a3b3c";
 const size = 28;
 
-export const TabBar = ({}: BottomTabBarProps) => {
+export const TabBar = () => {
   const { bottom } = useSafeAreaInsets();
   return (
     <View

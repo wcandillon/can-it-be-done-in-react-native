@@ -13,6 +13,7 @@ import Animated, {
 import { snapPoint, clamp } from "react-native-redash";
 
 import type { Video } from "../Videos";
+import { TabBar } from "../TabBar";
 
 import { Background, END } from "./Background";
 import { Content } from "./Content";
@@ -24,7 +25,7 @@ const { width, height: wHeight } = Dimensions.get("window");
 export const VideoModal = ({
   route,
 }: StackScreenProps<{ Video: { video: Video } }>) => {
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const start = wHeight - top;
   const height = useSharedValue(start);
   const { video } = route.params;
@@ -41,17 +42,35 @@ export const VideoModal = ({
     backgroundColor: "white",
   }));
   const videoStyle = useAnimatedStyle(() => {
+    const h = END - bottom - 64;
     const videoHeight = interpolate(
       height.value,
       [END, start],
-      [100, video.aspectRatio * width],
+      [h, video.aspectRatio * width],
       "clamp"
     );
     return {
-      width: interpolate(height.value, [END, END + 100], [100, width], "clamp"),
+      width: interpolate(
+        height.value,
+        [END, END + 100],
+        [h * 2, width],
+        "clamp"
+      ),
       height: videoHeight,
     };
   });
+  const footerStyle = useAnimatedStyle(() => ({
+    position: "absolute",
+    bottom: interpolate(
+      height.value,
+      [END, END + 100],
+      [0, -64 - bottom],
+      "clamp"
+    ),
+    left: 0,
+    right: 0,
+    height: 64 + bottom,
+  }));
   return (
     <View
       style={{
@@ -74,6 +93,9 @@ export const VideoModal = ({
           <Content height={height} video={video} />
         </Animated.View>
       </GestureDetector>
+      <Animated.View style={footerStyle}>
+        <TabBar />
+      </Animated.View>
     </View>
   );
 };

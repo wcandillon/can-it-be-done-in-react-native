@@ -8,7 +8,7 @@ const Tab = createBottomTabNavigator();
 
 export const YouTube = () => {
   return (
-    <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
+    <Tab.Navigator tabBar={() => <TabBar />}>
       <Tab.Screen name="Home" component={Home} />
     </Tab.Navigator>
   );

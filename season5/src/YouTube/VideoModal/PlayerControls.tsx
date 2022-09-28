@@ -32,8 +32,8 @@ export const PlayerControls = ({ title, height }: PlayerControlsProps) => {
   const style = useAnimatedStyle(() => ({
     flex: 1,
     flexDirection: "row",
-    justifyContent: "flex-end",
     alignItems: "center",
+    justifyContent: "flex-end",
     opacity: interpolate(height.value, [END, END + 50], [1, 0], "clamp"),
   }));
   return (
