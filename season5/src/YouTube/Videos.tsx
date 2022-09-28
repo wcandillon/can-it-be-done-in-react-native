@@ -4,12 +4,13 @@ import type { ImageSourcePropType } from "react-native";
 export type Video = {
   id: string;
   thumbnail: ImageSourcePropType;
-  video: ImageSourcePropType;
+  video: number;
   title: string;
   username: string;
   avatar: ImageSourcePropType;
   views: number;
   published: number;
+  aspectRatio: number;
 };
 
 export const videos: Video[] = [
@@ -22,6 +23,7 @@ export const videos: Video[] = [
     avatar: require("./assets/avatars/1.png"),
     views: 189,
     published: moment().subtract(5, "days").valueOf(),
+    aspectRatio: 720 / 1280,
   },
   {
     id: "1",
@@ -32,6 +34,7 @@ export const videos: Video[] = [
     avatar: require("./assets/avatars/1.png"),
     views: 63,
     published: moment().subtract(10, "days").valueOf(),
+    aspectRatio: 720 / 1152,
   },
   {
     id: "2",
@@ -42,6 +45,7 @@ export const videos: Video[] = [
     avatar: require("./assets/avatars/1.png"),
     views: 216,
     published: moment().subtract(17, "days").valueOf(),
+    aspectRatio: 720 / 1152,
   },
   {
     id: "4",
@@ -52,5 +56,6 @@ export const videos: Video[] = [
     avatar: require("./assets/avatars/1.png"),
     views: 273,
     published: moment().subtract(31, "days").valueOf(),
+    aspectRatio: 720 / 1152,
   },
 ];

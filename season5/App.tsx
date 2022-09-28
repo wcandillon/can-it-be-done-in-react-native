@@ -26,19 +26,19 @@ const AppNavigator = () => (
       component={YouTube}
       options={{
         title: "📺 YouTube",
-        header: () => null,
+        headerShown: false,
       }}
     />
 
-    <Stack.Group screenOptions={{ presentation: "modal" }}>
-      <Stack.Screen
-        name="Video"
-        component={Video}
-        options={{
-          header: () => null,
-        }}
-      />
-    </Stack.Group>
+    <Stack.Screen
+      name="Video"
+      component={Video}
+      options={{
+        headerShown: false,
+        presentation: "transparentModal",
+        gestureEnabled: false,
+      }}
+    />
   </Stack.Navigator>
 );
 
