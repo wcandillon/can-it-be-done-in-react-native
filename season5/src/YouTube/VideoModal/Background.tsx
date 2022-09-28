@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  View,
-  StatusBar as RNStatusBar,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import { StatusBar as RNStatusBar, Dimensions } from "react-native";
 import type { SharedValue } from "react-native-reanimated";
 import Animated, {
   interpolate,
