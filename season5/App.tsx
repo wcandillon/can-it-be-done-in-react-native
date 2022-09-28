@@ -5,6 +5,7 @@ import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
 import { YouTube } from "./src/YouTube";
 import { LoadAssets } from "./src/components/LoadAssets";
+import { Video } from "./src/YouTube/Video";
 
 const fonts = {};
 
@@ -28,6 +29,16 @@ const AppNavigator = () => (
         header: () => null,
       }}
     />
+
+    <Stack.Group screenOptions={{ presentation: "modal" }}>
+      <Stack.Screen
+        name="Video"
+        component={Video}
+        options={{
+          header: () => null,
+        }}
+      />
+    </Stack.Group>
   </Stack.Navigator>
 );
 

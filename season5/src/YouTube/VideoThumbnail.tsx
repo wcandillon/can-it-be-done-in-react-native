@@ -1,3 +1,6 @@
+import type { NavigationProp } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 import * as React from "react";
 import {
   View,
@@ -9,13 +12,18 @@ import {
 
 import type { Video } from "./Videos";
 
+type Navigation = NavigationProp<{ Video: { video: Video } }>;
+
 interface VideoThumbnailProps {
   video: Video;
 }
 
 export const VideoThumbnail = ({ video }: VideoThumbnailProps) => {
+  const navigation = useNavigation<Navigation>();
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate("Video", { video })}
+    >
       <View>
         <Image source={video.thumbnail} style={styles.thumbnail} />
         <View style={styles.description}>
@@ -23,9 +31,9 @@ export const VideoThumbnail = ({ video }: VideoThumbnailProps) => {
           <View>
             <Text style={styles.title}>{video.title}</Text>
             <Text style={styles.subtitle}>
-              {`${video.username} • ${
-                video.views
-              } views • ${video.published.fromNow()}`}
+              {`${video.username} • ${video.views} views • ${moment(
+                video.published
+              ).fromNow()}`}
             </Text>
           </View>
         </View>
