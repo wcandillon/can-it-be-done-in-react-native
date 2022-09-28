@@ -1,17 +1,14 @@
 import React from "react";
-import { Dimensions, Text } from "react-native";
+import { Text } from "react-native";
 import type { SharedValue } from "react-native-reanimated";
 import Animated, {
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import type { Video } from "../Videos";
 
 import { END } from "./Background";
-
-const { height: wHeight } = Dimensions.get("window");
 
 interface ContentProps {
   height: SharedValue<number>;
@@ -25,7 +22,7 @@ export const Content = ({ height, video }: ContentProps) => {
     padding: 16,
     flex: 1,
     backgroundColor: "white",
-    opacity: interpolate(height.value, [END - 300, END], [0, 1]),
+    opacity: interpolate(height.value, [END, END + 100], [0, 1]),
   }));
   return (
     <Animated.View style={style}>

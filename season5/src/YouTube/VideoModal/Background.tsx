@@ -7,7 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export const END = 125;
+export const END = 170;
 const { height: wHeight } = Dimensions.get("window");
 
 interface BackgroundProps {

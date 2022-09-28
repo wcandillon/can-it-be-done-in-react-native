@@ -47,7 +47,7 @@ export const VideoModal = ({
       "clamp"
     );
     return {
-      width: interpolate(height.value, [END, END + 100], [150, width], "clamp"),
+      width: interpolate(height.value, [END, END + 100], [100, width], "clamp"),
       height: videoHeight,
     };
   });
