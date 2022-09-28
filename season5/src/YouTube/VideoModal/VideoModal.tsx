@@ -1,7 +1,7 @@
 import type { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import { View, Dimensions } from "react-native";
-import { Video as VideoPlayer } from "expo-av";
+import { Video as VideoPlayer, ResizeMode } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -17,6 +17,7 @@ import type { Video } from "../Videos";
 import { Background, END } from "./Background";
 import { Content } from "./Content";
 
+const AnimatedVideoPlayer = Animated.createAnimatedComponent(VideoPlayer);
 const { width, height: wHeight } = Dimensions.get("window");
 
 export const VideoModal = ({
@@ -38,15 +39,24 @@ export const VideoModal = ({
     height: height.value,
     backgroundColor: "white",
   }));
-  const videoStyle = useAnimatedStyle(() => ({
-    width: interpolate(height.value, [END, start], [150, width], "clamp"),
-    height: interpolate(
+  const videoStyle = useAnimatedStyle(() => {
+    const videoWidth = interpolate(
       height.value,
-      [start - 100, start],
-      [150, width * video.aspectRatio],
+      [END, start],
+      [150, width],
       "clamp"
-    ),
-  }));
+    );
+    return {
+      width: videoWidth,
+      height:
+        interpolate(
+          height.value,
+          [END, END + 150],
+          [150, videoWidth],
+          "clamp"
+        ) * video.aspectRatio,
+    };
+  });
   return (
     <View
       style={{
@@ -57,13 +67,12 @@ export const VideoModal = ({
       <Background height={height} />
       <GestureDetector gesture={gesture}>
         <Animated.View style={style}>
-          <Animated.View style={videoStyle}>
-            <VideoPlayer
-              source={video.video}
-              style={{ flex: 1 }}
-              shouldPlay={true}
-            />
-          </Animated.View>
+          <AnimatedVideoPlayer
+            resizeMode={ResizeMode.STRETCH}
+            source={video.video}
+            style={videoStyle}
+            shouldPlay={true}
+          />
           <Content height={height} video={video} />
         </Animated.View>
       </GestureDetector>
