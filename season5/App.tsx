@@ -1,16 +1,11 @@
 import React from "react";
-import type {
-  StackCardInterpolationProps,
-  StackCardStyleInterpolator,
-} from "@react-navigation/stack";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Dimensions } from "react-native";
 
 import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
 import { YouTube } from "./src/YouTube";
 import { LoadAssets } from "./src/components/LoadAssets";
-import { Video } from "./src/YouTube/Video";
+import { VideoModal } from "./src/YouTube/VideoModal";
 
 const fonts = {};
 const assets: number[] = [];
@@ -35,7 +30,7 @@ const AppNavigator = () => (
 
     <Stack.Screen
       name="Video"
-      component={Video}
+      component={VideoModal}
       options={{
         headerShown: false,
         presentation: "transparentModal",

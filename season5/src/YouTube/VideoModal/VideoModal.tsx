@@ -11,16 +11,17 @@ import Animated, {
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
-import type { Video as VideoModel } from "./Videos";
+import type { Video } from "../Videos";
+
+import { Background, END } from "./Background";
 
 const { width, height: wHeight } = Dimensions.get("window");
 
-export const Video = ({
+export const VideoModal = ({
   route,
-}: StackScreenProps<{ Video: { video: VideoModel } }>) => {
+}: StackScreenProps<{ Video: { video: Video } }>) => {
   const { top } = useSafeAreaInsets();
   const start = wHeight - top;
-  const end = 125;
   const height = useSharedValue(start);
   const { video } = route.params;
   const gesture = Gesture.Pan()
@@ -28,12 +29,12 @@ export const Video = ({
       height.value -= changeY;
     })
     .onEnd(({ velocityY: velocity }) => {
-      const dst = snapPoint(height.value, velocity, [start, end]);
+      const dst = snapPoint(height.value, velocity, [start, END]);
       height.value = withSpring(dst, { velocity, overshootClamping: true });
     });
   const style = useAnimatedStyle(() => ({
     height: height.value,
-    backgroundColor: "cyan",
+    backgroundColor: "white",
   }));
   return (
     <View
@@ -42,8 +43,7 @@ export const Video = ({
         justifyContent: "space-between",
       }}
     >
-      <StatusBar barStyle="light-content" />
-      <View style={{ backgroundColor: "black", height: top }} />
+      <Background height={height} />
       <GestureDetector gesture={gesture}>
         <Animated.View style={style}>
           <VideoPlayer
