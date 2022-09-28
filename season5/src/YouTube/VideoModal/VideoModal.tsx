@@ -16,6 +16,7 @@ import type { Video } from "../Videos";
 
 import { Background, END } from "./Background";
 import { Content } from "./Content";
+import { PlayerControls } from "./PlayerControls";
 
 const AnimatedVideoPlayer = Animated.createAnimatedComponent(VideoPlayer);
 const { width, height: wHeight } = Dimensions.get("window");
@@ -61,12 +62,15 @@ export const VideoModal = ({
       <Background height={height} />
       <GestureDetector gesture={gesture}>
         <Animated.View style={style}>
-          <AnimatedVideoPlayer
-            resizeMode={ResizeMode.COVER}
-            source={video.video}
-            style={videoStyle}
-            shouldPlay={true}
-          />
+          <View style={{ flexDirection: "row" }}>
+            <AnimatedVideoPlayer
+              resizeMode={ResizeMode.COVER}
+              source={video.video}
+              style={videoStyle}
+              shouldPlay={true}
+            />
+            <PlayerControls height={height} title={video.title} />
+          </View>
           <Content height={height} video={video} />
         </Animated.View>
       </GestureDetector>
