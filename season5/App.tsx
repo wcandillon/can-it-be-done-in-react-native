@@ -7,6 +7,7 @@ import { YouTube } from "./src/YouTube";
 import { Shazam } from "./src/Shazam";
 import { LoadAssets } from "./src/components/LoadAssets";
 import { VideoModal } from "./src/YouTube/VideoModal";
+import { Breathe } from "./src/Breathe";
 
 const fonts = {};
 const assets: number[] = [];
@@ -33,6 +34,14 @@ const AppNavigator = () => (
       component={Shazam}
       options={{
         title: "🎧 Shazam",
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Breathe"
+      component={Breathe}
+      options={{
+        title: "🧘🏻‍♀️ Breathe",
         headerShown: false,
       }}
     />

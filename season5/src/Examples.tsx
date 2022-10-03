@@ -15,6 +15,10 @@ const examples = [
     screen: "Shazam",
     title: "🎧 Shazam",
   },
+  {
+    screen: "Breathe",
+    title: "🧘🏻‍♀️ Breathe",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
