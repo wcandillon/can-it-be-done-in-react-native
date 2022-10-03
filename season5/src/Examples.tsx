@@ -11,6 +11,10 @@ const examples = [
     screen: "YouTube",
     title: "📺 YouTube",
   },
+  {
+    screen: "Shazam",
+    title: "🎧 Shazam",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
 import { YouTube } from "./src/YouTube";
+import { Shazam } from "./src/Shazam";
 import { LoadAssets } from "./src/components/LoadAssets";
 import { VideoModal } from "./src/YouTube/VideoModal";
 
@@ -27,7 +28,14 @@ const AppNavigator = () => (
         headerShown: false,
       }}
     />
-
+    <Stack.Screen
+      name="Shazam"
+      component={Shazam}
+      options={{
+        title: "🎧 Shazam",
+        headerShown: false,
+      }}
+    />
     <Stack.Screen
       name="Video"
       component={VideoModal}
