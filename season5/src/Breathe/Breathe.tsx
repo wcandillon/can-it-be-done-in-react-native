@@ -10,6 +10,8 @@ import {
   Shadow,
   useLoop,
   useComputedValue,
+  RuntimeShader,
+  Skia,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions } from "react-native";
@@ -26,14 +28,22 @@ const { width, height } = Dimensions.get("window");
 const center = vec(width / 2, height / 2);
 const easing = Easing.bezier(0.85, 0, 0.15, 1); //Easing.inOut(Easing.ease);
 
+const source = Skia.RuntimeEffect.Make(`
+uniform shader image;
+
+half4 main(float2 xy) {
+  return image.eval(xy).rgba;
+}
+`)!;
+
 export const Breathe = () => {
-  const progress = { current: 1 }; //useLoop({ duration: 3000 });
+  const progress = useLoop({ duration: 3000 });
   const transform = useComputedValue(
     () => [{ rotate: mix(progress.current, -Math.PI, 0) }],
     [progress]
   );
   return (
-    <Canvas style={{ width, height }}>
+    <Canvas style={{ width, height }} debug>
       <Fill color="black" />
       <Group origin={center} transform={transform} blendMode="screen">
         {new Array(N).fill(0).map((_, n) => {
@@ -51,11 +61,8 @@ export const Breathe = () => {
           }, [progress]);
           return (
             <Group key={n}>
-              <Circle c={c} r={r}>
-                <Shadow dx={0} dy={0} blur={r / 2} color={cl} shadowOnly />
-              </Circle>
               <Circle c={c} r={r} color={cl}>
-                <BlurMask blur={r / 2} style="inner" />
+                <RuntimeShader source={source} />
               </Circle>
             </Group>
           );
