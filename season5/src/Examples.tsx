@@ -19,6 +19,10 @@ const examples = [
     screen: "Breathe",
     title: "🧘🏻‍♀️ Breathe",
   },
+  {
+    screen: "SongOfBloom",
+    title: "*️⃣ Song of Bloom",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

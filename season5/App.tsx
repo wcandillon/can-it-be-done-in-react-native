@@ -8,6 +8,7 @@ import { Shazam } from "./src/Shazam";
 import { LoadAssets } from "./src/components/LoadAssets";
 import { VideoModal } from "./src/YouTube/VideoModal";
 import { Breathe } from "./src/Breathe";
+import { SongOfBloom } from "./src/SongOfBloom";
 
 const fonts = {};
 const assets: number[] = [];
@@ -42,6 +43,14 @@ const AppNavigator = () => (
       component={Breathe}
       options={{
         title: "🧘🏻‍♀️ Breathe",
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="SongOfBloom"
+      component={SongOfBloom}
+      options={{
+        title: "*️⃣ Song of Bloom",
         headerShown: false,
       }}
     />

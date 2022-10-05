@@ -5,5 +5,6 @@ export type Routes = {
   YouTube: undefined;
   Shazam: undefined;
   Breathe: undefined;
+  SongOfBloom: undefined;
   Video: { video: Video };
 };
