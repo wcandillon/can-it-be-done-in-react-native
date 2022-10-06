@@ -23,6 +23,10 @@ const examples = [
     screen: "SongOfBloom",
     title: "*️⃣ Song of Bloom",
   },
+  {
+    screen: "Hue",
+    title: "🌈 Hue",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
