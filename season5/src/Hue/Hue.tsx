@@ -9,7 +9,7 @@ import {
   useValue,
 } from "@shopify/react-native-skia";
 import React from "react";
-import { Dimensions, StatusBar } from "react-native";
+import { Dimensions } from "react-native";
 
 import { Background } from "./Background";
 import { Room } from "./Room";
@@ -34,23 +34,20 @@ export const Hue = () => {
     },
   });
   if (!boldFont || !font) {
-    return false;
+    return null;
   }
   return (
-    <>
-      <StatusBar barStyle="light-content" />
-      <Canvas style={{ width, height }} onTouch={onTouch}>
-        <Background>
-          <Room
-            colors={["#54A5E4", "#3325AE"]}
-            name="Room Name"
-            boldFont={boldFont}
-            font={font}
-            icon={couch}
-            active={active}
-          />
-        </Background>
-      </Canvas>
-    </>
+    <Canvas style={{ width, height }} onTouch={onTouch}>
+      <Background>
+        <Room
+          colors={["#54A5E4", "#3325AE"]}
+          name="Room Name"
+          boldFont={boldFont}
+          font={font}
+          icon={couch}
+          active={active}
+        />
+      </Background>
+    </Canvas>
   );
 };

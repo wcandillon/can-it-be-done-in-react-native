@@ -5,7 +5,6 @@ import {
   rect,
   rrect,
   Shadow,
-  Circle,
   Group,
   Path,
   LinearGradient,
