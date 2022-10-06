@@ -1,5 +1,7 @@
 import type { SkFont, SkPath } from "@shopify/react-native-skia";
 import {
+  Shadow,
+  Circle,
   Group,
   Path,
   LinearGradient,
@@ -18,6 +20,8 @@ interface RoomProps {
 }
 
 export const Room = ({ colors, name, boldFont, font, icon }: RoomProps) => {
+  const progress = 0.61;
+  const w = 335 * progress;
   return (
     <>
       <RoundedRect x={20} y={0} width={335} height={94} r={12}>
@@ -54,16 +58,23 @@ export const Room = ({ colors, name, boldFont, font, icon }: RoomProps) => {
         r={12}
         color="rgba(0,0,0,0.14)"
       />
-      <Group transform={[{ translateX: 290 }, { translateY: 25 }]}>
-        <RoundedRect
-          x={0}
-          y={0}
-          width={50}
-          height={30}
-          r={15}
-          opacity={0.154}
+      <RoundedRect x={20} y={94 - 24} width={w} height={24} r={12}>
+        <LinearGradient
+          start={vec(20, 94 - 24)}
+          end={vec(20 + w, 94 - 24)}
+          colors={["rgba(255, 255, 255, 0.01)", "rgba(255, 255, 255, 0.95)"]}
         />
-        <RoundedRect x={22} y={2} width={26} height={26} r={13} color="#fff" />
+      </RoundedRect>
+      <Circle color="white" r={12} cx={w + 12} cy={94 - 12}>
+        <Shadow dx={0} dy={0} color="rgba(0, 0, 0, 0.6)" blur={2} />
+      </Circle>
+      <Group transform={[{ translateX: 290 }, { translateY: 25 }]}>
+        <RoundedRect x={0} y={0} width={50} height={30} r={15} opacity={0.154}>
+          <Shadow dx={0} dy={0} color="rgba(0, 0, 0, 0.6)" blur={2} inner />
+        </RoundedRect>
+        <RoundedRect x={22} y={2} width={26} height={26} r={13} color="#fff">
+          <Shadow dx={0} dy={0} color="rgba(0, 0, 0, 0.6)" blur={2} />
+        </RoundedRect>
       </Group>
     </>
   );
