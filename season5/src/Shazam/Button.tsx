@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import type { SkiaValue, SkImage } from "@shopify/react-native-skia";
+import type { SkImage } from "@shopify/react-native-skia";
 import {
   LinearGradient,
   ImageShader,

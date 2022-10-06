@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Group, RoundedRect, rect, Path } from "@shopify/react-native-skia";
+import { Group, RoundedRect, Path } from "@shopify/react-native-skia";
 import React from "react";
 
 //const box = rect(0, 0, 375, 44);
