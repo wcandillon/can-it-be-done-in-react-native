@@ -7,5 +7,6 @@ export type Routes = {
   Breathe: undefined;
   SongOfBloom: undefined;
   Hue: undefined;
+  Photos: undefined;
   Video: { video: Video };
 };

@@ -27,6 +27,10 @@ const examples = [
     screen: "Hue",
     title: "🌈 Hue",
   },
+  {
+    screen: "Photos",
+    title: "📷 Photos",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

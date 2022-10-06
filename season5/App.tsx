@@ -9,6 +9,7 @@ import { LoadAssets } from "./src/components/LoadAssets";
 import { VideoModal } from "./src/YouTube/VideoModal";
 import { Breathe } from "./src/Breathe";
 import { SongOfBloom } from "./src/SongOfBloom";
+import { Photos } from "./src/Photos";
 import { Hue } from "./src/Hue";
 
 const fonts = {};
@@ -60,6 +61,14 @@ const AppNavigator = () => (
       component={Hue}
       options={{
         title: "🌈 Hue",
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Photos"
+      component={Photos}
+      options={{
+        title: "📷 Photos",
         headerShown: false,
       }}
     />
