@@ -1,5 +1,9 @@
-import type { SkFont, SkPath } from "@shopify/react-native-skia";
+import type { SkFont, SkiaValue, SkPath } from "@shopify/react-native-skia";
 import {
+  mix,
+  useComputedValue,
+  rect,
+  rrect,
   Shadow,
   Circle,
   Group,
@@ -17,11 +21,27 @@ interface RoomProps {
   boldFont: SkFont;
   font: SkFont;
   icon: SkPath;
+  active: SkiaValue<number>;
 }
 
-export const Room = ({ colors, name, boldFont, font, icon }: RoomProps) => {
+export const Room = ({
+  colors,
+  name,
+  boldFont,
+  font,
+  icon,
+  active,
+}: RoomProps) => {
   const progress = 0.61;
-  const w = 335 * progress;
+  const x = 335 * progress;
+  const opacity = useComputedValue(() => {
+    return 1 - active.current;
+  }, [active]);
+  const r1 = useComputedValue(() => {
+    const h = mix(active.current, 24, 94);
+    const y = mix(active.current, 94 - 24, 0);
+    return rrect(rect(x, y, 24, h), 12, 12);
+  }, [active]);
   return (
     <>
       <RoundedRect x={20} y={0} width={335} height={94} r={12}>
@@ -58,17 +78,20 @@ export const Room = ({ colors, name, boldFont, font, icon }: RoomProps) => {
         r={12}
         color="rgba(0,0,0,0.14)"
       />
-      <RoundedRect x={20} y={94 - 24} width={w} height={24} r={12}>
+      <RoundedRect x={20} y={94 - 24} width={x} height={24} r={12}>
         <LinearGradient
           start={vec(20, 94 - 24)}
-          end={vec(20 + w, 94 - 24)}
+          end={vec(20 + x, 94 - 24)}
           colors={["rgba(255, 255, 255, 0.01)", "rgba(255, 255, 255, 0.95)"]}
         />
       </RoundedRect>
-      <Circle color="white" r={12} cx={w + 12} cy={94 - 12}>
+      <RoundedRect color="white" rect={r1}>
         <Shadow dx={0} dy={0} color="rgba(0, 0, 0, 0.6)" blur={2} />
-      </Circle>
-      <Group transform={[{ translateX: 290 }, { translateY: 25 }]}>
+      </RoundedRect>
+      <Group
+        transform={[{ translateX: 290 }, { translateY: 25 }]}
+        opacity={opacity}
+      >
         <RoundedRect x={0} y={0} width={50} height={30} r={15} opacity={0.154}>
           <Shadow dx={0} dy={0} color="rgba(0, 0, 0, 0.6)" blur={2} inner />
         </RoundedRect>

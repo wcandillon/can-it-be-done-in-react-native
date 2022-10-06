@@ -2,18 +2,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import {
   Canvas,
-  Circle,
-  Fill,
-  Group,
-  Image,
-  LinearGradient,
-  Path,
-  Rect,
-  rect,
-  RoundedRect,
+  runTiming,
   Skia,
   useFont,
-  vec,
+  useTouchHandler,
+  useValue,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions, StatusBar } from "react-native";
@@ -27,15 +20,26 @@ const couch = Skia.Path.MakeFromSVGString(
 )!;
 
 export const Hue = () => {
+  const active = useValue(0);
   const boldFont = useFont(require("./assets/Centrale-Sans-Bold.otf"), 15);
   const font = useFont(require("./assets/Centrale-Sans-Regular.otf"), 13);
+  const onTouch = useTouchHandler({
+    onStart: () => {
+      active.current = 0;
+      runTiming(active, 1, { duration: 300 });
+    },
+    onEnd: () => {
+      active.current = 1;
+      runTiming(active, 0, { duration: 300 });
+    },
+  });
   if (!boldFont || !font) {
     return false;
   }
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <Canvas style={{ width, height }}>
+      <Canvas style={{ width, height }} onTouch={onTouch}>
         <Background>
           <Room
             colors={["#54A5E4", "#3325AE"]}
@@ -43,6 +47,7 @@ export const Hue = () => {
             boldFont={boldFont}
             font={font}
             icon={couch}
+            active={active}
           />
         </Background>
       </Canvas>
