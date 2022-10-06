@@ -54,6 +54,17 @@ export const Room = ({ colors, name, boldFont, font, icon }: RoomProps) => {
         r={12}
         color="rgba(0,0,0,0.14)"
       />
+      <Group transform={[{ translateX: 290 }, { translateY: 25 }]}>
+        <RoundedRect
+          x={0}
+          y={0}
+          width={50}
+          height={30}
+          r={15}
+          opacity={0.154}
+        />
+        <RoundedRect x={22} y={2} width={26} height={26} r={13} color="#fff" />
+      </Group>
     </>
   );
 };
