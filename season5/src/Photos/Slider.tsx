@@ -24,22 +24,28 @@ interface Filter {
   filter: number[];
 }
 
-const f1 = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0];
-const f2 = [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0];
-const f3 = [0, 1.0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 0.6, 1, 0, 0, 0, 0, 0, 1, 0];
-const f4 = [
+const original = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0];
+const vivid = [
+  1.5, 0, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 0, 1, 0,
+];
+const sepia = [
+  1.3, -0.3, 1.1, 0, 0, 0, 1.3, 0.2, 0, 0, 0, 0, 0.8, 0.2, 0, 0, 0, 0, 1, 0,
+];
+const cool = [
   1, 0, 0, 0, 0, 0, 1, 0, 0, 0, -0.2, 0.2, 0.1, 0.4, 0, 0, 0, 0, 1, 0,
 ];
-const f5 = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0];
-const f6 = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0];
+const oldTimes = [
+  1, 0, 0, 0, 0, -0.4, 1.3, -0.4, 0.2, -0.1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0,
+];
+const noir = [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0];
 
 export const filters: Filter[] = [
-  { name: "Vivid", filter: f1 },
-  { name: "Filter 1", filter: f2 },
-  { name: "Filter 2", filter: f3 },
-  { name: "Filter 3", filter: f4 },
-  { name: "Filter 4", filter: f5 },
-  { name: "Filter 5", filter: f6 },
+  { name: "Original", filter: original },
+  { name: "Vivid", filter: vivid },
+  { name: "Sepia", filter: sepia },
+  { name: "Cool", filter: cool },
+  { name: "Old Times", filter: oldTimes },
+  { name: "Noir", filter: noir },
 ];
 
 interface SliderProps {

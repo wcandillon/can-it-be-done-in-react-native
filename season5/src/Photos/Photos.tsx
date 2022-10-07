@@ -35,7 +35,7 @@ export const Photos = () => {
   });
   const filter = useComputedValue(() => {
     return filters[
-      Math.min(Math.ceil(-x.current / photoWidth), filters.length - 1)
+      Math.min(Math.round(-x.current / photoWidth), filters.length - 1)
     ]!.filter;
   }, [x]);
   if (!image || !photo || !font) {
