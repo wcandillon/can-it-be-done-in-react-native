@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import type { NavigationProp } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { SharedElement } from "react-navigation-shared-element";
 import { View, Image, StyleSheet, Dimensions, Pressable } from "react-native";
 
@@ -8,6 +9,7 @@ import type { Story, InstagramRoutes } from "./Model";
 const margin = 16;
 const borderRadius = 5;
 const width = Dimensions.get("window").width / 2 - margin * 2;
+type Navigation = NavigationProp<InstagramRoutes>;
 
 const styles = StyleSheet.create({
   container: {
@@ -29,21 +31,12 @@ interface StoryThumbnailProps {
   story: Story;
 }
 
-const StoryThumbnail = ({ story }: StoryThumbnailProps) => {
-  const navigate = useNavigation<InstagramRoutes>();
-  //  const [opacity, setOpacity] = React.useState(1);
-  // useFocusEffect(() => {
-  //   if (navigation.isFocused()) {
-  //     setOpacity(1);
-  //   }
-  // });
-
+export const StoryThumbnail = ({ story }: StoryThumbnailProps) => {
+  const navigation = useNavigation<Navigation>();
   return (
     <Pressable
-      style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
       onPress={() => {
-        //  setOpacity(0);
-        navigate("Story", { story });
+        navigation.navigate("Story", { story });
       }}
     >
       <SharedElement id={story.id}>
@@ -54,5 +47,3 @@ const StoryThumbnail = ({ story }: StoryThumbnailProps) => {
     </Pressable>
   );
 };
-
-export default StoryThumbnail;

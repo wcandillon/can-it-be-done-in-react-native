@@ -11,10 +11,10 @@ import { Breathe } from "./src/Breathe";
 import { SongOfBloom } from "./src/SongOfBloom";
 import { Photos } from "./src/Photos";
 import { Hue } from "./src/Hue";
-import { Instagram } from "./src/Instagram";
+import { Instagram, assets as instagramAssets } from "./src/Instagram";
 
 const fonts = {};
-const assets: number[] = [];
+const assets: number[] = [...instagramAssets];
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
   <Stack.Navigator>

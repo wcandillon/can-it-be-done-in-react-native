@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 import type { Story } from "./Model";
-import StoryThumbnail from "./StoryThumbnail";
+import { StoryThumbnail } from "./StoryThumbnail";
 
 export const stories: Story[] = [
   {

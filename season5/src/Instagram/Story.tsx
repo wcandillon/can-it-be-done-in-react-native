@@ -14,19 +14,19 @@ import Animated, {
 } from "react-native-reanimated";
 import { useVector, snapPoint } from "react-native-redash";
 import { SharedElement } from "react-navigation-shared-element";
-import { Video } from "expo-av";
+import { ResizeMode, Video } from "expo-av";
 
-import type { SnapchatRoutes } from "./Model";
+import type { InstagramRoutes } from "./Model";
 
 interface StoryProps {
-  navigation: NavigationProp<SnapchatRoutes, "Story">;
-  route: RouteProp<SnapchatRoutes, "Story">;
+  navigation: NavigationProp<InstagramRoutes, "Story">;
+  route: RouteProp<InstagramRoutes, "Story">;
 }
 
 const { height } = Dimensions.get("window");
 const AnimatedVideo = Animated.createAnimatedComponent(Video);
 
-const Story = ({ route, navigation }: StoryProps) => {
+export const Story = ({ route, navigation }: StoryProps) => {
   const isGestureActive = useSharedValue(false);
   const translation = useVector();
   const { story } = route.params;
@@ -93,7 +93,7 @@ const Story = ({ route, navigation }: StoryProps) => {
               source={story.video}
               rate={1.0}
               isMuted={false}
-              resizeMode="cover"
+              resizeMode={ResizeMode.COVER}
               shouldPlay
               isLooping
               style={[StyleSheet.absoluteFill, borderStyle]}
@@ -104,5 +104,3 @@ const Story = ({ route, navigation }: StoryProps) => {
     </PanGestureHandler>
   );
 };
-
-export default Story;
