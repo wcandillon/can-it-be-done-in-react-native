@@ -31,6 +31,10 @@ const examples = [
     screen: "Photos",
     title: "📷 Photos",
   },
+  {
+    screen: "Instagram",
+    title: "🤳 Instagram",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

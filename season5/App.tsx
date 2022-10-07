@@ -11,6 +11,7 @@ import { Breathe } from "./src/Breathe";
 import { SongOfBloom } from "./src/SongOfBloom";
 import { Photos } from "./src/Photos";
 import { Hue } from "./src/Hue";
+import { Instagram } from "./src/Instagram";
 
 const fonts = {};
 const assets: number[] = [];
@@ -69,6 +70,15 @@ const AppNavigator = () => (
       component={Photos}
       options={{
         title: "📷 Photos",
+        headerShown: false,
+      }}
+    />
+
+    <Stack.Screen
+      name="Instagram"
+      component={Instagram}
+      options={{
+        title: "🤳 Instagram",
         headerShown: false,
       }}
     />

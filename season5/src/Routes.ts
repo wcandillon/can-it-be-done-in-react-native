@@ -8,5 +8,6 @@ export type Routes = {
   SongOfBloom: undefined;
   Hue: undefined;
   Photos: undefined;
+  Instagram: undefined;
   Video: { video: Video };
 };
