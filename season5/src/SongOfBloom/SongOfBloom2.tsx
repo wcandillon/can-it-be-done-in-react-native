@@ -32,7 +32,7 @@ export const SongOfBloom = () => {
           new Array(cols)
             .fill(0)
             .map((_j, j) => (
-              <Symbol key={`${i}-${j}`} i={i} j={j} clock={clock} />
+              <Symbol key={`${i}-${j}`} i={i} j={j} clock={clock} pos={pos} />
             ))
         )}
       <Fill blendMode="overlay">

@@ -26,6 +26,7 @@ interface SymbolProps {
   i: number;
   j: number;
   clock: SkiaValue<number>;
+  pos: SkiaValue<Vector>;
 }
 
 export const getPointAtLength = (length: number, from: Vector, to: Vector) => {
@@ -38,32 +39,36 @@ export const getPointAtLength = (length: number, from: Vector, to: Vector) => {
 const F = 0.0008;
 const noise = createNoise3D();
 
-export const Symbol = ({ i, j, clock }: SymbolProps) => {
+export const Symbol = ({ i, j, clock, pos }: SymbolProps) => {
   const x = j * size;
   const y = i * size;
   const c = vec(x, y);
-  const t2 = vec(x + size, y);
   const p2 = useComputedValue(() => {
-    const theta = noise(x / width, y / height, clock.current * F) * Math.PI;
-    return rotate(t2, c, theta);
-  }, [clock]);
+    const s = interpolate(
+      dist(pos.current, c),
+      [0, size, 350],
+      [0, size, 0],
+      "clamp"
+    );
+    return getPointAtLength(-s, c, pos.current);
+  }, [pos]);
   return (
     <>
       <Line
-        p1={c}
-        p2={p2}
+        p1={p2}
+        p2={c}
         style="stroke"
         color="rgba(255, 255, 255, 0.6)"
         strokeWidth={4}
         strokeCap="round"
       >
         <LinearGradient
-          start={c}
-          end={p2}
+          start={p2}
+          end={c}
           colors={["rgba(255, 255, 255, 0.6)", "rgba(255, 255, 255, 0)"]}
         />
       </Line>
-      <Circle color="white" r={2} c={c} />
+      <Circle color="white" r={2} c={p2} />
     </>
   );
 };
