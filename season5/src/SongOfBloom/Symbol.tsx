@@ -53,7 +53,7 @@ export const Symbol = ({ i, j, clock }: SymbolProps) => {
         p1={c}
         p2={p2}
         style="stroke"
-        color="white"
+        color="rgba(255, 255, 255, 0.6)"
         strokeWidth={4}
         strokeCap="round"
       >
