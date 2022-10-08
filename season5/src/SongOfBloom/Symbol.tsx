@@ -1,5 +1,7 @@
 import type { SkiaValue, Vector } from "@shopify/react-native-skia";
 import {
+  clamp,
+  rotate,
   dist,
   interpolate,
   Paint,
@@ -13,6 +15,7 @@ import {
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions } from "react-native";
+import { createNoise2D, createNoise3D } from "simplex-noise";
 
 const size = 30;
 const { width, height } = Dimensions.get("window");
@@ -22,7 +25,7 @@ export const rows = Math.ceil(height / size);
 interface SymbolProps {
   i: number;
   j: number;
-  pos: SkiaValue<Vector>;
+  clock: SkiaValue<number>;
 }
 
 export const getPointAtLength = (length: number, from: Vector, to: Vector) => {
@@ -32,24 +35,18 @@ export const getPointAtLength = (length: number, from: Vector, to: Vector) => {
   return vec(x, y);
 };
 
-export const Symbol = ({ i, j, pos }: SymbolProps) => {
+const F = 0.0008;
+const noise = createNoise3D();
+
+export const Symbol = ({ i, j, clock }: SymbolProps) => {
   const x = j * size;
   const y = i * size;
-  const c = vec(x + size / 2, y + size / 2);
-  const p2 = useComputedValue(
-    () =>
-      getPointAtLength(
-        interpolate(
-          dist(pos.current, c),
-          [0, Math.sqrt(width ** 2 + height ** 2)],
-          [15, 0],
-          "clamp"
-        ),
-        c,
-        pos.current
-      ),
-    [pos]
-  );
+  const c = vec(x, y);
+  const t2 = vec(x + size, y);
+  const p2 = useComputedValue(() => {
+    const theta = noise(x / width, y / height, clock.current * F) * Math.PI;
+    return rotate(t2, c, theta);
+  }, [clock]);
   return (
     <>
       <Line

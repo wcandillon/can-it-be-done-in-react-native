@@ -2,6 +2,7 @@ import {
   Canvas,
   Fill,
   Turbulence,
+  useClockValue,
   useTouchHandler,
   useValue,
   vec,
@@ -15,6 +16,7 @@ const { width, height } = Dimensions.get("window");
 const c = vec(width / 2, height / 2);
 
 export const SongOfBloom = () => {
+  const clock = useClockValue();
   const pos = useValue(c);
   const onTouch = useTouchHandler({
     onActive: (e) => {
@@ -29,7 +31,9 @@ export const SongOfBloom = () => {
         .map((_i, i) =>
           new Array(cols)
             .fill(0)
-            .map((_j, j) => <Symbol key={`${i}-${j}`} i={i} j={j} pos={pos} />)
+            .map((_j, j) => (
+              <Symbol key={`${i}-${j}`} i={i} j={j} clock={clock} />
+            ))
         )}
       <Fill blendMode="overlay">
         <Turbulence freqX={0.25} freqY={0.25} octaves={2} />
