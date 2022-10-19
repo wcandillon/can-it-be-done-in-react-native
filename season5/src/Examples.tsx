@@ -8,32 +8,8 @@ import type { Routes } from "./Routes";
 
 const examples = [
   {
-    screen: "YouTube",
-    title: "📺 YouTube",
-  },
-  {
-    screen: "Shazam",
-    title: "🎧 Shazam",
-  },
-  {
-    screen: "Breathe",
-    title: "🧘🏻‍♀️ Breathe",
-  },
-  {
-    screen: "SongOfBloom",
-    title: "*️⃣ Song of Bloom",
-  },
-  {
-    screen: "Hue",
-    title: "🌈 Hue",
-  },
-  {
-    screen: "Photos",
-    title: "📷 Photos",
-  },
-  {
-    screen: "Instagram",
-    title: "🤳 Instagram",
+    screen: "Headspace",
+    title: "🟠 Headspace",
   },
 ] as const;
 
