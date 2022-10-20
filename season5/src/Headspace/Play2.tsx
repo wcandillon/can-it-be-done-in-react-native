@@ -6,7 +6,6 @@ import {
   Paint,
   Group,
   mix,
-  CornerPathEffect,
   dist,
   vec,
   fitbox,
@@ -29,7 +28,6 @@ const src = Skia.XYWHRect(0, 0, 24, 24);
 const pause = Skia.Path.Make();
 pause.addRect(Skia.XYWHRect(0, 0, 8, 24));
 pause.addRect(Skia.XYWHRect(24 - 8, 0, 8, 24));
-console.log({ points: pause.countPoints() });
 
 const t = dist(vec(0, 0), vec(24, 12)) / 2;
 const mid1 = getPointAtLength(t, vec(0, 0), vec(24, 12));
@@ -78,7 +76,7 @@ export const Play = ({ progress }: Play2Props) => {
   return (
     <>
       <Paint ref={paint}>
-        <Blur blur={3} />
+        <Blur blur={4} />
         <ColorMatrix
           matrix={[
             1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 18, -7,
@@ -86,9 +84,7 @@ export const Play = ({ progress }: Play2Props) => {
         />
       </Paint>
       <Group transform={transform} layer={paint}>
-        <Path path={path} color="white">
-          <CornerPathEffect r={3} />
-        </Path>
+        <Path path={path} color="white" />
       </Group>
     </>
   );

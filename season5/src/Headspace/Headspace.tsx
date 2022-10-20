@@ -14,7 +14,7 @@ import { createNoise2D } from "simplex-noise";
 import { Easing } from "react-native-reanimated";
 import { SafeAreaInsetsContext } from "react-native-safe-area-context";
 
-import { Play } from "./Play";
+import { Play } from "./Play2";
 import { Background } from "./Background";
 import { Overlay } from "./Overlay";
 import { useContextBridge } from "./useContextBridge";
