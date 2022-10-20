@@ -1,5 +1,9 @@
 import type { SkiaValue, Vector } from "@shopify/react-native-skia";
 import {
+  usePaintRef,
+  Blur,
+  ColorMatrix,
+  Paint,
   Group,
   mix,
   CornerPathEffect,
@@ -58,7 +62,9 @@ interface Play2Props {
   r: number;
 }
 
-export const Play2 = ({ progress }: Play2Props) => {
+export const Play = ({ progress }: Play2Props) => {
+  const paint = usePaintRef();
+
   const path = useComputedValue(() => {
     const p = pause.interpolate(play, progress.current)!;
     p.simplify();
@@ -70,10 +76,20 @@ export const Play2 = ({ progress }: Play2Props) => {
     return [{ translateX: mix(progress.current, centroid, 0) }];
   }, [progress]);
   return (
-    <Group transform={transform}>
-      <Path path={path} color="white">
-        <CornerPathEffect r={8} />
-      </Path>
-    </Group>
+    <>
+      <Paint ref={paint}>
+        <Blur blur={3} />
+        <ColorMatrix
+          matrix={[
+            1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 18, -7,
+          ]}
+        />
+      </Paint>
+      <Group transform={transform} layer={paint}>
+        <Path path={path} color="white">
+          <CornerPathEffect r={3} />
+        </Path>
+      </Group>
+    </>
   );
 };
