@@ -14,7 +14,7 @@ import { createNoise2D } from "simplex-noise";
 import { Easing } from "react-native-reanimated";
 import { SafeAreaInsetsContext } from "react-native-safe-area-context";
 
-import { Play } from "./Play2";
+import { Play } from "./Play";
 import { Background } from "./Background";
 import { Overlay } from "./Overlay";
 import { useContextBridge } from "./useContextBridge";
@@ -32,7 +32,6 @@ const n4 = createNoise2D();
 
 export const Headspace = () => {
   const ContextBridge = useContextBridge(SafeAreaInsetsContext);
-
   const [toggled, setToggled] = useState(false);
   const onTouch = useTouchHandler({ onEnd: () => setToggled((t) => !t) });
   const progress = useTiming(toggled ? 1 : 0, {

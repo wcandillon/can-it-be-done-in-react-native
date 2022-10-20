@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import type { SkiaValue, Vector } from "@shopify/react-native-skia";
+import type { SkiaValue, SkPath, Vector } from "@shopify/react-native-skia";
 import {
   fitbox,
   Group,
@@ -13,33 +13,39 @@ import { interpolate } from "flubber";
 
 const bounds = { x: 0, y: 0, width: 100, height: 126 };
 
+const Flubber2SkiaInterpolator = (from: SkPath, to: SkPath) => {
+  const interpolator = interpolate(from.toSVGString(), to.toSVGString());
+  const d = 1e-3;
+  const i0 = Skia.Path.MakeFromSVGString(interpolator(0))!;
+  const i01 = Skia.Path.MakeFromSVGString(interpolator(d))!;
+  const i1 = Skia.Path.MakeFromSVGString(interpolator(1))!;
+  const i11 = Skia.Path.MakeFromSVGString(interpolator(1 - d))!;
+  return (t: number) => {
+    if (t < d) {
+      return i0;
+    }
+    if (1 - t < d) {
+      return i1;
+    }
+    return i11.interpolate(i01, t)!;
+  };
+};
+
+const playLeft = Skia.Path.MakeFromSVGString(
+  "M51 23V33.3V43.6V64.1V84.7V105.2L73.3 89.9L95.5 74.5C97.2 73.3 98.6 71.8 99.6 70C100.5 68.2 101 66.2 101 64.1C101 62.1 100.5 60 99.6 58.2C98.6 56.4 97.2 54.9 95.5 53.7L73.3 38.4L51 23Z"
+)!;
+const pauseLeft = Skia.Path.MakeFromSVGString(
+  "M84.7 1C80.2 1 76 2.8 72.9 5.9C69.8 9 68 13.2 68 17.7V106.6C68 111 69.8 115.2 72.9 118.3C76 121.5 80.2 123.2 84.7 123.2C89.1 123.2 93.3 121.5 96.5 118.3C99.6 115.2 101.3 111 101.3 106.6V17.7C101.3 13.2 99.6 9 96.5 5.9C93.3 2.8 89.1 1 84.7 1Z"
+)!;
+const leftPath = Flubber2SkiaInterpolator(playLeft, pauseLeft);
+
 const pauseRight = Skia.Path.MakeFromSVGString(
-  "M 0 0 V 10.3 V 20.6 V 41.1 V 61.7 V 82.2 L 22.3 66.9 L 44.5 51.5 C 46.2 50.3 47.6 48.8 48.6 47 C 49.5 45.2 50 43.2 50 41.1 C 50 39.1 49.5 37 48.6 35.2 C 47.6 33.4 46.2 31.9 44.5 30.7 L 22.3 15.4 L 0 0 Z"
+  "M17.7 3C13.2 3 9 4.8 5.9 7.9C2.8 11 1 15.2 1 19.7V108.6C1 113 2.8 117.2 5.9 120.3C9 123.5 13.2 125.2 17.7 125.2C22.1 125.2 26.3 123.5 29.5 120.3C32.6 117.2 34.3 113 34.3 108.6V19.7C34.3 15.2 32.6 11 29.5 7.9C26.3 4.8 22.1 3 17.7 3Z"
 )!;
 const playRight = Skia.Path.MakeFromSVGString(
-  "M16.6667 0C12.2464 0 8.00716 1.75595 4.88155 4.88155C1.75595 8.00716 0 12.2464 0 16.6667V105.556C0 109.976 1.75595 114.215 4.88155 117.341C8.00716 120.466 12.2464 122.222 16.6667 122.222C21.0869 122.222 25.3262 120.466 28.4518 117.341C31.5774 114.215 33.3333 109.976 33.3333 105.556V16.6667C33.3333 12.2464 31.5774 8.00716 28.4518 4.88155C25.3262 1.75595 21.0869 0 16.6667 0Z"
+  "M9 126C4.5 124 1.4 119.6 1 114.6V13.7C1.2 11.3 2 8.9 3.4 6.9C4.9 4.9 6.8 3.3 9 2.3C10.8 1.4 12.8 1 14.7 1C15.2 1 15.7 1 16.1 1.1C18.6 1.3 20.9 2.2 22.9 3.7L51 23V105.3L22.9 124.6C21.3 125.8 19.5 126.6 17.6 127H11.9C10.9 126.8 9.9 126.5 9 126Z"
 )!;
-
-let m3 = Skia.Matrix();
-m3.translate(
-  bounds.width / 2,
-  (bounds.height - pauseRight.computeTightBounds().height) / 2
-);
-pauseRight.transform(m3);
-
-m3 = Skia.Matrix();
-m3.translate(bounds.width - playRight.computeTightBounds().width, 0);
-playRight.transform(m3);
-
-const leftInterpolator = interpolate(
-  "M 8 125 C 3.5 123 0.4 118.6 0 113.6 V 12.7 C 0.2 10.3 1 7.9 2.4 5.9 C 3.9 3.9 5.8 2.3 8 1.3 C 9.8 0.4 11.8 0 13.7 0 C 14.2 0 14.7 0 15.1 0.1 C 17.6 0.3 19.9 1.2 21.9 2.7 L 50 22 V 104.3 L 21.9 123.6 C 20.3 124.8 18.5 125.6 16.6 126 H 10.9 C 9.9 125.8 8.9 125.5 8 125 Z",
-  "M 16.7 0 C 12.2 0 8 1.8 4.9 4.9 C 1.8 8 0 12.2 0 16.7 V 105.6 C 0 110 1.8 114.2 4.9 117.3 C 8 120.5 12.2 122.2 16.7 122.2 C 21.1 122.2 25.3 120.5 28.5 117.3 C 31.6 114.2 33.3 110 33.3 105.6 V 16.7 C 33.3 12.2 31.6 8 28.5 4.9 C 25.3 1.8 21.1 0 16.7 0 Z"
-);
-
-const rightInterpolator = interpolate(
-  pauseRight.toSVGString(),
-  playRight.toSVGString()
-);
+const rightPath = Flubber2SkiaInterpolator(playRight, pauseRight);
 
 interface PlayProps {
   progress: SkiaValue<number>;
@@ -49,16 +55,10 @@ interface PlayProps {
 
 export const Play = ({ progress, c, r }: PlayProps) => {
   const left = useComputedValue(() => {
-    const pathLeft = Skia.Path.MakeFromSVGString(
-      leftInterpolator(progress.current)
-    )!;
-    return pathLeft;
+    return leftPath(progress.current);
   }, [progress]);
   const right = useComputedValue(() => {
-    const pathRight = Skia.Path.MakeFromSVGString(
-      rightInterpolator(progress.current)
-    )!;
-    return pathRight;
+    return rightPath(progress.current);
   }, [progress]);
   const transform = useComputedValue(() => {
     const sf = 0.45;
