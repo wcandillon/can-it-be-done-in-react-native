@@ -17,7 +17,7 @@ const Flubber2SkiaInterpolator = (from: SkPath, to: SkPath) => {
   const interpolator = interpolate(from.toSVGString(), to.toSVGString());
   const d = 1e-3;
   const i0 = Skia.Path.MakeFromSVGString(interpolator(d))!;
-  const i1 = Skia.Path.MakeFromSVGString(interpolator(1))!;
+  const i1 = Skia.Path.MakeFromSVGString(interpolator(1 - d))!;
   return (t: number) => {
     if (t < d) {
       return from;
