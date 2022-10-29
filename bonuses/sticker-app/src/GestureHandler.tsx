@@ -79,7 +79,7 @@ export const GestureHandler = ({
     ],
   }));
   return (
-    <GestureDetector gesture={Gesture.Race(pan, rotate, scale)}>
+    <GestureDetector gesture={Gesture.Race(scale, rotate, pan)}>
       <Animated.View style={style} />
     </GestureDetector>
   );
