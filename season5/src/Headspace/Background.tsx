@@ -31,7 +31,7 @@ const getCurve = (start: number, h: number) => {
   path.moveTo(0, start);
   path.quadTo(width / 2, start - h, width, start);
   path.lineTo(width, height);
-  path.lineTo(0, height);
+  path.lineTo(0, height * 50);
   path.close();
   return path;
 };
