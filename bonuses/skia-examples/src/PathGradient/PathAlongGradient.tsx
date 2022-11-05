@@ -73,7 +73,7 @@ const inputRange = colors.map((_, i) => i / (colors.length - 1));
 //   4
 // );
 
-interface Line {
+export interface Line {
   p1: Vector;
   p2: Vector;
   length: number;
