@@ -94,7 +94,6 @@ basePaint.setStyle(PaintStyle.Stroke);
 basePaint.setStrokeJoin(StrokeJoin.Round);
 basePaint.setStrokeCap(StrokeCap.Round);
 
-const mul = (a: number, b: Vector) => vec(b.x * a, b.y * a);
 const getPointAtLength = (length: number, from: Vector, to: Vector) => {
   const angle = Math.atan2(to.y - from.y, to.x - from.x);
   const x = from.x + length * Math.cos(angle);
@@ -117,7 +116,7 @@ const tessalate = (
   const c05 = vec(pos.px, pos.py);
   const d = dist(p0, p1);
   const p05 = getPointAtLength(0.5 * d, p0, p1);
-  if (dist(c05, p05) > 0.1) {
+  if (dist(c05, p05) > 10) {
     tessalate(t0, t05, p0, c05, contour, lines, length, totalLength);
     tessalate(t05, t1, c05, p1, contour, lines, t05, totalLength);
   } else {
@@ -219,7 +218,7 @@ export const GradientAlongPath = ({
               return;
             }
             const d = dist(p1, p2);
-            if (d > current) {
+            if (length + d > current) {
               const p3 = getPointAtLength(current - length, p1, p2);
               canvas.drawLine(p1.x, p1.y, p3.x, p3.y, paint);
             } else {
