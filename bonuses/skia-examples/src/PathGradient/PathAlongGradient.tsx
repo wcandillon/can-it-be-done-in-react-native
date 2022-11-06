@@ -1,3 +1,4 @@
+import React from "react";
 import type {
   SkContourMeasure,
   SkiaValue,
@@ -7,6 +8,11 @@ import type {
   SkPaint,
 } from "@shopify/react-native-skia";
 import {
+  TileMode,
+  Path,
+  mix,
+  dist,
+  add,
   PaintStyle,
   Drawing,
   interpolateColors,
@@ -19,7 +25,7 @@ import {
   processTransform2d,
   Skia,
 } from "@shopify/react-native-skia";
-import { Dimensions } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 const strokeWidth = 15;
 const pad = 75;
@@ -50,7 +56,7 @@ const colors = repeat(
     "#67E282",
     "#3FCEBC",
   ],
-  2
+  1
 );
 const inputRange = colors.map((_, i) => i / (colors.length - 1));
 
@@ -88,6 +94,47 @@ basePaint.setStyle(PaintStyle.Stroke);
 basePaint.setStrokeJoin(StrokeJoin.Round);
 basePaint.setStrokeCap(StrokeCap.Round);
 
+const mul = (a: number, b: Vector) => vec(b.x * a, b.y * a);
+const getPointAtLength = (length: number, from: Vector, to: Vector) => {
+  const angle = Math.atan2(to.y - from.y, to.x - from.x);
+  const x = from.x + length * Math.cos(angle);
+  const y = from.y + length * Math.sin(angle);
+  return vec(x, y);
+};
+
+const tessalate = (
+  t0: number,
+  t1: number,
+  p0: Vector,
+  p1: Vector,
+  contour: SkContourMeasure,
+  lines: Line[],
+  length: number,
+  totalLength: number
+) => {
+  const t05 = mix(0.5, t0, t1);
+  const pos = contour.getPosTan(t05);
+  const c05 = vec(pos.px, pos.py);
+  const d = dist(p0, p1);
+  const p05 = getPointAtLength(0.5 * d, p0, p1);
+  if (dist(c05, p05) > 0.1) {
+    tessalate(t0, t05, p0, c05, contour, lines, length, totalLength);
+    tessalate(t05, t1, c05, p1, contour, lines, t05, totalLength);
+  } else {
+    const paint = basePaint.copy();
+    const start = interpolateColors(length / totalLength, inputRange, colors);
+    const end = interpolateColors(
+      (length + d) / totalLength,
+      inputRange,
+      colors
+    );
+    paint.setShader(
+      Skia.Shader.MakeLinearGradient(p0, p1, [start, end], null, TileMode.Clamp)
+    );
+    lines.push({ p1: p0, p2: p1, length, paint });
+  }
+};
+
 export const prepare = (svg: string) => {
   const path = Skia.Path.MakeFromSVGString(svg)!;
   const bounds = path.computeTightBounds();
@@ -102,27 +149,39 @@ export const prepare = (svg: string) => {
     contours.push(it);
   }
   const lines: Line[] = [];
-  let accumulatedLength = 0;
   contours.forEach((contour) => {
-    const length = contour.length();
-    const samples = Math.round(length / delta);
-    for (let i = 0; i <= samples; i++) {
-      if (i === 0) {
-        continue;
-      }
-      const l = (i - 1) * delta;
-      const prev = contour.getPosTan(l);
-      const current = contour.getPosTan(i * delta);
-      const p1 = vec(prev.px, prev.py);
-      const p2 = vec(current.px, current.py);
-      const paint = basePaint.copy();
-      paint.setColor(
-        interpolateColors(accumulatedLength / totalLength, inputRange, colors)
-      );
-      lines.push({ length: accumulatedLength, p1, p2, paint });
-      accumulatedLength += delta;
-    }
+    const posTan0 = contour.getPosTan(0);
+    const posTan1 = contour.getPosTan(contour.length());
+    const p0 = vec(posTan0.px, posTan0.py);
+    const p1 = vec(posTan1.px, posTan1.py);
+    tessalate(0, contour.length(), p0, p1, contour, lines, 0, contour.length());
   });
+  //  LOG  {"l": 53}
+  //LOG  {"l": 72}
+  //{"l": 105}
+  // 203
+  // let accumulatedLength = 0;
+  // contours.forEach((contour) => {
+  //   const length = contour.length();
+  //   const samples = Math.round(length / delta);
+  //   for (let i = 0; i <= samples; i++) {
+  //     if (i === 0) {
+  //       continue;
+  //     }
+  //     const l = (i - 1) * delta;
+  //     const prev = contour.getPosTan(l);
+  //     const current = contour.getPosTan(i * delta);
+  //     const p1 = vec(prev.px, prev.py);
+  //     const p2 = vec(current.px, current.py);
+  //     const paint = basePaint.copy();
+  //     paint.setColor(
+  //       interpolateColors(accumulatedLength / totalLength, inputRange, colors)
+  //     );
+  //     lines.push({ length: accumulatedLength, p1, p2, paint });
+  //     accumulatedLength += delta;
+  //   }
+  // });
+  // console.log({ l: lines.length });
   const stroke = path.copy();
   stroke.stroke({
     width: strokeWidth,
@@ -145,6 +204,7 @@ interface GradientAlongPathProps {
 // }
 
 export const GradientAlongPath = ({
+  path,
   progress,
   lines,
   totalLength,
@@ -154,10 +214,17 @@ export const GradientAlongPath = ({
       <Drawing
         drawing={({ canvas }) => {
           lines.map(({ p1, p2, length, paint }) => {
-            if (length > totalLength * progress.current) {
+            const current = totalLength * progress.current;
+            if (length >= current) {
               return;
             }
-            canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
+            const d = dist(p1, p2);
+            if (d > current) {
+              const p3 = getPointAtLength(current - length, p1, p2);
+              canvas.drawLine(p1.x, p1.y, p3.x, p3.y, paint);
+            } else {
+              canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
+            }
           });
         }}
       />
