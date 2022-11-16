@@ -1,9 +1,18 @@
 import type {
   SkContourMeasure,
   SkPath,
+  SkRect,
   Vector,
 } from "@shopify/react-native-skia";
-import { Skia, vec } from "@shopify/react-native-skia";
+import {
+  fitbox,
+  processTransform2d,
+  Skia,
+  vec,
+} from "@shopify/react-native-skia";
+
+export const fitRect = (src: SkRect, dst: SkRect) =>
+  processTransform2d(fitbox("contain", src, dst));
 
 export const getPointAtLength = (length: number, from: Vector, to: Vector) => {
   const angle = Math.atan2(to.y - from.y, to.x - from.x);
@@ -39,7 +48,7 @@ export class PathGeometry {
     if (!contour) {
       throw new Error(`Invalid length ${length}`);
     }
-    const posTan = contour.contour.getPosTan(length - contour.from);
-    return vec(posTan.px, posTan.py);
+    const res = contour.contour.getPosTan(length - contour.from);
+    return vec(res.px, res.py);
   }
 }
