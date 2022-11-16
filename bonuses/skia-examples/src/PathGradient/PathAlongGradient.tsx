@@ -61,13 +61,6 @@ const colors = repeat(
 );
 const inputRange = colors.map((_, i) => i / (colors.length - 1));
 
-export interface Line {
-  p1: Vector;
-  p2: Vector;
-  length: number;
-  paint: SkPaint;
-}
-
 const delta = strokeWidth / 4;
 
 const basePaint = Skia.Paint();
@@ -81,6 +74,13 @@ export const prepare = (svg: string) => {
 
   return { path, totalLength: 0, lines: [] };
 };
+
+export interface Line {
+  p1: Vector;
+  p2: Vector;
+  length: number;
+  paint: SkPaint;
+}
 
 interface GradientAlongPathProps {
   path: SkPath;
