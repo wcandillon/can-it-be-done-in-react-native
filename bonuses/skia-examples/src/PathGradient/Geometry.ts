@@ -23,18 +23,13 @@ export const getPointAtLength = (length: number, from: Vector, to: Vector) => {
 
 export class PathGeometry {
   private totalLength = 0;
-  private contours: { from: number; to: number; contour: SkContourMeasure }[] =
-    [];
+  private contour: SkContourMeasure;
 
   constructor(path: SkPath, resScale = 1) {
     const it = Skia.ContourMeasureIter(path, false, resScale);
-    let contour: SkContourMeasure | null;
-    while ((contour = it.next())) {
-      const from = this.totalLength;
-      const to = from + contour.length();
-      this.totalLength = to;
-      this.contours.push({ from, to, contour });
-    }
+    const contour: SkContourMeasure = it.next()!;
+    this.totalLength = contour.length();
+    this.contour = contour;
   }
 
   getTotalLength() {
@@ -42,13 +37,7 @@ export class PathGeometry {
   }
 
   getPointAtLength(length: number) {
-    const contour = this.contours.find(
-      ({ from, to }) => length >= from && length <= to
-    );
-    if (!contour) {
-      throw new Error(`Invalid length ${length}`);
-    }
-    const res = contour.contour.getPosTan(length - contour.from);
+    const res = this.contour.getPosTan(length);
     return vec(res.px, res.py);
   }
 }
