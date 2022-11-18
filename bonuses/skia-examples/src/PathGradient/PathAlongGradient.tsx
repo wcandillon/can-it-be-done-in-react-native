@@ -58,7 +58,7 @@ const colors = repeat(
     "#67E282",
     "#3FCEBC",
   ],
-  2
+  1
 );
 const inputRange = colors.map((_, i) => i / (colors.length - 1));
 
