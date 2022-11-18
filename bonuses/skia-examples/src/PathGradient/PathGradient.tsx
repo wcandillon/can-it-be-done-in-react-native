@@ -14,7 +14,7 @@ export const PathGradient = () => {
     easing: Easing.inOut(Easing.ease),
   });
   return (
-    <Canvas style={{ flex: 1 }} mode="continuous" debug>
+    <Canvas style={{ flex: 1 }}>
       <Fill color="black" />
       <GradientAlongPath {...hello} progress={progress} />
     </Canvas>

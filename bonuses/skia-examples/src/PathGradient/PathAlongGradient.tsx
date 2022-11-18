@@ -62,8 +62,6 @@ const colors = repeat(
 );
 const inputRange = colors.map((_, i) => i / (colors.length - 1));
 
-const delta = strokeWidth / 4;
-
 const basePaint = Skia.Paint();
 basePaint.setStrokeWidth(strokeWidth);
 basePaint.setStyle(PaintStyle.Stroke);
@@ -71,7 +69,7 @@ basePaint.setStrokeJoin(StrokeJoin.Round);
 basePaint.setStrokeCap(StrokeCap.Round);
 
 const tolerance = StyleSheet.hairlineWidth;
-const tessellate = (geo: PathGeometry, t0: number, t1: number) => {
+const tessellate = (geo: PathGeometry, t0: number, t1: number): Line[] => {
   const p0 = geo.getPointAtLength(t0);
   const p1 = geo.getPointAtLength(t1);
   const t05 = (t0 + t1) / 2;
@@ -130,7 +128,6 @@ interface GradientAlongPathProps {
 }
 
 export const GradientAlongPath = ({
-  path,
   progress,
   lines,
   totalLength,
@@ -138,6 +135,12 @@ export const GradientAlongPath = ({
   return (
     <Group>
       <Drawing
+        // We use the non-existing "progress" property Skia to register the animation Value
+        // This is only necessary with custom drawings (<Drawing />)
+        // We will improve this
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        progress={progress}
         drawing={({ canvas }) => {
           lines.forEach((line) => {
             const currentLength = totalLength * progress.current;
