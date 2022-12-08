@@ -17,8 +17,6 @@ import Animated, {
 import { State } from "react-native-gesture-handler";
 import { snapPoint } from "react-native-redash";
 
-import { ITEM_HEIGHT } from "./Constants";
-
 interface WithDecayParams {
   value: Animated.Adaptable<number>;
   velocity: Animated.Adaptable<number>;
