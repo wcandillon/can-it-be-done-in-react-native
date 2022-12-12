@@ -61,8 +61,7 @@ export const Card = ({ card: { source }, shuffleBack, index }: CardProps) => {
   );
   const gesture = Gesture.Pan()
     .onBegin(() => {
-      offset.value.x = translateX.value;
-      offset.value.y = translateY.value;
+      offset.value = { x: translateX.value, y: translateY.value };
       rotateZ.value = withTiming(0);
       scale.value = withTiming(1.1);
     })
