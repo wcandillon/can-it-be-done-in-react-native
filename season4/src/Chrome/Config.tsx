@@ -19,7 +19,7 @@ export const getPosition = (position: number) => {
   "worklet";
 
   return {
-    x: position % COL === 0 ? 0 : SIZE,
+    x: position % COL === 0 ? 0 : SIZE * (position % COL),
     y: Math.floor(position / COL) * SIZE,
   };
 };
