@@ -11,6 +11,10 @@ const examples = [
     screen: "Headspace",
     title: "🟠 Headspace",
   },
+  {
+    screen: "Riveo",
+    title: "📼 Riveo",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
