@@ -1,5 +1,12 @@
-import type { SkiaValue, Vector, SkFont } from "@shopify/react-native-skia";
+import type { SkFont } from "@shopify/react-native-skia";
 import {
+  Easing,
+  runTiming,
+  vec,
+  useComputedValue,
+  useValue,
+  useTouchHandler,
+  Canvas,
   Fill,
   ImageShader,
   Rect,
@@ -9,7 +16,6 @@ import {
   RoundedRect,
   RuntimeShader,
   Skia,
-  usePaintRef,
   Text,
   useImage,
 } from "@shopify/react-native-skia";
@@ -19,8 +25,8 @@ import { Dimensions, PixelRatio } from "react-native";
 import { Trash } from "./Icons";
 import { Labels } from "./Labels";
 
-const { width } = Dimensions.get("window");
-const project = Skia.RRectXY(Skia.XYWHRect(0, 0, width - 32, 150), 16, 16);
+const { width: wWidth } = Dimensions.get("window");
+const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, 150), 16, 16);
 
 const source = Skia.RuntimeEffect.Make(`
 uniform shader image;
@@ -32,7 +38,6 @@ const float PI = 3.1415926535897932384626433832795;
 const float r = 225.0;
 vec4 color = vec4(0., 0., 0., 0.);
 
-// https://www.youtube.com/watch?v=D_Zq6q1gnvw&t=158s
 void line(vec2 a, vec2 b, vec2 p) {
   vec2 ba = b - a;
   vec2 pa = p - a;
@@ -115,30 +120,57 @@ export interface Project {
 }
 
 interface ProjectProps {
-  active: boolean;
   project: Project;
   font: SkFont;
   smallFont: SkFont;
-  uniforms: SkiaValue<{ resolution: Vector; pointer: number; origin: number }>;
 }
 
 export const Project = ({
-  active,
-  uniforms,
   font,
   smallFont,
   project: { picture, title, color, size, duration },
 }: ProjectProps) => {
+  const { width } = project.rect;
   const image = useImage(picture);
-  const paint = usePaintRef();
+  const origin = useValue(width);
+  const pointer = useValue(width);
+  const onTouch = useTouchHandler({
+    onStart: ({ x }) => {
+      origin.current = x;
+    },
+    onActive: ({ x }) => {
+      pointer.current = x;
+    },
+    onEnd: () => {
+      runTiming(pointer, width, {
+        duration: 450,
+        easing: Easing.inOut(Easing.ease),
+      });
+      runTiming(origin, width, {
+        duration: 450,
+        easing: Easing.inOut(Easing.ease),
+      });
+    },
+  });
+  const uniforms = useComputedValue(() => {
+    return {
+      pointer: pointer.current * PixelRatio.get(),
+      origin: origin.current * PixelRatio.get(),
+      resolution: vec(width * PixelRatio.get(), 150 * PixelRatio.get()),
+    };
+  }, [origin, pointer]);
   if (!image) {
     return null;
   }
   return (
-    <>
-      <Paint ref={paint}>
-        <RuntimeShader source={source} uniforms={uniforms} />
-      </Paint>
+    <Canvas
+      style={{
+        width: project.rect.width,
+        height: project.rect.height,
+        marginBottom: 32,
+      }}
+      onTouch={onTouch}
+    >
       <RoundedRect rect={project} color="red" />
       <Group
         transform={[
@@ -152,7 +184,11 @@ export const Project = ({
       <Group transform={[{ scale: 1 / PixelRatio.get() }]}>
         <Group
           clip={project}
-          layer={active ? paint : undefined}
+          layer={
+            <Paint>
+              <RuntimeShader source={source} uniforms={uniforms} />
+            </Paint>
+          }
           transform={[{ scale: PixelRatio.get() }]}
         >
           <Fill>
@@ -163,6 +199,6 @@ export const Project = ({
           <Text x={32} y={150 - 40} text={title} color="white" font={font} />
         </Group>
       </Group>
-    </>
+    </Canvas>
   );
 };
