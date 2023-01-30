@@ -1,4 +1,4 @@
-import type { SkFont, SkRuntimeEffect } from "@shopify/react-native-skia";
+import type { SkFont } from "@shopify/react-native-skia";
 import {
   Easing,
   runTiming,
@@ -19,30 +19,16 @@ import {
   Text,
   useImage,
 } from "@shopify/react-native-skia";
-import React, { useEffect, useState } from "react";
-import { Dimensions, Image, PixelRatio } from "react-native";
+import { Dimensions, PixelRatio } from "react-native";
 
+import pageCurlSrc from "./pageCurl.sksl";
 import { Trash } from "./Icons";
 import { Labels } from "./Labels";
 
 const { width: wWidth } = Dimensions.get("window");
 const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, 150), 16, 16);
 
-const useShader = (mod: number) => {
-  const [rt, setRT] = useState<null | SkRuntimeEffect>(null);
-  useEffect(() => {
-    const { uri } = Image.resolveAssetSource(pageCurlSrc);
-    fetch(uri).then(async (resp) => {
-      const data = await resp.text();
-      setRT(Skia.RuntimeEffect.Make(data));
-    });
-  }, [mod]);
-
-  return rt;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const pageCurlSrc = require("./pageCurl.sksl");
+const source = Skia.RuntimeEffect.Make(pageCurlSrc);
 
 export interface Project {
   id: string;
@@ -64,7 +50,6 @@ export const Project = ({
   smallFont,
   project: { picture, title, color, size, duration },
 }: ProjectProps) => {
-  const source = useShader(pageCurlSrc);
   const { width } = project.rect;
   const image = useImage(picture);
   const origin = useValue(width);
@@ -129,7 +114,7 @@ export const Project = ({
           <Fill>
             <ImageShader image={image} rect={project.rect} fit="cover" />
           </Fill>
-          <Rect rect={rect(0, 120, width - 32, 30)} color={color} />
+          <Rect rect={rect(0, 120, width, 30)} color={color} />
           <Labels size={size} font={smallFont} duration={duration} />
           <Text x={32} y={150 - 40} text={title} color="white" font={font} />
         </Group>

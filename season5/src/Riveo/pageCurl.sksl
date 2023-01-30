@@ -7,74 +7,38 @@ const float PI = 3.1415926535897932384626433832795;
 const float r = 225.0;
 vec4 color = vec4(0., 0., 0., 0.);
 
-void line(vec2 a, vec2 b, vec2 p) {
-  vec2 ba = b - a;
+struct Paint {
+  float4 color;
+  bool stroke;
+  float strokeWidth;
+};
+
+float sdLine(vec2 p, vec2 a, vec2 b) {
   vec2 pa = p - a;
-  //float k = clamp(dot(ba, pa) / dot(ba, ba), 0.0, 1.0);
-  float k = dot(ba, pa) / dot(ba, ba);
-  float d = length(pa - ba * k);
-  if (d < 3.) {
-    color = vec4(0.3, 0.6, 1.0, 1.0);
+  vec2 ba = b - a;
+  float h = saturate(dot(pa, ba) / dot(ba, ba));
+  return length(pa - ba * h);
+}
+
+float4 draw(float4 color, float d, Paint paint) {
+  bool isFill = !paint.stroke && d < 0;
+  bool isStroke = paint.stroke && abs(d) < paint.strokeWidth/2;
+  if (isFill || isStroke) {
+    return paint.color;
   }
+  return color;
 }
 
-mat3 translate(vec2 p) {
-  return mat3(1.0,0.0,0.0,0.0,1.0,0.0,p.x,p.y,1.0);
-}
-
-mat3 scale(vec2 s, vec2 p) {
-  return translate(p) * mat3(s.x,0.0,0.0,0.0,s.y,0.0,0.0,0.0,1.0) * translate(-p);
-}
-
-vec2 project(vec2 p, mat3 m) {
-  return (inverse(m) * vec3(p, 1.)).xy;
-}
-
-void darken() {
-  color *= vec4(vec3(0.7), 1.);
-}
-
-bool transparent(vec2 p) {
-  return image.eval(p).a < 1.;
+float4 drawLine(float4 color, float2 p, float2 a, float2 b, Paint paint) {
+  float d = sdLine(p, a, b);
+  return draw(color, d, paint);
 }
 
 vec4 main(float2 xy) {
   color = image.eval(xy);
   float dx = origin - pointer;
-  float x = clamp(resolution.x - dx, 0., resolution.x);
-  float d = xy.x - x;
-  mat3 transform = mat3(1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0);
-  if (d > r) {
-    color = vec4(0.0, 0.0, 0.0, 0.0);
-    if (!transparent(xy)) {
-      color.rgb *= pow(clamp((r - d) / r, 0., 1.), .2);
-    }
-  } else if (d > 0) {
-    float theta = asin(d / r);
-    float dp = cos(theta);
-    vec2 s = vec2((1. + dp * 0.2));
-    transform = scale(s, 0.5 * resolution);
-    vec2 uv = project(xy, transform);
-    float d1 = theta * r;
-    float d2 = (PI - theta) * r;
-    vec2 p1 = vec2(x + d1, uv.y);
-    vec2 p2 = vec2(x + d2, uv.y);
-    color = image.eval(!transparent(p2) ? p2 : vec2(x + d1, xy.y));
-    if (!transparent(p2)) {
-      darken();
-    }
-    color.rgb *= pow(clamp((r - d) / r, 0., 1.), .2);
-  } else {
-    float theta = asin(abs(d) / r);
-    float dp = cos(theta);
-    vec2 s = vec2((1. + dp * 0.2));
-    transform = scale(s, 0.5 * resolution);
-    vec2 uv = project(xy, transform);
-    vec2 p = vec2(x + abs(d) + PI * r, uv.y);
-    color = image.eval(!transparent(p) ? p : xy);
-    if (!transparent(p)) {
-      darken();
-    }
-  }
+  float2 a = vec2(resolution.x - dx, resolution.y * 0.5);
+  float2 b = vec2(resolution.x, resolution.y * 0.5);
+  color = drawLine(color, xy, a, b, Paint(vec4(0.3, 0.6, 1., 1.), true, 10.));
   return color;
 }

@@ -7,6 +7,8 @@ import { Headspace } from "./src/Headspace";
 import { Riveo } from "./src/Riveo";
 import { LoadAssets } from "./src/components";
 
+import "./libs.d";
+
 const fonts = {};
 const assets: number[] = [];
 const Stack = createStackNavigator<Routes>();
