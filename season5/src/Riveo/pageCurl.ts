@@ -1,9 +1,19 @@
 import { Skia } from "@shopify/react-native-skia";
 
-const frag = (code: TemplateStringsArray) => {
-  const rt = Skia.RuntimeEffect.Make(code.join(""));
+type Value = string | number;
+type Values = Value | Value[];
+
+const frag = (source: TemplateStringsArray, rawValues?: Values) => {
+  // eslint-disable-next-line no-nested-ternary
+  const values = Array.isArray(rawValues)
+    ? rawValues
+    : rawValues === undefined
+    ? []
+    : [rawValues];
+  const processed = source.flatMap((s, i) => [s, values[i]]).filter(Boolean);
+  const rt = Skia.RuntimeEffect.Make(processed.join(""));
   if (rt === null) {
-    throw new Error("Couln't Compile Sahder");
+    throw new Error("Couln't Compile Shader");
   }
   return rt;
 };
@@ -14,8 +24,8 @@ uniform float pointer;
 uniform float origin;
 uniform vec2 resolution;
 
-const float PI = 3.1415926535897932384626433832795;
 const float r = 225.0;
+const float PI = ${Math.PI};
 vec4 color = vec4(0., 0., 0., 0.);
 
 struct Paint {
@@ -63,8 +73,15 @@ vec4 main(float2 xy) {
   Paint paint = Paint(vec4(0., 0., 1., 1.), true, 20.);
   drawLine(ctx, a, b, paint);
   drawLine(ctx, e, f, paint);
-  if (d > 0) {
+  
+  if (d > r) {
     ctx.color = vec4(0., 0., 0., 0.);
+  } else if (d > 0) {
+    float theta = asin(d / r);
+    float d1 = theta * r;
+    float d2 = (PI - theta) * r;
+  } else {
+
   }
   return ctx.color;
 }
