@@ -21,14 +21,12 @@ import {
 } from "@shopify/react-native-skia";
 import { Dimensions, PixelRatio } from "react-native";
 
-import pageCurlSrc from "./pageCurl.sksl";
 import { Trash } from "./Icons";
 import { Labels } from "./Labels";
+import { pageCurl } from "./pageCurl";
 
 const { width: wWidth } = Dimensions.get("window");
 const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, 150), 16, 16);
-
-const source = Skia.RuntimeEffect.Make(pageCurlSrc);
 
 export interface Project {
   id: string;
@@ -79,7 +77,7 @@ export const Project = ({
       resolution: vec(width * PixelRatio.get(), 150 * PixelRatio.get()),
     };
   }, [origin, pointer]);
-  if (!image || !source) {
+  if (!image) {
     return null;
   }
   return (
@@ -106,7 +104,7 @@ export const Project = ({
           clip={project}
           layer={
             <Paint>
-              <RuntimeShader source={source} uniforms={uniforms} />
+              <RuntimeShader source={pageCurl} uniforms={uniforms} />
             </Paint>
           }
           transform={[{ scale: PixelRatio.get() }]}
