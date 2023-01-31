@@ -18,7 +18,7 @@ const frag = (source: TemplateStringsArray, rawValues?: Values) => {
   return rt;
 };
 
-export const pageCurl = frag`  
+export const pageCurl = frag`
 uniform shader image;
 uniform float pointer;
 uniform float origin;
@@ -80,8 +80,14 @@ vec4 main(float2 xy) {
     float theta = asin(d / r);
     float d1 = theta * r;
     float d2 = (PI - theta) * r;
+    vec2 p1 = vec2(x + d1, xy.y);
+    vec2 p2 = vec2(x + d2, xy.y);
+    ctx.color = image.eval(p2.x > resolution.x ? p1 : p2);
   } else {
-
+    float theta = asin(abs(d) / r);
+    float dp = cos(theta);
+    vec2 p = vec2(x + abs(d) + PI * r, xy.y);
+    ctx.color = image.eval(p.x > resolution.x ? xy : p);
   }
   return ctx.color;
 }
