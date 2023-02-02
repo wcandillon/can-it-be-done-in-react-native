@@ -1,22 +1,4 @@
-import { Skia } from "@shopify/react-native-skia";
-
-type Value = string | number;
-type Values = Value | Value[];
-
-const frag = (source: TemplateStringsArray, rawValues?: Values) => {
-  // eslint-disable-next-line no-nested-ternary
-  const values = Array.isArray(rawValues)
-    ? rawValues
-    : rawValues === undefined
-    ? []
-    : [rawValues];
-  const processed = source.flatMap((s, i) => [s, values[i]]).filter(Boolean);
-  const rt = Skia.RuntimeEffect.Make(processed.join(""));
-  if (rt === null) {
-    throw new Error("Couln't Compile Shader");
-  }
-  return rt;
-};
+import { Core, frag } from "./ShaderLib";
 
 export const pageCurl = frag`
 uniform shader image;
@@ -28,39 +10,14 @@ const float r = 225.0;
 const float PI = ${Math.PI};
 vec4 color = vec4(0., 0., 0., 0.);
 
-struct Paint {
-  float4 color;
-  bool stroke;
-  float strokeWidth;
-};
+${Core}
 
-struct Context  {
-  float4 color;
-  float2 p;
-};
-
-float sdLine(vec2 p, vec2 a, vec2 b) {
-  vec2 pa = p - a;
-  vec2 ba = b - a;
-  float h = saturate(dot(pa, ba) / dot(ba, ba));
-  return length(pa - ba * h);
-}
-
-float4 draw(float4 color, float d, Paint paint) {
-  bool isFill = !paint.stroke && d < 0;
-  bool isStroke = paint.stroke && abs(d) < paint.strokeWidth/2;
-  if (isFill || isStroke) {
-    return paint.color;
-  }
-  return color;
-}
-
-void drawLine(inout Context ctx, float2 a, float2 b, Paint paint) {
-  float d = sdLine(ctx.p, a, b);
-  ctx.color = draw(ctx.color, d, paint); 
+bool inRect(float2 p, float4 rct) {
+  return p.x > rct.x && p.x < rct.z && p.y > rct.y && p.y < rct.w;
 }
 
 vec4 main(float2 xy) {
+  float4 region = vec4(0, 0, resolution.x, resolution.y);
   Context ctx = Context(image.eval(xy), xy);
   float dx = origin - pointer; 
   float x = resolution.x - dx;
@@ -70,9 +27,7 @@ vec4 main(float2 xy) {
   float2 b = vec2(resolution.x, resolution.y * 0.5);
   float2 e = vec2(resolution.x - r, 0);
   float2 f = vec2(resolution.x - r, resolution.y);
-  Paint paint = Paint(vec4(0., 0., 1., 1.), true, 20.);
-  drawLine(ctx, a, b, paint);
-  drawLine(ctx, e, f, paint);
+  Paint paint = createStroke(vec4(0., 0., 1., 1.), 20.);
   
   if (d > r) {
     ctx.color = vec4(0., 0., 0., 0.);
@@ -82,13 +37,18 @@ vec4 main(float2 xy) {
     float d2 = (PI - theta) * r;
     vec2 p1 = vec2(x + d1, xy.y);
     vec2 p2 = vec2(x + d2, xy.y);
-    ctx.color = image.eval(p2.x > resolution.x ? p1 : p2);
+    ctx.color = image.eval(inRect(p2, region) ? p2 : p1);
   } else {
     float theta = asin(abs(d) / r);
     float dp = cos(theta);
     vec2 p = vec2(x + abs(d) + PI * r, xy.y);
-    ctx.color = image.eval(p.x > resolution.x ? xy : p);
+    ctx.color = image.eval(inRect(p, region) ? p : xy);
   }
+
+  drawLine(ctx, a, b, paint);
+  drawLine(ctx, e, f, paint);
+  drawLine(ctx, vec2(x-r, 0), vec2(x-r, resolution.y), createStroke(vec4(1., 0., 0., 0.5), 10));
+  drawLine(ctx, vec2(x+r, 0), vec2(x+r, resolution.y), createStroke(vec4(1., 0., 0., 0.5), 10));
   return ctx.color;
 }
 `;

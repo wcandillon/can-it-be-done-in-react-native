@@ -26,7 +26,7 @@ import { Labels } from "./Labels";
 import { pageCurl } from "./pageCurl";
 
 const { width: wWidth } = Dimensions.get("window");
-const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, 150), 16, 16);
+const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, 150), 0, 0);
 
 export interface Project {
   id: string;
