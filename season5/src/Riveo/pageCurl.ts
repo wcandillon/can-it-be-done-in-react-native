@@ -23,10 +23,8 @@ vec4 main(float2 xy) {
   float x = resolution.x - dx;
   float d = xy.x - x;
 
-  float2 a = vec2(x, resolution.y * 0.5);
-  float2 b = vec2(resolution.x, resolution.y * 0.5);
-  float2 e = vec2(resolution.x - r, 0);
-  float2 f = vec2(resolution.x - r, resolution.y);
+  float2 a = vec2(x, 0);
+  float2 b = vec2(x, resolution.y);
   Paint paint = createStroke(vec4(0., 0., 1., 1.), 20.);
   
   if (d > r) {
@@ -39,16 +37,11 @@ vec4 main(float2 xy) {
     vec2 p2 = vec2(x + d2, xy.y);
     ctx.color = image.eval(inRect(p2, region) ? p2 : p1);
   } else {
-    float theta = asin(abs(d) / r);
-    float dp = cos(theta);
     vec2 p = vec2(x + abs(d) + PI * r, xy.y);
     ctx.color = image.eval(inRect(p, region) ? p : xy);
   }
 
   drawLine(ctx, a, b, paint);
-  drawLine(ctx, e, f, paint);
-  drawLine(ctx, vec2(x-r, 0), vec2(x-r, resolution.y), createStroke(vec4(1., 0., 0., 0.5), 10));
-  drawLine(ctx, vec2(x+r, 0), vec2(x+r, resolution.y), createStroke(vec4(1., 0., 0., 0.5), 10));
   return ctx.color;
 }
 `;

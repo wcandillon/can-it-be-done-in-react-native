@@ -26,7 +26,8 @@ import { Labels } from "./Labels";
 import { pageCurl } from "./pageCurl";
 
 const { width: wWidth } = Dimensions.get("window");
-const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, 150), 0, 0);
+const height = 150;
+const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, height), 0, 0);
 
 export interface Project {
   id: string;
@@ -74,7 +75,7 @@ export const Project = ({
     return {
       pointer: pointer.current * PixelRatio.get(),
       origin: origin.current * PixelRatio.get(),
-      resolution: vec(width * PixelRatio.get(), 150 * PixelRatio.get()),
+      resolution: vec(width * PixelRatio.get(), height * PixelRatio.get()),
     };
   }, [origin, pointer]);
   if (!image) {
@@ -114,7 +115,7 @@ export const Project = ({
           </Fill>
           <Rect rect={rect(0, 120, width, 30)} color={color} />
           <Labels size={size} font={smallFont} duration={duration} />
-          <Text x={32} y={150 - 40} text={title} color="white" font={font} />
+          <Text x={32} y={height - 40} text={title} color="white" font={font} />
         </Group>
       </Group>
     </Canvas>
