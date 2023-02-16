@@ -1,6 +1,9 @@
 import { glsl } from "./Tags";
 
 export const Core = glsl`
+const float PI = ${Math.PI};
+const vec4 TRANSPARENT = vec4(0., 0., 0., 0.);
+
 struct Paint {
   half4 color;
   bool stroke;
@@ -51,7 +54,7 @@ float4 draw(inout Context ctx, float d, Paint paint) {
   if (isFill || isStroke) {
     ctx.color = blend(ctx, paint);
   }
-  return color;
+  return TRANSPARENT;
 }
 
 void drawLine(inout Context ctx, float2 a, float2 b, Paint paint) {

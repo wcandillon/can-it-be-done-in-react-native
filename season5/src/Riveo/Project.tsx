@@ -26,6 +26,7 @@ import { Labels } from "./Labels";
 import { pageCurl } from "./pageCurl";
 
 const { width: wWidth } = Dimensions.get("window");
+const pd = PixelRatio.get();
 const height = 150;
 const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, height), 0, 0);
 
@@ -73,9 +74,9 @@ export const Project = ({
   });
   const uniforms = useComputedValue(() => {
     return {
-      pointer: pointer.current * PixelRatio.get(),
-      origin: origin.current * PixelRatio.get(),
-      resolution: vec(width * PixelRatio.get(), height * PixelRatio.get()),
+      pointer: pointer.current * pd,
+      origin: origin.current * pd,
+      resolution: vec(width * pd, height * pd),
     };
   }, [origin, pointer]);
   if (!image) {
@@ -100,7 +101,7 @@ export const Project = ({
       >
         <Trash />
       </Group>
-      <Group transform={[{ scale: 1 / PixelRatio.get() }]}>
+      <Group transform={[{ scale: 1 / pd }]}>
         <Group
           clip={project}
           layer={
@@ -108,7 +109,7 @@ export const Project = ({
               <RuntimeShader source={pageCurl} uniforms={uniforms} />
             </Paint>
           }
-          transform={[{ scale: PixelRatio.get() }]}
+          transform={[{ scale: pd }]}
         >
           <Fill>
             <ImageShader image={image} rect={project.rect} fit="cover" />
