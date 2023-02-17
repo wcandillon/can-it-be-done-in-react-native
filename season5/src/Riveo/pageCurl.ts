@@ -30,6 +30,10 @@ bool inRect(float2 p, float4 rct) {
   if (p.x < rct.x + cornerRadius && p.y > rct.w - cornerRadius) {
     return length(p - float2(rct.x + cornerRadius, rct.w - cornerRadius)) < cornerRadius;
   }
+  // Bottom right corner
+  if (p.x > rct.z - cornerRadius && p.y > rct.w - cornerRadius) {
+    return length(p - float2(rct.z - cornerRadius, rct.w - cornerRadius)) < cornerRadius;
+  }
   return true;
 }
 
