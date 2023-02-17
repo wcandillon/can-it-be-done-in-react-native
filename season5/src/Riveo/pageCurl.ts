@@ -21,19 +21,18 @@ vec4 main(float2 xy) {
   float dx = origin - pointer; 
   float x = container.z - dx;
   float d = xy.x - x;
- 
-  float2 a = vec2(x, container.y);
-  float2 b = vec2(x, container.w);
-  Paint paint = createStroke(vec4(0., 0., 1., 1.), 20.);
-  
+
   if (d > r) {
     ctx.color = TRANSPARENT;
+    if (inRect(xy, container)) {
+      ctx.color.a = mix(0.5, 0, (d-r)/r);
+    }
   } else if (d > 0) {
     float theta = asin(d / r);
     float d1 = theta * r;
     float d2 = (PI - theta) * r;
     vec2 p1 = vec2(x + d1, xy.y);
-    
+
     float dp = cos(theta);
     vec2 s = vec2((1. + dp * 0.2));
     mat3 transform = scale(s, center);
@@ -41,8 +40,12 @@ vec4 main(float2 xy) {
     vec2 p2 = vec2(x + d2, uv.y);
     if (inRect(p2, container)) {
       ctx.color = image.eval(p2);
-    } else {
+    } else if (inRect(p1, container)) {
       ctx.color = image.eval(p1);
+      ctx.color.rgb *= pow(clamp((r - d) / r, 0., 1.), .2);
+    } else if (inRect(xy, container)) {
+      ctx.color = TRANSPARENT;
+      ctx.color.a = 0.5;
     }
   } else {
     vec2 s = vec2(1.2);
@@ -55,8 +58,6 @@ vec4 main(float2 xy) {
       ctx.color = image.eval(xy);
     }
   }
-
-  drawLine(ctx, a, b, paint);
   return ctx.color;
 }
 `;
