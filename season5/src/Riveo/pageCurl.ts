@@ -4,10 +4,11 @@ export const pageCurl = frag`
 uniform shader image;
 uniform float pointer;
 uniform float origin;
-uniform vec2 resolution;
+uniform vec4 container;
+uniform vec2 center;
 
-const float r = 225.0;
-const float scaleFactor = 1.2;
+const float r = 150.0;
+const float scaleFactor = 0.2;
 
 ${Core}
 
@@ -16,14 +17,13 @@ bool inRect(float2 p, float4 rct) {
 }
 
 vec4 main(float2 xy) {
-  float4 region = vec4(0, 0, resolution.x, resolution.y);
   Context ctx = Context(image.eval(xy), xy);
   float dx = origin - pointer; 
-  float x = resolution.x - dx;
+  float x = container.z - dx;
   float d = xy.x - x;
-
-  float2 a = vec2(x, 0);
-  float2 b = vec2(x, resolution.y);
+ 
+  float2 a = vec2(x, container.y);
+  float2 b = vec2(x, container.w);
   Paint paint = createStroke(vec4(0., 0., 1., 1.), 20.);
   
   if (d > r) {
@@ -32,16 +32,22 @@ vec4 main(float2 xy) {
     float theta = asin(d / r);
     float d1 = theta * r;
     float d2 = (PI - theta) * r;
-    vec2 p1 = vec2(x + d1, xy.y);
-    vec2 p2 = vec2(x + d2, xy.y);
-    if (inRect(p2, region)) {
+    vec2 s = vec2(1);
+    mat3 transform = scale(s, center);
+    vec2 uv = project(xy, transform);
+    vec2 p1 = vec2(x + d1, uv.y);
+    vec2 p2 = vec2(x + d2, uv.y);
+    if (inRect(p2, container)) {
       ctx.color = image.eval(p2);
     } else {
       ctx.color = image.eval(p1);
     }
   } else {
-    vec2 p = vec2(x + abs(d) + PI * r, xy.y);
-    if (inRect(p, region)) {
+    vec2 s = vec2(1.2);
+    mat3 transform = scale(s, center);
+    vec2 uv = project(xy, transform);
+    vec2 p = vec2(x + abs(d) + PI * r, uv.y);
+    if (inRect(p, container)) {
       ctx.color = image.eval(p);
     } else {
       ctx.color = image.eval(xy);

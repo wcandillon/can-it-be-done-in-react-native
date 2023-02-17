@@ -26,21 +26,13 @@ const projects: Project[] = [
     color: "#59659a",
   },
   {
-    id: "fitness",
-    title: "Fitness",
+    id: "krakow",
+    title: "Kraków",
     size: "500MB",
     duration: "11:04m",
-    picture: require("./assets/crossfit.jpg"),
-    color: "#44484a",
+    picture: require("./assets/krakow.jpg"),
+    color: "#BAB9B0",
   },
-  // {
-  //   id: "chess",
-  //   title: "Chess",
-  //   size: "1.50GB",
-  //   duration: "16:18m",
-  //   picture: require("./assets/chess.jpg"),
-  //   color: "#44484a",
-  // },
 ];
 
 export const Riveo = () => {

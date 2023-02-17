@@ -19,7 +19,9 @@ export const Labels = ({ font, size, duration }: LabelsProps) => {
   const s1 = (width - (30 + font.getTextWidth(updated))) / 2;
   const s3 = width - 16 - (30 + font.getTextWidth(duration));
   return (
-    <Group transform={[{ translateY: 124 }, { scale: 0.9 }]}>
+    <Group
+      transform={[{ translateX: 16 }, { translateY: 112.5 }, { scale: 0.7 }]}
+    >
       <Group transform={[{ translateX: 16 }]}>
         <Database />
         <Text x={30} y={18} text={size} color="white" font={font} />

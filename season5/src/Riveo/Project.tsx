@@ -7,13 +7,11 @@ import {
   useValue,
   useTouchHandler,
   Canvas,
-  Fill,
   ImageShader,
   Rect,
   rect,
   Group,
   Paint,
-  RoundedRect,
   RuntimeShader,
   Skia,
   Text,
@@ -28,7 +26,10 @@ import { pageCurl } from "./pageCurl";
 const { width: wWidth } = Dimensions.get("window");
 const pd = PixelRatio.get();
 const height = 150;
-const project = Skia.RRectXY(Skia.XYWHRect(0, 0, wWidth - 32, height), 0, 0);
+const outer = Skia.XYWHRect(0, 0, wWidth, height);
+const pad = 16;
+const inner = Skia.XYWHRect(pad, pad, wWidth - pad * 2, height - pad * 2);
+const labelHeight = 25;
 
 export interface Project {
   id: string;
@@ -50,7 +51,7 @@ export const Project = ({
   smallFont,
   project: { picture, title, color, size, duration },
 }: ProjectProps) => {
-  const { width } = project.rect;
+  const { width } = outer;
   const image = useImage(picture);
   const origin = useValue(width);
   const pointer = useValue(width);
@@ -76,7 +77,13 @@ export const Project = ({
     return {
       pointer: pointer.current * pd,
       origin: origin.current * pd,
-      resolution: vec(width * pd, height * pd),
+      center: [(outer.width * pd) / 2, (outer.height * pd) / 2],
+      container: [
+        inner.x,
+        inner.y,
+        inner.x + inner.width,
+        inner.y + inner.height,
+      ].map((v) => v * pd),
     };
   }, [origin, pointer]);
   if (!image) {
@@ -85,13 +92,12 @@ export const Project = ({
   return (
     <Canvas
       style={{
-        width: project.rect.width,
-        height: project.rect.height,
-        marginBottom: 32,
+        width: outer.width,
+        height: outer.height,
       }}
       onTouch={onTouch}
     >
-      <RoundedRect rect={project} color="red" />
+      <Rect rect={inner} color="red" />
       <Group
         transform={[
           { translateX: 290 },
@@ -103,7 +109,6 @@ export const Project = ({
       </Group>
       <Group transform={[{ scale: 1 / pd }]}>
         <Group
-          clip={project}
           layer={
             <Paint>
               <RuntimeShader source={pageCurl} uniforms={uniforms} />
@@ -111,12 +116,20 @@ export const Project = ({
           }
           transform={[{ scale: pd }]}
         >
-          <Fill>
-            <ImageShader image={image} rect={project.rect} fit="cover" />
-          </Fill>
-          <Rect rect={rect(0, 120, width, 30)} color={color} />
+          <Rect rect={inner}>
+            <ImageShader image={image} rect={inner} fit="cover" />
+          </Rect>
+          <Rect
+            rect={rect(
+              inner.x,
+              inner.y + inner.height - labelHeight,
+              inner.width,
+              labelHeight
+            )}
+            color={color}
+          />
           <Labels size={size} font={smallFont} duration={duration} />
-          <Text x={32} y={height - 40} text={title} color="white" font={font} />
+          <Text x={32} y={height - 50} text={title} color="white" font={font} />
         </Group>
       </Group>
     </Canvas>
