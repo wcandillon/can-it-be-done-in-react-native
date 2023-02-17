@@ -27,6 +27,7 @@ struct Paint {
 struct Context  {
   half4 color;
   float2 p;
+  float2 resolution;
 };
 
 Paint createStroke(half4 color, float strokeWidth) {
@@ -56,6 +57,13 @@ float sdLine(vec2 p, vec2 a, vec2 b) {
   return length(pa - ba * h);
 }
 
+float sdRRect(in vec2 p, in vec2 b, in vec4 r) {
+  r.xy = (p.x>0.0)?r.xy : r.zw;
+  r.x  = (p.y>0.0)?r.x  : r.y;
+  vec2 q = abs(p)-b+r.x;
+  return min(max(q.x,q.y),0.0) + length(max(q,0.0)) - r.x;
+}
+
 float sdRect(vec2 p, vec2 b) {
   vec2 d = abs(p)-b;
   return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
@@ -76,7 +84,16 @@ void drawLine(inout Context ctx, float2 a, float2 b, Paint paint) {
 }
 
 void drawRect(inout Context ctx, float4 rect, Paint paint) {
-  float d = sdRect(ctx.p - rect.xy, rect.zw - rect.xy);
+  vec2 p = (2.0*ctx.p-ctx.resolution)/ctx.resolution;
+  float2 wh = rect.zw - rect.xy;
+  float d = sdRect(p, wh/ctx.resolution.xy);
+  draw(ctx, d, paint); 
+}
+
+void drawRRect(inout Context ctx, float4 rect, float4 r, Paint paint) {
+  vec2 p = (2.0*ctx.p-ctx.resolution)/ctx.resolution;
+  float2 wh = rect.zw - rect.xy;
+  float d = sdRRect(p, wh/ctx.resolution.xy,vec4(3)/r);
   draw(ctx, d, paint); 
 }
 `;

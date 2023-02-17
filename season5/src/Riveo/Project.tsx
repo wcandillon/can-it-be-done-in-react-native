@@ -1,5 +1,6 @@
 import type { SkFont } from "@shopify/react-native-skia";
 import {
+  RoundedRect,
   Easing,
   runTiming,
   useComputedValue,
@@ -27,7 +28,13 @@ const pd = PixelRatio.get();
 const height = 150;
 const outer = Skia.XYWHRect(0, 0, wWidth, height);
 const pad = 16;
-const inner = Skia.XYWHRect(pad, pad, wWidth - pad * 2, height - pad * 2);
+const cornerRadius = 16;
+
+const inner = Skia.RRectXY(
+  Skia.XYWHRect(pad, pad, wWidth - pad * 2, height - pad * 2),
+  cornerRadius,
+  cornerRadius
+);
 const labelHeight = 25;
 
 export interface Project {
@@ -76,13 +83,14 @@ export const Project = ({
     return {
       pointer: pointer.current * pd,
       origin: origin.current * pd,
-      center: [(outer.width * pd) / 2, (outer.height * pd) / 2],
+      resolution: [outer.width * pd, outer.height * pd],
       container: [
-        inner.x,
-        inner.y,
-        inner.x + inner.width,
-        inner.y + inner.height,
+        inner.rect.x,
+        inner.rect.y,
+        inner.rect.x + inner.rect.width,
+        inner.rect.y + inner.rect.height,
       ].map((v) => v * pd),
+      cornerRadius: cornerRadius * pd,
     };
   }, [origin, pointer]);
   if (!image) {
@@ -96,7 +104,7 @@ export const Project = ({
       }}
       onTouch={onTouch}
     >
-      <Rect rect={inner} color="red" />
+      <RoundedRect rect={inner} color="red" />
       <Group
         transform={[
           { translateX: 310 },
@@ -114,15 +122,16 @@ export const Project = ({
             </Paint>
           }
           transform={[{ scale: pd }]}
+          clip={inner}
         >
-          <Rect rect={inner}>
-            <ImageShader image={image} rect={inner} fit="cover" />
+          <Rect rect={inner.rect}>
+            <ImageShader image={image} rect={inner.rect} fit="cover" />
           </Rect>
           <Rect
             rect={rect(
-              inner.x,
-              inner.y + inner.height - labelHeight,
-              inner.width,
+              inner.rect.x,
+              inner.rect.y + inner.rect.height - labelHeight,
+              inner.rect.width,
               labelHeight
             )}
             color={color}

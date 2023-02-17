@@ -5,7 +5,8 @@ uniform shader image;
 uniform float pointer;
 uniform float origin;
 uniform vec4 container;
-uniform vec2 center;
+uniform float cornerRadius;
+uniform vec2 resolution;
 
 const float r = 150.0;
 const float scaleFactor = 0.2;
@@ -13,11 +14,28 @@ const float scaleFactor = 0.2;
 ${Core}
 
 bool inRect(float2 p, float4 rct) {
-  return p.x > rct.x && p.x < rct.z && p.y > rct.y && p.y < rct.w;
+  bool inRct = p.x > rct.x && p.x < rct.z && p.y > rct.y && p.y < rct.w;
+  if (!inRct) {
+    return false;
+  }
+  // Top left corner
+  if (p.x < rct.x + cornerRadius && p.y < rct.y + cornerRadius) {
+    return length(p - float2(rct.x + cornerRadius, rct.y + cornerRadius)) < cornerRadius;
+  }
+  // Top right corner
+  if (p.x > rct.z - cornerRadius && p.y < rct.y + cornerRadius) {
+    return length(p - float2(rct.z - cornerRadius, rct.y + cornerRadius)) < cornerRadius;
+  }
+  // Bottom left corner
+  if (p.x < rct.x + cornerRadius && p.y > rct.w - cornerRadius) {
+    return length(p - float2(rct.x + cornerRadius, rct.w - cornerRadius)) < cornerRadius;
+  }
+  return true;
 }
 
 vec4 main(float2 xy) {
-  Context ctx = Context(image.eval(xy), xy);
+  Context ctx = Context(image.eval(xy), xy, resolution);
+  float2 center = resolution * 0.5;
   float dx = origin - pointer; 
   float x = container.z - dx;
   float d = xy.x - x;
