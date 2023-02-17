@@ -2,7 +2,6 @@ import type { SkFont } from "@shopify/react-native-skia";
 import {
   Easing,
   runTiming,
-  vec,
   useComputedValue,
   useValue,
   useTouchHandler,
@@ -100,7 +99,7 @@ export const Project = ({
       <Rect rect={inner} color="red" />
       <Group
         transform={[
-          { translateX: 290 },
+          { translateX: 310 },
           { translateY: (150 - 24 * 1.5) / 2 },
           { scale: 1.5 },
         ]}
