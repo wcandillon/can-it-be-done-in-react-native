@@ -53,13 +53,17 @@ vec4 main(float2 xy) {
     float theta = asin(d / r);
     float d1 = theta * r;
     float d2 = (PI - theta) * r;
-    vec2 p1 = vec2(x + d1, xy.y);
 
-    float dp = cos(theta);
-    vec2 s = vec2((1. + dp * 0.2));
+    vec2 s = vec2((1. + sin(theta) * 0.1));
     mat3 transform = scale(s, center);
     vec2 uv = project(xy, transform);
+    vec2 p1 = vec2(x + d1, uv.y);
+
+    s = vec2((1.1 + sin(PI/2 + theta) * 0.1));
+    transform = scale(s, center);
+    uv = project(xy, transform);
     vec2 p2 = vec2(x + d2, uv.y);
+
     if (inRect(p2, container)) {
       ctx.color = image.eval(p2);
     } else if (inRect(p1, container)) {
