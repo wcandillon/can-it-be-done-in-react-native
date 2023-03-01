@@ -1,5 +1,6 @@
 import type { SkFont } from "@shopify/react-native-skia";
 import {
+  Image,
   RoundedRect,
   Easing,
   runTiming,
@@ -17,6 +18,7 @@ import {
   Text,
   useImage,
 } from "@shopify/react-native-skia";
+import { ImageNode } from "@shopify/react-native-skia/lib/typescript/src/dom/nodes/drawings";
 import { Dimensions, PixelRatio } from "react-native";
 
 import { Trash } from "./Icons";
@@ -124,9 +126,7 @@ export const Project = ({
           transform={[{ scale: pd }]}
           clip={inner}
         >
-          <Rect rect={inner.rect}>
-            <ImageShader image={image} rect={inner.rect} fit="cover" />
-          </Rect>
+          <Image image={image} rect={inner.rect} fit="cover" />
           <Rect
             rect={rect(
               inner.rect.x,
