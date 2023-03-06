@@ -54,7 +54,7 @@ vec4 main(float2 xy) {
     float d1 = theta * r;
     float d2 = (PI - theta) * r;
 
-    vec2 s = vec2((1. + sin(theta) * 0.1));
+    vec2 s = vec2((1. + (1 - sin(PI/2 + theta)) * 0.1));
     mat3 transform = scale(s, center);
     vec2 uv = project(xy, transform);
     vec2 p1 = vec2(x + d1, uv.y);
