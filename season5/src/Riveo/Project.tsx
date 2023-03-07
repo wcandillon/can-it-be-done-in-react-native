@@ -8,7 +8,6 @@ import {
   useValue,
   useTouchHandler,
   Canvas,
-  ImageShader,
   Rect,
   rect,
   Group,
@@ -18,7 +17,6 @@ import {
   Text,
   useImage,
 } from "@shopify/react-native-skia";
-import { ImageNode } from "@shopify/react-native-skia/lib/typescript/src/dom/nodes/drawings";
 import { Dimensions, PixelRatio } from "react-native";
 
 import { Trash } from "./Icons";
