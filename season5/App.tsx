@@ -4,7 +4,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
 import { Headspace } from "./src/Headspace";
+import { Riveo } from "./src/Riveo";
 import { LoadAssets } from "./src/components";
+
+import "./libs.d";
 
 const fonts = {};
 const assets: number[] = [];
@@ -23,6 +26,14 @@ const AppNavigator = () => (
       component={Headspace}
       options={{
         title: "🟠 Headspace",
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Riveo"
+      component={Riveo}
+      options={{
+        title: "📼 Riveo",
         headerShown: false,
       }}
     />
