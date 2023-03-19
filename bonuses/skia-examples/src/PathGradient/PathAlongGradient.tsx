@@ -8,21 +8,15 @@ import type {
 } from "@shopify/react-native-skia";
 import {
   clamp,
-  SkContourMeasure,
-  Path,
   TileMode,
-  mix,
   dist,
   PaintStyle,
   Drawing,
   interpolateColors,
   StrokeJoin,
   StrokeCap,
-  vec,
   Group,
   rect,
-  fitbox,
-  processTransform2d,
   Skia,
 } from "@shopify/react-native-skia";
 import { Dimensions, StyleSheet } from "react-native";

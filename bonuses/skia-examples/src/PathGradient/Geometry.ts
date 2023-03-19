@@ -37,7 +37,7 @@ export class PathGeometry {
   }
 
   getPointAtLength(length: number) {
-    const res = this.contour.getPosTan(length);
-    return vec(res.px, res.py);
+    const [pos] = this.contour.getPosTan(length);
+    return pos;
   }
 }
