@@ -9,7 +9,11 @@ import type { Routes } from "./Routes";
 const examples = [
   {
     screen: "PathGradient",
-    title: "🎨 PathGradient",
+    title: "🌈 PathGradient",
+  },
+  {
+    screen: "JoyOfPainting",
+    title: "🎨 Joy of Painting",
   },
 ] as const;
 
