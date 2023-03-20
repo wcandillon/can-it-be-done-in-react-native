@@ -1,5 +1,7 @@
 import type { SkRect } from "@shopify/react-native-skia";
 import {
+  BlurMask,
+  Circle,
   SumPathEffect,
   CornerPathEffect,
   DiscretePathEffect,
@@ -36,6 +38,14 @@ const Cloud = ({ rct, flip = false }: CloudProps) => {
   );
 };
 
+export const Sun = () => {
+  return (
+    <Circle color="#F9E3A4" r={150} c={vec(350, 200)}>
+      <BlurMask blur={25} style="solid" />
+    </Circle>
+  );
+};
+
 export const Sky = () => {
   const { height } = useWindowDimensions();
   return (
@@ -47,6 +57,7 @@ export const Sky = () => {
           end={vec(0, height * 0.4)}
         />
       </Fill>
+      <Sun />
       <Cloud rct={rect(-150, 64, 350, 50)} />
       <Cloud rct={rect(250, 128, 350, 100)} flip />
       <Cloud rct={rect(-150, 200, 350, 120)} />

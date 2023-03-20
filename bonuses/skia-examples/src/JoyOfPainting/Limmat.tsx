@@ -10,13 +10,10 @@ import {
 } from "@shopify/react-native-skia";
 import { useWindowDimensions } from "react-native";
 
-interface LimmatProps {}
-
 export const Limmat = () => {
-  const { width, height } = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   const path = Skia.Path.Make();
-  const r1 = 200;
   path.addRect(rect(125, height * 0.5, 200, 600));
   const pivot = center(path.computeTightBounds());
   const m3 = Skia.Matrix();
