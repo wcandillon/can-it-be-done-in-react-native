@@ -1,27 +1,25 @@
 import {
-  Group,
-  CornerPathEffect,
-  rect,
   Canvas,
-  Path,
+  Fill,
+  LinearGradient,
+  rect,
+  vec,
 } from "@shopify/react-native-skia";
 import React from "react";
+import { useWindowDimensions } from "react-native";
 
-import { drawBlob } from "./Tools";
+import { Limmat } from "./Limmat";
+import { Sky } from "./Sky";
+import { Tree } from "./Tree";
 
 export const JoyOfPainting = () => {
-  const path = drawBlob(rect(0, 0, 400, 200));
+  const { height } = useWindowDimensions();
   return (
     <Canvas style={{ flex: 1 }}>
-      <Group transform={[{ translateY: 200 }]}>
-        <Path path={path}>
-          <CornerPathEffect r={100} />
-        </Path>
-      </Group>
-
-      <Group transform={[{ translateY: 600 }]}>
-        <Path path={path} />
-      </Group>
+      <Sky />
+      <Limmat />
+      <Tree rct={rect(0, 500, 100, 100)} />
+      <Tree rct={rect(100, 500, 100, 150)} />
     </Canvas>
   );
 };

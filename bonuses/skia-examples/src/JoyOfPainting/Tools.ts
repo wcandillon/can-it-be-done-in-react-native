@@ -1,63 +1,67 @@
 import type { SkPoint, SkRect } from "@shopify/react-native-skia";
-import { vec, Skia } from "@shopify/react-native-skia";
-import { createNoise2D } from "simplex-noise";
+import { vec } from "@shopify/react-native-skia";
 
-const noise2D = createNoise2D();
-
-export const inflate = (box: SkRect, dx: number, dy: number, tx = 0, ty = 0) =>
-  Skia.XYWHRect(
-    box.x - dx + tx,
-    box.y - dy + ty,
-    box.width + 2 * dx,
-    box.height + 2 * dy
-  );
-
-export const deflate = (box: SkRect, dx: number, dy: number, tx = 0, ty = 0) =>
-  inflate(box, -dx, -dy, tx, ty);
-
-export const drawBlob = (rct: SkRect, A = 25) => {
-  const path = Skia.Path.Make();
-  const a = 200; // Semi-major axis
-  const b = 100; // Semi-minor axis
-  const h = a / 2; // Center x-coordinate
-  const k = b / 2; // Center y-coordinate
-  const numPoints = 10; // Number of points to generate
-  const ellipsePoints = generateEllipsePoints(a, b, h, k, numPoints);
-  ellipsePoints.forEach((p, i) => {
-    if (i === 0) {
-      path.moveTo(p.x, p.y);
-    } else {
-      const p1 = ellipsePoints[i - 1];
-      path.quadTo(p1.x, p1.y, p.x, p.y);
-    }
-  });
-  return path;
-};
-
-const generateEllipsePoints = (
-  a: number,
-  b: number,
-  h = 0,
-  k = 0,
-  numPoints = 100
-) => {
+export const generateEllipsePoints = (rct: SkRect, numPoints = 10) => {
+  const a = rct.width / 2; // Semi-major axis (half of the rectangle's width)
+  const b = rct.height / 2; // Semi-minor axis (half of the rectangle's height)
+  const h = rct.x + a; // Center x-coordinate (half of the rectangle's width)
+  const k = rct.y + b; // Center y-coordinate (half of the rectangle's height)
   const points: SkPoint[] = [];
   const tValues: number[] = Array.from(
     { length: numPoints },
     (_, i) => (2 * Math.PI * i) / numPoints
   );
-  const noiseAmplitude = 50; // Amplitude of the noise
-  const noiseScale = 0.5; // Scale factor for the noise
 
   for (const t of tValues) {
-    const xNoise =
-      noise2D(h + a * Math.cos(t), k + b * Math.sin(t)) * noiseAmplitude;
-    const yNoise =
-      noise2D(h + a * Math.sin(t), k + b * Math.cos(t)) * noiseAmplitude;
-    const x: number = h + a * Math.cos(t) + noiseScale * xNoise;
-    const y: number = k + b * Math.sin(t) + noiseScale * yNoise;
+    const x: number = h + a * Math.cos(t);
+    const y: number = k + b * Math.sin(t);
     points.push(vec(x, y));
   }
 
   return points;
+};
+
+const catmullRomSpline = (
+  p0: SkPoint,
+  p1: SkPoint,
+  p2: SkPoint,
+  p3: SkPoint,
+  t: number
+) => {
+  const t2 = t * t;
+  const t3 = t2 * t;
+  const x =
+    0.5 *
+    (2 * p1.x +
+      (-p0.x + p2.x) * t +
+      (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 +
+      (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3);
+
+  const y =
+    0.5 *
+    (2 * p1.y +
+      (-p0.y + p2.y) * t +
+      (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 +
+      (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3);
+
+  return vec(x, y);
+};
+
+export const smoothPoints = (points: SkPoint[], splineResolution = 10) => {
+  const result: SkPoint[] = [];
+  const numPoints = points.length;
+  for (let i = 0; i < numPoints; i++) {
+    const p0 = points[(i - 1 + numPoints) % numPoints];
+    const p1 = points[i];
+    const p2 = points[(i + 1) % numPoints];
+    const p3 = points[(i + 2) % numPoints];
+
+    for (let j = 0; j < splineResolution; j++) {
+      const t = j / splineResolution;
+      const smoothedPoint = catmullRomSpline(p0, p1, p2, p3, t);
+      result.push(smoothedPoint);
+    }
+  }
+
+  return result;
 };
