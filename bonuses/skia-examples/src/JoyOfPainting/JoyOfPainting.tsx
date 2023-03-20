@@ -18,8 +18,8 @@ export const JoyOfPainting = () => {
     <Canvas style={{ flex: 1 }}>
       <Sky />
       <Limmat />
-      <Tree rct={rect(0, 490, 100, 170)} />
-      <Tree rct={rect(100, 500, 100, 150)} />
+      <Tree rct={rect(-32, 450, 100, 170)} />
+      <Tree rct={rect(50, 450, 100, 150)} />
     </Canvas>
   );
 };

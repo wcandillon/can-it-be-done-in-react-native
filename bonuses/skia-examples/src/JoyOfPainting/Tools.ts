@@ -1,6 +1,8 @@
 import type { SkPoint, SkRect } from "@shopify/react-native-skia";
 import { vec } from "@shopify/react-native-skia";
 
+export const generateRectPoints = (rct: SkRect, numPoints = 10) => {};
+
 export const generateEllipsePoints = (rct: SkRect, numPoints = 10) => {
   const a = rct.width / 2; // Semi-major axis (half of the rectangle's width)
   const b = rct.height / 2; // Semi-minor axis (half of the rectangle's height)

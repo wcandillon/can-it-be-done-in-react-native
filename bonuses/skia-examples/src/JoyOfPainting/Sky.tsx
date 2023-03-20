@@ -30,10 +30,8 @@ const Cloud = ({ rct, flip = false }: CloudProps) => {
         start={vec(rct.x, rct.y)}
         end={vec(rct.x + rct.width, rct.y + rct.height)}
       />
-      <SumPathEffect>
-        <CornerPathEffect r={50} />
-        <DiscretePathEffect length={25} deviation={10} />
-      </SumPathEffect>
+      <CornerPathEffect r={50} />
+      <DiscretePathEffect length={25} deviation={10} />
     </Oval>
   );
 };
