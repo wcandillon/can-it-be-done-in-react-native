@@ -13,8 +13,9 @@ export const Tree = ({ rct }: TreeProps) => {
   const noise = createNoise2D();
   const p1 = generateEllipsePoints(rct, 20);
   const A = 20;
-  const p2 = p1.map((point) => {
-    const d = A * noise(point.x, point.y);
+  const F = 2;
+  const p2 = p1.map((point, i) => {
+    const d = A + A * noise(0, (i / (p1.length - 1)) * F);
     return vec(point.x + d, point.y + d);
   });
   const points = smoothPoints(p2);
