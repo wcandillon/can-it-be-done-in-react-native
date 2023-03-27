@@ -1,56 +1,6 @@
 import type { SkPoint, SkRect } from "@shopify/react-native-skia";
 import { vec } from "@shopify/react-native-skia";
 
-export const generateRectPoints = (rct: SkRect, numPoints = 10) => {
-  const points: SkPoint[] = [];
-
-  const horizontalSegmentLength = rct.width / (Math.ceil(numPoints / 4) - 1);
-  const verticalSegmentLength = rct.height / (Math.ceil(numPoints / 4) - 1);
-
-  let remainingPoints = numPoints;
-
-  for (let i = 0; i < 4; i++) {
-    const segmentPoints = Math.ceil(remainingPoints / (4 - i));
-    remainingPoints -= segmentPoints;
-
-    for (let j = 0; j < segmentPoints; j++) {
-      let point: SkPoint;
-
-      switch (i) {
-        case 0:
-          point = {
-            x: rct.x + j * horizontalSegmentLength,
-            y: rct.y,
-          };
-          break;
-        case 1:
-          point = {
-            x: rct.x + rct.width,
-            y: rct.y + j * verticalSegmentLength,
-          };
-          break;
-        case 2:
-          point = {
-            x: rct.x + rct.width - j * horizontalSegmentLength,
-            y: rct.y + rct.height,
-          };
-          break;
-        case 3:
-          point = {
-            x: rct.x,
-            y: rct.y + rct.height - j * verticalSegmentLength,
-          };
-          break;
-        default:
-          throw new Error("Invalid segment index");
-      }
-
-      points.push(point);
-    }
-  }
-  return points;
-};
-
 export const generateEllipsePoints = (rct: SkRect, numPoints = 10) => {
   const a = rct.width / 2; // Semi-major axis (half of the rectangle's width)
   const b = rct.height / 2; // Semi-minor axis (half of the rectangle's height)
@@ -69,6 +19,25 @@ export const generateEllipsePoints = (rct: SkRect, numPoints = 10) => {
   }
 
   return points;
+};
+
+export const smoothPoints = (points: SkPoint[], splineResolution = 10) => {
+  const result: SkPoint[] = [];
+  const numPoints = points.length;
+  for (let i = 0; i < numPoints; i++) {
+    const p0 = points[(i - 1 + numPoints) % numPoints];
+    const p1 = points[i];
+    const p2 = points[(i + 1) % numPoints];
+    const p3 = points[(i + 2) % numPoints];
+
+    for (let j = 0; j < splineResolution; j++) {
+      const t = j / splineResolution;
+      const smoothedPoint = catmullRomSpline(p0, p1, p2, p3, t);
+      result.push(smoothedPoint);
+    }
+  }
+
+  return result;
 };
 
 const catmullRomSpline = (
@@ -95,23 +64,4 @@ const catmullRomSpline = (
       (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3);
 
   return vec(x, y);
-};
-
-export const smoothPoints = (points: SkPoint[], splineResolution = 10) => {
-  const result: SkPoint[] = [];
-  const numPoints = points.length;
-  for (let i = 0; i < numPoints; i++) {
-    const p0 = points[(i - 1 + numPoints) % numPoints];
-    const p1 = points[i];
-    const p2 = points[(i + 1) % numPoints];
-    const p3 = points[(i + 2) % numPoints];
-
-    for (let j = 0; j < splineResolution; j++) {
-      const t = j / splineResolution;
-      const smoothedPoint = catmullRomSpline(p0, p1, p2, p3, t);
-      result.push(smoothedPoint);
-    }
-  }
-
-  return result;
 };

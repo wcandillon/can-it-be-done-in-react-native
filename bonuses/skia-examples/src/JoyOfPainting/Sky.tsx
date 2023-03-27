@@ -1,11 +1,9 @@
 import type { SkRect } from "@shopify/react-native-skia";
 import {
-  BlurMask,
-  Circle,
-  SumPathEffect,
   CornerPathEffect,
   DiscretePathEffect,
-  center,
+  BlurMask,
+  Circle,
   Fill,
   LinearGradient,
   vec,
@@ -15,33 +13,31 @@ import {
 import React from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Palette } from "./Palette";
+
 interface CloudProps {
   rct: SkRect;
-  flip?: boolean;
 }
 
-const Cloud = ({ rct, flip = false }: CloudProps) => {
+const Cloud = ({ rct }: CloudProps) => {
+  const { width } = useWindowDimensions();
   return (
-    <Oval
-      rect={rct}
-      origin={center(rct)}
-      transform={[{ scaleX: flip ? -1 : 1 }]}
-    >
+    <Oval rect={rct}>
       <LinearGradient
-        colors={["white", "rgba(255, 255, 255, 0)"]}
-        start={vec(rct.x, rct.y)}
-        end={vec(rct.x + rct.width, rct.y + rct.height)}
+        colors={["white", "rgba(255, 255, 255, 0)", "white"]}
+        start={vec(-200, 0)}
+        end={vec(width + 200, 0)}
       />
-      <CornerPathEffect r={50} />
-      <DiscretePathEffect length={25} deviation={10} />
+      <CornerPathEffect r={60} />
+      <DiscretePathEffect length={20} deviation={10} />
     </Oval>
   );
 };
 
-export const Sun = () => {
+const Sun = () => {
   return (
-    <Circle color="#F9E3A4" r={150} c={vec(350, 200)}>
-      <BlurMask blur={25} style="solid" />
+    <Circle color={Palette.sunlightWishper} r={125} c={vec(350, 200)}>
+      <BlurMask blur={20} style="solid" />
     </Circle>
   );
 };
@@ -58,8 +54,8 @@ export const Sky = () => {
         />
       </Fill>
       <Sun />
-      <Cloud rct={rect(-150, 64, 350, 50)} />
-      <Cloud rct={rect(250, 128, 350, 100)} flip />
+      <Cloud rct={rect(-150, 50, 350, 50)} />
+      <Cloud rct={rect(250, 125, 350, 100)} />
       <Cloud rct={rect(-150, 200, 350, 120)} />
     </>
   );

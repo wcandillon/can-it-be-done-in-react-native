@@ -1,4 +1,4 @@
-import { Canvas, Group, rect } from "@shopify/react-native-skia";
+import { Canvas, rect } from "@shopify/react-native-skia";
 import React from "react";
 
 import { Grain } from "./Grain";
@@ -13,12 +13,10 @@ export const JoyOfPainting = () => {
       <Grain>
         <Sky />
         <Silo />
-        <Group transform={[{ translateY: 70 }]}>
-          <Limmat />
-          <Tree rct={rect(125, 430, 120, 150)} />
-          <Tree rct={rect(50, 420, 120, 150)} />
-          <Tree rct={rect(-50, 410, 120, 170)} />
-        </Group>
+        <Limmat />
+        <Tree rct={rect(125, 430, 120, 150)} />
+        <Tree rct={rect(50, 420, 120, 150)} />
+        <Tree rct={rect(-50, 410, 120, 170)} />
       </Grain>
     </Canvas>
   );

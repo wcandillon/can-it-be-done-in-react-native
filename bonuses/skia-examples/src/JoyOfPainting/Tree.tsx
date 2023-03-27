@@ -1,8 +1,8 @@
-import React from "react";
 import type { SkRect } from "@shopify/react-native-skia";
-import { Skia, vec, Group, Path } from "@shopify/react-native-skia";
+import { vec, Group, Path, Skia } from "@shopify/react-native-skia";
 import { createNoise2D } from "simplex-noise";
 
+import { Palette } from "./Palette";
 import { generateEllipsePoints, smoothPoints } from "./Tools";
 
 interface TreeProps {
@@ -11,29 +11,28 @@ interface TreeProps {
 
 export const Tree = ({ rct }: TreeProps) => {
   const noise = createNoise2D();
-  const p1 = generateEllipsePoints(rct, 20);
-  const A = 20;
-  const F = 2;
-  const p2 = p1.map((point, i) => {
-    const d = A + A * noise(0, (i / (p1.length - 1)) * F);
-    return vec(point.x + d, point.y + d);
+  let points = generateEllipsePoints(rct);
+  points = points.map((p, i) => {
+    const A = 20;
+    const F = 2;
+    const d = A * noise(F * (i / (points.length - 1)), 0);
+    return vec(p.x + d, p.y + d);
   });
-  const points = smoothPoints(p2);
-  const path = Skia.Path.Make();
-  points.forEach((point, index) => {
-    if (index === 0) {
-      path.moveTo(point.x, point.y);
+  points = smoothPoints(points);
+  const path = points.reduce((p, point, i) => {
+    if (i === 0) {
+      p.moveTo(point.x, point.y);
     } else {
-      path.lineTo(point.x, point.y);
+      p.lineTo(point.x, point.y);
     }
-  });
-  path.close();
+    return p;
+  }, Skia.Path.Make());
   return (
     <Group clip={path}>
-      <Path path={path} color="#315E5E" />
+      <Path path={path} color={Palette.silentBoughs} />
       <Path
         path={path}
-        color="#264948"
+        color={Palette.grove}
         transform={[{ translateX: -rct.width * 0.3 }]}
       />
     </Group>

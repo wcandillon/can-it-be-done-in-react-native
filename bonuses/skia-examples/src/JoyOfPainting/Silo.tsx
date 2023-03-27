@@ -1,68 +1,127 @@
-/* eslint-disable max-len */
 import { fitbox, Group, Path, rect } from "@shopify/react-native-skia";
-import React from "react";
 import { useWindowDimensions } from "react-native";
 
-// viewBox="0 0 345 1344"
-const src = rect(0, 0, 345, 1344);
-const aspectRatio = src.width / src.height;
 export const Silo = () => {
-  const { width, height } = useWindowDimensions();
-  const w = 150;
-  const dst = rect(width * 0.25, 50, w, w / aspectRatio);
+  const { width } = useWindowDimensions();
+  const siloWidth = 150;
+  const src = rect(0, 0, 520, 2025);
+  const aspectRatio = 520 / 2025;
+  const silo = rect(width * 0.25, 50, siloWidth, siloWidth / aspectRatio);
   return (
-    <Group transform={fitbox("contain", src, dst)}>
-      <Path path="M238.689.772H.021V1034.57h238.668V.772Z" color="#86A3B2" />
+    <Group transform={fitbox("contain", src, silo)}>
       <Path
-        path="M216.49 19.773h-22.177v36.175h22.177V19.773ZM179.306 19.773h-22.177v36.175h22.177V19.773ZM142.122 19.773h-22.177v36.175h22.177V19.773ZM104.96 19.773H82.783v36.175h22.177V19.773ZM67.776 19.773H45.6v36.175h22.177V19.773ZM29.004 19.773H6.826v36.175h22.178V19.773Z"
+        path="M409.473 1559.22H486.85V1780.12H519.891V2024.68H0.904297V1559.22H409.473Z"
+        color="#607F89"
+      />
+      <Path
+        path="M486.848 1559.22V1780.12V2024.68H289.57V1559.22H486.848Z"
+        color="#6C8E96"
+      />
+      <Path
+        path="M360.671 0.900269H0.904297V1559.22H360.671V0.900269Z"
+        color="#86A3B2"
+      />
+      <Path
+        path="M327.209 29.5405H293.779V84.0702H327.209V29.5405Z"
         color="#1D4D68"
       />
       <Path
-        path="M187.121.772v748.369M149.035.772v748.369M110.95.772v748.369M72.886.772v748.369M34.8.772v748.369"
+        path="M271.159 29.5405H237.729V84.0702H271.159V29.5405Z"
+        color="#1D4D68"
+      />
+      <Path
+        path="M215.108 29.5405H181.678V84.0702H215.108V29.5405Z"
+        color="#1D4D68"
+      />
+      <Path
+        path="M159.089 29.5405H125.659V84.0702H159.089V29.5405Z"
+        color="#1D4D68"
+      />
+      <Path
+        path="M103.038 29.5405H69.6082V84.0702H103.038V29.5405Z"
+        color="#1D4D68"
+      />
+      <Path
+        path="M44.5926 29.5405H11.1628V84.0702H44.5926V29.5405Z"
+        color="#1D4D68"
+      />
+      <Path
+        path="M282.938 0.900269V1128.97"
         style="stroke"
         color="#607F89"
         strokeMiter={10}
       />
       <Path
-        path="M249.466 753.134H.021v281.436h249.445V753.134Z"
+        path="M225.528 0.900269V1128.97"
+        style="stroke"
+        color="#607F89"
+        strokeMiter={10}
+      />
+      <Path
+        path="M168.118 0.900269V1128.97"
+        style="stroke"
+        color="#607F89"
+        strokeMiter={10}
+      />
+      <Path
+        path="M110.74 0.900269V1128.97"
+        style="stroke"
+        color="#607F89"
+        strokeMiter={10}
+      />
+      <Path
+        path="M53.331 0.900269V1128.97"
+        style="stroke"
+        color="#607F89"
+        strokeMiter={10}
+      />
+      <Path
+        path="M376.917 1134.99H0.90448V1559.22H376.917V1134.99Z"
         color="#7A99A5"
       />
-      <Path path="M48.39 809.898h-7.6v224.672h7.6V809.898Z" color="#A9CAD8" />
       <Path
-        path="m48.39 809.898 34.393 67.564v157.108H48.39V809.898Z"
-        color="#607F89"
-      />
-      <Path path="M90.383 809.898h-7.6v224.672h7.6V809.898Z" color="#A9CAD8" />
-      <Path
-        path="m90.361 809.898 34.393 67.564v157.108H90.361V809.898Z"
-        color="#607F89"
-      />
-      <Path path="M132.354 809.898h-7.6v224.672h7.6V809.898Z" color="#A9CAD8" />
-      <Path
-        path="m132.354 809.898 34.371 67.564v157.108h-34.371V809.898Z"
-        color="#607F89"
-      />
-      <Path path="M174.326 809.898h-7.6v224.672h7.6V809.898Z" color="#A9CAD8" />
-      <Path
-        path="m174.326 809.898 34.371 67.564v157.108h-34.371V809.898Z"
-        color="#607F89"
-      />
-      <Path path="M216.297 809.898h-7.6v224.672h7.6V809.898Z" color="#A9CAD8" />
-      <Path
-        path="m216.297 809.898 34.371 67.564v157.108h-34.371V809.898Z"
-        color="#607F89"
-      />
-      <Path
-        path="m238.689.772 32.375 63.162v970.636h-20.396V753.134h-11.979V.772Z"
+        path="M73.8151 1220.55H62.3589V1559.22H73.8151V1220.55Z"
         color="#A9CAD8"
       />
       <Path
-        path="M271.064 1034.57h51.331v146.55h21.92v162.24H.021v-308.79h271.043Z"
+        path="M73.8151 1220.55L125.659 1322.4V1559.22H73.8151V1220.55Z"
         color="#607F89"
       />
       <Path
-        path="M322.395 1034.57v308.79H191.522v-308.79h130.873Z"
-        color="#6C8E96"
+        path="M137.115 1220.55H125.659V1559.22H137.115V1220.55Z"
+        color="#A9CAD8"
+      />
+      <Path
+        path="M137.083 1220.55L188.927 1322.4V1559.22H137.083V1220.55Z"
+        color="#607F89"
+      />
+      <Path
+        path="M200.383 1220.55H188.927V1559.22H200.383V1220.55Z"
+        color="#A9CAD8"
+      />
+      <Path
+        path="M200.384 1220.55L252.195 1322.4V1559.22H200.384V1220.55Z"
+        color="#607F89"
+      />
+      <Path
+        path="M263.65 1220.55H252.194V1559.22H263.65V1220.55Z"
+        color="#A9CAD8"
+      />
+      <Path
+        path="M263.65 1220.55L315.461 1322.4V1559.22H263.65V1220.55Z"
+        color="#607F89"
+      />
+      <Path
+        path="M326.919 1220.55H315.463V1559.22H326.919V1220.55Z"
+        color="#A9CAD8"
+      />
+      <Path
+        path="M326.917 1220.55L378.728 1322.4V1559.22H326.917V1220.55Z"
+        color="#607F89"
+      />
+      <Path
+        path="M360.671 0.900269L409.472 96.1089V1134.99V1559.22H378.729V1134.99H360.671V0.900269Z"
+        color="#A9CAD8"
       />
     </Group>
   );

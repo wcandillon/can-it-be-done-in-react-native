@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { Fill, Turbulence, useFont, Text } from "@shopify/react-native-skia";
+import { useFont, Text, Turbulence, Fill } from "@shopify/react-native-skia";
 import type { ReactNode } from "react";
 import React from "react";
 import { useWindowDimensions } from "react-native";
@@ -16,7 +15,7 @@ export const Grain = ({ children }: GrainProps) => {
   const font = useFont(typeface, 100);
   const subFont = useFont(subTypeface, 24);
   const text = "Zürich";
-  const subText = "UNTERER LETTEN".toUpperCase();
+  const subText = "Unterer Letten".toUpperCase();
   if (!font || !subFont) {
     return null;
   }
