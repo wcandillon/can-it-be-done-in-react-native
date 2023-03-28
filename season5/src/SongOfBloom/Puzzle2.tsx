@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { SkiaValue, SkRect, Vector } from "@shopify/react-native-skia";
 import {
+  mix,
   Line,
   runTiming,
   Fill,
@@ -16,9 +17,10 @@ import {
   rect,
   useImage,
   vec,
+  Easing,
   useTouchHandler,
 } from "@shopify/react-native-skia";
-import React, { useState } from "react";
+import React from "react";
 import { Dimensions } from "react-native";
 import { createNoise2D, createNoise3D } from "simplex-noise";
 
@@ -98,9 +100,12 @@ interface StripeProps {
   index: number;
   clock: SkiaValue<number>;
   a: SkiaValue<number>;
+  i0: SkiaValue<number>;
+  i: SkiaValue<number>;
 }
 
-const Stripe = ({ index, clock, a }: StripeProps) => {
+const Stripe = ({ index, clock, a, i0, i }: StripeProps) => {
+  const animation = useValue(0);
   const noise = createNoise2D();
   const x = index * stripeWidth;
   const rct = rect(x, 0, stripeWidth - pad, height);
@@ -110,9 +115,18 @@ const Stripe = ({ index, clock, a }: StripeProps) => {
     index / numberOfStripes
   );
   const animatedVertices = useComputedValue(() => {
+    if (i0.current === index && i.current !== index) {
+      runTiming(animation, 1, { duration: 100, easing: Easing.linear }, () => {
+        runTiming(animation, 0, {
+          duration: 1000,
+          easing: Easing.bezier(0.22, 1, 0.36, 1),
+        });
+      });
+    }
     const t = clock.current * 0.0004;
-    return vertices.map((v, i) => {
-      const d = a.current * noise(t, i);
+    const f = mix(animation.current, 1, 2);
+    return vertices.map((v, j) => {
+      const d = (a.current + animation.current * 8) * noise(t * f, j);
       return vec(v.x + d, v.y + d);
     });
   }, [clock]);
@@ -126,6 +140,8 @@ const Stripe = ({ index, clock, a }: StripeProps) => {
 };
 
 export const Puzzle2 = () => {
+  const i = useValue(-1);
+  const i0 = useValue(-1);
   const y = useValue(0);
   const offset = useValue(0);
   const a = useValue(2);
@@ -139,14 +155,18 @@ export const Puzzle2 = () => {
       offset.current = y.current - e.y;
     },
     onActive: (e) => {
+      i0.current = i.current;
+      i.current = Math.round((e.x - pictureRect.x) / stripeWidth);
       const newY = offset.current + e.y;
       if (newY > y.current) {
         y.current = newY;
       }
     },
     onEnd: () => {
+      i.current = -1;
+      i0.current = -1;
       if (y.current + pictureRect.y > frameRect.y + frameRect.height - 40) {
-        runTiming(y, screen.height + 100, { duration: 600 });
+        runTiming(y, screen.height + 100, { duration: 800 });
         runTiming(a, 10, { duration: 200 });
       }
     },
@@ -163,7 +183,7 @@ export const Puzzle2 = () => {
         <Group
           transform={[
             { translateX: pictureRect.x },
-            { translateY: pictureRect.y + 5 },
+            { translateY: pictureRect.y + 10 },
           ]}
         >
           <ImageShader
@@ -172,7 +192,14 @@ export const Puzzle2 = () => {
             fit="fill"
           />
           {stripes.map((index) => (
-            <Stripe key={index} index={index} clock={clock} a={a} />
+            <Stripe
+              key={index}
+              index={index}
+              clock={clock}
+              a={a}
+              i0={i0}
+              i={i}
+            />
           ))}
         </Group>
       </Group>
