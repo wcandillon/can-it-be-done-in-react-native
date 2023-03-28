@@ -2,10 +2,8 @@
 import type { SkiaValue, SkRect, Vector } from "@shopify/react-native-skia";
 import {
   mix,
-  Line,
   runTiming,
   Fill,
-  Rect,
   Image,
   useComputedValue,
   useClockValue,
@@ -19,6 +17,7 @@ import {
   vec,
   Easing,
   useTouchHandler,
+  interpolate,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions } from "react-native";
@@ -126,7 +125,7 @@ const Stripe = ({ index, clock, a, i0, i }: StripeProps) => {
     const t = clock.current * 0.0004;
     const f = mix(animation.current, 1, 2);
     return vertices.map((v, j) => {
-      const d = (a.current + animation.current * 8) * noise(t * f, j);
+      const d = (a.current + animation.current * 6) * noise(t * f, j);
       return vec(v.x + d, v.y + d);
     });
   }, [clock]);
@@ -206,7 +205,7 @@ export const Puzzle2 = () => {
       <Group clip={deflate(frameRect, 10)}>
         <Group transform={transform}>
           <Group>
-            <Image image={picture} rect={pictureRect} fit="fill" />
+            <Image image={picture} rect={pictureRect} fit="cover" />
           </Group>
         </Group>
       </Group>
