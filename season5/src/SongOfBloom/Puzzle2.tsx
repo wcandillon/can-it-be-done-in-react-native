@@ -18,7 +18,7 @@ import {
   vec,
   useTouchHandler,
 } from "@shopify/react-native-skia";
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions } from "react-native";
 import { createNoise2D, createNoise3D } from "simplex-noise";
 
@@ -97,10 +97,10 @@ const generateTrianglePointsAndIndices = (
 interface StripeProps {
   index: number;
   clock: SkiaValue<number>;
+  a: SkiaValue<number>;
 }
 
-const Stripe = ({ index, clock }: StripeProps) => {
-  const freq = useValue(1);
+const Stripe = ({ index, clock, a }: StripeProps) => {
   const noise = createNoise2D();
   const x = index * stripeWidth;
   const rct = rect(x, 0, stripeWidth - pad, height);
@@ -110,9 +110,9 @@ const Stripe = ({ index, clock }: StripeProps) => {
     index / numberOfStripes
   );
   const animatedVertices = useComputedValue(() => {
-    const t = clock.current * 0.0004 * freq.current;
+    const t = clock.current * 0.0004;
     return vertices.map((v, i) => {
-      const d = 2 * noise(t, i);
+      const d = a.current * noise(t, i);
       return vec(v.x + d, v.y + d);
     });
   }, [clock]);
@@ -128,6 +128,8 @@ const Stripe = ({ index, clock }: StripeProps) => {
 export const Puzzle2 = () => {
   const y = useValue(0);
   const offset = useValue(0);
+  const a = useValue(2);
+
   const background = useImage(require("./assets/bg.jpg"));
   const frame = useImage(require("./assets/frame.png"));
   const picture = useImage(require("./assets/art1.jpg"));
@@ -144,7 +146,8 @@ export const Puzzle2 = () => {
     },
     onEnd: () => {
       if (y.current + pictureRect.y > frameRect.y + frameRect.height) {
-        runTiming(y, screen.height + 100, { duration: 400 });
+        runTiming(y, screen.height + 100, { duration: 600 });
+        runTiming(a, 10, { duration: 200 });
       }
     },
   });
@@ -169,7 +172,7 @@ export const Puzzle2 = () => {
             fit="fill"
           />
           {stripes.map((index) => (
-            <Stripe key={index} index={index} clock={clock} />
+            <Stripe key={index} index={index} clock={clock} a={a} />
           ))}
         </Group>
       </Group>
