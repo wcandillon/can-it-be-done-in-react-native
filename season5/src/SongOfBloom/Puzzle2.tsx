@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { SkiaValue, SkRect, Vector } from "@shopify/react-native-skia";
 import {
+  runSpring,
   mix,
   runTiming,
   Fill,
@@ -116,16 +117,13 @@ const Stripe = ({ index, clock, a, i0, i }: StripeProps) => {
   const animatedVertices = useComputedValue(() => {
     if (i0.current === index && i.current !== index) {
       runTiming(animation, 1, { duration: 100, easing: Easing.linear }, () => {
-        runTiming(animation, 0, {
-          duration: 1000,
-          easing: Easing.bezier(0.22, 1, 0.36, 1),
-        });
+        runSpring(animation, 0);
       });
     }
     const t = clock.current * 0.0004;
     const f = mix(animation.current, 1, 2);
     return vertices.map((v, j) => {
-      const d = (a.current + animation.current * 6) * noise(t * f, j);
+      const d = (a.current + animation.current * 8) * noise(t * f, j);
       return vec(v.x + d, v.y + d);
     });
   }, [clock]);
