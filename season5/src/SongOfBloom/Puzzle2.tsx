@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { SkiaValue, SkRect, Vector } from "@shopify/react-native-skia";
 import {
+  Line,
+  runTiming,
+  Fill,
+  Rect,
   Image,
   useComputedValue,
   useClockValue,
@@ -18,6 +22,7 @@ import React from "react";
 import { Dimensions } from "react-native";
 import { createNoise2D, createNoise3D } from "simplex-noise";
 
+const pad = 6;
 const deflate = (rct: SkRect, amount: number) => {
   return rect(
     rct.x + amount,
@@ -98,7 +103,7 @@ const Stripe = ({ index, clock }: StripeProps) => {
   const freq = useValue(1);
   const noise = createNoise2D();
   const x = index * stripeWidth;
-  const rct = rect(x, 0, stripeWidth - 4, height);
+  const rct = rect(x, 0, stripeWidth - pad, height);
   const { vertices, indices, textures } = generateTrianglePointsAndIndices(
     rct,
     20,
@@ -123,6 +128,7 @@ const Stripe = ({ index, clock }: StripeProps) => {
 export const Puzzle2 = () => {
   const y = useValue(0);
   const offset = useValue(0);
+  const background = useImage(require("./assets/bg.jpg"));
   const frame = useImage(require("./assets/frame.png"));
   const picture = useImage(require("./assets/art1.jpg"));
   const clock = useClockValue();
@@ -131,15 +137,25 @@ export const Puzzle2 = () => {
       offset.current = y.current - e.y;
     },
     onActive: (e) => {
-      y.current = offset.current + e.y;
+      const newY = offset.current + e.y;
+      if (newY > y.current) {
+        y.current = newY;
+      }
+    },
+    onEnd: () => {
+      if (y.current + pictureRect.y > frameRect.y + frameRect.height) {
+        runTiming(y, screen.height + 100, { duration: 400 });
+      }
     },
   });
   const transform = useComputedValue(() => [{ translateY: y.current }], [y]);
-  if (!picture || !frame) {
+  if (!picture || !frame || !background) {
     return null;
   }
   return (
     <Canvas style={{ flex: 1 }} onTouch={onTouch}>
+      <Fill color="#FDF8F7" />
+      <Image image={background} fit="cover" rect={pictureRect} />
       <Group transform={transform}>
         <Group
           transform={[
