@@ -1,5 +1,7 @@
-import type { SkRect, Vector } from "@shopify/react-native-skia";
+import type { SkiaValue, SkRect, Vector } from "@shopify/react-native-skia";
 import {
+  useComputedValue,
+  useClockValue,
   Shadow,
   Canvas,
   Group,
@@ -10,7 +12,7 @@ import {
   vec,
 } from "@shopify/react-native-skia";
 import React from "react";
-import { createNoise3D } from "simplex-noise";
+import { createNoise2D, createNoise3D } from "simplex-noise";
 
 const aspectRatio = 1030 / 564;
 const width = 300;
@@ -20,10 +22,6 @@ const art = require("./assets/art1.jpg");
 const numberOfStripes = 10;
 const stripeWidth = width / numberOfStripes;
 const stripes = new Array(numberOfStripes).fill(0).map((_, i) => i);
-
-interface StripeProps {
-  index: number;
-}
 
 const generateTrianglePointsAndIndices = (
   rct: SkRect,
@@ -70,7 +68,13 @@ const generateTrianglePointsAndIndices = (
   return { vertices, indices, textures };
 };
 
-const Stripe = ({ index }: StripeProps) => {
+interface StripeProps {
+  index: number;
+  clock: SkiaValue<number>;
+}
+
+const Stripe = ({ index, clock }: StripeProps) => {
+  const noise = createNoise2D();
   const x = index * stripeWidth;
   const rct = rect(x, 0, stripeWidth, height);
   const { vertices, indices, textures } = generateTrianglePointsAndIndices(
@@ -78,9 +82,16 @@ const Stripe = ({ index }: StripeProps) => {
     20,
     index / numberOfStripes
   );
+  const animatedVertices = useComputedValue(() => {
+    const t = clock.current * 0.0004;
+    return vertices.map((v, i) => {
+      const d = 2 * noise(t, i);
+      return vec(v.x + d, v.y + d);
+    });
+  }, [clock]);
   return (
     <Vertices
-      vertices={vertices}
+      vertices={animatedVertices}
       textures={textures}
       indices={indices}
       transform={[{ translateX: index * 5 }]}
@@ -92,6 +103,7 @@ const Stripe = ({ index }: StripeProps) => {
 
 export const Puzzle2 = () => {
   const image = useImage(art);
+  const clock = useClockValue();
 
   if (!image) {
     return null;
@@ -105,7 +117,7 @@ export const Puzzle2 = () => {
           fit="fill"
         />
         {stripes.map((index) => (
-          <Stripe key={index} index={index} />
+          <Stripe key={index} index={index} clock={clock} />
         ))}
       </Group>
     </Canvas>
