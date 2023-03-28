@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import type { SkiaValue, SkRect, Vector } from "@shopify/react-native-skia";
 import {
+  Image,
   useComputedValue,
   useClockValue,
-  Shadow,
+  useValue,
   Canvas,
   Group,
   Vertices,
@@ -10,15 +12,34 @@ import {
   rect,
   useImage,
   vec,
+  useTouchHandler,
 } from "@shopify/react-native-skia";
 import React from "react";
+import { Dimensions } from "react-native";
 import { createNoise2D, createNoise3D } from "simplex-noise";
 
-const aspectRatio = 1030 / 564;
-const width = 300;
+const deflate = (rct: SkRect, amount: number) => {
+  return rect(
+    rct.x + amount,
+    rct.y + amount,
+    rct.width - amount * 2,
+    rct.height - amount * 2
+  );
+};
+const screen = Dimensions.get("screen");
+const frameAspectRatio = 1621 / 1244;
+const frameWidth = 350;
+const frameRect = rect(
+  (screen.width - frameWidth) / 2,
+  64,
+  frameWidth,
+  frameWidth * frameAspectRatio
+);
+
+const width = 225;
+const aspectRatio = 1317 / 783;
 const height = width * aspectRatio;
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const art = require("./assets/art1.jpg");
+const pictureRect = rect((screen.width - width) / 2, 100, width, height);
 const numberOfStripes = 10;
 const stripeWidth = width / numberOfStripes;
 const stripes = new Array(numberOfStripes).fill(0).map((_, i) => i);
@@ -74,16 +95,17 @@ interface StripeProps {
 }
 
 const Stripe = ({ index, clock }: StripeProps) => {
+  const freq = useValue(1);
   const noise = createNoise2D();
   const x = index * stripeWidth;
-  const rct = rect(x, 0, stripeWidth, height);
+  const rct = rect(x, 0, stripeWidth - 4, height);
   const { vertices, indices, textures } = generateTrianglePointsAndIndices(
     rct,
     20,
     index / numberOfStripes
   );
   const animatedVertices = useComputedValue(() => {
-    const t = clock.current * 0.0004;
+    const t = clock.current * 0.0004 * freq.current;
     return vertices.map((v, i) => {
       const d = 2 * noise(t, i);
       return vec(v.x + d, v.y + d);
@@ -94,32 +116,55 @@ const Stripe = ({ index, clock }: StripeProps) => {
       vertices={animatedVertices}
       textures={textures}
       indices={indices}
-      transform={[{ translateX: index * 5 }]}
-    >
-      {/* <Shadow dx={4} dy={4} color="rgba(0, 0, 0, 0.4)" blur={4} /> */}
-    </Vertices>
+    />
   );
 };
 
 export const Puzzle2 = () => {
-  const image = useImage(art);
+  const y = useValue(0);
+  const offset = useValue(0);
+  const frame = useImage(require("./assets/frame.png"));
+  const picture = useImage(require("./assets/art1.jpg"));
   const clock = useClockValue();
-
-  if (!image) {
+  const onTouch = useTouchHandler({
+    onStart: (e) => {
+      offset.current = y.current - e.y;
+    },
+    onActive: (e) => {
+      y.current = offset.current + e.y;
+    },
+  });
+  const transform = useComputedValue(() => [{ translateY: y.current }], [y]);
+  if (!picture || !frame) {
     return null;
   }
   return (
-    <Canvas style={{ flex: 1 }}>
-      <Group>
-        <ImageShader
-          image={image}
-          rect={rect(0, 0, width, height)}
-          fit="fill"
-        />
-        {stripes.map((index) => (
-          <Stripe key={index} index={index} clock={clock} />
-        ))}
+    <Canvas style={{ flex: 1 }} onTouch={onTouch}>
+      <Group transform={transform}>
+        <Group
+          transform={[
+            { translateX: pictureRect.x },
+            { translateY: pictureRect.y + 5 },
+          ]}
+        >
+          <ImageShader
+            image={picture}
+            rect={rect(0, 0, width, height)}
+            fit="fill"
+          />
+          {stripes.map((index) => (
+            <Stripe key={index} index={index} clock={clock} />
+          ))}
+        </Group>
       </Group>
+      <Group clip={deflate(frameRect, 10)}>
+        <Group transform={transform}>
+          <Group>
+            <Image image={picture} rect={pictureRect} fit="fill" />
+          </Group>
+        </Group>
+      </Group>
+      <Image image={frame} rect={frameRect} fit="fill" />
     </Canvas>
   );
 };
