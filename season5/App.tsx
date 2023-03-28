@@ -5,6 +5,7 @@ import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
 import { Headspace } from "./src/Headspace";
 import { Riveo } from "./src/Riveo";
+import { SongOfBloom } from "./src/SongOfBloom";
 import { LoadAssets } from "./src/components";
 
 import "./libs.d";
@@ -34,6 +35,14 @@ const AppNavigator = () => (
       component={Riveo}
       options={{
         title: "📼 Riveo",
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="SongOfBloom"
+      component={SongOfBloom}
+      options={{
+        title: "*️⃣ Song of Bloom",
         headerShown: false,
       }}
     />
