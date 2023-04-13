@@ -18,7 +18,6 @@ import {
   vec,
   Easing,
   useTouchHandler,
-  interpolate,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions } from "react-native";

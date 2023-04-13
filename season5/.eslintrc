@@ -1,10 +1,6 @@
 { 
   "extends": "react-native-wcandillon", 
   "rules": {
-    "react/no-unstable-nested-components": [
-      "error",
-      { "allowAsProps": true }
-    ],
     "@typescript-eslint/no-non-null-assertion": "off"
   }
 } 
