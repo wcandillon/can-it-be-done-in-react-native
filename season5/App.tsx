@@ -9,6 +9,7 @@ import { SongOfBloom } from "./src/SongOfBloom";
 import { LoadAssets } from "./src/components";
 
 import "./libs.d";
+import { Instagram } from "./src/Instagram";
 
 const fonts = {};
 const assets: number[] = [];
@@ -43,6 +44,14 @@ const AppNavigator = () => (
       component={SongOfBloom}
       options={{
         title: "*️⃣ Song of Bloom",
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Instagram"
+      component={Instagram}
+      options={{
+        title: "📸 Instagram",
         headerShown: false,
       }}
     />

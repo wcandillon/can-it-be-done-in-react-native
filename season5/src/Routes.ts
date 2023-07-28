@@ -3,4 +3,5 @@ export type Routes = {
   Headspace: undefined;
   Riveo: undefined;
   SongOfBloom: undefined;
+  Instagram: undefined;
 };
