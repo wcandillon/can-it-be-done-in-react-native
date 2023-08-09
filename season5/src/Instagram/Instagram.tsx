@@ -8,18 +8,13 @@ import type { Routes } from "../Routes";
 
 import { ModalButton } from "./ModalButton";
 import zurich from "./assets/zurich.jpg";
-import aveny from "./assets/aveny.ttf";
-
 const { width, height } = Dimensions.get("window");
 const iconSize = 64;
-
-//       <Button onPress={() => navigate("StickerModal")} title="Open Modal" />
 
 export const Instagram = () => {
   const { navigate } = useNavigation<StackNavigationProp<Routes>>();
   const image = useImage(zurich);
-  const font = useFont(aveny, 56);
-  if (!image || !font) {
+  if (!image) {
     return null;
   }
   return (

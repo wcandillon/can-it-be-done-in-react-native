@@ -1,4 +1,4 @@
-import type { SkMatrix, SkSize } from "@shopify/react-native-skia";
+import { type SkMatrix, type SkSize } from "@shopify/react-native-skia";
 import { createContext, useContext, useReducer } from "react";
 import type { ReactNode, FC } from "react";
 import type { SharedValue } from "react-native-reanimated";

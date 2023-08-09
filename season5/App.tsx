@@ -6,7 +6,7 @@ import { Examples } from "./src/Examples";
 import { Headspace } from "./src/Headspace";
 import { Riveo } from "./src/Riveo";
 import { SongOfBloom } from "./src/SongOfBloom";
-import { LoadAssets } from "./src/components";
+import { LoadAssets, SkiaProvider } from "./src/components";
 import { Instagram, StickerModal } from "./src/Instagram";
 
 const fonts = {};

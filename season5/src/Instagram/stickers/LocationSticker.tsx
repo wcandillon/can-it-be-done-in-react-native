@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React from "react";
-import type { SkFont, SkMatrix } from "@shopify/react-native-skia";
+import type { SkMatrix } from "@shopify/react-native-skia";
 import {
   Skia,
   vec,
@@ -10,7 +10,6 @@ import {
   LinearGradient,
   Path,
   rect,
-  Text,
 } from "@shopify/react-native-skia";
 import type { SharedValue } from "react-native-reanimated";
 
@@ -25,11 +24,10 @@ const path = Skia.Path.MakeFromSVGString(
 const bounds = path.computeTightBounds();
 
 interface LocationStickerProps {
-  matrix: SharedValue<SkMatrix>;
-  font: SkFont;
+  matrix: SharedValue<SkMatrix> | SkMatrix;
 }
 
-export const LocationSticker = ({ matrix, font }: LocationStickerProps) => {
+export const LocationSticker = ({ matrix }: LocationStickerProps) => {
   return (
     <Group transform={[{ translateX: x }, { translateY: y }]}>
       <Group matrix={matrix}>
@@ -51,7 +49,7 @@ export const LocationSticker = ({ matrix, font }: LocationStickerProps) => {
             end={vec(100, 0)}
             colors={["#2803E5", "#911CAE"]}
           />
-          <Text text="Zürich" font={font} x={50} y={45} />
+          {/* <Text text="Zürich" font={font} x={50} y={45} /> */}
         </Group>
       </Group>
     </Group>

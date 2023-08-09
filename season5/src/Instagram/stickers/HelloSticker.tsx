@@ -21,8 +21,9 @@ export const HelloStickerDimensions = rect(
   300,
   (300 * bounds.height) / bounds.width
 );
+
 interface HelloStickerProps {
-  matrix: SharedValue<SkMatrix>;
+  matrix: SharedValue<SkMatrix> | SkMatrix;
 }
 
 export const HelloSticker = ({ matrix }: HelloStickerProps) => {

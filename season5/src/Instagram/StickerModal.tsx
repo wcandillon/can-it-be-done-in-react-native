@@ -1,6 +1,15 @@
 import React from "react";
-import { View } from "react-native";
+import { Canvas, Fill, Skia } from "@shopify/react-native-skia";
+
+import { stickers } from "./stickers";
 
 export const StickerModal = () => {
-  return <View style={{ flex: 1, backgroundColor: "cyan", opacity: 0.5 }} />;
+  return (
+    <Canvas style={{ flex: 1 }}>
+      <Fill color="rgba(34, 33, 33, 0.85)" />
+      {stickers.map((Sticker, index) => (
+        <Sticker key={index} matrix={Skia.Matrix()} />
+      ))}
+    </Canvas>
+  );
 };
