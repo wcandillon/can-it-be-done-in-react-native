@@ -1,43 +1,40 @@
-import { Canvas, Skia, useFont, useImage } from "@shopify/react-native-skia";
+import { useNavigation } from "@react-navigation/native";
+import { Canvas, useFont, useImage, Image } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions, View } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
+import type { StackNavigationProp } from "@react-navigation/stack";
 
-import { HelloSticker, HelloStickerDimensions } from "./HelloSticker";
-import { LocationSticker, LocationStickerDimensions } from "./LocationSticker";
-import { GestureHandler } from "./GestureHandler";
-import { Picture, PictureDimensions } from "./Picture";
+import type { Routes } from "../Routes";
+
+import { ModalButton } from "./ModalButton";
+import zurich from "./assets/zurich.jpg";
+import aveny from "./assets/aveny.ttf";
 
 const { width, height } = Dimensions.get("window");
+const iconSize = 64;
 
-const zurich = require("./assets/zurich.jpg");
-const aveny = require("./assets/aveny.ttf");
+//       <Button onPress={() => navigate("StickerModal")} title="Open Modal" />
 
 export const Instagram = () => {
-  const pictureMatrix = useSharedValue(Skia.Matrix());
-  const helloMatrix = useSharedValue(Skia.Matrix());
-  const locationMatrix = useSharedValue(Skia.Matrix());
+  const { navigate } = useNavigation<StackNavigationProp<Routes>>();
   const image = useImage(zurich);
   const font = useFont(aveny, 56);
   if (!image || !font) {
     return null;
   }
   return (
-    <View>
-      <Canvas style={{ width, height }}>
-        <Picture matrix={pictureMatrix} image={image} />
-        <HelloSticker matrix={helloMatrix} />
-        <LocationSticker font={font} matrix={locationMatrix} />
+    <View style={{ flex: 1 }}>
+      <Canvas style={{ flex: 1 }}>
+        <Image
+          image={image}
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          fit="cover"
+        />
       </Canvas>
-      <GestureHandler matrix={pictureMatrix} dimensions={PictureDimensions} />
-      <GestureHandler
-        matrix={helloMatrix}
-        dimensions={HelloStickerDimensions}
-      />
-      <GestureHandler
-        matrix={locationMatrix}
-        dimensions={LocationStickerDimensions}
-      />
+      <ModalButton size={iconSize} onPress={() => navigate("StickerModal")} />
     </View>
   );
 };

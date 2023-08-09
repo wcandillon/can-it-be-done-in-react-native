@@ -4,4 +4,5 @@ export type Routes = {
   Riveo: undefined;
   SongOfBloom: undefined;
   Instagram: undefined;
+  StickerModal: undefined;
 };

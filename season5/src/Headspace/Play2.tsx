@@ -1,6 +1,5 @@
 import type { SkiaValue, Vector } from "@shopify/react-native-skia";
 import {
-  usePaintRef,
   Blur,
   ColorMatrix,
   Paint,
@@ -61,8 +60,6 @@ interface Play2Props {
 }
 
 export const Play = ({ progress }: Play2Props) => {
-  const paint = usePaintRef();
-
   const path = useComputedValue(() => {
     const p = pause.interpolate(play, progress.current)!;
     p.simplify();
@@ -74,18 +71,20 @@ export const Play = ({ progress }: Play2Props) => {
     return [{ translateX: mix(progress.current, centroid, 0) }];
   }, [progress]);
   return (
-    <>
-      <Paint ref={paint}>
-        <Blur blur={4} />
-        <ColorMatrix
-          matrix={[
-            1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 18, -7,
-          ]}
-        />
-      </Paint>
-      <Group transform={transform} layer={paint}>
-        <Path path={path} color="white" />
-      </Group>
-    </>
+    <Group
+      transform={transform}
+      layer={
+        <Paint>
+          <Blur blur={4} />
+          <ColorMatrix
+            matrix={[
+              1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 18, -7,
+            ]}
+          />
+        </Paint>
+      }
+    >
+      <Path path={path} color="white" />
+    </Group>
   );
 };
