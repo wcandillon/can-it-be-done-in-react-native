@@ -7,8 +7,6 @@ import { Headspace } from "./src/Headspace";
 import { Riveo } from "./src/Riveo";
 import { SongOfBloom } from "./src/SongOfBloom";
 import { LoadAssets } from "./src/components";
-
-import "./libs.d";
 import { Instagram } from "./src/Instagram";
 
 const fonts = {};
