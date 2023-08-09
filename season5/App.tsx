@@ -56,7 +56,13 @@ const AppNavigator = () => (
       />
     </Stack.Group>
     <Stack.Group screenOptions={{ presentation: "modal" }}>
-      <Stack.Screen name="StickerModal" component={StickerModal} />
+      <Stack.Screen
+        name="StickerModal"
+        component={StickerModal}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Group>
   </Stack.Navigator>
 );

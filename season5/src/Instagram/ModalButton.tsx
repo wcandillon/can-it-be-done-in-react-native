@@ -18,12 +18,16 @@ export const ModalButton = ({ size, onPress }: ModalButtonProps) => {
         right: 16,
         width: size,
         height: size,
+        borderRadius: size / 2,
+        backgroundColor: "#222121",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Pressable onPress={onPress}>
         <MaterialCommunityIcons
           name="sticker-emoji"
-          size={size}
+          size={size * 0.55}
           color="white"
         />
       </Pressable>
