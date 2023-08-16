@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Canvas, useFont, useImage, Image } from "@shopify/react-native-skia";
+import { Canvas, useImage, Image } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import type { StackNavigationProp } from "@react-navigation/stack";

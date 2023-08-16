@@ -1,16 +1,6 @@
 /* eslint-disable max-len */
 import React from "react";
-import type { SkMatrix } from "@shopify/react-native-skia";
-import {
-  Skia,
-  vec,
-  rrect,
-  RoundedRect,
-  Group,
-  LinearGradient,
-  Path,
-  rect,
-} from "@shopify/react-native-skia";
+import { vec, Group, LinearGradient, Path } from "@shopify/react-native-skia";
 
 import type { StickerProps } from "./Sticker";
 

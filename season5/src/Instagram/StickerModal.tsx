@@ -3,7 +3,6 @@ import {
   Canvas,
   Fill,
   Group,
-  Rect,
   Skia,
   fitbox,
   rect,
