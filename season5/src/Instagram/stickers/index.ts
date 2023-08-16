@@ -1,4 +1,7 @@
-import { HelloSticker } from "./HelloSticker";
-import { LocationSticker } from "./LocationSticker";
+import { HelloSticker, HelloStickerDimensions } from "./HelloSticker";
+import { LocationSticker, LocationStickerDimensions } from "./LocationSticker";
 
-export const stickers = [HelloSticker, LocationSticker];
+export const stickers = [
+  { Sticker: HelloSticker, dimensions: HelloStickerDimensions },
+  { Sticker: LocationSticker, dimensions: LocationStickerDimensions },
+];
