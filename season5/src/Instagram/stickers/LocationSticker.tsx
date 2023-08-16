@@ -11,17 +11,14 @@ import {
   Path,
   rect,
 } from "@shopify/react-native-skia";
-import type { SharedValue } from "react-native-reanimated";
+
+import type { StickerProps } from "./Sticker";
 
 const width = 102;
 const height = 35;
 export const LocationStickerDimensions = { width, height };
 
-interface LocationStickerProps {
-  matrix: SharedValue<SkMatrix> | SkMatrix;
-}
-
-export const LocationSticker = ({ matrix }: LocationStickerProps) => {
+export const LocationSticker = ({ matrix }: StickerProps) => {
   return (
     <Group matrix={matrix}>
       <Path

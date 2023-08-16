@@ -17,12 +17,12 @@ import { stickers } from "./stickers";
 const window = Dimensions.get("window");
 const COLS = 2;
 const tileWidth = window.width / COLS;
-const tileHeight = 150;
+const tileHeight = 125;
 
 export const StickerModal = () => {
   return (
     <Canvas style={{ flex: 1 }}>
-      <Fill color="rgba(34, 33, 33, 0.85)" />
+      <Fill color="rgb(34, 33, 33)" />
       {stickers.map(({ Sticker, dimensions }, index) => {
         const { width, height } = dimensions;
         const src = rect(0, 0, width, height);
