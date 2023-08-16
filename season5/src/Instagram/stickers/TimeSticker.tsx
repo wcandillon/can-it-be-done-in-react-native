@@ -4,11 +4,9 @@ import { Group, Path } from "@shopify/react-native-skia";
 
 import type { StickerProps } from "./Sticker";
 
-const width = 146;
-const height = 52;
-export const TimeStickerDimensions = { width, height };
+const size = { width: 146, height: 52 };
 
-export const TimeSticker = ({ matrix }: StickerProps) => {
+const Sticker = ({ matrix }: StickerProps) => {
   return (
     <Group matrix={matrix}>
       <Path
@@ -78,3 +76,5 @@ export const TimeSticker = ({ matrix }: StickerProps) => {
     </Group>
   );
 };
+
+export const TimeSticker = { Sticker, size };

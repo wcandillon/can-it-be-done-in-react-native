@@ -4,11 +4,9 @@ import { vec, Group, LinearGradient, Path } from "@shopify/react-native-skia";
 
 import type { StickerProps } from "./Sticker";
 
-const width = 134;
-const height = 54;
-export const QuestionsStickerDimensions = { width, height };
+const size = { width: 134, height: 54 };
 
-export const QuestionsSticker = ({ matrix }: StickerProps) => {
+const Sticker = ({ matrix }: StickerProps) => {
   return (
     <Group matrix={matrix}>
       <Path
@@ -26,7 +24,7 @@ export const QuestionsSticker = ({ matrix }: StickerProps) => {
       <Group>
         <LinearGradient
           start={vec(0, 0)}
-          end={vec(width, height)}
+          end={vec(size.width, size.height)}
           colors={["#CB27D3", "#FF0000"]}
         />
         <Path path="M13.5146 17.0423L13.4713 25.9594C13.5114 30.1395 15.439 32.0783 18.3473 32.1391C19.5316 32.1599 20.5429 31.7797 21.3108 31.2246L22.5445 32.2035C22.805 32.4829 22.9095 32.4658 23.1357 32.5362C23.6585 32.4506 24.0253 32.0685 24.0614 31.6332C24.0101 31.3195 23.8542 31.023 23.4892 30.7607L22.4817 29.8521C22.9721 28.913 23.2895 27.5729 23.3465 25.9533L23.2853 17.0533C23.3498 12.8561 21.3176 10.9344 18.4092 10.8736C15.4134 10.9346 13.4746 12.8622 13.5146 17.0423ZM15.5623 25.6172L15.4992 17.3615C15.5086 14.1395 16.4704 12.8012 18.4036 12.8069C20.2323 12.8296 21.3082 14.1564 21.2989 17.3784L21.2574 25.6512C21.2365 26.8354 21.0598 27.7232 20.8488 28.4018L19.5979 27.3183C19.3546 27.1434 19.233 27.056 19.0239 27.0902C18.484 27.0712 18.1343 27.5579 18.2027 27.9761C18.1495 28.3068 18.2883 28.4988 18.6533 28.7611L19.7995 29.8617C19.4156 30.1393 18.8928 30.2248 18.353 30.2058C16.5243 30.1831 15.5529 28.8392 15.5623 25.6172Z" />
@@ -42,3 +40,5 @@ export const QuestionsSticker = ({ matrix }: StickerProps) => {
     </Group>
   );
 };
+
+export const QuestionsSticker = { Sticker, size };

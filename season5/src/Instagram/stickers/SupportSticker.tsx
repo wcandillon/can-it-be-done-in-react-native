@@ -4,11 +4,9 @@ import { Group, LinearGradient, Path, vec } from "@shopify/react-native-skia";
 
 import type { StickerProps } from "./Sticker";
 
-const width = 220;
-const height = 115;
-export const SupportStickerDimensions = { width, height };
+const size = { width: 220, height: 115 };
 
-export const SupportSticker = ({ matrix }: StickerProps) => {
+const Sticker = ({ matrix }: StickerProps) => {
   return (
     <Group matrix={matrix}>
       <Path
@@ -108,3 +106,5 @@ export const SupportSticker = ({ matrix }: StickerProps) => {
     </Group>
   );
 };
+
+export const SupportSticker = { Sticker, size };

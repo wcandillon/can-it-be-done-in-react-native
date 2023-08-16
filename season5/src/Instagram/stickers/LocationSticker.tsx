@@ -4,11 +4,9 @@ import { vec, Group, LinearGradient, Path } from "@shopify/react-native-skia";
 
 import type { StickerProps } from "./Sticker";
 
-const width = 102;
-const height = 35;
-export const LocationStickerDimensions = { width, height };
+const size = { width: 102, height: 35 };
 
-export const LocationSticker = ({ matrix }: StickerProps) => {
+const Sticker = ({ matrix }: StickerProps) => {
   return (
     <Group matrix={matrix}>
       <Path
@@ -18,7 +16,7 @@ export const LocationSticker = ({ matrix }: StickerProps) => {
       <Group>
         <LinearGradient
           start={vec(0, 0)}
-          end={vec(0, height)}
+          end={vec(0, size.height)}
           colors={["#2803E5", "#911CAE"]}
         />
         <Path path="M16.0008 5C13.879 5 11.8437 5.84301 10.3433 7.34305C8.84313 8.84343 8 10.8784 8 13C8 21 16.0008 29 16.0008 29C16.0008 29 24.0016 21 24.0016 13C24.0016 10.8784 23.1585 8.84334 21.6583 7.34305C20.1578 5.84305 18.1226 5 16.0008 5ZM16.0008 16.1571C15.1618 16.1571 14.3567 15.8238 13.7636 15.23C13.1705 14.6367 12.8372 13.8316 12.8379 12.9927C12.8383 12.1534 13.1724 11.3491 13.7662 10.7562C14.3601 10.1635 15.1652 9.83091 16.0046 9.83168C16.8435 9.83278 17.648 10.1672 18.2407 10.7613C18.833 11.3555 19.1652 12.1609 19.1638 12.9998C19.1623 13.8376 18.8285 14.6408 18.2354 15.2327C17.6424 15.8246 16.8387 16.1571 16.0008 16.1571Z" />
@@ -32,3 +30,5 @@ export const LocationSticker = ({ matrix }: StickerProps) => {
     </Group>
   );
 };
+
+export const LocationSticker = { Sticker, size };

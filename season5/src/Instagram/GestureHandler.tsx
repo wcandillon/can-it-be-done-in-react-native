@@ -1,4 +1,4 @@
-import type { SkMatrix, SkRect } from "@shopify/react-native-skia";
+import type { SkMatrix, SkSize } from "@shopify/react-native-skia";
 import { Skia } from "@shopify/react-native-skia";
 import React from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -12,16 +12,16 @@ import { rotateZ, toM4, translate, scale } from "./MatrixHelpers";
 
 interface GestureHandlerProps {
   matrix: SharedValue<SkMatrix>;
-  dimensions: SkRect;
+  size: SkSize;
   debug?: boolean;
 }
 
 export const GestureHandler = ({
   matrix,
-  dimensions,
+  size,
   debug,
 }: GestureHandlerProps) => {
-  const { x, y, width, height } = dimensions;
+  const { width, height } = size;
   const origin = useSharedValue(Skia.Point(0, 0));
   const offset = useSharedValue(Skia.Matrix());
 
@@ -50,8 +50,8 @@ export const GestureHandler = ({
   const style = useAnimatedStyle(() => {
     return {
       position: "absolute",
-      left: x,
-      top: y,
+      left: 0,
+      top: 0,
       width,
       height,
       backgroundColor: debug ? "rgba(100, 200, 300, 0.4)" : "transparent",
