@@ -10,10 +10,12 @@ import {
 } from "@shopify/react-native-skia";
 import { Dimensions } from "react-native";
 
+import { deflate } from "../components";
+
 import { stickers } from "./stickers";
 
 const window = Dimensions.get("window");
-const COLS = 3;
+const COLS = 2;
 const tileWidth = window.width / COLS;
 const tileHeight = 150;
 
@@ -26,11 +28,9 @@ export const StickerModal = () => {
         const src = rect(0, 0, width, height);
         const row = Math.floor(index / COLS);
         const col = index % COLS;
-        const dst = rect(
-          col * tileWidth,
-          row * tileHeight,
-          tileWidth,
-          tileHeight
+        const dst = deflate(
+          rect(col * tileWidth, row * tileHeight, tileWidth, tileHeight),
+          12
         );
         const transform = fitbox("contain", src, dst);
         return (
