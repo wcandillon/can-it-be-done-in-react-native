@@ -6,6 +6,7 @@ import {
 } from "./QuestionsSticker";
 import { SkiaSticker, SkiaStickerDimensions } from "./SkiaSticker";
 import { SupportSticker, SupportStickerDimensions } from "./SupportSticker";
+import { ThankYouStickerDimensions, ThankYouSticker } from "./ThankYouSticker";
 import { TimeSticker, TimeStickerDimensions } from "./TimeSticker";
 
 export const stickers = [
@@ -15,4 +16,5 @@ export const stickers = [
   { Sticker: SupportSticker, dimensions: SupportStickerDimensions },
   { Sticker: TimeSticker, dimensions: TimeStickerDimensions },
   { Sticker: SkiaSticker, dimensions: SkiaStickerDimensions },
+  { Sticker: ThankYouSticker, dimensions: ThankYouStickerDimensions },
 ];
