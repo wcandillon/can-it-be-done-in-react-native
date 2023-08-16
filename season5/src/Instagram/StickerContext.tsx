@@ -26,7 +26,6 @@ interface StickerAction {
 }
 
 const stickerReducer = (stickers: Stickers, action: StickerAction) => {
-  console.log("stickerReducer", stickers, action);
   return [...stickers, action.sticker];
 };
 

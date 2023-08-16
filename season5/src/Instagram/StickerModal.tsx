@@ -1,7 +1,14 @@
 import type { FC } from "react";
 import React, { useCallback } from "react";
 import type { SkSize } from "@shopify/react-native-skia";
-import { Canvas, Group, Skia, fitbox, rect } from "@shopify/react-native-skia";
+import {
+  Canvas,
+  Group,
+  Skia,
+  fitbox,
+  processTransform,
+  rect,
+} from "@shopify/react-native-skia";
 import { Dimensions, Pressable, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { makeMutable } from "react-native-reanimated";
@@ -22,10 +29,14 @@ export const StickerModal = () => {
   const navigation = useNavigation();
   const onPress = useCallback(
     (Sticker: FC<StickerProps>, size: SkSize) => {
+      const src = rect(0, 0, size.width, size.height);
+      const dst = deflate(rect(0, 0, window.width, window.height), 32);
+      const matrix = Skia.Matrix();
+      processTransform(matrix, fitbox("contain", src, dst));
       addSticker({
         Sticker,
         size,
-        matrix: makeMutable(Skia.Matrix()),
+        matrix: makeMutable(matrix),
       });
       navigation.goBack();
     },
