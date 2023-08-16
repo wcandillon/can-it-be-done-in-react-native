@@ -8,10 +8,12 @@ import type { Routes } from "../Routes";
 
 import { ModalButton } from "./ModalButton";
 import zurich from "./assets/zurich.jpg";
+import { useStickerContext } from "./StickerContext";
 const { width, height } = Dimensions.get("window");
 const iconSize = 64;
 
 export const Instagram = () => {
+  const { stickers } = useStickerContext();
   const { navigate } = useNavigation<StackNavigationProp<Routes>>();
   const image = useImage(zurich);
   if (!image) {
@@ -28,6 +30,9 @@ export const Instagram = () => {
           height={height}
           fit="cover"
         />
+        {stickers.map(({ Sticker, matrix }, index) => {
+          return <Sticker key={index} matrix={matrix} />;
+        })}
       </Canvas>
       <ModalButton size={iconSize} onPress={() => navigate("StickerModal")} />
     </View>

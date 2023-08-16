@@ -1,13 +1,11 @@
 import { type SkMatrix, type SkSize } from "@shopify/react-native-skia";
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useCallback, useContext, useReducer } from "react";
 import type { ReactNode, FC } from "react";
 import type { SharedValue } from "react-native-reanimated";
 
-interface StickerProps {
-  matrix: SkMatrix;
-}
+import type { StickerProps } from "./stickers/Sticker";
 
-interface Sticker {
+export interface Sticker {
   Sticker: FC<StickerProps>;
   size: SkSize;
   matrix: SharedValue<SkMatrix>;
@@ -20,10 +18,7 @@ interface StickerContext {
   dispatch: (action: StickerAction) => void;
 }
 
-const StickerContext = createContext<StickerContext>({
-  stickers: [],
-  dispatch: () => [],
-});
+const StickerContext = createContext<StickerContext | null>(null);
 
 interface StickerAction {
   action: "add";
@@ -31,14 +26,25 @@ interface StickerAction {
 }
 
 const stickerReducer = (stickers: Stickers, action: StickerAction) => {
+  console.log("stickerReducer", stickers, action);
   return [...stickers, action.sticker];
 };
 
 export const useStickerContext = () => {
-  const { stickers, dispatch } = useContext(StickerContext);
+  const ctx = useContext(StickerContext);
+  if (ctx === null) {
+    throw new Error("No Sticker context found");
+  }
+  const { stickers, dispatch } = ctx;
+  const addSticker = useCallback(
+    (sticker: Sticker) => {
+      dispatch({ action: "add", sticker });
+    },
+    [dispatch]
+  );
   return {
     stickers,
-    addSticker: (sticker: Sticker) => dispatch({ action: "add", sticker }),
+    addSticker,
   };
 };
 

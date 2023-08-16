@@ -8,6 +8,7 @@ import { Riveo } from "./src/Riveo";
 import { SongOfBloom } from "./src/SongOfBloom";
 import { LoadAssets } from "./src/components";
 import { Instagram, StickerModal } from "./src/Instagram";
+import { StickerProvider } from "./src/Instagram/StickerContext";
 
 const fonts = {};
 const assets: number[] = [];
@@ -70,7 +71,9 @@ const AppNavigator = () => (
 const App = () => {
   return (
     <LoadAssets assets={assets} fonts={fonts}>
-      <AppNavigator />
+      <StickerProvider>
+        <AppNavigator />
+      </StickerProvider>
     </LoadAssets>
   );
 };
