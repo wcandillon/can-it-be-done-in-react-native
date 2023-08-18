@@ -7,6 +7,7 @@ import type { StackNavigationProp } from "@react-navigation/stack";
 import type { Routes } from "../Routes";
 
 import { ModalButton } from "./ModalButton";
+import { ShareButton } from "./ShareButton";
 import zurich from "./assets/zurich.jpg";
 import { useStickerContext } from "./StickerContext";
 import { GestureHandler } from "./GestureHandler";
@@ -39,6 +40,7 @@ export const Instagram = () => {
         return <GestureHandler key={index} matrix={matrix} size={size} />;
       })}
       <ModalButton size={iconSize} onPress={() => navigate("StickerModal")} />
+      <ShareButton size={iconSize} onPress={() => {}} />
     </View>
   );
 };
