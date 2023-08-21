@@ -1,9 +1,17 @@
 import type { FC } from "react";
 import React, { useCallback } from "react";
 import type { SkSize } from "@shopify/react-native-skia";
-import { Canvas, Group, Skia, fitbox, rect } from "@shopify/react-native-skia";
+import {
+  Canvas,
+  Group,
+  Skia,
+  fitbox,
+  rect,
+  processTransform2d,
+} from "@shopify/react-native-skia";
 import { Dimensions, Pressable, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { makeMutable } from "react-native-reanimated";
 
 import { deflate } from "../components";
 
@@ -19,8 +27,21 @@ const tileHeight = 125;
 export const StickerModal = () => {
   const { addSticker } = useStickerContext();
   const navigation = useNavigation();
-  const onPress = useCallback((Sticker: FC<StickerProps>, size: SkSize) => {},
-  []);
+  const onPress = useCallback(
+    (Sticker: FC<StickerProps>, size: SkSize) => {
+      const src = rect(0, 0, size.width, size.height);
+      const dst = deflate(rect(0, 0, window.width, window.height), 24);
+      const m3 = processTransform2d(fitbox("contain", src, dst));
+      const matrix = makeMutable(m3);
+      addSticker({
+        Sticker,
+        size,
+        matrix,
+      });
+      navigation.goBack();
+    },
+    [addSticker, navigation]
+  );
   return (
     <View
       style={{

@@ -1,7 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import { Canvas, useImage, Image } from "@shopify/react-native-skia";
-import React from "react";
-import { Dimensions, View } from "react-native";
+import {
+  Canvas,
+  useImage,
+  Image,
+  useCanvasRef,
+} from "@shopify/react-native-skia";
+import React, { useRef } from "react";
+import { Dimensions, Share, View } from "react-native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 
 import type { Routes } from "../Routes";
@@ -15,6 +20,7 @@ const { width, height } = Dimensions.get("window");
 const iconSize = 64;
 
 export const Instagram = () => {
+  const ref = useCanvasRef();
   const { stickers } = useStickerContext();
   const { navigate } = useNavigation<StackNavigationProp<Routes>>();
   const image = useImage(zurich);
@@ -23,7 +29,7 @@ export const Instagram = () => {
   }
   return (
     <View style={{ flex: 1 }}>
-      <Canvas style={{ flex: 1 }}>
+      <Canvas style={{ flex: 1 }} ref={ref}>
         <Image
           image={image}
           x={0}
@@ -40,7 +46,14 @@ export const Instagram = () => {
         return <GestureHandler key={index} matrix={matrix} size={size} />;
       })}
       <ModalButton size={iconSize} onPress={() => navigate("StickerModal")} />
-      <ShareButton size={iconSize} onPress={() => {}} />
+      <ShareButton
+        size={iconSize}
+        onPress={() => {
+          const img = ref.current!.makeImageSnapshot().encodeToBase64();
+          const data = `data:image/png;base64,${img}`;
+          Share.share({ url: data });
+        }}
+      />
     </View>
   );
 };

@@ -1,3 +1,4 @@
+import { HacksSticker } from "./HacksSticker";
 import { HelloSticker } from "./HelloSticker";
 import { LocationSticker } from "./LocationSticker";
 import { MusicSticker } from "./MusicSticker";
@@ -16,4 +17,5 @@ export const stickers = [
   SkiaSticker,
   ThankYouSticker,
   MusicSticker,
+  HacksSticker,
 ];
