@@ -8,7 +8,7 @@ import {
   vec,
 } from "@shopify/react-native-skia";
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View, Text } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -16,7 +16,7 @@ import Animated, {
 
 import { frag } from "../components/ShaderLib";
 
-// https://www.shadertoy.com/view/4tSyzy
+// https://www.shadertoy.com/view/4lXXWn
 // TODO: clean shader
 const { width, height } = Dimensions.get("window");
 const source = frag`
@@ -41,7 +41,7 @@ const float repeats = 60;
 vec4 main(vec2 fragCoord)
 {
   vec2 uv = (fragCoord / iResolution);
-  float bluramount = mix(0, 0.05, mask.eval(fragCoord).a);
+  float bluramount = mix(0, 0.1, mask.eval(fragCoord).a);
   //float dists = 5.;
   vec3 blurred_image = vec3(0.);
   for (float i = 0.; i < repeats; i++) { 
