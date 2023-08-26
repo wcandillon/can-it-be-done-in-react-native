@@ -13,41 +13,68 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
+  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
 
 import { frag } from "../components/ShaderLib";
 
+// https://www.shadertoy.com/view/4tSyzy
+// TODO: clean shader
 const { width, height } = Dimensions.get("window");
 const source = frag`
-uniform shader image;
+uniform shader iImage1;
 uniform shader mask;
-uniform float2 resolution;
+uniform float2 iResolution;
 
-half4 main(float2 xy) {
-  // From: https://www.shadertoy.com/view/Xltfzj
-  const float Pi = 6.28318530718; // Pi*2
-  const float Directions = 16.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
-  const float Quality = 3.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
-  const float Size = 30; // BLUR SIZE (Radius)
-  vec2 Radius = mix(0, Size, mask.eval(xy).a)/resolution.xy;
+const float pi = atan(1.0) * 4.0;
+const int samples = 20;
+const float sigma = float(samples) * 1 * 0.25;
 
-  // Normalized pixel coordinates (from 0 to 1)
-  vec2 uv = xy/resolution;
-  // Pixel colour
-  vec4 Color = image.eval(uv * resolution);
-  // Blur calculations
-  for( float d=0.0; d<Pi; d+=Pi/Directions)
-  {
-      for(float i=1.0/Quality; i<=1.001; i+=1.0/Quality)
-      {
-        float2 val = uv+vec2(cos(d),sin(d))*Radius*i;
-        Color += image.eval(val * resolution);		
-      }
+float pow2(float x) {
+ return x * x;
+}
+
+float gaussian(vec2 i, float sigma) {
+    return 1.0 / (2.0 * pi * pow2(sigma)) * exp(-((pow2(i.x) + pow2(i.y)) / (2.0 * pow2(sigma))));
+}
+
+vec4 tex(vec2 uv) {
+  return iImage1.eval(uv * iResolution.xy );
+}
+
+vec3 blur(vec2 uv, vec2 scale) {
+  vec3 col = vec3(0.0);
+  float accum = 0.0;
+  float weight;
+  vec2 offset;
+  // TODO: use tex?
+  float s = mix(0, sigma, mask.eval(uv * iResolution.xy).a);
+
+  if (s > 0.0) {
+    for (int x = -samples / 2; x < samples / 2; ++x) {
+        for (int y = -samples / 2; y < samples / 2; ++y) {
+            offset = vec2(x, y);
+            if (s > 0.0) {
+              weight = gaussian(offset, s);
+              col += tex(uv + scale * offset).rgb * weight;
+              accum += weight;
+            }
+        }
+    }
+    
+    return col / accum;
   }
-  // Output to screen
-  Color /= Quality * Directions + 1.0;
-  return Color;
+  return tex(uv).rgb;
+}
+
+vec4 main(vec2 coord) {
+    vec4 color = vec4(0.0);
+    vec2 ps = vec2(1.0) / iResolution.xy;
+    vec2 uv = coord * ps;
+    color.rgb = blur(uv, ps);
+    color.a = 1.0;
+    return color;
 }
 `;
 
@@ -67,7 +94,7 @@ export const BlurGradient = () => {
       <Canvas style={{ flex: 1 }}>
         <Fill color="#765a63" />
         <Fill>
-          <Shader source={source} uniforms={{ resolution: [width, height] }}>
+          <Shader source={source} uniforms={{ iResolution: [width, height] }}>
             <ImageShader
               image={image}
               x={0}
@@ -77,9 +104,9 @@ export const BlurGradient = () => {
               fit="cover"
             />
             <LinearGradient
-              start={vec(0, height / 2)}
+              start={vec(0, 0)}
               end={vec(0, height)}
-              colors={["transparent", "black"]}
+              colors={["transparent", "transparent", "black"]}
             />
           </Shader>
         </Fill>
