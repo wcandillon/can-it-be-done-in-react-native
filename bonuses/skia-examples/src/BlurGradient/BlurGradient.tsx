@@ -2,16 +2,12 @@ import {
   Canvas,
   useImage,
   Image,
-  Group,
   Skia,
-  LinearGradient,
-  Rect,
-  vec,
-  rect,
   BackdropFilter,
-  Blur,
-  Mask,
+  RuntimeShader,
+  ImageShader,
   Fill,
+  Shader,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
@@ -20,7 +16,39 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+import { frag } from "../components/ShaderLib";
+
 const { width, height } = Dimensions.get("window");
+const source = frag`
+uniform shader image;
+uniform float2 resolution;
+
+half4 main(float2 xy) {
+  // From: https://www.shadertoy.com/view/Xltfzj
+  const float Pi = 6.28318530718; // Pi*2
+  const float Directions = 16.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
+  const float Quality = 3.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
+  const float Size = 10.0; // BLUR SIZE (Radius)
+  vec2 Radius = Size/resolution.xy;
+
+  // Normalized pixel coordinates (from 0 to 1)
+  vec2 uv = xy/resolution;
+  // Pixel colour
+  vec4 Color = image.eval(uv * resolution);
+  // Blur calculations
+  for( float d=0.0; d<Pi; d+=Pi/Directions)
+  {
+      for(float i=1.0/Quality; i<=1.0; i+=1.0/Quality)
+      {
+        float2 val = uv+vec2(cos(d),sin(d))*Radius*i;
+        Color += image.eval(val * resolution);		
+      }
+  }
+  // Output to screen
+  Color /= Quality * Directions - 15.0;
+  return Color;
+}
+`;
 
 export const BlurGradient = () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -45,41 +73,34 @@ export const BlurGradient = () => {
           fit="cover"
         /> */}
         {/* <Group matrix={matrix} /> */}
-
-        <Group matrix={matrix}>
-          <Image
-            image={image}
-            x={0}
-            y={0}
-            width={width}
-            height={height}
-            fit="cover"
-          />
-          <Mask
-            mode="luminance"
-            mask={
-              <Rect rect={rect(0, 0, width, height)}>
-                <LinearGradient
-                  start={vec(0, height)}
-                  end={vec(0, height / 2)}
-                  positions={[0.5, 1]}
-                  colors={["white", "black"]}
-                />
-              </Rect>
-            }
-          >
-            <Image
+        <Fill>
+          <Shader source={source} uniforms={{ resolution: [width, height] }}>
+            <ImageShader
               image={image}
               x={0}
               y={0}
               width={width}
               height={height}
               fit="cover"
-            >
-              <Blur blur={40} mode="clamp" />
-            </Image>
-          </Mask>
-        </Group>
+            />
+          </Shader>
+        </Fill>
+        {/* <Image
+          image={image}
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          fit="cover"
+        />
+        <BackdropFilter
+          filter={
+            <RuntimeShader
+              source={source}
+              uniforms={{ iResolution: [width, height] }}
+            />
+          }
+        /> */}
       </Canvas>
       <View style={StyleSheet.absoluteFill}>
         <Animated.ScrollView scrollEventThrottle={16} onScroll={onScroll} />
