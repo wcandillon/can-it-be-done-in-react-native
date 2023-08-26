@@ -1,10 +1,6 @@
 import {
   Canvas,
   useImage,
-  Image,
-  Skia,
-  BackdropFilter,
-  RuntimeShader,
   ImageShader,
   Fill,
   Shader,
@@ -57,6 +53,7 @@ export const BlurGradient = () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const image = useImage(require("./zurich.jpg"));
   const scrollY = useSharedValue(0);
+
   const onScroll = useAnimatedScrollHandler({
     onScroll: ({ contentOffset: { y } }) => {
       scrollY.value = -y;
