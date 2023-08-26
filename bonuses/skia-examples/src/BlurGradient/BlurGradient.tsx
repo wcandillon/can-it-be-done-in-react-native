@@ -56,32 +56,22 @@ half4 main(float2 xy) {
 export const BlurGradient = () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const image = useImage(require("./zurich.jpg"));
-  const matrix = useSharedValue(Skia.Matrix());
+  const scrollY = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler({
     onScroll: ({ contentOffset: { y } }) => {
-      matrix.value = Skia.Matrix();
-      matrix.value.translate(0, -y);
+      scrollY.value = -y;
     },
   });
 
   return (
     <View style={{ flex: 1 }}>
       <Canvas style={{ flex: 1 }}>
-        {/* <Image
-          image={image}
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          fit="cover"
-        /> */}
-        {/* <Group matrix={matrix} /> */}
         <Fill>
           <Shader source={source} uniforms={{ resolution: [width, height] }}>
             <ImageShader
               image={image}
               x={0}
-              y={0}
+              y={scrollY}
               width={width}
               height={height}
               fit="cover"
@@ -93,22 +83,6 @@ export const BlurGradient = () => {
             />
           </Shader>
         </Fill>
-        {/* <Image
-          image={image}
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          fit="cover"
-        />
-        <BackdropFilter
-          filter={
-            <RuntimeShader
-              source={source}
-              uniforms={{ iResolution: [width, height] }}
-            />
-          }
-        /> */}
       </Canvas>
       <View style={StyleSheet.absoluteFill}>
         <Animated.ScrollView scrollEventThrottle={16} onScroll={onScroll} />
