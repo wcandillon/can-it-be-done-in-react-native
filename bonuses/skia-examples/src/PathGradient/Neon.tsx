@@ -38,7 +38,7 @@ interface NeonProps {
 }
 
 const blur = 3;
-export const Neon = ({ stroke, progress }: NeonProps) => {
+export const Neon = ({ stroke }: NeonProps) => {
   const bounds = stroke.computeTightBounds();
   return (
     <Group>

@@ -1,28 +1,23 @@
 import {
   center,
-  Circle,
   CornerPathEffect,
   DiscretePathEffect,
-  DisplacementMap,
   Group,
   Oval,
   Rect,
   rect,
   Skia,
-  Turbulence,
-  vec,
 } from "@shopify/react-native-skia";
 import { useWindowDimensions } from "react-native";
 
 import { Palette } from "./Palette";
 
 export const Limmat = () => {
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   const hongg = rect(0, height * 0.5, 1000, 500);
   const limmat = rect(-500, height * 0.6, 1000, 500);
   const undulations = rect(125, height * 0.5, 200, 600);
-  const sun = vec(width / 2, height - 300);
   const clip = Skia.Path.Make();
   clip.addOval(limmat);
   return (

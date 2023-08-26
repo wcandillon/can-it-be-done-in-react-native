@@ -87,7 +87,7 @@ const tessellate = (geo: PathGeometry, t0: number, t1: number): Line[] => {
     const gradient = Skia.Shader.MakeLinearGradient(
       p0,
       p1,
-      [startColor, endColor],
+      [Skia.Color(startColor), Skia.Color(endColor)],
       null,
       TileMode.Clamp
     );

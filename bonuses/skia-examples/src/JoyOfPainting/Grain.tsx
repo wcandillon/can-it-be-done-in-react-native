@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { useFont, Text, Turbulence, Fill } from "@shopify/react-native-skia";
 import type { ReactNode } from "react";
 import React from "react";
