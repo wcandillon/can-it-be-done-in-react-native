@@ -6,6 +6,8 @@ import {
   Shader,
   LinearGradient,
   vec,
+  Blur,
+  Image,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
@@ -63,6 +65,7 @@ export const BlurGradient = () => {
   return (
     <View style={{ flex: 1 }}>
       <Canvas style={{ flex: 1 }}>
+        <Fill color="#765a63" />
         <Fill>
           <Shader source={source} uniforms={{ resolution: [width, height] }}>
             <ImageShader
