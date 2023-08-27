@@ -1,1 +1,1 @@
-export * from "./BlurGradient";
+export * from "./BlurGradientDemo1";

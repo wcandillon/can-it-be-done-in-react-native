@@ -6,7 +6,7 @@ import { Examples } from "./src/Examples";
 import { PathGradient } from "./src/PathGradient";
 import { LoadAssets } from "./src/LoadAssets";
 import { JoyOfPainting } from "./src/JoyOfPainting";
-import { BlurGradient } from "./src/BlurGradient";
+import { BlurGradientDemo } from "./src/BlurGradient";
 
 const fonts = {};
 const assets: number[] = [];
@@ -38,7 +38,7 @@ const AppNavigator = () => (
     />
     <Stack.Screen
       name="BlurGradient"
-      component={BlurGradient}
+      component={BlurGradientDemo}
       options={{
         title: "🌫️ Blur Gradient",
         headerShown: false,
