@@ -59,17 +59,9 @@ export const Wallpaper = () => {
           c={center}
           transform={[{ translateX: -width / 4 }, { rotate: Math.PI / 6 }]}
           origin={center}
-          start={0}
+          start={180}
           end={360}
-          colors={[
-            "#F592C7",
-            "#0C88B6",
-            "#000423",
-            "#000423",
-            "#0C88B6",
-            "#F592C7",
-            "#F592C7",
-          ]}
+          colors={["#043648", "#0C88B6", "#0C88B6", "#F592C7", "#F592C7"]}
         />
       </Path>
     </Canvas>
