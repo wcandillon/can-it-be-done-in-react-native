@@ -19,6 +19,10 @@ const examples = [
     screen: "BlurGradient",
     title: "🌫️ Blur Gradient",
   },
+  {
+    screen: "Wallpaper",
+    title: "🍏 Wallpaper",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

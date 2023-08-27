@@ -3,4 +3,5 @@ export type Routes = {
   PathGradient: undefined;
   JoyOfPainting: undefined;
   BlurGradient: undefined;
+  Wallpaper: undefined;
 };
