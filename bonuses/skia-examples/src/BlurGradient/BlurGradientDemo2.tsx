@@ -6,6 +6,8 @@ import {
   RadialGradient,
   makeImageFromView,
   Fill,
+  Line,
+  LinearGradient,
 } from "@shopify/react-native-skia";
 import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, StyleSheet, View, Text } from "react-native";
@@ -85,10 +87,10 @@ export const BlurGradientDemo = () => {
           <Fill color="white" />
           <BlurGradient
             mask={
-              <RadialGradient
-                c={vec(width / 2, height / 2)}
-                r={width}
-                colors={["transparent", "transparent", "black"]}
+              <LinearGradient
+                start={vec(0, 0)}
+                end={vec(0, 100)}
+                colors={["black", "transparent"]}
               />
             }
           >
