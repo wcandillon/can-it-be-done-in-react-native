@@ -5,13 +5,15 @@ import { Fill, Shader } from "@shopify/react-native-skia";
 
 import { frag } from "../components";
 
+// https://shaders.skia.org/?id=60604463f3a8a2eb0449541c10cac16d30772b34bb76ce7058374bb02226f9c8
+// https://www.shadertoy.com/view/4lXXWn
 const source = frag`
 uniform shader iImage1;
 uniform shader mask;
 uniform float2 iResolution;
 
 vec3 draw(vec2 uv) {
-  return iImage1.eval(vec2(uv.x,uv.y) * iResolution).rgb;   
+  return iImage1.eval(uv * iResolution).rgb;   
 }
 
 float grid(float var, float size) {
@@ -45,12 +47,12 @@ vec4 main(vec2 fragCoord)
 }
 `;
 
-const { width, height } = Dimensions.get("window");
-
 interface BlurGradientProps {
   children: ReactNode | ReactNode[];
   mask: ReactNode;
 }
+
+const { width, height } = Dimensions.get("window");
 
 export const BlurGradient = ({ children, mask }: BlurGradientProps) => {
   return (

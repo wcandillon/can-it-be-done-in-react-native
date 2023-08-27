@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { useFont, Text, Turbulence, Fill } from "@shopify/react-native-skia";
-import type { ReactNode } from "react";
+import { useFont, Text } from "@shopify/react-native-skia";
 import React from "react";
 import { useWindowDimensions } from "react-native";
 
