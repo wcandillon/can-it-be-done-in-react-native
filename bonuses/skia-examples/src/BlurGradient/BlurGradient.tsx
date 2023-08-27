@@ -6,6 +6,7 @@ import {
   Shader,
   LinearGradient,
   vec,
+  RadialGradient,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions, StyleSheet, View, Text } from "react-native";
@@ -91,9 +92,9 @@ export const BlurGradient = () => {
               height={height}
               fit="cover"
             />
-            <LinearGradient
-              start={vec(0, 0)}
-              end={vec(0, height)}
+            <RadialGradient
+              c={vec(width / 2, height / 2)}
+              r={width}
               colors={["transparent", "transparent", "black"]}
             />
           </Shader>
