@@ -16,6 +16,8 @@ import Animated, {
 
 import { frag } from "../components/ShaderLib";
 
+import { Title } from "./Title";
+
 // https://www.shadertoy.com/view/4lXXWn
 // TODO: clean shader
 const { width, height } = Dimensions.get("window");
@@ -62,7 +64,7 @@ vec4 main(vec2 fragCoord)
 
 export const BlurGradient = () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const image = useImage(require("./zurich.jpg"));
+  const image = useImage(require("./zurich3.jpg"));
   const scrollY = useSharedValue(0);
 
   const onScroll = useAnimatedScrollHandler({
@@ -96,6 +98,7 @@ export const BlurGradient = () => {
             />
           </Shader>
         </Fill>
+        <Title />
       </Canvas>
       <View style={StyleSheet.absoluteFill}>
         <Animated.ScrollView scrollEventThrottle={16} onScroll={onScroll} />
