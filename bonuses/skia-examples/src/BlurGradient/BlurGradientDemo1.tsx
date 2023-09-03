@@ -4,6 +4,7 @@ import {
   ImageShader,
   vec,
   RadialGradient,
+  LinearGradient,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
@@ -33,11 +34,16 @@ export const BlurGradientDemo = () => {
       <Canvas style={{ flex: 1 }}>
         <BlurGradient
           mask={
-            <RadialGradient
-              c={vec(width / 2, height / 2)}
-              r={width}
-              colors={["transparent", "transparent", "black"]}
+            <LinearGradient
+              start={vec(0, height * 0.61)}
+              end={vec(0, height)}
+              colors={["transparent", "black"]}
             />
+            // <RadialGradient
+            //   c={vec(width / 2, height / 2)}
+            //   r={width}
+            //   colors={["transparent", "transparent", "black"]}
+            // />
           }
         >
           <ImageShader
@@ -47,6 +53,9 @@ export const BlurGradientDemo = () => {
             width={width}
             height={height}
             fit="cover"
+            fm="linear"
+            tx="clamp"
+            ty="clamp"
           />
         </BlurGradient>
         <Title />
