@@ -5,7 +5,7 @@ import {
   Image,
   useCanvasRef,
 } from "@shopify/react-native-skia";
-import React, { useRef } from "react";
+import React from "react";
 import { Dimensions, Share, View } from "react-native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 

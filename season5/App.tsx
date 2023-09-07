@@ -9,6 +9,7 @@ import { SongOfBloom } from "./src/SongOfBloom";
 import { LoadAssets } from "./src/components";
 import { Instagram, StickerModal } from "./src/Instagram";
 import { StickerProvider } from "./src/Instagram/StickerContext";
+import { Telegram } from "./src/Telegram";
 
 const fonts = {};
 const assets: number[] = [];
@@ -52,6 +53,14 @@ const AppNavigator = () => (
         component={Instagram}
         options={{
           title: "📸 Instagram",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Telegram"
+        component={Telegram}
+        options={{
+          title: "💬 Telegram",
           headerShown: false,
         }}
       />

@@ -23,6 +23,10 @@ const examples = [
     screen: "Instagram",
     title: "📸 Instagram",
   },
+  {
+    screen: "Telegram",
+    title: "💬 Telegram",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
