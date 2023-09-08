@@ -5,7 +5,7 @@ import {
   useTheme as useThemeRS,
 } from "@shopify/restyle";
 
-import type { ColorScheme } from "./ColorSchemeContext";
+import type { ColorSchemeName } from "./ColorSchemeContext";
 
 const palette = {
   black: "#0B0B0B",
@@ -15,7 +15,7 @@ const palette = {
 };
 
 export const theme = createTheme({
-  colorScheme: "light" as ColorScheme,
+  colorScheme: "light" as ColorSchemeName,
   colors: {
     mainBackground: palette.white,
     mainForeground: palette.black,

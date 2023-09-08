@@ -15,7 +15,6 @@ import { IconButton } from "./IconButton";
 
 export const Header = () => {
   const theme = useTheme();
-  const { colorScheme } = theme;
   const insets = useSafeAreaInsets();
   const navigation = useNavigation() as DrawerActionHelpers<ParamListBase>;
   return (
@@ -29,7 +28,6 @@ export const Header = () => {
         }}
       >
         <Box flexDirection="row">
-          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
           <Avatar id="derek.russel" />
           <Text variant="header" marginLeft="s">
             Chats

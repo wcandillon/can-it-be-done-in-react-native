@@ -1,8 +1,9 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Button } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
-import { useColorScheme, Box } from "../components";
+import { useColorScheme, Box, Text } from "../components";
 
 import { Telegram as Main } from "./Telegram";
 
@@ -11,13 +12,20 @@ const LeftDrawer = createDrawerNavigator();
 const DrawerContent = () => {
   const insets = useSafeAreaInsets();
   const { toggle } = useColorScheme();
+  const tap = Gesture.Tap()
+    .runOnJS(true)
+    .onStart((e) => {
+      toggle(e.absoluteX, e.absoluteY);
+    });
   return (
     <Box
       flex={1}
       style={{ paddingTop: insets.top }}
       backgroundColor="mainBackground"
     >
-      <Button onPress={toggle} title="Hello" />
+      <GestureDetector gesture={tap}>
+        <Text variant="header">Hello</Text>
+      </GestureDetector>
     </Box>
   );
 };
