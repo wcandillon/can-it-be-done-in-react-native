@@ -2,6 +2,7 @@
     {
         "id": "28dbf2a7-5723-4743-8c42-d68b643ef916",
         "user": "mjcole",
+        "read": false,
         "messages": [
             {
                 "id": "fc2c3317-d525-4af0-91f9-1c6a0dd937d3",
@@ -20,6 +21,7 @@
     {
         "id": "bfa9748a-5b98-4921-b04e-6724cbc7f94e",
         "user": "griffinsof",
+        "read": true,
         "messages": [
             {
                 "id": "283cfc8f-cf28-4e10-ba8f-3e3de5d59d96",
@@ -44,6 +46,7 @@
     {
         "id": "2fcd2b0c-2540-49bf-983d-380d13e5337e",
         "user": "itsmesuri",
+        "read": true,
         "messages": [
             {
                 "id": "209583c2-5b0a-4f2c-bc8b-50532adc663c",
@@ -56,6 +59,7 @@
     {
         "id": "a61fcf57-437b-4cd3-a389-abf46f72ced5",
         "user": "alexandergarcia",
+        "read": true,
         "messages": [
             {
                 "id": "cda2ba06-c1ec-4a11-aab5-5f9a7597ab7c",

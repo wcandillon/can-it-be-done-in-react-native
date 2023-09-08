@@ -1,21 +1,20 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image } from "react-native";
 
 import users from "./data/users.json";
 
 interface AvatarProps {
   id: string;
+  large?: boolean;
 }
 
-export const Avatar = ({ id }: AvatarProps) => {
+export const Avatar = ({ id, large }: AvatarProps) => {
+  const size = large ? 60 : 40;
   const user = users.find((u) => u.id === id)!;
-  return <Image source={{ uri: user.picture }} style={styles.avatar} />;
+  return (
+    <Image
+      source={{ uri: user.picture }}
+      style={{ width: size, height: size, borderRadius: size / 2 }}
+    />
+  );
 };
-
-const styles = StyleSheet.create({
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-});

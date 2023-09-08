@@ -2,6 +2,11 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TextInput, View } from "react-native";
+import type {
+  DrawerActionHelpers,
+  ParamListBase,
+} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import { Box, Text, useTheme } from "../../components";
 
@@ -12,6 +17,7 @@ export const Header = () => {
   const theme = useTheme();
   const { colorScheme } = theme;
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation() as DrawerActionHelpers<ParamListBase>;
   return (
     <View>
       <View
@@ -30,9 +36,9 @@ export const Header = () => {
           </Text>
         </Box>
         <Box flexDirection="row">
-          <IconButton icon="camera" />
-          <Box marginLeft="s" />
           <IconButton icon="edit" />
+          <Box marginLeft="s" />
+          <IconButton icon="settings" onPress={() => navigation.openDrawer()} />
         </Box>
       </View>
       <Box paddingHorizontal="m" paddingVertical="s">
