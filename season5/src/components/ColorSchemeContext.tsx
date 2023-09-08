@@ -2,12 +2,14 @@ import {
   makeImageFromView,
   Image,
   Canvas,
-  Group,
-  Skia,
   mix,
   vec,
+  ImageShader,
+  Circle,
+  dist,
 } from "@shopify/react-native-skia";
 import type { Vector, SkImage } from "@shopify/react-native-skia";
+import { StatusBar } from "expo-status-bar";
 import type { ReactNode, RefObject } from "react";
 import {
   createContext,
@@ -38,7 +40,7 @@ interface ColorScheme {
 interface ColorSchemeContext extends ColorScheme {
   ref: RefObject<View>;
   transition: SharedValue<number>;
-  point: SharedValue<Vector>;
+  circle: SharedValue<{ x: number; y: number; r: number }>;
   dispatch: (scheme: ColorScheme) => void;
 }
 
@@ -59,10 +61,13 @@ export const useColorScheme = () => {
   if (ctx === null) {
     throw new Error("No ColorScheme context context found");
   }
-  const { colorScheme, dispatch, ref, transition, point } = ctx;
+  const { colorScheme, dispatch, ref, transition, circle } = ctx;
   const toggle = useCallback(
     async (x: number, y: number) => {
-      point.value = vec(x, y);
+      // 0. Define the circle and its maximum radius
+      const r = Math.max(...corners.map((corner) => dist(corner, { x, y })));
+      circle.value = { x, y, r };
+
       const newColorScheme = colorScheme === "light" ? "dark" : "light";
       // 1. Take the screenshot
       const overlay1 = await makeImageFromView(ref);
@@ -98,7 +103,7 @@ export const useColorScheme = () => {
         overlay2: null,
       });
     },
-    [colorScheme, dispatch, ref, transition]
+    [circle, colorScheme, dispatch, ref, transition]
   );
   return { colorScheme, toggle };
 };
@@ -108,26 +113,22 @@ interface ColorSchemeProviderProps {
 }
 
 const { width, height } = Dimensions.get("window");
+const corners = [vec(0, 0), vec(width, 0), vec(width, height), vec(0, height)];
 
 export const ColorSchemeProvider = ({ children }: ColorSchemeProviderProps) => {
-  const point = useSharedValue(vec(0, 0));
+  const circle = useSharedValue({ x: 0, y: 0, r: 0 });
   const transition = useSharedValue(0);
   const ref = useRef(null);
   const [{ colorScheme, overlay1, overlay2 }, dispatch] = useReducer(
     colorSchemeReducer,
     defaultValue
   );
-  const clip = useDerivedValue(() => {
-    const path = Skia.Path.Make();
-    path.addCircle(
-      point.value.x,
-      point.value.y,
-      mix(transition.value, 0, Math.hypot(height, width))
-    );
-    return path;
+  const r = useDerivedValue(() => {
+    return mix(transition.value, 0, circle.value.r);
   });
   return (
     <View style={{ flex: 1 }}>
+      <StatusBar style={colorScheme === "light" ? "dark" : "light"} />
       <View ref={ref} style={{ flex: 1 }}>
         <ColorSchemeContext.Provider
           value={{
@@ -137,7 +138,7 @@ export const ColorSchemeProvider = ({ children }: ColorSchemeProviderProps) => {
             dispatch,
             ref,
             transition,
-            point,
+            circle,
           }}
         >
           {children}
@@ -145,9 +146,18 @@ export const ColorSchemeProvider = ({ children }: ColorSchemeProviderProps) => {
       </View>
       <Canvas style={StyleSheet.absoluteFill} pointerEvents="none">
         <Image image={overlay1} x={0} y={0} width={width} height={height} />
-        <Group clip={clip}>
-          <Image image={overlay2} x={0} y={0} width={width} height={height} />
-        </Group>
+        {overlay2 && (
+          <Circle c={circle} r={r}>
+            <ImageShader
+              image={overlay2}
+              x={0}
+              y={0}
+              width={width}
+              height={height}
+              fit="cover"
+            />
+          </Circle>
+        )}
       </Canvas>
     </View>
   );
