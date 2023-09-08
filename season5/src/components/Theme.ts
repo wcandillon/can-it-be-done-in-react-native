@@ -1,10 +1,17 @@
-import { createBox, createText, createTheme } from "@shopify/restyle";
+import {
+  createBox,
+  createText,
+  createTheme,
+  useTheme as useThemeRS,
+} from "@shopify/restyle";
 
 import type { ColorScheme } from "./ColorSchemeContext";
 
 const palette = {
   black: "#0B0B0B",
   white: "#F0F2F3",
+  lightGray: "rgba(0, 0, 0, 0.04)",
+  darkGray: "#3B3B3B",
 };
 
 export const theme = createTheme({
@@ -12,6 +19,7 @@ export const theme = createTheme({
   colors: {
     mainBackground: palette.white,
     mainForeground: palette.black,
+    secondaryBackground: palette.lightGray,
   },
   spacing: {
     s: 8,
@@ -42,6 +50,7 @@ export const darkTheme: Theme = {
     ...theme.colors,
     mainBackground: palette.black,
     mainForeground: palette.white,
+    secondaryBackground: palette.darkGray,
   },
 };
 
@@ -49,3 +58,4 @@ export type Theme = typeof theme;
 
 export const Box = createBox<Theme>();
 export const Text = createText<Theme>();
+export const useTheme = useThemeRS<Theme>;

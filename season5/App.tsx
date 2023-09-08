@@ -93,6 +93,7 @@ const AppNavigator = () => {
 const App = () => {
   const [fontsLoaded] = useFonts({
     SFProDisplayBold: require("./assets/fonts/SF-Pro-Display-Bold.otf"),
+    SFProTextRegular: require("./assets/fonts/SF-Pro-Text-Regular.otf"),
   });
   if (!fontsLoaded) {
     return null;
