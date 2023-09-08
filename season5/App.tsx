@@ -1,6 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ThemeProvider } from "@shopify/restyle";
+import { useFonts } from "expo-font";
 
 import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
@@ -90,6 +91,12 @@ const AppNavigator = () => {
 };
 
 const App = () => {
+  const [fontsLoaded] = useFonts({
+    SFProDisplayBold: require("./assets/fonts/SF-Pro-Display-Bold.otf"),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <ColorSchemeProvider>
       <LoadAssets assets={assets} fonts={fonts}>

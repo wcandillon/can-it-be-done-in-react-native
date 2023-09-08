@@ -1,4 +1,6 @@
-import { createTheme } from "@shopify/restyle";
+import { createBox, createText, createTheme } from "@shopify/restyle";
+
+import type { ColorScheme } from "./ColorSchemeContext";
 
 const palette = {
   black: "#0B0B0B",
@@ -6,8 +8,10 @@ const palette = {
 };
 
 export const theme = createTheme({
+  colorScheme: "light" as ColorScheme,
   colors: {
     mainBackground: palette.white,
+    mainForeground: palette.black,
   },
   spacing: {
     s: 8,
@@ -16,26 +20,32 @@ export const theme = createTheme({
     xl: 40,
   },
   textVariants: {
+    defaults: {
+      color: "mainForeground",
+    },
     header: {
       fontWeight: "bold",
-      fontSize: 34,
+      fontSize: 30,
+      fontFamily: "SFProDisplayBold",
     },
     body: {
       fontSize: 16,
       lineHeight: 24,
-    },
-    defaults: {
-      // We can define a default text variant here.
     },
   },
 });
 
 export const darkTheme: Theme = {
   ...theme,
+  colorScheme: "dark",
   colors: {
     ...theme.colors,
     mainBackground: palette.black,
+    mainForeground: palette.white,
   },
 };
 
 export type Theme = typeof theme;
+
+export const Box = createBox<Theme>();
+export const Text = createText<Theme>();

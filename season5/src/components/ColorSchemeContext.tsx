@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { createContext, useCallback, useContext, useReducer } from "react";
 import { Appearance } from "react-native";
 
-type ColorScheme = "light" | "dark";
+export type ColorScheme = "light" | "dark";
 
 const defaultValue = Appearance.getColorScheme() ?? "light";
 
