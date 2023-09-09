@@ -6,11 +6,13 @@ import { useColorScheme, useTheme } from "../../components";
 
 export const ColorSchemeButton = () => {
   const theme = useTheme();
-  const { toggle, colorScheme } = useColorScheme();
+  const { toggle, colorScheme, active } = useColorScheme();
   const tap = Gesture.Tap()
     .runOnJS(true)
     .onStart((e) => {
-      toggle(e.absoluteX, e.absoluteY);
+      if (!active) {
+        toggle(e.absoluteX, e.absoluteY);
+      }
     });
   return (
     <GestureDetector gesture={tap}>

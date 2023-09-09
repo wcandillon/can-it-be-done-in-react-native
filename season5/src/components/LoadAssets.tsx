@@ -5,7 +5,6 @@ import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import type { InitialState } from "@react-navigation/native";
 import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 
 const NAVIGATION_STATE_KEY = "NAVIGATION_STATE_KEY";
 
@@ -72,7 +71,6 @@ export const LoadAssets = ({ assets, fonts, children }: LoadAssetsProps) => {
       onStateChange={onStateChange}
       initialState={initialState}
     >
-      <StatusBar style="light" />
       {children}
     </NavigationContainer>
   );

@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TextInput, View } from "react-native";

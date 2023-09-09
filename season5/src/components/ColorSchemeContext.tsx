@@ -8,7 +8,7 @@ import {
   Circle,
   dist,
 } from "@shopify/react-native-skia";
-import type { Vector, SkImage } from "@shopify/react-native-skia";
+import type { SkImage } from "@shopify/react-native-skia";
 import { StatusBar } from "expo-status-bar";
 import type { ReactNode, RefObject } from "react";
 import {
@@ -32,6 +32,8 @@ const wait = async (ms: number) =>
 export type ColorSchemeName = "light" | "dark";
 
 interface ColorScheme {
+  active: boolean;
+  statusBarStyle: ColorSchemeName;
   colorScheme: ColorSchemeName;
   overlay1: SkImage | null;
   overlay2: SkImage | null;
@@ -45,6 +47,8 @@ interface ColorSchemeContext extends ColorScheme {
 }
 
 const defaultValue: ColorScheme = {
+  active: false,
+  statusBarStyle: Appearance.getColorScheme() ?? "light" ? "dark" : "light",
   colorScheme: Appearance.getColorScheme() ?? "light",
   overlay1: null,
   overlay2: null,
@@ -61,51 +65,67 @@ export const useColorScheme = () => {
   if (ctx === null) {
     throw new Error("No ColorScheme context context found");
   }
-  const { colorScheme, dispatch, ref, transition, circle } = ctx;
+  const { colorScheme, dispatch, ref, transition, circle, active } = ctx;
   const toggle = useCallback(
     async (x: number, y: number) => {
+      const newColorScheme = colorScheme === "light" ? "dark" : "light";
+
+      dispatch({
+        active: true,
+        colorScheme,
+        overlay1: null,
+        overlay2: null,
+        statusBarStyle: newColorScheme,
+      });
       // 0. Define the circle and its maximum radius
       const r = Math.max(...corners.map((corner) => dist(corner, { x, y })));
       circle.value = { x, y, r };
 
-      const newColorScheme = colorScheme === "light" ? "dark" : "light";
       // 1. Take the screenshot
       const overlay1 = await makeImageFromView(ref);
       // 2. display it
       dispatch({
+        active: true,
         colorScheme,
         overlay1,
         overlay2: null,
+        statusBarStyle: newColorScheme,
       });
       // 3. switch to dark mode
       await wait(16);
       dispatch({
+        active: true,
         colorScheme: newColorScheme,
         overlay1,
         overlay2: null,
+        statusBarStyle: newColorScheme,
       });
       // 4. wait for the dark mode to render
       await wait(16);
       // 5. take screenshot
       const overlay2 = await makeImageFromView(ref);
       dispatch({
+        active: true,
         colorScheme: newColorScheme,
         overlay1,
         overlay2,
+        statusBarStyle: newColorScheme,
       });
       // 6. transition
       transition.value = 0;
       transition.value = withTiming(1, { duration: 650 });
       await wait(650);
       dispatch({
+        active: false,
         colorScheme: newColorScheme,
         overlay1: null,
         overlay2: null,
+        statusBarStyle: newColorScheme === "light" ? "dark" : "light",
       });
     },
     [circle, colorScheme, dispatch, ref, transition]
   );
-  return { colorScheme, toggle };
+  return { colorScheme, toggle, active };
 };
 
 interface ColorSchemeProviderProps {
@@ -119,19 +139,20 @@ export const ColorSchemeProvider = ({ children }: ColorSchemeProviderProps) => {
   const circle = useSharedValue({ x: 0, y: 0, r: 0 });
   const transition = useSharedValue(0);
   const ref = useRef(null);
-  const [{ colorScheme, overlay1, overlay2 }, dispatch] = useReducer(
-    colorSchemeReducer,
-    defaultValue
-  );
+  const [
+    { colorScheme, overlay1, overlay2, active, statusBarStyle },
+    dispatch,
+  ] = useReducer(colorSchemeReducer, defaultValue);
   const r = useDerivedValue(() => {
     return mix(transition.value, 0, circle.value.r);
   });
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar style={colorScheme === "light" ? "dark" : "light"} />
+      <StatusBar style={statusBarStyle} />
       <View ref={ref} style={{ flex: 1 }}>
         <ColorSchemeContext.Provider
           value={{
+            active,
             colorScheme,
             overlay1,
             overlay2,
@@ -139,12 +160,13 @@ export const ColorSchemeProvider = ({ children }: ColorSchemeProviderProps) => {
             ref,
             transition,
             circle,
+            statusBarStyle,
           }}
         >
           {children}
         </ColorSchemeContext.Provider>
       </View>
-      <Canvas style={StyleSheet.absoluteFill} pointerEvents="none">
+      <Canvas style={StyleSheet.absoluteFill} pointerEvents={"none"}>
         <Image image={overlay1} x={0} y={0} width={width} height={height} />
         {overlay2 && (
           <Circle c={circle} r={r}>
