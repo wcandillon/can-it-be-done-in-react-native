@@ -36,6 +36,11 @@ export const theme = createTheme({
       fontSize: 30,
       fontFamily: "SFProDisplayBold",
     },
+    item: {
+      fontWeight: "bold",
+      fontSize: 16,
+      fontFamily: "SFProDisplayBold",
+    },
     body: {
       fontSize: 16,
       lineHeight: 24,

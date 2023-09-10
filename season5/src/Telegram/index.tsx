@@ -3,10 +3,12 @@ import { Button } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
-import { Box } from "../components";
+import { Box, Text } from "../components";
 
 import { Telegram as Main } from "./Telegram";
 import { ColorSchemeButton } from "./components/ColorSchemeButton";
+import { Avatar } from "./components/Avatar";
+import { DrawerItem } from "./components/DrawerItem";
 
 const LeftDrawer = createDrawerNavigator();
 
@@ -14,13 +16,25 @@ const DrawerContent = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <Box
-      flex={1}
-      padding="m"
-      style={{ paddingTop: insets.top }}
-      backgroundColor="mainBackground"
-    >
-      <ColorSchemeButton />
+    <Box flex={1} backgroundColor="mainBackground">
+      <Box padding="m" style={{ paddingTop: insets.top }}>
+        <Box flexDirection="row" justifyContent="space-between">
+          <Box>
+            <Avatar id="derek.russel" />
+            <Text variant="header">Derek Russel</Text>
+          </Box>
+          <Box>
+            <ColorSchemeButton />
+          </Box>
+        </Box>
+      </Box>
+      <DrawerItem label="New Group" icon="users" />
+      <DrawerItem label="New Secret Chat" icon="lock" />
+      <DrawerItem label="New Channel" icon="speaker" />
+      <DrawerItem label="Contacts" icon="user" />
+      <DrawerItem label="Calls" icon="phone" />
+      <DrawerItem label="Saved Messages" icon="bookmark" />
+      <DrawerItem label="Settings" icon="settings" />
     </Box>
   );
 };
