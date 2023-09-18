@@ -14,7 +14,7 @@ export const strokeWidth = 40;
 
 const rings = [
   {
-    progress: 0.3, //2.3,
+    progress: 2.3,
     colors: ["rgb(0, 217, 253)", "rgb(0, 255, 169)"],
     background: "rgb(0, 72, 77)",
     size: SIZE - strokeWidth * 4,
@@ -26,7 +26,7 @@ const rings = [
     size: SIZE - strokeWidth * 2,
   },
   {
-    progress: 0.7, // 1.7
+    progress: 1.7,
     colors: ["rgb(249, 18, 78)", "rgb(249, 56, 133)"],
     background: "rgb(50, 1, 14)",
     size: SIZE,

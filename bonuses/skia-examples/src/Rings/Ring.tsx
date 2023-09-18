@@ -4,13 +4,22 @@ import {
   Path,
   Skia,
   SweepGradient,
+  mixColors,
   type Vector,
+  Shadow,
+  rect,
 } from "@shopify/react-native-skia";
 import React, { useEffect, useMemo } from "react";
-import { useSharedValue, withTiming } from "react-native-reanimated";
+import {
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
-const fromCircle = (center: Vector, r: number) =>
-  Skia.XYWHRect(center.x - r, center.y - r, r * 2, r * 2);
+const fromCircle = (center: Vector, r: number) => {
+  "worklet";
+  return Skia.XYWHRect(center.x - r, center.y - r, r * 2, r * 2);
+};
 
 interface Ring {
   colors: string[];
@@ -32,7 +41,7 @@ export const Ring = ({
 }: RingProps) => {
   const end = useSharedValue(0);
   const r = size / 2 - strokeWidth;
-  const path = useMemo(() => {
+  const originalPath = useMemo(() => {
     const container = fromCircle(center, r);
     const p = Skia.Path.Make();
     const circles = Math.ceil(progress);
@@ -42,6 +51,41 @@ export const Ring = ({
     }
     return p;
   }, [center, progress, r]);
+  const path = useDerivedValue(() => {
+    const p = originalPath.copy();
+    p.trim(0, end.value, false);
+    return p;
+  });
+  const head = useDerivedValue(() => {
+    const c = path.value.getLastPt();
+    const h = Skia.Path.Make();
+    const current = end.value * progress;
+    const rotate = 2 * Math.PI * (current % 1);
+    h.addArc(fromCircle(c, strokeWidth / 2), 0, 180);
+    const m = Skia.Matrix();
+    m.translate(c.x, c.y);
+    m.rotate(rotate);
+    m.translate(-c.x, -c.y);
+    h.transform(m);
+    return h;
+  });
+  const matrix = useDerivedValue(() => {
+    const current = end.value * progress;
+    const frac = current > 1 ? current % 1 : 0;
+    const m = Skia.Matrix();
+    m.translate(center.x, center.y);
+    m.rotate(2 * Math.PI * frac);
+    m.translate(-center.x, -center.y);
+    return m;
+  });
+  const headColor = useDerivedValue(() => {
+    const current = end.value * progress;
+    if (current < 1) {
+      return [...mixColors(end.value, colors[0], colors[1])];
+    } else {
+      return colors[1];
+    }
+  });
   useEffect(() => {
     end.value = withTiming(1, { duration: 3000 });
   }, [end, progress]);
@@ -55,17 +99,22 @@ export const Ring = ({
         strokeCap="round"
         strokeWidth={strokeWidth}
       />
+      <Circle
+        c={originalPath.getPoint(0)}
+        r={strokeWidth / 2}
+        color={colors[0]}
+      />
       <Path
-        end={end}
         path={path}
         color={colors[0]}
         style="stroke"
-        strokeCap="round"
         strokeWidth={strokeWidth}
       >
-        <SweepGradient c={center} colors={colors} />
+        <SweepGradient c={center} colors={colors} matrix={matrix} />
       </Path>
-      <Circle c={path.getPoint(0)} r={strokeWidth / 2} color={colors[0]} />
+      <Path path={head} color={headColor}>
+        <Shadow dx={0} dy={0} color="black" blur={20} />
+      </Path>
     </Group>
   );
 };
