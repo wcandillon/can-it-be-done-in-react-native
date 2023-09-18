@@ -43,7 +43,7 @@ export const Ring = ({
     return p;
   }, [center, progress, r]);
   useEffect(() => {
-    end.value = withTiming(progress, { duration: 3000 });
+    end.value = withTiming(1, { duration: 3000 });
   }, [end, progress]);
   return (
     <Group transform={[{ rotate: -Math.PI / 2 }]} origin={center}>
