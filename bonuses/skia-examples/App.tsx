@@ -8,6 +8,7 @@ import { LoadAssets } from "./src/LoadAssets";
 import { JoyOfPainting } from "./src/JoyOfPainting";
 import { BlurGradientDemo } from "./src/BlurGradient";
 import { Wallpaper } from "./src/Wallpaper";
+import { Rings } from "./src/Rings";
 
 const fonts = {};
 const assets: number[] = [];
@@ -50,6 +51,14 @@ const AppNavigator = () => (
       component={Wallpaper}
       options={{
         title: "🍏 Wallpaper",
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Rings"
+      component={Rings}
+      options={{
+        title: "🏋️‍♂️ Fitness Rings",
         headerShown: false,
       }}
     />

@@ -23,6 +23,10 @@ const examples = [
     screen: "Wallpaper",
     title: "🍏 Wallpaper",
   },
+  {
+    screen: "Rings",
+    title: "🏋️‍♂️ Fitness Rings",
+  },
 ] as const;
 
 const styles = StyleSheet.create({

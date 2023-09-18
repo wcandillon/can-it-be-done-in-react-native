@@ -3,7 +3,6 @@ import {
   useImage,
   ImageShader,
   vec,
-  RadialGradient,
   LinearGradient,
 } from "@shopify/react-native-skia";
 import React from "react";

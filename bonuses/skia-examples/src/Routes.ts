@@ -4,4 +4,5 @@ export type Routes = {
   JoyOfPainting: undefined;
   BlurGradient: undefined;
   Wallpaper: undefined;
+  Rings: undefined;
 };
