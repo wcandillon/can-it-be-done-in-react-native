@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ThemeProvider } from "@shopify/restyle";
 import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
@@ -99,13 +100,15 @@ const App = () => {
     return null;
   }
   return (
-    <ColorSchemeProvider>
-      <LoadAssets assets={assets} fonts={fonts}>
-        <StickerProvider>
-          <AppNavigator />
-        </StickerProvider>
-      </LoadAssets>
-    </ColorSchemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ColorSchemeProvider>
+        <LoadAssets assets={assets} fonts={fonts}>
+          <StickerProvider>
+            <AppNavigator />
+          </StickerProvider>
+        </LoadAssets>
+      </ColorSchemeProvider>
+    </GestureHandlerRootView>
   );
 };
 

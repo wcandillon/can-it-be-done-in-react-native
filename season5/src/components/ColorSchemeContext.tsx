@@ -149,7 +149,7 @@ export const ColorSchemeProvider = ({ children }: ColorSchemeProviderProps) => {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style={statusBarStyle} />
-      <View ref={ref} style={{ flex: 1 }}>
+      <View ref={ref} style={{ flex: 1 }} collapsable={false}>
         <ColorSchemeContext.Provider
           value={{
             active,
