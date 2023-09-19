@@ -7,8 +7,6 @@ import {
   mixColors,
   type Vector,
   Shadow,
-  rect,
-  Rect,
   PathOp,
 } from "@shopify/react-native-skia";
 import React, { useEffect, useMemo } from "react";
@@ -18,16 +16,14 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-import { strokeWidth } from "./Rings";
-
 const fromCircle = (center: Vector, r: number) => {
   "worklet";
   return Skia.XYWHRect(center.x - r, center.y - r, r * 2, r * 2);
 };
 
 interface Ring {
-  colors: string[];
-  background: string;
+  colors: Float32Array[];
+  background: Float32Array;
   size: number;
   progress: number;
 }

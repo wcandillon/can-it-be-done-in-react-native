@@ -12,23 +12,26 @@ export const TAU = 2 * PI;
 export const SIZE = width;
 export const strokeWidth = 40;
 
+const color = (r: number, g: number, b: number) =>
+  `rgb(${r * 255}, ${g * 255}, ${b * 255})`;
+
 const rings = [
   {
     progress: 2.3,
-    colors: ["rgb(0, 217, 253)", "rgb(0, 255, 169)"],
-    background: "rgb(0, 72, 77)",
+    colors: [color(0.008, 1, 0.659), color(0, 0.847, 1)],
+    background: color(0.016, 0.227, 0.212),
     size: SIZE - strokeWidth * 4,
   },
   {
     progress: 0.6,
-    colors: ["rgb(153, 255, 0)", "rgb(216, 255, 1)"],
-    background: "rgb(47, 78, 0)",
+    colors: [color(0.847, 1, 0), color(0.6, 1, 0.004)],
+    background: color(0.133, 0.2, 0),
     size: SIZE - strokeWidth * 2,
   },
   {
     progress: 1.7,
-    colors: ["rgb(249, 18, 78)", "rgb(249, 56, 133)"],
-    background: "rgb(50, 1, 14)",
+    colors: [color(0.98, 0.067, 0.31), color(0.976, 0.22, 0.522)],
+    background: color(0.196, 0.012, 0.063),
     size: SIZE,
   },
 ];
@@ -36,7 +39,7 @@ const rings = [
 export const Rings = () => {
   return (
     <Canvas style={{ flex: 1 }}>
-      <Fill color="#010002" />
+      <Fill color="black" />
       {rings.map((ring, index) => {
         return (
           <Ring
