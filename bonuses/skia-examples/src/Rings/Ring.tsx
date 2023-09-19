@@ -8,6 +8,8 @@ import {
   type Vector,
   Shadow,
   rect,
+  Rect,
+  PathOp,
 } from "@shopify/react-native-skia";
 import React, { useEffect, useMemo } from "react";
 import {
@@ -15,6 +17,8 @@ import {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+
+import { strokeWidth } from "./Rings";
 
 const fromCircle = (center: Vector, r: number) => {
   "worklet";
@@ -69,6 +73,22 @@ export const Ring = ({
     h.transform(m);
     return h;
   });
+  const headClip = useDerivedValue(() => {
+    const c = path.value.getLastPt();
+    const h = Skia.Path.Make();
+    const current = end.value * progress;
+    const rotate = 2 * Math.PI * (current % 1);
+    h.addRect(
+      Skia.XYWHRect(c.x - strokeWidth, c.y, strokeWidth * 2, strokeWidth)
+    );
+    const m = Skia.Matrix();
+    m.translate(c.x, c.y);
+    m.rotate(rotate);
+    m.translate(-c.x, -c.y);
+    h.transform(m);
+    return h;
+    //return Skia.Path.MakeFromOp(h, circle, PathOp.Intersect)!;
+  });
   const matrix = useDerivedValue(() => {
     const current = end.value * progress;
     const frac = current > 1 ? current % 1 : 0;
@@ -86,35 +106,45 @@ export const Ring = ({
       return colors[1];
     }
   });
+  const clip = useMemo(() => {
+    const outerCircle = Skia.Path.Make();
+    outerCircle.addCircle(center.x, center.y, r + strokeWidth / 2);
+    const innerCircle = Skia.Path.Make();
+    innerCircle.addCircle(center.x, center.y, r - strokeWidth / 2);
+    return Skia.Path.MakeFromOp(outerCircle, innerCircle, PathOp.Difference)!;
+  }, [center.x, center.y, r, strokeWidth]);
   useEffect(() => {
     end.value = withTiming(1, { duration: 3000 });
   }, [end, progress]);
   return (
-    <Group transform={[{ rotate: -Math.PI / 2 }]} origin={center}>
-      <Circle
-        c={center}
-        r={r}
-        color={background}
-        style="stroke"
-        strokeCap="round"
-        strokeWidth={strokeWidth}
-      />
-      <Circle
-        c={originalPath.getPoint(0)}
-        r={strokeWidth / 2}
-        color={colors[0]}
-      />
-      <Path
-        path={path}
-        color={colors[0]}
-        style="stroke"
-        strokeWidth={strokeWidth}
-      >
-        <SweepGradient c={center} colors={colors} matrix={matrix} />
-      </Path>
-      <Path path={head} color={headColor}>
-        <Shadow dx={0} dy={0} color="black" blur={20} />
-      </Path>
+    <Group clip={clip}>
+      <Group transform={[{ rotate: -Math.PI / 2 }]} origin={center}>
+        <Circle
+          c={center}
+          r={r}
+          color={background}
+          style="stroke"
+          strokeCap="round"
+          strokeWidth={strokeWidth}
+        />
+        <Circle
+          c={originalPath.getPoint(0)}
+          r={strokeWidth / 2}
+          color={colors[0]}
+        />
+        <Path
+          path={path}
+          color={colors[0]}
+          style="stroke"
+          strokeWidth={strokeWidth}
+        >
+          <SweepGradient c={center} colors={colors} matrix={matrix} />
+        </Path>
+        <Path path={head} color={headColor} clip={headClip}>
+          <Shadow dx={0} dy={0} color="black" blur={10} />
+        </Path>
+        <Path path={head} color={headColor} />
+      </Group>
     </Group>
   );
 };
