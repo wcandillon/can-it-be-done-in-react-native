@@ -23,13 +23,14 @@ import { frag } from "../components";
 const source = frag`
 uniform shader image;
 uniform vec4 color;
+uniform vec2 pos;
 uniform float progress;
 
 vec4 main(vec2 xy) {
   if (progress > 1) {
     return color;
   }
-  return image.eval(xy);
+  return image.eval(pos);
 }
 `;
 
@@ -126,6 +127,14 @@ export const Ring = ({
       return colors[1];
     }
   });
+  const uniforms = useDerivedValue(() => {
+    const c = path.value.getLastPt();
+    return {
+      color: [...Skia.Color(colors[1])],
+      progress: trim.value * totalProgress,
+      pos: c,
+    };
+  });
   useEffect(() => {
     trim.value = withTiming(1, { duration: 3000 });
   }, [trim]);
@@ -148,6 +157,9 @@ export const Ring = ({
         </Path>
         <Path path={head} color={headColor} clip={headClip}>
           <Shadow dx={0} dy={0} blur={10} color="black" />
+          <Shader source={source} uniforms={uniforms}>
+            <SweepGradient c={center} colors={colors} matrix={matrix} />
+          </Shader>
         </Path>
       </Group>
     </Group>
