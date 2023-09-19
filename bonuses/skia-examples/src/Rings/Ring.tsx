@@ -20,20 +20,6 @@ import {
 
 import { frag } from "../components";
 
-const source = frag`
-uniform shader image;
-uniform vec4 color;
-uniform vec2 pos;
-uniform float progress;
-
-vec4 main(vec2 xy) {
-  if (progress > 1) {
-    return color;
-  }
-  return image.eval(pos);
-}
-`;
-
 const fromCircle = (center: Vector, r: number) => {
   "worklet";
   return Skia.XYWHRect(center.x - r, center.y - r, r * 2, r * 2);
