@@ -32,7 +32,7 @@ vec2 rotate(in vec2 coord, in float angle, vec2 origin) {
  }
 
 vec4 main(vec2 xy) {
-  return image.eval(pos);
+  return image.eval(xy);
 }
 `;
 
