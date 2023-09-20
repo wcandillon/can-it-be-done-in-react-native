@@ -29,7 +29,7 @@ const rings = [
     size: SIZE - strokeWidth * 2,
   },
   {
-    totalProgress: 1.7,
+    totalProgress: 0.7,
     colors: [color(0.98, 0.067, 0.31), color(0.976, 0.22, 0.522)],
     background: color(0.196, 0.012, 0.063),
     size: SIZE,
