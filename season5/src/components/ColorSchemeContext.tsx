@@ -132,7 +132,7 @@ interface ColorSchemeProviderProps {
   children: ReactNode;
 }
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("screen");
 const corners = [vec(0, 0), vec(width, 0), vec(width, height), vec(0, height)];
 
 export const ColorSchemeProvider = ({ children }: ColorSchemeProviderProps) => {
