@@ -13,7 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Title } from "./Title";
-import { BlurGradient } from "./BlurGradient";
+import { BlurGradient } from "./BlurGradient2";
 
 const { width, height } = Dimensions.get("window");
 

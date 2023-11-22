@@ -113,13 +113,19 @@ const update = (radius: number, sigma: number) => {
 
 const val = 16;
 const v1 = update(val, 1);
-const v2 = update(val, 45);
+const v2 = update(val, 20);
+const v3 = update(val, 40);
+const v4 = update(val, 60);
 
 const { N } = v1;
 const WEIGHTS1 = v1.weights;
 const OFFSETS1 = v1.offsets;
 const WEIGHTS2 = v2.weights;
 const OFFSETS2 = v2.offsets;
+const WEIGHTS3 = v3.weights;
+const OFFSETS3 = v3.offsets;
+const WEIGHTS4 = v4.weights;
+const OFFSETS4 = v4.offsets;
 
 const source = frag`
 uniform shader image;
@@ -132,6 +138,35 @@ uniform float[${N}] WEIGHTS1;
 uniform float[${N}] OFFSETS1;
 uniform float[${N}] WEIGHTS2;
 uniform float[${N}] OFFSETS2;
+uniform float[${N}] WEIGHTS3;
+uniform float[${N}] OFFSETS3;
+uniform float[${N}] WEIGHTS4;
+uniform float[${N}] OFFSETS4;
+
+vec2 interpolate(float amount, vec2 val1, vec2 val2, vec2 val3, vec2 val4) {
+  vec2 result;
+  if (amount < 0.33) {
+      result = mix(val1, val2, amount / 0.33);
+  } else if (amount < 0.66) {
+      result = mix(val2, val3, (amount - 0.33) / 0.33);
+  } else {
+      result = mix(val3, val4, (amount - 0.66) / 0.34);
+  }
+  return result;
+}
+
+float interpolate(float amount, float val1, float val2, float val3, float val4) {
+  float result;
+  if (amount < 0.33) {
+      result = mix(val1, val2, amount / 0.33);
+  } else if (amount < 0.66) {
+      result = mix(val2, val3, (amount - 0.33) / 0.33);
+  } else {
+      result = mix(val3, val4, (amount - 0.66) / 0.34);
+  }
+  return result;
+}
+
 // blurDirection is:
 //     vec2(1,0) for horizontal pass
 //     vec2(0,1) for vertical pass
@@ -140,11 +175,10 @@ uniform float[${N}] OFFSETS2;
 vec4 blur(vec2 blurDirection, vec2 pixelCoord, float amount)
 {
     vec4 result = vec4(0.0);
-    // TODO: remove size
     for (int i = 0; i < ${N}; ++i)
     {
-        vec2 offset = blurDirection * mix(OFFSETS1[i], OFFSETS2[i], amount);
-        float weight = mix(WEIGHTS1[i], WEIGHTS2[i], amount);
+        vec2 offset = blurDirection * interpolate(amount, OFFSETS1[i], OFFSETS2[i], OFFSETS3[i], OFFSETS4[i]);
+        float weight = interpolate(amount, WEIGHTS1[i], WEIGHTS2[i], WEIGHTS3[i], WEIGHTS4[i]);
         result += image.eval((pixelCoord + offset)) * weight;
     }
     return result;
@@ -178,6 +212,10 @@ export const BlurGradient = ({ mask, children }: BlurGradientProps) => {
           OFFSETS1,
           WEIGHTS2,
           OFFSETS2,
+          WEIGHTS3,
+          OFFSETS3,
+          WEIGHTS4,
+          OFFSETS4,
         }}
       >
         <Shader
@@ -189,6 +227,10 @@ export const BlurGradient = ({ mask, children }: BlurGradientProps) => {
             OFFSETS1,
             WEIGHTS2,
             OFFSETS2,
+            WEIGHTS3,
+            OFFSETS3,
+            WEIGHTS4,
+            OFFSETS4,
           }}
         >
           {children}
