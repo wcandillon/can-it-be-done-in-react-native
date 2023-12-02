@@ -7,6 +7,9 @@ import { generateKernel } from "./Kernel";
 const opts = {
   linear: true,
   correction: false,
+  sigmaStep: 6,
+  radius: 8,
+  sigma: 48,
 };
 
 export const generareBlurMask = (
@@ -14,11 +17,11 @@ export const generareBlurMask = (
   maxSigma: number,
   aSteps?: number
 ) => {
-  const steps = aSteps ?? Math.round(maxSigma / 10);
+  const steps = aSteps ?? Math.round(maxSigma / opts.sigmaStep);
   const kernels = new Array(steps)
     .fill(0)
     .map((_, i) => generateKernel(radius, (maxSigma * (i + 1)) / steps, opts));
-  kernels.unshift(generateKernel(radius, 2, opts));
+  kernels.unshift(generateKernel(radius, 1, opts));
   const shader = generateShader(kernels);
   const uniforms: Record<string, number[]> = {};
   kernels.forEach((kernel, i) => {
@@ -31,20 +34,14 @@ export const generareBlurMask = (
   };
 };
 
+const { shader: source, uniforms } = generareBlurMask(opts.radius, opts.sigma);
+
 interface BlurGradientProps {
   mask: ReactNode | ReactNode[];
   children: ReactNode | ReactNode[];
-  sigma?: number;
-  radius?: number;
 }
 
-export const BlurMask = ({
-  mask,
-  children,
-  sigma = 30,
-  radius = 16,
-}: BlurGradientProps) => {
-  const { shader: source, uniforms } = generareBlurMask(radius, sigma);
+export const BlurMask = ({ mask, children }: BlurGradientProps) => {
   return (
     <Fill>
       <Shader

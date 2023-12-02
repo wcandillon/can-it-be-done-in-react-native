@@ -52,12 +52,6 @@ uniform float[${n}] OFFSETS${i};
   )
   .join("\n")}
 
-int clampStep(int x, int minVal, int maxVal) {
-  if (x < minVal) return minVal;
-  if (x > maxVal) return maxVal;
-  return x;
-}
-
 
 ${generateInterpolateFunction(l)}
 
