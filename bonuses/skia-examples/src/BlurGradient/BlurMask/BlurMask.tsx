@@ -13,7 +13,7 @@ export const generareBlurMask = (
   const kernels = new Array(steps)
     .fill(0)
     .map((_, i) => generateKernel(radius, (maxSigma * (i + 1)) / steps));
-  kernels.unshift(generateKernel(radius, 1));
+  kernels.unshift(generateKernel(radius, 2));
   const shader = generateShader(kernels);
   const uniforms: Record<string, number[]> = {};
   kernels.forEach((kernel, i) => {
@@ -37,7 +37,7 @@ export const BlurMask = ({
   mask,
   children,
   sigma = 30,
-  radius = 15,
+  radius = 16,
 }: BlurGradientProps) => {
   const { shader: source, uniforms } = generareBlurMask(radius, sigma);
   return (
