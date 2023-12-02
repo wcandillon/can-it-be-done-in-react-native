@@ -5,7 +5,7 @@ import {
   vec,
   LinearGradient,
 } from "@shopify/react-native-skia";
-import React from "react";
+import React, { useEffect } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
@@ -13,7 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Title } from "./Title";
-import { BlurGradient } from "./BlurGradient2";
+import { BlurMask } from "./BlurMask";
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,7 +21,9 @@ export const BlurGradientDemo = () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const image = useImage(require("./zurich3.jpg"));
   const scrollY = useSharedValue(0);
-
+  useEffect(() => {
+    //scrollY.value = withRepeat(withTiming(200, { duration: 2000 }), -1, true);
+  }, []);
   const onScroll = useAnimatedScrollHandler({
     onScroll: ({ contentOffset: { y } }) => {
       scrollY.value = -y;
@@ -31,7 +33,7 @@ export const BlurGradientDemo = () => {
   return (
     <View style={{ flex: 1 }}>
       <Canvas style={{ flex: 1 }}>
-        <BlurGradient
+        <BlurMask
           mask={
             <LinearGradient
               start={vec(0, height * 0.61)}
@@ -56,7 +58,7 @@ export const BlurGradientDemo = () => {
             tx="clamp"
             ty="clamp"
           />
-        </BlurGradient>
+        </BlurMask>
         <Title />
       </Canvas>
       <View style={StyleSheet.absoluteFill}>
