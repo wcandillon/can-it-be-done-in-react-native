@@ -1,93 +1,55 @@
-import { frag } from "../../components";
+import { Skia } from "@shopify/react-native-skia";
 
-interface Kernel {
-  n: number;
-  offsets: number[];
-  weights: number[];
-}
+import { frag, glsl } from "../../components";
 
-const generateInterpolateFunction = (size: number) => {
-  if (size < 2) {
-    return `float interpolate(float amount, float values[${size}]) {
-  return 0.0;
-}`;
-  }
-
-  let cases = "";
-  for (let i = 0; i < size - 1; i++) {
-    cases += `    ${
-      i === 0 ? "if" : "else if"
-    } (step == ${i}) return mix(values[${i}], values[${
-      i + 1
-    }], localAmount);\n`;
-  }
-
-  return `float interpolate(float amount, float values[${size}]) {
-  float stepSize = 1.0 / float(${size - 1});
-  int step = int(amount / stepSize);
-  step = step < 0 ? 0 : step; // Manual clamp
-  step = step > ${size - 2} ? ${size - 2} : step; // Manual clamp
-  float localAmount = (amount - float(step) * stepSize) / stepSize;
-${cases}
-  // This should never be reached
-  return 0.0;
-}`;
-};
-
-export const generateShader = (kernels: Kernel[]) => {
-  const [{ n }] = kernels;
-  const l = kernels.length;
-  const source = frag`
+export const generateShader = (sigma: number) => {
+  const baseKernelSize = 51; //Math.round(sigma * 6);
+  const kernelSize =
+    baseKernelSize % 2 === 0 ? baseKernelSize + 1 : baseKernelSize;
+  const halfSize = Math.floor(kernelSize / 2);
+  const source = glsl`
 uniform shader image;
 uniform shader mask;
 
 uniform float2 direction;
 
-${kernels
-  .map(
-    (_, i) => `
-uniform float[${n}] WEIGHTS${i};
-uniform float[${n}] OFFSETS${i};
-`
-  )
-  .join("\n")}
-
-
-${generateInterpolateFunction(l)}
-
-// blurDirection is:
-//     vec2(1,0) for horizontal pass
-//     vec2(0,1) for vertical pass
-// The sourceTexture to be blurred MUST use linear filtering!
-// pixelCoord is in [0..1]
-vec4 blur(vec2 blurDirection, vec2 pixelCoord, float amount)
-{
-    vec4 result = vec4(0.0);
-    for (int i = 0; i < ${n}; ++i)
-    {
-      float[${l}] offsets;
-      float[${l}] weights;
-      ${kernels
-        .map(
-          (_, i) => `
-      offsets[${i}] = OFFSETS${i}[i];
-      weights[${i}] = WEIGHTS${i}[i]; `
-        )
-        .join("\n")}
-        vec2 offset = blurDirection * interpolate(amount, offsets);
-        float weight = interpolate(amount, weights);
-        result += image.eval((pixelCoord + offset)) * weight;
-    }
-    return result;
+// Function to calculate Gaussian weight
+float Gaussian(float x, float sigma) {
+  return exp(-(x * x) / (2.0 * sigma * sigma)) / (2.0 * 3.14159 * sigma * sigma);
 }
 
-half4 main(vec2 fragCoord) {
+// Function to perform blur in one direction
+vec3 blur(vec2 uv, vec2 direction, float sigma) {
+  vec3 result = vec3(0.0);
+  float totalWeight = 0.0;
+
+  for (int i = ${-halfSize}; i <= ${halfSize}; i++) {
+      float weight = Gaussian(float(i), sigma);
+      vec2 offset = vec2(direction * float(i));
+      vec3 sample = image.eval(uv + offset).rgb;
+
+      result += sample * weight;
+      totalWeight += weight;
+  }
+
+  if (totalWeight > 0.0) {
+      result /= totalWeight;
+  }
+
+  return result;
+}
+
+// main function
+vec4 main(vec2 fragCoord) {
   float amount = mask.eval(fragCoord).a;
   if (amount == 0.0) {
     return image.eval(fragCoord);
   }
-  return blur(direction, fragCoord.xy, amount);
+  vec3 color = blur(fragCoord, direction, mix(0.1, ${sigma.toFixed(
+    1
+  )}, amount));
+  return vec4(color, 1.0);
 }
 `;
-  return source;
+  return Skia.RuntimeEffect.Make(source)!;
 };

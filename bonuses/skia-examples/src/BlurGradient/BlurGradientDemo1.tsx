@@ -36,7 +36,7 @@ export const BlurGradientDemo = () => {
         <BlurMask
           mask={
             <LinearGradient
-              start={vec(0, height * 0.61)}
+              start={vec(0, height * 0.5)}
               end={vec(0, height)}
               colors={["transparent", "black"]}
             />
