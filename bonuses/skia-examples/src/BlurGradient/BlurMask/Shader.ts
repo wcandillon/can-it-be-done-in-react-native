@@ -1,4 +1,4 @@
-import { frag, glsl } from "../../components";
+import { frag } from "../../components";
 
 interface Kernel {
   n: number;
@@ -6,10 +6,10 @@ interface Kernel {
   weights: number[];
 }
 
-const generateInterpolateFunction = (size: number, type = "vec2") => {
+const generateInterpolateFunction = (size: number) => {
   if (size < 2) {
-    return `vec2 interpolate(float amount, vec2 values[${size}]) {
-  return vec2(0.0, 0.0);
+    return `float interpolate(float amount, float values[${size}]) {
+  return 0.0;
 }`;
   }
 
@@ -22,13 +22,14 @@ const generateInterpolateFunction = (size: number, type = "vec2") => {
     }], localAmount);\n`;
   }
 
-  return `${type} interpolate(float amount, ${type} values[${size}]) {
+  return `float interpolate(float amount, float values[${size}]) {
   float stepSize = 1.0 / float(${size - 1});
   int step = int(amount / stepSize);
   step = step < 0 ? 0 : step; // Manual clamp
   step = step > ${size - 2} ? ${size - 2} : step; // Manual clamp
   float localAmount = (amount - float(step) * stepSize) / stepSize;
 ${cases}
+  // This should never be reached
   return 0.0;
 }`;
 };
@@ -58,7 +59,7 @@ int clampStep(int x, int minVal, int maxVal) {
 }
 
 
-${generateInterpolateFunction(l, "float")}
+${generateInterpolateFunction(l)}
 
 // blurDirection is:
 //     vec2(1,0) for horizontal pass

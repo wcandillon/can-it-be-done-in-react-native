@@ -13,6 +13,7 @@ export const generareBlurMask = (
   const kernels = new Array(steps)
     .fill(0)
     .map((_, i) => generateKernel(radius, (maxSigma * (i + 1)) / steps));
+  kernels.unshift(generateKernel(radius, 1));
   const shader = generateShader(kernels);
   const uniforms: Record<string, number[]> = {};
   kernels.forEach((kernel, i) => {

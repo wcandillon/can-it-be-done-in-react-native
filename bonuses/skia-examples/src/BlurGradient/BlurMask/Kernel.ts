@@ -24,6 +24,7 @@ const erf = (x: number) => {
 };
 
 export const generateKernel = (radius: number, sigma: number) => {
+  console.log(`generateKernel(${radius}, ${sigma})`);
   const linear = true;
   const correction = false;
 
