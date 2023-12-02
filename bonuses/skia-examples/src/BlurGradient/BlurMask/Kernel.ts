@@ -23,14 +23,21 @@ const erf = (x: number) => {
   return sign * y;
 };
 
-export const generateKernel = (radius: number, sigma: number) => {
-  console.log(`generateKernel(${radius}, ${sigma})`);
-  const linear = true;
-  const correction = false;
+interface Options {
+  linear?: boolean;
+  correction?: boolean;
+}
 
-  // if (sigma === 0.0) {
-  //   return;
-  // }
+export const generateKernel = (
+  radius: number,
+  sigma: number,
+  { linear = true, correction = false }: Options
+) => {
+  console.log(`generateKernel(${radius}, ${sigma})`);
+
+  if (sigma === 0.0) {
+    throw new Error("Sigma cannot be 0");
+  }
 
   const weights = [];
   let sumWeights = 0.0;

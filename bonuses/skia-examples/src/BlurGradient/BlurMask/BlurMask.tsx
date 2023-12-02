@@ -4,6 +4,11 @@ import { Fill, Shader, vec } from "@shopify/react-native-skia";
 import { generateShader } from "./Shader";
 import { generateKernel } from "./Kernel";
 
+const opts = {
+  linear: true,
+  correction: false,
+};
+
 export const generareBlurMask = (
   radius: number,
   maxSigma: number,
@@ -12,8 +17,8 @@ export const generareBlurMask = (
   const steps = aSteps ?? Math.round(maxSigma / 10);
   const kernels = new Array(steps)
     .fill(0)
-    .map((_, i) => generateKernel(radius, (maxSigma * (i + 1)) / steps));
-  kernels.unshift(generateKernel(radius, 2));
+    .map((_, i) => generateKernel(radius, (maxSigma * (i + 1)) / steps, opts));
+  kernels.unshift(generateKernel(radius, 2, opts));
   const shader = generateShader(kernels);
   const uniforms: Record<string, number[]> = {};
   kernels.forEach((kernel, i) => {
