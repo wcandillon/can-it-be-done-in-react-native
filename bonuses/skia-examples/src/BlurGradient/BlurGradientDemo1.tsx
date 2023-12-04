@@ -5,7 +5,7 @@ import {
   vec,
   LinearGradient,
 } from "@shopify/react-native-skia";
-import React, { useEffect } from "react";
+import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
@@ -21,9 +21,6 @@ export const BlurGradientDemo = () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const image = useImage(require("./zurich3.jpg"));
   const scrollY = useSharedValue(0);
-  useEffect(() => {
-    //scrollY.value = withRepeat(withTiming(200, { duration: 2000 }), -1, true);
-  }, []);
   const onScroll = useAnimatedScrollHandler({
     onScroll: ({ contentOffset: { y } }) => {
       scrollY.value = -y;
@@ -40,11 +37,6 @@ export const BlurGradientDemo = () => {
               end={vec(0, height)}
               colors={["transparent", "black"]}
             />
-            // <RadialGradient
-            //   c={vec(width / 2, height / 2)}
-            //   r={width}
-            //   colors={["transparent", "transparent", "black"]}
-            // />
           }
         >
           <ImageShader

@@ -3,8 +3,10 @@ import { Skia } from "@shopify/react-native-skia";
 import { glsl } from "../../components";
 
 export const generateShader = () => {
-  const sigma = 10;
-  const halfSize = 15;
+  const maxSigma = 10;
+  const k = 3;
+  const windowSize = k * maxSigma;
+  const halfWindowSize = (windowSize / 2).toFixed(1);
   const source = glsl`
 uniform shader image;
 uniform shader mask;
@@ -20,9 +22,9 @@ float Gaussian(float x, float sigma) {
 vec3 blur(vec2 uv, vec2 direction, float sigma) {
   vec3 result = vec3(0.0);
   float totalWeight = 0.0;
-  float window = sigma * 1.5;
+  float window = sigma * ${k.toFixed(1)} * 0.5;
 
-  for (float i = ${-halfSize}; i <= ${halfSize}; i++) {
+  for (float i = ${-halfWindowSize}; i <= ${halfWindowSize}; i++) {
       if (abs(i) > window) {
         continue;
       }
@@ -47,12 +49,11 @@ vec4 main(vec2 fragCoord) {
   if (amount == 0.0) {
     return image.eval(fragCoord);
   }
-  vec3 color = blur(fragCoord, direction, mix(0.1, ${sigma.toFixed(
+  vec3 color = blur(fragCoord, direction, mix(0.1, ${maxSigma.toFixed(
     1
   )}, amount));
   return vec4(color, 1.0);
 }
 `;
-  console.log(source);
   return Skia.RuntimeEffect.Make(source)!;
 };
