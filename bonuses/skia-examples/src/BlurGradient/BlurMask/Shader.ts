@@ -1,12 +1,19 @@
 import { Skia } from "@shopify/react-native-skia";
 
-import { frag, glsl } from "../../components";
+import { glsl } from "../../components";
+
+const calculateKernelSize = (sigma: number) => {
+  // k is the factor representing the number of standard deviations
+  // You can change this value based on your requirements
+  const k = 3;
+  // Calculate the kernel size
+  const kernelSize = 2 * Math.ceil(k * sigma) + 1;
+  return kernelSize;
+};
 
 export const generateShader = (sigma: number) => {
-  const baseKernelSize = 51; //Math.round(sigma * 6);
-  const kernelSize =
-    baseKernelSize % 2 === 0 ? baseKernelSize + 1 : baseKernelSize;
-  const halfSize = Math.floor(kernelSize / 2);
+  const kernelSize = calculateKernelSize(1.5);
+  const halfSize = Math.floor(kernelSize / 2).toFixed(1);
   const source = glsl`
 uniform shader image;
 uniform shader mask;
@@ -23,9 +30,9 @@ vec3 blur(vec2 uv, vec2 direction, float sigma) {
   vec3 result = vec3(0.0);
   float totalWeight = 0.0;
 
-  for (int i = ${-halfSize}; i <= ${halfSize}; i++) {
-      float weight = Gaussian(float(i), sigma);
-      vec2 offset = vec2(direction * float(i));
+  for (float i = ${-halfSize}; i <= ${halfSize}; i++) {
+      float weight = Gaussian(i, sigma);
+      vec2 offset = vec2(direction * i);
       vec3 sample = image.eval(uv + offset).rgb;
 
       result += sample * weight;
@@ -51,5 +58,6 @@ vec4 main(vec2 fragCoord) {
   return vec4(color, 1.0);
 }
 `;
+  console.log(source);
   return Skia.RuntimeEffect.Make(source)!;
 };
