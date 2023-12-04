@@ -13,7 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Title } from "./Title";
-import { BlurGradient } from "./BlurGradient";
+import { BlurMask } from "./BlurMask";
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,7 +21,6 @@ export const BlurGradientDemo = () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const image = useImage(require("./zurich3.jpg"));
   const scrollY = useSharedValue(0);
-
   const onScroll = useAnimatedScrollHandler({
     onScroll: ({ contentOffset: { y } }) => {
       scrollY.value = -y;
@@ -31,18 +30,13 @@ export const BlurGradientDemo = () => {
   return (
     <View style={{ flex: 1 }}>
       <Canvas style={{ flex: 1 }}>
-        <BlurGradient
+        <BlurMask
           mask={
             <LinearGradient
-              start={vec(0, height * 0.61)}
+              start={vec(0, height * 0.5)}
               end={vec(0, height)}
               colors={["transparent", "black"]}
             />
-            // <RadialGradient
-            //   c={vec(width / 2, height / 2)}
-            //   r={width}
-            //   colors={["transparent", "transparent", "black"]}
-            // />
           }
         >
           <ImageShader
@@ -56,7 +50,7 @@ export const BlurGradientDemo = () => {
             tx="clamp"
             ty="clamp"
           />
-        </BlurGradient>
+        </BlurMask>
         <Title />
       </Canvas>
       <View style={StyleSheet.absoluteFill}>
