@@ -3,7 +3,7 @@ import { Fill, Shader, vec } from "@shopify/react-native-skia";
 
 import { generateShader } from "./Shader";
 
-const source = generateShader(40);
+const source = generateShader();
 
 interface BlurGradientProps {
   mask: ReactNode | ReactNode[];
