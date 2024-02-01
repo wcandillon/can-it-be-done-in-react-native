@@ -10,6 +10,7 @@ import { JoyOfPainting } from "./src/JoyOfPainting";
 import { BlurGradientDemo } from "./src/BlurGradient";
 import { Wallpaper } from "./src/Wallpaper";
 import { Rings } from "./src/Rings";
+import { Generators } from "./src/Generators";
 
 const fonts = {};
 const assets: number[] = [];
@@ -61,6 +62,14 @@ const AppNavigator = () => (
         component={Rings}
         options={{
           title: "🏋️‍♂️ Fitness Rings",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Generators"
+        component={Generators}
+        options={{
+          title: "🧪 Generators",
           headerShown: false,
         }}
       />

@@ -5,4 +5,5 @@ export type Routes = {
   BlurGradient: undefined;
   Wallpaper: undefined;
   Rings: undefined;
+  Generators: undefined;
 };

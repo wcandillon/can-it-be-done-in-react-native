@@ -27,6 +27,10 @@ const examples = [
     screen: "Rings",
     title: "🏋️‍♂️ Fitness Rings",
   },
+  {
+    screen: "Generators",
+    title: "🧪 Generators",
+  },
 ] as const;
 
 const styles = StyleSheet.create({
