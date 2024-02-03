@@ -1,6 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { View } from "react-native";
 
 import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
@@ -10,14 +11,15 @@ import { JoyOfPainting } from "./src/JoyOfPainting";
 import { BlurGradientDemo } from "./src/BlurGradient";
 import { Wallpaper } from "./src/Wallpaper";
 import { Rings } from "./src/Rings";
-import { Generators } from "./src/Generators";
+//import { Generators } from "./src/Generators";
+import { Heartrate } from "./src/Heartrate";
 
 const fonts = {};
 const assets: number[] = [];
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
   <GestureHandlerRootView style={{ flex: 1 }}>
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Heartrate">
       <Stack.Screen
         name="Examples"
         component={Examples}
@@ -67,9 +69,17 @@ const AppNavigator = () => (
       />
       <Stack.Screen
         name="Generators"
-        component={Generators}
+        component={View}
         options={{
           title: "🧪 Generators",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Heartrate"
+        component={Heartrate}
+        options={{
+          title: "❤️ Heartrate",
           headerShown: false,
         }}
       />

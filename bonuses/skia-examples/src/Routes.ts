@@ -6,4 +6,5 @@ export type Routes = {
   Wallpaper: undefined;
   Rings: undefined;
   Generators: undefined;
+  Heartrate: undefined;
 };
