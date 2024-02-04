@@ -19,7 +19,7 @@ const assets: number[] = [];
 const Stack = createStackNavigator<Routes>();
 const AppNavigator = () => (
   <GestureHandlerRootView style={{ flex: 1 }}>
-    <Stack.Navigator initialRouteName="Heartrate">
+    <Stack.Navigator>
       <Stack.Screen
         name="Examples"
         component={Examples}

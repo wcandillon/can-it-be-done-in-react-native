@@ -7,7 +7,7 @@ import type { InitialState } from "@react-navigation/native";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 
-const NAVIGATION_STATE_KEY = "NAVIGATION_STATE_KEY";
+const NAVIGATION_STATE_KEY = "key";
 
 type FontSource = Parameters<typeof Font.loadAsync>[0];
 const usePromiseAll = (
