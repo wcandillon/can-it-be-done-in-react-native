@@ -28,12 +28,18 @@ export const Beat = ({ progress }: BeatProps) => {
   const transform = useDerivedValue(() => [
     { scale: mix(progress.value, 1, 3) },
   ]);
-  const blur = useDerivedValue(() => mix(progress.value, 0.5, 2));
-  const opacity = useDerivedValue(() => 1 - Math.pow(progress.value, 3));
+  const blur = useDerivedValue(() => mix(progress.value, 0.1, 2));
+  // const opacity = useDerivedValue(() => 1 - Math.pow(progress.value, 3));
+  const strokeWidth = useDerivedValue(() => mix(progress.value, 1, 0));
   return (
-    <Group transform={transform} origin={c} opacity={opacity}>
+    <Group transform={transform} origin={c} opacity={1}>
       <Group transform={fitbox("contain", src, dst)}>
-        <Path color="#D52327" path={path} style="stroke" strokeWidth={1}>
+        <Path
+          color="#D52327"
+          path={path}
+          style="stroke"
+          strokeWidth={strokeWidth}
+        >
           <Blur blur={blur} />
         </Path>
       </Group>
