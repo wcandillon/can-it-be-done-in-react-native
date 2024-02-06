@@ -55,7 +55,7 @@ export const Beat = ({ progress }: BeatProps) => {
   const transform = useDerivedValue(() => [
     { scale: mix(progress.value, 1, 3) },
   ]);
-  const blur = useDerivedValue(() => mix(progress.value, 1, 5));
+  const blur = useDerivedValue(() => mix(progress.value, 3, 15));
   const uniforms = useDerivedValue(() => {
     return {
       resolution: [width, height],
