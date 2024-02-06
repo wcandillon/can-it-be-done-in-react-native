@@ -1,1 +1,1 @@
-export * from "./Heartrate";
+export * from "./Heartrate2";
