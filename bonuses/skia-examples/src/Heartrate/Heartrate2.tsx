@@ -13,6 +13,7 @@ import { Easing, useDerivedValue, withTiming } from "react-native-reanimated";
 import { frag } from "../components";
 
 import { useLoop, useSharedValues } from "./Animations";
+import { Beat } from "./Beat2";
 
 const { width, height } = Dimensions.get("window");
 const origin = { x: width / 2, y: height / 2 };
@@ -84,14 +85,9 @@ export const Heartrate = () => {
   return (
     <Canvas style={{ flex: 1 }}>
       <Fill color="black" />
-      <Group transform={[{ scale: 2 }]} origin={origin}>
-        <Fill>
-          <Shader
-            source={source}
-            uniforms={{ resolution: [width, height], c1, c2 }}
-          />
-        </Fill>
-      </Group>
+      {values.map((val, i) => (
+        <Beat key={i} progress={val} />
+      ))}
       <Fill transform={transform} origin={origin}>
         <Shader
           source={source}
