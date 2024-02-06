@@ -21,6 +21,7 @@ const source = frag`
 uniform float2 resolution;
 uniform vec4 c1;
 uniform vec4 c2;
+uniform float opacity;
 
 float dot2(in vec2 v) { return dot(v,v); }
 float sdHeart(in vec2 p)
@@ -35,10 +36,9 @@ vec4 main(vec2 xy) {
   vec2 p = (xy*2.0-resolution.xy)/-resolution.x;
   p.y += 0.5;
   float d = sdHeart(p);
-  if (d < 0 && d > -0.05) {
-    vec3 col = c1.rgb;
-    col *= exp(d);
-    return mix(c2, vec4(0.0, 0.0, 0.0, 1.0), d/-0.05);
+  if (d < 0 && d > -0.1) {
+    vec4 res = mix(c2, vec4(0.0, 0.0, 0.0, 1.0), d/-0.1);
+    return mix(res, vec4(0.0, 0.0, 0.0, 1.0), 1.0-opacity);
   }
   return vec4(0.0, 0.0, 0.0, 0.0);
 }
@@ -46,8 +46,6 @@ vec4 main(vec2 xy) {
 
 const { width, height } = Dimensions.get("window");
 const c = { x: width / 2, y: height / 2 };
-const pad = 64;
-const dst = rect(pad, pad, width - 2 * pad, height - pad * 2);
 
 interface BeatProps {
   progress: SharedValue<number>;
@@ -57,15 +55,20 @@ export const Beat = ({ progress }: BeatProps) => {
   const transform = useDerivedValue(() => [
     { scale: mix(progress.value, 1, 3) },
   ]);
-  const blur = useDerivedValue(() => mix(progress.value, 1, 4));
-  const strokeWidth = useDerivedValue(() => mix(progress.value, 4, 0));
+  const blur = useDerivedValue(() => mix(progress.value, 1, 5));
+  const uniforms = useDerivedValue(() => {
+    return {
+      resolution: [width, height],
+      c1: Array.from(c1),
+      c2: Array.from(c2),
+      opacity: 1 - progress.value,
+    };
+  });
   return (
     <Group transform={transform} origin={c}>
       <Fill>
-        <Shader
-          source={source}
-          uniforms={{ resolution: [width, height], c1, c2 }}
-        />
+        <Shader source={source} uniforms={uniforms} />
+        <Blur blur={blur} />
       </Fill>
     </Group>
   );
