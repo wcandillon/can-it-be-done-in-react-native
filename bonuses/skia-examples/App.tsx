@@ -1,7 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { View } from "react-native";
 
 import type { Routes } from "./src/Routes";
 import { Examples } from "./src/Examples";
@@ -11,8 +10,8 @@ import { JoyOfPainting } from "./src/JoyOfPainting";
 import { BlurGradientDemo } from "./src/BlurGradient";
 import { Wallpaper } from "./src/Wallpaper";
 import { Rings } from "./src/Rings";
-//import { Generators } from "./src/Generators";
 import { Heartrate } from "./src/Heartrate";
+import { Generators } from "./src/Generators";
 
 const fonts = {};
 const assets: number[] = [];
@@ -69,7 +68,7 @@ const AppNavigator = () => (
       />
       <Stack.Screen
         name="Generators"
-        component={View}
+        component={Generators}
         options={{
           title: "🧪 Generators",
           headerShown: false,

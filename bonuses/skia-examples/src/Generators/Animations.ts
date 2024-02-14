@@ -37,7 +37,7 @@ export function* timeSincePreviousFrame() {
   return time;
 }
 
-export function* timing(value: Value, rawConfig?: TimingConfig) {
+export function* timing(value: SharedValue<number>, rawConfig?: TimingConfig) {
   "worklet";
   const from = value.value;
   const { to, easing, duration } = { ...defaultTimingConfig, ...rawConfig };
@@ -145,14 +145,14 @@ export const useAnimation = <S extends AnimationState>(
     typeof input === "function" ? { animation: input, state: {} as S } : input;
   const values = useSharedValues(state);
   const gen = useSharedValue<null | Generator>(null);
-  useFrameCallback(({ timeSincePreviousFrame }) => {
+  useFrameCallback(({ timeSincePreviousFrame: ts }) => {
     if (gen.value === null) {
       gen.value = animation(values);
     }
     if (pause?.value) {
-      offset.value += timeSincePreviousFrame ?? 0;
+      offset.value += ts ?? 0;
     } else {
-      gen.value.next(timeSincePreviousFrame);
+      gen.value.next(ts);
     }
   });
   return values;

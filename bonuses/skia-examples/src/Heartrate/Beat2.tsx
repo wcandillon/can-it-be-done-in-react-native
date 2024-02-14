@@ -5,7 +5,6 @@ import {
   Shader,
   Skia,
   mix,
-  rect,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions } from "react-native";

@@ -1,12 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  Canvas,
-  Fill,
-  Group,
-  Shader,
-  Skia,
-  mix,
-} from "@shopify/react-native-skia";
+import { Canvas, Fill, Shader, Skia, mix } from "@shopify/react-native-skia";
 import { Dimensions } from "react-native";
 import { Easing, useDerivedValue, withTiming } from "react-native-reanimated";
 
