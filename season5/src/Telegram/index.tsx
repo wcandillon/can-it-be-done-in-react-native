@@ -1,7 +1,5 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Button } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { Box, Text } from "../components";
 
