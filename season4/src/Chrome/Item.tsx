@@ -110,6 +110,9 @@ const Item = ({
         const upperBound = lowerBound + containerHeight - SIZE;
         const maxScroll = contentHeight - containerHeight;
         const leftToScrollDown = maxScroll - scrollY.value;
+        if (maxScroll <= 0) {
+          return;
+        }
         if (translateY.value < lowerBound) {
           const diff = Math.min(lowerBound - translateY.value, lowerBound);
           scrollY.value -= diff;
