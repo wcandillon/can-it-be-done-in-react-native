@@ -14,7 +14,6 @@ import {
 import type { ReactNode } from "react";
 import React, { useMemo } from "react";
 import { Dimensions } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const padding = 32;
 const { width, height } = Dimensions.get("window");
@@ -23,8 +22,9 @@ const title = "Following the breath";
 const boldTf = require("./assets/Roboto-Bold.ttf");
 const regularTf = require("./assets/Roboto-Regular.ttf");
 
+const top = 100;
+
 export const Overlay = () => {
-  const insets = useSafeAreaInsets();
   const titleFont = useFont(boldTf, 32);
   const normalFont = useFont(regularTf, 14);
   if (!titleFont || !normalFont) {
@@ -34,16 +34,13 @@ export const Overlay = () => {
     <>
       <Group />
       <Group
-        transform={[
-          { translateY: insets.top + padding },
-          { translateX: padding },
-        ]}
+        transform={[{ translateY: top + padding }, { translateX: padding }]}
       >
         <Info />
       </Group>
       <Group
         transform={[
-          { translateY: insets.top + padding },
+          { translateY: top + padding },
           { translateX: width - padding - 24 },
         ]}
       >

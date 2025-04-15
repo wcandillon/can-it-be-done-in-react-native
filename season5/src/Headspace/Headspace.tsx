@@ -1,19 +1,12 @@
 import { Path, Skia, Canvas, vec, useClock } from "@shopify/react-native-skia";
-import React, { useEffect, useState } from "react";
-import { Dimensions } from "react-native";
+import React, { useState } from "react";
+import { Dimensions, View } from "react-native";
 import { createNoise2D } from "simplex-noise";
-import {
-  Easing,
-  useDerivedValue,
-  useSharedValue,
-} from "react-native-reanimated";
-import { SafeAreaInsetsContext } from "react-native-safe-area-context";
-import { Pressable } from "react-native-gesture-handler";
+import { useDerivedValue, useSharedValue } from "react-native-reanimated";
 
 import { Play } from "./Play";
 import { Background } from "./Background";
 import { Overlay } from "./Overlay";
-import { useContextBridge } from "./useContextBridge";
 
 const C = 0.55228474983079;
 const F = 20000;
@@ -27,7 +20,6 @@ const n3 = createNoise2D();
 const n4 = createNoise2D();
 
 export const Headspace = () => {
-  const ContextBridge = useContextBridge(SafeAreaInsetsContext);
   const [toggled, setToggled] = useState(false);
   const clock = useClock();
   const progress = useSharedValue(0);
@@ -63,15 +55,15 @@ export const Headspace = () => {
   }, [clock]);
 
   return (
-    <Pressable onPress={() => setToggled((t) => !t)}>
+    <View style={{ flex: 1 }}>
+      {/* <Pressable onPress={() => setToggled((t) => !t)}> */}
       <Canvas style={{ flex: 1 }}>
-        <ContextBridge>
-          <Background clock={clock} />
-          <Path path={path} color="#3B3A3A" />
-          <Play progress={progress} c={c} r={r} />
-          <Overlay />
-        </ContextBridge>
+        <Background clock={clock} />
+        <Path path={path} color="#3B3A3A" />
+        <Play progress={progress} c={c} r={r} />
+        <Overlay />
       </Canvas>
-    </Pressable>
+      {/* </Pressable> */}
+    </View>
   );
 };
