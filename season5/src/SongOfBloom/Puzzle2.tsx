@@ -14,7 +14,7 @@ import {
   useClock,
 } from "@shopify/react-native-skia";
 import React from "react";
-import { Dimensions, Easing } from "react-native";
+import { Dimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import type { SharedValue } from "react-native-reanimated";
 import {
@@ -23,7 +23,8 @@ import {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { createNoise2D, createNoise3D } from "simplex-noise";
+
+import { createNoise2D, createNoise3D } from "../components/SimpleNoise";
 
 const pad = 6;
 const deflate = (rct: SkRect, amount: number) => {
@@ -117,13 +118,9 @@ const Stripe = ({ index, clock, a, i0, i }: StripeProps) => {
   );
   const animatedVertices = useDerivedValue(() => {
     if (i0.value === index && i.value !== index) {
-      animation.value = withTiming(
-        1,
-        { duration: 100, easing: Easing.linear },
-        () => {
-          animation.value = withSpring(0);
-        }
-      );
+      animation.value = withTiming(1, { duration: 100 }, () => {
+        animation.value = withSpring(0);
+      });
     }
     const t = clock.value * 0.0004;
     const f = mix(animation.value, 1, 2);

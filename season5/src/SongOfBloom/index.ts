@@ -1,1 +1,1 @@
-export { Puzzle2 as SongOfBloom } from "./Puzzle2";
+export { Puzzle1 as SongOfBloom } from "./Puzzle1";

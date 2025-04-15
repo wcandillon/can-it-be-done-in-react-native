@@ -12,6 +12,7 @@ const c2 = "#3a9dbb";
 const c3 = "#2a7fb8";
 const easing = Easing.bezier(0.37, 0, 0.63, 1).factory();
 const getProgress = (t: number, durationInFrames = 4000) => {
+  "worklet";
   const p = (t % durationInFrames) / durationInFrames;
   const currentIteration = Math.floor(t / durationInFrames);
   const isGoingBack = currentIteration % 2 === 0;
@@ -20,6 +21,7 @@ const getProgress = (t: number, durationInFrames = 4000) => {
 };
 
 const getCurve = (start: number, h: number) => {
+  "worklet";
   const path = Skia.Path.Make();
   path.moveTo(0, start);
   path.quadTo(width / 2, start - h, width, start);

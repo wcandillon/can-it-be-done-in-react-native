@@ -1,6 +1,7 @@
 import type { SkRect, Vector } from "@shopify/react-native-skia";
 import { Skia, vec } from "@shopify/react-native-skia";
-import { createNoise2D } from "simplex-noise";
+
+import { createNoise2D } from "../components/SimpleNoise";
 
 const pointOnRect = (t: number, rct: SkRect) => {
   const { x, y, width, height } = rct;
@@ -15,11 +16,12 @@ const pointOnRect = (t: number, rct: SkRect) => {
   }
 };
 
+const noise = createNoise2D();
 export const drawNoisyRect = (rct: SkRect) => {
+  "worklet";
   const sample = 20;
   const F = 1;
   const A = 5;
-  const noise = createNoise2D();
   const path = Skia.Path.Make();
   for (let i = 0; i < sample; i++) {
     const t = i / sample;
@@ -36,10 +38,10 @@ export const drawNoisyRect = (rct: SkRect) => {
 };
 
 export const drawNoisyCircle = (c: Vector) => {
+  "worklet";
   const F = 1;
   const R = 15;
   const sample = 50;
-  const noise = createNoise2D();
   const path = Skia.Path.Make();
   for (let i = 0; i < sample; i++) {
     const theta = (i / sample) * 2 * Math.PI;

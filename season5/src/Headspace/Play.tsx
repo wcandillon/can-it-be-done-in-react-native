@@ -13,6 +13,7 @@ const Flubber2SkiaInterpolator = (from: SkPath, to: SkPath) => {
   const i0 = Skia.Path.MakeFromSVGString(interpolator(d))!;
   const i1 = Skia.Path.MakeFromSVGString(interpolator(1 - d))!;
   return (t: number) => {
+    "worklet";
     if (t < d) {
       return from;
     }

@@ -1,8 +1,13 @@
 import { Path, Skia, Canvas, vec, useClock } from "@shopify/react-native-skia";
-import React, { useState } from "react";
-import { Dimensions, View } from "react-native";
-import { createNoise2D } from "simplex-noise";
-import { useDerivedValue, useSharedValue } from "react-native-reanimated";
+import React, { useEffect, useState } from "react";
+import { Dimensions, Easing, Pressable } from "react-native";
+import {
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+
+import { createNoise2D } from "../components/SimpleNoise";
 
 import { Play } from "./Play";
 import { Background } from "./Background";
@@ -23,18 +28,11 @@ export const Headspace = () => {
   const [toggled, setToggled] = useState(false);
   const clock = useClock();
   const progress = useSharedValue(0);
-  // const progress = useTiming(toggled ? 1 : 0, {
-  //   duration: 450,
-  //   easing: Easing.inOut(Easing.ease),
-  // });
-  // const clock = useClock();
-  // useEffect(() => {
-  //   if (toggled) {
-  //     clock.start();
-  //   } else {
-  //     clock.stop();
-  //   }
-  // }, [clock, toggled]);
+  useEffect(() => {
+    progress.value = withTiming(toggled ? 1 : 0, {
+      duration: 450,
+    });
+  }, [progress, toggled]);
   const path = useDerivedValue(() => {
     const C1 = C + A * n1(clock.value / F, 0);
     const C2 = C + A * n2(clock.value / F, 0);
@@ -55,15 +53,13 @@ export const Headspace = () => {
   }, [clock]);
 
   return (
-    <View style={{ flex: 1 }}>
-      {/* <Pressable onPress={() => setToggled((t) => !t)}> */}
+    <Pressable style={{ flex: 1 }} onPress={() => setToggled((t) => !t)}>
       <Canvas style={{ flex: 1 }}>
         <Background clock={clock} />
         <Path path={path} color="#3B3A3A" />
         <Play progress={progress} c={c} r={r} />
         <Overlay />
       </Canvas>
-      {/* </Pressable> */}
-    </View>
+    </Pressable>
   );
 };
