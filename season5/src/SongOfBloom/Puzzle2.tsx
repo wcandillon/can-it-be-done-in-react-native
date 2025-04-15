@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import type { SkiaValue, SkRect, Vector } from "@shopify/react-native-skia";
+import type { SkRect, Vector } from "@shopify/react-native-skia";
 import {
-  runSpring,
   mix,
-  runTiming,
   Fill,
   Image,
-  useComputedValue,
-  useClockValue,
-  useValue,
   Canvas,
   Group,
   Vertices,
@@ -16,11 +11,18 @@ import {
   rect,
   useImage,
   vec,
-  Easing,
-  useTouchHandler,
+  useClock,
 } from "@shopify/react-native-skia";
 import React from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, Easing } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import type { SharedValue } from "react-native-reanimated";
+import {
+  useDerivedValue,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import { createNoise2D, createNoise3D } from "simplex-noise";
 
 const pad = 6;
@@ -97,14 +99,14 @@ const generateTrianglePointsAndIndices = (
 
 interface StripeProps {
   index: number;
-  clock: SkiaValue<number>;
-  a: SkiaValue<number>;
-  i0: SkiaValue<number>;
-  i: SkiaValue<number>;
+  clock: SharedValue<number>;
+  a: SharedValue<number>;
+  i0: SharedValue<number>;
+  i: SharedValue<number>;
 }
 
 const Stripe = ({ index, clock, a, i0, i }: StripeProps) => {
-  const animation = useValue(0);
+  const animation = useSharedValue(0);
   const noise = createNoise2D();
   const x = index * stripeWidth;
   const rct = rect(x, 0, stripeWidth - pad, height);
@@ -113,19 +115,23 @@ const Stripe = ({ index, clock, a, i0, i }: StripeProps) => {
     20,
     index / numberOfStripes
   );
-  const animatedVertices = useComputedValue(() => {
-    if (i0.current === index && i.current !== index) {
-      runTiming(animation, 1, { duration: 100, easing: Easing.linear }, () => {
-        runSpring(animation, 0);
-      });
+  const animatedVertices = useDerivedValue(() => {
+    if (i0.value === index && i.value !== index) {
+      animation.value = withTiming(
+        1,
+        { duration: 100, easing: Easing.linear },
+        () => {
+          animation.value = withSpring(0);
+        }
+      );
     }
-    const t = clock.current * 0.0004;
-    const f = mix(animation.current, 1, 2);
+    const t = clock.value * 0.0004;
+    const f = mix(animation.value, 1, 2);
     return vertices.map((v, j) => {
-      const d = (a.current + animation.current * 8) * noise(t * f, j);
+      const d = (a.value + animation.value * 8) * noise(t * f, j);
       return vec(v.x + d, v.y + d);
     });
-  }, [clock]);
+  });
   return (
     <Vertices
       vertices={animatedVertices}
@@ -136,77 +142,78 @@ const Stripe = ({ index, clock, a, i0, i }: StripeProps) => {
 };
 
 export const Puzzle2 = () => {
-  const i = useValue(-1);
-  const i0 = useValue(-1);
-  const y = useValue(0);
-  const offset = useValue(0);
-  const a = useValue(2);
+  const i = useSharedValue(-1);
+  const i0 = useSharedValue(-1);
+  const y = useSharedValue(0);
+  const offset = useSharedValue(0);
+  const a = useSharedValue(2);
 
   const background = useImage(require("./assets/bg.jpg"));
   const frame = useImage(require("./assets/frame.png"));
   const picture = useImage(require("./assets/art1.jpg"));
-  const clock = useClockValue();
-  const onTouch = useTouchHandler({
-    onStart: (e) => {
-      offset.current = y.current - e.y;
-    },
-    onActive: (e) => {
-      i0.current = i.current;
-      i.current = Math.round((e.x - pictureRect.x) / stripeWidth);
-      const newY = offset.current + e.y;
-      if (newY > y.current) {
-        y.current = newY;
+  const clock = useClock();
+  const gesture = Gesture.Pan()
+    .onStart((e) => {
+      offset.value = y.value - e.y;
+    })
+    .onChange((e) => {
+      i0.value = i.value;
+      i.value = Math.round((e.x - pictureRect.x) / stripeWidth);
+      const newY = offset.value + e.y;
+      if (newY > y.value) {
+        y.value = newY;
       }
-    },
-    onEnd: () => {
-      i.current = -1;
-      i0.current = -1;
-      if (y.current + pictureRect.y > frameRect.y + frameRect.height - 40) {
-        runTiming(y, screen.height + 100, { duration: 800 });
-        runTiming(a, 10, { duration: 200 });
+    })
+    .onEnd(() => {
+      i.value = -1;
+      i0.value = -1;
+      if (y.value + pictureRect.y > frameRect.y + frameRect.height - 40) {
+        y.value = withTiming(screen.height + 100, { duration: 800 });
+        a.value = withTiming(10, { duration: 200 });
       }
-    },
-  });
-  const transform = useComputedValue(() => [{ translateY: y.current }], [y]);
+    });
+  const transform = useDerivedValue(() => [{ translateY: y.value }]);
   if (!picture || !frame || !background) {
     return null;
   }
   return (
-    <Canvas style={{ flex: 1 }} onTouch={onTouch}>
-      <Fill color="#FDF8F7" />
-      <Image image={background} fit="cover" rect={pictureRect} />
-      <Group transform={transform}>
-        <Group
-          transform={[
-            { translateX: pictureRect.x },
-            { translateY: pictureRect.y + 10 },
-          ]}
-        >
-          <ImageShader
-            image={picture}
-            rect={rect(0, 0, width, height)}
-            fit="fill"
-          />
-          {stripes.map((index) => (
-            <Stripe
-              key={index}
-              index={index}
-              clock={clock}
-              a={a}
-              i0={i0}
-              i={i}
-            />
-          ))}
-        </Group>
-      </Group>
-      <Group clip={deflate(frameRect, 10)}>
+    <GestureDetector gesture={gesture}>
+      <Canvas style={{ flex: 1 }}>
+        <Fill color="#FDF8F7" />
+        <Image image={background} fit="cover" rect={pictureRect} />
         <Group transform={transform}>
-          <Group>
-            <Image image={picture} rect={pictureRect} fit="cover" />
+          <Group
+            transform={[
+              { translateX: pictureRect.x },
+              { translateY: pictureRect.y + 10 },
+            ]}
+          >
+            <ImageShader
+              image={picture}
+              rect={rect(0, 0, width, height)}
+              fit="fill"
+            />
+            {stripes.map((index) => (
+              <Stripe
+                key={index}
+                index={index}
+                clock={clock}
+                a={a}
+                i0={i0}
+                i={i}
+              />
+            ))}
           </Group>
         </Group>
-      </Group>
-      <Image image={frame} rect={frameRect} fit="fill" />
-    </Canvas>
+        <Group clip={deflate(frameRect, 10)}>
+          <Group transform={transform}>
+            <Group>
+              <Image image={picture} rect={pictureRect} fit="cover" />
+            </Group>
+          </Group>
+        </Group>
+        <Image image={frame} rect={frameRect} fit="fill" />
+      </Canvas>
+    </GestureDetector>
   );
 };

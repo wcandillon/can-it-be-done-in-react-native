@@ -1,15 +1,9 @@
 /* eslint-disable max-len */
-import type { SkiaValue, SkPath, Vector } from "@shopify/react-native-skia";
-import {
-  fitbox,
-  Group,
-  mix,
-  Path,
-  useComputedValue,
-  Skia,
-} from "@shopify/react-native-skia";
+import type { SkPath, Vector } from "@shopify/react-native-skia";
+import { fitbox, Group, mix, Path, Skia } from "@shopify/react-native-skia";
 import React from "react";
 import { interpolate } from "flubber";
+import { useDerivedValue, type SharedValue } from "react-native-reanimated";
 
 const bounds = { x: 0, y: 0, width: 100, height: 126 };
 
@@ -46,19 +40,19 @@ const playRight = Skia.Path.MakeFromSVGString(
 const rightPath = Flubber2SkiaInterpolator(playRight, pauseRight);
 
 interface PlayProps {
-  progress: SkiaValue<number>;
+  progress: SharedValue<number>;
   c: Vector;
   r: number;
 }
 
 export const Play = ({ progress, c, r }: PlayProps) => {
-  const left = useComputedValue(() => {
-    return leftPath(progress.current);
+  const left = useDerivedValue(() => {
+    return leftPath(progress.value);
   }, [progress]);
-  const right = useComputedValue(() => {
-    return rightPath(progress.current);
+  const right = useDerivedValue(() => {
+    return rightPath(progress.value);
   }, [progress]);
-  const transform = useComputedValue(() => {
+  const transform = useDerivedValue(() => {
     const sf = 0.45;
     const h = r * sf * 2;
     const centroid = h / 2 - h / 3;
@@ -69,7 +63,7 @@ export const Play = ({ progress, c, r }: PlayProps) => {
         width: h,
         height: h,
       }),
-      { translateX: mix(progress.current, centroid, 0) },
+      { translateX: mix(progress.value, centroid, 0) },
     ];
   }, [progress]);
   return (

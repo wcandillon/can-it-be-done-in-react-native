@@ -2,11 +2,6 @@ import type { SkFont } from "@shopify/react-native-skia";
 import {
   Image,
   RoundedRect,
-  Easing,
-  runTiming,
-  useComputedValue,
-  useValue,
-  useTouchHandler,
   Canvas,
   Rect,
   rect,
@@ -18,6 +13,13 @@ import {
   useImage,
 } from "@shopify/react-native-skia";
 import { Dimensions, PixelRatio } from "react-native";
+import {
+  Easing,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { Trash } from "./Icons";
 import { Labels } from "./Labels";
@@ -59,30 +61,30 @@ export const Project = ({
 }: ProjectProps) => {
   const { width } = outer;
   const image = useImage(picture);
-  const origin = useValue(width);
-  const pointer = useValue(width);
-  const onTouch = useTouchHandler({
-    onStart: ({ x }) => {
-      origin.current = x;
-    },
-    onActive: ({ x }) => {
-      pointer.current = x;
-    },
-    onEnd: () => {
-      runTiming(pointer, width, {
+  const origin = useSharedValue(width);
+  const pointer = useSharedValue(width);
+  const gesture = Gesture.Pan()
+    .onStart((e) => {
+      origin.value = e.x;
+    })
+    .onChange((e) => {
+      pointer.value = e.x;
+    })
+    .onEnd(() => {
+      pointer.value = withTiming(width, {
         duration: 450,
         easing: Easing.inOut(Easing.ease),
       });
-      runTiming(origin, width, {
+      origin.value = withTiming(width, {
         duration: 450,
         easing: Easing.inOut(Easing.ease),
       });
-    },
-  });
-  const uniforms = useComputedValue(() => {
+    });
+
+  const uniforms = useDerivedValue(() => {
     return {
-      pointer: pointer.current * pd,
-      origin: origin.current * pd,
+      pointer: pointer.value * pd,
+      origin: origin.value * pd,
       resolution: [outer.width * pd, outer.height * pd],
       container: [
         inner.rect.x,
@@ -97,47 +99,54 @@ export const Project = ({
     return null;
   }
   return (
-    <Canvas
-      style={{
-        width: outer.width,
-        height: outer.height,
-      }}
-      onTouch={onTouch}
-    >
-      <RoundedRect rect={inner} color="red" />
-      <Group
-        transform={[
-          { translateX: 310 },
-          { translateY: (150 - 24 * 1.5) / 2 },
-          { scale: 1.5 },
-        ]}
+    <GestureDetector gesture={gesture}>
+      <Canvas
+        style={{
+          width: outer.width,
+          height: outer.height,
+        }}
       >
-        <Trash />
-      </Group>
-      <Group transform={[{ scale: 1 / pd }]}>
+        <RoundedRect rect={inner} color="red" />
         <Group
-          layer={
-            <Paint>
-              <RuntimeShader source={pageCurl} uniforms={uniforms} />
-            </Paint>
-          }
-          transform={[{ scale: pd }]}
-          clip={inner}
+          transform={[
+            { translateX: 310 },
+            { translateY: (150 - 24 * 1.5) / 2 },
+            { scale: 1.5 },
+          ]}
         >
-          <Image image={image} rect={inner.rect} fit="cover" />
-          <Rect
-            rect={rect(
-              inner.rect.x,
-              inner.rect.y + inner.rect.height - labelHeight,
-              inner.rect.width,
-              labelHeight
-            )}
-            color={color}
-          />
-          <Labels size={size} font={smallFont} duration={duration} />
-          <Text x={32} y={height - 50} text={title} color="white" font={font} />
+          <Trash />
         </Group>
-      </Group>
-    </Canvas>
+        <Group transform={[{ scale: 1 / pd }]}>
+          <Group
+            layer={
+              <Paint>
+                <RuntimeShader source={pageCurl} uniforms={uniforms} />
+              </Paint>
+            }
+            transform={[{ scale: pd }]}
+            clip={inner}
+          >
+            <Image image={image} rect={inner.rect} fit="cover" />
+            <Rect
+              rect={rect(
+                inner.rect.x,
+                inner.rect.y + inner.rect.height - labelHeight,
+                inner.rect.width,
+                labelHeight
+              )}
+              color={color}
+            />
+            <Labels size={size} font={smallFont} duration={duration} />
+            <Text
+              x={32}
+              y={height - 50}
+              text={title}
+              color="white"
+              font={font}
+            />
+          </Group>
+        </Group>
+      </Canvas>
+    </GestureDetector>
   );
 };

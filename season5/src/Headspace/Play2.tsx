@@ -1,4 +1,4 @@
-import type { SkiaValue, Vector } from "@shopify/react-native-skia";
+import type { Vector } from "@shopify/react-native-skia";
 import {
   Blur,
   ColorMatrix,
@@ -11,10 +11,11 @@ import {
   processTransform,
   Skia,
   Path,
-  useComputedValue,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions } from "react-native";
+import type { SharedValue } from "react-native-reanimated";
+import { useDerivedValue } from "react-native-reanimated";
 
 const getPointAtLength = (length: number, from: Vector, to: Vector) => {
   const angle = Math.atan2(to.y - from.y, to.x - from.x);
@@ -54,21 +55,21 @@ pause.transform(m3);
 play.transform(m3);
 
 interface Play2Props {
-  progress: SkiaValue<number>;
+  progress: SharedValue<number>;
   c: Vector;
   r: number;
 }
 
 export const Play = ({ progress }: Play2Props) => {
-  const path = useComputedValue(() => {
-    const p = pause.interpolate(play, progress.current)!;
+  const path = useDerivedValue(() => {
+    const p = pause.interpolate(play, progress.value)!;
     p.simplify();
     return p;
   }, [progress]);
-  const transform = useComputedValue(() => {
+  const transform = useDerivedValue(() => {
     const h = r * 2;
     const centroid = h / 2 - h / 3;
-    return [{ translateX: mix(progress.current, centroid, 0) }];
+    return [{ translateX: mix(progress.value, centroid, 0) }];
   }, [progress]);
   return (
     <Group

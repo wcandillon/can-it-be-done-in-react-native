@@ -1,9 +1,5 @@
-import {
-  Skia,
-  type SkMatrix,
-  type SkSize,
-  vec,
-} from "@shopify/react-native-skia";
+import { convertToColumnMajor, Skia, vec } from "@shopify/react-native-skia";
+import type { SkMatrix, SkSize } from "@shopify/react-native-skia";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import type { SharedValue } from "react-native-reanimated";
 import Animated, {
@@ -11,7 +7,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import { rotateZ, scale, toM4, translate } from "./MatrixHelpers";
+import { rotateZ, scale, translate } from "./MatrixHelpers";
 interface GestureHandlerProps {
   matrix: SharedValue<SkMatrix>;
   size: SkSize;
@@ -55,7 +51,8 @@ export const GestureHandler = ({ matrix, size }: GestureHandlerProps) => {
       {
         translateY: -size.height / 2,
       },
-      { matrix: toM4(matrix.value) },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { matrix: convertToColumnMajor(matrix.value as any) as any },
       {
         translateX: size.width / 2,
       },

@@ -1,18 +1,14 @@
-import {
-  Path,
-  Skia,
-  useClockValue,
-  useComputedValue,
-  Canvas,
-  vec,
-  useTouchHandler,
-  useTiming,
-} from "@shopify/react-native-skia";
+import { Path, Skia, Canvas, vec, useClock } from "@shopify/react-native-skia";
 import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import { createNoise2D } from "simplex-noise";
-import { Easing } from "react-native-reanimated";
+import {
+  Easing,
+  useDerivedValue,
+  useSharedValue,
+} from "react-native-reanimated";
 import { SafeAreaInsetsContext } from "react-native-safe-area-context";
+import { Pressable } from "react-native-gesture-handler";
 
 import { Play } from "./Play";
 import { Background } from "./Background";
@@ -33,24 +29,25 @@ const n4 = createNoise2D();
 export const Headspace = () => {
   const ContextBridge = useContextBridge(SafeAreaInsetsContext);
   const [toggled, setToggled] = useState(false);
-  const onTouch = useTouchHandler({ onEnd: () => setToggled((t) => !t) });
-  const progress = useTiming(toggled ? 1 : 0, {
-    duration: 450,
-    easing: Easing.inOut(Easing.ease),
-  });
-  const clock = useClockValue();
-  useEffect(() => {
-    if (toggled) {
-      clock.start();
-    } else {
-      clock.stop();
-    }
-  }, [clock, toggled]);
-  const path = useComputedValue(() => {
-    const C1 = C + A * n1(clock.current / F, 0);
-    const C2 = C + A * n2(clock.current / F, 0);
-    const C3 = C + A * n3(clock.current / F, 0);
-    const C4 = C + A * n4(clock.current / F, 0);
+  const clock = useClock();
+  const progress = useSharedValue(0);
+  // const progress = useTiming(toggled ? 1 : 0, {
+  //   duration: 450,
+  //   easing: Easing.inOut(Easing.ease),
+  // });
+  // const clock = useClock();
+  // useEffect(() => {
+  //   if (toggled) {
+  //     clock.start();
+  //   } else {
+  //     clock.stop();
+  //   }
+  // }, [clock, toggled]);
+  const path = useDerivedValue(() => {
+    const C1 = C + A * n1(clock.value / F, 0);
+    const C2 = C + A * n2(clock.value / F, 0);
+    const C3 = C + A * n3(clock.value / F, 0);
+    const C4 = C + A * n4(clock.value / F, 0);
     const p = Skia.Path.Make();
     p.moveTo(c.x, c.y - r);
     p.cubicTo(c.x + C1 * r, c.y - r, c.x + r, c.y - C1 * r, c.x + r, c.y);
@@ -59,20 +56,22 @@ export const Headspace = () => {
     p.cubicTo(c.x - r, c.y - C4 * r, c.x - C4 * r, c.y - r, c.x, c.y - r);
     const m = Skia.Matrix();
     m.translate(c.x, c.y);
-    m.rotate(clock.current / 2000);
+    m.rotate(clock.value / 2000);
     m.translate(-c.x, -c.y);
     p.transform(m);
     return p;
   }, [clock]);
 
   return (
-    <Canvas style={{ flex: 1 }} onTouch={onTouch}>
-      <ContextBridge>
-        <Background clock={clock} />
-        <Path path={path} color="#3B3A3A" />
-        <Play progress={progress} c={c} r={r} />
-        <Overlay />
-      </ContextBridge>
-    </Canvas>
+    <Pressable onPress={() => setToggled((t) => !t)}>
+      <Canvas style={{ flex: 1 }}>
+        <ContextBridge>
+          <Background clock={clock} />
+          <Path path={path} color="#3B3A3A" />
+          <Play progress={progress} c={c} r={r} />
+          <Overlay />
+        </ContextBridge>
+      </Canvas>
+    </Pressable>
   );
 };
