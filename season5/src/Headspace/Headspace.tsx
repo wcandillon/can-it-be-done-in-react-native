@@ -1,6 +1,6 @@
 import { Path, Skia, Canvas, vec, useClock } from "@shopify/react-native-skia";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Easing, Pressable } from "react-native";
+import { Dimensions, Pressable } from "react-native";
 import {
   useDerivedValue,
   useSharedValue,

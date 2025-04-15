@@ -7,7 +7,7 @@ import {
   Skia,
   fitbox,
   rect,
-  processTransform2d,
+  processTransform3d,
 } from "@shopify/react-native-skia";
 import { Dimensions, Pressable, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -31,8 +31,8 @@ export const StickerModal = () => {
     (Sticker: FC<StickerProps>, size: SkSize) => {
       const src = rect(0, 0, size.width, size.height);
       const dst = deflate(rect(0, 0, window.width, window.height), 24);
-      const m3 = processTransform2d(fitbox("contain", src, dst));
-      const matrix = makeMutable(m3);
+      const m4 = processTransform3d(fitbox("contain", src, dst));
+      const matrix = makeMutable(m4);
       addSticker({
         Sticker,
         size,
