@@ -16,6 +16,11 @@ import Animated, {
 } from "react-native-reanimated";
 import { Platform } from "react-native";
 
+const multiply = (...matrices: Matrix4[]) => {
+  "worklet";
+  return matrices.reduce((acc, matrix) => multiply4(acc, matrix), Matrix4());
+};
+
 interface GestureHandlerProps {
   matrix: SharedValue<Matrix4>;
   size: SkSize;
@@ -53,7 +58,12 @@ export const GestureHandler = ({ matrix, size }: GestureHandlerProps) => {
 
   const gesture = Gesture.Race(pan, pinch, rotate);
   const style = useAnimatedStyle(() => {
-    const m4 = convertToColumnMajor(matrix.value);
+    const m = multiply(
+      translate(-width / 2, -height / 2),
+      matrix.value,
+      translate(width / 2, height / 2)
+    );
+    const m4 = convertToColumnMajor(m);
     return {
       position: "absolute",
       width: size.width,
@@ -62,22 +72,10 @@ export const GestureHandler = ({ matrix, size }: GestureHandlerProps) => {
       left: 0,
       transform: [
         {
-          translateX: -size.width / 2,
-        },
-        {
-          translateY: -size.height / 2,
-        },
-        {
           matrix:
             Platform.OS === "web"
               ? convertToAffineMatrix(m4)
               : (m4 as unknown as number[]),
-        },
-        {
-          translateX: size.width / 2,
-        },
-        {
-          translateY: size.height / 2,
         },
       ],
     };
