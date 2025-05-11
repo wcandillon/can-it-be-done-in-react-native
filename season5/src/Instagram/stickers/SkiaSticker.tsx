@@ -14,36 +14,40 @@ const bounds = inflate(path.computeTightBounds(), strokeWidth / 2);
 const size = {
   width: bounds.width,
   height: bounds.height,
+  x: 100,
+  y: 200,
 };
 
 const Sticker = ({ matrix }: StickerProps) => {
   return (
-    <Group matrix={matrix}>
-      <LinearGradient
-        start={path.getPoint(0)}
-        end={path.getLastPt()}
-        colors={[
-          "#3CBCEB",
-          "#5F96E7",
-          "#816FE3",
-          "#9F5EE2",
-          "#BD4CE0",
-          "#DE589F",
-          "#FF645E",
-          "#FDA859",
-          "#FAEC54",
-          "#9EE671",
-          "#67E282",
-          "#3FCEBC",
-        ]}
-      />
-      <Path
-        path={path}
-        strokeWidth={strokeWidth}
-        style="stroke"
-        strokeCap="round"
-        strokeJoin="round"
-      />
+    <Group transform={[{ translateX: size.x }, { translateY: size.y }]}>
+      <Group matrix={matrix}>
+        <LinearGradient
+          start={path.getPoint(0)}
+          end={path.getLastPt()}
+          colors={[
+            "#3CBCEB",
+            "#5F96E7",
+            "#816FE3",
+            "#9F5EE2",
+            "#BD4CE0",
+            "#DE589F",
+            "#FF645E",
+            "#FDA859",
+            "#FAEC54",
+            "#9EE671",
+            "#67E282",
+            "#3FCEBC",
+          ]}
+        />
+        <Path
+          path={path}
+          strokeWidth={strokeWidth}
+          style="stroke"
+          strokeCap="round"
+          strokeJoin="round"
+        />
+      </Group>
     </Group>
   );
 };

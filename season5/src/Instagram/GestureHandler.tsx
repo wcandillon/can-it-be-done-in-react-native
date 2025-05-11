@@ -3,18 +3,18 @@ import {
   convertToColumnMajor,
   Matrix4,
   multiply4,
-  rotateZ,
-  scale,
+  processTransform3d,
   translate,
 } from "@shopify/react-native-skia";
-import type { SkSize } from "@shopify/react-native-skia";
+import { Platform } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import type { SharedValue } from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import { Platform } from "react-native";
+
+import { type StickerDimensions } from "./stickers/types";
 
 const multiply = (...matrices: Matrix4[]) => {
   "worklet";
@@ -23,53 +23,75 @@ const multiply = (...matrices: Matrix4[]) => {
 
 interface GestureHandlerProps {
   matrix: SharedValue<Matrix4>;
-  size: SkSize;
+  size: StickerDimensions;
   debug?: boolean;
 }
 
 export const GestureHandler = ({ matrix, size }: GestureHandlerProps) => {
-  const origin = useSharedValue({ x: 0, y: 0 });
-  const offset = useSharedValue(Matrix4());
+  const currentPosition = useSharedValue({ x: 0, y: 0 });
+  const previousPosition = useSharedValue({ x: 0, y: 0 });
 
-  const pan = Gesture.Pan().onChange((e) => {
-    matrix.value = multiply4(translate(e.changeX, e.changeY), matrix.value);
-  });
+  const currentRotation = useSharedValue(0);
+  const previousRotation = useSharedValue(0);
+
+  const currentScale = useSharedValue(1);
+  const previousScale = useSharedValue(1);
+
+  const pan = Gesture.Pan()
+    .onChange((e) => {
+      currentPosition.value = {
+        x: e.translationX + previousPosition.value.x,
+        y: e.translationY + previousPosition.value.y,
+      };
+    })
+    .onEnd(() => {
+      previousPosition.value = currentPosition.value;
+    });
 
   const rotate = Gesture.Rotation()
-    .onBegin((e) => {
-      origin.value = { x: e.anchorX, y: e.anchorY };
-      offset.value = matrix.value;
-    })
     .onChange((e) => {
-      matrix.value = multiply4(offset.value, rotateZ(e.rotation, origin.value));
+      currentRotation.value = e.rotation + previousRotation.value;
+    })
+    .onEnd(() => {
+      previousRotation.value = currentRotation.value;
     });
 
   const pinch = Gesture.Pinch()
-    .onBegin((e) => {
-      origin.value = { x: e.focalX, y: e.focalY };
-      offset.value = matrix.value;
-    })
     .onChange((e) => {
-      matrix.value = multiply4(
-        offset.value,
-        scale(e.scale, e.scale, 1, origin.value)
-      );
+      currentScale.value = e.scale * previousScale.value;
+    })
+    .onEnd(() => {
+      previousScale.value = currentScale.value;
     });
 
-  const gesture = Gesture.Race(pan, pinch, rotate);
+  const gesture = Gesture.Simultaneous(pan, rotate, pinch);
+
   const style = useAnimatedStyle(() => {
+    matrix.value = processTransform3d([
+      { translateX: currentPosition.value.x },
+      { translateY: currentPosition.value.y },
+      { translateX: size.width / 2 },
+      { translateY: size.height / 2 },
+      { scale: currentScale.value },
+      { rotateZ: currentRotation.value },
+      { translateX: -size.width / 2 },
+      { translateY: -size.height / 2 },
+    ]);
+
     const m = multiply(
-      translate(-width / 2, -height / 2),
+      translate(-size.width / 2, -size.height / 2),
       matrix.value,
-      translate(width / 2, height / 2)
+      translate(size.width / 2, size.height / 2)
     );
+
     const m4 = convertToColumnMajor(m);
+
     return {
       position: "absolute",
       width: size.width,
       height: size.height,
-      top: 0,
-      left: 0,
+      top: size.y,
+      left: size.x,
       transform: [
         {
           matrix:
