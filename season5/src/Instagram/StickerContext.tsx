@@ -1,13 +1,14 @@
-import type { Matrix4, SkSize } from "@shopify/react-native-skia";
+import type { Matrix4 } from "@shopify/react-native-skia";
 import { createContext, useCallback, useContext, useReducer } from "react";
 import type { ReactNode, FC } from "react";
 import type { SharedValue } from "react-native-reanimated";
 
 import type { StickerProps } from "./stickers/Sticker";
+import { type StickerDimensions } from "./stickers/types";
 
 export interface Sticker {
   Sticker: FC<StickerProps>;
-  size: SkSize;
+  size: StickerDimensions;
   matrix: SharedValue<Matrix4>;
 }
 

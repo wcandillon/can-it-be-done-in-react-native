@@ -1,22 +1,21 @@
-import type { FC } from "react";
-import React, { useCallback } from "react";
-import type { SkSize } from "@shopify/react-native-skia";
+import { useNavigation } from "@react-navigation/native";
 import {
   Canvas,
   Group,
   Skia,
   fitbox,
-  rect,
   processTransform3d,
+  rect,
 } from "@shopify/react-native-skia";
+import type { FC } from "react";
+import React, { useCallback } from "react";
 import { Dimensions, Pressable, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { makeMutable } from "react-native-reanimated";
 
 import { deflate } from "../components";
 
-import { stickers } from "./stickers";
 import { useStickerContext } from "./StickerContext";
+import { stickers } from "./stickers";
 import type { StickerProps } from "./stickers/Sticker";
 
 const window = Dimensions.get("window");
@@ -28,7 +27,10 @@ export const StickerModal = () => {
   const { addSticker } = useStickerContext();
   const navigation = useNavigation();
   const onPress = useCallback(
-    (Sticker: FC<StickerProps>, size: SkSize) => {
+    (
+      Sticker: FC<StickerProps>,
+      size: { x: number; y: number; width: number; height: number }
+    ) => {
       const src = rect(0, 0, size.width, size.height);
       const dst = deflate(rect(0, 0, window.width, window.height), 24);
       const m4 = processTransform3d(fitbox("contain", src, dst));
@@ -52,8 +54,8 @@ export const StickerModal = () => {
       }}
     >
       {stickers.map(({ Sticker, size }, index) => {
-        const { width, height } = size;
-        const src = rect(0, 0, width, height);
+        const { width, height, x, y } = size;
+        const src = rect(x, y, width, height);
         const dst = deflate(rect(0, 0, tileWidth, tileHeight), 12);
         const transform = fitbox("contain", src, dst);
         return (
