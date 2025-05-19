@@ -8,7 +8,7 @@ import {
 } from "@shopify/react-native-skia";
 import { Platform } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import type { SharedValue } from "react-native-reanimated";
+import { type SharedValue, useDerivedValue } from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -66,8 +66,8 @@ export const GestureHandler = ({ matrix, size }: GestureHandlerProps) => {
 
   const gesture = Gesture.Simultaneous(pan, rotate, pinch);
 
-  const style = useAnimatedStyle(() => {
-    matrix.value = processTransform3d([
+  const newMatrix = useDerivedValue(() => {
+    return processTransform3d([
       { translateX: currentPosition.value.x },
       { translateY: currentPosition.value.y },
       { translateX: size.width / 2 },
@@ -77,10 +77,16 @@ export const GestureHandler = ({ matrix, size }: GestureHandlerProps) => {
       { translateX: -size.width / 2 },
       { translateY: -size.height / 2 },
     ]);
+  });
 
+  useDerivedValue(() => {
+    matrix.value = newMatrix.value;
+  });
+
+  const style = useAnimatedStyle(() => {
     const m = multiply(
       translate(-size.width / 2, -size.height / 2),
-      matrix.value,
+      newMatrix.value,
       translate(size.width / 2, size.height / 2)
     );
 
